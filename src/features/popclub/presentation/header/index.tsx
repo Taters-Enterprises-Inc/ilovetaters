@@ -1,0 +1,1 @@
+export { HeaderNavPopClub } from './header-nav-popclub.component';
