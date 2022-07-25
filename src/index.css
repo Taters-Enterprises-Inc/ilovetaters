@@ -10,3 +10,7 @@ html {
 body{
     font-family: "Rubik",sans-serif;
 }
+
+.pac-container {
+    z-index: 2001;
+}

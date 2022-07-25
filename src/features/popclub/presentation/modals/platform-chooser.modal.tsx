@@ -8,6 +8,8 @@ import { useNavigate} from "react-router-dom";
 import { setPopClubData } from '../slices/set-popclub-data.slice';
 import { useAppDispatch } from 'features/config/hooks';
 
+import { Link } from "react-router-dom";
+
 interface PlatformChooserModalProps{
   open : boolean,
   platforms: Array<PlatformModel>
@@ -60,10 +62,6 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const platformClicked =(platform : PlatformModel)=>{
-    dispatch(setPopClubData({platform: platform.url_name}));
-    navigate(`../${platform.url_name}?category=all`);
-  }
 
   return (
       <Modal
@@ -81,11 +79,15 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
             <h1 className='text-center font-bold text-2xl'>Select a platform</h1>
             <ul className='flex'>
               {
-                props.platforms.map((platform)=>(
-                  <li className='flex-1 flex justify-center items-center font-semibold'>
-                    <button className='text-gray-700' onClick={()=>platformClicked(platform)}>
+                props.platforms.map((platform, i)=>(
+                  <li key={i} className='flex-1 flex justify-center items-center font-semibold'>
+                    <Link 
+                    to={`../${platform.url_name}?category=all`}
+                    className='text-gray-700' onClick={()=>{
+                      dispatch(setPopClubData({platform: platform.url_name}));
+                    }}>
                       {platform.name}
-                    </button>
+                    </Link>
                   </li>
                 ))
               }

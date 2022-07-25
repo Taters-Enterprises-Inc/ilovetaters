@@ -1,18 +1,21 @@
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate, useParams} from "react-router-dom";
 import { FooterNavPopClub } from "../footer";
 import { HeaderNavPopClub } from "../header";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
+import { StoreChooserModal } from "../modals/store-chooser.modal";
 import { getAllPlatformCategories, selectGetAllPlatformCategories } from "../slices/get-all-platform-categories.slice";
 import { getAllPlatform, selectGetAllPlatform } from "../slices/get-all-platform.slice";
 import { getDeals, selectGetDeals } from "../slices/get-deals.slice";
 import { getPopClubData, selectGetPopClubData } from "../slices/get-popclub-data.slice";
-import { selectSetPopClubData } from "../slices/set-popclub-data.slice";
+import { selectSetPopClubData, setPopClubData } from "../slices/set-popclub-data.slice";
 
 
 export function PopClub(){
+
+    const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
 
     const getAllPlatformState  = useAppSelector(selectGetAllPlatform);
     const getAllPlatformCategoriesState  = useAppSelector(selectGetAllPlatformCategories);
@@ -57,14 +60,24 @@ export function PopClub(){
             <section className="container lg:px-0 md:px-8 px-4 mx-auto py-4 ">
                 <ul className="flex space-x-2">
                     {
-                        getAllPlatformState.data.map((platform)=> (
-                            <li>
-                                <NavLink 
-                                    to={`../${platform.url_name}?category=all`} className='text-2xl px-2 font-bold flex justify-center items-center space-x-1'>
-                                    {({ isActive }) => (
-                                        <span className={isActive? 'text-primary' : ''}>{platform.name}</span>
-                                    )}
-                                </NavLink>
+                        getAllPlatformState.data.map((platformObj, i)=> (
+                            <li key={i}>
+                                <button 
+                                    onClick={()=>{
+                                        switch(platformObj.url_name){
+                                            case 'snackshop':
+                                                setOpenStoreChooserModal(true);
+                                                break;
+                                            case 'walk-in':
+                                                dispatch(setPopClubData({platform : platformObj.url_name}));
+                                                navigate(`../${platformObj.url_name}?category=all`);
+                                                break;
+
+                                        }
+                                    }}
+                                     className='text-2xl px-2 font-bold flex justify-center items-center space-x-1'>
+                                    <span className={platform === platformObj.url_name ? 'text-primary' : ''}>{platformObj.name}</span>
+                                </button>
                             </li>
                         ))
                     }
@@ -72,8 +85,8 @@ export function PopClub(){
                 
                 <ul className="flex space-x-2">
                     {
-                        getAllPlatformCategoriesState.data.map((category)=> (
-                            <li>
+                        getAllPlatformCategoriesState.data.map((category, i)=> (
+                            <li key={i}>
                                 <Link to={`?category=${category.url_name}`} className='text-gray-500 text-base px-2 font-bold flex justify-center items-center space-x-1'>
                                      <span className={category.url_name === query.get('category')? 'text-primary' : ''}>{category.name}</span>
                                 </Link>
@@ -86,8 +99,8 @@ export function PopClub(){
             <section className="container lg:px-0 md:px-8 px-4 mx-auto min-h-screen">
                 <div className="flex flex-wrap">
                     {
-                        getDealsState.data.map((deal)=>(
-                            <Link to={`../deal/hash`} className='flex-[0_0_50%] p-[0.3rem] lg:flex-[0_0_20%] lg:pr-[0.7rem] lg:pb-[0.7rem]'>
+                        getDealsState.data.map((deal, i)=>(
+                            <Link key={i} to={`../deal/hash`} className='flex-[0_0_50%] p-[0.3rem] lg:flex-[0_0_20%] lg:pr-[0.7rem] lg:pb-[0.7rem]'>
                                 <div className="relative flex flex-wrap flex-col bg-black shadow-lg rounded-[30px] h-full">
                                     <div className="absolute top-5 w-full">
                                         <div className=" md:w-2/5 w-3/5  bg-yellow-500 pl-2 text-white">{((deal.price - deal.discounted_price) / deal.price) * 100}%OFF</div>
@@ -110,7 +123,12 @@ export function PopClub(){
 
             <FooterNavPopClub></FooterNavPopClub>
 
-            <PlatformChooserModal platforms={getAllPlatformState.data} open={getPopClubDataState.data == null ?  true : false }></PlatformChooserModal>
+            
+
+            <PlatformChooserModal platforms={getAllPlatformState.data} open={getPopClubDataState.data === null ?  true : false }></PlatformChooserModal>
+            <StoreChooserModal open={openStoreChooserModal} onClose={()=>{
+                setOpenStoreChooserModal(false);
+            }}></StoreChooserModal>
         </>
     );
 }
