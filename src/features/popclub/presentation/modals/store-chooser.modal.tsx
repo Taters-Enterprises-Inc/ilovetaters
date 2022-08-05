@@ -1,100 +1,57 @@
 import * as React from 'react';
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import { useSpring, animated } from '@react-spring/web';
-import styled from '@emotion/styled';
-import { usePlacesWidget } from "react-google-autocomplete";
-
-interface FadeProps {
-  children?: React.ReactElement;
-  in: boolean;
-  onEnter?: () => {};
-  onExited?: () => {};
-}
+import { useAppDispatch, useAppSelector } from 'features/config/hooks';
+import { StoreCluster } from '../components';
+import { getSession, selectGetSession } from "../slices/get-session.slice";
+import { SearchAddress } from '../components/search-address';
+import { getStoresAvailable } from '../slices/get-stores-available-slice';
 
 interface StoreChooserModalProps {
   open : boolean,
-  onClose: ((event: {}, reason: "backdropClick" | "escapeKeyDown") => void)
+  onClose: any,
 }
 
-const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
-  const { in: open, children, onEnter, onExited, ...other } = props;
-  const style = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: open ? 1 : 0 },
-    onStart: () => {
-      if (open && onEnter) {
-        onEnter();
-      }
-    },
-    onRest: () => {
-      if (!open && onExited) {
-        onExited();
-      }
-    },
-  });
 
-  return (
-    <animated.div ref={ref} style={style} {...other}>
-      {children}
-    </animated.div>
-  );
-});
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '20%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '80%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 export function StoreChooserModal(props : StoreChooserModalProps) {
+  const dispatch = useAppDispatch();
+  const [address, setAddress] = React.useState<any>('');
+  const getSessionState = useAppSelector(selectGetSession);
   
-  
-  const { ref : materialRef } = usePlacesWidget({
-    apiKey:'AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8',
-    onPlaceSelected: (place) => {
-      console.log(place);
-    },
-    options: {
-      types: ['geocode'],
-      componentRestrictions: { country: "ph" },
-    },
-  });
-  
-  const CssTextField = styled(TextField)({
-    '& label.Mui-focused': {
-      color: '#ED1F24',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#ED1F24',
-    },
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: '#ED1F24',
-      },
-    },
-  });
+  React.useEffect(()=>{
+      dispatch(getSession());
+  },[]);
+
+  React.useEffect(()=>{
+    if(getSessionState.data?.customer_address !== null){
+      setAddress(getSessionState.data?.customer_address);
+    }
+  },[]);
+
+  if(props.open)
+    document.body.classList.add('overflow-hidden');
 
   return (
-      <Modal
-        aria-labelledby="spring-modal-title"
-        aria-describedby="spring-modal-description"
-        open={props.open}
-        onClose={props.onClose}
-      >
-        <Fade in={props.open}>
-          <Box sx={style} className='space-y-2'>
-            <CssTextField inputRef={materialRef} label="Write your address." variant="outlined" fullWidth  />
-          </Box>
-        </Fade>
-      </Modal>
+    <div
+       style={{display: props.open? 'flex':'none'}}
+      className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
+      <div className='bg-primary px-[5px] py-[30px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
+
+        <button className='absolute top-2 right-4 text-white' onClick={()=>{
+          document.body.classList.remove('overflow-hidden');
+          props.onClose();
+        }}>X</button>
+        
+        <div className='flex items-center justify-center mb-3'>
+          <label className="pure-material-textfield-outlined w-[96%]">
+            <SearchAddress onPlaceSelected={( place : string)=>{
+              setAddress(place);
+              dispatch(getStoresAvailable({address: place}));
+            }}/>
+            <span>Search Address</span>
+          </label>
+        </div>
+        <StoreCluster onClose={props.onClose} address={address}></StoreCluster>
+      </div>
+    </div>
   );
 }

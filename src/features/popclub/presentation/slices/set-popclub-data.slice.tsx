@@ -22,7 +22,6 @@ const initialState : {
 export const setPopClubData = createAsyncThunk('setPopClubData',
     async (param: SetPopclubDataParam) => {
         const response : SetPopClubDataResponse = await SetPopClubDataRepository(param);
-        console.log(response);
         
         return response.data;
     }

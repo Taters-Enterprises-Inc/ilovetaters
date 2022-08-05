@@ -5,6 +5,12 @@ import getAllPlatformCategories from '../popclub/presentation/slices/get-all-pla
 import getDeals from '../popclub/presentation/slices/get-deals.slice';
 import getPopClubData from '../popclub/presentation/slices/get-popclub-data.slice';
 import setPopClubData from '../popclub/presentation/slices/set-popclub-data.slice';
+import getStoresAvailable from '../popclub/presentation/slices/get-stores-available-slice';
+import setStoreAndAddress from '../popclub/presentation/slices/set-store-and-address.slice';
+import getSession from '../popclub/presentation/slices/get-session.slice';
+import setSession from '../popclub/presentation/slices/set-session.slice';
+import getAllAvailableStores from '../popclub/presentation/slices/get-all-available-stores.slice';
+import getDeal from '../popclub/presentation/slices/get-deal.slice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +20,13 @@ export const store = configureStore({
 
     setPopClubData: setPopClubData,
     getPopClubData: getPopClubData,
+
+    getStoresAvailable: getStoresAvailable,
+    setStoreAndAddress: setStoreAndAddress,
+    getSession: getSession,
+    setSession: setSession,
+    getAllAvailableStores: getAllAvailableStores,
+    getDeal: getDeal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

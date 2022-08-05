@@ -13,11 +13,16 @@ import { REACT_APP_BASE_NAME } from 'features/shared/constants';
 import { store } from 'features/config/store';
 import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
-import { PopClubDealGuards, PopClubGuards } from 'features/popclub/presentation/pages/guards';
+import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
+import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+if (window.location.hash == "#_=_"){
+  window.location.replace(window.location.protocol + "//" + window.location.host + window.location.pathname);
+}
 
 root.render(
   <React.StrictMode>
@@ -30,9 +35,8 @@ root.render(
             <Route path=":hash" element={<PopClubDeal />}></Route>
           </Route>
 
-          <Route path='popclub' element={<PopClubGuards />}>
-            <Route path=":platform" element={<PopClub />}></Route>
-          </Route>
+          <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
+          <Route path="popclub/:platform" element={<PopClub />}></Route>
           
         </Routes>
       </BrowserRouter>

@@ -4,7 +4,8 @@ export interface DealModel{
     name: string,
     description: string,
     delivery_details: string,
-    price: number,
+    promo_price: number,
+    original_price: number,
     discounted_price: number,
     uom: string,
     add_details: string,
@@ -12,7 +13,7 @@ export interface DealModel{
     category: number,
     num_flavor: number,
     add_remarks: number,
-    product_hash: number,
+    hash: number,
     note: number,
     dateadded: string,
     product_code: string,
@@ -20,4 +21,5 @@ export interface DealModel{
     
     deal_id: number,
     platform_category_id: number,
+    category_name: string,
 }

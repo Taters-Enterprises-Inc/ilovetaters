@@ -23,6 +23,7 @@ const initialState : {
 export const getDeals = createAsyncThunk('getDeals',
     async (param: GetDealsParam) => {
         const response : GetDealsRepositoryResponse = await GetDealsRepository(param);
+        
         return response.data;
     }
 )
