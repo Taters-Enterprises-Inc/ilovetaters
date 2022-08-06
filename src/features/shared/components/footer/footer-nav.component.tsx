@@ -45,9 +45,11 @@ export function FooterNav(){
                             <span className="text-[8px] sm:text-[14px] pt-[2px]">Branches</span>
                         </a>
                     </li>
-                    <li className="flex justify-center items-center flex-col flex-1 h-full pt-1">
-                        <FiMoreHorizontal className='text-2xl sm:text-4xl'></FiMoreHorizontal>
-                        <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
+                    <li className="flex-[0.8]">
+                        <a  className="flex justify-center items-center flex-col h-full pt-1 pr-2">
+                        <FiMoreHorizontal className='text-[25px] sm:text-4xl'></FiMoreHorizontal>
+                            <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
+                        </a>
                     </li>
                 </ul>
             </nav>

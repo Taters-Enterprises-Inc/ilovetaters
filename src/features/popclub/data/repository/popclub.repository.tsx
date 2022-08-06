@@ -3,76 +3,109 @@ import { DealModel } from "features/popclub/core/domain/deal.model";
 import { PlatformCategoryModel } from "features/popclub/core/domain/platform-category.model";
 import { PlatformModel } from "features/popclub/core/domain/platform.model";
 import { PopClubDataModel } from "features/popclub/core/domain/popclub-data.model";
+import { ProductVariantModel } from "features/popclub/core/domain/product_variant.model";
+import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model";
 import { SessionModel } from "features/popclub/core/domain/session.model";
 import { StoreModel } from "features/popclub/core/domain/store.model";
-import { GetAllPlatformCategoriesParam, GetDealsParam, GetStoresAvailableParam, SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
+import { GetAllPlatformCategoriesParam, GetDealProductVariantsParam, GetDealsParam, GetStoresAvailableParam, RedeemDealParam, SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
 import { REACT_APP_DOMAIN_URL } from '../../../shared/constants';
 
 export interface GetAllPlatformRepositoryResponse{
     data: {
-        message: string,
+        message: string;
         data: Array<PlatformModel>
     }
 }
 export interface GetAllPlatformCategoriesRepositoryResponse{
     data: {
-        message: string,
+        message: string;
         data: Array<PlatformCategoryModel>
     }
 }
 export interface GetDealsRepositoryResponse{
     data: {
-        message: string,
+        message: string;
         data: Array<DealModel>
     }
 }
 
 export interface GetPopClubDataRepositortyResponse{
     data:{
-        message: string,
+        message: string;
         data: PopClubDataModel
     }
 }
 
 export interface SetPopClubDataResponse{
     data:{
-        message: string,
+        message: string;
     }
 }
 
 export interface GetStoresAvailableResponse{
     data: {
-        message: string,
-        data: Array<StoreModel>,
+        message: string;
+        data: Array<StoreModel>;
     }
 }
 
 export interface SetStoreAndAddressResponse{
     data: {
-        message: string,
+        message: string;
     }
 }
 
 export interface GetSessionResponse{
     data: {
-        data: SessionModel,
-        message: string,
+        data: SessionModel;
+        message: string;
     }
 }
 
 export interface SetSessionResponse{
     data: {
-        message: string,
+        message: string;
     }
 }
 
 export interface GetDealResponse{
     data: {
-        data: DealModel,
-        message: string,
+        data: DealModel;
+        message: string;
     }
 }
 
+export interface GetDealProductVariantsResponse {
+    data: { 
+        data: Array<ProductVariantModel>;
+        message: string;
+    }
+}
+
+export interface RedeemDealResponse {
+    data: {
+        data: RedeemDealModel;
+        mesage: string;
+    }
+}
+
+export function RedeemDealRepository(param : RedeemDealParam) : Promise<RedeemDealResponse> {
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/popclub/redeem_deal`, param ,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
+}
+
+export function GetDealProductVariantsRepository(param : GetDealProductVariantsParam) : Promise<GetDealProductVariantsResponse>{
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/popclub/check_product_variant_deals`, param ,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
+}
 export function GetAllPlatformRepository() : Promise<GetAllPlatformRepositoryResponse>{
     return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/platform`,{
         headers: {

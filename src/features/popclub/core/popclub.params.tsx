@@ -1,3 +1,12 @@
+
+export interface RedeemDealParam {
+    hash: string;
+}
+
+export interface GetDealProductVariantsParam{
+    hash : string;
+}
+
 export interface GetAllPlatformCategoriesParam {
     platform_url_name: string,
 }

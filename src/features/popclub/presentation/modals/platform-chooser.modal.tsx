@@ -21,19 +21,25 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
     <div
       style={{display: props.open? 'flex':'none'}}
       className='fixed inset-0 bg-[#22201A] bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
-      <div className='bg-[#22201A] p-2 round w-[80%] sm:w-[400px] rounded-lg'>
-        <h1 className='text-center text-xs text-white'>Are you?</h1>
-          <ul className='flex'>
+      <div className='bg-[#22201A] p-4 round w-[80%] sm:w-[400px] rounded-lg relative'>
+
+        <button className='absolute top-2 right-4 text-white' onClick={()=>{
+          window.location.href = '/staging';
+        }}>X</button>
+
+          <h1 className='text-center text-xs text-white '>Are you</h1>
+          <ul className=' space-y-1' >
             {
               props.platforms.map((platform, i)=>(
-                <li key={i} className='flex-1 flex justify-center items-center font-semibold'>
+                <li key={i} className='flex-1 flex flex-col justify-center items-center'>
                   <button 
-                  className=' font-bold text-xs lg:text-base text-white' onClick={()=>{
+                  className=' text-sm w-full lg:text-base rounded-lg bg-transparent text-white py-3 px-10 border border-white mt-2 tracking-widest font-["Bebas_Neue"]' onClick={()=>{
                     props.onSelectedPlatform(platform.url_name);
                     dispatch(setPopClubData({platform: platform.url_name}));
                   }}>
-                    {temp[i]}
+                    {temp[i]}?
                   </button>
+                  { i === 0 ? <h1 className='text-center text-xs text-white mt-3'>or having your</h1> : null}
                 </li>
               ))
             }

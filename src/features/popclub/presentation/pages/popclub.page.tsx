@@ -76,29 +76,9 @@ export function PopClub(){
     return (
         <section className='bg-[#a21013]'>
             <HeaderNav serviceReached={serviceReached} active='POPCLUB'></HeaderNav>
-            
-            <section 
-                style={{
-                    backgroundImage: `url('${REACT_APP_DOMAIN_URL}uploads/images/mobile/banners/popclub.jpg')`,
-                    backgroundSize: 'contain',
-                    backgroundPositionX: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                }}
-                className="sm:hidden flex items-end justify-center relative ">
-                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/mobile/banners/popclub.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
-            </section>
-            
-            <section 
-                style={{
-                    backgroundImage: `url('${REACT_APP_DOMAIN_URL}uploads/images/desktop/banners/popclub.jpg')`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                }}
-                className="hidden sm:flex items-end justify-center relative ">
-                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/desktop/banners/popclub.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
-            </section>
+
+            <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/mobile/banners/popclub.jpg"} alt="The best pop corn in town"></img>
+            <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/desktop/banners/popclub.jpg"} alt="The best pop corn in town"></img>
 
             <img  className="hidden sm:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/instructions/popclub_instruction.jpg"} alt="The best pop corn in town"></img>
 
@@ -108,7 +88,7 @@ export function PopClub(){
                     <button className="text-xs" onClick={()=>{
                         setOpenPlatformChooserModal(true);
                     }}>
-                        <span className="text-white ">Claim deals : </span><span className="text-[#ffcd17]">{getSessionState.data?.popclub_data.platform.replace('-', '  ')}</span>
+                        <span className="text-white ">Claim deals via : </span><span className="text-[#ffcd17]">{getSessionState.data?.popclub_data.platform.replace('-', '  ')}</span>
                     </button>
                     : null
                 }
@@ -150,7 +130,7 @@ export function PopClub(){
                     : null
                 }
 
-                <div className="overflow-y-auto w-full hide-scrollbar pl-6 font-['Bebas_Neue']">
+                <div className="overflow-y-auto w-full hide-scrollbar pl-6 font-['Bebas_Neue'] mt-2">
                     <ul className="flex items-start justify-start space-x-6 mt-2 w-[400px] lg:w-full">
                         <Link to={`?category=all`} className='text-gray-500 text-lg tracking-widest lg:px-2 font-semi-bold flex justify-center items-center space-x-1 '>
                                 <span className={'all' === query.get('category')?  'text-[#ffcd17] font-bold ' : 'text-white'}>All</span>
@@ -172,27 +152,10 @@ export function PopClub(){
                 <div className="flex flex-wrap">
                     {
                         getDealsState.data.map((deal, i)=>(
-                            <button key={i} onClick={()=>{
-
-                                console.log(`${REACT_APP_DOMAIN_URL}v2/popclub/v3_to_v2_session_connector`);
-                                
-                                axios.post(`${REACT_APP_DOMAIN_URL}v2/popclub/v3_to_v2_session_connector`,{
-                                    session : getSessionState.data,
-                                }, {
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    withCredentials: true,
-                                })
-                                .then(function (response: any) {
-                                    window.location.href = `${REACT_APP_DOMAIN_URL}v2/popclub/${platform}/${category}/${deal.hash}/`;
-                                })
-
-
-                            }} className='flex-[0_0_50%] p-[0.5rem] lg:flex-[0_0_20%] lg:pr-[0.7rem] lg:pb-[0.7rem]'>
+                            <Link key={i} to={`/popclub/deal/${deal.hash}`} className='flex-[0_0_50%] p-[0.5rem] lg:flex-[0_0_20%] lg:pr-[0.7rem] lg:pb-[0.7rem]'>
                                 
                                 <div className=" relative flex flex-wrap flex-col bg-[#22201A] shadow-md shadow-[#ffcd17] rounded-[10px] h-full" >
-                                    <h1 className="text-[12px] lg:text-lg pt-1 text-white uppercase font-['Bebas_Neue'] tracking-[2px]  ">
+                                    <h1 className="text-[12px] lg:text-lg pt-1 text-white uppercase font-['Bebas_Neue'] tracking-[2px] text-center ">
                                         {deal.category_name}
                                     </h1>
                                     { deal.original_price && deal.promo_price ? 
@@ -214,7 +177,7 @@ export function PopClub(){
                                         <h4 className="text-white text-[12px]  pb-3 pt-4 px-2  leading-4 lg:text-base font-light text-start text-sm whitespace-pre-wrap  font-[TTHazelnuts]">{deal.name}</h4>
                                     </div>
                                 </div>
-                            </button>
+                            </Link>
                         ))
                     }
                 </div>

@@ -13,7 +13,7 @@ export interface DealModel{
     category: number,
     num_flavor: number,
     add_remarks: number,
-    hash: number,
+    hash: string,
     note: number,
     dateadded: string,
     product_code: string,

@@ -23,11 +23,12 @@ export function StoreVisitStoreChooserModal(props : StoreVisitStoreChooserModalP
     <div
       style={{display: props.open? 'flex':'none'}}
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
-        <div className='bg-primary px-[5px] py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
+        <div className='bg-[#a21013] px-[5px] py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
           <button className='absolute top-2 right-4 text-white' onClick={()=>{
             document.body.classList.remove('overflow-hidden');
             props.onClose();
           }}>X</button>
+          <h1 className='text-white font-bold text-sm text-center pt-4 pb-2'>Which store are you visiting?</h1>
           <StoreClusterStoreVisit onClose={props.onClose} address={null}></StoreClusterStoreVisit>
         </div>
     </div>

@@ -11,6 +11,8 @@ import getSession from '../popclub/presentation/slices/get-session.slice';
 import setSession from '../popclub/presentation/slices/set-session.slice';
 import getAllAvailableStores from '../popclub/presentation/slices/get-all-available-stores.slice';
 import getDeal from '../popclub/presentation/slices/get-deal.slice';
+import getDealProductVariants from '../popclub/presentation/slices/get-deal-product-variants.slice';
+import redeemDeal from '../popclub/presentation/slices/redeem-deal.slice';
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +29,9 @@ export const store = configureStore({
     setSession: setSession,
     getAllAvailableStores: getAllAvailableStores,
     getDeal: getDeal,
+    getDealProductVariants: getDealProductVariants,
+    
+    redeemDeal: redeemDeal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

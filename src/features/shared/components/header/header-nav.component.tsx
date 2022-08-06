@@ -76,35 +76,37 @@ export function HeaderNav(props: HeaderNavProps){
     
 
     return (
-        <header className={`${props.sticky? 'sticky' : 'fixed'} w-full top-0 z-20 py-2 hidden lg:block ${props.serviceReached ? 'bg-red-700':''}`}>
-            <nav className="flex justify-between items-center w-full container mx-auto px-3">
-                <img src={REACT_APP_DOMAIN_URL + "uploads/images/logo/taters-logo.png"} alt="Taters Logo" className="w-[150px] lg:w-[160px]"></img>
+        <header className={`${props.sticky? 'sticky' : 'fixed'} w-full top-0 z-20 `}>
+            <div className={` w-full ${props.serviceReached ? 'bg-red-700':''}`}>
+                <nav className={`lg:flex hidden justify-between items-center container mx-auto px-3 py-2 ${props.serviceReached ? 'bg-red-700':''}`}>
+                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/logo/taters-logo.png"} alt="Taters Logo" className="w-[150px] lg:w-[160px]"></img>
 
-                <div  className="justify-center items-center space-x-4 flex">
-                    <ul className="flex text-white font-semibold items-stretch h-[40px] justify-center ">
+                    <div  className="justify-center items-center space-x-4 flex">
+                        <ul className="flex text-white font-semibold items-stretch h-[40px] justify-center ">
+                            {
+                                TABS.map((tab: any, i)=>{
+                                    return (
+                                        <li key={i} className={props.active === tab.name ? `border-b-4  ease-in duration-200 border-white px-4 flex justify-center items-center font-bold tracking-wider` : 
+                                        "px-4 pb-1 flex justify-center items-center tracking-wider"}>
+                                            <Link to={tab.url}>{tab.name}</Link>
+                                        </li>
+                                    );
+                                })
+                            }
+                        </ul>
                         {
-                            TABS.map((tab: any, i)=>{
-                                return (
-                                    <li key={i} className={props.active === tab.name ? `border-b-4  ease-in duration-200 border-white px-4 flex justify-center items-center font-bold tracking-wider` : 
-                                    "px-4 pb-1 flex justify-center items-center tracking-wider"}>
-                                        <Link to={tab.url}>{tab.name}</Link>
-                                    </li>
-                                );
-                            })
+                            
                         }
-                    </ul>
-                    {
-                        
-                    }
-                    {
-                        getSessionState.data?.userData ? 
-                        <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full"></img> : 
-                            getSessionState.data?.userData === null ? 
-                            <button onClick={loginToFacebook} className="bg-red-600 text-white mb-1 h-[40px] px-4 rounded-full uppercase font-semibold tracking-lg flex justify-center items-center">SIGN IN</button>
-                        : null
-                    }
-                </div>
-            </nav>
+                        {
+                            getSessionState.data?.userData ? 
+                            <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full"></img> : 
+                                getSessionState.data?.userData === null ? 
+                                <button onClick={loginToFacebook} className="bg-red-600 text-white mb-1 h-[40px] px-4 rounded-full uppercase font-semibold tracking-lg flex justify-center items-center">SIGN IN</button>
+                            : null
+                        }
+                    </div>
+                </nav>
+            </div>
         </header>
     );
 }

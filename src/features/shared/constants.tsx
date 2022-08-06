@@ -7,7 +7,7 @@ export const SERVICES_DESKTOP = [
         subtitle: 'Online delivery snacks',
         color: '#1d1115',
         textColor: 'white',
-        image: 'uploads/images/home_cards/taters_online-delivery.jpeg'
+        image: 'uploads/images/home_cards/taters_snackshop.jpeg'
     },
     {
         title: 'Franchising',
