@@ -4,7 +4,7 @@ import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model"
 import {RedeemDealParam } from "features/popclub/core/popclub.params";
 import {RedeemDealRepository, RedeemDealResponse } from "features/popclub/data/repository/popclub.repository";
 
-export enum RedeemDealSite{
+export enum RedeemDealState{
     initial,
     inProgress,
     success,
@@ -13,10 +13,10 @@ export enum RedeemDealSite{
 
 
 const initialState : {
-    status: RedeemDealSite,
+    status: RedeemDealState,
     data: RedeemDealModel | null | undefined
 } = {
-    status: RedeemDealSite.initial,
+    status: RedeemDealState.initial,
     data: undefined,
 }
 
@@ -31,18 +31,19 @@ export const redeemDeal = createAsyncThunk('redeemDeal',
 export const redeemDealSlice = createSlice({
     name:'redeemDeal',
     initialState,
-    reducers : {},
+    reducers : {
+        resetRedeemDeal: (state) => {
+            state.status = RedeemDealState.initial;
+        },
+    },
     extraReducers: (builder: any) => {
         builder.addCase(redeemDeal.pending, (state: any)=>{
-            state.status = RedeemDealSite.inProgress;
+            state.status = RedeemDealState.inProgress;
         }).addCase(redeemDeal.fulfilled, (state: any, action : PayloadAction<{message: string, data: RedeemDealModel}> ) => {
             const data = action.payload.data;
-
-            console.log(action.payload.message);
-            
             
             state.data = data;
-            state.status = RedeemDealSite.success;
+            state.status = RedeemDealState.success;
         })
     }
 });
@@ -50,5 +51,7 @@ export const redeemDealSlice = createSlice({
 
 
 export const selectRedeemDeal = (state : RootState) => state.redeemDeal;
+
+export const { resetRedeemDeal } = redeemDealSlice.actions;
 
 export default redeemDealSlice.reducer;

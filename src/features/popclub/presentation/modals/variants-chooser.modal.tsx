@@ -1,6 +1,6 @@
 import { selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { redeemDeal } from "../slices/redeem-deal.slice";
+import { redeemDeal, RedeemDealState, resetRedeemDeal } from "../slices/redeem-deal.slice";
 import { DealModel } from "features/popclub/core/domain/deal.model";
 import { selectGetDeal } from "../slices/get-deal.slice";
 import { useEffect, useState } from "react";
@@ -26,8 +26,9 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
     const dispatch = useAppDispatch();
 
     useEffect(()=>{
-        if(redeemDealState.data){
+        if(redeemDealState.status === RedeemDealState.success){
             dispatch(getSession());
+            dispatch(resetRedeemDeal());
         }
     }, [redeemDealState, dispatch]);
 
@@ -82,7 +83,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
             <div className='bg-primaryDark px-4 py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px] text-white mb-10'>
                 <form onSubmit={onSubmit}>
                     {
-                        getDealProductVariantsState.data.map((dealProductVariant, i) => {
+                        getDealProductVariantsState.data?.map((dealProductVariant, i) => {
                             return (
                                 <div key={i} className="pb-4">
                                     <h1 className="text-lg font-bold">{dealProductVariant.product.name}</h1>

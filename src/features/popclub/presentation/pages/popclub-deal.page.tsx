@@ -2,23 +2,52 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { HeaderNav } from "features/shared";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDeal, selectGetDeal } from "../slices/get-deal.slice";
+import { useParams } from "react-router-dom";
+import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
 import axios from "axios"
 import { getSession, selectGetSession } from "../slices/get-session.slice";
-import { getDealProductVariants, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
+import { getDealProductVariants, GetDealProductVariantsState, resetGetDealProductVariantsState, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
 import { CountdownTimer } from "../components";
-import moment from "moment";
+import { redeemDeal, RedeemDealState, resetRedeemDeal, selectRedeemDeal } from "../slices/redeem-deal.slice";
+import { getRedeems } from "../slices/get-redeems.slice";
 
 export function PopClubDeal(){
     const getDealState = useAppSelector(selectGetDeal);
+    const getDealProductVariantsState = useAppSelector(selectGetDealProductVariants);
+    const redeemDealState = useAppSelector(selectRedeemDeal);
+
     const dispatch = useAppDispatch();
     let { hash } = useParams();
 
     const getSessionState = useAppSelector(selectGetSession);
     
     const [openVariantChooserModal, setOpenVariantChooserModal ] = useState(false);
+
+    useEffect(()=>{
+        if(
+            getDealState.status === GetDealState.success &&
+            getDealProductVariantsState.status === GetDealProductVariantsState.success
+        ){
+            if(getDealProductVariantsState.data?.length > 0){
+                setOpenVariantChooserModal(true);
+            }else{
+                if(getDealState.data?.hash){
+                    dispatch(redeemDeal({
+                        hash: getDealState.data?.hash,
+                    }));
+                    dispatch(resetGetDealProductVariantsState());
+                }
+            }
+        }
+    },[getDealProductVariantsState, dispatch, getDealState]);
+
+    useEffect(()=>{
+        if(redeemDealState.status === RedeemDealState.success){
+            dispatch(getRedeems());
+            dispatch(resetRedeemDeal());
+        }
+    },[redeemDealState, dispatch]);
 
     useEffect(()=>{
         dispatch(getSession());
@@ -31,18 +60,16 @@ export function PopClubDeal(){
         }
     },[dispatch, hash]);
 
-    const redeemDeal =()=>{
+    const handleRedeem =()=>{
         if(hash){
             dispatch(getDealProductVariants({
                 hash,
             }));
-            setOpenVariantChooserModal(true);
         }
     }
     
 
-    const loginToFacebook = () => {
-        
+    const loginToRedeem = () => {
         axios.get(`${REACT_APP_DOMAIN_URL}api/facebook/login`, {
             headers: {
                 'Content-Type': 'application/json'
@@ -104,15 +131,16 @@ export function PopClubDeal(){
                             
                             {
                                 getSessionState.data?.userData ? 
-                                    <button className="bg-transparent text-white py-3 px-10 uppercase border border-white rounded" onClick={redeemDeal}>Redeem</button> : 
+                                    <button className="bg-transparent text-white py-3 px-10 uppercase border border-white rounded" onClick={handleRedeem}>Redeem</button> : 
                                     getSessionState.data?.userData === null ? 
-                                    <button className="bg-transparent text-white py-3 px-10 uppercase border border-white rounded" onClick={loginToFacebook}>Login to Redeem</button>
+                                    <button className="bg-transparent text-white py-3 px-10 uppercase border border-white rounded" onClick={loginToRedeem}>Login to Redeem</button>
                                 : null
                             }
                         </div>
                     </div>
                 </section>
             </section>
+
             <VariantsChooserModal open={openVariantChooserModal} onClose={()=>{
 
             }}></VariantsChooserModal>

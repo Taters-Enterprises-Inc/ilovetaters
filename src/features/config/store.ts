@@ -13,6 +13,7 @@ import getAllAvailableStores from '../popclub/presentation/slices/get-all-availa
 import getDeal from '../popclub/presentation/slices/get-deal.slice';
 import getDealProductVariants from '../popclub/presentation/slices/get-deal-product-variants.slice';
 import redeemDeal from '../popclub/presentation/slices/redeem-deal.slice';
+import getRedeems from '../popclub/presentation/slices/get-redeems.slice';
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     getDealProductVariants: getDealProductVariants,
     
     redeemDeal: redeemDeal,
+    getRedeems: getRedeems,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

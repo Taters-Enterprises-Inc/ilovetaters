@@ -84,9 +84,24 @@ export interface GetDealProductVariantsResponse {
 
 export interface RedeemDealResponse {
     data: {
-        data: RedeemDealModel;
-        mesage: string;
+        message: string;
     }
+}
+
+export interface GetRedeemsResponse{
+    data: {
+        data: RedeemDealModel,
+        message: string,
+    }
+}
+
+export function GetRedeemsRepository() : Promise<GetRedeemsResponse> {
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeems`,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
 }
 
 export function RedeemDealRepository(param : RedeemDealParam) : Promise<RedeemDealResponse> {

@@ -16,7 +16,7 @@ export enum GetDealProductVariantsState{
 
 const initialState : {
     status: GetDealProductVariantsState,
-    data: Array<DealProductVariantsModel>
+    data: Array<DealProductVariantsModel>,
 } = {
     status: GetDealProductVariantsState.initial,
     data: [],
@@ -33,7 +33,11 @@ export const getDealProductVariants = createAsyncThunk('getDealProductVariants',
 export const getDealProductVariantsSlice = createSlice({
     name:'getDealProductVariants',
     initialState,
-    reducers : {},
+    reducers : {
+        resetGetDealProductVariantsState: (state) => {
+            state.status = GetDealProductVariantsState.initial;
+        },
+    },
     extraReducers: (builder: any) => {
         builder.addCase(getDealProductVariants.pending, (state: any)=>{
             state.status = GetDealProductVariantsState.inProgress;
@@ -42,12 +46,15 @@ export const getDealProductVariantsSlice = createSlice({
             
             state.data = data;
             state.status = GetDealProductVariantsState.success;
-        })
+        });
+        
     }
 });
 
 
 
 export const selectGetDealProductVariants = (state : RootState) => state.getDealProductVariants;
+
+export const { resetGetDealProductVariantsState } = getDealProductVariantsSlice.actions;
 
 export default getDealProductVariantsSlice.reducer;

@@ -1,23 +1,28 @@
+import { RedeemDealModel } from "./redeem_deal.model";
+
 export interface SessionModel {
     cache_data ?: {
-        store_id ?: string,
-        region_id ?: number,
-        store_name ?: string,
-    }
+        store_id ?: string;
+        region_id ?: number;
+        store_name ?: string;
+    };
 
-    customer_address ?: string,
+    customer_address ?: string;
+    
     userData: {
-        oauth_provider: string,
-        oauth_uid: string,
-        first_name: string,
-        last_name: string,
-        email: string,
-        gender: string,
-        picture: string,
+        oauth_provider: string;
+        oauth_uid: string;
+        first_name: string;
+        last_name: string;
+        email: string;
+        gender: string;
+        picture: string;
         link: string
-    },
+    };
     
     popclub_data : {
-        platform: string,
-    }
+        platform: string;
+    };
+
+    redeem_data : Array<RedeemDealModel>;
 }
