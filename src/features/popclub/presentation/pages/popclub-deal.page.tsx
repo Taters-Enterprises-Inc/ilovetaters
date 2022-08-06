@@ -98,7 +98,7 @@ export function PopClubDeal(){
                                 </div>
                             </div> : null }
                         <img src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getDealState.data?.product_image}`} alt='Deals'/>
-                        {/* <CountdownTimer></CountdownTimer> */}
+                        <CountdownTimer></CountdownTimer>
                         <div className="p-4 flex items-center justify-center flex-col space-y-4">
                             <h1 className="text-white">{getDealState.data?.description}</h1>
                             
