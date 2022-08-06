@@ -1,6 +1,7 @@
 
 export interface RedeemDealParam {
     hash: string;
+    remarks: string;
 }
 
 export interface GetDealProductVariantsParam{
