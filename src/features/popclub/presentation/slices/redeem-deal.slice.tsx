@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
-import { PlatformModel } from "features/popclub/core/domain/platform.model";
-import { ProductVariantModel } from "features/popclub/core/domain/product_variant.model";
 import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model";
-import { GetDealProductVariantsParam, RedeemDealParam } from "features/popclub/core/popclub.params";
-import { GetAllPlatformRepository, GetAllPlatformRepositoryResponse, GetDealProductVariantsRepository, GetDealProductVariantsResponse, RedeemDealRepository, RedeemDealResponse } from "features/popclub/data/repository/popclub.repository";
+import {RedeemDealParam } from "features/popclub/core/popclub.params";
+import {RedeemDealRepository, RedeemDealResponse } from "features/popclub/data/repository/popclub.repository";
 
 export enum RedeemDealSite{
     initial,
