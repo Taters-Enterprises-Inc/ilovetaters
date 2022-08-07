@@ -1,28 +1,24 @@
 import moment from "moment";
 import Countdown from "react-countdown";
 import { ProgressBar } from "./progress-bar";
-import {AiOutlineFieldTime} from 'react-icons/ai';
 import {  useAppDispatch, useAppSelector } from "features/config/hooks";
 
-import { selectGetDeal } from "../slices/get-deal.slice";
-import {GetRedeemState, resetGetRedeem, selectGetRedeem } from "../slices/get-redeem.slice";
-import { useParams } from "react-router-dom";
+import { GetLatestUnexpiredRedeemState, resetGetLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "../slices/get-latest-unexpired-redeem.slice";
 
-export function CountdownTimer(){
+export function CountdownTimerLatestRedeem(){
 
-    const getRedeemState = useAppSelector(selectGetRedeem);
+    const getLatestUnexpiredRedeemState = useAppSelector(selectGetLatestUnexpiredRedeem);
     const dispatch = useAppDispatch();
 
-    if(getRedeemState.status === GetRedeemState.success && getRedeemState.data){
-        var redeemDate : any = moment(getRedeemState.data.date_redeemed);
-        var expirationDate : any = moment(getRedeemState.data.expiration);
-        var expirationDateCountDown = new Date(getRedeemState.data.expiration);
-        
-        const pad =(number : number) => ('0' + number).slice(-2);
+    if( getLatestUnexpiredRedeemState.status === GetLatestUnexpiredRedeemState.success 
+        && getLatestUnexpiredRedeemState.data){
+        var redeemDate : any = moment(getLatestUnexpiredRedeemState.data.date_redeemed);
+        var expirationDate : any = moment(getLatestUnexpiredRedeemState.data.expiration);
+        var expirationDateCountDown = new Date(getLatestUnexpiredRedeemState.data.expiration);
         
         const renderer = ({ hours, minutes, seconds, completed} : any) => {
             if(completed){
-                dispatch(resetGetRedeem());
+                dispatch(resetGetLatestUnexpiredRedeem());
             }else if (!completed) {
                 var today = moment();
                 let timeName = '';
@@ -51,7 +47,7 @@ export function CountdownTimer(){
                 return(
                     <>
                         <ProgressBar percentage={percentage}/>
-                        <div className="text-white flex items-center text-xl px-4 ">
+                        {/* <div className="text-white flex items-center text-xl px-4 ">
                             <AiOutlineFieldTime className="text-4xl mr-2"/>
                             <div className="font-['Bebas_Neue'] tracking-[4px]">
                                 <span className="mr-2">
@@ -59,7 +55,7 @@ export function CountdownTimer(){
                                 </span>
                                 <span className="text-sm">{timeName} Remaining</span>
                             </div>
-                        </div>
+                        </div> */}
                     </>
                 );
             }

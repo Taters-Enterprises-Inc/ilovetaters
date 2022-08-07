@@ -31,7 +31,11 @@ export const getRedeems = createAsyncThunk('getRedeems',
 export const getRedeemsSlice = createSlice({
     name:'getRedeems',
     initialState,
-    reducers : {},
+    reducers : {
+        resetGetRedeems: (state) => {
+            state.status = GetRedeemsState.initial;
+        }
+    },
     extraReducers: (builder: any) => {
         builder.addCase(getRedeems.pending, (state: any)=>{
             state.status = GetRedeemsState.inProgress;
@@ -47,5 +51,7 @@ export const getRedeemsSlice = createSlice({
 
 
 export const selectGetRedeems = (state : RootState) => state.getRedeems;
+
+export const { resetGetRedeems } = getRedeemsSlice.actions;
 
 export default getRedeemsSlice.reducer;

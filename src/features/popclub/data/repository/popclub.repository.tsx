@@ -7,7 +7,7 @@ import { ProductVariantModel } from "features/popclub/core/domain/product_varian
 import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model";
 import { SessionModel } from "features/popclub/core/domain/session.model";
 import { StoreModel } from "features/popclub/core/domain/store.model";
-import { GetAllPlatformCategoriesParam, GetDealProductVariantsParam, GetDealsParam, GetStoresAvailableParam, RedeemDealParam, SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
+import { GetAllPlatformCategoriesParam, GetDealProductVariantsParam, GetDealsParam, GetRedeemParam, GetStoresAvailableParam, RedeemDealParam, SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
 import { REACT_APP_DOMAIN_URL } from '../../../shared/constants';
 
 export interface GetAllPlatformRepositoryResponse{
@@ -85,6 +85,7 @@ export interface GetDealProductVariantsResponse {
 export interface RedeemDealResponse {
     data: {
         message: string;
+        data: RedeemDealModel;
     }
 }
 
@@ -93,6 +94,38 @@ export interface GetRedeemsResponse{
         data: RedeemDealModel,
         message: string,
     }
+}
+
+export interface GetRedeemResponse{
+    data: {
+        data: RedeemDealModel,
+        message: string,
+    }
+}
+
+export interface GetLatestUnexpiredRedeemResponse{
+    data: {
+        data: RedeemDealModel,
+        message: string,
+    }
+}
+
+export function GetLatestUnexpiredRedeemRepository() : Promise<GetLatestUnexpiredRedeemResponse> {
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeem` ,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
+}
+
+export function GetRedeemRepository(param : GetRedeemParam) : Promise<GetRedeemResponse> {
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeem?deal_id=${param.deal_id}` ,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
 }
 
 export function GetRedeemsRepository() : Promise<GetRedeemsResponse> {

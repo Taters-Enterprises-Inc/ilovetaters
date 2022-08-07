@@ -6,10 +6,11 @@ import { selectGetDeal } from "../slices/get-deal.slice";
 import { useEffect, useState } from "react";
 import { ProductModel } from "features/popclub/core/domain/product.model";
 import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
+import { getSession, GetSessionState, selectGetSession } from "../slices/get-session.slice";
 import { selectRedeemDeal } from "../slices/redeem-deal.slice";
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getRedeems, GetRedeemsState, selectGetRedeems } from "../slices/get-redeems.slice";
 
 interface VariantChooserModalProps{
     open: boolean;
@@ -19,6 +20,7 @@ interface VariantChooserModalProps{
 export function VariantsChooserModal(props: VariantChooserModalProps){
     const getDealProductVariantsState = useAppSelector(selectGetDealProductVariants);
     const getDealState = useAppSelector(selectGetDeal);
+    const getRedeemsState = useAppSelector(selectGetRedeems);
     const getSessionState = useAppSelector(selectGetSession);
     const redeemDealState = useAppSelector(selectRedeemDeal);
 
@@ -28,14 +30,23 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
     useEffect(()=>{
         if(redeemDealState.status === RedeemDealState.success){
             dispatch(getSession());
-            dispatch(resetRedeemDeal());
         }
     }, [redeemDealState, dispatch]);
 
     useEffect(()=>{
-        if(redeemDealState.data){
+
+        console.log(redeemDealState);
+        
+
+        if(redeemDealState.status === RedeemDealState.success && 
+            getSessionState.status === GetSessionState.success &&
+            getSessionState.data?.popclub_data.platform === 'online-delivery' &&
+            redeemDealState.data
+            ){
+
             axios.post(`${REACT_APP_DOMAIN_URL}v2/popclub/v3_to_v2_session_connector`,{
                 session : getSessionState.data,
+                redeem_data: redeemDealState.data,
             }, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,7 +57,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
                 window.location.href = `${REACT_APP_DOMAIN_URL}v2/shop/products`;
             });
         }
-    }, [getSessionState, redeemDealState]);
+    }, [getSessionState, redeemDealState, getRedeemsState]);
         
     if(props.open){
         document.body.classList.add('overflow-hidden');

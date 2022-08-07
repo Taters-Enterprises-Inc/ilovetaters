@@ -14,7 +14,7 @@ export enum RedeemDealState{
 
 const initialState : {
     status: RedeemDealState,
-    data: RedeemDealModel | null | undefined
+    data: RedeemDealModel | undefined | null,
 } = {
     status: RedeemDealState.initial,
     data: undefined,

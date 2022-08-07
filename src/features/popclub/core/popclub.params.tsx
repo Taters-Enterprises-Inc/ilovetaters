@@ -1,4 +1,8 @@
 
+export interface GetRedeemParam{
+    deal_id: number;
+}
+
 export interface RedeemDealParam {
     hash: string;
     remarks?: string;
