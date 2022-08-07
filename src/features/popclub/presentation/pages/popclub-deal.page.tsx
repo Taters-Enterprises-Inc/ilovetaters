@@ -4,7 +4,6 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
-import axios from "axios"
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { getDealProductVariants, GetDealProductVariantsState, resetGetDealProductVariantsState, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
@@ -13,6 +12,7 @@ import { redeemDeal, RedeemDealState, resetRedeemDeal, selectRedeemDeal } from "
 import { getRedeem, GetRedeemState, selectGetRedeem } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
+import 'react-toastify/dist/ReactToastify.css';
 
 export function PopClubDeal(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);

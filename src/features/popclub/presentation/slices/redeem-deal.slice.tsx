@@ -41,6 +41,9 @@ export const redeemDealSlice = createSlice({
             state.status = RedeemDealState.inProgress;
         }).addCase(redeemDeal.fulfilled, (state: any, action : PayloadAction<{message: string, data: RedeemDealModel}> ) => {
             const data = action.payload.data;
+
+            console.log(action.payload.message);
+            
             
             state.data = data;
             state.status = RedeemDealState.success;

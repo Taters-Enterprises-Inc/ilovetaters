@@ -4,6 +4,7 @@ import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from 'featur
 import { REACT_APP_DOMAIN_URL } from 'features/shared/constants';
 import { useEffect } from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 export function FooterNav(){
     const getLatestUnexpiredRedeemState = useAppSelector(selectGetLatestUnexpiredRedeem);
@@ -15,19 +16,19 @@ export function FooterNav(){
     return (
         <section className='fixed w-full bottom-0 '>
             { getLatestUnexpiredRedeemState.data ? 
-                <div className='text-white bg-primaryDark m-2 h-[105px] rounded-xl'>
+                <Link to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash } className='text-white shadow-lg bg-primaryDark m-2 h-[105px] rounded-xl block'>
                     <div className='flex'>
                         <div className='flex-1 flex flex-col'>
                             <div className='flex-1 p-4 leading-2 text-sm'>
-                                <h1>{getLatestUnexpiredRedeemState.data.name}</h1>
+                                <h1 className='elipsis-3-line'>{getLatestUnexpiredRedeemState.data.name}</h1>
                             </div>
                             <CountdownTimerLatestRedeem/>
                         </div>
                         <img 
-                            className='rounded-r-xl w-[100px] h-[100px] object-contain'
+                            className='rounded-r-xl w-[105px] h-[105px] object-contain'
                             src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getLatestUnexpiredRedeemState.data.product_image}`} alt='Deals'/> 
                     </div>
-                </div> : null }
+                </Link> : null }
             <footer className='w-full py-2 lg:hidden bg-primaryDark'>
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
