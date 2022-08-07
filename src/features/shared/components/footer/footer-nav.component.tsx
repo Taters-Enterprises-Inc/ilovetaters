@@ -15,17 +15,17 @@ export function FooterNav(){
     return (
         <section className='fixed w-full bottom-0 '>
             { getLatestUnexpiredRedeemState.data ? 
-                <div className='text-white bg-primaryDark m-2 h-[100px] rounded-lg'>
+                <div className='text-white bg-primaryDark m-2 h-[105px] rounded-xl'>
                     <div className='flex'>
-                        <div className='flex-1'>
-
+                        <div className='flex-1 flex flex-col'>
+                            <div className='flex-1 p-4 leading-2 text-sm'>
+                                <h1>{getLatestUnexpiredRedeemState.data.name}</h1>
+                            </div>
+                            <CountdownTimerLatestRedeem/>
                         </div>
                         <img 
-                            width={87}
+                            className='rounded-r-xl w-[100px] h-[100px] object-contain'
                             src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getLatestUnexpiredRedeemState.data.product_image}`} alt='Deals'/> 
-                    </div>
-                    <div>
-                        <CountdownTimerLatestRedeem/>
                     </div>
                 </div> : null }
             <footer className='w-full py-2 lg:hidden bg-primaryDark'>

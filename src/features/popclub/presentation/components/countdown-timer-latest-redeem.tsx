@@ -46,16 +46,7 @@ export function CountdownTimerLatestRedeem(){
 
                 return(
                     <>
-                        <ProgressBar percentage={percentage}/>
-                        {/* <div className="text-white flex items-center text-xl px-4 ">
-                            <AiOutlineFieldTime className="text-4xl mr-2"/>
-                            <div className="font-['Bebas_Neue'] tracking-[4px]">
-                                <span className="mr-2">
-                                    {pad(hours)}:{pad(minutes)}:{pad(seconds)} 
-                                </span>
-                                <span className="text-sm">{timeName} Remaining</span>
-                            </div>
-                        </div> */}
+                        <ProgressBar className="rounded-bl-xl" percentage={percentage}/>
                     </>
                 );
             }

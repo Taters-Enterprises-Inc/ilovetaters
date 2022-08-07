@@ -17,6 +17,8 @@ export function StoreVisitStoreChooserModal(props : StoreVisitStoreChooserModalP
   
   if(props.open){
     document.body.classList.add('overflow-hidden');
+  }else {
+    document.body.classList.remove('overflow-hidden');
   }
 
   return (

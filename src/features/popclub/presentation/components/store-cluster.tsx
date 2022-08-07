@@ -1,10 +1,11 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getDeals } from "../slices/get-deals.slice";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { selectGetStoresAvailable } from '../slices/get-stores-available-slice';
-import { setStoreAndAddress } from "../slices/set-store-and-address.slice";
+import { setStoreAndAddress, SetStoreAndAddressState } from "../slices/set-store-and-address.slice";
 
 import { selectSetStoreAndAddress } from "../slices/set-store-and-address.slice";
 
@@ -15,9 +16,21 @@ interface StoreClusterProps {
 
 export function StoreCluster(props: StoreClusterProps ){
     const getStoresAvailableState  = useAppSelector(selectGetStoresAvailable);
+    const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     let { platform } = useParams();
+    const query = useQuery();
+    const category = query.get('category');
+
+    useEffect(()=>{
+        if(setStoreAndAddressState.status === SetStoreAndAddressState.success){
+            
+            if(platform !== undefined && category !== null){
+                dispatch(getDeals({platform_url_name:platform, category_url_name: category}));
+            }
+        }
+    }, [setStoreAndAddressState]);
 
     const storeClicked =(storeId: number)=> {
         dispatch(setStoreAndAddress({

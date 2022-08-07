@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useAppDispatch, useAppSelector } from 'features/config/hooks';
+import { useAppDispatch, useAppSelector, useQuery } from 'features/config/hooks';
 import { StoreCluster } from '../components';
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { SearchAddress } from '../components/search-address';
@@ -24,11 +24,16 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
   React.useEffect(()=>{
     if(getSessionState.data?.customer_address !== null){
       setAddress(getSessionState.data?.customer_address);
+      
+      
     }
   },[]);
 
-  if(props.open)
+  if(props.open){
     document.body.classList.add('overflow-hidden');
+  }else {
+    document.body.classList.remove('overflow-hidden');
+  }
 
   return (
     <div
@@ -41,7 +46,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
           props.onClose();
         }}>X</button>
 
-        <h1 className='text-white font-bold text-sm text-center pt-1 pb-2'>Which store are you visiting?</h1>
+        <h1 className='text-white font-bold text-sm text-center pt-1 pb-2'>Which store do you want for online delivery?</h1>
         
         <div className='flex items-center justify-center mb-3'>
           <label className="pure-material-textfield-outlined w-[96%]">

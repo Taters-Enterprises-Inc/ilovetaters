@@ -61,6 +61,8 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
         
     if(props.open){
         document.body.classList.add('overflow-hidden');
+    }else{
+        document.body.classList.remove('overflow-hidden');
     }
 
     const onSubmit =(event: any)=>{
@@ -91,7 +93,9 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
         <div
         style={{display: props.open? 'flex':'none'}}
         className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
-            <div className='bg-primaryDark px-4 py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px] text-white mb-10'>
+            <div className='bg-primaryDark px-4 py-8 lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px] text-white mb-10'>
+                
+                <button className='absolute top-2 right-4 text-white' onClick={props.onClose}>X</button>
                 <form onSubmit={onSubmit}>
                     {
                         getDealProductVariantsState.data?.map((dealProductVariant, i) => {

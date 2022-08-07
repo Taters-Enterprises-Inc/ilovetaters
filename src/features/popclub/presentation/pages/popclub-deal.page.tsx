@@ -12,8 +12,10 @@ import { CountdownTimer } from "../components";
 import { redeemDeal, RedeemDealState, resetRedeemDeal, selectRedeemDeal } from "../slices/redeem-deal.slice";
 import { getRedeem, GetRedeemState, selectGetRedeem } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
+import { LoginChooserModal } from "../modals/login-chooser.modal";
 
 export function PopClubDeal(){
+    const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
     const getDealState = useAppSelector(selectGetDeal);
     const getDealProductVariantsState = useAppSelector(selectGetDealProductVariants);
     const redeemDealState = useAppSelector(selectRedeemDeal);
@@ -98,29 +100,7 @@ export function PopClubDeal(){
     
 
     const loginToRedeem = () => {
-        axios.get(`${REACT_APP_DOMAIN_URL}api/facebook/login`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true,
-        })
-        .then(function (response: any) {
-            const facebookURL = response.data.url;
-            
-            if (response.data.result === false) {
-                axios.post(`${REACT_APP_DOMAIN_URL}api/facebook/login_point/`,{
-                    fb_login_point: window.location.href 
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    withCredentials: true,
-                }).then(()=>{
-                    window.location.href = facebookURL;
-                });
-            }
-            
-        })
+        setOpenLoginChooserModal(true);
     }
 
     const redeemButton =()=> {
@@ -129,18 +109,18 @@ export function PopClubDeal(){
             getRedeemState.status === GetRedeemState.success &&
             getRedeemState.data){
             return (
-                <div className="bg-green-700 text-white py-3 w-full uppercase border border-white rounded">CODE : 
+                <div className="bg-green-700 text-white py-3 w-full uppercase border border-white rounded-xl">CODE : 
                     <span className="font-bold ml-1">{getRedeemState.data.redeem_code}</span>
                 </div>
             );
         }
         if(getSessionState.data?.userData){
             return(
-                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded" onClick={handleRedeem}>Redeem</button>
+                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl" onClick={handleRedeem}>Redeem</button>
             );
         } else if (getSessionState.data?.userData === null){
             return(
-                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded" onClick={loginToRedeem}>Login to Redeem</button>
+                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl" onClick={loginToRedeem}>Login to Redeem</button>
             );
         }
     }
@@ -180,8 +160,12 @@ export function PopClubDeal(){
             </section>
 
             <VariantsChooserModal open={openVariantChooserModal} onClose={()=>{
+                setOpenVariantChooserModal(false);
+            }}/>
 
-            }}></VariantsChooserModal>
+            <LoginChooserModal open={openLoginChooserModal} onClose={()=>{
+                setOpenLoginChooserModal(false);
+            }}/>
         </>
     );
 }
