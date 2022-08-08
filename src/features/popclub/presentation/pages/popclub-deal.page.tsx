@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { HeaderNav } from "features/shared";
+import { FooterNav, HeaderNav } from "features/shared";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -166,6 +166,8 @@ export function PopClubDeal(){
             <LoginChooserModal open={openLoginChooserModal} onClose={()=>{
                 setOpenLoginChooserModal(false);
             }}/>
+            
+            <FooterNav></FooterNav>
         </>
     );
 }

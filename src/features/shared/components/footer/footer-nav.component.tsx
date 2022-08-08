@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'features/config/hooks';
 import { CountdownTimerLatestRedeem } from 'features/popclub/presentation/components';
 import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from 'features/popclub/presentation/slices/get-latest-unexpired-redeem.slice';
-import { REACT_APP_DOMAIN_URL } from 'features/shared/constants';
+import { REACT_APP_BASE_NAME, REACT_APP_DOMAIN_URL } from 'features/shared/constants';
 import { useEffect } from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 
@@ -32,25 +32,25 @@ export function FooterNav(){
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
                         <li className="flex-1">
-                            <a href='/staging'  className="flex justify-between items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_BASE_NAME}  className="flex justify-between items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/home.png'} className="w-[28px] sm:w-[40px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px]">Home</span>
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href='/staging/popclub'  className="flex justify-between items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_BASE_NAME + 'popclub'}  className="flex justify-between items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/popclub.png'} className="w-[20px] sm:w-[24px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px]">Popclub</span>
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href='https://ilovetaters.com/shop' className="flex justify-center items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'} className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/snackshop.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Snackshop</span>
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href='https://ilovetaters.com/catering'  className="flex justify-center items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'}  className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/catering.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Catering</span>
                             </a>

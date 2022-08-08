@@ -80,7 +80,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps ){
                                     }
                                 </div>
                                 <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" width={250}/>
-                                <div className="px-3 py-2 h-full">
+                                <div className="px-3 py-2">
                                     <h1 className="mb-1 text-[10px] lg:text-base">{store.store_name}</h1>
                                     <p className="text-[7px] lg:text-[11px]">{store.store_address}</p>
                                 </div>
