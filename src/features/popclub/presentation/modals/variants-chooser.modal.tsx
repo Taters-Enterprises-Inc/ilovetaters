@@ -44,7 +44,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
 
             axios.post(`${REACT_APP_DOMAIN_URL}v2/popclub/v3_to_v2_session_connector`,{
                 session : getSessionState.data,
-                redeem_data: redeemDealState.data,
+                redeem: redeemDealState.data,
             }, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
                 withCredentials: true,
             })
             .then(function (response: any) {
-                window.location.href = `${REACT_APP_DOMAIN_URL}v2/shop/products`;
+                window.location.href = `${REACT_APP_DOMAIN_URL}v2/shop/checkout`;
             });
         }
     }, [getSessionState, redeemDealState, getRedeemsState]);
