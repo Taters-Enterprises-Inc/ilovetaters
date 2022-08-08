@@ -4,13 +4,14 @@ import { ProgressBar } from "./progress-bar";
 import {AiOutlineFieldTime} from 'react-icons/ai';
 import {  useAppDispatch, useAppSelector } from "features/config/hooks";
 
-import { selectGetDeal } from "../slices/get-deal.slice";
-import {GetRedeemState, resetGetRedeem, selectGetRedeem } from "../slices/get-redeem.slice";
+import { GetDealState, selectGetDeal } from "../slices/get-deal.slice";
+import {getRedeem, GetRedeemState, resetGetRedeem, selectGetRedeem } from "../slices/get-redeem.slice";
 import { useParams } from "react-router-dom";
 
 export function CountdownTimer(){
 
     const getRedeemState = useAppSelector(selectGetRedeem);
+    const getDealState = useAppSelector(selectGetDeal);
     const dispatch = useAppDispatch();
 
     if(getRedeemState.status === GetRedeemState.success && getRedeemState.data){
@@ -22,7 +23,14 @@ export function CountdownTimer(){
         
         const renderer = ({ hours, minutes, seconds, completed} : any) => {
             if(completed){
-                dispatch(resetGetRedeem());
+                if(
+                    getDealState.status === GetDealState.success &&
+                    getDealState.data
+                    ){
+                    dispatch(getRedeem({
+                        deal_id : getDealState.data.id
+                    }));
+                }
             }else if (!completed) {
                 var today = moment();
                 let timeName = '';

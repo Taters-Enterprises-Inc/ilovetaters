@@ -148,7 +148,7 @@ export function PopClub(){
                 </div>
             </section>
 
-            <section className="container lg:px-0 md:px-8 px-2 mx-auto min-h-screen pb-20">
+            <section className="container lg:px-0 md:px-8 px-2 mx-auto min-h-screen pb-96">
                 <div className="flex flex-wrap">
                     {
                         getDealsState.data.map((deal, i)=>(
