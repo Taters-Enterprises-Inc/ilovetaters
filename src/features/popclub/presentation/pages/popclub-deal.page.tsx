@@ -4,7 +4,6 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
-import axios from "axios"
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { getDealProductVariants, GetDealProductVariantsState, resetGetDealProductVariantsState, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
@@ -13,6 +12,11 @@ import { redeemDeal, RedeemDealState, resetRedeemDeal, selectRedeemDeal } from "
 import { getRedeem, GetRedeemState, selectGetRedeem } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
+import 'react-toastify/dist/ReactToastify.css';
+import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "../slices/get-latest-unexpired-redeem.slice";
+import Countdown from "react-countdown";
+import { AiOutlineFieldTime } from "react-icons/ai";
+import moment from "moment";
 
 export function PopClubDeal(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -20,6 +24,7 @@ export function PopClubDeal(){
     const getDealProductVariantsState = useAppSelector(selectGetDealProductVariants);
     const redeemDealState = useAppSelector(selectRedeemDeal);
     const getRedeemState = useAppSelector(selectGetRedeem);
+    const getLatestUnexpiredRedeemState = useAppSelector(selectGetLatestUnexpiredRedeem);
 
     const dispatch = useAppDispatch();
     let { hash } = useParams();
@@ -48,6 +53,7 @@ export function PopClubDeal(){
 
     useEffect(()=>{
         dispatch(resetGetRedeem());
+        dispatch(getLatestUnexpiredRedeem());
     },[]);
 
     useEffect(()=>{
@@ -66,6 +72,7 @@ export function PopClubDeal(){
 
 
     useEffect(()=>{
+        dispatch(getLatestUnexpiredRedeem());
         
         
         if(
@@ -102,19 +109,146 @@ export function PopClubDeal(){
     const loginToRedeem = () => {
         setOpenLoginChooserModal(true);
     }
+    
+
 
     const redeemButton =()=> {
-        if(
+        if(getSessionState.data?.userData && getLatestUnexpiredRedeemState.next_avialable_redeem){
+
+            const pad =(number : number) => ('0' + number).slice(-2);
+        
+            const renderer = ({ hours, minutes, seconds, completed} : any) => {
+                if(completed){
+                    if(
+                        getDealState.status === GetDealState.success &&
+                        getDealState.data
+                        ){
+                        dispatch(getRedeem({
+                            deal_id : getDealState.data.id
+                        }));
+                    }
+                    dispatch(getLatestUnexpiredRedeem());
+                }else if (!completed) {
+                    let timeName = '';
+                    
+                    if(hours > 0){
+                        if(hours === 1){
+                            timeName = 'hour';
+                        }else{
+                            timeName = 'hours';
+                        }
+                    } else if(minutes > 0){
+                        if(minutes === 1){
+                            timeName = 'minute';
+                        }else{
+                            timeName = 'minutes';
+                        }
+                    } else if(seconds > 0){
+                        if(seconds === 1){
+                            timeName = 'second';
+                        }else{
+                            timeName = 'seconds';
+                        }
+                    }
+        
+                    return(
+                        <>
+                            <div className="text-white flex justify-center items-center text-xl px-4 ">
+                                <AiOutlineFieldTime className="text-4xl mr-3"/>
+                                <div className="font-['Bebas_Neue'] tracking-[4px]">
+                                    <span >
+                                        {pad(hours)}:{pad(minutes)}:{pad(seconds)} 
+                                    </span>
+                                    <span className="text-sm ml-2">{timeName}</span>
+                                </div>
+                            </div>
+                        </>
+                    );
+                }
+            };
+            
+            return(
+                <div className="bg-primaryDark text-white py-3 w-full">
+                    <span className="mt-3">You can redeem after </span>
+                    <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}/>
+                </div>
+            );
+        }else if(getSessionState.data?.userData && getLatestUnexpiredRedeemState.redeem_cooldown){
+
+            const pad =(number : number) => ('0' + number).slice(-2);
+        
+            const renderer = ({ hours, minutes, seconds, completed} : any) => {
+                if(completed){
+                    if(
+                        getDealState.status === GetDealState.success &&
+                        getDealState.data
+                        ){
+                        dispatch(getRedeem({
+                            deal_id : getDealState.data.id
+                        }));
+                    }
+                    dispatch(getLatestUnexpiredRedeem());
+                }else if (!completed) {
+                    let timeName = '';
+                    
+                    if(hours > 0){
+                        if(hours === 1){
+                            timeName = 'hour';
+                        }else{
+                            timeName = 'hours';
+                        }
+                    } else if(minutes > 0){
+                        if(minutes === 1){
+                            timeName = 'minute';
+                        }else{
+                            timeName = 'minutes';
+                        }
+                    } else if(seconds > 0){
+                        if(seconds === 1){
+                            timeName = 'second';
+                        }else{
+                            timeName = 'seconds';
+                        }
+                    }
+        
+                    return(
+                        <>
+                            <div className="text-white flex justify-center items-center text-xl px-4 ">
+                                <AiOutlineFieldTime className="text-4xl mr-3"/>
+                                <div className="font-['Bebas_Neue'] tracking-[4px]">
+                                    <span >
+                                        {pad(hours)}:{pad(minutes)}:{pad(seconds)} 
+                                    </span>
+                                    <span className="text-sm ml-2">{timeName}</span>
+                                </div>
+                            </div>
+                        </>
+                    );
+                }
+            };
+            
+            return(
+                <div className="bg-primaryDark text-white py-3 w-full">
+                    <span className="mt-3">Redeem cooldown: </span>
+                    <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}/>
+                </div>
+            );
+        }else if(
             getSessionState.data?.userData && 
             getRedeemState.status === GetRedeemState.success &&
-            getRedeemState.data){
+            getRedeemState.data ){
             return (
                 <div className="bg-green-700 text-white py-3 w-full uppercase border border-white rounded-xl">CODE : 
                     <span className="font-bold ml-1">{getRedeemState.data.redeem_code}</span>
                 </div>
             );
-        }
-        if(getSessionState.data?.userData){
+        }else if(getSessionState.data?.userData && getLatestUnexpiredRedeemState.data?.deal_hash  && getLatestUnexpiredRedeemState.data?.deal_hash !== hash){
+            return(
+                <div className="bg-primaryDark text-white py-3 w-full uppercase border border-white rounded-xl">
+                    You currently have running deal
+                </div>
+            );
+        }else if(getSessionState.data?.userData){
             return(
                 <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl" onClick={handleRedeem}>Redeem</button>
             );

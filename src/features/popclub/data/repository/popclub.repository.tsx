@@ -106,6 +106,7 @@ export interface GetRedeemResponse{
 export interface GetLatestUnexpiredRedeemResponse{
     data: {
         data: RedeemDealModel,
+        next_avialable_redeem?: string,
         message: string,
     }
 }

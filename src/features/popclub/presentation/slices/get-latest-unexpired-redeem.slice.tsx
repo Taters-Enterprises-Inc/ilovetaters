@@ -17,6 +17,8 @@ export enum GetLatestUnexpiredRedeemState{
 const initialState : {
     status: GetLatestUnexpiredRedeemState,
     message: string,
+    next_avialable_redeem?: string,
+    redeem_cooldown?: string,
     data: RedeemDealModel | undefined | null,
 } = {
     status: GetLatestUnexpiredRedeemState.initial,
@@ -45,10 +47,12 @@ export const getLatestUnexpiredRedeemSlice = createSlice({
     extraReducers: (builder: any) => {
         builder.addCase(getLatestUnexpiredRedeem.pending, (state: any)=>{
             state.status = GetLatestUnexpiredRedeemState.inProgress;
-        }).addCase(getLatestUnexpiredRedeem.fulfilled, (state: any, action : PayloadAction<{message: string, data: RedeemDealModel}> ) => {
+        }).addCase(getLatestUnexpiredRedeem.fulfilled, (state: any, action : PayloadAction<{message: string, data: RedeemDealModel, next_avialable_redeem?: string, redeem_cooldown?: string}> ) => {
             const data = action.payload.data;
 
             state.data = data;
+            state.next_avialable_redeem = action.payload.next_avialable_redeem;
+            state.redeem_cooldown = action.payload.redeem_cooldown;
             state.status = GetLatestUnexpiredRedeemState.success;
         })
     }

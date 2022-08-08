@@ -34,8 +34,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
     }, [redeemDealState, dispatch]);
 
     useEffect(()=>{
-
-        console.log(redeemDealState);
         
 
         if(redeemDealState.status === RedeemDealState.success && 
