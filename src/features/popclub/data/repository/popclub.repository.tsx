@@ -4,11 +4,10 @@ import { PlatformCategoryModel } from "features/popclub/core/domain/platform-cat
 import { PlatformModel } from "features/popclub/core/domain/platform.model";
 import { PopClubDataModel } from "features/popclub/core/domain/popclub-data.model";
 import { ProductVariantModel } from "features/popclub/core/domain/product_variant.model";
-import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model";
-import { SessionModel } from "features/popclub/core/domain/session.model";
-import { StoreModel } from "features/popclub/core/domain/store.model";
+import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetAllPlatformCategoriesParam, GetDealProductVariantsParam, GetDealsParam, GetRedeemParam, GetStoresAvailableParam, RedeemDealParam, SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
 import { REACT_APP_DOMAIN_URL } from '../../../shared/constants';
+import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 
 export interface GetAllPlatformRepositoryResponse{
     data: {
@@ -55,18 +54,6 @@ export interface SetStoreAndAddressResponse{
     }
 }
 
-export interface GetSessionResponse{
-    data: {
-        data: SessionModel;
-        message: string;
-    }
-}
-
-export interface SetSessionResponse{
-    data: {
-        message: string;
-    }
-}
 
 export interface GetDealResponse{
     data: {
@@ -220,24 +207,6 @@ export function GetStoresAvailableRepository(param: GetStoresAvailableParam) : P
 
 export function SetStoreAndAddressRepository(param: SetStoreAndAddressParm) : Promise<GetStoresAvailableResponse>{
     return axios.post(`${REACT_APP_DOMAIN_URL}api/store`,param,{
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        withCredentials : true,
-    });
-}
-
-export function GetSessionRepository(): Promise<GetSessionResponse>{
-    return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/session`,{
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        withCredentials : true,
-    });
-}
-
-export function SetSessionRepository(param: SetSessionParam): Promise<GetSessionResponse>{
-    return axios.post(`${REACT_APP_DOMAIN_URL}api/popclub/session`, {'session' : param},{
         headers: {
             'Content-Type': 'application/json'
         },

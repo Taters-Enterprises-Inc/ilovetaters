@@ -7,14 +7,16 @@ export const SERVICES_DESKTOP = [
         subtitle: 'Online delivery snacks',
         color: '#1d1115',
         textColor: 'white',
-        image: 'uploads/images/home_cards/taters_snackshop.jpeg'
+        url: 'shop',
+        image: 'uploads/images/home/cards/taters_snackshop.webp'
     },
     {
         title: 'Franchising',
         subtitle: 'Investment opportunities',
         color: '#1b1915',
         textColor: 'white',
-        image: 'uploads/images/home_cards/taters_franchising.jpeg'
+        url: 'franchising',
+        image: 'uploads/images/home/cards/taters_franchising.webp'
     },
     {
         title: 'PopClub',
@@ -22,28 +24,31 @@ export const SERVICES_DESKTOP = [
         color: '#22201A',
         textColor: 'white',
         url: 'popclub',
-        image: 'uploads/images/home_cards/taters_popclub.jpeg',
+        image: 'uploads/images/home/cards/taters_popclub.webp',
     },
     {
         title: 'Taters Caters',
         subtitle: 'Celebration Snacks',
         color: '#858173',
         textColor: 'black',
-        image: 'uploads/images/home_cards/taters_catering.jpeg'
+        url: 'catering',
+        image: 'uploads/images/home/cards/taters_catering.webp'
     },
     {
         title: 'Reseller',
         subtitle: 'Community selling',
         color: '#c7b7ad',
         textColor: 'black',
-        image: 'uploads/images/home_cards/taters_reseller.jpeg'
+        url: 'reseller',
+        image: 'uploads/images/home/cards/taters_reseller.webp'
     },
     {
         title: 'Branches',
         subtitle: 'Nationwide Locations',
         color: '#d7cdb7',
         textColor: 'black',
-        image: 'uploads/images/home_cards/taters_branches.jpg'
+        url: 'branches',
+        image: 'uploads/images/home/cards/taters_branches.webp'
     },
 ];
 
@@ -53,32 +58,32 @@ export const SERVICES_MOBILE = [
         subtitle: 'Online delivery snacks',
         color: '#1d1115',
         textColor: 'white',
-        url: '',
-        image: 'uploads/images/home_cards/taters_snackshop.jpeg'
+        url: 'shop',
+        image: 'uploads/images/home/cards/taters_snackshop.webp'
     },
     {
         title: 'Taters Caters',
         subtitle: 'Celebration Snacks',
         color: '#858173',
         textColor: 'black',
-        url: '',
-        image: 'uploads/images/home_cards/taters_catering.jpeg'
+        url: 'catering',
+        image: 'uploads/images/home/cards/taters_catering.webp'
     },
     {
         title: 'Franchising',
         subtitle: 'Investment opportunities',
         color: '#1b1915',
         textColor: 'white',
-        url: '',
-        image: 'uploads/images/home_cards/taters_franchising.jpeg'
+        url: 'franchising',
+        image: 'uploads/images/home/cards/taters_franchising.webp'
     },
     {
         title: 'Reseller',
         subtitle: 'Community selling',
         color: '#c7b7ad',
         textColor: 'black',
-        url: '',
-        image: 'uploads/images/home_cards/taters_reseller.jpeg'
+        url: 'reseller',
+        image: 'uploads/images/home/cards/taters_reseller.webp'
     },
     {
         title: 'PopClub',
@@ -86,14 +91,14 @@ export const SERVICES_MOBILE = [
         color: '#22201A',
         textColor: 'white',
         url: 'popclub',
-        image: 'uploads/images/home_cards/taters_popclub.jpeg',
+        image: 'uploads/images/home/cards/taters_popclub.webp',
     },
     {
         title: 'Branches',
         subtitle: 'Nationwide Locations',
         color: '#d7cdb7',
         textColor: 'black',
-        url: '',
-        image: 'uploads/images/home_cards/taters_branches.jpg'
+        url: 'branches',
+        image: 'uploads/images/home/cards/taters_branches.webp'
     },
 ];

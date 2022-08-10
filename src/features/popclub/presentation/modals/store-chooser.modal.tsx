@@ -1,9 +1,10 @@
-import * as React from 'react';
+
 import { useAppDispatch, useAppSelector, useQuery } from 'features/config/hooks';
 import { StoreCluster } from '../components';
-import { getSession, selectGetSession } from "../slices/get-session.slice";
-import { SearchAddress } from '../components/search-address';
-import { getStoresAvailable } from '../slices/get-stores-available-slice';
+import { SearchAddress } from '../../../shared/presentation/components/inputs/search-address';
+import { getSession, selectGetSession } from 'features/shared/presentation/slices/get-session.slice';
+import { getStoresAvailable } from 'features/shared/presentation/slices/get-stores-available-slice';
+import { useEffect, useState } from 'react';
 
 interface StoreChooserModalProps {
   open : boolean,
@@ -14,14 +15,14 @@ interface StoreChooserModalProps {
 
 export function StoreChooserModal(props : StoreChooserModalProps) {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = React.useState<any>('');
+  const [address, setAddress] = useState<any>('');
   const getSessionState = useAppSelector(selectGetSession);
   
-  React.useEffect(()=>{
+  useEffect(()=>{
       dispatch(getSession());
   },[]);
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     if(getSessionState.data?.customer_address !== null){
       setAddress(getSessionState.data?.customer_address);
       

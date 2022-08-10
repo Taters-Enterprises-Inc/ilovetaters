@@ -15,6 +15,11 @@ import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
+import { Shop } from 'features/shop/presentation/pages';
+import { Catering } from 'features/catering/presentation/pages';
+import { Franchising } from 'features/franchising/presentation/pages';
+import { Reseller } from 'features/reseller/presentation/pages';
+import { Branches } from 'features/branches/presentation/pages';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -34,9 +39,14 @@ root.render(
           <Route path="popclub/deal" element={<PopClubDealGuards />}>
             <Route path=":hash" element={<PopClubDeal />}></Route>
           </Route>
-
           <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
           <Route path="popclub/:platform" element={<PopClub />}></Route>
+
+          <Route path="shop" element={<Shop/>}></Route>
+          <Route path="catering" element={<Catering/>}></Route>
+          <Route path="franchising" element={<Franchising/>}></Route>
+          <Route path="reseller" element={<Reseller/>}></Route>
+          <Route path="branches" element={<Branches/>}></Route>
           
         </Routes>
       </BrowserRouter>

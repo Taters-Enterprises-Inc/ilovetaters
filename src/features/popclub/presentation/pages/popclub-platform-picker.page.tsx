@@ -20,7 +20,7 @@ export function PopClubPlatformPicker(){
     
     return (
         
-        <section className="bg-[#a21013]">
+        <section className="bg-primary">
 
             <HeaderNav serviceReached={false} active='HOME'></HeaderNav>
 

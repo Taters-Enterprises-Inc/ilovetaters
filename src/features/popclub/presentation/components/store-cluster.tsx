@@ -1,13 +1,10 @@
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectGetStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
+import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
-import { selectGetStoresAvailable } from '../slices/get-stores-available-slice';
-import { setStoreAndAddress, SetStoreAndAddressState } from "../slices/set-store-and-address.slice";
-
-import { selectSetStoreAndAddress } from "../slices/set-store-and-address.slice";
 
 interface StoreClusterProps {
     onClose : any,

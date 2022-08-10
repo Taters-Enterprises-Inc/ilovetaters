@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { SetPopclubDataParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
-import { SetPopClubDataRepository, SetPopClubDataResponse, SetStoreAndAddressRepository, SetStoreAndAddressResponse } from "features/popclub/data/repository/popclub.repository";
+import {  SetStoreAndAddressParm } from "features/shared/core/shared.params";
+import { SetStoreAndAddressRepository, SetStoreAndAddressResponse } from "features/shared/data/repository/shared.repository";
 
 export enum SetStoreAndAddressState{
     initial,

@@ -25,4 +25,8 @@ export interface SessionModel {
     };
 
     redeem_data : Array<RedeemDealModel>;
+
+    orders : any;
+
+    deals : any;
 }

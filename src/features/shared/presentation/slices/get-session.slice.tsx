@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { SessionModel } from "features/popclub/core/domain/session.model";
-import { GetSessionRepository, GetSessionResponse} from "features/popclub/data/repository/popclub.repository";
+import { SessionModel } from "features/shared/core/domain/session.model";
+import { GetSessionRepository, GetSessionResponse} from "features/shared/data/repository/shared.repository";
 
 export enum GetSessionState{
     initial,

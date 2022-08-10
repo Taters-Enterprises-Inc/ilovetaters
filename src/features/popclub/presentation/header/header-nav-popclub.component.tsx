@@ -1,4 +1,4 @@
-import { SocialMediaLink } from "features/shared/components/button";
+import { SocialMediaLink } from "features/shared/presentation/components/button";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import useCollapse from 'react-collapsed'
 import { FaViber, FaFacebookF, FaInstagram } from "react-icons/fa";

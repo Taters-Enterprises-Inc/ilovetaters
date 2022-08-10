@@ -1,10 +1,9 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav, HeaderNav } from "features/shared";
+import { HeaderNav } from "features/shared";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { getDealProductVariants, GetDealProductVariantsState, resetGetDealProductVariantsState, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
 import { CountdownTimer } from "../components";
@@ -16,7 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "../slices/get-latest-unexpired-redeem.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import moment from "moment";
+import { FooterNavDealPage } from "../footer/footer-nav-deal-page.component";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function PopClubDeal(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -25,6 +25,7 @@ export function PopClubDeal(){
     const redeemDealState = useAppSelector(selectRedeemDeal);
     const getRedeemState = useAppSelector(selectGetRedeem);
     const getLatestUnexpiredRedeemState = useAppSelector(selectGetLatestUnexpiredRedeem);
+    const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
     let { hash } = useParams();
@@ -168,7 +169,7 @@ export function PopClubDeal(){
             };
             
             return(
-                <div className="bg-primaryDark text-white py-3 w-full">
+                <div className="bg-secondary text-white py-3 w-full">
                     <span className="mt-3">You can redeem after </span>
                     <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}/>
                 </div>
@@ -228,7 +229,7 @@ export function PopClubDeal(){
             };
             
             return(
-                <div className="bg-primaryDark text-white py-3 w-full">
+                <div className="bg-secondary text-white py-3 w-full">
                     <span className="mt-3">Redeem cooldown: </span>
                     <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}/>
                 </div>
@@ -244,17 +245,17 @@ export function PopClubDeal(){
             );
         }else if(getSessionState.data?.userData && getLatestUnexpiredRedeemState.data?.deal_hash  && getLatestUnexpiredRedeemState.data?.deal_hash !== hash){
             return(
-                <div className="bg-primaryDark text-white py-3 w-full uppercase border border-white rounded-xl">
+                <div className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl">
                     You currently have running deal
                 </div>
             );
         }else if(getSessionState.data?.userData){
             return(
-                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl" onClick={handleRedeem}>Redeem</button>
+                <button className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl" onClick={handleRedeem}>Redeem</button>
             );
         } else if (getSessionState.data?.userData === null){
             return(
-                <button className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl" onClick={loginToRedeem}>Login to Redeem</button>
+                <button className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl" onClick={loginToRedeem}>Login to Redeem</button>
             );
         }
     }
@@ -263,7 +264,7 @@ export function PopClubDeal(){
 
     return(
         <>
-            <section className='bg-primaryDark relative min-h-screen flex flex-col'>
+            <section className='bg-secondary relative min-h-screen flex flex-col pb-10'>
                 <HeaderNav serviceReached={true} active='POPCLUB' sticky></HeaderNav>
                 <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">{getDealState.data?.category_name}</div>
 
@@ -287,6 +288,10 @@ export function PopClubDeal(){
 
                             <div className="text-center">
                                 {redeemButton()}
+
+                                <button className="bg-white font-bold text-black py-3 w-full uppercase border border-white rounded-xl mt-4" onClick={()=>{
+                                    navigate(-1);
+                                }}>Go Back</button>
                             </div>
                         </div>
                     </div>
@@ -301,7 +306,7 @@ export function PopClubDeal(){
                 setOpenLoginChooserModal(false);
             }}/>
             
-            <FooterNav></FooterNav>
+            <FooterNavDealPage/>
         </>
     );
 }
