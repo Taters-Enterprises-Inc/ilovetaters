@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL, TABS } from "features/shared/constants";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -11,29 +11,6 @@ interface HeaderNavProps {
     sticky?: boolean,
 }
 
-
-const TABS =[
-    {
-        name: 'HOME',
-        url: '/',
-    },
-    {
-        name: 'POPCLUB',
-        url: '/popclub',
-    },
-    {
-        name: 'SNACKSHOP',
-        url: '/shop',
-    },
-    {
-        name: 'CATERING',
-        url: '/catering',
-    },
-    {
-        name: 'BRANCHES',
-        url: '/branches',
-    },
-];
 
 export function HeaderNav(props: HeaderNavProps){
 

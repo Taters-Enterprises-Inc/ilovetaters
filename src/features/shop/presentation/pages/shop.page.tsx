@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav } from "features/shared";
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { StoreListDelivery } from "../components/store-list-delivery";
 import { getSession, selectGetSession } from "../../../shared/presentation/slices/get-session.slice";
 import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
+import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
 export function Shop(){
     const dispatch = useAppDispatch();
@@ -24,16 +25,17 @@ export function Shop(){
 
     return (
         <main className="bg-primary">
-            <HeaderNav serviceReached={true} active='SNACKSHOP' sticky/>
+            <ShopHeaderNav/>
             
             <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
 
-            <section className=" container mx-auto min-h-screen">
+            <section className="container mx-auto min-h-screen px-4 lg:px-0">
 
+                <h1 className='text-white text-2xl pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>Which store are you visiting?</h1>
 
                 <div className='flex items-center justify-center mb-3'>
-                    <label className="pure-material-textfield-outlined w-[96%]">
+                    <label className="pure-material-textfield-outlined w-[100%]">
                         <SearchAddress onPlaceSelected={( place : string)=>{
                             setAddress(place);
                             dispatch(getStoresAvailable({address: place}));

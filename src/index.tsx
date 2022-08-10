@@ -15,7 +15,7 @@ import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
-import { Shop } from 'features/shop/presentation/pages';
+import { Shop, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
 import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
@@ -36,13 +36,17 @@ root.render(
         <Routes>
           <Route path='/' element={<Home />} />
 
+          <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
+          <Route path="popclub/:platform" element={<PopClub />}></Route>
           <Route path="popclub/deal" element={<PopClubDealGuards />}>
             <Route path=":hash" element={<PopClubDeal />}></Route>
           </Route>
-          <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
-          <Route path="popclub/:platform" element={<PopClub />}></Route>
 
           <Route path="shop" element={<Shop/>}></Route>
+          <Route path="shop/products" element={<ShopProducts/>}></Route>
+          <Route path="shop/products/:hash" element={<ShopProduct/>}></Route>
+
+
           <Route path="catering" element={<Catering/>}></Route>
           <Route path="franchising" element={<Franchising/>}></Route>
           <Route path="reseller" element={<Reseller/>}></Route>

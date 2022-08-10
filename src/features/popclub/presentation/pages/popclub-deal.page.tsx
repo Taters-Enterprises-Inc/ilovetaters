@@ -269,7 +269,7 @@ export function PopClubDeal(){
                 <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">{getDealState.data?.category_name}</div>
 
                 <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">
-                    <div className="relative flex w-full flex-1 flex-col bg-primaryDark shadow-lg pb-10 ">
+                    <div className="relative flex w-full flex-1 flex-col bg-secondary shadow-lg pb-10 ">
                         { getDealState.data?.original_price && getDealState.data?.promo_price ? 
                             <div className="absolute top-0 left-0">
                                 <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">{Math.floor(((getDealState.data?.original_price - getDealState.data?.promo_price) / getDealState.data?.original_price) * 100)}% OFF</div>

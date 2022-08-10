@@ -2,6 +2,7 @@ import { PlatformModel } from 'features/popclub/core/domain/platform.model';
 import { setPopClubData } from '../slices/set-popclub-data.slice';
 import { useAppDispatch } from 'features/config/hooks';
 import { REACT_APP_BASE_NAME } from 'features/shared/constants';
+import { useNavigate } from 'react-router-dom';
 
 
 interface PlatformChooserModalProps{
@@ -12,6 +13,7 @@ interface PlatformChooserModalProps{
 
 export function PlatformChooserModal(props : PlatformChooserModalProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const temp = [
     'visiting a store',
@@ -26,7 +28,7 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
 
         <button className='absolute top-2 right-4 text-white' onClick={()=>{
           if(REACT_APP_BASE_NAME)
-            window.location.href = REACT_APP_BASE_NAME;
+            navigate(-1);
         }}>X</button>
 
           <h1 className='text-center text-xs text-white '>Are you</h1>

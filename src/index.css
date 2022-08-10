@@ -29,7 +29,7 @@ html {
 
 .not-within-reach-text {
     position: absolute;
-    top: 8rem;
+    top: 50%;
     left: 1rem;
     right: 1rem;
     color: white;
@@ -46,6 +46,7 @@ html {
     position: absolute;
     background: rgba(128,128,128, 0.7);
     z-index: 4;
+    border-radius: 10px;
 }
 
 .pure-material-textfield-outlined {
@@ -148,7 +149,7 @@ html {
 
 .pure-material-textfield-outlined:hover > input:not(:focus):placeholder-shown,
 .pure-material-textfield-outlined:hover > textarea:not(:focus):placeholder-shown {
-    border-color: transparent;
+    border-color: white;
 }
 
 /* Placeholder-shown */

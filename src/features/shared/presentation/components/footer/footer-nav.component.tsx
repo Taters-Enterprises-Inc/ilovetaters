@@ -15,7 +15,7 @@ export function FooterNav(){
     },[]);
     
     return (
-        <section className='fixed w-full bottom-0 '>
+        <section className='fixed w-full bottom-0 z-20'>
             { getLatestUnexpiredRedeemState.data ? 
                 <Link to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash } className='text-white shadow-lg bg-secondary m-2 h-[105px] rounded-xl block'>
                     <div className='flex'>

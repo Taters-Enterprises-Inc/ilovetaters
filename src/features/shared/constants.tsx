@@ -102,3 +102,27 @@ export const SERVICES_MOBILE = [
         image: 'uploads/images/home/cards/taters_branches.webp'
     },
 ];
+
+
+export const TABS =[
+    {
+        name: 'HOME',
+        url: '/',
+    },
+    {
+        name: 'POPCLUB',
+        url: '/popclub',
+    },
+    {
+        name: 'SNACKSHOP',
+        url: '/shop',
+    },
+    {
+        name: 'CATERING',
+        url: '/catering',
+    },
+    {
+        name: 'BRANCHES',
+        url: '/branches',
+    },
+];
