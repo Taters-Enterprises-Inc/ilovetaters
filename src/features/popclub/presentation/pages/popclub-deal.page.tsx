@@ -4,7 +4,6 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate  } from "react-router-dom";
 import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { getDealProductVariants, GetDealProductVariantsState, resetGetDealProductVariantsState, selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
 import { CountdownTimer } from "../components";
@@ -17,6 +16,7 @@ import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "../sli
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { FooterNavDealPage } from "../footer/footer-nav-deal-page.component";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function PopClubDeal(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -169,7 +169,7 @@ export function PopClubDeal(){
             };
             
             return(
-                <div className="bg-primaryDark text-white py-3 w-full">
+                <div className="bg-secondary text-white py-3 w-full">
                     <span className="mt-3">You can redeem after </span>
                     <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}/>
                 </div>
@@ -229,7 +229,7 @@ export function PopClubDeal(){
             };
             
             return(
-                <div className="bg-primaryDark text-white py-3 w-full">
+                <div className="bg-secondary text-white py-3 w-full">
                     <span className="mt-3">Redeem cooldown: </span>
                     <Countdown renderer={renderer} date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}/>
                 </div>
@@ -264,7 +264,7 @@ export function PopClubDeal(){
 
     return(
         <>
-            <section className='bg-primaryDark relative min-h-screen flex flex-col pb-10'>
+            <section className='bg-secondary relative min-h-screen flex flex-col pb-10'>
                 <HeaderNav serviceReached={true} active='POPCLUB' sticky></HeaderNav>
                 <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">{getDealState.data?.category_name}</div>
 

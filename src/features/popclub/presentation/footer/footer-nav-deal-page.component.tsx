@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export function FooterNavDealPage(){
     return (
         <section className='fixed w-full bottom-0 '>
-            <footer className='w-full py-2 lg:hidden bg-primaryDark'>
+            <footer className='w-full py-2 lg:hidden bg-secondary'>
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
                         <li className="flex-1">

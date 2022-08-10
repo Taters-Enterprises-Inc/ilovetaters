@@ -3,7 +3,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { SetPopclubDataParam, SetSessionParam, SetStoreAndAddressParm } from "features/popclub/core/popclub.params";
-import { SetPopClubDataRepository, SetPopClubDataResponse, SetSessionRepository, SetSessionResponse, SetStoreAndAddressRepository, SetStoreAndAddressResponse } from "features/popclub/data/repository/popclub.repository";
+import { SetSessionRepository, SetSessionResponse } from "features/shared/data/repository/shared.repository";
 
 export enum SetSessionState{
     initial,

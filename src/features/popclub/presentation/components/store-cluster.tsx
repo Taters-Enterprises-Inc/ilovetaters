@@ -1,13 +1,10 @@
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectGetStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
+import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
-import { selectGetStoresAvailable } from '../slices/get-stores-available-slice';
-import { setStoreAndAddress, SetStoreAndAddressState } from "../slices/set-store-and-address.slice";
-
-import { selectSetStoreAndAddress } from "../slices/set-store-and-address.slice";
 
 interface StoreClusterProps {
     onClose : any,
@@ -69,7 +66,7 @@ export function StoreCluster(props: StoreClusterProps ){
                                 key={index}
                                 onClick={ store_availability && props.address != null ? () => {console.log('test');
                                 }  :  ()=>storeClicked(store.store_id)  }
-                                className={`bg-primaryDark shadow-primaryOrange shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[32%] sm:flex-[0_0_32%] lg:max-w-[24%] lg:flex-[0_0_24%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
+                                className={`bg-secondary shadow-tertiary shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[32%] sm:flex-[0_0_32%] lg:max-w-[24%] lg:flex-[0_0_24%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
                                 }

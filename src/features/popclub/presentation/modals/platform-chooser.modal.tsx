@@ -1,6 +1,7 @@
 import { PlatformModel } from 'features/popclub/core/domain/platform.model';
 import { setPopClubData } from '../slices/set-popclub-data.slice';
 import { useAppDispatch } from 'features/config/hooks';
+import { REACT_APP_BASE_NAME } from 'features/shared/constants';
 
 
 interface PlatformChooserModalProps{
@@ -20,11 +21,12 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
   return (
     <div
       style={{display: props.open? 'flex':'none'}}
-      className='fixed inset-0 bg-[#22201A] bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
-      <div className='bg-[#22201A] p-4 round w-[80%] sm:w-[400px] rounded-lg relative'>
+      className='fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
+      <div className='bg-secondary p-4 round w-[80%] sm:w-[400px] rounded-lg relative'>
 
         <button className='absolute top-2 right-4 text-white' onClick={()=>{
-          window.location.href = '/staging';
+          if(REACT_APP_BASE_NAME)
+            window.location.href = REACT_APP_BASE_NAME;
         }}>X</button>
 
           <h1 className='text-center text-xs text-white '>Are you</h1>

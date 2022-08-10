@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { StoreModel } from "features/popclub/core/domain/store.model";
+import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetStoresAvailableParam } from "features/popclub/core/popclub.params";
 import { GetStoresAvailableRepository, GetStoresAvailableResponse } from "features/popclub/data/repository/popclub.repository";
 

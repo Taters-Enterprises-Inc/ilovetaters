@@ -38,8 +38,8 @@ export function LoginChooserModal(props: LoginChooserModalProps){
     return(
         <div
         style={{display: props.open? 'flex':'none'}}
-        className='fixed inset-0 bg-[#22201A] bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
-            <div className='bg-[#22201A] px-4 py-8 round w-[90%] rounded-lg relative text-white'>
+        className='fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
+            <div className='bg-secondary px-4 py-8 round w-[90%] rounded-lg relative text-white'>
                 <button className='absolute top-2 right-4 text-white' onClick={props.onClose}>X</button>
 
                 <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">Hi! Welcome to Popclub</h1>

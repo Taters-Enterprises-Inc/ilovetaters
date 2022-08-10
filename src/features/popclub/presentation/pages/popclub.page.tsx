@@ -11,9 +11,9 @@ import { getAllPlatformCategories, selectGetAllPlatformCategories } from "../sli
 import { getAllPlatform, selectGetAllPlatform } from "../slices/get-all-platform.slice";
 import { getDeals, selectGetDeals } from "../slices/get-deals.slice";
 import { getPopClubData, selectGetPopClubData } from "../slices/get-popclub-data.slice";
-import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { selectSetPopClubData, setPopClubData } from "../slices/set-popclub-data.slice";
-import { selectSetSession, setSession } from "../slices/set-session.slice";
+import { selectSetSession, setSession } from "../../../shared/presentation/slices/set-session.slice";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function PopClub(){
 
@@ -74,13 +74,13 @@ export function PopClub(){
     
 
     return (
-        <section className='bg-[#a21013]'>
+        <section className='bg-primary'>
             <HeaderNav serviceReached={serviceReached} active='POPCLUB'></HeaderNav>
 
-            <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/mobile/banners/popclub.jpg"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/desktop/banners/popclub.jpg"} alt="The best pop corn in town"></img>
+            <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
+            <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
 
-            <img  className="hidden lg:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/instructions/popclub_instruction.jpg"} alt="The best pop corn in town"></img>
+            <img  className="hidden lg:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/popclub/banner/popclub_instruction.webp"} alt="The best pop corn in town"></img>
 
             <section className="container lg:px-0 md:px-8 px-4 mx-auto pt-4 flex flex-col justify-start items-start">
                 {
@@ -154,7 +154,7 @@ export function PopClub(){
                         getDealsState.data.map((deal, i)=>(
                             <Link key={i} to={`/popclub/deal/${deal.hash}`} className='flex-[0_0_50%] p-[0.5rem] lg:flex-[0_0_20%] lg:pr-[0.7rem] lg:pb-[0.7rem]'>
                                 
-                                <div className=" relative flex flex-wrap flex-col bg-[#22201A] shadow-md shadow-[#ffcd17] rounded-[10px] h-full" >
+                                <div className=" relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full" >
                                     <h1 className="text-[12px] lg:text-lg pt-1 text-white uppercase font-['Bebas_Neue'] tracking-[2px] text-center ">
                                         {deal.category_name}
                                     </h1>

@@ -17,7 +17,7 @@ export function FooterNav(){
     return (
         <section className='fixed w-full bottom-0 '>
             { getLatestUnexpiredRedeemState.data ? 
-                <Link to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash } className='text-white shadow-lg bg-primaryDark m-2 h-[105px] rounded-xl block'>
+                <Link to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash } className='text-white shadow-lg bg-secondary m-2 h-[105px] rounded-xl block'>
                     <div className='flex'>
                         <div className='flex-1 flex flex-col'>
                             <div className='flex-1 p-4 leading-2 text-sm'>
@@ -30,7 +30,7 @@ export function FooterNav(){
                             src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getLatestUnexpiredRedeemState.data.product_image}`} alt='Deals'/> 
                     </div>
                 </Link> : null }
-            <footer className='w-full py-2 lg:hidden bg-primaryDark'>
+            <footer className='w-full py-2 lg:hidden bg-secondary'>
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
                         <li className="flex-1">
@@ -46,25 +46,25 @@ export function FooterNav(){
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'} className="flex justify-center items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_BASE_NAME + 'shop'} className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/snackshop.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Snackshop</span>
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'}  className="flex justify-center items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_BASE_NAME + 'catering'}  className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/catering.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Catering</span>
                             </a>
                         </li>
                         <li className='flex-1'>
-                            <a href='https://ilovetaters.com/branches' className="flex justify-center items-center flex-col h-full pt-1">
+                            <a href={REACT_APP_BASE_NAME + 'branches'} className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/branches.png'} className="w-[18px] sm:w-[25px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Branches</span>
                             </a>
                         </li>
                         <li className="flex-[0.8]">
-                            <a  className="flex justify-center items-center flex-col h-full pt-1 pr-2">
+                            <a className="flex justify-center items-center flex-col h-full pt-1 pr-2">
                             <FiMoreHorizontal className='text-[25px] sm:text-4xl'></FiMoreHorizontal>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
                             </a>

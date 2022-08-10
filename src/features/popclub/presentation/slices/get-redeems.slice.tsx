@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { RedeemDealModel } from "features/popclub/core/domain/redeem_deal.model";
-import {RedeemDealParam } from "features/popclub/core/popclub.params";
+import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import {GetRedeemsRepository, GetRedeemsResponse, RedeemDealRepository, RedeemDealResponse } from "features/popclub/data/repository/popclub.repository";
 
 export enum GetRedeemsState{

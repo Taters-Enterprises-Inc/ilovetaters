@@ -1,9 +1,10 @@
-import * as React from 'react';
+
 import { useAppDispatch, useAppSelector, useQuery } from 'features/config/hooks';
 import { StoreCluster } from '../components';
-import { getSession, selectGetSession } from "../slices/get-session.slice";
-import { SearchAddress } from '../components/search-address';
-import { getStoresAvailable } from '../slices/get-stores-available-slice';
+import { SearchAddress } from '../../../shared/presentation/components/inputs/search-address';
+import { getSession, selectGetSession } from 'features/shared/presentation/slices/get-session.slice';
+import { getStoresAvailable } from 'features/shared/presentation/slices/get-stores-available-slice';
+import { useEffect, useState } from 'react';
 
 interface StoreChooserModalProps {
   open : boolean,
@@ -14,14 +15,14 @@ interface StoreChooserModalProps {
 
 export function StoreChooserModal(props : StoreChooserModalProps) {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = React.useState<any>('');
+  const [address, setAddress] = useState<any>('');
   const getSessionState = useAppSelector(selectGetSession);
   
-  React.useEffect(()=>{
+  useEffect(()=>{
       dispatch(getSession());
   },[]);
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     if(getSessionState.data?.customer_address !== null){
       setAddress(getSessionState.data?.customer_address);
       
@@ -39,7 +40,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
     <div
        style={{display: props.open? 'flex':'none'}}
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
-      <div className='bg-[#a21013] px-[5px] py-[30px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
+      <div className='bg-primary px-[5px] py-[30px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
 
         <button className='absolute top-2 right-4 text-white' onClick={()=>{
           document.body.classList.remove('overflow-hidden');
