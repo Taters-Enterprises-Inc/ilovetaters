@@ -107,14 +107,14 @@ export function VariantsChooserModal(props: VariantChooserModalProps){
                                                     <h2 className="text-base uppercase">
                                                         {productVariant.name}
                                                     </h2>
-                                                    <ul className="w-full mt-2 text-sm font-medium text-gray-900 bg-primaryDark rounded-lg border border-gray-200 0 dark:border-gray-600 dark:text-white">
+                                                    <ul className="w-full mt-2 text-sm font-medium text-white bg-primaryDark rounded-lg border border-gray-200 0 dark:border-gray-600 dark:text-white">
                                                         {
                                                             productVariant.options.map(
                                                                 (option, i)=>(
                                                                     <li key={i} className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
                                                                         <div className="flex items-center pl-3">
                                                                             <input onChange={(e) => handleFormChange(e, dealProductVariant)} id={dealProductVariant.option_id + '_' + productVariant.id + "_" + option.id } type="radio" value={option.name} name={dealProductVariant.option_id + '_' + productVariant.id } className="w-4 h-4 text-blue-600 bg-primaryDark border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"/>
-                                                                            <label htmlFor={dealProductVariant.option_id + '_' + productVariant.id + "_" + option.id} className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{option.name}</label>
+                                                                            <label htmlFor={dealProductVariant.option_id + '_' + productVariant.id + "_" + option.id} className="py-3 ml-2 w-full text-sm font-medium !text-white">{option.name}</label>
                                                                         </div>
                                                                     </li>
                                                                 )

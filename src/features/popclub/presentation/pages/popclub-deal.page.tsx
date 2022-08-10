@@ -264,7 +264,7 @@ export function PopClubDeal(){
 
     return(
         <>
-            <section className='bg-primaryDark relative min-h-screen flex flex-col'>
+            <section className='bg-primaryDark relative min-h-screen flex flex-col pb-10'>
                 <HeaderNav serviceReached={true} active='POPCLUB' sticky></HeaderNav>
                 <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">{getDealState.data?.category_name}</div>
 

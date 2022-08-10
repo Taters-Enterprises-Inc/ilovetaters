@@ -80,7 +80,7 @@ export function PopClub(){
             <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/mobile/banners/popclub.jpg"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/desktop/banners/popclub.jpg"} alt="The best pop corn in town"></img>
 
-            <img  className="hidden sm:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/instructions/popclub_instruction.jpg"} alt="The best pop corn in town"></img>
+            <img  className="hidden lg:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/instructions/popclub_instruction.jpg"} alt="The best pop corn in town"></img>
 
             <section className="container lg:px-0 md:px-8 px-4 mx-auto pt-4 flex flex-col justify-start items-start">
                 {
@@ -88,7 +88,7 @@ export function PopClub(){
                     <button className="text-xs" onClick={()=>{
                         setOpenPlatformChooserModal(true);
                     }}>
-                        <span className="text-white ">Claim deals via : </span><span className="text-[#ffcd17]">{getSessionState.data?.popclub_data.platform.replace('-', '  ')}</span>
+                        <span className="text-white text-lg">Claim deals via : </span><span className="text-[#ffcd17] text-lg font-['Bebas_Neue'] tracking-widest">{getSessionState.data?.popclub_data.platform.replace('-', '  ')}</span>
                     </button>
                     : null
                 }
@@ -106,7 +106,7 @@ export function PopClub(){
 
                         }
                     }}>
-                        <span className="text-white">Chosen store: </span><span className="text-[#ffcd17]">{getSessionState.data?.cache_data.store_name}</span>
+                        <span className="text-white text-lg">Chosen store: </span><span className="text-[#ffcd17] text-lg font-['Bebas_Neue'] tracking-widest">{getSessionState.data?.cache_data.store_name}</span>
                     </button>
                     : null
                 }
@@ -174,7 +174,7 @@ export function PopClub(){
                                     
                                     <div className="mb-2 flex relative">
                                         <div className="fade-seperator"></div>
-                                        <h4 className="text-white text-[12px]  pb-3 pt-4 px-2  leading-4 lg:text-base font-light text-start text-sm whitespace-pre-wrap  font-[TTHazelnuts]">{deal.name}</h4>
+                                        <h4 className="text-white text-[12px]  pb-3 pt-4 px-2  leading-4 lg:text-base font-light text-start text-sm whitespace-pre-wrap ">{deal.name}</h4>
                                     </div>
                                 </div>
                             </Link>
