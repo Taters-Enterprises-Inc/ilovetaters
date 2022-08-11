@@ -52,7 +52,7 @@ export function ShopHeaderNav(){
         <header className={'sticky w-full top-0 z-20'}>
             <div className={` w-full bg-primary shadow-2xl`}>
                 <nav className={`flex justify-between items-center container mx-auto px-3 py-2`}>
-                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/logo/taters-logo.png"} alt="Taters Logo" className="w-[100px] lg:w-[160px]"></img>
+                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/shared/logo/taters-snackshop-logo.webp"} alt="Taters Logo" className="w-[100px] lg:w-[160px]"></img>
 
                     <div  className="justify-center items-center space-x-4 flex">
                         <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">

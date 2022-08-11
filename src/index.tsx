@@ -9,52 +9,56 @@ import {
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { Home } from 'features/home/presentation/pages';
-import { REACT_APP_BASE_NAME } from 'features/shared/constants';
+import { REACT_APP_BASE_NAME, theme } from 'features/shared/constants';
 import { store } from 'features/config/store';
 import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
-import { Shop, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
+import { Shop, ShopCheckout, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
 import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
+import { ThemeProvider } from "@material-tailwind/react";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-if (window.location.hash == "#_=_"){
+if (window.location.hash === "#_=_"){
   window.location.replace(window.location.protocol + "//" + window.location.host + window.location.pathname);
 }
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter basename={REACT_APP_BASE_NAME}>
-        <Routes>
-          <Route path='/' element={<Home />} />
+    <ThemeProvider value={theme}>
+      <Provider store={store}>
+        <BrowserRouter basename={REACT_APP_BASE_NAME}>
+          <Routes>
+            <Route path='/' element={<Home />} />
 
-          <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
-          <Route path="popclub/:platform" element={<PopClub />}></Route>
-          <Route path="popclub/deal" element={<PopClubDealGuards />}>
-            <Route path=":hash" element={<PopClubDeal />}></Route>
-          </Route>
+            <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
+            <Route path="popclub/:platform" element={<PopClub />}></Route>
+            <Route path="popclub/deal" element={<PopClubDealGuards />}>
+              <Route path=":hash" element={<PopClubDeal />}></Route>
+            </Route>
 
-          <Route path="shop" element={<Shop/>}></Route>
-          <Route path="shop/products" element={<ShopProducts/>}></Route>
-          <Route path="shop/products/:hash" element={<ShopProduct/>}></Route>
+            <Route path="shop" element={<Shop/>}></Route>
+            <Route path="shop/products" element={<ShopProducts/>}></Route>
+            <Route path="shop/products/:hash" element={<ShopProduct/>}></Route>
+            <Route path="shop/checkout" element={<ShopCheckout/>}></Route>
 
 
-          <Route path="catering" element={<Catering/>}></Route>
-          <Route path="franchising" element={<Franchising/>}></Route>
-          <Route path="reseller" element={<Reseller/>}></Route>
-          <Route path="branches" element={<Branches/>}></Route>
-          
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+            <Route path="catering" element={<Catering/>}></Route>
+            <Route path="franchising" element={<Franchising/>}></Route>
+            <Route path="reseller" element={<Reseller/>}></Route>
+            <Route path="branches" element={<Branches/>}></Route>
+            
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

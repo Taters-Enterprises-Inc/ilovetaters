@@ -126,3 +126,22 @@ export const TABS =[
         url: '/branches',
     },
 ];
+
+export const theme = {
+    input: {
+        styles: {
+            variants: {
+              outlined: {
+                base: {   
+                    input:{
+                        color: '!text-white'
+                    },
+                    label: {
+                        color: '!text-white',
+                    },
+                },
+              }
+            },
+        },
+    },
+}

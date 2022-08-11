@@ -6,6 +6,8 @@ import { MdFastfood } from "react-icons/md";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { Link } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
+import { CounterInput } from "../components/counter-input";
+import { BsFillCartPlusFill } from 'react-icons/bs';
 
 export function ShopProduct(){
     return (
@@ -20,7 +22,7 @@ export function ShopProduct(){
                 <div className="lg:-mt-[150px] lg:space-y-10">
 
                     <div className="px-4 py-6 lg:py-0 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
-                        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-8 lg:text-3xl">Lorem ipsum dolor sit amet</h1>
+                        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-xl leading-8 lg:text-3xl">Lorem ipsum dolor sit amet</h1>
                         
                         <nav className="flex" aria-label="Breadcrumb">
 
@@ -49,7 +51,7 @@ export function ShopProduct(){
                         
                     </div>
 
-                    <div className="bg-primary pb-20 shadow-black shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
+                    <div className="bg-primary pb-20 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
                         <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[900px]">
                             <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/350/test.jpg"} className="lg:rounded-[20px] w-full h-full object-cover" alt="" />
                         </div>
@@ -59,8 +61,8 @@ export function ShopProduct(){
                             <div className="border-2 border-white text-white rounded-xl">
                                 <div className="px-6 py-4 flex space-x-2 items-center">
                                     <AiFillInfoCircle className="text-3xl" />
-                                    <h3 className="font-['Bebas_Neue'] text-2xl tracking-[3px] font-light mt-1 flex-1">Product Info</h3>
-                                    <IoIosArrowDown className="text-4xl"/>
+                                    <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Info</h3>
+                                    <IoIosArrowDown className="text-xl"/>
                                 </div>
 
                                 <hr/>
@@ -76,8 +78,8 @@ export function ShopProduct(){
                             <div className="border-2 border-white text-white rounded-xl">
                                 <div className="px-6 py-4 flex space-x-2 items-center">
                                     <TbTruckDelivery className="text-3xl" />
-                                    <h3 className="font-['Bebas_Neue'] text-2xl tracking-[3px] font-light mt-1 flex-1">Delivery Details</h3>
-                                    <IoIosArrowDown className="text-4xl"/>
+                                    <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Delivery Details</h3>
+                                    <IoIosArrowDown className="text-xl"/>
                                 </div>
 
                                 <hr/>
@@ -91,23 +93,78 @@ export function ShopProduct(){
                             </div>
 
                             
-                            <div className="border-2 border-white text-white rounded-xl">
-                                <div className="px-6 py-4 flex space-x-2 items-center">
+                            <div className=" text-white">
+                                <div className="px-6 py-4 flex space-x-2 items-center rounded-t-xl border-2 border-white">
                                     <MdFastfood className="text-3xl" />
-                                    <h3 className="font-['Bebas_Neue'] text-2xl tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
-                                    <IoIosArrowDown className="text-4xl"/>
+                                    <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
+                                    <IoIosArrowDown className="text-xl"/>
                                 </div>
 
                                 <hr/>
 
-                                <p className="p-6 text-sm">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet, ut quibusdam quod quae odit, 
-                                    repudiandae tenetur fugit ipsa eligendi nostrum, autem totam? Nesciunt, unde! Nemo dolorum illum 
-                                    excepturi quia temporibus?
-                                </p>
+                                <div className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6">
+                                    <div className="p-4 flex space-x-2">
+                                        <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/100/test.jpg"} className="rounded-[10px] w-[100px] h-[100px]" alt="" />
+                                        <div className="p-2 space-y-2">
+                                            <h4 className="font-['Bebas_Neue'] text-xl tracking-[2px] leading-5">Taters Snackstix</h4>
+                                            <h5 className="text-lg font-bold text-tertiary leading-5">₱ 50.00 x 1 = ₱ 50.00</h5>
+                                            <CounterInput/>
 
+                                        </div>
+                                    </div>
+                                    <button className="bg-primary w-full py-2 rounded-b-xl font-light flex space-x-4 justify-center items-center">
+                                        <BsFillCartPlusFill className="text-2xl"/>
+                                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
+                                    </button>
+                                </div>
                             </div>
 
+                            <div>
+                                <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Flavor</h2>
+
+                                <ul>
+                                    <li className="flex items-center">
+                                        <input type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                        <label htmlFor="default-radio-1" className="ml-2 text-lg text-white">Default radio</label>
+                                    </li>
+
+                                    <li className="flex items-center">
+                                        <input checked type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                        <label htmlFor="default-radio-2" className="ml-2 text-lg text-white">Checked state</label>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Quantity</h2>
+                                
+                                <div className="h-[60px] w-full mt-2">
+
+                                    <div className="flex flex-row h-full w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
+
+                                        <button className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary">
+                                            <span className="m-auto text-5xl font-thin leading-3">−</span>
+                                        </button>
+
+                                        <input type="number" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" value="0"/>
+                                        
+                                        <button className="h-full w-[150px] rounded-r cursor-pointer bg-primary">
+                                            <span className="m-auto text-5xl font-thin leading-3">+</span>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <h2 className="text-5xl text-white font-bold mt-4">₱ 250.00</h2>
+
+                            <button className="text-white text-xl flex space-x-6 justify-center items-center bg-[#CC5801] py-4 w-full rounded-xl ">
+                                <BsFillCartPlusFill className="text-4xl"/>
+                                <span className="text-3xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
+                            </button>
+                            
                         </div>
 
                     </div>
