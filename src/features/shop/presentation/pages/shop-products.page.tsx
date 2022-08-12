@@ -1,5 +1,5 @@
 import { FooterNav } from "features/shared";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
@@ -32,9 +32,9 @@ export function ShopProducts(){
             <ShopHeaderNav/>
 
             <section className="container mx-auto">
-                <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
-                <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
-                <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
+                <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
+                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
+                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
             </section>
 
 
@@ -42,7 +42,7 @@ export function ShopProducts(){
                 
                 <div 
                     style={{
-                        backgroundImage : `url('${REACT_APP_DOMAIN_URL + "uploads/images/shop/categories/test.jpg"}')`,
+                        backgroundImage : `url('${REACT_APP_UPLOADS_URL + "images/shop/categories/test.jpg"}')`,
                         backgroundRepeat: 'no-repeat',
                         backgroundSize: 'cover',
                     }}
@@ -58,7 +58,7 @@ export function ShopProducts(){
                     {
                         products.map((product, i) => (
                             <Link to={product.hash} className="bg-secondary shadow-tertiary shadow-md rounded-[10px] text-white max-w-[45%] flex-[0_0_45%] lg:max-w-[22.8%] lg:flex-[0_0_22.8%] m-2 min-h-[200px]">
-                                <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/175/test.jpg"} className="rounded-t-[10px] w-full" alt="" />
+                                <img src={REACT_APP_UPLOADS_URL + "images/shop/products/175/test.jpg"} className="rounded-t-[10px] w-full" alt="" />
                                 <div className="p-3 space-y-2">
                                     <h2 className="text-white text-sm leading-4">{product.name}</h2>
                                     <h3 className="text-white font-bold">{product.price}</h3>

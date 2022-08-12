@@ -1,11 +1,11 @@
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {  REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { Checkbox, Input } from "@material-tailwind/react";
 import { FooterNav } from "features/shared";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { PaymentAccordion } from "../components/payment,accordion";
+import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
 
 export function ShopCheckout(){
@@ -165,7 +165,7 @@ export function ShopCheckout(){
                             <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">Order Summary</h2>
 
                             <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]">
-                                <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/100/test.jpg"} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
+                                <img src={REACT_APP_UPLOADS_URL + "images/shop/products/100/test.jpg"} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
                                 <div className="flex-1 text-white px-3 py-2 flex flex-col">
                                     <h3 className="text-sm">Family Pack Tofu Chips</h3>
                                     <h3 className="text-xs">Quntity: <span className="text-tertiary">3</span></h3>

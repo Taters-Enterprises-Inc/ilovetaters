@@ -6,7 +6,7 @@ import {
     Radio,
 } from "@material-tailwind/react";  
 import { AiFillCreditCard } from "react-icons/ai";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 
 function Icon({ id , open } : any) {
@@ -82,7 +82,7 @@ export function PaymentAccordion(){
             </div>
           </AccordionHeader>
           <AccordionBody>
-            <Radio id="cash" color="orange" name="payment_method" label="CASH" />
+            <Radio id="cash" color="orange" name="payment_method" label="CASH (additional ₱ 50.00)" />
           </AccordionBody>
         </Accordion>
         
@@ -97,7 +97,7 @@ export function PaymentAccordion(){
             </AccordionHeader>
           <AccordionBody>
             <Radio id="gcash" color="orange" name="payment_method" label="GCASH " />
-            <img src={`${REACT_APP_DOMAIN_URL}uploads/images/shop/payments/gcash_qr.webp`} alt='Taters G-Cash QR' width={230}/>
+            <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/gcash_qr.webp`} alt='Taters G-Cash QR' width={230}/>
           </AccordionBody>
         </Accordion>
 

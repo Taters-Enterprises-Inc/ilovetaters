@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { FooterNav } from "features/shared";
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { StoreListDelivery } from "../components/store-list-delivery";
 import { getSession, selectGetSession } from "../../../shared/presentation/slices/get-session.slice";
@@ -27,8 +27,8 @@ export function Shop(){
         <main className="bg-primary">
             <ShopHeaderNav/>
             
-            <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
+            <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
+            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
 
             <section className="container mx-auto min-h-screen px-4 lg:px-0">
 

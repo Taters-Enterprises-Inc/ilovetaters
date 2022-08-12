@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { FooterNav, HeaderNav } from "features/shared";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams} from "react-router-dom";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
@@ -14,6 +13,7 @@ import { getPopClubData, selectGetPopClubData } from "../slices/get-popclub-data
 import { selectSetPopClubData, setPopClubData } from "../slices/set-popclub-data.slice";
 import { selectSetSession, setSession } from "../../../shared/presentation/slices/set-session.slice";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 export function PopClub(){
 
@@ -77,10 +77,10 @@ export function PopClub(){
         <section className='bg-primary'>
             <HeaderNav serviceReached={serviceReached} active='POPCLUB'></HeaderNav>
 
-            <img className="lg:hidden" src={REACT_APP_DOMAIN_URL + "uploads/images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_DOMAIN_URL + "uploads/images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
+            <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
+            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
 
-            <img  className="hidden lg:block" src={ REACT_APP_DOMAIN_URL + "uploads/images/popclub/banner/popclub_instruction.webp"} alt="The best pop corn in town"></img>
+            <img  className="hidden lg:block" src={ REACT_APP_UPLOADS_URL + "images/popclub/banner/popclub_instruction.webp"} alt="The best pop corn in town"></img>
 
             <section className="container lg:px-0 md:px-8 px-4 mx-auto pt-4 flex flex-col justify-start items-start">
                 {

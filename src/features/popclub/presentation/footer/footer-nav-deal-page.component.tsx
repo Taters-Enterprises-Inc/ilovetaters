@@ -1,5 +1,5 @@
 
-import { REACT_APP_BASE_NAME, REACT_APP_DOMAIN_URL } from 'features/shared/constants';
+import { REACT_APP_BASE_NAME, REACT_APP_UPLOADS_URL } from 'features/shared/constants';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -10,40 +10,40 @@ export function FooterNavDealPage(){
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
                         <li className="flex-1">
-                            <a href={REACT_APP_BASE_NAME}  className="flex justify-between items-center flex-col h-full pt-1">
-                                <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/home.png'} className="w-[28px] sm:w-[40px]" alt="Tater home icon"></img>
+                            <Link to='/'  className="flex justify-between items-center flex-col h-full pt-1">
+                                <img src={REACT_APP_UPLOADS_URL + 'images/icons/home.png'} className="w-[28px] sm:w-[40px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px]">Home</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className='flex-1'>
-                            <a href={REACT_APP_BASE_NAME + 'popclub'}  className="flex justify-between items-center flex-col h-full pt-1">
-                                <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/popclub.png'} className="w-[20px] sm:w-[24px]" alt="Tater home icon"></img>
+                            <Link to={REACT_APP_BASE_NAME + 'popclub'}  className="flex justify-between items-center flex-col h-full pt-1">
+                                <img src={REACT_APP_UPLOADS_URL + 'images/icons/popclub.png'} className="w-[20px] sm:w-[24px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px]">Popclub</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className='flex-1'>
-                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'} className="flex justify-center items-center flex-col h-full pt-1">
-                                <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/snackshop.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
+                            <Link to={REACT_APP_BASE_NAME + 'shop'} className="flex justify-center items-center flex-col h-full pt-1">
+                                <img src={REACT_APP_UPLOADS_URL + 'images/icons/snackshop.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Snackshop</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className='flex-1'>
-                            <a href={REACT_APP_DOMAIN_URL + '/v2/shop'}  className="flex justify-center items-center flex-col h-full pt-1">
-                                <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/catering.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
+                            <Link to={`${REACT_APP_BASE_NAME}catering`}  className="flex justify-center items-center flex-col h-full pt-1">
+                                <img src={REACT_APP_UPLOADS_URL + 'images/icons/catering.png'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Catering</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className='flex-1'>
-                            <a href='https://ilovetaters.com/branches' className="flex justify-center items-center flex-col h-full pt-1">
-                                <img src={REACT_APP_DOMAIN_URL + 'uploads/images/icons/branches.png'} className="w-[18px] sm:w-[25px]" alt="Tater home icon"></img>
+                            <Link to={`${REACT_APP_BASE_NAME}branches`} className="flex justify-center items-center flex-col h-full pt-1">
+                                <img src={REACT_APP_UPLOADS_URL + 'images/icons/branches.png'} className="w-[18px] sm:w-[25px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Branches</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="flex-[0.8]">
-                            <a  className="flex justify-center items-center flex-col h-full pt-1 pr-2">
+                            <button  className="flex justify-center items-center flex-col h-full pt-1 pr-2">
                             <FiMoreHorizontal className='text-[25px] sm:text-4xl'></FiMoreHorizontal>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </nav>

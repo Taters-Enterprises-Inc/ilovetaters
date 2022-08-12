@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { FooterNav, HeaderNav } from "features/shared";
-import { REACT_APP_DOMAIN_URL, SERVICES_DESKTOP, SERVICES_MOBILE } from "features/shared/constants";
+import { REACT_APP_UPLOADS_URL, SERVICES_DESKTOP, SERVICES_MOBILE } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
 import { StoreChooserModal } from "../modals/store-chooser.modal";
@@ -26,25 +26,25 @@ export function PopClubPlatformPicker(){
 
             <section 
                 style={{
-                    backgroundImage: `url('${REACT_APP_DOMAIN_URL}uploads/images/mobile/banners/taters_entertainment_snacks.jpg')`,
+                    backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/mobile/banners/taters_entertainment_snacks.jpg')`,
                     backgroundSize: 'contain',
                     backgroundPositionX: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundAttachment: 'fixed',
                 }}
                 className="sm:hidden flex items-end justify-center relative ">
-                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/mobile/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
+                    <img src={REACT_APP_UPLOADS_URL + "images/mobile/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
             </section>
             
             <section 
                 style={{
-                    backgroundImage: `url('${REACT_APP_DOMAIN_URL}uploads/images/desktop/banners/taters_entertainment_snacks.jpg')`,
+                    backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/desktop/banners/taters_entertainment_snacks.jpg')`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundAttachment: 'fixed',
                 }}
                 className="hidden sm:flex items-end justify-center relative ">
-                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/desktop/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
+                    <img src={REACT_APP_UPLOADS_URL + "images/desktop/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
             </section>
 
 
@@ -58,7 +58,7 @@ export function PopClubPlatformPicker(){
                                 <div key={i} className="flex-[0_0_50%] max-w-[50%] md:flex-[0_0_30%] md:max-w-[40%] lg:max-w-[30%]  lg:flex-[0_0_30%] h-[250px] sm:h-[300px] p-2 text-white">
                                     <div 
                                         style={{
-                                            backgroundImage: `url("${REACT_APP_DOMAIN_URL+service_desktop.image}")`,
+                                            backgroundImage: `url("${REACT_APP_UPLOADS_URL+service_desktop.image}")`,
                                             backgroundPosition: 'center',
                                             backgroundRepeat: 'no-repeat',
                                             backgroundSize: 'cover',
@@ -90,7 +90,7 @@ export function PopClubPlatformPicker(){
                                 <div key={i} className="flex-[0_0_50%] max-w-[50%] md:flex-[0_0_30%] md:max-w-[40%] lg:max-w-[30%]  lg:flex-[0_0_30%] h-[250px] sm:h-[300px] p-2 text-white">
                                     <div 
                                         style={{
-                                            backgroundImage: `url("${REACT_APP_DOMAIN_URL+service_mobile.image}")`,
+                                            backgroundImage: `url("${REACT_APP_UPLOADS_URL+service_mobile.image}")`,
                                             backgroundPosition: 'center',
                                             backgroundRepeat: 'no-repeat',
                                             backgroundSize: 'cover',
