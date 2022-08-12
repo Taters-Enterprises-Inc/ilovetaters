@@ -6,6 +6,7 @@ import { FooterNav } from "features/shared";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
+import { PaymentAccordion } from "../components/payment,accordion";
 
 export function ShopCheckout(){
     return (
@@ -98,7 +99,7 @@ export function ShopCheckout(){
                             </div>
                             
 
-                            <div className="text-white order-last lg:mt-0 mt-4">
+                            <div className="text-white lg:mt-0 mt-4">
                                 <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">Handling Method</h2>
 
                                 <ul className="space-y-1 mt-2">
@@ -117,9 +118,7 @@ export function ShopCheckout(){
                                 </ul>
                             </div>
 
-
-
-                            <div className="text-white order-last lg:mt-0 mt-4">
+                            <div className="text-white lg:mt-0 mt-4">
                                 <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">Note: </h2>
 
                                 <ul className="space-y-2 mt-2">
@@ -137,7 +136,12 @@ export function ShopCheckout(){
                                     </li>
                                 </ul>
                             </div>
+                            
+                            <div className="text-white lg:mt-0 mt-4">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">Choose payment method</h2>
+                                <PaymentAccordion />
 
+                            </div>
                         </div>
 
                         <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">

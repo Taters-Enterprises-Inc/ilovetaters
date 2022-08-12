@@ -144,4 +144,29 @@ export const theme = {
             },
         },
     },
+    accordion: {
+        styles: {
+          base: {
+            header: {
+              initial: {
+                color: '!text-white',
+                fontSize: 'text-lg',
+                justifyContent: 'justify-start'
+              },
+            },
+            body:{
+                color: '!text-white',
+            }
+          },
+        },
+    },
+    radio: {
+      styles: {
+        base: {
+          label: {
+            color : '!text-white',
+          },
+        }
+      },
+    },
 }
