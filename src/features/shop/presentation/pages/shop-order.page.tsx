@@ -1,4 +1,5 @@
 import { FooterNav } from "features/shared";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
@@ -79,8 +80,82 @@ export function ShopOrder(){
 
                     <div className="bg-primary py-6 px-4 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex justify-between flex-col lg:flex-row">
                         
-                        <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
+                        <div className="space-y-8 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
+                            <div className="text-white">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">From: </h2>
+                                <h3 className="font-semibold text-lg">Taters Malate</h3>
+                                <h3 className="text-sm">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
+                                <div>
+                                    <strong>Contact #</strong> 09084741500
+                                </div>
+                                <div>
+                                    <strong>Email :</strong> taters.tdcgt.s@tatersgroup.com
+                                </div>
+                            </div>
+
+                            <div className="text-white">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Deliver To Address: </h2>
+                                <h3 className="font-semibold text-lg">Eco Villaraza</h3>
+                                <div>
+                                    <strong>Address:</strong> Adamson University, San Marcelino Street, Ermita, Manila, Metro Manila, Philippines
+                                </div>
+                                <div>
+                                    <strong>Email: </strong> taters.tdcgt.s@tatersgroup.com
+                                </div>
+                            </div>
                             
+
+                            <div className="text-white">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Tracking Information</h2>
+                                <div>
+                                    <strong>Tracking Number:</strong> #661dbd
+                                </div>
+                                <div>
+                                    <strong>Order Status:</strong> Order Placed In System
+                                </div>
+                                <div>
+                                    <strong>Mode of handling:</strong> Delivery
+                                </div>
+                                <div>
+                                    <strong>Gift Card Number:</strong> 0
+                                </div>
+                            </div>
+
+                            <div className="text-white">
+                                <h2 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl mb-2">Orders</h2>
+                                
+                                <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]">
+                                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/100/test.jpg"} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
+                                    <div className="flex-1 text-white px-3 py-2 flex flex-col">
+                                        <h3 className="text-sm">Family Pack Tofu Chips</h3>
+                                        <h3 className="text-xs">Quntity: <span className="text-tertiary">3</span></h3>
+                                        <h3 className="text-xs">Flavor: <span className="text-tertiary">Natural</span></h3>
+                                        <h3 className="text-base flex-1 flex justify-end items-end">₱ 295.00</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="text-white">
+                                <h2 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl mb-2">Freebies</h2>
+                                
+                                <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]">
+                                    <img src={REACT_APP_DOMAIN_URL + "uploads/images/shop/products/100/test.jpg"} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
+                                    <div className="flex-1 text-white px-3 py-2 flex flex-col">
+                                        <h3 className="text-sm">Family Pack Tofu Chips</h3>
+                                        <h3 className="text-xs">Quntity: <span className="text-tertiary">1</span></h3>
+                                        <h3 className="text-xs">Flavor: <span className="text-tertiary">Natural</span></h3>
+                                        <h3 className="text-base flex-1 flex justify-end items-end">FREE</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="text-white">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Delivery Information</h2>
+                                <h3 className="font-semibold text-lg">Eco Villaraza</h3>
+                                <h3 className="text-sm">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
+                                <h3 className="text-sm">09686097100</h3>
+                            </div>
+
                         </div>
 
                         <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
