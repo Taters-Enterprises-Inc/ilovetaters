@@ -149,8 +149,9 @@ export const theme = {
           base: {
             header: {
               initial: {
+                fontWeight: 'font-light',
                 color: '!text-white',
-                fontSize: 'text-lg',
+                fontSize: 'text-base',
                 justifyContent: 'justify-start'
               },
             },
@@ -168,5 +169,14 @@ export const theme = {
           },
         }
       },
+    },
+    checkbox: {
+        styles: {
+            base: {
+              input: {
+                borderColor: '!border-white',
+              }
+            }
+        },
     },
 }

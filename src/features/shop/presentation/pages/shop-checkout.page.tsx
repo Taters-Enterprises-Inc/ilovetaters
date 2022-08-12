@@ -1,14 +1,16 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Input } from "@material-tailwind/react";
+import { Checkbox, Input } from "@material-tailwind/react";
 import { FooterNav } from "features/shared";
-import { TbTruckDelivery } from "react-icons/tb";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment,accordion";
+import { useNavigate } from "react-router-dom";
 
 export function ShopCheckout(){
+    const navigate = useNavigate();
+
     return (
         <main className="bg-primary">
 
@@ -140,7 +142,22 @@ export function ShopCheckout(){
                             <div className="text-white lg:mt-0 mt-4">
                                 <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">Choose payment method</h2>
                                 <PaymentAccordion />
+                            </div>
 
+                            <div className="flex justify-start items-center space-x-1 text-white">
+                                <Checkbox color="orange"/>
+                                <span>I agree with the </span>
+                                <button className="text-tertiary">Terms & Conditions</button>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row lg:space-x-4">
+                                <button className="bg-white font-bold text-black py-3 w-full uppercase border border-white rounded-xl mt-4 order-2 lg:order-1" onClick={()=>{
+                                        navigate(-1);
+                                }}>Go Back</button>
+
+                                <button className="bg-[#CC5801] text-white py-3 w-full uppercase border rounded-xl mt-4 order-1 lg:order-2" onClick={()=>{
+                                        navigate(-1);
+                                }}>Checkout</button>
                             </div>
                         </div>
 
