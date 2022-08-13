@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { REACT_APP_DOMAIN_URL } from 'features/shared/constants';
 import { BsFacebook } from 'react-icons/bs';
+import { IoMdClose } from 'react-icons/io';
 
 interface LoginChooserModalProps {
     open : boolean;
@@ -40,7 +41,7 @@ export function LoginChooserModal(props: LoginChooserModalProps){
         style={{display: props.open? 'flex':'none'}}
         className='fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
             <div className='bg-secondary px-4 py-8 round w-[90%] rounded-lg relative text-white'>
-                <button className='absolute top-2 right-4 text-white' onClick={props.onClose}>X</button>
+                <button className='absolute top-2 right-4 text-white text-2xl' onClick={props.onClose}><IoMdClose/></button>
 
                 <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">Hi! Welcome to Popclub</h1>
                 <h2 className="text-xs text-center">Continue with us by connecting your existing account</h2>

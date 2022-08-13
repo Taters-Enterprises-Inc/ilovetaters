@@ -15,7 +15,7 @@ export function ShopProduct(){
         <main className="bg-primary">
             <ShopHeaderNav/>
 
-            <div className="bg-secondary lg:h-[200px] text-white pt-4">
+            <div className="bg-secondary lg:h-[200px] text-white lg:pt-4">
 
                 <div className="mx-auto container px-4 py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
                     <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-xl leading-8 lg:text-3xl">Lorem ipsum dolor sit amet</h1>

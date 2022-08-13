@@ -3,6 +3,7 @@ import { setPopClubData } from '../slices/set-popclub-data.slice';
 import { useAppDispatch } from 'features/config/hooks';
 import { REACT_APP_BASE_NAME } from 'features/shared/constants';
 import { useNavigate } from 'react-router-dom';
+import { IoMdClose } from 'react-icons/io';
 
 
 interface PlatformChooserModalProps{
@@ -26,10 +27,10 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
       className='fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
       <div className='bg-secondary p-4 round w-[80%] sm:w-[400px] rounded-lg relative'>
 
-        <button className='absolute top-2 right-4 text-white' onClick={()=>{
+        <button className='absolute top-2 right-4 text-white text-2xl' onClick={()=>{
           if(REACT_APP_BASE_NAME)
             navigate(-1);
-        }}>X</button>
+        }}><IoMdClose/></button>
 
           <h1 className='text-center text-xs text-white '>Are you</h1>
           <ul className=' space-y-1' >

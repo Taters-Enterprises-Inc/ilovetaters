@@ -1,5 +1,6 @@
 import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
@@ -40,15 +41,46 @@ export function ShopOrder(){
                     </nav>
                     
                 </div>
+                
+                <div className="pb-4 flex lg:hidden">
+                    <div className="flex-1">
+                        <div className="bg-white h-[0.25rem] relative">
+                            <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem] text-black">1</div>
+                        </div>
+                        <div className="flex justify-center items-center mt-5 text-xs text-white">
+                            Your Details
+                        </div>
+                    </div>
+                    
+                    <div className="flex-1">
+                        <div className="bg-white h-[0.25rem] relative">
+                            <div className="absolute rounded-[50%] text-black font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
+                        </div>
+                        <div className="flex justify-center items-center mt-5 text-xs text-white">
+                            Payment
+                        </div>
+                    </div>
+
+                    
+                    <div className="flex-1">
+                        <div className="bg-[#424242] h-[0.25rem] relative">
+                            <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
+                        </div>
+                        <div className="flex justify-center items-center mt-5 text-xs text-white">
+                            Complete
+                        </div>
+                    </div>
+
+                </div>
             </div>
                 
             <section className="min-h-screen container mx-auto lg:space-x-4 pb-36">
                     
-                <div className="lg:mt-[-80px] flex justify-between flex-col lg:flex-row px-4">
+                <div className="lg:mt-[-80px] flex justify-between items-start flex-col lg:flex-row px-4">
                     
-                    <div className="space-y-8 lg:flex-[0_0_65%] lg:max-w-[65%] order-2 lg:order-1 lg:mt-0 mt-4">
+                    <div className="space-y-8 lg:flex-[0_0_65%] lg:max-w-[65%]">
                         
-                        <div className="flex pb-8">
+                        <div className="pb-8 hidden lg:flex">
                             <div className="flex-1">
                                 <div className="bg-white h-[0.25rem] relative">
                                     <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
@@ -108,8 +140,8 @@ export function ShopOrder(){
                                 <div className="text-sm">
                                     <strong>Tracking Number:</strong> #661dbd
                                 </div>
-                                <div className="text-sm">
-                                    <strong>Order Status:</strong> Order Placed In System
+                                <div className="text-sm space-x-2">
+                                    <strong>Order Status:</strong> <span className="rounded-full bg-green-700 text-white px-2 py-1">Order Placed In System</span>
                                 </div>
                                 <div className="text-sm">
                                     <strong>Mode of handling:</strong> Delivery
@@ -151,29 +183,35 @@ export function ShopOrder(){
                             </div>
                         </div>
 
-                        <div className="text-white">
-                            <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Delivery Information</h2>
-                            <h3 className="font-semibold text-lg">Eco Villaraza</h3>
-                            <h3 className="text-sm">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
-                            <h3 className="text-sm">09686097100</h3>
+                        <div className="flex lg:flex-row flex-col space-x-2">
+                            <div className="text-white lg:flex-1">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Delivery Information</h2>
+                                <h3 className="font-semibold text-lg">Eco Villaraza</h3>
+                                <h3 className="text-sm">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
+                                <h3 className="text-sm">09686097100</h3>
+                            </div>
+
+                            <div className="text-white space-y-2 lg:flex-1">
+                                <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Payment Options</h2>
+                                <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/bdo.webp`} alt="" />
+
+                                <div>
+                                    <div>
+                                        <strong>Account Name:</strong> Sierra Dreams Consumer Goods Trading
+                                    </div>
+                                    <div>
+                                        <strong>Account #:</strong> 0101-7800-1264
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="text-white space-y-2 ">
-                            <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Payment Options</h2>
-                            <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/bdo.webp`} alt="" />
-                            <div>
-                                <strong>Account Name:</strong> Sierra Dreams Consumer Goods Trading
-                            </div>
-                            <div>
-                                <strong>Account #:</strong> 0101-7800-1264
-                            </div>
-                        </div>
 
                     </div>
 
-                    <div className="space-y-4 lg:flex-[0_0_30%] lg:max-w-[30%] order-1 lg:order-2 bg-primary lg:shadow-[#540808] lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+                    <div className="space-y-4 lg:flex-[0_0_30%] lg:max-w-[30%] bg-primary lg:shadow-[#540808] lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
                         
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center pb-6">Order Summary</h2>
+                        <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">Order Summary</h2>
 
                         <div className="grid grid-cols-2 text-white">
                             <span>Subtotal:</span>
@@ -185,6 +223,27 @@ export function ShopOrder(){
                         <hr className="mt-1" />
 
                         <h1 className="text-4xl text-center text-white">₱ 295.00</h1>
+
+                        <h2 className="font-['Bebas_Neue'] text-2xl  text-white tracking-[3px] text-center">Upload Proof of Payment</h2>
+
+                        <div>
+                            <div className="border-dashed border-t-2 border-l-2 border-r-2 border-sky-500 h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2">
+
+                                <AiOutlineCloudUpload className="text-white text-5xl"/>
+                                <span className="text-white text-lg">Drag and drop here to upload</span>
+                                <button className="text-white text-lg bg-secondary px-3 py-1 rounded-lg">Or select file</button>
+
+                            </div>
+
+                            <button className="bg-button w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]">
+                                Upload
+                            </button>
+
+                            <h4 className="text-white mt-1 leading-5">Note: Supported file types: JPG, JPEG, PNG and GIF. Maximum file size is 2MB.</h4>
+                            
+                        </div>
+
+
                     </div>
                 </div>
                 

@@ -1,0 +1,1 @@
+export { ShopCartModal } from './shop-cart.modal';

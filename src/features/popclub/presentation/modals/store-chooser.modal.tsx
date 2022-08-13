@@ -5,6 +5,7 @@ import { SearchAddress } from '../../../shared/presentation/components/inputs/se
 import { getSession, selectGetSession } from 'features/shared/presentation/slices/get-session.slice';
 import { getStoresAvailable } from 'features/shared/presentation/slices/get-stores-available-slice';
 import { useEffect, useState } from 'react';
+import { IoMdClose } from 'react-icons/io';
 
 interface StoreChooserModalProps {
   open : boolean,
@@ -42,10 +43,10 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
       <div className='bg-[#a21013] px-[10px] py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
 
-        <button className='absolute top-2 right-4 text-white' onClick={()=>{
+        <button className='absolute top-2 right-4 text-white text-2xl' onClick={()=>{
           document.body.classList.remove('overflow-hidden');
           props.onClose();
-        }}>X</button>
+        }}><IoMdClose/></button>
 
         <h1 className='text-white font-bold text-sm text-center pt-1 pb-2'>Which store do you want for online delivery?</h1>
         

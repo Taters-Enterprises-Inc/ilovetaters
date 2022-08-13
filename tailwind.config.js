@@ -11,6 +11,7 @@ module.exports = withMT({
         'primary': '#a21013',
         'secondary' : '#22201A',
         'tertiary' : '#ffcd17' ,
+        'button': '#CC5801'
       },
     },
   },
