@@ -1,6 +1,7 @@
 import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
+import { ShopBannerCarousel } from "../carousels";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
 const products = [
@@ -32,9 +33,10 @@ export function ShopProducts(){
             <ShopHeaderNav/>
 
             <section className="container mx-auto">
-                <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
+                <ShopBannerCarousel/>
+                {/* <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
-                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
+                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img> */}
             </section>
 
 
