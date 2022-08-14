@@ -4,13 +4,27 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { CounterInput } from "../components/counter-input";
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Radio } from "@material-tailwind/react";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { getProductDetails, selectGetProductDetails } from "../slices/get-product-details.slice";
+import { useEffect } from "react";
 
 export function ShopProduct(){
+    const dispatch = useAppDispatch();
+    const getProductDetailsState = useAppSelector(selectGetProductDetails);
+    let { hash } = useParams();
+
+
+    useEffect(()=>{
+        if(hash !== undefined){
+            dispatch(getProductDetails({hash}));
+        }
+    },[]);
+    
     return (
         <main className="bg-primary">
             <ShopHeaderNav/>
@@ -18,7 +32,7 @@ export function ShopProduct(){
             <div className="bg-secondary lg:h-[200px] text-white lg:pt-4">
 
                 <div className="mx-auto container px-4 py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
-                    <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-xl leading-8 lg:text-3xl">Lorem ipsum dolor sit amet</h1>
+                    <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-xl leading-8 lg:text-3xl">{getProductDetailsState.data?.product.name}</h1>
                     
                     <nav className="flex" aria-label="Breadcrumb">
 
@@ -38,7 +52,7 @@ export function ShopProduct(){
                             <li aria-current="page">
                                 <div className="flex items-center">
                                     <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                                    <span className="ml-1 text-xs lg:text-base font-medium text-white md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis">Lorem ipsum dolor sit amet</span>
+                                    <span className="ml-1 text-xs lg:text-base font-medium text-white md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis">{getProductDetailsState.data?.product.name}</span>
                                 </div>
                             </li>
                         </ol>
@@ -54,7 +68,7 @@ export function ShopProduct(){
 
                     <div className="bg-primary pb-20 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
                         <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[900px]">
-                            <img src={REACT_APP_UPLOADS_URL + "images/shop/products/350/test.jpg"} className="lg:rounded-[20px] w-full h-full object-cover" alt="" />
+                            <img src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`} className="lg:rounded-[20px] w-full h-full object-cover" alt="" />
                         </div>
 
                         <div className="flex-1 space-y-10 px-4 lg:px-0">
@@ -69,9 +83,7 @@ export function ShopProduct(){
                                 <hr/>
 
                                 <p className="p-6 text-sm">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet, ut quibusdam quod quae odit, 
-                                    repudiandae tenetur fugit ipsa eligendi nostrum, autem totam? Nesciunt, unde! Nemo dolorum illum 
-                                    excepturi quia temporibus?
+                                    {getProductDetailsState.data?.product.description}
                                 </p>
 
                             </div>
@@ -86,9 +98,12 @@ export function ShopProduct(){
                                 <hr/>
 
                                 <p className="p-6 text-sm">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet, ut quibusdam quod quae odit, 
-                                    repudiandae tenetur fugit ipsa eligendi nostrum, autem totam? Nesciunt, unde! Nemo dolorum illum 
-                                    excepturi quia temporibus?
+                                    {
+                                        getProductDetailsState.data?.product.delivery_details ? 
+                                            <div dangerouslySetInnerHTML={{__html:getProductDetailsState.data?.product.delivery_details }} />
+                                        : null
+                                    }
+                                    
                                 </p>
 
                             </div>

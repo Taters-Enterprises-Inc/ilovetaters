@@ -49,7 +49,7 @@ export function ShopProducts(){
 
 
                     return(
-                        <section key={i} className="lg:h-[620px] container mx-auto px-4 lg:px-0 lg:flex lg:space-x-3 space-y-3 lg:space-y-0">
+                        <section key={i} className="lg:h-[620px] container mx-auto px-4 lg:px-0 lg:flex lg:space-x-3 space-y-3 lg:space-y-0 mb-4">
                             
                             <div 
                                 style={{

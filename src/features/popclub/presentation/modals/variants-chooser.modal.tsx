@@ -1,15 +1,13 @@
 import { selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { redeemDeal, RedeemDealState, resetRedeemDeal } from "../slices/redeem-deal.slice";
-import { DealModel } from "features/popclub/core/domain/deal.model";
+import { redeemDeal, RedeemDealState } from "../slices/redeem-deal.slice";
 import { selectGetDeal } from "../slices/get-deal.slice";
 import { useEffect, useState } from "react";
-import { ProductModel } from "features/popclub/core/domain/product.model";
 import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
 import { selectRedeemDeal } from "../slices/redeem-deal.slice";
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { getRedeems, GetRedeemsState, selectGetRedeems } from "../slices/get-redeems.slice";
+import { selectGetRedeems } from "../slices/get-redeems.slice";
 import { getSession, GetSessionState, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 
 interface VariantChooserModalProps{
