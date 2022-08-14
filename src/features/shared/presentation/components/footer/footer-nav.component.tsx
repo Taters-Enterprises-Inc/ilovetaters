@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'features/config/hooks';
 import { CountdownTimerLatestRedeem } from 'features/popclub/presentation/components';
 import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from 'features/popclub/presentation/slices/get-latest-unexpired-redeem.slice';
-import { REACT_APP_BASE_NAME, REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from 'features/shared/constants';
+import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from 'features/shared/constants';
 import { useEffect } from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -40,25 +40,25 @@ export function FooterNav(){
                             </Link>
                         </li>
                         <li className='flex-1'>
-                            <Link to={REACT_APP_BASE_NAME + 'popclub'}  className="flex justify-between items-center flex-col h-full pt-1">
+                            <Link to={'/popclub'}  className="flex justify-between items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_UPLOADS_URL + 'images/shared/icons/popclub.webp'} className="w-[20px] sm:w-[24px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px]">Popclub</span>
                             </Link>
                         </li>
                         <li className='flex-1'>
-                            <Link to={REACT_APP_BASE_NAME + 'shop'} className="flex justify-center items-center flex-col h-full pt-1">
+                            <Link to={'/shop'} className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_UPLOADS_URL + 'images/shared/icons/snackshop.webp'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Snackshop</span>
                             </Link>
                         </li>
                         <li className='flex-1'>
-                            <Link to={REACT_APP_BASE_NAME + 'catering'}  className="flex justify-center items-center flex-col h-full pt-1">
+                            <Link to={'/catering'}  className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_UPLOADS_URL + 'images/shared/icons/catering.webp'} className="w-[24px] sm:w-[30px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Catering</span>
                             </Link>
                         </li>
                         <li className='flex-1'>
-                            <Link to={REACT_APP_BASE_NAME + 'branches'} className="flex justify-center items-center flex-col h-full pt-1">
+                            <Link to={'/branches'} className="flex justify-center items-center flex-col h-full pt-1">
                                 <img src={REACT_APP_UPLOADS_URL + 'images/shared/icons/branches.webp'} className="w-[18px] sm:w-[25px]" alt="Tater home icon"></img>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">Branches</span>
                             </Link>

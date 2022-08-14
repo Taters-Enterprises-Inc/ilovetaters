@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
-import { selectSetStoreAndAddress, setStoreAndAddress } from "features/shared/presentation/slices/set-store-and-address.slice";
+import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSession, selectGetSession } from "../../../shared/presentation/slices/get-session.slice";
@@ -15,18 +15,18 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
     const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    let { platform } = useParams();
-    const query = useQuery();
-    const category = query.get('category');
 
+    useEffect(()=>{
+        if(setStoreAndAddressState.status === SetStoreAndAddressState.success){
+            navigate('products');
+        }
+    }, [setStoreAndAddressState, navigate]);
 
     const storeClicked =(storeId: number)=> {
         dispatch(setStoreAndAddress({
             address: props.address,
             storeId,
         }));
-
-        navigate('products');
 
         document.body.classList.remove('overflow-hidden');
     }
