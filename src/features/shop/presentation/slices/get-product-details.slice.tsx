@@ -19,6 +19,15 @@ const initialState : {
     status: GetProductDetails,
     data: {
         product: ProductModel;
+        addons: Array<ProductModel>;
+        product_size: Array<{
+            id: number;
+            name: string;
+        }>;
+        product_flavor: Array<{
+            id: number;
+            name: string;
+        }>;
     } | undefined
 } = {
     status: GetProductDetails.initial,
@@ -40,7 +49,12 @@ export const getProductDetailsSlice = createSlice({
     extraReducers: (builder: any) => {
         builder.addCase(getProductDetails.pending, (state: any)=>{
             state.status = GetProductDetails.inProgress;
-        }).addCase(getProductDetails.fulfilled, (state: any, action : PayloadAction<{message: string, data: { product : ProductModel } | null}> ) => {
+        }).addCase(getProductDetails.fulfilled, (state: any, action : PayloadAction<{message: string, data: { 
+                product : ProductModel; 
+                addons: Array<ProductModel>; 
+                product_flavor: Array<any>; 
+            } | null}> ) => {
+                
             const data = action.payload.data;
             
             state.data = data;

@@ -4,7 +4,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { CounterInput } from "../components/counter-input";
 import { BsFillCartPlusFill } from 'react-icons/bs';
@@ -16,7 +16,15 @@ import { useEffect } from "react";
 export function ShopProduct(){
     const dispatch = useAppDispatch();
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
+
     let { hash } = useParams();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    }, [location]);
+  
 
 
     useEffect(()=>{
@@ -66,8 +74,8 @@ export function ShopProduct(){
 
                 <div className="lg:-mt-[80px] lg:space-y-10">
 
-                    <div className="bg-primary pb-20 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
-                        <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[900px]">
+                    <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
+                        <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                             <img src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`} className="lg:rounded-[20px] w-full h-full object-cover" alt="" />
                         </div>
 
@@ -115,39 +123,72 @@ export function ShopProduct(){
                                     <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
                                     <IoIosArrowDown className="text-xl"/>
                                 </div>
-
-                                <hr/>
-
-                                <div className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6">
-                                    <div className="p-4 flex space-x-2">
-                                        <img src={REACT_APP_UPLOADS_URL + "images/shop/products/100/test.jpg"} className="rounded-[10px] w-[100px] h-[100px]" alt="" />
-                                        <div className="p-2 space-y-2">
-                                            <h4 className="font-['Bebas_Neue'] text-lg tracking-[2px] leading-5">Taters Snackstix</h4>
-                                            <h5 className=" text-tertiary leading-5">₱ 50.00</h5>
-                                            <CounterInput/>
-
-                                        </div>
-                                    </div>
-                                    <button className="bg-primary w-full py-2 rounded-b-xl font-light flex space-x-4 justify-center items-center">
-                                        <BsFillCartPlusFill className="text-2xl"/>
-                                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
-                                    </button>
+                                <div className="h-[400px] overflow-y-auto flex flex-col items-center border-2 border-white py-4">
+                                    {
+                                        getProductDetailsState.data?.addons.map((product, i)=>(
+                                            <div key={i} className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6 w-[92%]">
+                                                <div className="p-4 flex space-x-2">
+                                                    <img src={`http://ilovetaters.com/shop/assets/img/75/${product.product_image}`} className="rounded-[10px] w-[100px] h-[100px]" alt="" />
+                                                    <div className="p-2 space-y-2">
+                                                        <h4 className="font-['Bebas_Neue'] text-lg tracking-[2px] leading-5">{product.name}</h4>
+                                                        <h5 className=" text-tertiary leading-5">₱ {product.price.toFixed(2)}</h5>
+                                                        <CounterInput/>
+            
+                                                    </div>
+                                                </div>
+                                                <button className="bg-primary w-full py-2 rounded-b-xl font-light flex space-x-4 justify-center items-center">
+                                                    <BsFillCartPlusFill className="text-2xl"/>
+                                                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
+                                                </button>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
+                                
                             </div>
+                            
+                            {
+                                getProductDetailsState.data?.product_size && getProductDetailsState.data?.product_size.length > 0 ? 
+                                    <div>
+                                        <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Size</h2>
+                
+                                        <ul>
+                                            {
+                                                getProductDetailsState.data?.product_size.map((size, i)=>(
+                                                    <>
+                                                        <li className="flex items-center">
+                                                            <Radio id={size.id.toString()} color="orange" name="size" label={size.name} />
+                                                        </li>
+                                                    </>
+                                                ))
+                                            }
+                                        </ul>
 
-                            <div>
-                                <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Flavor</h2>
+                                    </div>
+                                    : null
+                            }
 
-                                <ul>
-                                    <li className="flex items-center">
-                                        <Radio id="nacho-cheese" color="orange" name="flavor" label="Nacho Cheese" />
-                                    </li>
+                            {
+                                getProductDetailsState.data?.product_flavor && getProductDetailsState.data?.product_flavor.length > 0 ? 
+                                    <div>
+                                        <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Flavor</h2>
+                
+                                        <ul>
+                                            {
+                                                getProductDetailsState.data?.product_flavor.map((flavor, i)=>(
+                                                    <>
+                                                        <li className="flex items-center">
+                                                            <Radio id={flavor.id.toString()} color="orange" name="flavor" label={flavor.name} />
+                                                        </li>
+                                                    </>
+                                                ))
+                                            }
+                                        </ul>
 
-                                    <li className="flex items-center">
-                                        <Radio id="texan-barbeque" color="orange" name="flavor" label="Texan Barbeque" />
-                                    </li>
-                                </ul>
-                            </div>
+                                    </div>
+                                    : null
+                            }
+
 
                             <div>
                                 <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Quantity</h2>
@@ -171,10 +212,13 @@ export function ShopProduct(){
                                 </div>
                             </div>
 
+                            {
+                                getProductDetailsState.data?.product.price ? 
+                                    <h2 className="text-4xl text-white mt-4">₱ {getProductDetailsState.data.product.price.toFixed(2)}</h2>
+                                : null
+                            }
 
-                            <h2 className="text-4xl text-white mt-4">₱ 250.00</h2>
-
-                            <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-4 w-full rounded-xl ">
+                            <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
                                 <BsFillCartPlusFill className="text-3xl"/>
                                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
                             </button>

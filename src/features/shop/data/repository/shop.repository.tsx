@@ -16,6 +16,15 @@ export interface GetProductDetailsResponse{
         message: string;
         data : {
             product: ProductModel;
+            addons: Array<ProductModel>;
+            product_size: Array<{
+                id: number;
+                name: string;
+            }>;
+            product_flavor: Array<{
+                id: number;
+                name: string;
+            }>;
         }
     }
 }
