@@ -1,7 +1,6 @@
 import { PlatformModel } from 'features/popclub/core/domain/platform.model';
 import { setPopClubData } from '../slices/set-popclub-data.slice';
 import { useAppDispatch } from 'features/config/hooks';
-import { REACT_APP_BASE_NAME } from 'features/shared/constants';
 import { useNavigate } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
 
@@ -28,7 +27,6 @@ export function PlatformChooserModal(props : PlatformChooserModalProps) {
       <div className='bg-secondary p-4 round w-[80%] sm:w-[400px] rounded-lg relative'>
 
         <button className='absolute top-2 right-4 text-white text-2xl' onClick={()=>{
-          if(REACT_APP_BASE_NAME)
             navigate(-1);
         }}><IoMdClose/></button>
 

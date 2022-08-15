@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 html {
     scroll-behavior: smooth;
 }
@@ -15,6 +16,22 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+.swiper-button-next,
+.swiper-button-prev {
+    background-color: #ffcd17;
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 50%;
+    font-size: bold;
+    color: #000 !important;
+    fill: black !important;
+    stroke: black !important;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px !important;
+    font-weight: 900;
 }
 
 .elipsis-3-line{

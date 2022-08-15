@@ -49,7 +49,7 @@ export function SetStoreAndAddressRepository(param: SetStoreAndAddressParm) : Pr
 }
 
 export function GetSessionRepository(): Promise<GetSessionResponse>{
-    return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/session`,{
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/session`,{
         headers: {
             'Content-Type': 'application/json'
         },
@@ -58,7 +58,7 @@ export function GetSessionRepository(): Promise<GetSessionResponse>{
 }
 
 export function SetSessionRepository(param: SetSessionParam): Promise<GetSessionResponse>{
-    return axios.post(`${REACT_APP_DOMAIN_URL}api/popclub/session`, {'session' : param},{
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/shared/session`, {'session' : param},{
         headers: {
             'Content-Type': 'application/json'
         },

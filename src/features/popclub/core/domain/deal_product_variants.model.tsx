@@ -1,4 +1,5 @@
-import { ProductModel } from "./product.model";
+
+import { ProductModel } from "features/shared/core/domain/product.model";
 import { ProductVariantModel } from "./product_variant.model";
 
 export interface DealProductVariantsModel {

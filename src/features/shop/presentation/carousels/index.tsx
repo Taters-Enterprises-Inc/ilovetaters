@@ -1,1 +1,1 @@
-export { ShopBannerCarousel } from './shop-banner.carousel';
+export { ShopProductsCarousel } from './shop-products.carousel';
