@@ -51,7 +51,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
         <h1 className='text-white font-bold text-sm text-center pt-1 pb-2'>Which store do you want for online delivery?</h1>
         
         <div className='flex items-center justify-center mb-3'>
-          <label className="pure-material-textfield-outlined w-[96%]">
+          <label className="pure-material-textfield-outlined w-full">
             <SearchAddress onPlaceSelected={( place : string)=>{
               setAddress(place);
               dispatch(getStoresAvailable({address: place}));

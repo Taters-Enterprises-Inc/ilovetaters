@@ -27,10 +27,11 @@ export function Shop(){
         <main className="bg-primary">
             <ShopHeaderNav/>
             
-            <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
 
             <section className="container mx-auto min-h-screen px-4 lg:px-0">
+                
+                <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
+                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
 
                 <h1 className='text-white text-2xl pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>Which store are you visiting?</h1>
 

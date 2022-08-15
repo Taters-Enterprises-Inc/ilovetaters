@@ -48,15 +48,24 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
                                 key={index}
                                 onClick={ store_availability && props.address != null ? () => {console.log('test');
                                 }  :  ()=>storeClicked(store.store_id)  }
-                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%] lg:max-w-[23.9%] lg:flex-[0_0_23.9%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
+                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30.5%] sm:flex-[0_0_30.5%]  md:max-w-[22.9%] md:flex-[0_0_22.9%]  lg:max-w-[23.5%] lg:flex-[0_0_23.5%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
                                 }
-                                <div className="text-[10px] lg:text-base uppercase ">FULL MENU</div> 
+                                <div className="text-sm uppercase">FULL MENU</div> 
+                                
+                                <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
+                                        <div className="flex justify-end">
+                                            <span className="bg-secondary px-2 text-sm">
+                                                {distance_in_km} KM 
+                                            </span>
+                                        </div>
+                                </div>
+                                
                                 <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full"/>
                                 <div className="px-3 py-2">
-                                    <h1 className="mb-1 text-[10px] sm:text-lg">{store.store_name}</h1>
-                                    <p className="text-[7px] sm:text-xs">{store.store_address}</p>
+                                    <h1 className="mb-1 text-xs lg:text-base">{store.store_name}</h1>
+                                    <p className="text-[7px] lg:text-xs">{store.store_address}</p>
                                 </div>
                             </button>
                         )

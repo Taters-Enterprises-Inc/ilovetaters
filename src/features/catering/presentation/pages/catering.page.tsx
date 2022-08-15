@@ -7,10 +7,11 @@ export function Catering(){
         <main className="bg-primary">
             <HeaderNav serviceReached={true} active='CATERING' sticky/>
             
-            <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/catering/hero/mobile/catering_landing_page.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/catering/hero/desktop/catering_landing_page.webp"} alt="The best pop corn in town"></img>
 
             <section className=" container mx-auto min-h-screen">
+                
+                <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/catering/hero/mobile/catering_landing_page.webp"} alt="The best pop corn in town"></img>
+                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/catering/hero/desktop/catering_landing_page.webp"} alt="The best pop corn in town"></img>
 
             </section>
 
