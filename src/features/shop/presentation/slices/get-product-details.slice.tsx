@@ -21,11 +21,11 @@ const initialState : {
         product: ProductModel;
         addons: Array<ProductModel>;
         product_size: Array<{
-            id: string;
+            id: number;
             name: string;
         }>;
         product_flavor: Array<{
-            id: string;
+            id: number;
             name: string;
         }>;
     } | undefined

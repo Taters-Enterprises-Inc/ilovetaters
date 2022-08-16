@@ -39,7 +39,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
 
   return (
     <div
-       style={{display: props.open? 'flex':'none'}}
+      style={{display: props.open? 'flex':'none'}}
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
       <div className='bg-[#a21013] px-[10px] py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
 

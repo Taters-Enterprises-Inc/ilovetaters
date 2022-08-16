@@ -12,16 +12,31 @@ import { getProductDetails, GetProductDetailsState, selectGetProductDetails } fr
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
-import { addToCart } from "../slices/add-to-cart.slice";
+import { addToCart, AddToCartState, resetAddToCart, selectAddToCart } from "../slices/add-to-cart.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
+    const addToCartState = useAppSelector(selectAddToCart);
+
     const [quantity, setQuantity] = useState(1);
+    
+    const [currentSize, setCurrentSize] = useState<number | undefined>(undefined);
+    const [currentFlavor, setCurrentFlavor] = useState<number | undefined>(undefined);
+
+    
 
     let { hash } = useParams();
 
     const location = useLocation();
+
+    useEffect(()=>{
+        if(addToCartState.status === AddToCartState.success){
+            dispatch(getSession());
+            dispatch(resetAddToCart());
+        }
+    },[addToCartState, dispatch]);
 
     useEffect(() => {
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -36,12 +51,15 @@ export function ShopProduct(){
     },[]);
 
     const handleAddToCart =()=>{
+        
         if(getProductDetailsState.status === GetProductDetailsState.success && getProductDetailsState.data){
             dispatch(addToCart({
                 prod_id : getProductDetailsState.data.product.id,
                 prod_image_name : getProductDetailsState.data.product.product_image,
                 prod_name : getProductDetailsState.data.product.name,
                 prod_qty : quantity,
+                prod_flavor : currentFlavor,
+                prod_size : currentSize,
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
@@ -154,13 +172,21 @@ export function ShopProduct(){
                 
                                         <ul>
                                             {
-                                                getProductDetailsState.data?.product_size.map((size, i)=>(
-                                                    <>
-                                                        <li className="flex items-center">
-                                                            <Radio id={size.id.toString()} color="orange" name="size" label={size.name} />
-                                                        </li>
-                                                    </>
-                                                ))
+                                                getProductDetailsState.data?.product_size.map((size, i)=>{
+
+                                                    if(i === 0 && currentSize === undefined){
+                                                        setCurrentSize(size.id);
+                                                    }
+
+                                                    return(
+                                                        <li key={i} className="flex items-center">
+                                                        <Radio  id={size.id.toString()}  checked={size.id === currentSize} color='orange' onChange={()=>{
+                                                            setCurrentSize(size.id);
+                                                        }} />
+                                                        <label htmlFor={size.id.toString()} className='text-white'>{size.name}</label>
+                                                    </li>
+                                                    );
+                                                })
                                             }
                                         </ul>
 
@@ -175,13 +201,21 @@ export function ShopProduct(){
                 
                                         <ul>
                                             {
-                                                getProductDetailsState.data?.product_flavor.map((flavor, i)=>(
-                                                    <>
-                                                        <li className="flex items-center">
-                                                            <Radio id={flavor.id.toString()} color="orange" name="flavor" label={flavor.name} />
+                                                getProductDetailsState.data?.product_flavor.map((flavor, i)=>{
+
+                                                    if(i === 0 && currentFlavor === undefined){
+                                                        setCurrentFlavor(flavor.id);
+                                                    }
+
+                                                    return(
+                                                        <li key={i} className="flex items-center">
+                                                            <Radio id={flavor.id.toString()} checked={flavor.id === currentFlavor} color='orange'  onChange={()=>{
+                                                                setCurrentFlavor(flavor.id);
+                                                            }} />
+                                                            <label htmlFor={flavor.id.toString()} className='text-white'>{flavor.name}</label>
                                                         </li>
-                                                    </>
-                                                ))
+                                                    );
+                                                })
                                             }
                                         </ul>
 
