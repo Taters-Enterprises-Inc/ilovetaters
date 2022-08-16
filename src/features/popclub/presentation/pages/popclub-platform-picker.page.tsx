@@ -24,29 +24,11 @@ export function PopClubPlatformPicker(){
 
             <HeaderNav serviceReached={false} active='HOME'></HeaderNav>
 
-            <section 
-                style={{
-                    backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/mobile/banners/taters_entertainment_snacks.jpg')`,
-                    backgroundSize: 'contain',
-                    backgroundPositionX: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                }}
-                className="sm:hidden flex items-end justify-center relative ">
-                    <img src={REACT_APP_UPLOADS_URL + "images/mobile/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
-            </section>
-            
-            <section 
-                style={{
-                    backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/desktop/banners/taters_entertainment_snacks.jpg')`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundAttachment: 'fixed',
-                }}
-                className="hidden sm:flex items-end justify-center relative ">
-                    <img src={REACT_APP_UPLOADS_URL + "images/desktop/banners/taters_entertainment_snacks.jpg"} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
-            </section>
 
+            <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
+            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
+
+            <img  className="hidden lg:block" src={ REACT_APP_UPLOADS_URL + "images/popclub/banner/popclub_instruction.webp"} alt="The best pop corn in town"></img>
 
             <section>
 

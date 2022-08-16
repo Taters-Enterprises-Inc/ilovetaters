@@ -1,4 +1,7 @@
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 
@@ -9,12 +12,19 @@ interface ShopCartModalProps{
 
 export function ShopCartModal(props : ShopCartModalProps){
 
-    if(props.open){
-        document.body.classList.add('overflow-hidden');
-    }else {
-        document.body.classList.remove('overflow-hidden');
-        return null;
-    }
+  const getSessionState = useAppSelector(selectGetSession);
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    dispatch(getSession());
+  },[]);
+
+  if(props.open){
+      document.body.classList.add('overflow-hidden');
+  }else {
+      document.body.classList.remove('overflow-hidden');
+      return null;
+  }
 
     
   return (

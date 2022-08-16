@@ -64,10 +64,10 @@ export function FooterNav(){
                             </Link>
                         </li>
                         <li className="flex-[0.8]">
-                            <button className="flex justify-center items-center flex-col h-full pt-1 pr-2">
+                            <a className="flex justify-center items-center flex-col h-full pt-1 pr-2">
                                 <FiMoreHorizontal className='text-[25px] sm:text-4xl'></FiMoreHorizontal>
                                 <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
-                            </button>
+                            </a>
                         </li>
                     </ul>
                 </nav>

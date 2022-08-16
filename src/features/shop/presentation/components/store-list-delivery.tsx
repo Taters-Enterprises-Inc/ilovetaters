@@ -43,7 +43,7 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
                                 key={index}
                                 onClick={ store_availability && props.address != null ? () => {console.log('test');
                                 }  :  ()=>storeClicked(store.store_id)  }
-                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30.5%] sm:flex-[0_0_30.5%]  md:max-w-[22.9%] md:flex-[0_0_22.9%]  lg:max-w-[23.5%] lg:flex-[0_0_23.5%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
+                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[45.6%] m-[7px] flex-[0_0_45.6%] sm:max-w-[30.5%] sm:flex-[0_0_30.5%]  md:max-w-[22.9%] md:flex-[0_0_22.9%]  lg:max-w-[23.5%] lg:flex-[0_0_23.5%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
                                 }

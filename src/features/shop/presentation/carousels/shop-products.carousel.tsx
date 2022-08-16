@@ -91,7 +91,7 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                         <div className="flex flex-wrap">
                             {
                                 chunk.map((product, i)=>(
-                                    <Link key={i} to={product.hash} className="bg-secondary flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white max-w-[44%] flex-[0_0_44%] m-2">
+                                    <Link key={i} to={product.hash} className="bg-secondary flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white max-w-[45.5%] flex-[0_0_45.5%] m-2">
                                         <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
                                         <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
                                             <h2 className="text-white text-sm leading-4">{product.name}</h2>

@@ -8,10 +8,11 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Radio } from "@material-tailwind/react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getProductDetails, selectGetProductDetails } from "../slices/get-product-details.slice";
+import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
+import { addToCart } from "../slices/add-to-cart.slice";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
@@ -33,6 +34,20 @@ export function ShopProduct(){
             dispatch(getProductDetails({hash}));
         }
     },[]);
+
+    const handleAddToCart =()=>{
+        if(getProductDetailsState.status === GetProductDetailsState.success && getProductDetailsState.data){
+            dispatch(addToCart({
+                prod_id : getProductDetailsState.data.product.id,
+                prod_image_name : getProductDetailsState.data.product.product_image,
+                prod_name : getProductDetailsState.data.product.name,
+                prod_qty : quantity,
+                prod_price : getProductDetailsState.data.product.price,
+                prod_calc_amount : getProductDetailsState.data.product.price * quantity,
+                prod_category : getProductDetailsState.data.product.category,
+            }));
+        }
+    }
     
     return (
         <main className="bg-primary">
@@ -183,7 +198,7 @@ export function ShopProduct(){
                                     <div className="flex flex-row h-full w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
 
                                         <button onClick={()=>{
-                                            if(quantity > 0)
+                                            if(quantity > 1)
                                                 setQuantity(quantity - 1)
                                         }} className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary">
                                             <span className="m-auto text-5xl font-thin">−</span>
@@ -198,7 +213,7 @@ export function ShopProduct(){
                                         type="number" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
                                         
                                         <button onClick={()=>{
-                                            if(quantity >= 0)
+                                            if(quantity >= 1)
                                                 setQuantity(quantity + 1)
                                         }} className="h-full w-[150px] rounded-r cursor-pointer bg-primary">
                                             <span className="m-auto text-5xl font-thin">+</span>
@@ -217,7 +232,7 @@ export function ShopProduct(){
                                 : null
                             }
 
-                            <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
+                            <button onClick={handleAddToCart} className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
                                 <BsFillCartPlusFill className="text-3xl"/>
                                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
                             </button>
