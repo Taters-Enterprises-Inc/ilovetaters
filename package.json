@@ -2,7 +2,7 @@
   "name": "ilovetaters",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/staging",
+  "homepage": "https://ilovetaters.com/staging",
   "dependencies": {
     "@material-tailwind/react": "^1.2.3",
     "@reduxjs/toolkit": "^1.8.3",

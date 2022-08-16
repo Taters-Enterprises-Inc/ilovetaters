@@ -19,7 +19,7 @@ export function Addon(props: AddonProps){
                 <div className="p-2 space-y-2">
                     <h4 className="font-['Bebas_Neue'] text-lg tracking-[2px] leading-5">{props.product.name}</h4>
                     <h5 className=" text-tertiary leading-5">
-                        <NumberFormat value={(props.product.price * quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                        <NumberFormat value={(props.product.price * quantity)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
                     </h5>
                     
                     <div className="h-10 w-32">
