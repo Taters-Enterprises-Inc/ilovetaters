@@ -22,6 +22,23 @@ export function ShopCartModal(props : ShopCartModalProps){
       return null;
   }
 
+  const calculateOrdersPrice =()=>{
+
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+
+    if(orders){
+      for(let i = 0; i < orders.length; i++){
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+      return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+    }else {
+      return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+    }
+
+    
+  }
+
     
   return (
     <div
@@ -71,7 +88,7 @@ export function ShopCartModal(props : ShopCartModalProps){
               <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-white">Total:</span>
-                    <span className="text-white">₱ 295.00</span>
+                    <span className="text-white">{calculateOrdersPrice()}</span>
                   </div>
 
                   <button className="bg-button text-white text-lg w-full py-2 rounded-lg">Process Orders</button>

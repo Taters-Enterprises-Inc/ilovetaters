@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL, TABS } from "features/shared/constants";
+import { REACT_APP_UPLOADS_URL, TABS } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";

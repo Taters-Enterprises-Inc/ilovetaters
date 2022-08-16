@@ -9,6 +9,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { BsCart4 } from 'react-icons/bs';
 import { ShopCartModal } from "../modals";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import NumberFormat from "react-number-format";
 
 export function ShopHeaderNav(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -23,6 +24,23 @@ export function ShopHeaderNav(){
 
     const handleCart = () =>{
         setOpenShopCartModal(true);
+    }
+    
+    const calculateOrdersPrice =()=>{
+
+        let calculatedPrice = 0;
+        const orders = getSessionState.data?.orders;
+
+        if(orders){
+        for(let i = 0; i < orders.length; i++){
+            calculatedPrice += orders[i].prod_calc_amount;
+        }
+        return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+        }else {
+        return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+        }
+
+        
     }
 
     return (
@@ -64,9 +82,11 @@ export function ShopHeaderNav(){
                                 <button onClick={handleCart} className="flex flex-col justifiy-center items-center space-y-1">
                                     <div className="relative space-y-1 flex-col text-white rounded-xl flex justify-center items-center">
                                         <BsCart4 className="text-white text-2xl" />
-                                        <span className="absolute rounded-full bg-red-500 h-[1.2rem] w-[1.2rem] lg:h-[1.25rem] lg:w-[1.25rem] -top-2 -right-2 lg:-top-3 lg:-right-2 flex justify-center items-center text-[10px]">0</span>
+                                        <span className="absolute rounded-full bg-red-500 h-[1.2rem] w-[1.2rem] lg:h-[1.25rem] lg:w-[1.25rem] -top-2 -right-2 lg:-top-3 lg:-right-2 flex justify-center items-center text-[10px]">
+                                            {getSessionState.data?.orders ? getSessionState.data.orders.length : 0}
+                                        </span>
                                     </div>
-                                    <h5 className="text-[13px] font-extralight text-white">₱ 0.00</h5>
+                                    <h5 className="text-[13px] font-extralight text-white">{calculateOrdersPrice()}</h5>
                                 </button>
                             </div>
                         </div>
