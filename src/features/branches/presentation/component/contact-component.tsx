@@ -14,7 +14,7 @@ export const FranchisingContactComponent: React.FC = (): JSX.Element => {
           Contact Us
         </h1>
       </section>
-      <section className=" container mx-auto text-center md:grid gap-4 xl:grid-cols-4 md:grid-cols-2 flex flex-col	 md:px-0 px-4">
+      <section className=" container text-center md:grid gap-4 xl:grid-cols-4 md:grid-cols-2 flex flex-col">
         {contactData.map(
           (
             { Icon, heading, href, paragraph, cardOpt }: ContactDataType,

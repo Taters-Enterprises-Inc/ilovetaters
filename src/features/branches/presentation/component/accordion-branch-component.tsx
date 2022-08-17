@@ -12,7 +12,7 @@ export const AccordionComponent: React.FC<{
     <div className={`relative container `}>
       <div
         className={`
-   cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2  border mx-auto items-center font rounded  px-4 cursor-pointer	 
+          cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer	 
         `}
         onClick={() => {
           setShow((isShow: boolean) => !isShow);

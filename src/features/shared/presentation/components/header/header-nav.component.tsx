@@ -26,7 +26,7 @@ export function HeaderNav(props: HeaderNavProps){
         <>
             <header className={`${props.sticky? 'sticky' : 'fixed'} w-full top-0 z-20 `}>
                 <div className={` w-full ${props.serviceReached ? 'bg-primary shadow-2xl':''}`}>
-                    <nav className={`lg:flex hidden justify-between items-center container mx-auto px-3 py-2`}>
+                    <nav className={`lg:flex hidden justify-between items-center container py-2`}>
                         <img src={REACT_APP_UPLOADS_URL + "images/shared/logo/taters-logo.webp"} alt="Taters Logo" className="w-[150px] lg:w-[160px]"></img>
 
                         <div  className="justify-center items-center space-x-4 flex">

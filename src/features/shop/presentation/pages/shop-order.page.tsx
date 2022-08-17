@@ -12,7 +12,7 @@ export function ShopOrder(){
             
             <div className="bg-secondary lg:h-[200px] text-white pt-4">
 
-                <div className="mx-auto container px-4 py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
+                <div className="container py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
                     <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-8">Order View</h1>
                     
                     <nav className="flex" aria-label="Breadcrumb">
@@ -74,7 +74,7 @@ export function ShopOrder(){
                 </div>
             </div>
                 
-            <section className="min-h-screen container mx-auto lg:space-x-4 pb-36">
+            <section className="min-h-screen container lg:space-x-4 pb-36">
                     
                 <div className="lg:mt-[-80px] flex justify-between items-start flex-col lg:flex-row px-4">
                     

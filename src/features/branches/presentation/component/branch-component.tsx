@@ -50,7 +50,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   return (
     <section className="bg-primary ">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">
-        <h1 className=" md:text-[3rem] text-[2rem] font-normal text-center container mx-auto my-4 text-[#f2f1ed] tracking-[2px]">
+        <h1 className=" md:text-[3rem] text-[2rem] font-normal text-center container my-4 text-[#f2f1ed] tracking-[2px]">
           Our Branches
         </h1>
       </section>
@@ -86,7 +86,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
       </section>
 
       {catigory ? (
-        <section className="container mx-auto pb-[200px] md:px-0 px-4  ">
+        <section className="container pb-[200px]">
           <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
             WHICH STORE IS NEAR YOU?
           </h1>
@@ -105,6 +105,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
       ) : (
         <>
           <section className="  mb-20 z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
+
             {branches.map(
               ({ region, branch }: branchesTypes, idx: number): JSX.Element => {
                 return (
