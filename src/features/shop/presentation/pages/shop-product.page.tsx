@@ -6,7 +6,6 @@ import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { BsFillCartPlusFill } from 'react-icons/bs';
-import { Radio } from "@material-tailwind/react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
 import { addToCart, AddToCartState, resetAddToCart, selectAddToCart } from "../slices/add-to-cart.slice";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import Radio from "@mui/material/Radio";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
@@ -180,7 +180,7 @@ export function ShopProduct(){
 
                                                     return(
                                                         <li key={i} className="flex items-center">
-                                                        <Radio  id={size.id.toString()}  checked={size.id === currentSize} color='orange' onChange={()=>{
+                                                        <Radio  id={size.id.toString()}  checked={size.id === currentSize} onChange={()=>{
                                                             setCurrentSize(size.id);
                                                         }} />
                                                         <label htmlFor={size.id.toString()} className='text-white'>{size.name}</label>
@@ -209,7 +209,7 @@ export function ShopProduct(){
 
                                                     return(
                                                         <li key={i} className="flex items-center">
-                                                            <Radio id={flavor.id.toString()} checked={flavor.id === currentFlavor} color='orange'  onChange={()=>{
+                                                            <Radio id={flavor.id.toString()} checked={flavor.id === currentFlavor}  onChange={()=>{
                                                                 setCurrentFlavor(flavor.id);
                                                             }} />
                                                             <label htmlFor={flavor.id.toString()} className='text-white'>{flavor.name}</label>

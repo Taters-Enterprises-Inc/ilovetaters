@@ -1,3 +1,5 @@
+import createTheme from "@mui/material/styles/createTheme";
+
 export const REACT_APP_DOMAIN_URL =  process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 export const REACT_APP_UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
@@ -128,56 +130,74 @@ export const TABS =[
     },
 ];
 
-export const theme = {
-    input: {
-        styles: {
-            variants: {
-              outlined: {
-                base: {   
-                    input:{
-                        color: '!text-white'
-                    },
-                    label: {
-                        color: '!text-white',
-                    },
-                },
-              }
-            },
-        },
-    },
-    accordion: {
-        styles: {
-          base: {
-            header: {
-              initial: {
-                fontWeight: 'font-light',
-                color: '!text-white',
-                fontSize: 'text-base',
-                justifyContent: 'justify-start'
-              },
-            },
-            body:{
-                color: '!text-white',
-            }
-          },
-        },
-    },
-    radio: {
-      styles: {
-        base: {
-          label: {
-            color : '!text-white',
-          },
-        }
-      },
-    },
-    checkbox: {
-        styles: {
-            base: {
-              input: {
-                borderColor: '!border-white',
-              }
-            }
-        },
-    },
+declare module '@mui/material/styles' {
+  interface Theme {
+    status: {
+      danger: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    status?: {
+      danger?: string;
+    };
+  }
 }
+
+export const theme = createTheme({
+});
+
+
+// export const theme = {
+//     input: {
+//         styles: {
+//             variants: {
+//               outlined: {
+//                 base: {   
+//                     input:{
+//                         color: '!text-white'
+//                     },
+//                     label: {
+//                         color: '!text-white',
+//                     },
+//                 },
+//               }
+//             },
+//         },
+//     },
+//     accordion: {
+//         styles: {
+//           base: {
+//             header: {
+//               initial: {
+//                 fontWeight: 'font-light',
+//                 color: '!text-white',
+//                 fontSize: 'text-base',
+//                 justifyContent: 'justify-start'
+//               },
+//             },
+//             body:{
+//                 color: '!text-white',
+//             }
+//           },
+//         },
+//     },
+//     radio: {
+//       styles: {
+//         base: {
+//           label: {
+//             color : '!text-white',
+//           },
+//         }
+//       },
+//     },
+//     checkbox: {
+//         styles: {
+//             base: {
+//               input: {
+//                 borderColor: '!border-white',
+//               }
+//             }
+//         },
+//     },
+// }

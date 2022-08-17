@@ -20,7 +20,7 @@ import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
-import { ThemeProvider } from "@material-tailwind/react";
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,9 +30,10 @@ if (window.location.hash === "#_=_"){
   window.location.replace(window.location.protocol + "//" + window.location.host + window.location.pathname);
 }
 
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider value={theme}>
+    <ThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter basename={REACT_APP_BASE_NAME}>
           <Routes>
@@ -50,7 +51,6 @@ root.render(
             <Route path="shop/checkout" element={<ShopCheckout/>}></Route>
 
             <Route path="shop/order/:hash" element={<ShopOrder/>}></Route>
-
 
             <Route path="catering" element={<Catering/>}></Route>
             <Route path="franchising" element={<Franchising/>}></Route>

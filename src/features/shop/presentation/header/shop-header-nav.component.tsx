@@ -37,7 +37,7 @@ export function ShopHeaderNav(){
         }
         return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }else {
-        return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+        return <>₱0.00</>
         }
 
         

@@ -1,12 +1,13 @@
 import {  REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Checkbox, Input } from "@material-tailwind/react";
 import { FooterNav } from "features/shared";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import Checkbox from "@mui/material/Checkbox";
 
 export function ShopCheckout(){
     const navigate = useNavigate();
@@ -88,14 +89,14 @@ export function ShopCheckout(){
                     <div className="bg-primary py-6 px-4 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex justify-between flex-col lg:flex-row">
                         
                         <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                            <Input variant="outlined" color="orange" size="lg" label="First Name"/>
-                            <Input variant="outlined" color="orange" size="lg" label="Last Name"/>
+                            <TextField label="First Name" variant="outlined"/>
+                            <TextField label="Last Name" variant="outlined"/>
                             <div className="flex lg:space-x-4 flex-col lg:flex-row space-y-4 lg:space-y-0">
                                 <div className="flex-1">
-                                    <Input variant="outlined" color="orange" size="lg" label="E-mail Address" />
+                                    <TextField label="E-mail Address" variant="outlined"/>
                                 </div>
                                 <div className="flex-1">
-                                    <Input variant="outlined" color="orange" size="lg" label="Phone Number"/>
+                                    <TextField label="Phone Number" variant="outlined"/>
                                     <span className="text-xs text-tertiary underline underline-offset-4">Setup your phone number</span>
                                 </div>
                             </div>
@@ -145,7 +146,7 @@ export function ShopCheckout(){
                             </div>
 
                             <div className="flex justify-start items-center space-x-1 text-white">
-                                <Checkbox color="orange"/>
+                                <Checkbox />
                                 <span>I agree with the </span>
                                 <button className="text-tertiary">Terms & Conditions</button>
                             </div>
