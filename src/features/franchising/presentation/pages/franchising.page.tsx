@@ -1,8 +1,6 @@
 import { FooterNav, HeaderNav } from "features/shared";
 import { useEffect, useRef, useState } from "react";
-import CustomizedAccordions from "./faqs";
-import CarouselBanner from "./carouselbanner";
-import BannerModel from "partials/model/BannerModel";
+import CustomizedAccordions from "../components/faqs";
 import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 
