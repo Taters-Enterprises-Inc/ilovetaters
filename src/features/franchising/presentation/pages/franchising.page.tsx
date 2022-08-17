@@ -29,7 +29,7 @@ export function Franchising(){
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
 
-            <section ref={servicesRef} className=" container min-h-screen">
+            <section ref={servicesRef} className="container min-h-screen">
             <section className="container lg:px-0 md:px-8 px-4 pt-6"></section>
 
             <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center pb-6 '>FREQUENTLY ASKED QUESTIONS</h1>
@@ -42,7 +42,7 @@ export function Franchising(){
           <section className="container text-left lg:px-0 md:px-8 px-4 pt-6 pb-16 bg-primary">
             
 
-            <div className="text-white lg:pb-8 pb-10 flex-1 lg:pr-4">
+            <div className="container text-white lg:pb-8 pb-10 flex-1 lg:pr-4">
               <h1 className="text-3xl text-center  font-bold leading-[2.3rem] font-['Bebas_Neue'] tracking-wide ">
                 Ready to invest in the best Snacks in Town?
               </h1>
