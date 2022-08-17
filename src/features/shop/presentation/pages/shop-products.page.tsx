@@ -34,7 +34,7 @@ export function ShopProducts(){
         <main className="bg-primary pb-20">
             <ShopHeaderNav/>
 
-            <section className="container mx-auto">
+            <section className="container">
                 <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
@@ -45,7 +45,7 @@ export function ShopProducts(){
 
 
                     return(
-                        <section key={i} className="lg:h-[620px] container mx-auto px-4 lg:px-0 lg:flex lg:space-x-3 space-y-3 lg:space-y-0 mb-4">
+                        <section key={i} className="lg:h-[620px] container lg:flex space-y-3 lg:space-y-0 mb-4">
                             
                             <div 
                                 style={{
@@ -53,7 +53,7 @@ export function ShopProducts(){
                                     backgroundRepeat: 'no-repeat',
                                     backgroundSize: 'cover',
                                 }}
-                                className={`bg-secondary ${i % 2 === 0 ? '' : 'order-2'} flex-none w-[495px] shadow-tertiary shadow-md rounded-[10px] mb-6 p-10 hidden lg:block relative`}>
+                                className={`bg-secondary ${i % 2 === 0 ? 'mr-1' : 'order-2 ml-1'} flex-none w-[495px] shadow-tertiary shadow-md rounded-[10px] mb-6 p-10 hidden lg:block relative`}>
                                 
                                 <h1 className="text-white text-center lg:text-start text-2xl lg:text-5xl py-3 font-['Bebas_Neue'] font-light tracking-[3px]">{category.category_name}</h1>
                             </div>
@@ -62,7 +62,7 @@ export function ShopProducts(){
                                 <h1 className="text-white text-center lg:text-start text-2xl lg:text-5xl py-3 font-['Bebas_Neue'] font-light tracking-[3px]">{category.category_name}</h1>
                             </div>
                             
-                            <div className="flex-1">
+                            <div className={`flex-1 ${i % 2 === 0 ? '-mr-1' : '-ml-1'}`}>
                                 <ShopProductsCarousel products={category.category_products}/>
                             </div>
                         </section>

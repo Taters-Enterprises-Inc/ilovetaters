@@ -41,21 +41,19 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
             _4x2.map((chunk, i) => {
                 
                 return(
-                    <SwiperSlide key={i} className='hidden xl:block' >
-                        <div className="flex flex-wrap">
+                    <SwiperSlide key={i} className='hidden xl:block pr-4 pl-1' >
+                        <div className="grid grid-cols-4 gap-4">
                             {
                                 chunk.map((product, i)=>(
-                                    <div className=" max-w-[25%] flex-[0_0_25%] p-2">
-                                        <Link key={i}  to={product.hash} className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full">
-                                            <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
-                                            <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                                                <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                                <h3 className="text-white font-bold">
-                                                    <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
-                                                </h3>
-                                            </div>
-                                        </Link>
-                                    </div>
+                                    <Link key={i}  to={product.hash} className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full">
+                                        <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
+                                        <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
+                                            <h2 className="text-white text-sm leading-4">{product.name}</h2>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
+                                        </div>
+                                    </Link>
                                 ))
                             }
                         </div>
@@ -68,20 +66,18 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                 
                 return(
                     <SwiperSlide key={i} className='hidden sm:block xl:hidden' >
-                        <div className="flex flex-wrap">
+                        <div className="grid grid-cols-3 gap-4">
                             {
                                 chunk.map((product, i)=>(
-                                    <div className="max-w-[33.33%] flex-[0_0_33.33%] p-2">
-                                        <Link key={i}  to={product.hash} className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full">
-                                            <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
-                                            <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                                                <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                                <h3 className="text-white font-bold">
-                                                    <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
-                                                </h3>
-                                            </div>
-                                        </Link>
-                                    </div>
+                                    <Link key={i}  to={product.hash} className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full">
+                                        <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
+                                        <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
+                                            <h2 className="text-white text-sm leading-4">{product.name}</h2>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
+                                        </div>
+                                    </Link>
                                 ))
                             }
                         </div>
@@ -94,20 +90,18 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                 
                 return(
                     <SwiperSlide key={i} className='sm:hidden' >
-                        <div className="flex flex-wrap">
+                        <div className="grid gap-4 grid-cols-2">
                             {
                                 chunk.map((product, i)=>(
-                                    <div className=" max-w-[50%] flex-[0_0_50%] p-2">
-                                        <Link key={i} to={product.hash} className="bg-secondary h-full flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white ">
-                                            <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
-                                            <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                                                <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                                <h3 className="text-white font-bold">
-                                                    <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
-                                                </h3>
-                                            </div>
-                                        </Link>
-                                    </div>
+                                    <Link key={i} to={product.hash} className="bg-secondary h-full flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white ">
+                                        <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
+                                        <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
+                                            <h2 className="text-white text-sm leading-4">{product.name}</h2>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
+                                        </div>
+                                    </Link>
                                 ))
                             }
                         </div>

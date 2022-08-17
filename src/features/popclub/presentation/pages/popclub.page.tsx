@@ -82,7 +82,7 @@ export function PopClub(){
 
             <img  className="hidden lg:block" src={ REACT_APP_UPLOADS_URL + "images/popclub/banner/popclub_instruction.webp"} alt="The best pop corn in town"></img>
 
-            <section className="container lg:px-0 md:px-8 px-4 mx-auto pt-4 flex flex-col justify-start items-start">
+            <section className="container pt-4 flex flex-col justify-start items-start">
                 {
                     getSessionState.data?.popclub_data ? 
                     <button className="text-xs" onClick={()=>{
@@ -148,7 +148,7 @@ export function PopClub(){
                 </div>
             </section>
 
-            <section className="container lg:px-0 md:px-8 px-2 mx-auto min-h-screen pb-96">
+            <section className="container min-h-screen pb-96">
                 <div className="flex flex-wrap">
                     {
                         getDealsState.data.map((deal, i)=>(

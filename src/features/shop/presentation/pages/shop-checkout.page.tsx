@@ -20,7 +20,7 @@ export function ShopCheckout(){
             <div className="bg-secondary lg:h-[240px] text-white">
             </div>
                 
-            <section className="min-h-screen container mx-auto lg:space-x-4 pb-36">
+            <section className="min-h-screen container lg:space-x-4 pb-36">
                 
                 <div className="lg:-mt-[200px] lg:space-y-8">
 

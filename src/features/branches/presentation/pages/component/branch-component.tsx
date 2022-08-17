@@ -51,11 +51,11 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   return (
     <section className="bg-primary">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">
-        <h1 className=" md:text-[3rem] text-[2rem] font-normal text-center container mx-auto my-4 text-[#f2f1ed] tracking-[2px]">
+        <h1 className=" md:text-[3rem] text-[2rem] font-normal text-center container my-4 text-[#f2f1ed] tracking-[2px]">
           Our Branches
         </h1>
       </section>
-      <section className="container mx-auto flex space-x-4 justify-center items-center mb-4 h-auto font-['Bebas_Neue'] ">
+      <section className="container flex space-x-4 justify-center items-center mb-4 h-auto font-['Bebas_Neue'] ">
         <button
           onClick={() => {
             setCatigory(false);
@@ -84,7 +84,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
       </section>
 
       {catigory ? (
-        <section className="container mx-auto pb-[200px] md:px-0 px-4  ">
+        <section className="container pb-[200px]">
           <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
             WHICH STORE IS NEAR YOU?
           </h1>
@@ -98,7 +98,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
         </section>
       ) : (
         <>
-          <section className="z-1  pb-[200px] lg:grid lg:grid-cols-2 lg:gap-x-  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
+          <section className="z-1  pb-[200px] lg:grid lg:grid-cols-2 lg:gap-x- md:block container h-auto  md:pb-0">
             {branches.map(
               ({ region, branch }: branchesTypes, idx: number): JSX.Element => {
                 return (

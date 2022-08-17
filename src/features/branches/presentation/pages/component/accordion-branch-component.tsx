@@ -12,7 +12,7 @@ export const AccordionComponent: React.FC<{
     <div className={`relative container `}>
       <div
         className={`
-   cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2  border mx-auto items-center font rounded  px-4 cursor-pointer	 
+          cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer	 
         `}
         onClick={() => {
           setShow((isShow: boolean) => !isShow);
@@ -79,7 +79,7 @@ export const AccordionComponent: React.FC<{
                         "linear-gradient( 0%, rgb(29, 17, 21) 45%, rgb(29, 17, 21) 100%)",
                       boxShadow: " 0px -39px 25px 13px rgba(0,0,0,0.75)",
                     }}
-                    className="z-0 cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[90px] lg:h-[130px]  h-[133px] md:h-[105px] 	z-10 relative"
+                    className=" cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[90px] lg:h-[130px]  h-[133px] md:h-[105px] 	z-10 relative"
                   >
                     <span className="p-4 md:relative md:top-0 md:left-0  absolute top-[-12px] left-[21px]">
                       <svg

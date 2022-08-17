@@ -32,7 +32,7 @@ export function PopClubPlatformPicker(){
 
             <section>
 
-                <section className="hidden lg:flex max-w-[1000px] mx-auto flex-wrap pt-2 pb-[90px] lg:pb-0 px-2 justify-center items-center lg:min-h-screen content-start">
+                <section className="hidden lg:flex container flex-wrap pt-2 pb-[90px] lg:pb-0 justify-center items-center lg:min-h-screen content-start">
 
                     {
                         SERVICES_DESKTOP.map(function(service_desktop, i){
@@ -64,7 +64,7 @@ export function PopClubPlatformPicker(){
                 </section>
 
                 
-                <section className="lg:hidden max-w-[1000px] mx-auto flex flex-wrap pt-2 pb-[90px] lg:pb-0 px-2 lg:justify-start justify-center items-center lg:min-h-screen content-start">
+                <section className="lg:hidden container flex flex-wrap pt-2 pb-[90px] lg:pb-0 lg:justify-start justify-center items-center lg:min-h-screen content-start">
 
                     {
                         SERVICES_MOBILE.map(function(service_mobile, i){

@@ -24,7 +24,7 @@ export default function CarouselBanner(props:CarouselBannerProps){
                         ) : null
                       }
                         <div className="absolute w-full h-full top-0 ">
-                          <div className="flex flex-col lg:flex-row container mx-auto h-full">
+                          <div className="flex flex-col lg:flex-row container h-full">
                             <div className="lg:flex-1">
                             </div>
                     </div>
