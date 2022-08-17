@@ -8,7 +8,8 @@ import {
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StoreListDelivery } from "features/shop/presentation/components/store-list-delivery";
 import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
-import { SearchAddress } from "../inputs/search-address";
+import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+
 
 export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   const [showButton, setShowButton] = useState<boolean>(false);
@@ -97,7 +98,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
         </section>
       ) : (
         <>
-          <section className="z-1  pb-[200px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	md:px-0 px-4 ">
+          <section className="z-1  pb-[200px] lg:grid lg:grid-cols-2 lg:gap-x-  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
             {branches.map(
               ({ region, branch }: branchesTypes, idx: number): JSX.Element => {
                 return (
