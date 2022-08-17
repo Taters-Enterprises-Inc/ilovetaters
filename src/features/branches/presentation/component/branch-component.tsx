@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { branches, branchesTypes } from "../data/branches-data";
+import { branches, branchesTypes } from "../pages/data/branches-data";
 import { AccordionComponent } from "./accordion-branch-component";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { StoreListDelivery } from "features/shop/presentation/components/store-list-delivery";
 import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
-
 
 export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   const [showButton, setShowButton] = useState<boolean>(false);
@@ -40,47 +38,51 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(getSession());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (getSessionState.data?.customer_address !== null) {
       setAddress(getSessionState.data?.customer_address);
     }
-  }, []);
-  console.log(address);
+  }, [getSessionState.data?.customer_address]);
+
+  console.log(dispatch(getSession()));
   return (
-    <section className="bg-primary">
+    <section className="bg-primary ">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">
         <h1 className=" md:text-[3rem] text-[2rem] font-normal text-center container mx-auto my-4 text-[#f2f1ed] tracking-[2px]">
           Our Branches
         </h1>
       </section>
-      <section className="container mx-auto flex space-x-4 justify-center items-center mb-4 h-auto font-['Bebas_Neue'] ">
-        <button
-          onClick={() => {
-            setCatigory(false);
-          }}
-          className={`${
-            !catigory
-              ? "bg-tertiary text-secondary "
-              : "bg-transparent  text-white border-solid border-2 border-tertiary"
-          }   py-2 px-4  rounded-[10px] tracking-[1px]`}
-        >
-          Region
-        </button>
-
-        <button
-          onClick={() => {
-            setCatigory(true);
-          }}
-          className={`${
-            catigory
-              ? "bg-tertiary text-secondary "
-              : "bg-transparent  text-white border-solid border-2 border-tertiary"
-          }   py-2 px-4  rounded-[10px] tracking-[1px]`}
-        >
-          Near you ?
-        </button>
+      <section className="container mx-auto grid grid-cols-2 gap-x-4 justify-center items-center mb-4 h-auto font-['Bebas_Neue'] ">
+        <div className="flex justify-end">
+          <button
+            onClick={() => {
+              setCatigory(false);
+            }}
+            className={`${
+              !catigory
+                ? "bg-tertiary text-secondary "
+                : "bg-transparent  text-white border-solid border-2 border-tertiary"
+            }   py-2 px-4  rounded-[10px] tracking-[1px]`}
+          >
+            Region
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              setCatigory(true);
+            }}
+            className={`${
+              catigory
+                ? "bg-tertiary text-secondary "
+                : "bg-transparent  text-white border-solid border-2 border-tertiary"
+            }   py-2 px-4  rounded-[10px] tracking-[1px]`}
+          >
+            Near you ?
+          </button>
+        </div>
       </section>
 
       {catigory ? (
@@ -88,17 +90,21 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
           <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
             WHICH STORE IS NEAR YOU?
           </h1>
-          <SearchAddress
-            onPlaceSelected={(place: string) => {
-              setAddress(place);
-              dispatch(getStoresAvailable({ address: place }));
-            }}
-          />
-          <StoreListDelivery address={address} />
+          <div className="flex items-center justify-center mb-3">
+            <label className="pure-material-textfield-outlined w-full">
+              <SearchAddress
+                onPlaceSelected={(place: string) => {
+                  setAddress(place);
+                  dispatch(getStoresAvailable({ address: place }));
+                }}
+              />
+              <span>Search Address</span>
+            </label>
+          </div>
         </section>
       ) : (
         <>
-          <section className="z-1  pb-[200px] lg:grid lg:grid-cols-2 lg:gap-x-  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
+          <section className="  mb-20 z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
             {branches.map(
               ({ region, branch }: branchesTypes, idx: number): JSX.Element => {
                 return (
