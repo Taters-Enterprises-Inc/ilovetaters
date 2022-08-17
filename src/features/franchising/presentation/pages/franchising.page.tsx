@@ -29,8 +29,8 @@ export function Franchising(){
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
             
-            <section ref={servicesRef} className=" container mx-auto min-h-screen">
-            <section className="container lg:px-0 md:px-8 px-4 mx-auto pt-6"></section>
+            <section ref={servicesRef} className=" container mx-auto min-h-min">
+            <section className="container container lg:px-0 md:px-8 px-4 mx-auto pt-6"></section>
             <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center pb-6 '>FREQUENTLY ASKED QUESTIONS</h1>
             <CustomizedAccordions></CustomizedAccordions>
             </section>
