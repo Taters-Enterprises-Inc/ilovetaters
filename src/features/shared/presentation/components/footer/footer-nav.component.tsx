@@ -30,7 +30,7 @@ export function FooterNav(){
                             src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getLatestUnexpiredRedeemState.data.product_image}`} alt='Deals'/> 
                     </div>
                 </Link> : null }
-            <footer className='w-full py-2 lg:hidden bg-secondary'>
+            <footer className='w-full py-2 sm:hidden bg-secondary'>
                 <nav className=" mx-auto">
                     <ul className="flex text-white items-stretch h-full md:px-10">
                         <li className="flex-1">

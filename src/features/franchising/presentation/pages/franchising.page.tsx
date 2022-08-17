@@ -28,9 +28,10 @@ export function Franchising(){
             <HeaderNav serviceReached={serviceReached} active='FRANCHISING'></HeaderNav>
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
-            
-            <section ref={servicesRef} className=" container mx-auto min-h-min">
-            <section className="container container lg:px-0 md:px-8 px-4 mx-auto pt-6"></section>
+
+            <section ref={servicesRef} className=" container min-h-screen">
+            <section className="container lg:px-0 md:px-8 px-4 pt-6"></section>
+
             <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center pb-6 '>FREQUENTLY ASKED QUESTIONS</h1>
             <CustomizedAccordions></CustomizedAccordions>
             </section>
@@ -38,7 +39,7 @@ export function Franchising(){
             {/* <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
             <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
 
-          <section className="container text-left lg:px-0 md:px-8 px-4 mx-auto pt-6 pb-16 bg-primary">
+          <section className="container text-left lg:px-0 md:px-8 px-4 pt-6 pb-16 bg-primary">
             
 
             <div className="text-white lg:pb-8 pb-10 flex-1 lg:pr-4">

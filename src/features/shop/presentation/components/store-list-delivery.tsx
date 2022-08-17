@@ -28,9 +28,9 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
     return(
         <section className='text-white'>
             {getStoresAvailableState.data.map((store_cluster, index)=>(
-            <div key={index}>
-                <h1 className="text-sm font-normal pl-2">{store_cluster.region_name}</h1>
-                <section className="flex flex-wrap pb-2">
+            <div key={index} className="space-y-3">
+                <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
+                <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
                     {store_cluster.stores.map((store, index)=>{
 
                         const distance_in_km = Math.ceil( store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5);
@@ -42,11 +42,11 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
                                 key={index}
                                 onClick={ store_availability && props.address != null ? () => {console.log('test');
                                 }  :  ()=>storeClicked(store.store_id)  }
-                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30.5%] sm:flex-[0_0_30.5%]  md:max-w-[22.9%] md:flex-[0_0_22.9%]  lg:max-w-[23.5%] lg:flex-[0_0_23.5%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
+                                className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
                                 }
-                                <div className="text-sm uppercase">FULL MENU</div> 
+                                <div className="text-sm uppercase py-1">FULL MENU</div> 
                                 
                                 <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                                         <div className="flex justify-end">
@@ -56,10 +56,10 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
                                         </div>
                                 </div>
                                 
-                                <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full"/>
-                                <div className="px-3 py-2">
-                                    <h1 className="mb-1 text-xs lg:text-base">{store.store_name}</h1>
-                                    <p className="text-[7px] lg:text-xs">{store.store_address}</p>
+                                <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full sm::w-[250px] sm::h-[250px] object-fit"/>
+                                <div className="p-4 space-y-2">
+                                    <h1 className="mb-1 text-sm leading-5 font-bold">{store.store_name}</h1>
+                                    <p className="text-xs">{store.store_address}</p>
                                 </div>
                             </button>
                         )
