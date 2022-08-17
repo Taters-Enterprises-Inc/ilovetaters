@@ -39,11 +39,11 @@ export function Franchising(){
             {/* <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
             <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
 
-          <section className="container text-left lg:px-0 md:px-8 px-4 pt-6 pb-16 bg-primary">
+          <section className="text-left lg:px-0 md:px-8 pt-6 pb-6 bg-primary">
             
 
-            <div className="text-white">
-              <h1 className="text-3xl text-center  font-bold leading-[2.3rem] font-['Bebas_Neue'] tracking-wide ">
+            <div className="container text-white">
+              <h1 className="text-3xl text-center font-bold leading-[2.3rem] font-['Bebas_Neue'] tracking-wide ">
                 Ready to invest in the best Snacks in Town?
               </h1>
               <br/>
@@ -53,7 +53,7 @@ export function Franchising(){
                 franchise location. Send your applications thru <strong>franchising@tatersgroup.com</strong>. 
               </p>
 
-              <div className="sm:space-x-2 sm:space-y-0 space-y-2 flex flex-col sm:flex-row mt-6 mb-6 justify-center">
+              <div className="sm:space-x-2 sm:space-y-0 space-y-2 flex flex-col sm:flex-row mt-6 justify-center">
                 <a href="FranchiseApplicationForm.pdf" download="FranchiseApplicationForm.pdf" className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center">Application Form</a>
                 <a href="TatersFranchiseKit.pdf"  download="TatersFranchiseKit.pdf" className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center">Franchise Kit</a>
                </div>
