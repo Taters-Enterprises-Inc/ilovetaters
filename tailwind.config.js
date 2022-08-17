@@ -14,6 +14,9 @@ module.exports = withMT({
         'button': '#CC5801'
       },
     },
+      screens: {
+        'custom-media': '1132px',
+      },
   },
   plugins: [],
 });
