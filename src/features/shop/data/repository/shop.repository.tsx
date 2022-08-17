@@ -2,7 +2,7 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
-import { GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
+import { AddToCartParam, GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse{
     data: {
@@ -16,8 +16,32 @@ export interface GetProductDetailsResponse{
         message: string;
         data : {
             product: ProductModel;
+            addons: Array<ProductModel>;
+            product_size: Array<{
+                id: number;
+                name: string;
+            }>;
+            product_flavor: Array<{
+                id: number;
+                name: string;
+            }>;
         }
     }
+}
+
+export interface AddToCartResponse {
+    data: {
+        message: string;
+    }
+}
+
+export function AddToCartRepository(param : AddToCartParam) : Promise<AddToCartResponse> {
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
 }
 
 export function GetProductDetailsRepository(param : GetProductDetailsParam) : Promise<GetProductDetailsResponse> {

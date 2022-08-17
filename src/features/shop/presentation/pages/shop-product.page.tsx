@@ -1,22 +1,47 @@
 import { FooterNav } from "features/shared";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
-import { CounterInput } from "../components/counter-input";
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Radio } from "@material-tailwind/react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getProductDetails, selectGetProductDetails } from "../slices/get-product-details.slice";
-import { useEffect } from "react";
+import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
+import { useEffect, useState } from "react";
+import { Addon } from "../components/addon";
+import NumberFormat from 'react-number-format';
+import { addToCart, AddToCartState, resetAddToCart, selectAddToCart } from "../slices/add-to-cart.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
+    const addToCartState = useAppSelector(selectAddToCart);
+
+    const [quantity, setQuantity] = useState(1);
+    
+    const [currentSize, setCurrentSize] = useState<number | undefined>(undefined);
+    const [currentFlavor, setCurrentFlavor] = useState<number | undefined>(undefined);
+
+    
+
     let { hash } = useParams();
+
+    const location = useLocation();
+
+    useEffect(()=>{
+        if(addToCartState.status === AddToCartState.success){
+            dispatch(getSession());
+            dispatch(resetAddToCart());
+        }
+    },[addToCartState, dispatch]);
+
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    }, [location]);
+  
 
 
     useEffect(()=>{
@@ -24,6 +49,23 @@ export function ShopProduct(){
             dispatch(getProductDetails({hash}));
         }
     },[]);
+
+    const handleAddToCart =()=>{
+        
+        if(getProductDetailsState.status === GetProductDetailsState.success && getProductDetailsState.data){
+            dispatch(addToCart({
+                prod_id : getProductDetailsState.data.product.id,
+                prod_image_name : getProductDetailsState.data.product.product_image,
+                prod_name : getProductDetailsState.data.product.name,
+                prod_qty : quantity,
+                prod_flavor : currentFlavor,
+                prod_size : currentSize,
+                prod_price : getProductDetailsState.data.product.price,
+                prod_calc_amount : getProductDetailsState.data.product.price * quantity,
+                prod_category : getProductDetailsState.data.product.category,
+            }));
+        }
+    }
     
     return (
         <main className="bg-primary">
@@ -66,8 +108,8 @@ export function ShopProduct(){
 
                 <div className="lg:-mt-[80px] lg:space-y-10">
 
-                    <div className="bg-primary pb-20 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
-                        <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[900px]">
+                    <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 flex lg:space-x-10 space-y-10 lg:space-y-0 flex-col lg:flex-row">
+                        <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                             <img src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`} className="lg:rounded-[20px] w-full h-full object-cover" alt="" />
                         </div>
 
@@ -115,39 +157,72 @@ export function ShopProduct(){
                                     <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
                                     <IoIosArrowDown className="text-xl"/>
                                 </div>
-
-                                <hr/>
-
-                                <div className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6">
-                                    <div className="p-4 flex space-x-2">
-                                        <img src={REACT_APP_UPLOADS_URL + "images/shop/products/100/test.jpg"} className="rounded-[10px] w-[100px] h-[100px]" alt="" />
-                                        <div className="p-2 space-y-2">
-                                            <h4 className="font-['Bebas_Neue'] text-lg tracking-[2px] leading-5">Taters Snackstix</h4>
-                                            <h5 className=" text-tertiary leading-5">₱ 50.00</h5>
-                                            <CounterInput/>
-
-                                        </div>
-                                    </div>
-                                    <button className="bg-primary w-full py-2 rounded-b-xl font-light flex space-x-4 justify-center items-center">
-                                        <BsFillCartPlusFill className="text-2xl"/>
-                                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
-                                    </button>
+                                <div className="max-h-[490px] overflow-y-auto flex flex-col items-center border-2 border-white py-4">
+                                    {
+                                        getProductDetailsState.data?.addons.map((product, i)=> <Addon key={i} product={product}/>)
+                                    }
                                 </div>
+                                
                             </div>
+                            
+                            {
+                                getProductDetailsState.data?.product_size && getProductDetailsState.data?.product_size.length > 0 ? 
+                                    <div>
+                                        <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Size</h2>
+                
+                                        <ul>
+                                            {
+                                                getProductDetailsState.data?.product_size.map((size, i)=>{
 
-                            <div>
-                                <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Flavor</h2>
+                                                    if(i === 0 && currentSize === undefined){
+                                                        setCurrentSize(size.id);
+                                                    }
 
-                                <ul>
-                                    <li className="flex items-center">
-                                        <Radio id="nacho-cheese" color="orange" name="flavor" label="Nacho Cheese" />
-                                    </li>
+                                                    return(
+                                                        <li key={i} className="flex items-center">
+                                                        <Radio  id={size.id.toString()}  checked={size.id === currentSize} color='orange' onChange={()=>{
+                                                            setCurrentSize(size.id);
+                                                        }} />
+                                                        <label htmlFor={size.id.toString()} className='text-white'>{size.name}</label>
+                                                    </li>
+                                                    );
+                                                })
+                                            }
+                                        </ul>
 
-                                    <li className="flex items-center">
-                                        <Radio id="texan-barbeque" color="orange" name="flavor" label="Texan Barbeque" />
-                                    </li>
-                                </ul>
-                            </div>
+                                    </div>
+                                    : null
+                            }
+
+                            {
+                                getProductDetailsState.data?.product_flavor && getProductDetailsState.data?.product_flavor.length > 0 ? 
+                                    <div>
+                                        <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Choose Flavor</h2>
+                
+                                        <ul>
+                                            {
+                                                getProductDetailsState.data?.product_flavor.map((flavor, i)=>{
+
+                                                    if(i === 0 && currentFlavor === undefined){
+                                                        setCurrentFlavor(flavor.id);
+                                                    }
+
+                                                    return(
+                                                        <li key={i} className="flex items-center">
+                                                            <Radio id={flavor.id.toString()} checked={flavor.id === currentFlavor} color='orange'  onChange={()=>{
+                                                                setCurrentFlavor(flavor.id);
+                                                            }} />
+                                                            <label htmlFor={flavor.id.toString()} className='text-white'>{flavor.name}</label>
+                                                        </li>
+                                                    );
+                                                })
+                                            }
+                                        </ul>
+
+                                    </div>
+                                    : null
+                            }
+
 
                             <div>
                                 <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">Quantity</h2>
@@ -156,13 +231,25 @@ export function ShopProduct(){
 
                                     <div className="flex flex-row h-full w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
 
-                                        <button className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary">
+                                        <button onClick={()=>{
+                                            if(quantity > 1)
+                                                setQuantity(quantity - 1)
+                                        }} className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary">
                                             <span className="m-auto text-5xl font-thin">−</span>
                                         </button>
 
-                                        <input type="number" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" value="0"/>
+                                        <input value={quantity} 
+                                            onChange={(event : any) => {
+                                                const value = event.target.value;
+                                                if(value >= 1)
+                                                    setQuantity(event.target.value);
+                                            }}
+                                        type="number" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
                                         
-                                        <button className="h-full w-[150px] rounded-r cursor-pointer bg-primary">
+                                        <button onClick={()=>{
+                                            if(quantity >= 1)
+                                                setQuantity(quantity + 1)
+                                        }} className="h-full w-[150px] rounded-r cursor-pointer bg-primary">
                                             <span className="m-auto text-5xl font-thin">+</span>
                                         </button>
 
@@ -171,10 +258,15 @@ export function ShopProduct(){
                                 </div>
                             </div>
 
+                            {
+                                getProductDetailsState.data?.product.price ? 
+                                    <h2 className="text-4xl text-white mt-4">
+                                        <NumberFormat value={(getProductDetailsState.data.product.price * quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                    </h2>
+                                : null
+                            }
 
-                            <h2 className="text-4xl text-white mt-4">₱ 250.00</h2>
-
-                            <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-4 w-full rounded-xl ">
+                            <button onClick={handleAddToCart} className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
                                 <BsFillCartPlusFill className="text-3xl"/>
                                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">Add to cart</span>
                             </button>

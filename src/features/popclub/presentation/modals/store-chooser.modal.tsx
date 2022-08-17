@@ -39,7 +39,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
 
   return (
     <div
-       style={{display: props.open? 'flex':'none'}}
+      style={{display: props.open? 'flex':'none'}}
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto'>
       <div className='bg-[#a21013] px-[10px] py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]'>
 
@@ -51,7 +51,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
         <h1 className='text-white font-bold text-sm text-center pt-1 pb-2'>Which store do you want for online delivery?</h1>
         
         <div className='flex items-center justify-center mb-3'>
-          <label className="pure-material-textfield-outlined w-[96%]">
+          <label className="pure-material-textfield-outlined w-full">
             <SearchAddress onPlaceSelected={( place : string)=>{
               setAddress(place);
               dispatch(getStoresAvailable({address: place}));

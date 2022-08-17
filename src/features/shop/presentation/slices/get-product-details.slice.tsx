@@ -7,7 +7,7 @@ import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-
 import { GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 
-export enum GetProductDetails{
+export enum GetProductDetailsState{
     initial,
     inProgress,
     success,
@@ -16,12 +16,21 @@ export enum GetProductDetails{
 
 
 const initialState : {
-    status: GetProductDetails,
+    status: GetProductDetailsState,
     data: {
         product: ProductModel;
+        addons: Array<ProductModel>;
+        product_size: Array<{
+            id: number;
+            name: string;
+        }>;
+        product_flavor: Array<{
+            id: number;
+            name: string;
+        }>;
     } | undefined
 } = {
-    status: GetProductDetails.initial,
+    status: GetProductDetailsState.initial,
     data: undefined,
 }
 
@@ -39,12 +48,17 @@ export const getProductDetailsSlice = createSlice({
     reducers : {},
     extraReducers: (builder: any) => {
         builder.addCase(getProductDetails.pending, (state: any)=>{
-            state.status = GetProductDetails.inProgress;
-        }).addCase(getProductDetails.fulfilled, (state: any, action : PayloadAction<{message: string, data: { product : ProductModel } | null}> ) => {
+            state.status = GetProductDetailsState.inProgress;
+        }).addCase(getProductDetails.fulfilled, (state: any, action : PayloadAction<{message: string, data: { 
+                product : ProductModel; 
+                addons: Array<ProductModel>; 
+                product_flavor: Array<any>; 
+            } | null}> ) => {
+                
             const data = action.payload.data;
             
             state.data = data;
-            state.status = GetProductDetails.success;
+            state.status = GetProductDetailsState.success;
         })
     }
 });

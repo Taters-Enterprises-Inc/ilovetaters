@@ -1,5 +1,6 @@
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link } from "react-router-dom";
+import NumberFormat from 'react-number-format';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,6 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 
 import { Autoplay, Navigation } from "swiper";
+
 interface ShopProductsCarouselProps {
     products: Array<any>
 }
@@ -47,7 +49,9 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                                         <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
                                         <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
                                             <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                            <h3 className="text-white font-bold">₱ {product.price}</h3>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
                                         </div>
                                     </Link>
                                 ))
@@ -69,7 +73,9 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                                         <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
                                         <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
                                             <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                            <h3 className="text-white font-bold">₱ {product.price}</h3>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
                                         </div>
                                     </Link>
                                 ))
@@ -87,11 +93,13 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
                         <div className="flex flex-wrap">
                             {
                                 chunk.map((product, i)=>(
-                                    <Link key={i} to={product.hash} className="bg-secondary flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white max-w-[46%] flex-[0_0_46%] m-2">
+                                    <Link key={i} to={product.hash} className="bg-secondary flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white max-w-[44%] flex-[0_0_44%] m-2">
                                         <img src={`https://ilovetaters.com/shop/assets/img/250/${product.image}`} className="rounded-t-[10px] w-full" alt="" />
                                         <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
                                             <h2 className="text-white text-sm leading-4">{product.name}</h2>
-                                            <h3 className="text-white font-bold">₱ {product.price}</h3>
+                                            <h3 className="text-white font-bold">
+                                                <NumberFormat value={product.price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+                                            </h3>
                                         </div>
                                     </Link>
                                 ))

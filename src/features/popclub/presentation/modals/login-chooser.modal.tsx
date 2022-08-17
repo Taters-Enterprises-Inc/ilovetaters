@@ -40,7 +40,7 @@ export function LoginChooserModal(props: LoginChooserModalProps){
         <div
         style={{display: props.open? 'flex':'none'}}
         className='fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-center '>
-            <div className='bg-secondary px-4 py-8 round w-[90%] rounded-lg relative text-white'>
+            <div className='bg-secondary px-4 py-8 round w-[90%] sm:w-[400px] rounded-lg relative text-white'>
                 <button className='absolute top-2 right-4 text-white text-2xl' onClick={props.onClose}><IoMdClose/></button>
 
                 <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">Hi! Welcome to Popclub</h1>

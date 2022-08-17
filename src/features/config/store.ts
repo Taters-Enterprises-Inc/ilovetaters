@@ -18,6 +18,7 @@ import getRedeem from '../popclub/presentation/slices/get-redeem.slice';
 import getLatestUnexpiredRedeem from '../popclub/presentation/slices/get-latest-unexpired-redeem.slice';
 import getCategoryProducts from '../shop/presentation/slices/get-category-products.slice';
 import getProductDetails from '../shop/presentation/slices/get-product-details.slice';
+import addToCart from '../shop/presentation/slices/add-to-cart.slice';
 
 
 export const store = configureStore({
@@ -44,6 +45,7 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails : getProductDetails,
+    addToCart: addToCart,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

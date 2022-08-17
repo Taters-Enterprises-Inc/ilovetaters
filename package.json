@@ -2,7 +2,7 @@
   "name": "ilovetaters",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/staging",
+  "homepage": "https://ilovetaters.com/staging",
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
@@ -25,6 +25,7 @@
     "react-countdown": "^2.3.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
+    "react-number-format": "^4.9.3",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",

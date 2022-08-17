@@ -13,12 +13,7 @@ export function ShopProducts(){
     const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
 
     const dispatch = useAppDispatch();
-
-    useEffect(()=>{
-        if(getCategoryProductsState.status === GetCategoryProductsState.success && getCategoryProductsState.data){
-            console.log(getCategoryProductsState.data);
-        }
-    },[getCategoryProductsState]);
+  
 
     useEffect(()=>{
         dispatch(getSession());
@@ -33,9 +28,10 @@ export function ShopProducts(){
             }
         }
     },[dispatch,getSessionState]);
+    
 
     return (
-        <main className="bg-primary pb-10">
+        <main className="bg-primary pb-20">
             <ShopHeaderNav/>
 
             <section className="container mx-auto">
@@ -55,14 +51,11 @@ export function ShopProducts(){
                                 style={{
                                     backgroundImage : `url('https://ilovetaters.com/shop/assets/img/categories/${category.category_image}')`,
                                     backgroundRepeat: 'no-repeat',
-                                    backgroundSize: 'auto',
+                                    backgroundSize: 'cover',
                                 }}
                                 className={`bg-secondary ${i % 2 === 0 ? '' : 'order-2'} flex-none w-[495px] shadow-tertiary shadow-md rounded-[10px] mb-6 p-10 hidden lg:block relative`}>
                                 
-                                <img src={`https://ilovetaters.com/shop/assets/img/categories/${category.category_image}`} alt="The best pop corn in town" style={{visibility: 'hidden'}}></img>
-                                <div className="absolute w-full h-full z-10 px-2 py-10 top-0">
-                                    <h1 className="text-white text-center lg:text-start text-2xl lg:text-5xl py-3 font-['Bebas_Neue'] font-light tracking-[3px]">{category.category_name}</h1>
-                                </div>
+                                <h1 className="text-white text-center lg:text-start text-2xl lg:text-5xl py-3 font-['Bebas_Neue'] font-light tracking-[3px]">{category.category_name}</h1>
                             </div>
                             <div 
                             className="bg-secondary shadow-tertiary shadow-md rounded-[10px] mb-6 lg:p-10  lg:hidden">
