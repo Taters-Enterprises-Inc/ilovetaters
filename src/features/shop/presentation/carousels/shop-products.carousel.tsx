@@ -12,7 +12,8 @@ import 'swiper/css/autoplay';
 import { Autoplay, Navigation } from "swiper";
 
 interface ShopProductsCarouselProps {
-    products: Array<any>
+    products: Array<any>;
+    parentIndex : number;
 }
 
 export function ShopProductsCarousel(props: ShopProductsCarouselProps){
@@ -36,13 +37,14 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
             modules={[Navigation, Autoplay]}
             navigation
             autoplay={{ delay: 5000 }} 
+            className='w-[103%] sm:w-[102%] lg:w-full'
         >
         {
             _4x2.map((chunk, i) => {
                 
                 return(
-                    <SwiperSlide key={i} className='hidden xl:block pr-4 pl-1' >
-                        <div className="grid grid-cols-4 gap-4">
+                    <SwiperSlide key={i} className={`hidden xl:block ${props.parentIndex % 2 === 0 ? 'pl-4 pr-1' : 'pr-4 pl-1'} pb-2`} >
+                        <div className="grid grid-cols-4 gap-4">    
                             {
                                 chunk.map((product, i)=>(
                                     <Link key={i}  to={product.hash} className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full">
@@ -65,7 +67,7 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
             _3x2.map((chunk, i) => {
                 
                 return(
-                    <SwiperSlide key={i} className='hidden sm:block xl:hidden' >
+                    <SwiperSlide key={i} className={`hidden sm:block xl:hidden ${props.parentIndex % 2 === 0 ? 'lg:pl-4 lg:pr-1' : 'lg:pr-4 lg:pl-1'} pb-2 px-3 lg:px-0`} >
                         <div className="grid grid-cols-3 gap-4">
                             {
                                 chunk.map((product, i)=>(
@@ -89,7 +91,7 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps){
             _2x2.map((chunk, i) => {
                 
                 return(
-                    <SwiperSlide key={i} className='sm:hidden' >
+                    <SwiperSlide key={i} className={`sm:hidden pb-2 px-3`} >
                         <div className="grid gap-4 grid-cols-2">
                             {
                                 chunk.map((product, i)=>(
