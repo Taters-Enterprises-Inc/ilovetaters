@@ -1,7 +1,8 @@
-export function Franchising(){
-    return (
-        <div>
-            Franchising
-        </div>
-    )
-}
+import React from "react";
+export const Franchising: React.FC = (): JSX.Element => {
+  return (
+    <main>
+        Franchising
+    </main>
+  );
+};
