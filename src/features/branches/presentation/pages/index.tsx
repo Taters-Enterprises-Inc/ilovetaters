@@ -1,1 +1,1 @@
-export { Branches } from './branches.page';
+export { Branches } from "./branches.page";
