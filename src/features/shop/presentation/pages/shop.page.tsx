@@ -24,11 +24,11 @@ export function Shop(){
     },[]);
 
     return (
-        <main className="bg-primary min-h-screen">
+        <main className="bg-primary">
             <ShopHeaderNav/>
             
 
-            <section className="container">
+            <section className="container  min-h-screen pb-64">
                 
                 <img className="sm:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden sm:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_landing_page_banner.webp"} alt="The best pop corn in town"></img>

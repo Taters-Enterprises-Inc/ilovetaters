@@ -19,7 +19,7 @@ export function ShopOrder(){
 
                         <ol className="inline-flex items-center space-x-1 md:space-x-3">
                             <li className="inline-flex items-center">
-                                <Link to='/shop' className="inline-flex items-center text-xs lg:text-base font-medium text-gray-700 dark:text-white dark:hover:text-white">
+                                <Link to='/shop' className="inline-flex items-center text-xs lg:text-base font-medium text-gray-400">
                                     <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                                     Snackshop
                                 </Link>
@@ -27,7 +27,7 @@ export function ShopOrder(){
                             <li>
                             <div className="flex items-center">
                                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                                <Link to='/shop/products' className="ml-1 text-xs lg:text-base font-medium text-gray-700 md:ml-2 dark:text-white dark:hover:text-white">Products</Link>
+                                <Link to='/shop/products' className="ml-1 text-xs lg:text-base font-medium text-gray-400 md:ml-2">Products</Link>
                             </div>
                             </li>
                             <li aria-current="page">
@@ -183,7 +183,7 @@ export function ShopOrder(){
                             </div>
                         </div>
 
-                        <div className="flex lg:flex-row flex-col space-x-2">
+                        <div className="flex lg:flex-row flex-col lg:space-x-2 space-y-2 lg:space-y-0">
                             <div className="text-white lg:flex-1">
                                 <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Delivery Information</h2>
                                 <h3 className="font-semibold text-lg">Eco Villaraza</h3>
@@ -191,7 +191,7 @@ export function ShopOrder(){
                                 <h3 className="text-sm">09686097100</h3>
                             </div>
 
-                            <div className="text-white space-y-2 lg:flex-1">
+                            <div className="text-white lg:flex-1">
                                 <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">Payment Options</h2>
                                 <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/bdo.webp`} alt="" />
 
@@ -227,7 +227,7 @@ export function ShopOrder(){
                         <h2 className="font-['Bebas_Neue'] text-2xl  text-white tracking-[3px] text-center">Upload Proof of Payment</h2>
 
                         <div>
-                            <div className="border-dashed border-t-2 border-l-2 border-r-2 border-sky-500 h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2">
+                            <div className="border-dashed border-t-2 border-l-2 border-r-2 border-white h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2">
 
                                 <AiOutlineCloudUpload className="text-white text-5xl"/>
                                 <span className="text-white text-lg">Drag and drop here to upload</span>
@@ -246,6 +246,7 @@ export function ShopOrder(){
 
                     </div>
                 </div>
+                
                 
             </section>
 

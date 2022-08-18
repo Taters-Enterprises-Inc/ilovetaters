@@ -13,10 +13,10 @@ import NumberFormat from "react-number-format";
 
 export function ShopHeaderNav(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+    const [openShopCartModal, setOpenShopCartModal] = useState(false); 
+    
     const getSessionState = useAppSelector(selectGetSession);
     const dispatch = useAppDispatch();
-
-    const [openShopCartModal, setOpenShopCartModal] = useState(false); 
 
     useEffect(()=>{
         dispatch(getSession());

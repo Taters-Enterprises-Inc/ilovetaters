@@ -13,7 +13,7 @@ export function Addon(props: AddonProps){
 
     
     return(
-        <div className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6 w-[92%]">
+        <div className="my-3 bg-secondary rounded-xl shadow-tertiary shadow-md mb-6">
             <div className="p-4 flex space-x-2">
                 <img src={`http://ilovetaters.com/shop/assets/img/75/${props.product.product_image}`} className="rounded-[10px] w-[100px] h-[100px]" alt="" />
                 <div className="p-2 space-y-2">
@@ -22,7 +22,7 @@ export function Addon(props: AddonProps){
                         <NumberFormat value={(props.product.price * quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
                     </h5>
                     
-                    <div className="h-10 w-32">
+                    <div className="h-10 w-24">
 
                         <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
 
@@ -30,7 +30,7 @@ export function Addon(props: AddonProps){
                                 if(quantity > 1)
                                     setQuantity(quantity - 1);
                             }} className=" h-full w-20 rounded-l cursor-pointer outline-none bg-primary">
-                                <span className="m-auto text-2xl font-thin">−</span>
+                                <span className="m-auto text-2xl font-thinleading-3" >−</span>
                             </button>
 
                             <input value={quantity} onChange={(event : any) => {
@@ -43,7 +43,7 @@ export function Addon(props: AddonProps){
                                 if(quantity >= 1)
                                     setQuantity(quantity + 1);
                             }} className="h-full w-20 rounded-r cursor-pointer bg-primary">
-                                <span className="m-auto text-2xl font-thin">+</span>
+                                <span className="m-auto text-2xl font-thin leading-3">+</span>
                             </button>
 
                         </div>

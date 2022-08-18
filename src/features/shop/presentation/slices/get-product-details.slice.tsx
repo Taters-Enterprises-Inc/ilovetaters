@@ -28,6 +28,7 @@ const initialState : {
             id: number;
             name: string;
         }>;
+        suggested_products: Array<ProductModel>;
     } | undefined
 } = {
     status: GetProductDetailsState.initial,
@@ -53,6 +54,7 @@ export const getProductDetailsSlice = createSlice({
                 product : ProductModel; 
                 addons: Array<ProductModel>; 
                 product_flavor: Array<any>; 
+                suggested_products: Array<ProductModel>;
             } | null}> ) => {
                 
             const data = action.payload.data;
