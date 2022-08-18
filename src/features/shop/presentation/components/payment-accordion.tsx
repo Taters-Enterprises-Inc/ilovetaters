@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillCreditCard } from "react-icons/ai";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -14,6 +14,8 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -53,85 +55,108 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export function PaymentAccordion(){
+
+  const getSessionState = useAppSelector(selectGetSession);
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    dispatch(getSession());
+  },[]);
    
-    return (
-      <FormControl>
-        <RadioGroup
-          aria-labelledby="demo-controlled-radio-buttons-group"
-          name="payment_method"
-        >
-          
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
+  return (
+    <FormControl className="w-full">
+      <RadioGroup
+        aria-labelledby="payment_method_aria_labelledby"
+        name="payment_method"
+      >
+
+        {
+          getSessionState.data?.payops_list.map((payops, i)=>(
+            <Accordion key={i}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon className="text-white" />}
+              >
+              <div className="flex space-x-4 justify-start items-center flex-1">
+                  <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with {payops.name}</span>
+              </div>
+              </AccordionSummary>
+              <AccordionDetails>
+                <FormControlLabel  value={payops.id} control={<Radio  color='tertiary' required/>} label={payops.name} />
+                <ul>
+                  {
+                    payops.acct_name ? 
+                    <li className="text-lg">Account Name: {payops.acct_name}</li> :
+                    null
+                  }
+                  {
+                    payops.acct ? 
+                    <li className="text-lg">Account Name: {payops.acct}</li> :
+                    null
+                  }
+                </ul>
+                {
+                  payops.qr_code ? 
+                  <img src={`https://ilovetaters.com/shop/assets/img/qr_codes/${payops.qr_code}`} alt='Taters G-Cash QR' width={230}/> :
+                  null
+                }
+              </AccordionDetails>
+            </Accordion>
+          ))
+        }
+        
+
+        {/* <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon className="text-white"  />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
             <div className="flex space-x-4 justify-start items-center flex-1">
-                <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with BPI</span>
+                <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with BDO</span>
             </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormControlLabel  value="bpi" control={<Radio  color='tertiary' required/>} label="BPI" />
-              <ul>
-                <li className="text-lg">Account Name: Taters Enterprises, Inc.</li>
-                <li className="text-lg">Account #: 0381-0160-99</li>
-              </ul>
-            </AccordionDetails>
-          </Accordion>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormControlLabel  value="bdo" control={<Radio color='tertiary' required/>} label="BDO"/>
+            <ul>
+              <li className="text-lg">Account Name: Taters Enterprises, Inc.</li>
+              <li className="text-lg">Account #: 0006-7804-8382</li>
+            </ul>
+          </AccordionDetails>
+        </Accordion>
+        
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon className="text-white" />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <div className="flex space-x-4 justify-start items-center flex-1">
+                <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with CASH</span>
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormControlLabel  value="cash" control={<Radio  color='tertiary'/>} label="Cash CASH (additional ₱ 50.00)"  />
+          </AccordionDetails>
+        </Accordion>
+        
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon className="text-white" />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <div className="flex space-x-4 justify-start items-center flex-1">
+                <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with GCASH</span>
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormControlLabel  value="gcash" control={<Radio  color='tertiary' required/>} label="GCash" />
+            <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/gcash_qr.webp`} alt='Taters G-Cash QR' width={230}/>
+          </AccordionDetails>
+        </Accordion> */}
 
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white"  />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <div className="flex space-x-4 justify-start items-center flex-1">
-                  <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with BDO</span>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormControlLabel  value="bdo" control={<Radio color='tertiary' required/>} label="BDO"/>
-              <ul>
-                <li className="text-lg">Account Name: Taters Enterprises, Inc.</li>
-                <li className="text-lg">Account #: 0006-7804-8382</li>
-              </ul>
-            </AccordionDetails>
-          </Accordion>
-          
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <div className="flex space-x-4 justify-start items-center flex-1">
-                  <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with CASH</span>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormControlLabel  value="cash" control={<Radio  color='tertiary'/>} label="Cash CASH (additional ₱ 50.00)"  />
-            </AccordionDetails>
-          </Accordion>
-          
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <div className="flex space-x-4 justify-start items-center flex-1">
-                  <AiFillCreditCard className='text-tertiary text-2xl'/> <span>Pay with GCASH</span>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormControlLabel  value="gcash" control={<Radio  color='tertiary' required/>} label="GCash" />
-              <img src={`${REACT_APP_UPLOADS_URL}images/shop/payments/gcash_qr.webp`} alt='Taters G-Cash QR' width={230}/>
-            </AccordionDetails>
-          </Accordion>
-
-          
-        </RadioGroup>
-      </FormControl>
-    );
+        
+      </RadioGroup>
+    </FormControl>
+  );
 }

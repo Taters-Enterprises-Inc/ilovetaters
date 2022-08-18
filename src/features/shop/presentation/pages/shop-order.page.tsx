@@ -1,6 +1,7 @@
 import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { AiOutlineCloudUpload } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineCloudUpload, AiOutlineCreditCard } from "react-icons/ai";
+import { BiUserCircle } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
@@ -47,8 +48,8 @@ export function ShopOrder(){
                         <div className="bg-white h-[0.25rem] relative">
                             <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem] text-black">1</div>
                         </div>
-                        <div className="flex justify-center items-center mt-5 text-xs text-white">
-                            Your Details
+                        <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <BiUserCircle className="text-2xl"/> <span>Your Details</span>
                         </div>
                     </div>
                     
@@ -56,8 +57,8 @@ export function ShopOrder(){
                         <div className="bg-white h-[0.25rem] relative">
                             <div className="absolute rounded-[50%] text-black font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
                         </div>
-                        <div className="flex justify-center items-center mt-5 text-xs text-white">
-                            Payment
+                        <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <AiOutlineCreditCard className="text-2xl"/> <span>Payment</span>
                         </div>
                     </div>
 
@@ -66,8 +67,8 @@ export function ShopOrder(){
                         <div className="bg-[#424242] h-[0.25rem] relative">
                             <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
                         </div>
-                        <div className="flex justify-center items-center mt-5 text-xs text-white">
-                            Complete
+                        <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
                         </div>
                     </div>
 
@@ -76,17 +77,17 @@ export function ShopOrder(){
                 
             <section className="min-h-screen container lg:space-x-4 pb-36">
                     
-                <div className="lg:mt-[-80px] flex justify-between items-start flex-col lg:flex-row px-4">
+                <div className="lg:mt-[-80px] flex justify-between items-start flex-col lg:flex-row">
                     
-                    <div className="space-y-8 lg:flex-[0_0_65%] lg:max-w-[65%]">
+                    <div className="space-y-8 lg:flex-[0_0_60%] lg:max-w-[60%]">
                         
                         <div className="pb-8 hidden lg:flex">
                             <div className="flex-1">
                                 <div className="bg-white h-[0.25rem] relative">
                                     <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
                                 </div>
-                                <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                    Your Details
+                                <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                    <BiUserCircle className="text-2xl"/> <span>Your Details</span>
                                 </div>
                             </div>
                             
@@ -94,8 +95,8 @@ export function ShopOrder(){
                                 <div className="bg-white h-[0.25rem] relative">
                                     <div className="absolute rounded-[50%] text-black font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
                                 </div>
-                                <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                    Payment
+                                <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                    <AiOutlineCreditCard className="text-2xl"/> <span>Payment</span>
                                 </div>
                             </div>
 
@@ -104,8 +105,8 @@ export function ShopOrder(){
                                 <div className="bg-[#424242] h-[0.25rem] relative">
                                     <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
                                 </div>
-                                <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                    Complete
+                                <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                    <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
                                 </div>
                             </div>
 
@@ -114,39 +115,39 @@ export function ShopOrder(){
                         <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-4">
                             <div className="text-white flex-1 space-y-2">
                                 <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">From: </h2>
-                                <h3 className="font-semibold text-sm">Taters Malate</h3>
-                                <h3 className="text-sm">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
-                                <div className="text-sm">
+                                <h3 className="font-semibold text-xs">Taters Malate</h3>
+                                <h3 className="text-xs">1020 San Andres St. Cor Singalong St. Malate Manila</h3>
+                                <div className="text-xs">
                                     <strong>Contact #</strong> 09084741500
                                 </div>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <strong>Email :</strong> taters.tdcgt.s@tatersgroup.com
                                 </div>
                             </div>
 
                             <div className="text-white flex-1 space-y-2">
                                 <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">Deliver To Address: </h2>
-                                <h3 className="font-semibold text-sm">Eco Villaraza</h3>
-                                <div className="text-sm">
+                                <h3 className="font-semibold text-xs">Eco Villaraza</h3>
+                                <div className="text-xs">
                                     <strong>Address:</strong> Adamson University, San Marcelino Street, Ermita, Manila, Metro Manila, Philippines
                                 </div>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <strong>Email: </strong> taters.tdcgt.s@tatersgroup.com
                                 </div>
                             </div>
 
                             <div className="text-white flex-1 space-y-2">
                                 <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">Tracking Information</h2>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <strong>Tracking Number:</strong> #661dbd
                                 </div>
-                                <div className="text-sm space-x-2">
-                                    <strong>Order Status:</strong> <span className="rounded-full bg-green-700 text-white px-2 py-1">Order Placed In System</span>
+                                <div className="text-xs space-x-2">
+                                    <strong>Order Status:</strong> <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">Order Placed In System</span>
                                 </div>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <strong>Mode of handling:</strong> Delivery
                                 </div>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <strong>Gift Card Number:</strong> 0
                                 </div>
                             </div>
@@ -209,9 +210,9 @@ export function ShopOrder(){
 
                     </div>
 
-                    <div className="space-y-4 lg:flex-[0_0_30%] lg:max-w-[30%] bg-primary lg:shadow-[#540808] lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+                    <div className="space-y-4 lg:flex-[0_0_36%] lg:max-w-[36%] bg-primary lg:shadow-[#540808] lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
                         
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">Order Summary</h2>
+                        <h2 className="font-['Bebas_Neue'] text-4xl  text-white tracking-[3px] text-center">Order Summary</h2>
 
                         <div className="grid grid-cols-2 text-white">
                             <span>Subtotal:</span>
@@ -222,9 +223,9 @@ export function ShopOrder(){
 
                         <hr className="mt-1" />
 
-                        <h1 className="text-4xl text-center text-white">₱ 295.00</h1>
+                        <h1 className="text-3xl text-center text-white">₱ 295.00</h1>
 
-                        <h2 className="font-['Bebas_Neue'] text-2xl  text-white tracking-[3px] text-center">Upload Proof of Payment</h2>
+                        <h2 className="font-['Bebas_Neue'] text-xl  text-white tracking-[3px] text-center">Upload Proof of Payment</h2>
 
                         <div>
                             <div className="border-dashed border-t-2 border-l-2 border-r-2 border-white h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2">
@@ -239,7 +240,7 @@ export function ShopOrder(){
                                 Upload
                             </button>
 
-                            <h4 className="text-white mt-1 leading-5">Note: Supported file types: JPG, JPEG, PNG and GIF. Maximum file size is 2MB.</h4>
+                            <h4 className="text-white mt-1 leading-5 text-sm"><strong>Note:</strong> Supported file types: JPG, JPEG, PNG and GIF. Maximum file size is 2MB.</h4>
                             
                         </div>
 

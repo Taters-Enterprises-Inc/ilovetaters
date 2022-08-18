@@ -2,7 +2,7 @@ import {  REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Link, useLocation } from "react-router-dom";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { FooterNav } from "features/shared";
-import { MdDeliveryDining } from "react-icons/md";
+import { MdDeliveryDining, MdPayment } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { FormEvent, useEffect } from "react";
 import NumberFormat from "react-number-format";
+import { BiUserCircle } from 'react-icons/bi';
+import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 
 interface formDataType {[key:string]: FormDataEntryValue}
 
@@ -46,24 +48,34 @@ export function ShopCheckout(){
         const orders = getSessionState.data?.orders;
 
         if(orders){
-        for(let i = 0; i < orders.length; i++){
-            calculatedPrice += orders[i].prod_calc_amount;
-        }
-        return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+            for(let i = 0; i < orders.length; i++){
+                calculatedPrice += orders[i].prod_calc_amount;
+            }
+            return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }else {
         return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }
     }
     
+    const calculateDeliveryFee =()=>{
+
+        if(getSessionState.data?.distance_rate_price){
+            return <NumberFormat value={getSessionState.data.distance_rate_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+        }else {
+            return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+        }
+    }
+
     const calculateTotalPrice =()=>{
         let calculatedPrice = 0;
         const orders = getSessionState.data?.orders;
 
-        if(orders){
+        if(orders && getSessionState.data?.distance_rate_price){
             for(let i = 0; i < orders.length; i++){
                 calculatedPrice += orders[i].prod_calc_amount;
             }
 
+            calculatedPrice += getSessionState.data.distance_rate_price;
             return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }else {
          return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
@@ -81,8 +93,8 @@ export function ShopCheckout(){
             <section className="min-h-screen lg:space-x-4 pb-36">
                 <div className="lg:-mt-[200px] lg:space-y-8">
 
-                    <div className="py-6 lg:py-0 flex flex-col lg:flex-row justify-between items-center bg-secondary lg:container space-y-2">
-                        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-8">Checkout</h1>
+                    <div className="py-6 lg:py-0 flex flex-col lg:flex-row justify-between items-center bg-secondary lg:container space-y-2 lg:space-y-0">
+                        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">Checkout</h1>
                         
                         <nav className="flex" aria-label="Breadcrumb">
 
@@ -111,13 +123,13 @@ export function ShopCheckout(){
                         
                     </div>
                     
-                    <div className="flex lg:container">
+                    <div className="flex container">
                         <div className="flex-1">
                             <div className="bg-white h-[0.25rem] relative">
                                 <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
                             </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                Your Details
+                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <BiUserCircle className="text-2xl"/> <span>Your Details</span>
                             </div>
                         </div>
                         
@@ -125,8 +137,8 @@ export function ShopCheckout(){
                             <div className="bg-[#424242] h-[0.25rem] relative">
                                 <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
                             </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                Payment
+                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <AiOutlineCreditCard className="text-2xl"/> <span>Payment</span>
                             </div>
                         </div>
 
@@ -135,8 +147,8 @@ export function ShopCheckout(){
                             <div className="bg-[#424242] h-[0.25rem] relative">
                                 <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
                             </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white">
-                                Complete
+                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                                <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
                             </div>
                         </div>
 
@@ -206,7 +218,7 @@ export function ShopCheckout(){
                                 </div>
 
                                 <div className="flex justify-start items-center space-x-1 text-white">
-                                    <Checkbox color="tertiary"/>
+                                    <Checkbox color="tertiary" required/>
                                     <span>I agree with the </span>
                                     <button className="text-tertiary">Terms & Conditions</button>
                                 </div>
@@ -225,7 +237,7 @@ export function ShopCheckout(){
                                     <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
                                         <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">Order Summary</h2>
 
-                                        <div className="max-h-[400px] overflow-y-auto space-y-4">
+                                        <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
 
                                             {
                                                 getSessionState.data?.orders.map((order, i)=>(
@@ -250,15 +262,12 @@ export function ShopCheckout(){
 
                                         </div>
 
-
-
-                                        <hr className="mt-1" />
-
+                                        <hr className="mt-1 mb-2" />
                                         <div className="grid grid-cols-2 text-white">
                                             <span>Subtotal:</span>
                                             <span className="text-end">{calculateSubTotalPrice()}</span>
                                             <span>Delivery Fee:</span>
-                                            <span className="text-end">₱ 0.00</span>
+                                            <span className="text-end">{calculateDeliveryFee()}</span>
                                             <span>Discount:</span>
                                             <span className="text-end">( ₱ 0.00 )</span>
                                         </div>

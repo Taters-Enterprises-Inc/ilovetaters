@@ -46,4 +46,29 @@ export interface SessionModel {
     }>;
 
     deals : any;
+
+    
+    km_radius: string,
+    km_min: string,
+    free_delivery: number,
+    free_min_delivery: number,
+    delivery_rate: string,
+    minimum_rate: string,
+    catering_delivery_rate: string,
+    catering_minimum_rate: string,
+    distance: number,
+    distance_rate_id: number
+    distance_rate_price: number,
+    distance_rate_price_before: number,
+    distance_routes: string,
+    distance_radius: string,
+
+    payops_list: Array<{
+        id: number;
+        type: number;
+        name: string;
+        acct: string;
+        acct_name: string;
+        qr_code: string;
+    }>
 }
