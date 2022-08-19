@@ -1,21 +1,23 @@
-import { FooterNav, HeaderNav } from "features/shared";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import {BrowserRouter as Router, Link} from 'react-router-dom';
+import { LoginForm } from '../components/loginform';
+import Loginimg from '../assets/loginlogo.png';
 
 export function Admin(){
 
     return (
-        <main className="bg-primary">
-            <HeaderNav serviceReached={true} active='CATERING' sticky/>
-            
-
-            <section className=" container min-h-screen">
-                
-                <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/catering/hero/mobile/catering_landing_page.webp"} alt="The best pop corn in town"></img>
-                <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/catering/hero/desktop/catering_landing_page.webp"} alt="The best pop corn in town"></img>
+        <main className='bg-white'>
+            <section className='bg-primary lg:w-1/4 max-h-auto text-white font-["Roboto"] text-sm text-center rounded-md shadow-md shadow-tertiary'>
+                <div className='header_image grid grid-cols-1 sm:grid-cols-2'> 
+                    <img src ={Loginimg} alt=''/>
+                </div>
+                <div className='login-body pt-4 pb-4 align-center'>
+                    <LoginForm></LoginForm>
+                </div>
+                <form action=''></form>
 
             </section>
 
-            <FooterNav/>
+        
         </main>
     );
 }
