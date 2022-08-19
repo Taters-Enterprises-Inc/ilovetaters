@@ -1,66 +1,39 @@
 import {BrowserRouter as Router, Link} from 'react-router-dom';
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { useEffect, useRef, useState } from "react";
-import {styled} from '@mui/material/styles';
-import {FaEnvelope} from 'react-icons/fa';
-
-interface State {
-    password: string;
-    showPassword: boolean;
-  }
+import {FaRegEnvelope} from 'react-icons/fa';
+import { MdLockOutline } from 'react-icons/md';
+import { useState } from "react";
 
 export function Admin(){
 
-    const [values, setValues] = React.useState<State>({
-        password: '',
-        showPassword: false,
-      });
-    
-      const handleChange =
-        (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-          setValues({ ...values, [prop]: event.target.value });
-        };
-    
-      const handleClickShowPassword = () => {
-        setValues({
-          ...values,
-          showPassword: !values.showPassword,
-        });
-      };
-    
-      const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-      };
-
     return (
-        <main className='bg-primary h-screen pt-32'>
-            <section className='bg-secondary max-w-[400px] mx-auto p-6 px-6
-             text-white font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>
-                <div className='header_image w-36 pt-2 pb-2'> 
+
+        <main className='bg-primary h-screen pt-40'>
+
+            <section className='bg-secondary max-w-[350px] mx-auto p-6 px-6 
+              font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>
+
+                <div className='header_image w-36 pt-2'> 
                     <img src="https://ilovetaters.com/staging/uploads/images/shop/snackshop-logo-creamy-red.png" alt="taterslogo"></img>
                 </div>
-                <div className='login-body pt-4 pb-4'>
+                
+                <div className='login-body pt-4'>
                     <form>
-                    <p>Please login with your email/username and password below.</p>
-                    <div className='mt-4'>
-                        <TextField required id="email" label="Email" variant="outlined"/>
-                        <FaEnvelope></FaEnvelope>
+                    <p className='text-white'>Please login with your email/username and password below.</p>
+                    <div className='mt-6 w-full p2 bg-gray-100 flex items-center rounded-2xl'>
+                        {/* <TextField required id="email" label="Email" variant="outlined"/> */}
+                        <FaRegEnvelope className='m-2'/>
+                        <input type="text" name='email' placeholder='Email' className='bg-gray-100 w-full h-9 mr-4 outline-none text-sm flex-1'></input>
                     </div>
-                    <div className='mt-4'>
-                        <TextField required id="passw" label="Password" variant="outlined"/>
+                    <div className='mt-4 w-full p2 bg-gray-100 flex items-center rounded-2xl'>
+                        <MdLockOutline className='m-2'/>
+                        <input type="password" name='passw' placeholder='Password' className='bg-gray-100 w-full mr-4 h-9 outline-none text-sm flex-1'></input>
                     </div>
-                    <div className='flex justify-between py-4'>
+
+                    <div className='flex justify-between py-4 text-white'>
                         <p className='flex items-center'><input className='mr-2' type="checkbox"/> Remember Me</p>
-                        <p>Forgot Password?</p>
+                        <a href='#'>Forgot Password?</a>
                     </div>
-                    <button className='w-full my-2 py-4 bg-button shadow-md rounded-3xl'>LOGIN</button>
+                    <button className='w-full my-2 py-2 bg-button shadow-md rounded-3xl text-white'>LOG IN</button>
                     </form>
                 </div>
 
