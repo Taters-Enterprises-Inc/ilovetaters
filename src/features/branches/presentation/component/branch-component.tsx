@@ -1,21 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { branches, branchesTypes } from "../pages/data/branches-data";
 import { AccordionComponent } from "./accordion-branch-component";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
-import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+import { BranchesNearyouComponent } from "./branches-near-you-component";
 
 export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   const [showButton, setShowButton] = useState<boolean>(false);
   const [catigory, setCatigory] = useState<boolean>(false);
-  const [address, setAddress] = useState<any>("");
-  const getSessionState = useAppSelector(selectGetSession);
-  const dispatch = useAppDispatch();
-
+  
   const ref = useRef<null | HTMLTableSectionElement>(null);
 
   const scrollToTop = () => {
@@ -36,17 +26,11 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
     return () => window.removeEventListener("scroll", scrollDown);
   }, []);
 
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
 
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState.data?.customer_address]);
 
-  console.log(dispatch(getSession()));
+  
+
+  
   return (
     <section className="bg-primary ">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">
@@ -86,34 +70,17 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
       </section>
 
       {catigory ? (
-        <section className="container pb-[200px]">
-          <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
-            WHICH STORE IS NEAR YOU?
-          </h1>
-          <div className="flex items-center justify-center mb-3">
-            <label className="pure-material-textfield-outlined w-full">
-              <SearchAddress
-                onPlaceSelected={(place: string) => {
-                  setAddress(place);
-                  dispatch(getStoresAvailable({ address: place }));
-                }}
-              />
-              <span>Search Address</span>
-            </label>
-          </div>
-        </section>
+       <BranchesNearyouComponent />
       ) : (
         <>
           <section className="  mb-20 z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
 
-            {branches.map(
-              ({ region, branch }: branchesTypes, idx: number): JSX.Element => {
+            {['ncr' , 'luzon' ,'visayas' ,'mindanao'].map(
+              (data:string, idx: number): JSX.Element => {
                 return (
                   <AccordionComponent
                     key={idx}
-                    region={region}
-                    branch={branch}
-                    idx={idx}
+                    region={data}
                   />
                 );
               }
