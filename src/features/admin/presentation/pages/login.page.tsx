@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useEffect, useRef, useState } from "react";
 import {styled} from '@mui/material/styles';
+import {FaEnvelope} from 'react-icons/fa';
 
 interface State {
     password: string;
@@ -39,7 +40,7 @@ export function Admin(){
       };
 
     return (
-        <main className='bg-primary h-screen '>
+        <main className='bg-primary h-screen pt-32'>
             <section className='bg-secondary max-w-[400px] mx-auto p-6 px-6
              text-white font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>
                 <div className='header_image w-36 pt-2 pb-2'> 
@@ -48,8 +49,9 @@ export function Admin(){
                 <div className='login-body pt-4 pb-4'>
                     <form>
                     <p>Please login with your email/username and password below.</p>
-                    <div className='mt-4 w-full'>
+                    <div className='mt-4'>
                         <TextField required id="email" label="Email" variant="outlined"/>
+                        <FaEnvelope></FaEnvelope>
                     </div>
                     <div className='mt-4'>
                         <TextField required id="passw" label="Password" variant="outlined"/>
@@ -58,7 +60,7 @@ export function Admin(){
                         <p className='flex items-center'><input className='mr-2' type="checkbox"/> Remember Me</p>
                         <p>Forgot Password?</p>
                     </div>
-                    <button className='w-full my-2 py-4 bg-button shadow-md rounded-lg'>LOGIN</button>
+                    <button className='w-full my-2 py-4 bg-button shadow-md rounded-3xl'>LOGIN</button>
                     </form>
                 </div>
 
