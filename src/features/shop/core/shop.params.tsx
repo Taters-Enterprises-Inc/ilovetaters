@@ -1,3 +1,16 @@
+export interface GetOrdersParam{
+    hash: string;
+}
+
+export interface CheckoutOrdersParam{
+    firstName: string;
+    lastName: string;
+    eMail: string;
+    phoneNumber: string;
+    payops: string;
+    address: string;
+}
+
 export interface GetCategoryProductsParam{
     region_id: number;
 }

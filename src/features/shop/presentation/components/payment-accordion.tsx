@@ -66,8 +66,8 @@ export function PaymentAccordion(){
   return (
     <FormControl className="w-full">
       <RadioGroup
-        aria-labelledby="payment_method_aria_labelledby"
-        name="payment_method"
+        aria-labelledby="payops aria label"
+        name="payops"
       >
 
         {

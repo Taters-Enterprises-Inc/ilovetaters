@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 
+.profile-tab-active{
+    margin-bottom: -1px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 50%);
+    padding-right: 40px;
+    z-index: 1;
+    padding-top: 20px !important;
+}
+
+.profile-tab-content{
+    box-shadow: 0 3px 10px rgb(0 0 0 / 50%) !important;
+    position: relative !important;
+}
+
 html {
     scroll-behavior: smooth;
 }

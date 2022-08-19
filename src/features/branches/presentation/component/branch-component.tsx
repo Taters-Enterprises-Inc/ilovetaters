@@ -46,7 +46,6 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
     }
   }, [getSessionState.data?.customer_address]);
 
-  console.log(dispatch(getSession()));
   return (
     <section className="bg-primary ">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">

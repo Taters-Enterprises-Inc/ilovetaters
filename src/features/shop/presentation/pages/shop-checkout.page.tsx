@@ -14,6 +14,7 @@ import { FormEvent, useEffect } from "react";
 import NumberFormat from "react-number-format";
 import { BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
+import { checkoutOrders, CheckoutOrdersState, resetCheckoutOrders, selectCheckoutOrders } from "../slices/checkout-orders.slice";
 
 interface formDataType {[key:string]: FormDataEntryValue}
 
@@ -21,7 +22,15 @@ export function ShopCheckout(){
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const getSessionState = useAppSelector(selectGetSession);
+    const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
     const location = useLocation();
+
+    useEffect(()=>{
+        if( checkoutOrdersState.status === CheckoutOrdersState.success && checkoutOrdersState.data){
+            navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
+            dispatch(resetCheckoutOrders());
+        }
+    },[checkoutOrdersState, dispatch]);
 
     useEffect(()=>{
         dispatch(getSession());
@@ -33,14 +42,13 @@ export function ShopCheckout(){
 
     const handleCheckout =(e : FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        const responseBody: formDataType = {};
+        const responseBody: any = {};
         
         const formData = new FormData(e.currentTarget as HTMLFormElement)
 
         formData.forEach((value, property:string) => responseBody[property] = value);
 
-        console.log(responseBody);
-        
+        dispatch(checkoutOrders(responseBody));
     }
 
     const calculateSubTotalPrice =()=>{
@@ -123,12 +131,12 @@ export function ShopCheckout(){
                         
                     </div>
                     
-                    <div className="flex container">
+                    <div className="flex lg:container">
                         <div className="flex-1">
                             <div className="bg-white h-[0.25rem] relative">
                                 <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
                             </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pl-4 lg:pl-0">
                                 <BiUserCircle className="text-2xl"/> <span>Your Details</span>
                             </div>
                         </div>
@@ -147,7 +155,7 @@ export function ShopCheckout(){
                             <div className="bg-[#424242] h-[0.25rem] relative">
                                 <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
                             </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pr-4 lg:pr-0">
                                 <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
                             </div>
                         </div>
@@ -160,12 +168,30 @@ export function ShopCheckout(){
                             className="bg-primary py-6 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex justify-between flex-col lg:flex-row">
                             
                             <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                                <TextField required label="First Name" variant="outlined" className="w-full" name='firstName'/>
-                                <TextField required label="Last Name" variant="outlined" className="w-full" name='lastName'/>
+
+                                {
+                                    getSessionState.data?.userData.first_name ? 
+                                    <TextField aria-readonly value={getSessionState.data.userData.first_name} variant="outlined" className="w-full" name='firstName'/>
+                                    :
+                                    <TextField required label="First Name" variant="outlined" className="w-full" name='firstName'/>
+                                }
+
+                                {
+                                    getSessionState.data?.userData.last_name ? 
+                                    <TextField aria-readonly value={getSessionState.data.userData.last_name} variant="outlined" className="w-full" name='lastName'/>
+                                    :
+                                    <TextField required label="Last Name" variant="outlined" className="w-full" name='lastName'/>
+                                }
+                                
                                 
                                 <div className="flex lg:space-x-4 flex-col lg:flex-row space-y-4 lg:space-y-0">
                                     <div className="flex-1">
-                                        <TextField required label="E-mail Address" variant="outlined" className="w-full" name='e-mail'/>
+                                        {
+                                            getSessionState.data?.userData.email ? 
+                                            <TextField aria-readonly value={getSessionState.data.userData.email} variant="outlined" className="w-full" name='eMail'/>
+                                            :
+                                            <TextField required label="E-mail Address" variant="outlined" className="w-full" name='eMail'/>
+                                        }
                                     </div>
                                     <div className="flex-1">
                                         <TextField required label="Phone Number" variant="outlined" className="w-full" name='phoneNumber'/>
@@ -173,6 +199,7 @@ export function ShopCheckout(){
                                     </div>
                                 </div>
                                 
+                                <TextField aria-readonly value={getSessionState.data?.customer_address} variant="outlined" className="w-full" name='address'/>
 
                                 <div className="text-white lg:mt-0 mt-4">
                                     <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">Handling Method</h2>

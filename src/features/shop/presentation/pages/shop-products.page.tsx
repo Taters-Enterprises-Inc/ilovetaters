@@ -31,7 +31,7 @@ export function ShopProducts(){
     
 
     return (
-        <main className="bg-primary pb-20">
+        <main className="bg-primary pb-20 min-h-screen">
             <ShopHeaderNav/>
 
             <section className="container">

@@ -17,6 +17,7 @@ export function Shop(){
         dispatch(getSession());
     },[]);
 
+            
     useEffect(()=>{
         if(getSessionState.data?.customer_address !== null){
             setAddress(getSessionState.data?.customer_address);

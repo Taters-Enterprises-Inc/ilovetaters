@@ -40,8 +40,7 @@ export function StoreListDelivery(props: StoreListDeliveryProps ){
                         return (
                             <button 
                                 key={index}
-                                onClick={ store_availability && props.address != null ? () => {console.log('test');
-                                }  :  ()=>storeClicked(store.store_id)  }
+                                onClick={ store_availability && props.address != null ? () => {}  :  ()=>storeClicked(store.store_id)  }
                                 className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null

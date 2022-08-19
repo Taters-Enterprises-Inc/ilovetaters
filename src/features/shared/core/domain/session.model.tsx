@@ -4,6 +4,7 @@ export interface SessionModel {
     cache_data ?: {
         store_id ?: string;
         region_id ?: number;
+        region_name ?: string;
         store_name ?: string;
     };
 
@@ -71,4 +72,6 @@ export interface SessionModel {
         acct_name: string;
         qr_code: string;
     }>
+
+    cash_delivery: string;
 }
