@@ -31,15 +31,12 @@ export function ShopProducts(){
     
 
     return (
-        <main className="bg-primary pb-20 min-h-screen">
-            <ShopHeaderNav/>
-
+        <>
             <section className="container">
                 <img className="sm:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden sm:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden sm:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
             </section>
-
             {
                 getCategoryProductsState.data?.map((category, i)=>{ 
 
@@ -70,10 +67,6 @@ export function ShopProducts(){
                 }
                 )
             }
-
-
-
-            <FooterNav/>
-        </main>
+        </>
     );
 }

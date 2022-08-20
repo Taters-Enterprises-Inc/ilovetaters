@@ -95,10 +95,7 @@ export function ShopOrder(){
 
 
     return(
-        <main className="bg-primary">
-            <ShopHeaderNav/>
-
-            
+        <>
             <div className="bg-secondary lg:h-[200px] text-white pt-4">
 
                 <div className="container py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
@@ -387,8 +384,6 @@ export function ShopOrder(){
                 
                 
             </section>
-
-            <FooterNav/>
-        </main>
+        </>
     );
 }

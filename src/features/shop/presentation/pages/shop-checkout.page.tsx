@@ -91,10 +91,7 @@ export function ShopCheckout(){
     }
 
     return (
-        <main className="bg-primary">
-
-            <ShopHeaderNav/>
-
+        <>
             <div className="bg-secondary lg:h-[240px] text-white">
             </div>
                 
@@ -309,9 +306,6 @@ export function ShopCheckout(){
                     </div>
                     
             </section>
-
-            <FooterNav/>
-
-        </main>
+        </>
     )
 }
