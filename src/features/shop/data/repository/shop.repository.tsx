@@ -2,7 +2,8 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
-import { AddToCartParam, GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
+import { OrderModel } from "features/shop/core/domain/order.model";
+import { AddToCartParam, CheckoutOrdersParam, GetCategoryProductsParam, GetOrdersParam, GetProductDetailsParam } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse{
     data: {
@@ -33,6 +34,37 @@ export interface AddToCartResponse {
     data: {
         message: string;
     }
+}
+
+export interface CheckoutOrdersResponse{
+    data: {
+        message: string;
+    }
+}
+
+export interface GetOrdersResponse{
+    data: {
+        message: string;
+        data: OrderModel;
+    }
+}
+
+export function GetOrdersRepository(param : GetOrdersParam) : Promise<GetOrdersResponse> {
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/shop/orders${param.hash ?"?hash=" + param.hash : ""}`,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
+}
+
+export function CheckoutOrdersRepository(param : CheckoutOrdersParam) : Promise<CheckoutOrdersResponse> {
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/transaction/shop`, param,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
 }
 
 export function AddToCartRepository(param : AddToCartParam) : Promise<AddToCartResponse> {

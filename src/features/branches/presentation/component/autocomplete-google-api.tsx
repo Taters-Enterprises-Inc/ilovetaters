@@ -9,8 +9,7 @@ export default function AutocompleteGoogleApi() {
 
      const autocomplete = new google.maps.places.Autocomplete(ref.current ,  { componentRestrictions: { country: "ph" } });
      autocomplete.addListener("place_changed",()=>{
-       const place = autocomplete.getPlace()
-       console.log(place)
+       const place = autocomplete.getPlace();
      })
   })
 
