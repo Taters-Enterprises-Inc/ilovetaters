@@ -15,7 +15,7 @@ import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
-import { Shop, ShopCheckout, ShopHome, ShopOrder, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
+import { Shop, ShopCheckout, ShopHome, ShopOrder, ShopProduct, ShopProducts, ShopProfile, ShopProfileCateringBookings, ShopProfileSnackshopOrders } from 'features/shop/presentation/pages';
 import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
@@ -48,11 +48,19 @@ root.render(
             </Route>
 
             <Route path='shop' element={<Shop/>}>
+              
               <Route index element={<ShopHome/>}/>
               <Route path="products/:hash" element={<ShopProduct/>}/>
               <Route path="order/:hash" element={<ShopOrder/>}/>
               <Route path="products" element={<ShopProducts/>}/>
               <Route path="checkout" element={<ShopCheckout/>}/>
+
+              <Route path='profile'>
+                <Route index element={<ShopProfile/>}/>
+                <Route path='snackshop-orders' element={<ShopProfileSnackshopOrders/>}/>
+                <Route path='catering-bookings' element={<ShopProfileCateringBookings/>}/>
+              </Route>
+
             </Route>
 
             <Route path="catering" element={<Catering/>}/>

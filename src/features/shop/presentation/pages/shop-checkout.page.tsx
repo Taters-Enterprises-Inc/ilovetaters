@@ -15,6 +15,7 @@ import NumberFormat from "react-number-format";
 import { BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { checkoutOrders, CheckoutOrdersState, resetCheckoutOrders, selectCheckoutOrders } from "../slices/checkout-orders.slice";
+import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 
 interface formDataType {[key:string]: FormDataEntryValue}
 
@@ -92,42 +93,11 @@ export function ShopCheckout(){
 
     return (
         <>
-            <div className="bg-secondary lg:h-[240px] text-white">
-            </div>
+            <ShopPageTitleAndBreadCrumbs title="Checkout" pageTitles={['Products', 'Checkout']} />
                 
             <section className="min-h-screen lg:space-x-4 pb-36">
-                <div className="lg:-mt-[200px] lg:space-y-8">
-
-                    <div className="py-6 lg:py-0 flex flex-col lg:flex-row justify-between items-center bg-secondary lg:container space-y-2 lg:space-y-0">
-                        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">Checkout</h1>
-                        
-                        <nav className="flex" aria-label="Breadcrumb">
-
-                            <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                                <li className="inline-flex items-center">
-                                    <Link to='/shop' className="inline-flex items-center text-xs lg:text-base font-medium text-gray-400">
-                                        <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                                        Snackshop
-                                    </Link>
-                                </li>
-                                <li>
-                                <div className="flex items-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                                    <Link to='/shop/products' className="ml-1 text-xs lg:text-base font-medium text-gray-400 md:ml-2">Products</Link>
-                                </div>
-                                </li>
-                                <li aria-current="page">
-                                <div className="flex items-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                                    <span className="ml-1 text-xs lg:text-base font-medium text-white md:ml-2 ">Checkout</span>
-                                </div>
-                                </li>
-                            </ol>
-
-                        </nav>
-                        
-                    </div>
-                    
+                <div className="lg:-mt-[80px] lg:space-y-8">
+          
                     <div className="flex lg:container">
                         <div className="flex-1">
                             <div className="bg-white h-[0.25rem] relative">

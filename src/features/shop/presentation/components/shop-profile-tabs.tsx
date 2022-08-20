@@ -2,8 +2,8 @@ import { FaShoppingBag, FaUserAlt } from "react-icons/fa";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-interface ShopProfileTabsProps{
-    active: 'profile' | 'snackshop' | 'catering' | 'raffle' | 'gift-cards';
+export interface ShopProfileTabsProps{
+    activeTab: 'profile' | 'snackshop' | 'catering' | 'raffle' | 'gift-cards';
 }
 
 const TABS = [
@@ -23,7 +23,7 @@ const TABS = [
         name: 'Catering Bookings',
         active: 'catering',
         icon: <RiShoppingBag3Fill/>,
-        url: 'catering-orders',
+        url: 'catering-bookings',
     },
 ];
 
@@ -33,7 +33,7 @@ export function ShopProfileTabs(props: ShopProfileTabsProps){
             {
                 TABS.map((tab)=>(
                     <li className="flex justify-end items-end" style={{borderTopLeftRadius: '0.4375rem'}}>
-                        <Link to={`/shop/profile/${tab.url}`} className={`${props.active === tab.active ? 'profile-tab-active' : ''} flex w-full font-semibold active space-x-2 items-center text-inherit text-start py-4 px-6 bg-primary`}>
+                        <Link to={`/shop/profile/${tab.url}`} className={`${props.activeTab === tab.active ? 'profile-tab-active' : ''} flex w-full font-semibold active space-x-2 items-center text-inherit text-start py-4 px-6 bg-primary`}>
                             {tab.icon} <span>{tab.name}</span>
                         </Link>
                     </li>

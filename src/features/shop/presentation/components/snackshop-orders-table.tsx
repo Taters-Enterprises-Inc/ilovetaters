@@ -24,6 +24,15 @@ const StyledIconButton= styled(IconButton)(({ theme }) => ({
 const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
     backgroundColor: '#22201A',
     color: 'white',
+    '& .MuiTablePagination-menuItem': {
+      backgroundColor : '#22201A !important',
+    },
+    '& .MuiTablePagination-selectIcon':{
+      color : 'white !important'
+    },
+    '& .Mui-disabled':{
+      color: 'rgba(255,255,255,0.2);'
+    }
 }));
 
 
