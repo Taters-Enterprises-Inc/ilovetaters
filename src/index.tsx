@@ -15,7 +15,7 @@ import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
 import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
-import { Shop, ShopCheckout, ShopOrder, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
+import { Shop, ShopCheckout, ShopHome, ShopOrder, ShopProduct, ShopProducts } from 'features/shop/presentation/pages';
 import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
@@ -37,25 +37,31 @@ root.render(
       <Provider store={store}>
         <BrowserRouter basename={REACT_APP_BASE_NAME}>
           <Routes>
+            
             <Route path='/' element={<Home />} />
 
-            <Route path="popclub" element={<PopClubPlatformPicker />}></Route>
-            <Route path="popclub/:platform" element={<PopClub />}></Route>
+            <Route path="popclub" element={<PopClubPlatformPicker />}/>
+            <Route path="popclub/:platform" element={<PopClub />}/>
+
             <Route path="popclub/deal" element={<PopClubDealGuards />}>
-              <Route path=":hash" element={<PopClubDeal />}></Route>
+              <Route path=":hash" element={<PopClubDeal />}/>
             </Route>
 
-            <Route path="shop" element={<Shop/>}></Route>
-            <Route path="shop/products" element={<ShopProducts/>}></Route>
-            <Route path="shop/products/:hash" element={<ShopProduct/>}></Route>
-            <Route path="shop/checkout" element={<ShopCheckout/>}></Route>
+            <Route path='shop' element={<Shop/>}>
+              <Route index element={<ShopHome/>}/>
+              <Route path="products/:hash" element={<ShopProduct/>}/>
+              <Route path="order/:hash" element={<ShopOrder/>}/>
+              <Route path="products" element={<ShopProducts/>}/>
+              <Route path="checkout" element={<ShopCheckout/>}/>
+            </Route>
 
-            <Route path="shop/order/:hash" element={<ShopOrder/>}></Route>
+            <Route path="catering" element={<Catering/>}/>
 
-            <Route path="catering" element={<Catering/>}></Route>
-            <Route path="franchising" element={<Franchising/>}></Route>
-            <Route path="reseller" element={<Reseller/>}></Route>
-            <Route path="branches" element={<Branches/>}></Route>
+
+            <Route path="franchising" element={<Franchising/>}/>
+
+            <Route path="reseller" element={<Reseller/>}/>
+            <Route path="branches" element={<Branches/>}/>
             
           </Routes>
         </BrowserRouter>
