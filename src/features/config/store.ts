@@ -23,6 +23,9 @@ import getBranchesStore from '../branches/presentation/slices/get-branches-store
 import checkoutOrders from '../shop/presentation/slices/checkout-orders.slice';
 import getOrders from '../shop/presentation/slices/get-orders.slice';
 
+import getSnackShopOrderHistory from '../shop/presentation/slices/get-snackshop-order-history.slice';
+import getCateringBookingHistory from '../shop/presentation/slices/get-catering-booking-history.slice';
+
 
 export const store = configureStore({
   reducer: {
@@ -53,6 +56,8 @@ export const store = configureStore({
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
     getOrders: getOrders,
+    getSnackShopOrderHistory: getSnackShopOrderHistory,
+    getCateringBookingHistory: getCateringBookingHistory,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -12,20 +12,14 @@ import { ShopHeaderNav } from "../header/shop-header-nav.component";
 export function ShopProfile(){
     const getSessionState = useAppSelector(selectGetSession);
     const dispatch = useAppDispatch();
-    const location = useLocation();
-
 
     useEffect(()=>{
         dispatch(getSession());
     },[]);
-    
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-    }, [location]);
 
     return(
         <ShopProfileContainer title="My Profile" activeTab="profile">
-            <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6 mb-10">Personal Information</h1>
+            <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">Personal Information</h1>
 
             <div className="flex space-x-4">
                 {

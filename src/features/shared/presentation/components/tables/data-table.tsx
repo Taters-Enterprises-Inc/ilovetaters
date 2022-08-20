@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import styled from '@mui/material/styles/styled';
+import useTheme from '@mui/material/styles/useTheme';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +16,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
+import { SnackShopOrderModel } from 'features/shop/core/domain/snackshop-order.model';
 
 const StyledIconButton= styled(IconButton)(({ theme }) => ({
     color: 'white',
@@ -31,7 +33,7 @@ const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
       color : 'white !important'
     },
     '& .Mui-disabled':{
-      color: 'rgba(255,255,255,0.2);'
+      color: 'rgba(255,255,255,0.2) !important;'
     }
 }));
 
@@ -56,7 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }));
   
 
-interface SnackshopOrdersTableProps {
+interface DataTableActionsProps {
   count: number;
   page: number;
   rowsPerPage: number;
@@ -66,7 +68,7 @@ interface SnackshopOrdersTableProps {
   ) => void;
 }
 
-function SnackShopOrdersTableActions(props: SnackshopOrdersTableProps) {
+function DataTableActions(props: DataTableActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -122,47 +124,32 @@ function SnackShopOrdersTableActions(props: SnackshopOrdersTableProps) {
   );
 }
 
-function createData(name: string, calories: number, fat: number) {
-  return { name, calories, fat };
+export interface Column {
+  id: string;
+  label: string;
+  minWidth?: number;
+  align?: 'right';
+  format?: (value: number) => string;
 }
 
-const rows = [
-  createData('Cupcake', 305, 3.7),
-  createData('Donut', 452, 25.0),
-  createData('Eclair', 262, 16.0),
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Gingerbread', 356, 16.0),
-  createData('Honeycomb', 408, 3.2),
-  createData('Ice cream sandwich', 237, 9.0),
-  createData('Jelly Bean', 375, 0.0),
-  createData('KitKat', 518, 26.0),
-  createData('Lollipop', 392, 0.2),
-  createData('Marshmallow', 318, 0),
-  createData('Nougat', 360, 19.0),
-  createData('Oreo', 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
-interface Column {
-    id: 'name' | 'code' | 'population' | 'size' | 'density';
-    label: string;
-    minWidth?: number;
-    align?: 'right';
-    format?: (value: number) => string;
+export interface Row {
+  rowKey: string;
+  align: 'left' | 'right';
 }
 
-const columns: readonly Column[] = [
-    { id: 'name', label: 'Name' },
-    { id: 'code', label: 'ISO\u00a0Code'},
-    { id: 'code', label: 'ISO\u00a0Code'},
-  ];
+interface DataTableProps{
+  columns: Array<Column>;
+  rowsOrder: Array<Row>;
+  rows: Array<any> | undefined;
+}
 
-export function SnackShopOrdersTable() {
+export function DataTable(props: DataTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (props.rows ? props.rows.length : 0 ) ) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -184,7 +171,7 @@ export function SnackShopOrdersTable() {
         
         <TableHead>
             <StyledTableRow>
-                {columns.map((column) => (
+                {props.columns.map((column) => (
                 <StyledTableCell
                     key={column.id}
                     align={column.align}
@@ -197,34 +184,39 @@ export function SnackShopOrdersTable() {
         </TableHead>
         
         <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {row.calories}
-              </StyledTableCell>
-              <StyledTableCell align="left">
-                {row.fat}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-          {emptyRows > 0 && (
-            <StyledTableRow style={{ height: 53 * emptyRows }}>
-              <StyledTableCell colSpan={6} />
-            </StyledTableRow>
-          )}
+          {
+            props.rows !== undefined ? 
+            <>
+                {(rowsPerPage > 0
+                  ? props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : props.rows
+                ).map((row, i) => (
+                  <StyledTableRow key={i}>
+                    {
+                      props.rowsOrder.map((rowOrder)=>(
+                        <StyledTableCell align={rowOrder.align}>
+                          {row[rowOrder.rowKey] || 'N/A' }
+                        </StyledTableCell>
+                      ))
+                    }
+                  </StyledTableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <StyledTableRow style={{ height: 53 * emptyRows }}>
+                    <StyledTableCell colSpan={6} />
+                  </StyledTableRow>
+                )}
+          </>
+            : null
+          }
+         
         </TableBody>
         <TableFooter>
           <StyledTableRow>
             <StyledTablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
-              count={rows.length}
+              colSpan={props.columns.length}
+              count={props.rows ? props.rows.length : 0}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
@@ -235,7 +227,7 @@ export function SnackShopOrdersTable() {
               }}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={SnackShopOrdersTableActions}
+              ActionsComponent={DataTableActions}
             />
           </StyledTableRow>
         </TableFooter>

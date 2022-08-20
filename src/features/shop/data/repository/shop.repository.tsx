@@ -3,6 +3,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
+import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 import { AddToCartParam, CheckoutOrdersParam, GetCategoryProductsParam, GetOrdersParam, GetProductDetailsParam } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse{
@@ -47,6 +48,39 @@ export interface GetOrdersResponse{
         message: string;
         data: OrderModel;
     }
+}
+
+export interface GetSnackShopOrderHistoryResponse{
+    data: {
+        message: string;
+        data: Array<SnackShopOrderModel>
+    }
+}
+
+export interface GetCateringBookingHistoryResponse{
+    data: {
+        message: string;
+        data: Array<SnackShopOrderModel>
+    }
+}
+
+export function GetCateringBookingHistoryRepository() : Promise<GetCateringBookingHistoryResponse>{
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/catering-bookings`,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
+}
+
+
+export function GetSnackShopOrderHistoryRepository() : Promise<GetSnackShopOrderHistoryResponse>{
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/snackshop-orders`,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
 }
 
 export function GetOrdersRepository(param : GetOrdersParam) : Promise<GetOrdersResponse> {

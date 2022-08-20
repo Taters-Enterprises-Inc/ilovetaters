@@ -14,20 +14,6 @@ interface ShopProfileContainerProps extends ShopProfileTabsProps{
 }
 
 export function ShopProfileContainer(props: ShopProfileContainerProps){
-
-    const getSessionState = useAppSelector(selectGetSession);
-    const dispatch = useAppDispatch();
-    const location = useLocation();
-
-
-    useEffect(()=>{
-        dispatch(getSession());
-    },[]);
-    
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-    }, [location]);
-
     return(
         <>
             <ShopPageTitleAndBreadCrumbs title={props.title} pageTitles={['Products', props.title]}/>
@@ -40,7 +26,7 @@ export function ShopProfileContainer(props: ShopProfileContainerProps){
                         
                         <ShopProfileTabs activeTab={props.activeTab}/>
 
-                        <div className="bg-primary profile-tab-content py-6 lg:shadow-[0_3px_10px_rgba(0,0,0,0.5)] w-full mb-10 p-6 space-y-6">
+                        <div className="bg-primary profile-tab-content py-6 lg:shadow-[0_3px_10px_rgba(0,0,0,0.5)] w-full mb-10 lg:p-6 space-y-6">
                            {props.children}
                         </div>
 
