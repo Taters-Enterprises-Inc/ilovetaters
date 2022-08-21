@@ -37,17 +37,17 @@ export function ShopProduct(){
 
     const location = useLocation();
 
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+    }, [location]);
+  
     useEffect(()=>{
         if(addToCartState.status === AddToCartState.success){
             dispatch(getSession());
             dispatch(resetAddToCart());
         }
     },[addToCartState, dispatch]);
-
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-    }, [location]);
-  
+    
     useEffect(()=>{
         if(hash !== undefined){
             dispatch(getProductDetails({hash}));

@@ -39,10 +39,10 @@ export const getStoresAvailableSlice = createSlice({
             state.status = GetStoresAvailableState.inProgress;
         }).addCase(getStoresAvailable.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
             const {data, message} = action.payload;
+            state.status = GetStoresAvailableState.success;
             
             state.data = data;
             state.message = message;
-            state.status = GetStoresAvailableState.success;
         }).addCase(getStoresAvailable.rejected, (state: any, action: PayloadAction<{message : string}>) => {
             state.status = GetStoresAvailableState.fail;
             state.message = action.payload.message;

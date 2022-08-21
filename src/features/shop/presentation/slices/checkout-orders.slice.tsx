@@ -4,7 +4,6 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 import { AddToCartParam, CheckoutOrdersParam, GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { AddToCartRepository, AddToCartResponse, CheckoutOrdersRepository, CheckoutOrdersResponse, GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 

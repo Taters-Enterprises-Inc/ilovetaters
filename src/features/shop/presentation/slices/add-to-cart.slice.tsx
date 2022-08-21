@@ -3,7 +3,6 @@ import { RootState } from "features/config/store";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { AddToCartParam, GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { AddToCartRepository, AddToCartResponse, GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 

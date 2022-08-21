@@ -6,6 +6,8 @@ import { Outlet } from "react-router-dom";
 import { GetStoresAvailableState, selectGetStoresAvailable } from "../../slices/get-stores-available-slice";
 import BackdropLoading from "../loading/backdrop-loading-wrapper";
 import MuiAlert from '@mui/material/Alert';
+import { GetCategoryProductsState, selectGetCategoryProducts } from "features/shop/presentation/slices/get-category-products.slice";
+import { GetProductDetailsState, selectGetProductDetails } from "features/shop/presentation/slices/get-product-details.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -18,7 +20,8 @@ export function LoadingAndSnackbarWrapper(){
     });
     
     const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
-    const dispatch = useAppDispatch();
+    const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
+    const getProductDetailsState = useAppSelector(selectGetProductDetails);
     
     useEffect(()=>{
         switch(getStoresAvailableState.status){
@@ -37,7 +40,43 @@ export function LoadingAndSnackbarWrapper(){
                 setOpenBackdropLoading(false);
                 break;
         }
-    },[getStoresAvailableState, dispatch]);
+    },[getStoresAvailableState]);
+
+    useEffect(()=>{
+        switch(getCategoryProductsState.status){
+            case GetCategoryProductsState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case GetCategoryProductsState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case GetCategoryProductsState.success:
+                setOpenBackdropLoading(false);
+                break;
+            case GetCategoryProductsState.fail:
+                showAlert(setFailsAlert,getCategoryProductsState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[getCategoryProductsState]);
+    
+    useEffect(()=>{
+      switch(getProductDetailsState.status){
+          case GetProductDetailsState.inProgress:
+              setOpenBackdropLoading(true);
+              break;
+          case GetProductDetailsState.initial:
+              setOpenBackdropLoading(false);
+              break;
+          case GetProductDetailsState.success:
+              setOpenBackdropLoading(false);
+              break;
+          case GetProductDetailsState.fail:
+              showAlert(setFailsAlert,getProductDetailsState.message);
+              setOpenBackdropLoading(false);
+              break;
+      }
+  },[getProductDetailsState]);
 
     return(
         <div>
@@ -72,7 +111,7 @@ function showAlert(
     const { open, severity, message } = props;
     
     return(
-        <Snackbar open={open} autoHideDuration={6000} anchorOrigin={{ vertical : 'top', horizontal : 'center'}} TransitionComponent={Slide}>
+        <Snackbar open={open} autoHideDuration={10000} anchorOrigin={{ vertical : 'bottom', horizontal : 'center'}} TransitionComponent={Slide}>
           <MuiAlert severity={severity}>
             {message}
           </MuiAlert>

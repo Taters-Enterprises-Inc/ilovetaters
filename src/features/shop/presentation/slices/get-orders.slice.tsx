@@ -4,7 +4,6 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { AddToCartParam, GetCategoryProductsParam, GetOrdersParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { AddToCartRepository, AddToCartResponse, GetCategoryProductsResponse, GetOrdersRepository, GetOrdersResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 
