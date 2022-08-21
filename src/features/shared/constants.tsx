@@ -157,6 +157,14 @@ declare module '@mui/material/Checkbox' {
     }
 }   
   
+
+// Update the Button's color prop options
+declare module '@mui/material/CircularProgress' {
+    interface CircularProgressPropsColorOverrides {
+        tertiary: true;
+    }
+}   
+  
 export const theme = createTheme({
     palette: {
       primary: {

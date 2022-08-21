@@ -21,6 +21,7 @@ import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { LoadingAndSnackbarWrapper } from 'features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -38,39 +39,43 @@ root.render(
         <BrowserRouter basename={REACT_APP_BASE_NAME}>
           <Routes>
             
-            <Route path='/' element={<Home />} />
+            <Route element={<LoadingAndSnackbarWrapper/>}>
 
-            <Route path="popclub" element={<PopClubPlatformPicker />}/>
-            <Route path="popclub/:platform" element={<PopClub />}/>
+              <Route path='/' element={<Home />} />
 
-            <Route path="popclub/deal" element={<PopClubDealGuards />}>
-              <Route path=":hash" element={<PopClubDeal />}/>
-            </Route>
+              <Route path="popclub" element={<PopClubPlatformPicker />}/>
+              <Route path="popclub/:platform" element={<PopClub />}/>
 
-            <Route path='shop' element={<Shop/>}>
-              
-              <Route index element={<ShopHome/>}/>
-              <Route path="products/:hash" element={<ShopProduct/>}/>
-              <Route path="order/:hash" element={<ShopOrder/>}/>
-              <Route path="products" element={<ShopProducts/>}/>
-              <Route path="checkout" element={<ShopCheckout/>}/>
-
-              <Route path='profile'>
-                <Route index element={<ShopProfile/>}/>
-                <Route path='snackshop-orders' element={<ShopProfileSnackshopOrders/>}/>
-                <Route path='catering-bookings' element={<ShopProfileCateringBookings/>}/>
+              <Route path="popclub/deal" element={<PopClubDealGuards />}>
+                <Route path=":hash" element={<PopClubDeal />}/>
               </Route>
 
-            </Route>
+              <Route path='shop' element={<Shop/>}>
+                
+                <Route index element={<ShopHome/>}/>
+                <Route path="products/:hash" element={<ShopProduct/>}/>
+                <Route path="order/:hash" element={<ShopOrder/>}/>
+                <Route path="products" element={<ShopProducts/>}/>
+                <Route path="checkout" element={<ShopCheckout/>}/>
 
-            <Route path="catering" element={<Catering/>}/>
+                <Route path='profile'>
+                  <Route index element={<ShopProfile/>}/>
+                  <Route path='snackshop-orders' element={<ShopProfileSnackshopOrders/>}/>
+                  <Route path='catering-bookings' element={<ShopProfileCateringBookings/>}/>
+                </Route>
+
+              </Route>
+
+              <Route path="catering" element={<Catering/>}/>
 
 
-            <Route path="franchising" element={<Franchising/>}/>
+              <Route path="franchising" element={<Franchising/>}/>
 
-            <Route path="reseller" element={<Reseller/>}/>
-            <Route path="branches" element={<Branches/>}/>
+              <Route path="reseller" element={<Reseller/>}/>
+              <Route path="branches" element={<Branches/>}/>
             
+            </Route>
+    
           </Routes>
         </BrowserRouter>
       </Provider>

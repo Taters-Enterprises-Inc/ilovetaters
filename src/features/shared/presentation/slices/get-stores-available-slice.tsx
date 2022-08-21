@@ -13,11 +13,13 @@ export enum GetStoresAvailableState{
 
 
 const initialState : {
-    status: GetStoresAvailableState,
-    data: Array<StoreModel>
+    status: GetStoresAvailableState;
+    data: Array<StoreModel>;
+    message: string;
 } = {
     status: GetStoresAvailableState.initial,
     data: [],
+    message : '',
 }
 
 export const getStoresAvailable = createAsyncThunk('getStoresAvailable',
@@ -36,11 +38,15 @@ export const getStoresAvailableSlice = createSlice({
         builder.addCase(getStoresAvailable.pending, (state: any)=>{
             state.status = GetStoresAvailableState.inProgress;
         }).addCase(getStoresAvailable.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
-            const data = action.payload.data;
+            const {data, message} = action.payload;
             
             state.data = data;
+            state.message = message;
             state.status = GetStoresAvailableState.success;
-        });
+        }).addCase(getStoresAvailable.rejected, (state: any, action: PayloadAction<{message : string}>) => {
+            state.status = GetStoresAvailableState.fail;
+            state.message = action.payload.message;
+        })
     }
 });
 
