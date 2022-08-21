@@ -11,7 +11,7 @@ import { getProductDetails, GetProductDetailsState, selectGetProductDetails } fr
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
-import { addToCart, AddToCartState, resetAddToCart, selectAddToCart } from "../slices/add-to-cart.slice";
+import { addToCart, AddToCartState, selectAddToCart } from "../slices/add-to-cart.slice";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
@@ -44,7 +44,6 @@ export function ShopProduct(){
     useEffect(()=>{
         if(addToCartState.status === AddToCartState.success){
             dispatch(getSession());
-            dispatch(resetAddToCart());
         }
     },[addToCartState, dispatch]);
     

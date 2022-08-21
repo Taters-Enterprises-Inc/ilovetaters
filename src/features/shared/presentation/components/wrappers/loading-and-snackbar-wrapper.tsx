@@ -8,6 +8,7 @@ import BackdropLoading from "../loading/backdrop-loading-wrapper";
 import MuiAlert from '@mui/material/Alert';
 import { GetCategoryProductsState, selectGetCategoryProducts } from "features/shop/presentation/slices/get-category-products.slice";
 import { GetProductDetailsState, selectGetProductDetails } from "features/shop/presentation/slices/get-product-details.slice";
+import { AddToCartState, selectAddToCart } from "features/shop/presentation/slices/add-to-cart.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -22,6 +23,7 @@ export function LoadingAndSnackbarWrapper(){
     const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
     const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
+    const addToCartState = useAppSelector(selectAddToCart);
     
     useEffect(()=>{
         switch(getStoresAvailableState.status){
@@ -78,14 +80,33 @@ export function LoadingAndSnackbarWrapper(){
       }
   },[getProductDetailsState]);
 
-    return(
-        <div>
-            <Outlet/>
-            <SnackbarAlert open={successAlert.status} severity="success" message={successAlert.message} />
-            <SnackbarAlert open={failsAlert.status} severity="error" message={failsAlert.message} />
-            <BackdropLoading open={openBackdropLoading}/>
-        </div>
-    )
+    useEffect(()=>{
+      switch(addToCartState.status){
+          case AddToCartState.inProgress:
+              setOpenBackdropLoading(true);
+              break;
+          case AddToCartState.initial:
+              setOpenBackdropLoading(false);
+              break;
+          case AddToCartState.success:
+              showAlert(setSuccessAlert,addToCartState.message);
+              setOpenBackdropLoading(false);
+              break;
+          case AddToCartState.fail:
+              showAlert(setFailsAlert,addToCartState.message);
+              setOpenBackdropLoading(false);
+              break;
+      }
+  },[addToCartState]);
+  
+  return(
+      <div>
+          <Outlet/>
+          <SnackbarAlert open={successAlert.status} severity="success" message={successAlert.message} />
+          <SnackbarAlert open={failsAlert.status} severity="error" message={failsAlert.message} />
+          <BackdropLoading open={openBackdropLoading}/>
+      </div>
+  )
 }
 
 

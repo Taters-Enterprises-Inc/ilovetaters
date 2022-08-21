@@ -17,6 +17,9 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
 import { SnackShopOrderModel } from 'features/shop/core/domain/snackshop-order.model';
+import { FaEye } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
 
 const StyledIconButton= styled(IconButton)(({ theme }) => ({
     color: 'white',
@@ -134,12 +137,14 @@ export interface Column {
 
 export interface Row {
   rowKey: string;
+  isTime?: boolean;
   align: 'left' | 'right';
 }
 
 interface DataTableProps{
   columns: Array<Column>;
   rowsOrder: Array<Row>;
+  viewBaseUrl?: string;
   rows: Array<any> | undefined;
 }
 
@@ -149,7 +154,7 @@ export function DataTable(props: DataTableProps) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (props.rows ? props.rows.length : 0 ) ) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0)  : 0 ) ) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -180,6 +185,18 @@ export function DataTable(props: DataTableProps) {
                     {column.label}
                 </StyledTableCell>
                 ))}
+                
+
+                {
+                  props.viewBaseUrl ? 
+                  <StyledTableCell
+                      key='action'
+                      align='left'
+                  >
+                    View
+                  </StyledTableCell>
+                  : null
+                }
             </StyledTableRow>
         </TableHead>
         
@@ -195,9 +212,23 @@ export function DataTable(props: DataTableProps) {
                     {
                       props.rowsOrder.map((rowOrder)=>(
                         <StyledTableCell align={rowOrder.align}>
-                          {row[rowOrder.rowKey] || 'N/A' }
+                          {
+                            rowOrder.isTime? 
+                            <Moment format='LLL'>{row[rowOrder.rowKey]}</Moment>
+                            : row[rowOrder.rowKey] || 'N/A' 
+                          }
+                          
                         </StyledTableCell>
                       ))
+                    }
+                    {
+                      props.viewBaseUrl ?
+                      <StyledTableCell align='left'>
+                        <Link to={`${props.viewBaseUrl}/${row.hash_key}`}>
+                          <FaEye className='text-lg'/>
+                        </Link>
+                      </StyledTableCell> 
+                      : null
                     }
                   </StyledTableRow>
                 ))}
@@ -215,8 +246,8 @@ export function DataTable(props: DataTableProps) {
           <StyledTableRow>
             <StyledTablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={props.columns.length}
-              count={props.rows ? props.rows.length : 0}
+              colSpan={props.columns.length + (props.viewBaseUrl ? 1 : 0)}
+              count={props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0) : 0}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

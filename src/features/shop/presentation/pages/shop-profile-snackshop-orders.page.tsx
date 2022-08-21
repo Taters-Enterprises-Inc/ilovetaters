@@ -36,6 +36,7 @@ export function ShopProfileSnackshopOrders(){
                     {
                         rowKey: 'dateadded',
                         align: 'left',
+                        isTime: true,
                     },
                     {
                         rowKey: 'tracking_no',
@@ -54,6 +55,7 @@ export function ShopProfileSnackshopOrders(){
                         align: 'left',
                     },
                 ]}
+                viewBaseUrl='/shop/order'
                 columns={columns} 
                 rows={getSnackShopOrderHistoryState.data}/>
         </ShopProfileContainer>
