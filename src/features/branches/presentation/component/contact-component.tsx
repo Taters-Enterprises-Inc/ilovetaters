@@ -1,20 +1,16 @@
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import React from "react";
 import { contactData, ContactDataType } from "../pages/data/contact-data";
 
 export const FranchisingContactComponent: React.FC = (): JSX.Element => {
   return (
     <>
-    <section >
-    <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
-    </section>
+   
       <section className="block bg-primary font-['Bebas_Neue']">
         <h1 className="text-center my-4 text-white  md:text-[3rem] text-[2rem] font-normal tracking-[2px]">
           Contact Us
         </h1>
       </section>
-      <section className=" container text-center md:grid gap-4 xl:grid-cols-4 md:grid-cols-2 flex flex-col">
+      <section className="px-4 container text-center md:grid gap-4 xl:grid-cols-4 md:grid-cols-2 flex flex-col">
         {contactData.map(
           (
             { Icon, heading, href, paragraph, cardOpt }: ContactDataType,

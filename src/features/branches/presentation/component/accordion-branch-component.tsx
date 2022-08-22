@@ -1,24 +1,30 @@
-import { useState } from "react";
-import { branchType } from "../pages/data/branches-data";
+import { useEffect, useState } from "react";
+import {getBranchesStore, selectGetBranchesStore} from "../slices/get-branches-store";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 
 export const AccordionComponent: React.FC<{
   region: string;
-  branch: Array<branchType>;
-  idx: number;
-}> = ({ region, branch, idx }): JSX.Element => {
+}> = ({ region }): JSX.Element => {
   const [show, setShow] = useState<boolean>(false);
+  const getBranchesStoreState:any= useAppSelector(selectGetBranchesStore);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getBranchesStore())
+  }, [dispatch]);
+
 
   return (
-    <div className={`relative container `}>
+    <div className={`relative  `}>
       <div
         className={`
-          cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer	 
+          cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer px-4	  
         `}
         onClick={() => {
           setShow((isShow: boolean) => !isShow);
         }}
       >
-        <h1 className="text-left flex-1 text-[#fff] tracking-[2px] font-['Bebas_Neue']">
+        <h1 className="text-left flex-1 text-[#fff] tracking-[2px] font-['Bebas_Neue'] ">
           {region}
         </h1>
         <svg
@@ -42,16 +48,9 @@ export const AccordionComponent: React.FC<{
             show ? "h-auto bg-primary " : "h-0"
           } grid lg:grid lg:grid-cols-2  md:w-full transition-all duration-1000 gap-x-4 gap-y-4 grid-cols-2 py-4 rounded-lg w-full  `}
         >
-          {branch.map(
+         {getBranchesStoreState?.data?.[`${region}`].map(
             (
-              {
-                place,
-                address,
-                contact,
-                oparationHour,
-                addressHref,
-                contactHref,
-              }: branchType,
+               data:any,
               index: number
             ): JSX.Element => {
               return (
@@ -59,15 +58,17 @@ export const AccordionComponent: React.FC<{
                   key={index}
                   className={` transition-all ${
                     show ? "block" : "hidden"
-                  } overflow-hidden shadow-tertiary shadow-md bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
+                  }z-0 overflow-hidden shadow-tertiary shadow-md bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
                 >
                   <h1 className="font-['Bebas_Neue'] text-center tracking-[1.5px] pt-2 antialiased md:text-[1.0625rem] text-[13px] text-[#fff] pb-2 relative md:px-0 px-2 h-[60px] flex items-center justify-center">
-                    {place}
+                    {data.nameofstore}
                   </h1>
                   <div className="w-full h-auto relative">
                     <img
                       className="object-cover	w-[100%] h-[100%] max-h-[300px]  	"
                       src={
+                        data.store_image ? `https://ilovetaters.com/shop/assets/img//store_images/250/${data.store_image}`
+                        :
                         "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
                       }
                       alt="taters_ayalacircuit"
@@ -79,7 +80,7 @@ export const AccordionComponent: React.FC<{
                         "linear-gradient( 0%, rgb(29, 17, 21) 45%, rgb(29, 17, 21) 100%)",
                       boxShadow: " 0px -39px 25px 13px rgba(0,0,0,0.75)",
                     }}
-                    className="z-0 cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[90px] lg:h-[130px]  h-auto md:h-[105px] 	z-10 relative"
+                    className="z-0 cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
                   >
                     <span className="p-4 md:relative md:top-0 md:left-0  absolute top-[-12px] left-[21px]">
                       <svg
@@ -112,13 +113,13 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={addressHref}
+                        href={data.maplink}
                       >
-                        {address}
+                        {data.address}
                       </a>
                     </div>
                   </div>
-                  <div className="cursor-pointer flex container border-b border-[#7b7982]">
+                  <div className="cursor-pointer flex  border-b border-[#7b7982]">
                     <span className="p-4">
                       <svg
                         className="w-4 h-4 stroke-red-400"
@@ -135,19 +136,19 @@ export const AccordionComponent: React.FC<{
                         ></path>
                       </svg>
                     </span>
-                    <div className="block text-left py-1 ">
+                    <div className="block text-left py-2 ">
                       <p className="text-[.7125rem] text-[#bcd2d6] pb-1 ">
                         Call us
                       </p>
                       <a
                         className="text-[#fff] text-[12px] font-normal "
-                        href={contactHref}
+                        href={`/tel:${data.contactno}`}
                       >
-                        {contact}
+                        {data.contactno}
                       </a>
                     </div>
                   </div>
-                  <div className="flex container h-[75px]">
+                  <div className="flex  md:h-[85px] h-auto py-2">
                     <span className="p-4">
                       <svg
                         className="w-4 h-4 stroke-red-400"
@@ -169,20 +170,13 @@ export const AccordionComponent: React.FC<{
                         Operating Hours
                       </p>
                       <div className="md:text-[12px] text-[11px] font-normal  text-[#fff] ">
-                        {oparationHour.split(",")[1] ? (
-                          <div>
-                            <p>{oparationHour.split(",")[0]}</p>
-                            <p>{oparationHour.split(",")[1]}</p>
-                          </div>
-                        ) : (
-                          oparationHour
-                        )}
+                        <p>{data.operatinghours}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               );
-            }
+            } 
           )}
         </div>
       )}
