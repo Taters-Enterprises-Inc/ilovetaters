@@ -62,7 +62,7 @@ export function ShopCartModal(props : ShopCartModalProps){
             <div>
               <h1 className="text-white text-3xl font-['Bebas_Neue'] tracking-[2px] text-center border-white border-2 rounded-t-2xl py-2 my-4">My Cart</h1>
               
-              <div className="space-y-6 overflow-y-auto max-h-[400px]">
+              <div className="space-y-6 overflow-y-auto max-h-[400px] px-[4px] py-[10px]">
                 {
                   getSessionState.data?.orders.map((order, i)=>(
                     <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
@@ -90,7 +90,7 @@ export function ShopCartModal(props : ShopCartModalProps){
               <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-white">Total:</span>
-                    <span className="text-white">{calculateOrdersPrice()}</span>
+                    <span className="text-white font-bold">{calculateOrdersPrice()}</span>
                   </div>
 
                   <button onClick={()=>{

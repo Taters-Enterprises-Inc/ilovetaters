@@ -27,7 +27,6 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   }, []);
 
 
-
   
 
   

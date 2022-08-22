@@ -64,8 +64,7 @@ export function StoreCluster(props: StoreClusterProps ){
                         return (
                             <button 
                                 key={index}
-                                onClick={ store_availability && props.address != null ? () => {console.log('test');
-                                }  :  ()=>storeClicked(store.store_id)  }
+                                onClick={ store_availability && props.address != null ? () => {}  :  ()=>storeClicked(store.store_id)  }
                                 className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
                                 {
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null

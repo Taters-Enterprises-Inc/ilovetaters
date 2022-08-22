@@ -157,6 +157,14 @@ declare module '@mui/material/Checkbox' {
     }
 }   
   
+
+// Update the Button's color prop options
+declare module '@mui/material/CircularProgress' {
+    interface CircularProgressPropsColorOverrides {
+        tertiary: true;
+    }
+}   
+  
 export const theme = createTheme({
     palette: {
       primary: {
@@ -188,7 +196,7 @@ export const theme = createTheme({
             styleOverrides:{
                 root: {
                     '& fieldset': {
-                        borderColor: 'white',
+                        borderColor: 'white !important',
                     },
                     '&:hover fieldset': {
                         borderColor: 'white !important',
@@ -199,6 +207,7 @@ export const theme = createTheme({
                 },
                 input: {
                     color: 'white',
+                    "-webkit-text-fill-color" : "white !important",
                 }
             }
         },
@@ -209,7 +218,7 @@ export const theme = createTheme({
                         color: "white"
                     },
                     "& label": {
-                        color: "white"
+                        color: "white !important"
                     },
                 },
             }

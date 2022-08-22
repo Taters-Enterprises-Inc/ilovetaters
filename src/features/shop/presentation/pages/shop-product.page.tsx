@@ -11,12 +11,13 @@ import { getProductDetails, GetProductDetailsState, selectGetProductDetails } fr
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
-import { addToCart, AddToCartState, resetAddToCart, selectAddToCart } from "../slices/add-to-cart.slice";
+import { addToCart, AddToCartState, selectAddToCart } from "../slices/add-to-cart.slice";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from 'react-icons/bs';
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
@@ -32,25 +33,20 @@ export function ShopProduct(){
 
     const navigate = useNavigate();
 
-    
-
     let { hash } = useParams();
 
     const location = useLocation();
 
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+    }, [location]);
+  
     useEffect(()=>{
         if(addToCartState.status === AddToCartState.success){
             dispatch(getSession());
-            dispatch(resetAddToCart());
         }
     },[addToCartState, dispatch]);
-
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-    }, [location]);
-  
-
-
+    
     useEffect(()=>{
         if(hash !== undefined){
             dispatch(getProductDetails({hash}));
@@ -105,41 +101,8 @@ export function ShopProduct(){
     }
     
     return (
-        <main className="bg-primary">
-            <ShopHeaderNav/>
-
-            <div className="bg-secondary lg:h-[200px] text-white lg:pt-4">
-
-                <div className="container py-6 flex flex-col lg:flex-row justify-between items-center bg-secondary space-y-2">
-                    <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-xl leading-8 lg:text-3xl text-center">{getProductDetailsState.data?.product.name}</h1>
-                    
-                    <nav className="flex" aria-label="Breadcrumb">
-
-                        <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                            <li className="inline-flex items-center">
-                                <Link to='/shop' className="inline-flex items-center text-xs lg:text-base font-medium text-gray-400 ">
-                                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                                    Snackshop
-                                </Link>
-                            </li>
-                            <li>
-                                <div className="flex items-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                                    <Link to='/shop/products' className="ml-1 text-xs lg:text-base font-medium text-gray-400 md:ml-2 ">Products</Link>
-                                </div>
-                            </li>
-                            <li aria-current="page">
-                                <div className="flex items-center">
-                                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                                    <span className="ml-1 text-xs lg:text-base font-medium text-white md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis">{getProductDetailsState.data?.product.name}</span>
-                                </div>
-                            </li>
-                        </ol>
-
-                    </nav>
-                    
-                </div>
-            </div>
+        <>
+            <ShopPageTitleAndBreadCrumbs title={getProductDetailsState.data?.product.name} pageTitles={['Products', getProductDetailsState.data?.product.name]} />
             
             <section className="min-h-screen lg:space-x-4 pb-36">
 
@@ -166,9 +129,9 @@ export function ShopProduct(){
 
                                     <hr/>
 
-                                    <p className="p-6 text-sm">
+                                    <div className="p-6 text-sm">
                                         {getProductDetailsState.data?.product.description}
-                                    </p>
+                                    </div>
 
                                 </div>
 
@@ -181,14 +144,14 @@ export function ShopProduct(){
 
                                     <hr/>
 
-                                    <p className="p-6 text-sm">
+                                    <div className="p-6 text-sm">
                                         {
                                             getProductDetailsState.data?.product.delivery_details ? 
                                                 <div dangerouslySetInnerHTML={{__html:getProductDetailsState.data?.product.delivery_details }} />
                                             : null
                                         }
                                         
-                                    </p>
+                                    </div>
 
                                 </div>
 
@@ -343,8 +306,6 @@ export function ShopProduct(){
             <LoginChooserModal open={openLoginChooserModal} onClose={()=>{
                 setOpenLoginChooserModal(false);
             }}/>
-
-            <FooterNav/>
-        </main>
+        </>
     );
 }
