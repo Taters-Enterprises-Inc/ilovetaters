@@ -20,6 +20,7 @@ import { Catering } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
+import { Admin } from 'features/admin/presentation/pages';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { LoadingAndSnackbarWrapper } from 'features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper';
 
@@ -38,7 +39,6 @@ root.render(
       <Provider store={store}>
         <BrowserRouter basename={REACT_APP_BASE_NAME}>
           <Routes>
-            
             <Route element={<LoadingAndSnackbarWrapper/>}>
 
               <Route path='/' element={<Home />} />
@@ -70,6 +70,7 @@ root.render(
 
 
               <Route path="franchising" element={<Franchising/>}/>
+              <Route path="admin"element={<Admin/>}> </Route>
 
               <Route path="reseller" element={<Reseller/>}/>
               <Route path="branches" element={<Branches/>}/>
