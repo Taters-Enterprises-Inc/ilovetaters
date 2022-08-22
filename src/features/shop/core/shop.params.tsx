@@ -31,7 +31,7 @@ export interface AddToCartParam{
     prod_with_drinks?: number;
     prod_size?: number;
     prod_size_id?: number;
-    prod_multiflavors?: string;
+    flavors_details?: string;
     prod_sku_id?: number;
     prod_sku?: number;
     prod_discount?: number;

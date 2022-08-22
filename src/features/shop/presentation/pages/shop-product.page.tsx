@@ -28,8 +28,8 @@ export function ShopProduct(){
 
     const [quantity, setQuantity] = useState(1);
     
-    const [currentSize, setCurrentSize] = useState<number | undefined>(undefined);
-    const [currentFlavor, setCurrentFlavor] = useState<number | undefined>(undefined);
+    const [currentSize, setCurrentSize] = useState<number>(-1);
+    const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
 
     const navigate = useNavigate();
 
@@ -72,6 +72,10 @@ export function ShopProduct(){
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
+                prod_with_drinks: -1,
+                flavors_details: '',
+                prod_sku_id: -1,
+                prod_sku: -1,
             }));
 
             navigate('/shop/checkout');
@@ -96,6 +100,10 @@ export function ShopProduct(){
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
+                prod_with_drinks: -1,
+                flavors_details: '',
+                prod_sku_id: -1,
+                prod_sku: -1,
             }));
         }
     }
@@ -179,7 +187,7 @@ export function ShopProduct(){
                                                 {
                                                     getProductDetailsState.data?.product_size.map((size, i)=>{
 
-                                                        if(i === 0 && currentSize === undefined){
+                                                        if(i === 0 && currentSize === -1){
                                                             setCurrentSize(size.id);
                                                         }
 
@@ -208,7 +216,7 @@ export function ShopProduct(){
                                                 {
                                                     getProductDetailsState.data?.product_flavor.map((flavor, i)=>{
 
-                                                        if(i === 0 && currentFlavor === undefined){
+                                                        if(i === 0 && currentFlavor === -1){
                                                             setCurrentFlavor(flavor.id);
                                                         }
 
