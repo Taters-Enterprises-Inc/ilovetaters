@@ -3,7 +3,6 @@ import { RootState } from "features/config/store";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 
@@ -16,7 +15,7 @@ export enum GetProductDetailsState{
 
 
 const initialState : {
-    status: GetProductDetailsState,
+    status: GetProductDetailsState;
     data: {
         product: ProductModel;
         addons: Array<ProductModel>;
@@ -28,10 +27,13 @@ const initialState : {
             id: number;
             name: string;
         }>;
-    } | undefined
+        suggested_products: Array<ProductModel>;
+    } | undefined;
+    message: string;
 } = {
     status: GetProductDetailsState.initial,
     data: undefined,
+    message : '',
 }
 
 export const getProductDetails = createAsyncThunk('getProductDetails',
@@ -53,12 +55,17 @@ export const getProductDetailsSlice = createSlice({
                 product : ProductModel; 
                 addons: Array<ProductModel>; 
                 product_flavor: Array<any>; 
+                suggested_products: Array<ProductModel>;
             } | null}> ) => {
                 
-            const data = action.payload.data;
+            const {data, message} = action.payload;
+            state.status = GetProductDetailsState.success;
             
             state.data = data;
-            state.status = GetProductDetailsState.success;
+            state.message = message;
+        }).addCase(getProductDetails.rejected, (state: any, action : PayloadAction<{message: string}> ) => {
+            state.status = GetProductDetailsState.fail;
+            state.message = action.payload.message;
         })
     }
 });

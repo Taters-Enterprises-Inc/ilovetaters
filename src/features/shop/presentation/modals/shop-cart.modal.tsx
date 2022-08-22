@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
+import { useNavigate } from "react-router-dom";
 
 interface ShopCartModalProps{
   open : boolean,
@@ -14,6 +15,7 @@ interface ShopCartModalProps{
 export function ShopCartModal(props : ShopCartModalProps){
 
   const getSessionState = useAppSelector(selectGetSession);
+  const navigate = useNavigate();
 
   if(props.open){
       document.body.classList.add('overflow-hidden');
@@ -60,11 +62,11 @@ export function ShopCartModal(props : ShopCartModalProps){
             <div>
               <h1 className="text-white text-3xl font-['Bebas_Neue'] tracking-[2px] text-center border-white border-2 rounded-t-2xl py-2 my-4">My Cart</h1>
               
-              <div className="space-y-6">
+              <div className="space-y-6 overflow-y-auto max-h-[400px] px-[4px] py-[10px]">
                 {
                   getSessionState.data?.orders.map((order, i)=>(
                     <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
-                      <img src={REACT_APP_UPLOADS_URL + "images/shop/products/100/test.jpg"} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
+                      <img src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.prod_image_name}`} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
                       <div className="flex-1 text-white px-3 py-2 flex flex-col">
                           <h3 className="text-sm">{order.prod_size} {order.prod_name}</h3>
                           <h3 className="text-xs">Quntity: <span className="text-tertiary">{order.prod_qty}</span></h3>
@@ -88,10 +90,13 @@ export function ShopCartModal(props : ShopCartModalProps){
               <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-white">Total:</span>
-                    <span className="text-white">{calculateOrdersPrice()}</span>
+                    <span className="text-white font-bold">{calculateOrdersPrice()}</span>
                   </div>
 
-                  <button className="bg-button text-white text-lg w-full py-2 rounded-lg">Process Orders</button>
+                  <button onClick={()=>{
+                    props.onClose();
+                    navigate('/shop/checkout');
+                  }} className="bg-button text-white text-lg w-full py-2 rounded-lg">Process Orders</button>
               </div>
           </div>
 

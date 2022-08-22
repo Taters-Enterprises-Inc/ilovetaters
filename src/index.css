@@ -3,8 +3,23 @@
 @tailwind utilities;
 
 
+.profile-tab-active{
+    z-index: 1;
+}
+
+.profile-tab-content{
+    position: relative !important;
+}
+
 html {
     scroll-behavior: smooth;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
 }
 
 input::-webkit-outer-spin-button,
@@ -12,7 +27,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;

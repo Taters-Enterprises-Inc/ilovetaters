@@ -3,6 +3,7 @@ import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { getSession, GetSessionState, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
 import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { getCategoryProducts, GetCategoryProductsState, selectGetCategoryProducts } from "../slices/get-category-products.slice";
@@ -13,6 +14,12 @@ export function ShopProducts(){
     const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
 
     const dispatch = useAppDispatch();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+    }, [location]);
   
 
     useEffect(()=>{
@@ -31,15 +38,12 @@ export function ShopProducts(){
     
 
     return (
-        <main className="bg-primary pb-20">
-            <ShopHeaderNav/>
-
+        <>
             <section className="container">
                 <img className="sm:hidden" src={REACT_APP_UPLOADS_URL + "images/shop/hero/mobile/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden sm:block" src={REACT_APP_UPLOADS_URL + "images/shop/hero/desktop/snackshop_delivered.webp"} alt="The best pop corn in town"></img>
                 <img className="hidden sm:block" src={REACT_APP_UPLOADS_URL + "images/shop/instructions/snackshop_instructions.webp"} alt="The best pop corn in town"></img>
             </section>
-
             {
                 getCategoryProductsState.data?.map((category, i)=>{ 
 
@@ -70,10 +74,6 @@ export function ShopProducts(){
                 }
                 )
             }
-
-
-
-            <FooterNav/>
-        </main>
+        </>
     );
 }
