@@ -88,7 +88,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
             {showButton && (
               <button
                 onClick={scrollToTop}
-                className=" bg-tertiary fixed bottom-[84px] left-2/4 z-100 -translate-x-2/4 w-fit rounded-full	"
+                className="shadow-none bg-tertiary fixed bottom-[84px] left-2/4 z-[100] -translate-x-2/4 w-fit rounded-full	"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -4,6 +4,8 @@ import { GetBranchesStoreRepository, GetBranchesStoreResponse } from "features/b
 import { RootState } from "features/config/store";
 
 
+
+//inumerate the status of fecthing data
 export enum GetBrachesStore{
     initial,
     inProgress,
@@ -11,7 +13,7 @@ export enum GetBrachesStore{
     fail
 }
 
-
+//initizalize the state
 const initialState : {
     status: GetBrachesStore,
     data: Array<{
@@ -24,10 +26,10 @@ const initialState : {
     status: GetBrachesStore.initial,
     data: undefined
 }
-
+//createAsyncThunk asyncronous function for builder , addCase first args  and use for dispatch
 export const getBranchesStore = createAsyncThunk('getBranchesStore',
     async () => {
-        const response : GetBranchesStoreResponse = await GetBranchesStoreRepository();
+        const response : GetBranchesStoreResponse = await GetBranchesStoreRepository(); // fetchfunction
         return response.data;
     }
 )
@@ -56,7 +58,8 @@ export const getBranchesStoreSlice = createSlice({
 });
 
 
-
+//state if u want to get the value is inclue for args of useSelector
 export const selectGetBranchesStore = (state : RootState) => state.getBranchesStore;
 
+// reducer
 export default getBranchesStoreSlice.reducer;

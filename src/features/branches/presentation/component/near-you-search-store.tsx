@@ -7,7 +7,10 @@ interface StoreListDeliveryProps {
 }
 
 export function NearyouSearchStore(props: StoreListDeliveryProps) {
+  
   const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
+
+  console.log(getStoresAvailableState);
 
   return (
     <section className="text-white ">
@@ -16,7 +19,6 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
             {store_cluster.stores.map((store: any, index: number) => {
-              console.log(store);
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
                   store.store_distance * 1.609344 * 0.5
@@ -69,7 +71,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                           ? ""
                           : " 0px -39px 25px 13px rgba(0,0,0,0.75)",
                     }}
-                    className="z-0 cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
+                    className=" cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
                   >
                     <span
                       className={`${
