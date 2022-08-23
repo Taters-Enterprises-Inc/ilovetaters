@@ -28,7 +28,7 @@ export const FranchisingContactComponent: React.FC = (): JSX.Element => {
                   </div>
                   <h5 className="mb-2 text-medium  text-[#fff] tracking-[2px] font-['Bebas_Neue']">
                     {heading}
-                    md:mt-24   </h5>
+                   </h5>
                   <p className="text-[12px] text-[#e7e6eb]	tracking-[1px]">{paragraph}</p>
                 </a>
               ) : (

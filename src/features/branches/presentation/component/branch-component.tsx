@@ -1,11 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AccordionComponent } from "./accordion-branch-component";
 import { BranchesNearyouComponent } from "./branches-near-you-component";
 
 export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   const [showButton, setShowButton] = useState<boolean>(false);
   const [catigory, setCatigory] = useState<boolean>(false);
+
+  const [isShow, setIsShow] = useState<boolean>(false);
   
+
+  const seeItShow = useCallback((value:boolean)=>{
+    setIsShow(value)
+  },[])
   const ref = useRef<null | HTMLTableSectionElement>(null);
 
   const scrollToTop = () => {
@@ -80,11 +86,12 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
                   <AccordionComponent
                     key={idx}
                     region={data}
+                    seeItShow={seeItShow}
                   />
                 );
               }
             )}
-            {showButton && (
+            {(isShow && showButton) && (
               <button
                 onClick={scrollToTop}
                 className="shadow-none bg-tertiary fixed bottom-[84px] left-2/4 z-[100] -translate-x-2/4 w-fit rounded-full	"

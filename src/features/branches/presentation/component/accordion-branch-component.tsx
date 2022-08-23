@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 
 export const AccordionComponent: React.FC<{
   region: string;
-}> = ({ region }): JSX.Element => {
+  seeItShow:any
+}> = ({ region ,seeItShow }): JSX.Element => {
   const [show, setShow] = useState<boolean>(false);
   const getBranchesStoreState:any= useAppSelector(selectGetBranchesStore);
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ export const AccordionComponent: React.FC<{
           cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer px-4	  
         `}
         onClick={() => {
+          seeItShow(!show)
           setShow((isShow: boolean) => !isShow);
         }}
       >
@@ -170,7 +172,7 @@ export const AccordionComponent: React.FC<{
                         Operating Hours
                       </p>
                       <div className="md:text-[12px] text-[11px] font-normal  text-[#fff] ">
-                        <p>{data.operatinghours}</p>
+                        <p>{data.operatinghours.split("</br>")[1] !== undefined ?  data.operatinghours.split("</br>")[0] + " , " + data.operatinghours.split("</br>")[1] :data.operatinghours.split("</br>")[0] }</p>
                       </div>
                     </div>
                   </div>
