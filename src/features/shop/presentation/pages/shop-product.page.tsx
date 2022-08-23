@@ -163,20 +163,23 @@ export function ShopProduct(){
 
                                 </div>
 
-                                
-                                <div className=" text-white">
-                                    <div className="px-6 py-4 flex space-x-2 items-center rounded-t-xl border-2 border-white">
-                                        <MdFastfood className="text-3xl" />
-                                        <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
-                                        <IoIosArrowDown className="text-xl"/>
-                                    </div>
-                                    <div className="max-h-[300px] overflow-y-auto flex flex-col border-2 border-white py-4 px-3">
-                                        {
-                                            getProductDetailsState.data?.addons.map((product, i)=> <Addon key={i} product={product}/>)
-                                        }
-                                    </div>
-                                    
-                                </div>
+                                {
+                                    getProductDetailsState.data?.addons ? 
+                                    <div className=" text-white">
+                                        <div className="px-6 py-4 flex space-x-2 items-center rounded-t-xl border-2 border-white">
+                                            <MdFastfood className="text-3xl" />
+                                            <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
+                                            <IoIosArrowDown className="text-xl"/>
+                                        </div>
+                                        <div className="max-h-[300px] overflow-y-auto flex flex-col border-2 border-white py-4 px-3">
+                                            {
+                                                getProductDetailsState.data?.addons.map((product, i)=> <Addon key={i} product={product}/>)
+                                            }
+                                        </div>
+                                        
+                                    </div> : null
+                                }
+
                                 
                                 {
                                     getProductDetailsState.data?.product_size && getProductDetailsState.data?.product_size.length > 0 ? 

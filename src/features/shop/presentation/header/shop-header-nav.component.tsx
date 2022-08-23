@@ -13,12 +13,17 @@ import NumberFormat from "react-number-format";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { facebookLogout, selectFacebookLogout } from "features/shared/presentation/slices/facebook-logout.slice";
 
 export function ShopHeaderNav(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
     const [openShopCartModal, setOpenShopCartModal] = useState(false); 
     const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
+    
+    const getSessionState = useAppSelector(selectGetSession);
+    const facebookLogoutState = useAppSelector(selectFacebookLogout);
+    const dispatch = useAppDispatch();
 
     const handleProfileMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       setOpenProfileMenu(event.currentTarget);
@@ -31,15 +36,13 @@ export function ShopHeaderNav(){
 
     const handleLogout = () => {
         setOpenProfileMenu(null);
-        // navigate('/shop/profile');
+        dispatch(facebookLogout());
     };
 
-    const getSessionState = useAppSelector(selectGetSession);
-    const dispatch = useAppDispatch();
 
     useEffect(()=>{
         dispatch(getSession());
-    },[]);
+    },[facebookLogoutState]);
 
     const handleCart = () =>{
         setOpenShopCartModal(true);
@@ -118,15 +121,18 @@ export function ShopHeaderNav(){
                                         </>
                                     : null
                                 }
-                                <button onClick={handleCart} className="flex flex-col justifiy-center items-center space-y-1">
-                                    <div className="relative space-y-1 flex-col text-white rounded-xl flex justify-center items-center">
-                                        <BsCart4 className="text-white text-2xl" />
-                                        <span className="absolute rounded-full bg-red-500 h-[1.2rem] w-[1.2rem] lg:h-[1.25rem] lg:w-[1.25rem] -top-2 -right-2 lg:-top-3 lg:-right-2 flex justify-center items-center text-[10px]">
-                                            {getSessionState.data?.orders ? getSessionState.data.orders.length : 0}
-                                        </span>
-                                    </div>
-                                    <h5 className="text-[13px] font-extralight text-white">{calculateOrdersPrice()}</h5>
-                                </button>
+                                {
+                                    getSessionState.data?.cache_data ?
+                                    <button onClick={handleCart} className="flex-col justifiy-center items-center space-y-1">
+                                        <div className="relative space-y-1 flex-col text-white rounded-xl flex justify-center items-center">
+                                            <BsCart4 className="text-white text-2xl" />
+                                            <span className="absolute rounded-full bg-red-500 h-[1.2rem] w-[1.2rem] lg:h-[1.25rem] lg:w-[1.25rem] -top-2 -right-2 lg:-top-3 lg:-right-2 flex justify-center items-center text-[10px]">
+                                                {getSessionState.data?.orders ? getSessionState.data.orders.length : 0}
+                                            </span>
+                                        </div>
+                                        <h5 className="text-[13px] font-extralight text-white">{calculateOrdersPrice()}</h5>
+                                    </button> : null
+                                }
                             </div>
                         </div>
                     </nav>

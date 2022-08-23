@@ -10,6 +10,8 @@ import { GetCategoryProductsState, selectGetCategoryProducts } from "features/sh
 import { GetProductDetailsState, selectGetProductDetails } from "features/shop/presentation/slices/get-product-details.slice";
 import { AddToCartState, selectAddToCart } from "features/shop/presentation/slices/add-to-cart.slice";
 import { resetStoreAndAddress, selectSetStoreAndAddress, SetStoreAndAddressState } from "../../slices/set-store-and-address.slice";
+import { FacebookLoginState, selectFacebookLogin } from "../../slices/facebook-login.slice";
+import { FacebookLoginPointState, selectFacebookLoginPoint } from "../../slices/facebook-login-point.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -28,8 +30,35 @@ export function LoadingAndSnackbarWrapper(){
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
     const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
     const addToCartState = useAppSelector(selectAddToCart);
+    const facebookLoginState = useAppSelector(selectFacebookLogin);
+    const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
     
-      useEffect(()=>{
+    useEffect(()=>{
+        switch(facebookLoginPointState.status){
+            case FacebookLoginPointState.success:
+                setOpenBackdropLoading(false);
+                break;
+            case FacebookLoginPointState.fail:
+                setOpenBackdropLoading(false);
+                dispatch(resetStoreAndAddress());
+                break;
+        }
+    },[facebookLoginState, dispatch]);
+    useEffect(()=>{
+        switch(facebookLoginState.status){
+            case FacebookLoginState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case FacebookLoginState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case FacebookLoginState.fail:
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[facebookLoginState, dispatch]);
+
+    useEffect(()=>{
         switch(setStoreAndAddressState.status){
             case SetStoreAndAddressState.inProgress:
                 setOpenBackdropLoading(true);

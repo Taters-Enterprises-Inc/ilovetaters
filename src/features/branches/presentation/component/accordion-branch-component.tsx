@@ -58,7 +58,7 @@ export const AccordionComponent: React.FC<{
                   key={index}
                   className={` transition-all ${
                     show ? "block" : "hidden"
-                  }z-0 overflow-hidden shadow-tertiary shadow-md bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
+                  }z-0 overflow-hidden shadow-tertiary bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
                 >
                   <h1 className="font-['Bebas_Neue'] text-center tracking-[1.5px] pt-2 antialiased md:text-[1.0625rem] text-[13px] text-[#fff] pb-2 relative md:px-0 px-2 h-[60px] flex items-center justify-center">
                     {data.nameofstore}

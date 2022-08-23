@@ -25,6 +25,10 @@ import getOrders from '../shop/presentation/slices/get-orders.slice';
 
 import getSnackShopOrderHistory from '../shop/presentation/slices/get-snackshop-order-history.slice';
 import getCateringBookingHistory from '../shop/presentation/slices/get-catering-booking-history.slice';
+import facebookLogin from '../shared/presentation/slices/facebook-login.slice';
+import facebookLoginPoint from '../shared/presentation/slices/facebook-login-point.slice';
+import facebookLogout from '../shared/presentation/slices/facebook-logout.slice';
+import storeReset from '../shared/presentation/slices/store-reset.slice';
 
 
 export const store = configureStore({
@@ -50,7 +54,7 @@ export const store = configureStore({
     getLatestUnexpiredRedeem: getLatestUnexpiredRedeem,
 
     getCategoryProducts: getCategoryProducts,
-    getProductDetails : getProductDetails,
+    getProductDetails: getProductDetails,
     addToCart: addToCart,
 
     getBranchesStore: getBranchesStore,
@@ -58,6 +62,11 @@ export const store = configureStore({
     getOrders: getOrders,
     getSnackShopOrderHistory: getSnackShopOrderHistory,
     getCateringBookingHistory: getCateringBookingHistory,
+
+    facebookLogin: facebookLogin,
+    facebookLoginPoint: facebookLoginPoint,
+    facebookLogout: facebookLogout,
+    storeReset: storeReset,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

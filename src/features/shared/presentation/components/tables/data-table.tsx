@@ -210,8 +210,8 @@ export function DataTable(props: DataTableProps) {
                 ).map((row, i) => (
                   <StyledTableRow key={i}>
                     {
-                      props.rowsOrder.map((rowOrder)=>(
-                        <StyledTableCell align={rowOrder.align}>
+                      props.rowsOrder.map((rowOrder,i)=>(
+                        <StyledTableCell key={i} align={rowOrder.align}>
                           {
                             rowOrder.isTime? 
                             <Moment format='LLL'>{row[rowOrder.rowKey]}</Moment>

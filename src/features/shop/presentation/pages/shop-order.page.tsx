@@ -217,7 +217,7 @@ export function ShopOrder(){
                                 <div className="space-y-6">
                                     {
                                         getOrdersState.data?.order.order_details.map((order,index)=>(
-                                            <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]">
+                                            <div key={index} className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]">
                                                 <img src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.product_image}`} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
                                                 <div className="flex-1 text-white px-3 py-2 flex flex-col">
                                                     <h3 className="text-sm">{order.product_label} {order.name}</h3>

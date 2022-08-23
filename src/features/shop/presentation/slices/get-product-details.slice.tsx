@@ -18,7 +18,7 @@ const initialState : {
     status: GetProductDetailsState;
     data: {
         product: ProductModel;
-        addons: Array<ProductModel>;
+        addons?: Array<ProductModel>;
         product_size: Array<{
             id: number;
             name: string;

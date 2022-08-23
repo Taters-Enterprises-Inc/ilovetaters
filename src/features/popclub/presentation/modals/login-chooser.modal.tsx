@@ -1,5 +1,9 @@
 import axios from 'axios';
+import { useAppDispatch, useAppSelector } from 'features/config/hooks';
 import { REACT_APP_DOMAIN_URL } from 'features/shared/constants';
+import { facebookLoginPoint, FacebookLoginPointState, selectFacebookLoginPoint } from 'features/shared/presentation/slices/facebook-login-point.slice';
+import { facebookLogin, FacebookLoginState, selectFacebookLogin } from 'features/shared/presentation/slices/facebook-login.slice';
+import { useEffect } from 'react';
 import { BsFacebook } from 'react-icons/bs';
 import { IoMdClose } from 'react-icons/io';
 
@@ -10,31 +14,29 @@ interface LoginChooserModalProps {
 
 export function LoginChooserModal(props: LoginChooserModalProps){
 
+    const facebookLoginState = useAppSelector(selectFacebookLogin);
+    const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
+    const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        if(facebookLoginState.status === FacebookLoginState.success){
+            dispatch(facebookLoginPoint({currentUrl: window.location.href}))
+        }
+    },[facebookLoginState, dispatch]);
+
+    useEffect(()=>{
+        if(
+            facebookLoginState.status === FacebookLoginState.success && 
+            facebookLoginState.url &&
+            facebookLoginPointState.status == FacebookLoginPointState.success
+            ){
+            window.location.href = facebookLoginState.url;
+        }
+    },[facebookLoginPointState]);
+
     const facebook =()=> {
         props.onClose();
-        axios.get(`${REACT_APP_DOMAIN_URL}api/facebook/login`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true,
-        })
-        .then(function (response: any) {
-            const facebookURL = response.data.url;
-            
-            if (response.data.result === false) {
-                axios.post(`${REACT_APP_DOMAIN_URL}api/facebook/login_point/`,{
-                    fb_login_point: window.location.href 
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    withCredentials: true,
-                }).then(()=>{
-                    window.location.href = facebookURL;
-                });
-            }
-            
-        })
+        dispatch(facebookLogin());
     }
     return(
         <div

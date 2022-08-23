@@ -65,7 +65,7 @@ export function ShopCartModal(props : ShopCartModalProps){
               <div className="space-y-6 overflow-y-auto max-h-[400px] px-[4px] py-[10px]">
                 {
                   getSessionState.data?.orders.map((order, i)=>(
-                    <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
+                    <div key={i} className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
                       <img src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.prod_image_name}`} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
                       <div className="flex-1 text-white px-3 py-2 flex flex-col">
                           <h3 className="text-sm">{order.prod_size} {order.prod_name}</h3>
