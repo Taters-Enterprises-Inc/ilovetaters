@@ -12,17 +12,25 @@ interface StoreListDeliveryProps {
 
 export function StoreListDelivery(props: StoreListDeliveryProps ){
     const getStoresAvailableState  = useAppSelector(selectGetStoresAvailable);
+    const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(setStoreAndAddressState.status == SetStoreAndAddressState.success){
+            navigate('products');
+            document.body.classList.remove('overflow-hidden');
+        }
+    },[setStoreAndAddressState]);
+
+
 
     const storeClicked =(storeId: number)=> {
         dispatch(setStoreAndAddress({
             address: props.address,
             storeId,
         }));
-
-        navigate('products');
-        document.body.classList.remove('overflow-hidden');
     }
 
     return(

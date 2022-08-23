@@ -26,18 +26,20 @@ export const setStoreAndAddress = createAsyncThunk('setStoreAndAddress',
         return response.data;
     }
 )
-
-/* Main Slice */
 export const setStoreAndAddressSlice = createSlice({
     name:'setStoreAndAddress',
     initialState,
-    reducers : {},
+    reducers : {
+        resetStoreAndAddress: (state)=>{
+            state.status = SetStoreAndAddressState.initial;
+            state.message = '';
+        }
+    },
     extraReducers: (builder: any) => {
         builder.addCase(setStoreAndAddress.pending, (state: any)=>{
             state.status = SetStoreAndAddressState.inProgress;
         }).addCase(setStoreAndAddress.fulfilled, (state: any, action : PayloadAction<{message: string}> ) => {
             const message = action.payload.message;
-            
             state.message = message;
             state.status = SetStoreAndAddressState.success;
         })
@@ -47,5 +49,5 @@ export const setStoreAndAddressSlice = createSlice({
 
 
 export const selectSetStoreAndAddress = (state : RootState) => state.setStoreAndAddress;
-
+export const {resetStoreAndAddress} = setStoreAndAddressSlice.actions;
 export default setStoreAndAddressSlice.reducer;

@@ -3,18 +3,37 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL, TABS } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineUser } from 'react-icons/ai';
 import { BsCart4 } from 'react-icons/bs';
 import { ShopCartModal } from "../modals";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import NumberFormat from "react-number-format";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 export function ShopHeaderNav(){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
     const [openShopCartModal, setOpenShopCartModal] = useState(false); 
-    
+    const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
+    const navigate = useNavigate();
+
+    const handleProfileMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setOpenProfileMenu(event.currentTarget);
+    };
+
+    const handleMyProfile = () => {
+        setOpenProfileMenu(null);
+        navigate('/shop/profile');
+    };
+
+    const handleLogout = () => {
+        setOpenProfileMenu(null);
+        // navigate('/shop/profile');
+    };
+
     const getSessionState = useAppSelector(selectGetSession);
     const dispatch = useAppDispatch();
 
@@ -32,12 +51,12 @@ export function ShopHeaderNav(){
         const orders = getSessionState.data?.orders;
 
         if(orders){
-        for(let i = 0; i < orders.length; i++){
-            calculatedPrice += orders[i].prod_calc_amount;
-        }
-        return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
+            for(let i = 0; i < orders.length; i++){
+                calculatedPrice += orders[i].prod_calc_amount;
+            }
+            return <NumberFormat value={calculatedPrice.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }else {
-        return <>₱0.00</>
+            return <>₱0.00</>
         }
 
         
@@ -67,10 +86,28 @@ export function ShopHeaderNav(){
                             <div className="flex justify-center items-center space-x-3 lg:space-x-6">
                                 {
                                     getSessionState.data?.userData ? 
-                                        <Link to='/shop/profile' className="flex justify-center items-center flex-col space-y-1 mt-[-5px]">
-                                            <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full" width={30}></img>
-                                            <span className="text-xs font-extralight text-white">{getSessionState.data?.userData.first_name} {getSessionState.data?.userData.last_name}</span>
-                                        </Link>
+                                        (
+                                            <div>
+                                                <Button 
+                                                aria-controls={Boolean(openProfileMenu) ? 'basic-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={Boolean(openProfileMenu) ? 'true' : undefined}
+                                                onClick={handleProfileMenuClick}
+                                                className='flex justify-center items-center flex-col space-y-1 mt-[-5px]'
+                                                >
+                                                    <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full" width={30}></img>
+                                                    <span className="text-xs font-extralight text-white">{getSessionState.data?.userData.first_name} {getSessionState.data?.userData.last_name}</span>
+                                                </Button>
+                                                <Menu
+                                                    anchorEl={openProfileMenu}
+                                                    open={Boolean(openProfileMenu)}
+                                                    onClose={()=>setOpenProfileMenu(null)}
+                                                >
+                                                    <MenuItem onClick={handleMyProfile} className='bg-secondary'>My profile</MenuItem>
+                                                    <MenuItem onClick={handleLogout} className='bg-secondary'>Logout</MenuItem>
+                                                </Menu>
+                                            </div>
+                                        )
                                     : 
                                         getSessionState.data?.userData === null ? 
                                         <>

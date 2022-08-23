@@ -16,6 +16,12 @@ export function ShopProfile(){
     useEffect(()=>{
         dispatch(getSession());
     },[]);
+    
+    const location = useLocation();
+    
+    useEffect(() => {
+        window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+    }, [location]);
 
     return(
         <ShopProfileContainer title="My Profile" activeTab="profile">
