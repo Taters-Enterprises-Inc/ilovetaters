@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { SessionModel } from "features/shared/core/domain/session.model";
-import { GetSessionRepository, GetSessionResponse} from "features/shared/data/repository/shared.repository";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { GetCategoryProductsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
-import { GetCategoryProductsResponse } from "features/shop/data/repository/shop.repository";
+import { GetCategoryProductsRepository, GetCategoryProductsResponse } from "features/shop/data/repository/shop.repository";
 
 
 export enum GetCategoryProductsState{
@@ -17,16 +14,18 @@ export enum GetCategoryProductsState{
 
 
 const initialState : {
-    status: GetCategoryProductsState,
-    data: Array<CategoryProductsModel> | undefined
+    status: GetCategoryProductsState;
+    data: Array<CategoryProductsModel> | undefined;
+    message: ''
 } = {
     status: GetCategoryProductsState.initial,
     data: undefined,
+    message: ''
 }
 
 export const getCategoryProducts = createAsyncThunk('getCategoryProducts',
     async (param: GetCategoryProductsParam) => {
-        const response : GetCategoryProductsResponse = await GetCategoryProductsUsecase(param);
+        const response : GetCategoryProductsResponse = await GetCategoryProductsRepository(param);
         return response.data;
     }
 )
@@ -40,10 +39,14 @@ export const getCategoryProductsSlice = createSlice({
         builder.addCase(getCategoryProducts.pending, (state: any)=>{
             state.status = GetCategoryProductsState.inProgress;
         }).addCase(getCategoryProducts.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<CategoryProductsModel> | null}> ) => {
-            const data = action.payload.data;
-            
-            state.data = data;
+            const {data, message} = action.payload;
             state.status = GetCategoryProductsState.success;
+
+            state.data = data;
+            state.message = message;
+        }).addCase(getCategoryProducts.rejected, (state: any, action: PayloadAction<{message : string}>) => {
+            state.status = GetCategoryProductsState.fail;
+            state.message = action.payload.message;
         })
     }
 });

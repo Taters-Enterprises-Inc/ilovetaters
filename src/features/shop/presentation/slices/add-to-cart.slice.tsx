@@ -3,7 +3,6 @@ import { RootState } from "features/config/store";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { AddToCartParam, GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { AddToCartRepository, AddToCartResponse, GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 
@@ -17,10 +16,10 @@ export enum AddToCartState{
 
 const initialState : {
     status: AddToCartState,
-    message: string | undefined
+    message: string;
 } = {
     status: AddToCartState.initial,
-    message: undefined
+    message: '',
 }
 
 export const addToCart = createAsyncThunk('addToCart',
@@ -34,24 +33,21 @@ export const addToCart = createAsyncThunk('addToCart',
 export const addToCartSlice = createSlice({
     name:'addToCart',
     initialState,
-    reducers : {
-        resetAddToCart : (state)=>{
-            state.status = AddToCartState.initial;
-            state.message = undefined;
-        }
-    },
+    reducers : {},
     extraReducers: (builder: any) => {
         builder.addCase(addToCart.pending, (state: any)=>{
             state.status = AddToCartState.inProgress;
-        }).addCase(addToCart.fulfilled, (state: any, action : PayloadAction<{message: string, data: { 
-                product : ProductModel; 
-                addons: Array<ProductModel>; 
-                product_flavor: Array<any>; 
-            } | null}> ) => {
+        }).addCase(addToCart.fulfilled, (state: any, action : PayloadAction<{message: string}> ) => {
                 
-            const data = action.payload.data;
+            const { message} = action.payload;
+            state.status = AddToCartState.success;
+
+            console.log(action.payload);
             
-            state.data = data;
+
+            state.message = message;
+        }).addCase(addToCart.rejected, (state: any, action : PayloadAction<{message: string }> ) => {
+            state.message = action.payload.message;
             state.status = AddToCartState.success;
         })
     }
@@ -61,7 +57,5 @@ export const addToCartSlice = createSlice({
 
 export const selectAddToCart = (state : RootState) => state.addToCart;
 
-
-export const {resetAddToCart} = addToCartSlice.actions;
 
 export default addToCartSlice.reducer;

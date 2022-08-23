@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 
+.profile-tab-active{
+    z-index: 1;
+}
+
+.profile-tab-content{
+    position: relative !important;
+}
+
 html {
     scroll-behavior: smooth;
 }

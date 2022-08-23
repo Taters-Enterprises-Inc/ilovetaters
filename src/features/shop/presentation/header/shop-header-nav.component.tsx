@@ -48,7 +48,9 @@ export function ShopHeaderNav(){
             <header className={'sticky w-full top-0 z-20'}>
                 <div className={` w-full bg-primary shadow-2xl`}>
                     <nav className={`flex justify-between items-center container py-2`}>
-                        <img src={REACT_APP_UPLOADS_URL + "images/shared/logo/taters-snackshop-logo.webp"} alt="Taters Logo" className="w-[100px] lg:w-[160px]"></img>
+                        <Link to={'/shop'}>
+                            <img src={REACT_APP_UPLOADS_URL + "images/shared/logo/taters-snackshop-logo.webp"} alt="Taters Logo" className="w-[100px] lg:w-[160px]"></img>
+                        </Link>
 
                         <div  className="justify-center items-center space-x-4 flex">
                             <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
@@ -65,10 +67,10 @@ export function ShopHeaderNav(){
                             <div className="flex justify-center items-center space-x-3 lg:space-x-6">
                                 {
                                     getSessionState.data?.userData ? 
-                                    <button className="flex justify-center items-center flex-col space-y-1 mt-[-5px]">
-                                        <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full" width={30}></img>
-                                        <span className="text-xs font-extralight text-white">{getSessionState.data?.userData.first_name} {getSessionState.data?.userData.last_name}</span>
-                                    </button>
+                                        <Link to='/shop/profile' className="flex justify-center items-center flex-col space-y-1 mt-[-5px]">
+                                            <img src={getSessionState.data?.userData.picture} alt='Profile pic' className="rounded-full" width={30}></img>
+                                            <span className="text-xs font-extralight text-white">{getSessionState.data?.userData.first_name} {getSessionState.data?.userData.last_name}</span>
+                                        </Link>
                                     : 
                                         getSessionState.data?.userData === null ? 
                                         <>

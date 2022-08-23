@@ -20,6 +20,11 @@ import getCategoryProducts from '../shop/presentation/slices/get-category-produc
 import getProductDetails from '../shop/presentation/slices/get-product-details.slice';
 import addToCart from '../shop/presentation/slices/add-to-cart.slice';
 import getBranchesStore from '../branches/presentation/slices/get-branches-store';
+import checkoutOrders from '../shop/presentation/slices/checkout-orders.slice';
+import getOrders from '../shop/presentation/slices/get-orders.slice';
+
+import getSnackShopOrderHistory from '../shop/presentation/slices/get-snackshop-order-history.slice';
+import getCateringBookingHistory from '../shop/presentation/slices/get-catering-booking-history.slice';
 
 
 export const store = configureStore({
@@ -49,6 +54,10 @@ export const store = configureStore({
     addToCart: addToCart,
 
     getBranchesStore: getBranchesStore,
+    checkoutOrders: checkoutOrders,
+    getOrders: getOrders,
+    getSnackShopOrderHistory: getSnackShopOrderHistory,
+    getCateringBookingHistory: getCateringBookingHistory,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
