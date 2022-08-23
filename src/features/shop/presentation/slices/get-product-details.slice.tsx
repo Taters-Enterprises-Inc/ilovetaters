@@ -47,7 +47,13 @@ export const getProductDetails = createAsyncThunk('getProductDetails',
 export const getProductDetailsSlice = createSlice({
     name:'getProductDetails',
     initialState,
-    reducers : {},
+    reducers : {
+        resetGetProductDetails: (state) =>{
+            state.data = undefined;
+            state.message = '';
+            state.status = GetProductDetailsState.initial;
+        }
+    },
     extraReducers: (builder: any) => {
         builder.addCase(getProductDetails.pending, (state: any)=>{
             state.status = GetProductDetailsState.inProgress;
@@ -73,5 +79,5 @@ export const getProductDetailsSlice = createSlice({
 
 
 export const selectGetProductDetails = (state : RootState) => state.getProductDetails;
-
+export const {  resetGetProductDetails } = getProductDetailsSlice.actions;
 export default getProductDetailsSlice.reducer;

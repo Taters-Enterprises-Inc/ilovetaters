@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
+import { getProductDetails, GetProductDetailsState, selectGetProductDetails, resetGetProductDetails } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
@@ -36,7 +36,7 @@ export function ShopProduct(){
     let { hash } = useParams();
 
     const location = useLocation();
-
+    
     useEffect(() => {
         window.scrollTo({top: 0, left: 0, behavior: 'auto'});
     }, [location]);
@@ -67,8 +67,8 @@ export function ShopProduct(){
                 prod_image_name : getProductDetailsState.data.product.product_image,
                 prod_name : getProductDetailsState.data.product.name,
                 prod_qty : quantity,
-                prod_flavor : currentFlavor,
-                prod_size : currentSize,
+                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : -1,
+                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : -1,
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
@@ -95,8 +95,8 @@ export function ShopProduct(){
                 prod_image_name : getProductDetailsState.data.product.product_image,
                 prod_name : getProductDetailsState.data.product.name,
                 prod_qty : quantity,
-                prod_flavor : currentFlavor,
-                prod_size : currentSize,
+                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : -1,
+                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : -1,
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
@@ -187,13 +187,9 @@ export function ShopProduct(){
                                                 {
                                                     getProductDetailsState.data?.product_size.map((size, i)=>{
 
-                                                        if(i === 0 && currentSize === -1){
-                                                            setCurrentSize(size.id);
-                                                        }
-
                                                         return(
                                                             <li key={i} className="flex items-center">
-                                                            <Radio  id={size.id.toString()} color='tertiary' checked={size.id === currentSize} onChange={()=>{
+                                                            <Radio  id={size.id.toString()} color='tertiary'  checked={currentSize == -1 && i == 0 ? true : size.id === currentSize}  onChange={()=>{
                                                                 setCurrentSize(size.id);
                                                             }} />
                                                             <label htmlFor={size.id.toString()} className='text-white'>{size.name}</label>
@@ -215,14 +211,9 @@ export function ShopProduct(){
                                             <ul>
                                                 {
                                                     getProductDetailsState.data?.product_flavor.map((flavor, i)=>{
-
-                                                        if(i === 0 && currentFlavor === -1){
-                                                            setCurrentFlavor(flavor.id);
-                                                        }
-
                                                         return(
                                                             <li key={i} className="flex items-center">
-                                                                <Radio id={flavor.id.toString()} color='tertiary' checked={flavor.id === currentFlavor}  onChange={()=>{
+                                                                <Radio id={flavor.id.toString()} color='tertiary' checked={currentFlavor == -1 && i == 0 ? true : flavor.id === currentFlavor}  onChange={()=>{
                                                                     setCurrentFlavor(flavor.id);
                                                                 }} />
                                                                 <label htmlFor={flavor.id.toString()} className='text-white'>{flavor.name}</label>
