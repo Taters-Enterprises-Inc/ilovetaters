@@ -14,7 +14,7 @@ interface ShopProductDetailsAccordionProps{
         prefixIcon : JSX.Element,
         name: string;
     };
-    description: string;
+    children: React.ReactNode;
 }
 
 const Accordion = styled((props: AccordionProps) => (
@@ -35,6 +35,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: 0,
 }));
   
 export function ShopProductDetailsAccordion(props: ShopProductDetailsAccordionProps){
@@ -49,9 +50,9 @@ export function ShopProductDetailsAccordion(props: ShopProductDetailsAccordionPr
             </div>
           </AccordionSummary>
           <AccordionDetails>
-            <div className="p-2 text-sm">
-                <div dangerouslySetInnerHTML={{__html:props.description}} />
-            </div>
+                {
+                  props.children
+                }
           </AccordionDetails>
         </Accordion>
     )

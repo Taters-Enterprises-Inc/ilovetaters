@@ -155,8 +155,11 @@ export function ShopProduct(){
                                             name: "Product Info",
                                             prefixIcon: <AiFillInfoCircle className="text-3xl" />,
                                         }}
-                                        description={getProductDetailsState.data.product.description}
-                                    /> : null
+                                    >
+                                        <div className="p-4 text-sm">
+                                            {getProductDetailsState.data.product.description}
+                                        </div>
+                                    </ShopProductDetailsAccordion> : null
                                 }
                                 
                                 {
@@ -166,46 +169,27 @@ export function ShopProduct(){
                                             name: "Delivery Details",
                                             prefixIcon: <TbTruckDelivery className="text-3xl" />,
                                         }}
-                                        description={getProductDetailsState.data.product.delivery_details}
-                                    /> : null
-                                }
-
-
-                                {/* <div className="border-2 border-white text-white rounded-xl">
-                                    <div className="px-6 py-4 flex space-x-2 items-center">
-                                        <TbTruckDelivery className="text-3xl" />
-                                        <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Delivery Details</h3>
-                                        <IoIosArrowDown className="text-xl"/>
-                                    </div>
-
-                                    <hr/>
-
-                                    <div className="p-6 text-sm">
-                                        {
-                                            getProductDetailsState.data?.product.delivery_details ? 
-                                                <div dangerouslySetInnerHTML={{__html:getProductDetailsState.data?.product.delivery_details }} />
-                                            : null
-                                        }
-                                        
-                                    </div>
-
-                                </div> */}
-
-                                {
-                                    getProductDetailsState.data?.addons ? 
-                                    <div className=" text-white">
-                                        <div className="px-6 py-4 flex space-x-2 items-center rounded-t-xl border-2 border-white">
-                                            <MdFastfood className="text-3xl" />
-                                            <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Add-ons</h3>
-                                            <IoIosArrowDown className="text-xl"/>
+                                    >
+                                        <div className="p-4 text-sm">
+                                            <div dangerouslySetInnerHTML={{__html:getProductDetailsState.data.product.delivery_details}} />
                                         </div>
-                                        <div className="max-h-[300px] overflow-y-auto flex flex-col border-2 border-white py-4 px-3">
+                                    </ShopProductDetailsAccordion> : null
+                                }
+                                
+                                {
+                                    getProductDetailsState.data?.addons ?
+                                    <ShopProductDetailsAccordion
+                                        title={{
+                                            name: "Product Add-ons",
+                                            prefixIcon: <MdFastfood className="text-3xl" />,
+                                        }}
+                                    >
+                                        <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
                                             {
                                                 getProductDetailsState.data?.addons.map((product, i)=> <Addon key={i} product={product}/>)
                                             }
                                         </div>
-                                        
-                                    </div> : null
+                                    </ShopProductDetailsAccordion> : null
                                 }
 
                                 
