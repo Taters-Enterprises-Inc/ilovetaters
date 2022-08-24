@@ -1,8 +1,5 @@
-import {  REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { Link, useLocation } from "react-router-dom";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { FooterNav } from "features/shared";
-import { MdDeliveryDining, MdPayment } from "react-icons/md";
+import {  useLocation } from "react-router-dom";
+import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +13,6 @@ import { BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { checkoutOrders, CheckoutOrdersState, resetCheckoutOrders, selectCheckoutOrders } from "../slices/checkout-orders.slice";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
-
-interface formDataType {[key:string]: FormDataEntryValue}
 
 export function ShopCheckout(){
     const navigate = useNavigate();

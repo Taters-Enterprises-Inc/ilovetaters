@@ -1,4 +1,4 @@
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import React, { useEffect, useState } from "react";
 import { FranchisingBranchComponent } from "../component/branch-component";
@@ -24,7 +24,7 @@ export function Branches() {
 
   return (
     <main className="bg-primary h-auto w-full border-primary border-solid	border">
-      <HeaderNav serviceReached={serviceReached} active="BRANCHES" />
+      <HomeHeaderNav serviceReached={serviceReached} active="BRANCHES" />
       <section className="container px-4" >
     <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>

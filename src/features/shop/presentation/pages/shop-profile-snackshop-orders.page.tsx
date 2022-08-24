@@ -1,13 +1,7 @@
-import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
-import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { ShopProfileContainer } from "../components/shop-profile-container";
-import { ShopProfileTabs } from "../components/shop-profile-tabs";
 import { Column, DataTable } from "../../../shared/presentation/components/tables/data-table";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { getSnackShopOrderHistory, selectGetSnackShopOrderHistory } from "../slices/get-snackshop-order-history.slice";
 
 const columns: Array<Column> = [

@@ -1,5 +1,5 @@
 
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { useEffect, useRef, useState } from "react";
 import { REACT_APP_UPLOADS_URL, SERVICES_DESKTOP, SERVICES_MOBILE } from "features/shared/constants";
 
@@ -28,7 +28,7 @@ export function Home(){
     return (
         <main className="bg-primary">
 
-            <HeaderNav serviceReached={serviceReached} active='HOME'></HeaderNav>
+            <HomeHeaderNav serviceReached={serviceReached} active='HOME'/>
 
             <section 
                 style={{

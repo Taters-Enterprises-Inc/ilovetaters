@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 
 interface HeaderNavProps {
-    serviceReached: boolean,
+    serviceReached?: boolean,
     active: string,
     sticky?: boolean,
 }
 
 
-export function HeaderNav(props: HeaderNavProps){
+export function HomeHeaderNav(props: HeaderNavProps){
 
     const getSessionState = useAppSelector(selectGetSession);
     const dispatch = useAppDispatch();

@@ -1,11 +1,11 @@
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 export function Admin(){
 
     return (
         <main className="bg-primary">
-            <HeaderNav serviceReached={true} active='CATERING' sticky/>
+            <HomeHeaderNav serviceReached={true} active='CATERING' sticky/>
             
 
             <section className=" container min-h-screen">

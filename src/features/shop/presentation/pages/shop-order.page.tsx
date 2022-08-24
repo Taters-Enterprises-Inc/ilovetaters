@@ -1,11 +1,9 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
-import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { AiFillCheckCircle, AiOutlineCheckCircle, AiOutlineCloudUpload, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
+import { useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";

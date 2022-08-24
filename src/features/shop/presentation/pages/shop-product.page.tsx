@@ -1,13 +1,11 @@
-import { FooterNav } from "features/shared";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getProductDetails, GetProductDetailsState, selectGetProductDetails, resetGetProductDetails } from "../slices/get-product-details.slice";
+import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
@@ -83,6 +81,8 @@ export function ShopProduct(){
     }
 
     const handleAddToCart =()=>{
+
+        console.log(currentFlavor, currentSize);
         
         if(getSessionState.data?.userData == null || getSessionState.data?.userData === undefined){
             setOpenLoginChooserModal(true);
@@ -95,8 +95,8 @@ export function ShopProduct(){
                 prod_image_name : getProductDetailsState.data.product.product_image,
                 prod_name : getProductDetailsState.data.product.name,
                 prod_qty : quantity,
-                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : -1,
-                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : -1,
+                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : currentFlavor,
+                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : currentSize,
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,

@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaUserAlt } from 'react-icons/fa';
 import { AiOutlineUser } from 'react-icons/ai';
 import { BsCart4 } from 'react-icons/bs';
-import { ShopCartModal } from "../modals";
+import { ShopCartModal } from "../../../../shop/presentation/modals";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import NumberFormat from "react-number-format";
 import Button from "@mui/material/Button";
@@ -15,7 +15,16 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { facebookLogout, selectFacebookLogout } from "features/shared/presentation/slices/facebook-logout.slice";
 
-export function ShopHeaderNav(){
+interface HeaderNavProps{
+    activeUrl: 'SNACKSHOP' | 'CATERING';
+    logoProps: {
+        src: string;
+        alt: string;
+        className: string;
+    };
+}
+
+export function HeaderNav(props: HeaderNavProps){
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
     const [openShopCartModal, setOpenShopCartModal] = useState(false); 
     const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
@@ -71,7 +80,7 @@ export function ShopHeaderNav(){
                 <div className={` w-full bg-primary shadow-2xl`}>
                     <nav className={`flex justify-between items-center container py-2`}>
                         <Link to={'/shop'}>
-                            <img src={REACT_APP_UPLOADS_URL + "images/shared/logo/taters-snackshop-logo.webp"} alt="Taters Logo" className="w-[100px] lg:w-[160px]"></img>
+                            <img {...props.logoProps}/>
                         </Link>
 
                         <div  className="justify-center items-center space-x-4 flex">
@@ -79,7 +88,7 @@ export function ShopHeaderNav(){
                                 {
                                     TABS.map((tab: any, i)=>{
                                         return (
-                                            <li key={i} className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-extralight ${tab.name === 'SNACKSHOP' ? "text-tertiary" : "text-white"}`}>
+                                            <li key={i} className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-extralight ${tab.name === props.activeUrl ? "text-tertiary" : "text-white"}`}>
                                                 <Link to={tab.url}>{tab.name}</Link>
                                             </li>
                                         );

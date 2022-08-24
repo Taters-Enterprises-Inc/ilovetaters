@@ -1,12 +1,6 @@
-import TextField from "@mui/material/TextField";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
-import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { ReactNode, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { ReactNode } from "react";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import { ShopProfileTabs, ShopProfileTabsProps } from "../components/shop-profile-tabs";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
 interface ShopProfileContainerProps extends ShopProfileTabsProps{
     title: string;

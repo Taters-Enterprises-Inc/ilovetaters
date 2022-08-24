@@ -16,13 +16,14 @@ import { PopClubDeal } from 'features/popclub/presentation/pages';
 import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
 import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
 import { Shop, ShopCheckout, ShopHome, ShopOrder, ShopProduct, ShopProducts, ShopProfile, ShopProfileCateringBookings, ShopProfileSnackshopOrders } from 'features/shop/presentation/pages';
-import { Catering } from 'features/catering/presentation/pages';
+import { Catering, CateringProducts } from 'features/catering/presentation/pages';
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
 import { Admin } from 'features/admin/presentation/pages';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { LoadingAndSnackbarWrapper } from 'features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper';
+import { CateringHome } from 'features/catering/presentation/pages/catering-home.page';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -66,7 +67,12 @@ root.render(
 
               </Route>
 
-              <Route path="catering" element={<Catering/>}/>
+              <Route path="catering" element={<Catering/>}>
+
+                <Route index element={<CateringHome/>}/>
+                <Route path="products" element={<CateringProducts/>}/>
+                
+              </Route>
 
 
               <Route path="franchising" element={<Franchising/>}/>

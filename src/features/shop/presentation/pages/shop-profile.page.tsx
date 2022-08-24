@@ -1,13 +1,9 @@
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
+import { useLocation } from "react-router-dom";
 import { ShopProfileContainer } from "../components/shop-profile-container";
-import { ShopProfileTabs } from "../components/shop-profile-tabs";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
 
 export function ShopProfile(){
     const getSessionState = useAppSelector(selectGetSession);

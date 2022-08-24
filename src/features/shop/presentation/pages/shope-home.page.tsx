@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { StoreListDelivery } from "../components/store-list-delivery";
 import { getSession, selectGetSession } from "../../../shared/presentation/slices/get-session.slice";
 import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function ShopHome(){

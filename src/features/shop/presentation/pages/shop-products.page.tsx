@@ -1,12 +1,10 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { getSession, GetSessionState, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
-import { ShopHeaderNav } from "../header/shop-header-nav.component";
-import { getCategoryProducts, GetCategoryProductsState, selectGetCategoryProducts } from "../slices/get-category-products.slice";
+import { getCategoryProducts, selectGetCategoryProducts } from "../slices/get-category-products.slice";
 
 export function ShopProducts(){
 

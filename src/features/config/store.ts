@@ -30,6 +30,8 @@ import facebookLoginPoint from '../shared/presentation/slices/facebook-login-poi
 import facebookLogout from '../shared/presentation/slices/facebook-logout.slice';
 import storeReset from '../shared/presentation/slices/store-reset.slice';
 
+import getCateringCategoryProducts from '../catering/presentation/slices/get-catering-category-products.slice';
+
 
 export const store = configureStore({
   reducer: {
@@ -67,6 +69,8 @@ export const store = configureStore({
     facebookLoginPoint: facebookLoginPoint,
     facebookLogout: facebookLogout,
     storeReset: storeReset,
+
+    getCateringCategoryProducts: getCateringCategoryProducts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
