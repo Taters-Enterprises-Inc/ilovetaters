@@ -31,6 +31,9 @@ import facebookLogout from '../shared/presentation/slices/facebook-logout.slice'
 import storeReset from '../shared/presentation/slices/store-reset.slice';
 
 import getCateringCategoryProducts from '../catering/presentation/slices/get-catering-category-products.slice';
+import getProductSku from '../shop/presentation/slices/get-product-sku.slice';
+import removeItemFromCart from '../shared/presentation/slices/remove-item-from-cart.slice';
+import uploadProofOfPayment from '../shared/presentation/slices/upload-proof-of-payment.slice';
 
 
 export const store = configureStore({
@@ -71,6 +74,9 @@ export const store = configureStore({
     storeReset: storeReset,
 
     getCateringCategoryProducts: getCateringCategoryProducts,
+    getProductSku: getProductSku,
+    removeItemFromCart: removeItemFromCart,
+    uploadProofOfPayment: uploadProofOfPayment,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -10,7 +10,11 @@
 .profile-tab-content{
     position: relative !important;
 }
-
+.invalid-number-message {
+    background-color: #a21013 !important;
+    color: white !important;
+    padding: 0 3px 0 3px !important;
+}
 html {
     scroll-behavior: smooth;
 }

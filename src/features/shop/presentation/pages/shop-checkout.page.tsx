@@ -7,12 +7,14 @@ import TextField from '@mui/material/TextField';
 import Checkbox from "@mui/material/Checkbox";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useRef } from "react";
 import NumberFormat from "react-number-format";
 import { BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { checkoutOrders, CheckoutOrdersState, resetCheckoutOrders, selectCheckoutOrders } from "../slices/checkout-orders.slice";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 export function ShopCheckout(){
     const navigate = useNavigate();
@@ -20,6 +22,7 @@ export function ShopCheckout(){
     const getSessionState = useAppSelector(selectGetSession);
     const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
     const location = useLocation();
+    const phoneNumberRef = useRef(null);
 
     useEffect(()=>{
         if( checkoutOrdersState.status === CheckoutOrdersState.success && checkoutOrdersState.data){
@@ -43,8 +46,21 @@ export function ShopCheckout(){
         const formData = new FormData(e.currentTarget as HTMLFormElement)
 
         formData.forEach((value, property:string) => responseBody[property] = value);
-
-        dispatch(checkoutOrders(responseBody));
+        if(
+            ( responseBody.phoneNumber.match(/63/) &&
+            responseBody.phoneNumber.length == 15 ) ||
+            ( responseBody.phoneNumber.match(/09/) &&
+            responseBody.phoneNumber.length == 14 ) 
+        ){
+            dispatch(checkoutOrders(responseBody));
+        }else{
+            const phoneNumber : any = phoneNumberRef.current;
+            
+            if(phoneNumber){
+                phoneNumber.focus();
+            }
+        }
+        
     }
 
     const calculateSubTotalPrice =()=>{
@@ -156,7 +172,23 @@ export function ShopCheckout(){
                                         }
                                     </div>
                                     <div className="flex-1">
-                                        <TextField required label="Phone Number" variant="outlined" className="w-full" name='phoneNumber'/>
+                                        <PhoneInput
+                                            country={'ph'}
+                                            disableDropdown
+                                            inputClass='!bg-transparent !text-white !py-[27px] !w-full'
+                                            inputProps={{
+                                              name: 'phoneNumber',
+                                              ref: phoneNumberRef,
+                                              required: true,
+                                            }}
+                                            isValid={(value, country: any) => {
+                                              if (value.match(/63/) || value.match(/09/)) {
+                                                return true;
+                                              } else  {
+                                                return 'Please use +63 or 09';
+                                              } 
+                                            }}
+                                        />
                                         <span className="text-xs text-tertiary underline underline-offset-4">Setup your phone number</span>
                                     </div>
                                 </div>

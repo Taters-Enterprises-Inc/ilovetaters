@@ -5,7 +5,7 @@ import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowDown } from 'react-icons/io';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
+import { changeProductPrice, getProductDetails, GetProductDetailsState, selectGetProductDetails } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from 'react-number-format';
@@ -16,10 +16,13 @@ import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from 'react-icons/bs';
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
+import { getProductSku, GetProductSkuState, selectgetProductSku } from "../slices/get-product-sku.slice";
+import { ShopProductDetailsAccordion } from "../components/shop-product-details-accordion";
 
 export function ShopProduct(){
     const dispatch = useAppDispatch();
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
+    const getProductSkuState = useAppSelector(selectgetProductSku);
     const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
     const getSessionState = useAppSelector(selectGetSession);
     const addToCartState = useAppSelector(selectAddToCart);
@@ -38,6 +41,12 @@ export function ShopProduct(){
     useEffect(() => {
         window.scrollTo({top: 0, left: 0, behavior: 'auto'});
     }, [location]);
+
+    useEffect(()=>{
+        if(getProductSkuState.status === GetProductSkuState.success && getProductSkuState.data){
+            dispatch(changeProductPrice({price: parseInt(getProductSkuState.data.price)}));
+        }
+    },[getProductSkuState, dispatch]);
   
     useEffect(()=>{
         if(addToCartState.status === AddToCartState.success){
@@ -65,8 +74,8 @@ export function ShopProduct(){
                 prod_image_name : getProductDetailsState.data.product.product_image,
                 prod_name : getProductDetailsState.data.product.name,
                 prod_qty : quantity,
-                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : -1,
-                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : -1,
+                prod_flavor : currentFlavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : currentFlavor,
+                prod_size : currentSize == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : currentSize,
                 prod_price : getProductDetailsState.data.product.price,
                 prod_calc_amount : getProductDetailsState.data.product.price * quantity,
                 prod_category : getProductDetailsState.data.product.category,
@@ -82,8 +91,6 @@ export function ShopProduct(){
 
     const handleAddToCart =()=>{
 
-        console.log(currentFlavor, currentSize);
-        
         if(getSessionState.data?.userData == null || getSessionState.data?.userData === undefined){
             setOpenLoginChooserModal(true);
             return;
@@ -107,6 +114,20 @@ export function ShopProduct(){
             }));
         }
     }
+
+
+    const handleSizeAndFlavorChange =(size: number, flavor: number)=>{
+
+        if(getProductDetailsState.data){
+            flavor = flavor == -1 ?  getProductDetailsState.data.product_flavor[0] ?  getProductDetailsState.data.product_flavor[0].id : -1 : flavor;
+            size = size == -1 ?  getProductDetailsState.data.product_size[0] ?  getProductDetailsState.data.product_size[0].id : -1 : size;
+            
+            dispatch(getProductSku({
+                prod_flavor: flavor,
+                prod_size: size,
+            }));
+        }
+    }
     
     return (
         <>
@@ -127,23 +148,30 @@ export function ShopProduct(){
                             </div>
                             
                             <div className="flex-1 space-y-10 lg:px-0 container">
+                                {
+                                    getProductDetailsState.data?.product.description ?
+                                    <ShopProductDetailsAccordion
+                                        title={{
+                                            name: "Product Info",
+                                            prefixIcon: <AiFillInfoCircle className="text-3xl" />,
+                                        }}
+                                        description={getProductDetailsState.data.product.description}
+                                    /> : null
+                                }
+                                
+                                {
+                                    getProductDetailsState.data?.product.delivery_details ?
+                                    <ShopProductDetailsAccordion
+                                        title={{
+                                            name: "Delivery Details",
+                                            prefixIcon: <TbTruckDelivery className="text-3xl" />,
+                                        }}
+                                        description={getProductDetailsState.data.product.delivery_details}
+                                    /> : null
+                                }
 
-                                <div className="border-2 border-white text-white rounded-xl">
-                                    <div className="px-6 py-4 flex space-x-2 items-center">
-                                        <AiFillInfoCircle className="text-3xl" />
-                                        <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Product Info</h3>
-                                        <IoIosArrowDown className="text-xl"/>
-                                    </div>
 
-                                    <hr/>
-
-                                    <div className="p-6 text-sm">
-                                        {getProductDetailsState.data?.product.description}
-                                    </div>
-
-                                </div>
-
-                                <div className="border-2 border-white text-white rounded-xl">
+                                {/* <div className="border-2 border-white text-white rounded-xl">
                                     <div className="px-6 py-4 flex space-x-2 items-center">
                                         <TbTruckDelivery className="text-3xl" />
                                         <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">Delivery Details</h3>
@@ -161,7 +189,7 @@ export function ShopProduct(){
                                         
                                     </div>
 
-                                </div>
+                                </div> */}
 
                                 {
                                     getProductDetailsState.data?.addons ? 
@@ -194,6 +222,7 @@ export function ShopProduct(){
                                                             <li key={i} className="flex items-center">
                                                             <Radio  id={size.id.toString()} color='tertiary'  checked={currentSize == -1 && i == 0 ? true : size.id === currentSize}  onChange={()=>{
                                                                 setCurrentSize(size.id);
+                                                                handleSizeAndFlavorChange(size.id, currentFlavor);
                                                             }} />
                                                             <label htmlFor={size.id.toString()} className='text-white'>{size.name}</label>
                                                         </li>
@@ -218,6 +247,7 @@ export function ShopProduct(){
                                                             <li key={i} className="flex items-center">
                                                                 <Radio id={flavor.id.toString()} color='tertiary' checked={currentFlavor == -1 && i == 0 ? true : flavor.id === currentFlavor}  onChange={()=>{
                                                                     setCurrentFlavor(flavor.id);
+                                                                    handleSizeAndFlavorChange(currentSize, flavor.id);
                                                                 }} />
                                                                 <label htmlFor={flavor.id.toString()} className='text-white'>{flavor.name}</label>
                                                             </li>
@@ -292,7 +322,7 @@ export function ShopProduct(){
                         {
                             getProductDetailsState.data?.suggested_products && getProductDetailsState.data?.suggested_products.length > 0 ? 
                             <div className="container space-y-3">
-                                <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">People  Also Bought</h1>
+                                <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">People Also Bought</h1>
                                 <ShopPeopleAlsoBoughtCarousel products={getProductDetailsState.data?.suggested_products}/>
                             </div> : null
                         }

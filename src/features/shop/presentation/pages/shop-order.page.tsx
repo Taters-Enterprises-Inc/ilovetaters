@@ -9,9 +9,13 @@ import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { selectUploadProofOfPayment, uploadProofOfPayment } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 
 export function ShopOrder(){
     const getOrdersState = useAppSelector(selectGetOrders);
+    const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
+
     const [images, setImages] = useState<any>();
     const dispatch = useAppDispatch();
     let { hash } = useParams();
@@ -20,7 +24,6 @@ export function ShopOrder(){
     
     const onDrop = useCallback((acceptedFiles : any) => {
         setUploadedFile(acceptedFiles[0]);
-        
         
         acceptedFiles.map((file: any, index : any) => {
           const reader = new FileReader();
@@ -36,9 +39,9 @@ export function ShopOrder(){
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     }, [location]);
 
-    
-
-    
+    useEffect(()=>{
+        dispatch(getSession());
+    },[dispatch]);
     
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: false})
 
@@ -46,7 +49,7 @@ export function ShopOrder(){
         if(hash !== undefined){
             dispatch(getOrders({hash}));
         }
-    },[]);
+    },[uploadProofOfPaymentState]);
     
     const getStatus =(status : number | undefined, payops: number | undefined)=>{
       switch (status) {
@@ -74,20 +77,9 @@ export function ShopOrder(){
         
 
         if(uploadedFile){
-
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             formData.append('uploaded_file', uploadedFile);
-    
-            axios.post(`${REACT_APP_DOMAIN_URL}api/shop/upload_payment`,formData,{
-                headers: {
-                    'Content-Type' : 'multipart/form-data'
-                },
-                withCredentials: true
-            }).then((response)=>{
-                if(hash !== undefined){
-                    dispatch(getOrders({hash}));
-                }
-            })
+            dispatch(uploadProofOfPayment({formData}));
         }
         
     }
@@ -97,40 +89,42 @@ export function ShopOrder(){
         <>
             <ShopPageTitleAndBreadCrumbs title="Order View" pageTitles={['Products', 'Order View']}/>
 
+            
+                    
+            <div className="flex lg:hidden">
+                <div className="flex-1">
+                    <div className="bg-white h-[0.25rem] relative">
+                        <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
+                    </div>
+                    <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pl-4 lg:pl-0">
+                        <BiUserCircle className="text-2xl"/> <span>Your Details</span>
+                    </div>
+                </div>
+                
+                <div className="flex-1">
+                    <div className="bg-white h-[0.25rem] relative">
+                        <div className="absolute rounded-[50%] text-black font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
+                    </div>
+                    <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                        <AiOutlineCreditCard className="text-2xl"/> <span>Payment</span>
+                    </div>
+                </div>
+
+                
+                <div className="flex-1">
+                    <div className="bg-[#424242] h-[0.25rem] relative">
+                        <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
+                    </div>
+                    <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pr-4 lg:pr-0">
+                        <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
+                    </div>
+                </div>
+
+            </div>
+
             <section className="min-h-screen container lg:space-x-4 pb-36">
                     
                 <div className="lg:mt-[-80px]">
-                    
-                    <div className="flex lg:hidden">
-                        <div className="flex-1">
-                            <div className="bg-white h-[0.25rem] relative">
-                                <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">1</div>
-                            </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pl-4 lg:pl-0">
-                                <BiUserCircle className="text-2xl"/> <span>Your Details</span>
-                            </div>
-                        </div>
-                        
-                        <div className="flex-1">
-                            <div className="bg-[#424242] h-[0.25rem] relative">
-                                <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">2</div>
-                            </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
-                                <AiOutlineCreditCard className="text-2xl"/> <span>Payment</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex-1">
-                            <div className="bg-[#424242] h-[0.25rem] relative">
-                                <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">3</div>
-                            </div>
-                            <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pr-4 lg:pr-0">
-                                <AiOutlineCheckCircle className="text-2xl"/> <span>Complete</span>
-                            </div>
-                        </div>
-
-                    </div>
 
                     <div className="flex justify-between items-start flex-col lg:flex-row">
                         <div className="space-y-8 lg:flex-[0_0_60%] lg:max-w-[60%]">
@@ -320,7 +314,7 @@ export function ShopOrder(){
                                                             <>
                                                                 <AiOutlineCloudUpload className="text-white text-5xl"/>
                                                                 <span className="text-white text-lg">Drag and drop here to upload</span>
-                                                                <button className="text-white text-lg bg-secondary px-3 py-1 rounded-lg">Or select file</button>
+                                                                <button type="button" className="text-white text-lg bg-secondary px-3 py-1 rounded-lg">Or select file</button>
                                                             </>
                                                         }
                                                     </>
@@ -341,13 +335,10 @@ export function ShopOrder(){
                                     <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
                                         <AiFillCheckCircle className="text-2xl"/>
                                         <span>
-                                            Proof of Pament Uploaded
+                                            Proof of Payment Uploaded
                                         </span>
                                     </h2> : null
                             }
-                            
-
-
                         </div>
                     </div>
 

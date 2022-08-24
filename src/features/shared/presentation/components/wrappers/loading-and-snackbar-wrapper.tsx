@@ -12,6 +12,8 @@ import { AddToCartState, selectAddToCart } from "features/shop/presentation/slic
 import { resetStoreAndAddress, selectSetStoreAndAddress, SetStoreAndAddressState } from "../../slices/set-store-and-address.slice";
 import { FacebookLoginState, selectFacebookLogin } from "../../slices/facebook-login.slice";
 import { FacebookLoginPointState, selectFacebookLoginPoint } from "../../slices/facebook-login-point.slice";
+import { RemoveItemFromCartState, selectRemoveItemFromCart } from "../../slices/remove-item-from-cart.slice";
+import { selectUploadProofOfPayment, UploadProofOfPaymentState } from "../../slices/upload-proof-of-payment.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -32,7 +34,47 @@ export function LoadingAndSnackbarWrapper(){
     const addToCartState = useAppSelector(selectAddToCart);
     const facebookLoginState = useAppSelector(selectFacebookLogin);
     const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
+    const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
+    const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
     
+    useEffect(()=>{
+        switch(uploadProofOfPaymentState.status){
+            case UploadProofOfPaymentState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case UploadProofOfPaymentState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case UploadProofOfPaymentState.success:
+                showAlert(setSuccessAlert,uploadProofOfPaymentState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case UploadProofOfPaymentState.fail:
+                showAlert(setFailsAlert,uploadProofOfPaymentState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[uploadProofOfPaymentState, dispatch]);
+
+    useEffect(()=>{
+        switch(removeItemFromCartState.status){
+            case RemoveItemFromCartState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case RemoveItemFromCartState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case RemoveItemFromCartState.success:
+                showAlert(setSuccessAlert,removeItemFromCartState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case RemoveItemFromCartState.fail:
+                showAlert(setFailsAlert,removeItemFromCartState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[removeItemFromCartState, dispatch]);
+
     useEffect(()=>{
         switch(facebookLoginPointState.status){
             case FacebookLoginPointState.success:
@@ -44,6 +86,7 @@ export function LoadingAndSnackbarWrapper(){
                 break;
         }
     },[facebookLoginState, dispatch]);
+
     useEffect(()=>{
         switch(facebookLoginState.status){
             case FacebookLoginState.inProgress:

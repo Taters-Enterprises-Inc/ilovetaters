@@ -1,7 +1,7 @@
 import axios from "axios"
 import { SessionModel } from "features/shared/core/domain/session.model";
 import { StoreModel } from "features/shared/core/domain/store.model";
-import {  FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm } from "features/shared/core/shared.params";
+import {  FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm, UploadProofOfPaymentParam } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from '../../constants';
 
 export interface GetStoresAvailableResponse{
@@ -53,6 +53,36 @@ export interface StoreResetResponse{
     data: {
         message: string;
     }
+}
+
+export interface RemoveItemFromCartResponse{
+    data: {
+        message: string;
+    }
+}
+
+export interface UploadProofOfPaymentResponse{
+    data: {
+        message: string;
+    }
+}
+
+export function UploadProofOfPaymentRepository(param: UploadProofOfPaymentParam): Promise<UploadProofOfPaymentResponse>{
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/shared/upload_payment/`,param.formData,{
+        headers: {
+            'Content-Type' : 'multipart/form-data'
+        },
+        withCredentials: true,
+    });
+}
+
+export function RemoveItemFromCartRepository(param: number): Promise<RemoveItemFromCartResponse>{
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/cart/delete/${param}`,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
 }
 
 export function StoreResetRepository(): Promise<StoreResetResponse>{

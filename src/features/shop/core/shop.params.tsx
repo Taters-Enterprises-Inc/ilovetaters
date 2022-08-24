@@ -1,3 +1,8 @@
+export interface GetProductSkuParam{
+    prod_size: number;
+    prod_flavor: number;
+}
+
 export interface GetOrdersParam{
     hash: string;
 }

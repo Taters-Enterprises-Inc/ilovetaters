@@ -31,9 +31,15 @@ export function Addon(props: AddonProps){
             prod_image_name : props.product.product_image,
             prod_name : props.product.name,
             prod_qty : quantity,
+            prod_flavor: -1,
+            prod_size: -1,
             prod_price : props.product.price,
             prod_calc_amount : props.product.price * quantity,
             prod_category : props.product.category,
+            prod_with_drinks: -1,
+            flavors_details: '',
+            prod_sku_id: -1,
+            prod_sku: -1,
         }));
     }
     
