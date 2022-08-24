@@ -87,7 +87,7 @@ export const contactData: Array<ContactDataType> = [
     ),
     heading: "Phone Numbers",
     paragraph: "Hotline: (+63) 997-275-5595",
-    href: "/one",
+    href: "tel:09972755595",
     cardOpt: {
       active: true,
       title: "contact",
@@ -112,7 +112,7 @@ export const contactData: Array<ContactDataType> = [
     ),
     heading: "Email Address",
     paragraph: "contact: support@tatersgroup.com",
-    href: "/one",
+    href: "mailto:support@tatersgroup.com",
     cardOpt: {
       active: true,
       title: "contact",
