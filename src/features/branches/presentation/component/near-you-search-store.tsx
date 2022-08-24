@@ -9,6 +9,8 @@ interface StoreListDeliveryProps {
 export function NearyouSearchStore(props: StoreListDeliveryProps) {
   const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
 
+  console.log(getStoresAvailableState);
+
   return (
     <section className="text-white ">
       {getStoresAvailableState.data.map((store_cluster: any, index: number) => (
@@ -16,28 +18,17 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
             {store_cluster.stores.map((store: any, index: number) => {
-              console.log(store);
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
                   store.store_distance * 1.609344 * 0.5
               );
 
-              const store_availability = distance_in_km > 10;
 
               return (
                 <button
                   key={index}
-                  className={`z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${
-                    store_availability && props.address != null
-                      ? "store-not-available"
-                      : ""
-                  }`}
+                  className={`z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
                 >
-                  {store_availability && props.address != null ? (
-                    <span className="p-1 not-within-reach-text text-center ">
-                      Store not within reach
-                    </span>
-                  ) : null}
                   <div className="md:text-sm text-[13px] md:h-auto h-[70px]  uppercase py-4 font-['Bebas_Neue'] tracking-[2px]">
                     {store.store_name}
                   </div>
@@ -64,19 +55,12 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                     style={{
                       background:
                         "linear-gradient( 0%, rgb(29, 17, 21) 45%, rgb(29, 17, 21) 100%)",
-                      boxShadow:
-                        store_availability && props.address != null
-                          ? ""
-                          : " 0px -39px 25px 13px rgba(0,0,0,0.75)",
+                      boxShadow: " 0px -39px 25px 13px rgba(0,0,0,0.75)",
                     }}
-                    className="z-0 cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
+                    className=" cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
                   >
                     <span
-                      className={`${
-                        store_availability && props.address != null
-                          ? "opacity-30"
-                          : ""
-                      } p-4 md:relative md:top-0 md:left-0  absolute top-[-2px] left-[21px]`}
+                      className={` p-4 md:relative md:top-0 md:left-0  absolute top-[-2px] left-[21px]`}
                     >
                       <svg
                         className="w-4 h-4 stroke-red-400"
@@ -104,20 +88,12 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                     -2 block pr-1 leading-[20px] "
                     >
                       <p
-                        className={` ${
-                          store_availability && props.address != null
-                            ? "opacity-30 text-[#fff]"
-                            : "text-[#bcd2d6] "
-                        } text-[.8125rem] pb-1 pt-1 md:text-left text-center`}
+                        className={` text-[.8125rem] pb-1 pt-1 md:text-left text-center`}
                       >
                         Find us
                       </p>
                       <a
-                        className={`${
-                          store_availability && props.address != null
-                            ? "opacity-30"
-                            : ""
-                        } text-[#fff] md:text-[12px] text-[11.9px] font-normal`}
+                        className={` text-[#fff] md:text-[12px] text-[11.9px] font-normal`}
                         href={store.mapLink}
                       >
                         {store.address}
