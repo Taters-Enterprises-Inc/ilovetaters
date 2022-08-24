@@ -66,7 +66,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps ){
                                     store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
                                 }
                                 <div className="text-sm uppercase ">FULL MENU</div>
-                                <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full"/>
+                                <img src={'https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full"/>
                                 <div className="px-3 py-2">
                                     <h1 className="mb-1 text-xs">{store.store_name}</h1>
                                     <p className="text-[7px]">{store.store_address}</p>

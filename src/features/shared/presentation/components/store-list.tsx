@@ -46,7 +46,7 @@ export function StoreList(props: StoreListProps ){
                                         </div>
                                 </div>
                                 
-                                <img src={REACT_APP_DOMAIN_URL + 'v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full sm::w-[250px] sm::h-[250px] object-fit"/>
+                                <img src={'https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full sm::w-[250px] sm::h-[250px] object-fit"/>
                                 <div className="p-4 space-y-2">
                                     <h1 className="mb-1 text-sm leading-5 font-bold">{store.store_name}</h1>
                                     <p className="text-xs">{store.store_address}</p>
