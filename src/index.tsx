@@ -22,6 +22,7 @@ import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
 import { Admin } from 'features/admin/presentation/pages';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { Login } from 'features/admin/presentation/pages/login.page';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -57,7 +58,8 @@ root.render(
             <Route path="franchising" element={<Franchising/>}></Route>
             <Route path="reseller" element={<Reseller/>}></Route>
             <Route path="branches" element={<Branches/>}></Route>
-            <Route path="admin"element={<Admin/>}> </Route>
+            <Route path="admin/login"element={<Login/>}></Route>
+            <Route path="admin/page"element={<Admin/>}></Route>
             
           </Routes>
         </BrowserRouter>

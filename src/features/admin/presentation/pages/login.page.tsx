@@ -3,7 +3,7 @@ import {FaRegEnvelope} from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
 import { useState } from "react";
 
-export function Admin(){
+export function Login(){
 
     return (
 
@@ -12,8 +12,8 @@ export function Admin(){
             <section className='grid h-screen place-items-center ml-2 mr-2'>
                 <div className='bg-secondary max-w-[350px] mx-auto p-6 px-6 
               font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>
-                    <div className='header_image object-contain md:object-scale-down pt-2'> 
-                        <img src="https://ilovetaters.com/staging/uploads/images/shop/snackshop-logo-creamy-red.png" alt="taterslogo"></img>
+                    <div className='header_image pt-2 flex justify-center items-center'> 
+                        <img src="https://ilovetaters.com/staging/uploads/images/shop/snackshop-logo-creamy-red.png" alt="taterslogo" className='w-36'></img>
                     </div>
                     
                     <div className='login-body pt-4'>
