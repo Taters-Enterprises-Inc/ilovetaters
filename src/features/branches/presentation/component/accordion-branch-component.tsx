@@ -115,7 +115,7 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={`https://maps.google.com/?q=${data.nameofstore}`}
+                        href={`https://maps.google.com/?q=${data.nameofstore +" "+ data.address}`}
                       >
                         {data.address}
                       </a>
