@@ -14,7 +14,7 @@ export const AccordionComponent: React.FC<{
     dispatch(getBranchesStore())
   }, [dispatch]);
 
-
+   console.log(getBranchesStoreState)
   return (
     <div className={`relative  `}>
       <div
@@ -115,7 +115,7 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={data.maplink}
+                        href={`https://maps.google.com/?q=${data.nameofstore}`}
                       >
                         {data.address}
                       </a>
