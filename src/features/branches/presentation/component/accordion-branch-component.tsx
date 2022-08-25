@@ -157,7 +157,7 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] text-[12px] font-normal "
-                        href={`/tel:${contactno}`}
+                        href={`tel:${contactno}`}
                       >
                         {contactno}
                       </a>
