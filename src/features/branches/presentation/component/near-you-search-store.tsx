@@ -129,7 +129,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                       </p>
                       <a
                         className="text-[#fff] text-[12px] font-normal "
-                        href={`/tel:${store.contactno}`}
+                        href={`tel:${store.contactno}`}
                       >
                         {store.contactno}
                       </a>
