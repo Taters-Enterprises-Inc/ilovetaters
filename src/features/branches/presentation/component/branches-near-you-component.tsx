@@ -20,7 +20,7 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
   
   useEffect(() => {
     const scrollDown = () => {
-      if (window.pageYOffset > 1300) {
+      if (window.pageYOffset > 1700) {
         setShowButton(true);
       } else {
         setShowButton(false);
@@ -34,11 +34,11 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
 
 
   return (
-    <section className="container pb-[200px] px-4">
+    <section  ref={ref} className="container pb-[200px] px-4">
       <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
         WHICH STORE IS NEAR YOU?
       </h1>
-      <div ref={ref} className="flex items-center justify-center mb-3">
+      <div className="flex items-center justify-center mb-3">
         <label className="pure-material-textfield-outlined w-full">
           <SearchAddress
             onPlaceSelected={(place: string) => {
