@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
-import {getBranchesStore, selectGetBranchesStore} from "../slices/get-branches-store";
+import {
+  getBranchesStore,
+  selectGetBranchesStore,
+} from "../slices/get-branches-store";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { BranchesStoreModel } from "features/branches/core/domain/branches-store.model";
 export const AccordionComponent: React.FC<{
   region: string;
-  seeItShow:any
-}> = ({ region ,seeItShow }): JSX.Element => {
+  seeItShow: any;
+}> = ({ region, seeItShow }): JSX.Element => {
   const [show, setShow] = useState<boolean>(false);
-  const getBranchesStoreState:any= useAppSelector(selectGetBranchesStore);
+  const getBranchesStoreState: any = useAppSelector(selectGetBranchesStore);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getBranchesStore())
+    dispatch(getBranchesStore());
   }, [dispatch]);
 
-   console.log(getBranchesStoreState)
+  console.log(getBranchesStoreState);
   return (
     <div className={`relative  `}>
       <div
         className={`
-          cursor-pointer flex ${!show ? 'mb-4' : ""} transition-all py-2 border items-center font rounded cursor-pointer px-4	  
+          cursor-pointer flex ${
+            !show ? "mb-4" : ""
+          } transition-all py-2 border items-center font rounded cursor-pointer px-4	  
         `}
         onClick={() => {
-          seeItShow(!show)
+          seeItShow(!show);
           setShow((isShow: boolean) => !isShow);
         }}
       >
@@ -50,9 +55,17 @@ export const AccordionComponent: React.FC<{
             show ? "h-auto bg-primary " : "h-0"
           } grid lg:grid lg:grid-cols-2  md:w-full transition-all duration-1000 gap-x-4 gap-y-4 grid-cols-2 py-4 rounded-lg w-full  `}
         >
-         {getBranchesStoreState?.data?.[`${region}`].map(
+          {getBranchesStoreState?.data?.[`${region}`].map(
             (
-               {nameofstore , address ,contactno ,store_image ,operatinghours ,latitude ,longitude }:BranchesStoreModel,
+              {
+                nameofstore,
+                address,
+                contactno,
+                store_image,
+                operatinghours,
+                latitude,
+                longitude,
+              }: BranchesStoreModel,
               index: number
             ): JSX.Element => {
               return (
@@ -69,9 +82,9 @@ export const AccordionComponent: React.FC<{
                     <img
                       className="object-cover	w-[100%] h-[100%] max-h-[300px]  	"
                       src={
-                        store_image ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store_image}`
-                        :
-                        "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
+                        store_image
+                          ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store_image}`
+                          : "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
                       }
                       alt="taters_ayalacircuit"
                     />
@@ -115,7 +128,7 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={`https://www.google.com/maps/search/?api=1&query=${nameofstore}`}
+                        href={`https://www.google.com/maps/search/${nameofstore}/@${latitude},${longitude},15z`}
                       >
                         {address}
                       </a>
@@ -172,13 +185,19 @@ export const AccordionComponent: React.FC<{
                         Operating Hours
                       </p>
                       <div className="md:text-[12px] text-[11px] font-normal  text-[#fff] ">
-                        <p>{operatinghours.split("</br>")[1] !== undefined ?  operatinghours.split("</br>")[0] + " , " + operatinghours.split("</br>")[1] :operatinghours.split("</br>")[0] }</p>
+                        <p>
+                          {operatinghours.split("</br>")[1] !== undefined
+                            ? operatinghours.split("</br>")[0] +
+                              " , " +
+                              operatinghours.split("</br>")[1]
+                            : operatinghours.split("</br>")[0]}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               );
-            } 
+            }
           )}
         </div>
       )}
