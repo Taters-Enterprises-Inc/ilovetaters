@@ -20,8 +20,10 @@ import { Catering, CateringProducts } from 'features/catering/presentation/pages
 import { Franchising } from 'features/franchising/presentation/pages';
 import { Reseller } from 'features/reseller/presentation/pages';
 import { Branches } from 'features/branches/presentation/pages';
-import { Admin } from 'features/admin/presentation/pages';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { Login } from 'features/admin/presentation/pages/login.page';
+import { Admin } from 'features/admin/presentation/pages';
+ 
 import { LoadingAndSnackbarWrapper } from 'features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper';
 import { CateringHome } from 'features/catering/presentation/pages/catering-home.page';
 
@@ -51,6 +53,14 @@ root.render(
                 <Route path=":hash" element={<PopClubDeal />}/>
               </Route>
 
+            <Route path="catering" element={<Catering/>}></Route>
+            <Route path="franchising" element={<Franchising/>}></Route>
+            <Route path="reseller" element={<Reseller/>}></Route>
+            <Route path="branches" element={<Branches/>}></Route>
+            
+            <Route path="admin/login"element={<Login/>}></Route>
+            <Route path="admin/main"element={<Admin/>}></Route>
+            
               <Route path='shop' element={<Shop/>}>
                 
                 <Route index element={<ShopHome/>}/>
@@ -76,10 +86,9 @@ root.render(
 
 
               <Route path="franchising" element={<Franchising/>}/>
-              <Route path="admin"element={<Admin/>}> </Route>
-
               <Route path="reseller" element={<Reseller/>}/>
               <Route path="branches" element={<Branches/>}/>
+
             
             </Route>
     
