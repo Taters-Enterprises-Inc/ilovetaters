@@ -6,6 +6,15 @@ interface StoreListDeliveryProps {
   address: string;
 }
 
+interface StoreType {
+  store_name: string;
+  store_distance: number;
+  store_image: string;
+  contactno: string;
+  operatinghours: string;
+  address: string;
+}
+
 export function NearyouSearchStore(props: StoreListDeliveryProps) {
   const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
 
@@ -15,7 +24,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
         <div key={index} className="space-y-3">
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
-            {store_cluster.stores.map((store: any, index: number) => {
+            {store_cluster.stores.map((store: StoreType, index: number) => {
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
                   store.store_distance * 1.609344 * 0.5
@@ -126,6 +135,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                       </a>
                     </div>
                   </div>
+
                   <div className="flex  md:h-[85px] h-auto py-2 w-full">
                     <span className="p-4">
                       <svg

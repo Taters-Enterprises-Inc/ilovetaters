@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {getBranchesStore, selectGetBranchesStore} from "../slices/get-branches-store";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-
+import { BranchesStoreModel } from "features/branches/core/domain/branches-store.model";
 export const AccordionComponent: React.FC<{
   region: string;
   seeItShow:any
@@ -52,7 +52,7 @@ export const AccordionComponent: React.FC<{
         >
          {getBranchesStoreState?.data?.[`${region}`].map(
             (
-               data:any,
+               {nameofstore , address ,contactno ,store_image ,operatinghours }:BranchesStoreModel,
               index: number
             ): JSX.Element => {
               return (
@@ -63,13 +63,13 @@ export const AccordionComponent: React.FC<{
                   }z-0 overflow-hidden shadow-tertiary bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
                 >
                   <h1 className="font-['Bebas_Neue'] text-center tracking-[1.5px] pt-2 antialiased md:text-[1.0625rem] text-[13px] text-[#fff] pb-2 relative md:px-0 px-2 h-[60px] flex items-center justify-center">
-                    {data.nameofstore}
+                    {nameofstore}
                   </h1>
                   <div className="w-full h-auto relative">
                     <img
                       className="object-cover	w-[100%] h-[100%] max-h-[300px]  	"
                       src={
-                        data.store_image ? `https://ilovetaters.com/shop/assets/img//store_images/250/${data.store_image}`
+                        store_image ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store_image}`
                         :
                         "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
                       }
@@ -115,9 +115,9 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={`https://maps.google.com/?q=${data.nameofstore +" "+ data.address}`}
+                        href={`https://maps.google.com/?q=${nameofstore}`}
                       >
-                        {data.address}
+                        {address}
                       </a>
                     </div>
                   </div>
@@ -144,9 +144,9 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] text-[12px] font-normal "
-                        href={`/tel:${data.contactno}`}
+                        href={`/tel:${contactno}`}
                       >
-                        {data.contactno}
+                        {contactno}
                       </a>
                     </div>
                   </div>
@@ -172,7 +172,7 @@ export const AccordionComponent: React.FC<{
                         Operating Hours
                       </p>
                       <div className="md:text-[12px] text-[11px] font-normal  text-[#fff] ">
-                        <p>{data.operatinghours.split("</br>")[1] !== undefined ?  data.operatinghours.split("</br>")[0] + " , " + data.operatinghours.split("</br>")[1] :data.operatinghours.split("</br>")[0] }</p>
+                        <p>{operatinghours.split("</br>")[1] !== undefined ?  operatinghours.split("</br>")[0] + " , " + operatinghours.split("</br>")[1] :operatinghours.split("</br>")[0] }</p>
                       </div>
                     </div>
                   </div>

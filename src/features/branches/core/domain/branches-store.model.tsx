@@ -5,4 +5,5 @@ export interface BranchesStoreModel {
     operatinghours: string;
     maplink: string;
     store_image: string;
+    
 }
