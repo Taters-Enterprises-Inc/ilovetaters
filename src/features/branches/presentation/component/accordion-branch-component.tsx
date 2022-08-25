@@ -17,7 +17,6 @@ export const AccordionComponent: React.FC<{
     dispatch(getBranchesStore());
   }, [dispatch]);
 
-  console.log(getBranchesStoreState);
   return (
     <div className={`relative  `}>
       <div

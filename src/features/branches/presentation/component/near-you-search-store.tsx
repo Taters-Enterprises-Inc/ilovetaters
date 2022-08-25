@@ -15,7 +15,7 @@ interface StoreType {
   address: string;
 }
 
-export function NearyouSearchStore(props: StoreListDeliveryProps) {
+export const NearyouSearchStore:React.FC =():JSX.Element => {
   const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
 
   return (
@@ -39,9 +39,9 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                     {store.store_name}
                   </div>
 
-                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                    <div className="flex justify-end">
-                      <span className="bg-secondary px-2 text-sm">
+                  <div className="absolute flex flex-col items-stretch w-full md:mt-16 mt-20 space-y-2 bg-transparent">
+                    <div className="flex justify-end ">
+                      <span className="bg-secondary px-2 text-sm ">
                         {distance_in_km} KM
                       </span>
                     </div>

@@ -51,7 +51,7 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
       </div>
 
       
-      <NearyouSearchStore  address={address}/>
+      <NearyouSearchStore  />
       {
         showButton && (
             <button
