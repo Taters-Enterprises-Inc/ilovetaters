@@ -52,7 +52,7 @@ export const AccordionComponent: React.FC<{
         >
          {getBranchesStoreState?.data?.[`${region}`].map(
             (
-               {nameofstore , address ,contactno ,store_image ,operatinghours }:BranchesStoreModel,
+               {nameofstore , address ,contactno ,store_image ,operatinghours ,latitude ,longitude }:BranchesStoreModel,
               index: number
             ): JSX.Element => {
               return (
@@ -115,7 +115,7 @@ export const AccordionComponent: React.FC<{
                       </p>
                       <a
                         className="text-[#fff] md:text-[12px] text-[11.9px] font-normal 	"
-                        href={`https://maps.google.com/?q=${nameofstore}`}
+                        href={`https://www.google.com/maps/search/?api=1&query=${nameofstore}`}
                       >
                         {address}
                       </a>
