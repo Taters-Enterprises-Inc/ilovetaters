@@ -253,22 +253,23 @@ export function ShopProduct(){
                                         <div className="flex flex-row h-full w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
 
                                             <button onClick={()=>{
-                                                if(quantity > 1)
+                                                if(quantity > 1 && quantity <= 10)
                                                     setQuantity(quantity - 1)
                                             }} className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary">
                                                 <span className="m-auto text-5xl font-thin leading-3">−</span>
                                             </button>
 
                                             <input value={quantity} 
+                                                readOnly
                                                 onChange={(event : any) => {
                                                     const value = event.target.value;
-                                                    if(value >= 1)
-                                                        setQuantity(event.target.value);
+                                                    if(value >= 1 && value <= 10)
+                                                        setQuantity(Math.floor(event.target.value));
                                                 }}
-                                            type="number" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
+                                                type="number" min="1" max="10" className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
                                             
                                             <button onClick={()=>{
-                                                if(quantity >= 1)
+                                                if(quantity >= 1 && quantity < 10)
                                                     setQuantity(quantity + 1)
                                             }} className="h-full w-[150px] rounded-r cursor-pointer bg-primary">
                                                 <span className="m-auto text-5xl font-thin leading-3">+</span>

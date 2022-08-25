@@ -35,6 +35,9 @@ import getProductSku from '../shop/presentation/slices/get-product-sku.slice';
 import removeItemFromCart from '../shared/presentation/slices/remove-item-from-cart.slice';
 import uploadProofOfPayment from '../shared/presentation/slices/upload-proof-of-payment.slice';
 
+import addContact from '../shared/presentation/slices/add-contact.slice';
+import getContacts from '../shared/presentation/slices/get-contacts.slice';
+
 
 export const store = configureStore({
   reducer: {
@@ -77,6 +80,8 @@ export const store = configureStore({
     getProductSku: getProductSku,
     removeItemFromCart: removeItemFromCart,
     uploadProofOfPayment: uploadProofOfPayment,
+    addContact: addContact,
+    getContacts: getContacts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

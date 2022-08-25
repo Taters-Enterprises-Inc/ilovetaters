@@ -1,3 +1,7 @@
+export interface AddContactParam{
+    contact: string;
+}
+
 export interface UploadProofOfPaymentParam{
     formData: FormData;
 }

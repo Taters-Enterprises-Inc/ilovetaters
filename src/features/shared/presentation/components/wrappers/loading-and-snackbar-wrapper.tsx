@@ -14,6 +14,7 @@ import { FacebookLoginState, selectFacebookLogin } from "../../slices/facebook-l
 import { FacebookLoginPointState, selectFacebookLoginPoint } from "../../slices/facebook-login-point.slice";
 import { RemoveItemFromCartState, selectRemoveItemFromCart } from "../../slices/remove-item-from-cart.slice";
 import { selectUploadProofOfPayment, UploadProofOfPaymentState } from "../../slices/upload-proof-of-payment.slice";
+import { AddContactState, selectAddContact } from "../../slices/add-contact.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -36,7 +37,28 @@ export function LoadingAndSnackbarWrapper(){
     const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
     const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
     const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
+    const addContactState = useAppSelector(selectAddContact);
     
+    useEffect(()=>{
+        switch(addContactState.status){
+            case AddContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case AddContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.success:
+                showAlert(setSuccessAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.fail:
+                showAlert(setFailsAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[addContactState, dispatch]);
+
+
     useEffect(()=>{
         switch(uploadProofOfPaymentState.status){
             case UploadProofOfPaymentState.inProgress:

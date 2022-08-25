@@ -1,7 +1,7 @@
 import axios from "axios"
 import { SessionModel } from "features/shared/core/domain/session.model";
 import { StoreModel } from "features/shared/core/domain/store.model";
-import {  FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm, UploadProofOfPaymentParam } from "features/shared/core/shared.params";
+import {  AddContactParam, FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm, UploadProofOfPaymentParam } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from '../../constants';
 
 export interface GetStoresAvailableResponse{
@@ -65,6 +65,36 @@ export interface UploadProofOfPaymentResponse{
     data: {
         message: string;
     }
+}
+
+export interface GetContactsResponse{
+    data: {
+        message: string;
+    }
+}
+
+export interface AddContactResponse{
+    data: {
+        message: string;
+    }
+}
+
+export function AddContactRepository(param: AddContactParam): Promise<AddContactResponse>{
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/shared/contacts`, param,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
+}
+
+export function GetContactsRepository(): Promise<GetContactsResponse>{
+    return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/contacts`,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
 }
 
 export function UploadProofOfPaymentRepository(param: UploadProofOfPaymentParam): Promise<UploadProofOfPaymentResponse>{

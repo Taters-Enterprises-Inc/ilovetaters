@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Checkbox from "@mui/material/Checkbox";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { FormEvent, useEffect, useRef } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import NumberFormat from "react-number-format";
 import { BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
@@ -15,6 +15,7 @@ import { checkoutOrders, CheckoutOrdersState, resetCheckoutOrders, selectCheckou
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { AddContactModal } from "../modals";
 
 export function ShopCheckout(){
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ export function ShopCheckout(){
     const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
     const location = useLocation();
     const phoneNumberRef = useRef(null);
+    const [openAddContactModal, setOpenAddContactModal] = useState(false);
 
     useEffect(()=>{
         if( checkoutOrdersState.status === CheckoutOrdersState.success && checkoutOrdersState.data){
@@ -189,7 +191,12 @@ export function ShopCheckout(){
                                               } 
                                             }}
                                         />
-                                        <span className="text-xs text-tertiary underline underline-offset-4">Setup your phone number</span>
+                                        <button 
+                                            type="button"
+                                            onClick={()=>{
+                                                setOpenAddContactModal(true);
+                                            }}
+                                            className="text-xs text-tertiary underline underline-offset-4">Setup your phone number</button>
                                     </div>
                                 </div>
                                 
@@ -303,6 +310,10 @@ export function ShopCheckout(){
                     </div>
                     
             </section>
+
+            <AddContactModal open={openAddContactModal} onClose={()=>{
+                setOpenAddContactModal(false);
+            }}/>
         </>
     )
 }
