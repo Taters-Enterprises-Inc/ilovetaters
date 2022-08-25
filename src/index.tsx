@@ -58,9 +58,6 @@ root.render(
             <Route path="reseller" element={<Reseller/>}></Route>
             <Route path="branches" element={<Branches/>}></Route>
             
-            <Route path="admin/login"element={<Login/>}></Route>
-            <Route path="admin/main"element={<Admin/>}></Route>
-            
               <Route path='shop' element={<Shop/>}>
                 
                 <Route index element={<ShopHome/>}/>
@@ -88,6 +85,9 @@ root.render(
               <Route path="franchising" element={<Franchising/>}/>
               <Route path="reseller" element={<Reseller/>}/>
               <Route path="branches" element={<Branches/>}/>
+
+              <Route path="admin"element={<Login/>}></Route>
+              <Route path="admin/main"element={<Admin/>}></Route>
 
             
             </Route>
