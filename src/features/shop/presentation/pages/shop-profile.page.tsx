@@ -90,10 +90,10 @@ export function ShopProfile(){
 
                     <div className="space-y-4">
                         {
-                            getContactsState.data?.map((person)=>(
+                            getContactsState.data?.map((val)=>(
                                 <div className="flex">
                                     <div className="border border-white rounded-l-md flex-1">
-                                        <input readOnly className="px-4 text-white py-4 bg-transparent w-full" value={person.contact}/>
+                                        <input readOnly className="px-4 text-white py-4 bg-transparent w-full" value={val.contact}/>
                                     </div>
                                     <button className="text-white border border-blue-700 bg-blue-700 px-4">
                                         <FiEdit/>

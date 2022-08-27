@@ -5,6 +5,7 @@ import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
 import Checkbox from "@mui/material/Checkbox";
+import Select from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -16,15 +17,25 @@ import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-b
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { AddContactModal } from "../modals";
+import { getContacts, selectGetContacts } from "features/shared/presentation/slices/get-contacts.slice";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
+import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 
 export function ShopCheckout(){
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const getSessionState = useAppSelector(selectGetSession);
-    const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
     const location = useLocation();
     const phoneNumberRef = useRef(null);
     const [openAddContactModal, setOpenAddContactModal] = useState(false);
+
+    
+    const getContactsState = useAppSelector(selectGetContacts);
+    const addContactState = useAppSelector(selectAddContact);
+    const getSessionState = useAppSelector(selectGetSession);
+    const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
 
     useEffect(()=>{
         if( checkoutOrdersState.status === CheckoutOrdersState.success && checkoutOrdersState.data){
@@ -35,7 +46,8 @@ export function ShopCheckout(){
 
     useEffect(()=>{
         dispatch(getSession());
-    },[dispatch]);
+        dispatch(getContacts());
+    },[addContactState]);
     
     useEffect(() => {
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -103,7 +115,6 @@ export function ShopCheckout(){
          return <NumberFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
         }
     }
-
     return (
         <>
             <ShopPageTitleAndBreadCrumbs title="Checkout" pageTitles={['Products', 'Checkout']} />
@@ -174,23 +185,39 @@ export function ShopCheckout(){
                                         }
                                     </div>
                                     <div className="flex-1">
-                                        <PhoneInput
-                                            country={'ph'}
-                                            disableDropdown
-                                            inputClass='!bg-transparent !text-white !py-[27px] !w-full'
-                                            inputProps={{
-                                              name: 'phoneNumber',
-                                              ref: phoneNumberRef,
-                                              required: true,
-                                            }}
-                                            isValid={(value, country: any) => {
-                                              if (value.match(/63/) || value.match(/09/)) {
-                                                return true;
-                                              } else  {
-                                                return 'Please use +63 or 09';
-                                              } 
-                                            }}
-                                        />
+                                        {
+                                            getContactsState?.data && getContactsState.data.length > 0? 
+                                            <FormControl className="w-full">
+                                                <InputLabel id="demo-simple-select-helper-label">Contacts</InputLabel>
+                                                <Select
+                                                    className="w-full"
+                                                    label="Contacts"
+                                                    name="phoneNumber"
+                                                >
+                                                    {
+                                                    getContactsState.data.map((val)=> <MenuItem value={val.contact}>{val.contact}</MenuItem>)
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                            :
+                                            <PhoneInput
+                                                country={'ph'}
+                                                disableDropdown
+                                                inputClass='!bg-transparent !text-white !py-[27px] !w-full'
+                                                inputProps={{
+                                                name: 'phoneNumber',
+                                                ref: phoneNumberRef,
+                                                required: true,
+                                                }}
+                                                isValid={(value, country: any) => {
+                                                if (value.match(/63/) || value.match(/09/)) {
+                                                    return true;
+                                                } else  {
+                                                    return 'Please use +63 or 09';
+                                                } 
+                                                }}
+                                            />
+                                        }
                                         <button 
                                             type="button"
                                             onClick={()=>{
@@ -248,7 +275,7 @@ export function ShopCheckout(){
                                 <div className="flex justify-start items-center space-x-1 text-white">
                                     <Checkbox color="tertiary" required/>
                                     <span>I agree with the </span>
-                                    <button className="text-tertiary">Terms & Conditions</button>
+                                    <button type="button" className="text-tertiary">Terms & Conditions</button>
                                 </div>
 
                                 <div className="flex flex-col lg:flex-row lg:space-x-4">
