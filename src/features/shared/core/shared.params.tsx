@@ -1,3 +1,13 @@
+export interface DeleteContactParam{
+    id: number;
+}
+export interface UpdateContactParam{
+    id: number;
+
+    body:{
+        contact: string;
+    }
+}
 export interface AddContactParam{
     contact: string;
 }

@@ -1,27 +1,37 @@
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { ContactModel } from "features/shared/core/domain/contact.model";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import { deleteContact, selectDeleteContact } from "features/shared/presentation/slices/delete-contact.slice";
 import { getContacts, selectGetContacts } from "features/shared/presentation/slices/get-contacts.slice";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { selectUpdateContact } from "features/shared/presentation/slices/update-contact.slice";
 import { useEffect, useState } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 import { ShopProfileContainer } from "../components/shop-profile-container";
-import { AddContactModal } from "../modals";
+import { AddContactModal, UpdateContactModal } from "../modals";
 
 export function ShopProfile(){
     const getSessionState = useAppSelector(selectGetSession);
     const addContactState = useAppSelector(selectAddContact);
+    const deleteContactState = useAppSelector(selectDeleteContact);
+    const updateContactState = useAppSelector(selectUpdateContact);
     const getContactsState = useAppSelector(selectGetContacts);
     const dispatch = useAppDispatch();
+
     const [openAddContactModal, setOpenAddContactModal] = useState(false);
+    const [openUpdateContactModal, setOpenUpdateContactModal] = useState<{status: boolean; contact?: ContactModel}>({
+        status: false,
+        contact: undefined
+    });
 
     useEffect(()=>{
         dispatch(getContacts());
         dispatch(getSession());
-    },[addContactState,dispatch]);
+    },[addContactState, deleteContactState, updateContactState,dispatch]);
     
     const location = useLocation();
     
@@ -95,10 +105,19 @@ export function ShopProfile(){
                                     <div className="border border-white rounded-l-md flex-1">
                                         <input readOnly className="px-4 text-white py-4 bg-transparent w-full" value={val.contact}/>
                                     </div>
-                                    <button className="text-white border border-blue-700 bg-blue-700 px-4">
+                                    <button onClick={()=>{
+                                        setOpenUpdateContactModal({
+                                            status: true,
+                                            contact: val,
+                                        })
+                                    }} className="text-white border border-blue-700 bg-blue-700 px-4">
                                         <FiEdit/>
                                     </button>
-                                    <button className="text-white border border-orange-700 bg-orange-700 px-4">
+                                    <button onClick={()=>{
+                                        dispatch(deleteContact({
+                                            id: val.id,
+                                        }));
+                                    }}  className="text-white border border-orange-700 bg-orange-700 px-4">
                                         <BsFillTrashFill/>
                                     </button>
                                 </div>
@@ -113,6 +132,13 @@ export function ShopProfile(){
             </ShopProfileContainer>
             <AddContactModal open={openAddContactModal} onClose={()=>{
                 setOpenAddContactModal(false);
+            }}/>
+
+            <UpdateContactModal open={openUpdateContactModal.status} contact={openUpdateContactModal.contact} onClose={()=>{
+                setOpenUpdateContactModal({
+                    status: false,
+                    contact: undefined,
+                })
             }}/>
         </>
     );

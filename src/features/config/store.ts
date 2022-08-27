@@ -36,6 +36,8 @@ import removeItemFromCart from '../shared/presentation/slices/remove-item-from-c
 import uploadProofOfPayment from '../shared/presentation/slices/upload-proof-of-payment.slice';
 
 import addContact from '../shared/presentation/slices/add-contact.slice';
+import deleteContact from '../shared/presentation/slices/delete-contact.slice';
+import updateContact from '../shared/presentation/slices/update-contact.slice';
 import getContacts from '../shared/presentation/slices/get-contacts.slice';
 
 
@@ -81,6 +83,8 @@ export const store = configureStore({
     removeItemFromCart: removeItemFromCart,
     uploadProofOfPayment: uploadProofOfPayment,
     addContact: addContact,
+    updateContact: updateContact,
+    deleteContact: deleteContact,
     getContacts: getContacts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

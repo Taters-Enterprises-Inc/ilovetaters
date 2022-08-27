@@ -15,6 +15,8 @@ import { FacebookLoginPointState, selectFacebookLoginPoint } from "../../slices/
 import { RemoveItemFromCartState, selectRemoveItemFromCart } from "../../slices/remove-item-from-cart.slice";
 import { selectUploadProofOfPayment, UploadProofOfPaymentState } from "../../slices/upload-proof-of-payment.slice";
 import { AddContactState, selectAddContact } from "../../slices/add-contact.slice";
+import { DeleteContactState, selectDeleteContact } from "../../slices/delete-contact.slice";
+import { selectUpdateContact, UpdateContactState } from "../../slices/update-contact.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -38,7 +40,66 @@ export function LoadingAndSnackbarWrapper(){
     const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
     const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
     const addContactState = useAppSelector(selectAddContact);
+    const deleteContactState = useAppSelector(selectDeleteContact);
+    const updateContactState = useAppSelector(selectUpdateContact);
     
+    useEffect(()=>{
+        switch(updateContactState.status){
+            case UpdateContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case UpdateContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case UpdateContactState.success:
+                showAlert(setSuccessAlert,updateContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case UpdateContactState.fail:
+                showAlert(setFailsAlert,updateContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[updateContactState, dispatch]);
+
+    useEffect(()=>{
+        switch(deleteContactState.status){
+            case DeleteContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case DeleteContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case DeleteContactState.success:
+                showAlert(setSuccessAlert,deleteContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case DeleteContactState.fail:
+                showAlert(setFailsAlert,deleteContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[deleteContactState, dispatch]);
+
+    useEffect(()=>{
+        switch(addContactState.status){
+            case AddContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case AddContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.success:
+                showAlert(setSuccessAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.fail:
+                showAlert(setFailsAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[addContactState, dispatch]);
+
     useEffect(()=>{
         switch(addContactState.status){
             case AddContactState.inProgress:

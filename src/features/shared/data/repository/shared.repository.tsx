@@ -1,7 +1,7 @@
 import axios from "axios"
 import { SessionModel } from "features/shared/core/domain/session.model";
 import { StoreModel } from "features/shared/core/domain/store.model";
-import {  AddContactParam, FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm, UploadProofOfPaymentParam } from "features/shared/core/shared.params";
+import {  AddContactParam, DeleteContactParam, FacebookLoginPointParam, GetStoresAvailableParam, SetSessionParam, SetStoreAndAddressParm, UpdateContactParam, UploadProofOfPaymentParam } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from '../../constants';
 
 export interface GetStoresAvailableResponse{
@@ -77,6 +77,36 @@ export interface AddContactResponse{
     data: {
         message: string;
     }
+}
+
+export interface DeleteContactResponse{
+    data: {
+        message: string;
+    }
+}
+
+export interface UpdateContactResponse{
+    data: {
+        message: string;
+    }
+}
+
+export function UpdateContactRepository(param: UpdateContactParam): Promise<UpdateContactResponse>{
+    return axios.put(`${REACT_APP_DOMAIN_URL}api/profile/contact/${param.id}`,param.body,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
+}
+
+export function DeleteContactRepository(param: DeleteContactParam): Promise<DeleteContactResponse>{
+    return axios.delete(`${REACT_APP_DOMAIN_URL}api/profile/contact/${param.id}`,{
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+    });
 }
 
 export function AddContactRepository(param: AddContactParam): Promise<AddContactResponse>{

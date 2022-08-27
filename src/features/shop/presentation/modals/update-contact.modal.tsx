@@ -1,26 +1,22 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { addContact, selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
-import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { removeItemFromCart, RemoveItemFromCartState, resetRemoveItemFromCart, selectRemoveItemFromCart } from "features/shared/presentation/slices/remove-item-from-cart.slice";
-import { useEffect, useRef, useState } from "react";
-import { BsCartX } from "react-icons/bs";
+import { useAppDispatch } from "features/config/hooks";
+import { ContactModel } from "features/shared/core/domain/contact.model";
+import { updateContact } from "features/shared/presentation/slices/update-contact.slice";
+import { useRef } from "react";
 import { IoMdClose } from "react-icons/io";
-import NumberFormat from "react-number-format";
 import PhoneInput from "react-phone-input-2";
-import { useNavigate } from "react-router-dom";
 
-interface AddContactModalProps{
+interface UpdateContactModalProps{
   open : boolean,
   onClose: any,
+  contact?: ContactModel,
 }
 
-export function AddContactModal(props : AddContactModalProps){
+export function UpdateContactModal(props : UpdateContactModalProps){
 
   const dispatch = useAppDispatch();
   const phoneNumberRef = useRef(null);
 
-  if(props.open){
+  if(props.open && props.contact){
       document.body.classList.add('overflow-hidden');
   }else {
       document.body.classList.remove('overflow-hidden');
@@ -40,13 +36,14 @@ export function AddContactModal(props : AddContactModalProps){
         <div>
           <div className="text-white text-3xl flex justify-center items-center space-x-2 font-['Bebas_Neue'] tracking-[2px] text-center border-white border-2 rounded-t-2xl py-2 my-4">
             <span>
-              Add Contact
+              Update Contact
             </span>
           </div>
           <div className="space-y-4">
             <PhoneInput
                   country={'ph'}
                   disableDropdown
+                  value={props.contact.contact}
                   inputClass='!bg-transparent !text-white !py-[27px] !w-full'
                   inputProps={{
                     ref: phoneNumberRef,
@@ -71,10 +68,18 @@ export function AddContactModal(props : AddContactModalProps){
                   ( phoneNumber.value.match(/09/) &&
                   phoneNumber.value.length == 14 ) 
               ){
+
+                if(props.contact){
+
+                  dispatch(updateContact({
+                    id: props.contact.id,
+                    body:{
+                      contact: phoneNumber.value,
+                    }
+                  }));
+                }
                 
-                dispatch(addContact({
-                  contact: phoneNumber.value,
-                }));
+
                 props.onClose();
             }else{
               
@@ -82,7 +87,7 @@ export function AddContactModal(props : AddContactModalProps){
                   phoneNumber.focus();
               }
             }
-            }} className="bg-button text-white text-lg w-full py-2 rounded-lg">Add Contact</button>
+            }} className="bg-button text-white text-lg w-full py-2 rounded-lg">Update Contact</button>
           </div>
         </div>
         
