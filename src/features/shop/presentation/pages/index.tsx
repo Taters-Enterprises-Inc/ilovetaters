@@ -1,5 +1,5 @@
 export { Shop } from './shop.page';
-export { ShopHome } from './shope-home.page';
+export { ShopHome } from './shop-home.page';
 export { ShopProduct } from './shop-product.page';
 export { ShopProducts } from './shop-products.page';
 export { ShopCheckout } from './shop-checkout.page';

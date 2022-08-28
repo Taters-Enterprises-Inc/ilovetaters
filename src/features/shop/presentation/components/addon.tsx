@@ -31,9 +31,15 @@ export function Addon(props: AddonProps){
             prod_image_name : props.product.product_image,
             prod_name : props.product.name,
             prod_qty : quantity,
+            prod_flavor: -1,
+            prod_size: -1,
             prod_price : props.product.price,
             prod_calc_amount : props.product.price * quantity,
             prod_category : props.product.category,
+            prod_with_drinks: -1,
+            flavors_details: '',
+            prod_sku_id: -1,
+            prod_sku: -1,
         }));
     }
     
@@ -53,7 +59,7 @@ export function Addon(props: AddonProps){
                             <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
 
                                 <button onClick={()=>{
-                                    if(quantity > 1)
+                                    if(quantity > 1 && quantity <= 10)
                                         setQuantity(quantity - 1);
                                 }} className=" h-full w-20 rounded-l cursor-pointer outline-none bg-primary">
                                     <span className="m-auto text-2xl font-thinleading-3" >−</span>
@@ -61,12 +67,12 @@ export function Addon(props: AddonProps){
 
                                 <input value={quantity} onChange={(event : any) => {
                                     const value = event.target.value;
-                                    if(value >= 1)
-                                        setQuantity(event.target.value);
-                                }} type="number" className="leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
+                                    if(value >= 1 && value <= 10)
+                                        setQuantity(Math.floor(event.target.value));
+                                }} type="number" readOnly className="leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center" name="custom-input-number" />
                                 
                                 <button onClick={()=>{
-                                    if(quantity >= 1)
+                                    if(quantity >= 1 && quantity < 10)
                                         setQuantity(quantity + 1);
                                 }} className="h-full w-20 rounded-r cursor-pointer bg-primary">
                                     <span className="m-auto text-2xl font-thin leading-3">+</span>

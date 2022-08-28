@@ -130,7 +130,7 @@ export function Home(){
             </section>
 
             
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="HOME"></FooterNav>
         </main>
     )
 }

@@ -42,9 +42,6 @@ export const addToCartSlice = createSlice({
             const { message} = action.payload;
             state.status = AddToCartState.success;
 
-            console.log(action.payload);
-            
-
             state.message = message;
         }).addCase(addToCart.rejected, (state: any, action : PayloadAction<{message: string }> ) => {
             state.message = action.payload.message;

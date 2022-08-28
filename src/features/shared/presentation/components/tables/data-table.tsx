@@ -20,6 +20,7 @@ import { SnackShopOrderModel } from 'features/shop/core/domain/snackshop-order.m
 import { FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
+import 'moment-timezone';
 
 const StyledIconButton= styled(IconButton)(({ theme }) => ({
     color: 'white',

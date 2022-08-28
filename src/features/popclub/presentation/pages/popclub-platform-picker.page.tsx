@@ -121,7 +121,7 @@ export function PopClubPlatformPicker(){
                 setOpenStoreVisitStoreChooserModal(false);
             }}></StoreVisitStoreChooserModal>
             
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="POPCLUB" />
         </section>
     )
 }

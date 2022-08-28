@@ -3,8 +3,9 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
+import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { AddToCartParam, CheckoutOrdersParam, GetCategoryProductsParam, GetOrdersParam, GetProductDetailsParam } from "features/shop/core/shop.params";
+import { AddToCartParam, CheckoutOrdersParam, GetCategoryProductsParam, GetOrdersParam, GetProductDetailsParam, GetProductSkuParam } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse{
     data: {
@@ -62,6 +63,22 @@ export interface GetCateringBookingHistoryResponse{
         message: string;
         data: Array<SnackShopOrderModel>
     }
+}
+
+export interface GetProductSkuResponse{
+    data: {
+        message: string;
+        data: ProductSkuModel
+    }
+}
+
+export function GetProductSkuRepository(param: GetProductSkuParam) : Promise<GetProductSkuResponse>{
+    return axios.post(`${REACT_APP_DOMAIN_URL}api/shop/get_product_sku`,param,{
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        withCredentials: true
+    });
 }
 
 export function GetCateringBookingHistoryRepository() : Promise<GetCateringBookingHistoryResponse>{

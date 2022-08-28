@@ -1,8 +1,8 @@
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
 import React, { useEffect, useRef, useState } from "react";
-import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
 import { useAppDispatch } from "features/config/hooks";
 import { NearyouSearchStore } from "./near-you-search-store";
+import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 
 export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
   const [address, setAddress] = useState<string>("");
@@ -43,7 +43,7 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
           <SearchAddress
             onPlaceSelected={(place: string) => {
               setAddress(place);
-              dispatch(getStoresAvailable({ address: place }));
+              dispatch(getStoresAvailableBranches({ address: place }));
             }}
           />
           <span>Search Address</span>

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { removeItemFromCart, RemoveItemFromCartState, resetRemoveItemFromCart, selectRemoveItemFromCart } from "features/shared/presentation/slices/remove-item-from-cart.slice";
 import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -16,6 +17,15 @@ export function ShopCartModal(props : ShopCartModalProps){
 
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const remoteItemFromCartState = useAppSelector(selectRemoveItemFromCart);
+
+  useEffect(()=>{
+    if(remoteItemFromCartState.status === RemoveItemFromCartState.success){
+      dispatch(getSession());
+      dispatch(resetRemoveItemFromCart());
+    }
+  },[remoteItemFromCartState]);
 
   if(props.open){
       document.body.classList.add('overflow-hidden');
@@ -53,7 +63,7 @@ export function ShopCartModal(props : ShopCartModalProps){
         }}><IoMdClose/></button>
         
         {
-          getSessionState.data?.orders ===  undefined || getSessionState.data?.orders ==  null ? 
+          getSessionState.data?.orders ===  undefined || getSessionState.data?.orders ==  null || getSessionState.data?.orders.length <= 0 ? 
             <div className="justify-center items-center flex-col space-y-2 flex">
                 <BsCartX className="text-white text-7xl"/>
                 <span className="text-white text-4xl font-['Bebas_Neue'] tracking-[2px]">Cart Empty</span>
@@ -69,7 +79,7 @@ export function ShopCartModal(props : ShopCartModalProps){
                       <img src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.prod_image_name}`} className="rounded-[10px] w-[92px] h-[92px]" alt="" />
                       <div className="flex-1 text-white px-3 py-2 flex flex-col">
                           <h3 className="text-sm">{order.prod_size} {order.prod_name}</h3>
-                          <h3 className="text-xs">Quntity: <span className="text-tertiary">{order.prod_qty}</span></h3>
+                          <h3 className="text-xs">Quantity: <span className="text-tertiary">{order.prod_qty}</span></h3>
                           {
                             order.prod_flavor ? 
                             <h3 className="text-xs">Flavor: <span className="text-tertiary">{order.prod_flavor}</span></h3> 
@@ -79,7 +89,9 @@ export function ShopCartModal(props : ShopCartModalProps){
                             <NumberFormat value={order.prod_calc_amount.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'₱'} />
                           </h3>
                       </div>
-                      <button className='absolute top-2 right-4 text-white' onClick={()=>{}}><IoMdClose/></button>
+                      <button className='absolute top-2 right-4 text-white' onClick={()=>{
+                        dispatch(removeItemFromCart(i));
+                      }}><IoMdClose/></button>
                   </div>
                   ))
                 }

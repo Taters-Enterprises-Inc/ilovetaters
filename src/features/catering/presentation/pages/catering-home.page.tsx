@@ -3,7 +3,6 @@ import { FooterNav, HeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
 import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useState } from "react";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -11,10 +10,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import TextField from "@mui/material/TextField";
 import { FaSearchLocation } from "react-icons/fa";
-import { StoreListDelivery } from "features/shop/presentation/components/store-list-delivery";
-import { StoreList } from "features/shared/presentation/components/store-list";
 import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useNavigate } from "react-router-dom";
+import { CateringStoreList } from "../components/catering-store-list";
+import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 
 export function CateringHome(){
     const dispatch = useAppDispatch();
@@ -99,14 +98,14 @@ export function CateringHome(){
                 </LocalizationProvider>
 
                 <button onClick={()=>{
-                    dispatch(getStoresAvailable({address}));
+                    dispatch(getStoresAvailableCatering({address}));
                 }} className="bg-button text-white rounded-xl px-4 py-2 text-lg font-bold flex items-center justify-center space-x-2">
                     <FaSearchLocation/>
                     <span>Check Availability</span>
                 </button>
 
                 
-                <StoreList 
+                <CateringStoreList 
                     onClickStore={(storeId: number)=>{
                         dispatch(setStoreAndAddress({
                             address,

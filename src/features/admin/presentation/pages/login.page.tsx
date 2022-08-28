@@ -17,7 +17,7 @@ export function Admin(){
                 aswdasdasd
             </section>
 
-            <FooterNav/>
+            <FooterNav activeUrl="HOME"/>
         </main>
     );
 }

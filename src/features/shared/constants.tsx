@@ -211,6 +211,18 @@ export const theme = createTheme({
                 }
             }
         },
+        MuiFormControl:{
+            styleOverrides:{
+                root: {
+                    "& label.Mui-focused": {
+                        color: "white"
+                    },
+                    "& label": {
+                        color: "white !important"
+                    },
+                },
+            }
+        },
         MuiTextField:{
             styleOverrides:{
                 root: {

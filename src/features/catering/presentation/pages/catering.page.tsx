@@ -16,7 +16,7 @@ export function Catering(){
             
             <Outlet/>
 
-            <FooterNav/>
+            <FooterNav activeUrl="CATERING"/>
         </main>
     );
 }
