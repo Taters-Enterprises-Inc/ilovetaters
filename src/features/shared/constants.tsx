@@ -1,3 +1,4 @@
+import { PaletteOptions } from "@mui/material";
 import createTheme from "@mui/material/styles/createTheme";
 
 export const REACT_APP_DOMAIN_URL =  process.env.REACT_APP_DOMAIN_URL;
@@ -130,63 +131,109 @@ export const TABS =[
     },
 ];
 
+
 declare module '@mui/material/styles' {
+    interface Palette {
+        tertiary: Palette['primary'];
+    }
+
+    // allow configuration using `createTheme`
+    interface PaletteOptions {
+        tertiary?: PaletteOptions['primary'];
+    }
 }
+  
+// Update the Button's color prop options
+declare module '@mui/material/Radio' {
+    interface RadioPropsColorOverrides {
+        tertiary: true;
+    }
+}   
 
+// Update the Button's color prop options
+declare module '@mui/material/Checkbox' {
+    interface CheckboxPropsColorOverrides {
+        tertiary: true;
+    }
+}   
+  
+
+// Update the Button's color prop options
+declare module '@mui/material/CircularProgress' {
+    interface CircularProgressPropsColorOverrides {
+        tertiary: true;
+    }
+}   
+  
 export const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#a21013',
+      },
+      secondary: {
+        main: '#22201A',
+      },
+      tertiary: {
+        main: '#ffcd17',
+      },
+    },
+    components: {
+        MuiCheckbox: {
+            styleOverrides:{
+                root:{
+                    color: 'white',
+                },
+            },
+        },
+        MuiRadio:{
+            styleOverrides:{
+                root:{
+                    color: 'white',
+                },
+            },
+        },
+        MuiInputBase: {
+            styleOverrides:{
+                root: {
+                    '& fieldset': {
+                        borderColor: 'white !important',
+                    },
+                    '&:hover fieldset': {
+                        borderColor: 'white !important',
+                    },
+                    '&.Mui-focused fieldset': {
+                        borderColor: 'white !important',
+                    },
+                },
+                input: {
+                    color: 'white',
+                    "-webkit-text-fill-color" : "white !important",
+                }
+            }
+        },
+        MuiFormControl:{
+            styleOverrides:{
+                root: {
+                    "& label.Mui-focused": {
+                        color: "white"
+                    },
+                    "& label": {
+                        color: "white !important"
+                    },
+                },
+            }
+        },
+        MuiTextField:{
+            styleOverrides:{
+                root: {
+                    "& label.Mui-focused": {
+                        color: "white"
+                    },
+                    "& label": {
+                        color: "white !important"
+                    },
+                },
+            }
+        },
+    }
 });
-
-
-// export const theme = {
-//     input: {
-//         styles: {
-//             variants: {
-//               outlined: {
-//                 base: {   
-//                     input:{
-//                         color: '!text-white'
-//                     },
-//                     label: {
-//                         color: '!text-white',
-//                     },
-//                 },
-//               }
-//             },
-//         },
-//     },
-//     accordion: {
-//         styles: {
-//           base: {
-//             header: {
-//               initial: {
-//                 fontWeight: 'font-light',
-//                 color: '!text-white',
-//                 fontSize: 'text-base',
-//                 justifyContent: 'justify-start'
-//               },
-//             },
-//             body:{
-//                 color: '!text-white',
-//             }
-//           },
-//         },
-//     },
-//     radio: {
-//       styles: {
-//         base: {
-//           label: {
-//             color : '!text-white',
-//           },
-//         }
-//       },
-//     },
-//     checkbox: {
-//         styles: {
-//             base: {
-//               input: {
-//                 borderColor: '!border-white',
-//               }
-//             }
-//         },
-//     },
-// }

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { HeaderNav } from "features/shared";
+import { HomeHeaderNav } from "features/shared";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate  } from "react-router-dom";
@@ -265,7 +265,7 @@ export function PopClubDeal(){
     return(
         <>
             <section className='bg-secondary relative min-h-screen flex flex-col pb-10'>
-                <HeaderNav serviceReached={true} active='POPCLUB' sticky></HeaderNav>
+                <HomeHeaderNav serviceReached={true} active='POPCLUB' sticky/>
                 <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">{getDealState.data?.category_name}</div>
 
                 <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">

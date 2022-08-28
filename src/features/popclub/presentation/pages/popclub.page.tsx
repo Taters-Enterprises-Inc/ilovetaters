@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams} from "react-router-dom";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
@@ -75,7 +75,7 @@ export function PopClub(){
 
     return (
         <section className='bg-primary'>
-            <HeaderNav serviceReached={serviceReached} active='POPCLUB'></HeaderNav>
+            <HomeHeaderNav serviceReached={serviceReached} active='POPCLUB'/>
 
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
@@ -209,7 +209,7 @@ export function PopClub(){
                 setOpenStoreVisitStoreChooserModal(false);
             }}></StoreVisitStoreChooserModal>
 
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="POPCLUB"></FooterNav>
         </section>
     );
 }

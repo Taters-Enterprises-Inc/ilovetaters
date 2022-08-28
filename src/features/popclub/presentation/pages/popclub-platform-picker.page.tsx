@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL, SERVICES_DESKTOP, SERVICES_MOBILE } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
@@ -22,7 +22,7 @@ export function PopClubPlatformPicker(){
         
         <section className="bg-primary">
 
-            <HeaderNav serviceReached={false} active='HOME'></HeaderNav>
+            <HomeHeaderNav serviceReached={false} active='HOME'/>
 
 
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
@@ -121,7 +121,7 @@ export function PopClubPlatformPicker(){
                 setOpenStoreVisitStoreChooserModal(false);
             }}></StoreVisitStoreChooserModal>
             
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="POPCLUB" />
         </section>
     )
 }

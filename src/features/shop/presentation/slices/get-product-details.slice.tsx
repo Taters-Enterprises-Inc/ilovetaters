@@ -3,7 +3,6 @@ import { RootState } from "features/config/store";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { GetCategoryProductsParam, GetProductDetailsParam } from "features/shop/core/shop.params";
-import GetCategoryProductsUsecase from "features/shop/core/usecase/get-category-products.usecase";
 import { GetCategoryProductsResponse, GetProductDetailsRepository, GetProductDetailsResponse } from "features/shop/data/repository/shop.repository";
 
 
@@ -16,10 +15,10 @@ export enum GetProductDetailsState{
 
 
 const initialState : {
-    status: GetProductDetailsState,
+    status: GetProductDetailsState;
     data: {
         product: ProductModel;
-        addons: Array<ProductModel>;
+        addons?: Array<ProductModel>;
         product_size: Array<{
             id: number;
             name: string;
@@ -28,10 +27,13 @@ const initialState : {
             id: number;
             name: string;
         }>;
-    } | undefined
+        suggested_products: Array<ProductModel>;
+    } | undefined;
+    message: string;
 } = {
     status: GetProductDetailsState.initial,
     data: undefined,
+    message : '',
 }
 
 export const getProductDetails = createAsyncThunk('getProductDetails',
@@ -45,7 +47,20 @@ export const getProductDetails = createAsyncThunk('getProductDetails',
 export const getProductDetailsSlice = createSlice({
     name:'getProductDetails',
     initialState,
-    reducers : {},
+    reducers : {
+        resetGetProductDetails: (state) =>{
+            state.data = undefined;
+            state.message = '';
+            state.status = GetProductDetailsState.initial;
+        },
+        changeProductPrice: (state, action : PayloadAction<{price: number }>)=>{
+            const {price} = action.payload;
+
+            if(state.data){
+                state.data.product.price = price;
+            }
+        }
+    },
     extraReducers: (builder: any) => {
         builder.addCase(getProductDetails.pending, (state: any)=>{
             state.status = GetProductDetailsState.inProgress;
@@ -53,12 +68,17 @@ export const getProductDetailsSlice = createSlice({
                 product : ProductModel; 
                 addons: Array<ProductModel>; 
                 product_flavor: Array<any>; 
+                suggested_products: Array<ProductModel>;
             } | null}> ) => {
                 
-            const data = action.payload.data;
+            const {data, message} = action.payload;
+            state.status = GetProductDetailsState.success;
             
             state.data = data;
-            state.status = GetProductDetailsState.success;
+            state.message = message;
+        }).addCase(getProductDetails.rejected, (state: any, action : PayloadAction<{message: string}> ) => {
+            state.status = GetProductDetailsState.fail;
+            state.message = action.payload.message;
         })
     }
 });
@@ -66,5 +86,5 @@ export const getProductDetailsSlice = createSlice({
 
 
 export const selectGetProductDetails = (state : RootState) => state.getProductDetails;
-
+export const {  resetGetProductDetails, changeProductPrice } = getProductDetailsSlice.actions;
 export default getProductDetailsSlice.reducer;

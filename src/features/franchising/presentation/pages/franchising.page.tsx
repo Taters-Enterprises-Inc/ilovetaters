@@ -1,4 +1,4 @@
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 import { REACT_APP_DOMAIN_URL, REACT_APP_UPLOADS_URL } from "features/shared/constants";
@@ -25,7 +25,7 @@ export function Franchising(){
 
     return (
         <main className="bg-primary">
-            <HeaderNav serviceReached={serviceReached} active='FRANCHISING'></HeaderNav>
+            <HomeHeaderNav serviceReached={serviceReached} active='FRANCHISING'></HomeHeaderNav>
             <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
             <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
 
@@ -64,7 +64,7 @@ export function Franchising(){
 
       {/* <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
       <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
-            <FooterNav/>
+            <FooterNav activeUrl="HOME"/>
         </main>
     );
 }

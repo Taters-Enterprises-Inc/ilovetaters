@@ -1,1 +1,2 @@
-export {HeaderNav} from './header-nav.component';
+export {HomeHeaderNav} from './home-header-nav';
+export { HeaderNav } from './header-nav';

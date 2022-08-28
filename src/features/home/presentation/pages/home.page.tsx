@@ -1,5 +1,5 @@
 
-import { FooterNav, HeaderNav } from "features/shared";
+import { FooterNav, HomeHeaderNav } from "features/shared";
 import { useEffect, useRef, useState } from "react";
 import { REACT_APP_UPLOADS_URL, SERVICES_DESKTOP, SERVICES_MOBILE } from "features/shared/constants";
 
@@ -28,7 +28,7 @@ export function Home(){
     return (
         <main className="bg-primary">
 
-            <HeaderNav serviceReached={serviceReached} active='HOME'></HeaderNav>
+            <HomeHeaderNav serviceReached={serviceReached} active='HOME'/>
 
             <section 
                 style={{
@@ -59,7 +59,7 @@ export function Home(){
                 {
                     SERVICES_DESKTOP.map(function(service_desktop, i){
                         return (
-                            <div className="flex-[0_0_33.33%] max-w-[33.33%] p-2">
+                            <div key={i} className="flex-[0_0_33.33%] max-w-[33.33%] p-2">
                                 <div className=" h-[250px] sm:h-[300px] text-white">
                                     
                                     <a href={service_desktop.url} key={i}>
@@ -97,7 +97,7 @@ export function Home(){
                 {
                     SERVICES_MOBILE.map(function(service_mobile, i){
                         return (
-                            <div className="flex-[0_0_50%] mx-w-[0_0_50%] p-2">
+                            <div key={i} className="flex-[0_0_50%] mx-w-[0_0_50%] p-2">
                                 
                                 <div key={i} className="h-[250px] sm:h-[300px] text-white">
                                     <a href={service_mobile.url}>
@@ -130,7 +130,7 @@ export function Home(){
             </section>
 
             
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="HOME"></FooterNav>
         </main>
     )
 }
