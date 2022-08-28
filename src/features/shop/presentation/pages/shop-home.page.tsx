@@ -1,12 +1,11 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { FooterNav } from "features/shared";
 import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { StoreListDelivery } from "../components/store-list-delivery";
+import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
 import { getSession, selectGetSession } from "../../../shared/presentation/slices/get-session.slice";
-import { getStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
 
 export function ShopHome(){
     const dispatch = useAppDispatch();
@@ -36,14 +35,13 @@ export function ShopHome(){
                 <label className="pure-material-textfield-outlined w-[100%] mb-10">
                     <SearchAddress onPlaceSelected={( place : string)=>{
                         setAddress(place);
-                        dispatch(getStoresAvailable({address: place}));
+                        dispatch(getStoresAvailableSnackshop({address: place}));
                     }}/>
                     <span>Search Address</span>
                 </label>
             </div>
 
-            <StoreListDelivery address={address}/>
-
+            <ShopStoreListDelivery address={address}/>
         </section>
     );
 }

@@ -5,7 +5,6 @@ import getAllPlatformCategories from '../popclub/presentation/slices/get-all-pla
 import getDeals from '../popclub/presentation/slices/get-deals.slice';
 import getPopClubData from '../popclub/presentation/slices/get-popclub-data.slice';
 import setPopClubData from '../popclub/presentation/slices/set-popclub-data.slice';
-import getStoresAvailable from '../shared/presentation/slices/get-stores-available-slice';
 import setStoreAndAddress from '../shared/presentation/slices/set-store-and-address.slice';
 import getSession from '../shared/presentation/slices/get-session.slice';
 import setSession from '../shared/presentation/slices/set-session.slice';
@@ -40,6 +39,12 @@ import deleteContact from '../shared/presentation/slices/delete-contact.slice';
 import updateContact from '../shared/presentation/slices/update-contact.slice';
 import getContacts from '../shared/presentation/slices/get-contacts.slice';
 
+import getStoresAvailableSnackshop from '../shop/presentation/slices/get-stores-available-snackshop.slice';
+import getStoresAvailableCatering from '../catering/presentation/slices/get-stores-available-catering.slice';
+import getStoresAvailableBranches from '../branches/presentation/slices/get-stores-available-branches.slice';
+import getStoresAvailablePopClub from '../popclub/presentation/slices/get-stores-available-popclub.slice';
+
+
 
 export const store = configureStore({
   reducer: {
@@ -50,7 +55,11 @@ export const store = configureStore({
     setPopClubData: setPopClubData,
     getPopClubData: getPopClubData,
 
-    getStoresAvailable: getStoresAvailable,
+    getStoresAvailableSnackshop: getStoresAvailableSnackshop,
+    getStoresAvailableCatering: getStoresAvailableCatering,
+    getStoresAvailableBranches: getStoresAvailableBranches,
+    getStoresAvailablePopClub: getStoresAvailablePopClub,
+
     setStoreAndAddress: setStoreAndAddress,
     getSession: getSession,
     setSession: setSession,

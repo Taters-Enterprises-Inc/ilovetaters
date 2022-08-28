@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector, useQuery } from 'features/config/hooks'
 import { StoreCluster } from '../components';
 import { SearchAddress } from '../../../shared/presentation/components/inputs/search-address';
 import { getSession, selectGetSession } from 'features/shared/presentation/slices/get-session.slice';
-import { getStoresAvailable } from 'features/shared/presentation/slices/get-stores-available-slice';
 import { useEffect, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { getStoresAvailablePopClub } from '../slices/get-stores-available-popclub.slice';
 
 interface StoreChooserModalProps {
   open : boolean,
@@ -54,7 +54,7 @@ export function StoreChooserModal(props : StoreChooserModalProps) {
           <label className="pure-material-textfield-outlined w-full">
             <SearchAddress onPlaceSelected={( place : string)=>{
               setAddress(place);
-              dispatch(getStoresAvailable({address: place}));
+              dispatch(getStoresAvailablePopClub({address: place}));
             }}/>
             <span>Search Address</span>
           </label>

@@ -4,7 +4,7 @@ import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
 import { GetStoresAvailableRepository, GetStoresAvailableResponse } from "features/shared/data/repository/shared.repository";
 
-export enum GetStoresAvailableState{
+export enum GetStoresAvailablePopClubState{
     initial,
     inProgress,
     success,
@@ -13,16 +13,16 @@ export enum GetStoresAvailableState{
 
 
 const initialState : {
-    status: GetStoresAvailableState;
+    status: GetStoresAvailablePopClubState;
     data: Array<StoreModel>;
     message: string;
 } = {
-    status: GetStoresAvailableState.initial,
+    status: GetStoresAvailablePopClubState.initial,
     data: [],
     message : '',
 }
 
-export const getStoresAvailable = createAsyncThunk('getStoresAvailable',
+export const getStoresAvailablePopClub = createAsyncThunk('getStoresAvailablePopClub',
     async (param : GetStoresAvailableParam) => {
         const response : GetStoresAvailableResponse = await GetStoresAvailableRepository(param);
         return response.data;
@@ -30,21 +30,21 @@ export const getStoresAvailable = createAsyncThunk('getStoresAvailable',
 )
 
 /* Main Slice */
-export const getStoresAvailableSlice = createSlice({
-    name:'getStoresAvailable',
+export const getStoresAvailablePopClubSlice = createSlice({
+    name:'getStoresAvailablePopClub',
     initialState,
     reducers : {},
     extraReducers: (builder: any) => {
-        builder.addCase(getStoresAvailable.pending, (state: any)=>{
-            state.status = GetStoresAvailableState.inProgress;
-        }).addCase(getStoresAvailable.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
+        builder.addCase(getStoresAvailablePopClub.pending, (state: any)=>{
+            state.status = GetStoresAvailablePopClubState.inProgress;
+        }).addCase(getStoresAvailablePopClub.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
             const {data, message} = action.payload;
-            state.status = GetStoresAvailableState.success;
+            state.status = GetStoresAvailablePopClubState.success;
             
             state.data = data;
             state.message = message;
-        }).addCase(getStoresAvailable.rejected, (state: any, action: PayloadAction<{message : string}>) => {
-            state.status = GetStoresAvailableState.fail;
+        }).addCase(getStoresAvailablePopClub.rejected, (state: any, action: PayloadAction<{message : string}>) => {
+            state.status = GetStoresAvailablePopClubState.fail;
             state.message = action.payload.message;
         })
     }
@@ -52,6 +52,6 @@ export const getStoresAvailableSlice = createSlice({
 
 
 
-export const selectGetStoresAvailable = (state : RootState) => state.getStoresAvailable;
+export const selectGetStoresAvailablePopClub = (state : RootState) => state.getStoresAvailablePopClub;
 
-export default getStoresAvailableSlice.reducer;
+export default getStoresAvailablePopClubSlice.reducer;

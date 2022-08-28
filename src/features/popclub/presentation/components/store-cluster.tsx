@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { selectGetStoresAvailable } from "features/shared/presentation/slices/get-stores-available-slice";
 import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
+import { selectGetStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
 
 interface StoreClusterProps {
     onClose : any,
@@ -12,7 +12,7 @@ interface StoreClusterProps {
 }
 
 export function StoreCluster(props: StoreClusterProps ){
-    const getStoresAvailableState  = useAppSelector(selectGetStoresAvailable);
+    const getStoresAvailablePopClubState  = useAppSelector(selectGetStoresAvailablePopClub);
     const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -51,7 +51,7 @@ export function StoreCluster(props: StoreClusterProps ){
 
     return(
         <section className='text-white '>
-            {getStoresAvailableState.data.map((store_cluster, index)=>(
+            {getStoresAvailablePopClubState.data.map((store_cluster, index)=>(
             <div key={index}>
                 <h1 className="text-sm font-normal pl-2">{store_cluster.region_name}</h1>
                 <section className="flex flex-wrap pb-2 ">
