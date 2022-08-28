@@ -18,13 +18,13 @@ export function ShopHome() {
   useEffect(() => {
     dispatch(getSession());
     dispatch(storeReset());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (getSessionState.data?.customer_address !== null) {
       setAddress(getSessionState.data?.customer_address);
     }
-  }, []);
+  }, [getSessionState]);
 
   return (
     <section className="container pb-64">

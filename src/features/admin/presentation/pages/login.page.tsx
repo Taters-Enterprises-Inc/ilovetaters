@@ -1,7 +1,5 @@
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
-import { useState } from "react";
 
 export function Login() {
   return (
@@ -14,7 +12,7 @@ export function Login() {
           <div className="header_image flex justify-center items-center">
             <img
               src="https://ilovetaters.com/staging/uploads/images/shop/snackshop-logo-creamy-red.png"
-              alt="taterslogo"
+              alt="taters logo"
               className="w-36"
             ></img>
           </div>
@@ -38,7 +36,7 @@ export function Login() {
                 <MdLockOutline className="m-2" />
                 <input
                   type="password"
-                  name="passw"
+                  name="password"
                   placeholder="Password"
                   className="bg-gray-100 w-full mr-4 h-9 outline-none text-sm flex-1"
                 ></input>
@@ -48,7 +46,7 @@ export function Login() {
                 <p className="flex items-center">
                   <input className="mr-2" type="checkbox" /> Remember Me
                 </p>
-                <a href="#">Forgot Password?</a>
+                <a href="/">Forgot Password?</a>
               </div>
               <button className="w-full my-2 py-2 bg-button shadow-md rounded-3xl text-white">
                 LOG IN

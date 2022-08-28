@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import {
   AiFillCheckCircle,
@@ -12,12 +11,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
 import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import {
   selectUploadProofOfPayment,
   uploadProofOfPayment,
@@ -63,7 +58,7 @@ export function ShopOrder() {
     if (hash !== undefined) {
       dispatch(getOrders({ hash }));
     }
-  }, [uploadProofOfPaymentState]);
+  }, [uploadProofOfPaymentState, dispatch, hash]);
 
   const getStatus = (
     status: number | undefined,
@@ -89,7 +84,7 @@ export function ShopOrder() {
           </span>
         );
       case 3:
-        if (payops == 3) {
+        if (payops === 3) {
           return (
             <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
               Order Confirmed
@@ -171,7 +166,7 @@ export function ShopOrder() {
               1
             </div>
           </div>
-          <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pl-4 lg:pl-0">
+          <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
             <BiUserCircle className="text-2xl" /> <span>Your Details</span>
           </div>
         </div>
@@ -182,7 +177,7 @@ export function ShopOrder() {
               2
             </div>
           </div>
-          <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+          <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
             <AiOutlineCreditCard className="text-2xl" /> <span>Payment</span>
           </div>
         </div>
@@ -193,24 +188,24 @@ export function ShopOrder() {
               3
             </div>
           </div>
-          <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pr-4 lg:pr-0">
+          <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
             <AiOutlineCheckCircle className="text-2xl" /> <span>Complete</span>
           </div>
         </div>
       </div>
 
-      <section className="min-h-screen container lg:space-x-4 pb-36">
+      <section className="container min-h-screen lg:space-x-4 pb-36">
         <div className="lg:mt-[-80px]">
-          <div className="flex justify-between items-start flex-col lg:flex-row">
+          <div className="flex flex-col items-start justify-between lg:flex-row">
             <div className="space-y-8 lg:flex-[0_0_60%] lg:max-w-[60%]">
-              <div className="pb-8 hidden lg:flex">
+              <div className="hidden pb-8 lg:flex">
                 <div className="flex-1">
                   <div className="bg-white h-[0.25rem] relative">
                     <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                       1
                     </div>
                   </div>
-                  <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                  <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
                     <BiUserCircle className="text-2xl" />{" "}
                     <span>Your Details</span>
                   </div>
@@ -222,7 +217,7 @@ export function ShopOrder() {
                       2
                     </div>
                   </div>
-                  <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                  <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
                     <AiOutlineCreditCard className="text-2xl" />{" "}
                     <span>Payment</span>
                   </div>
@@ -234,19 +229,19 @@ export function ShopOrder() {
                       3
                     </div>
                   </div>
-                  <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+                  <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
                     <AiOutlineCheckCircle className="text-2xl" />{" "}
                     <span>Complete</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-4">
-                <div className="text-white flex-1 space-y-2">
+              <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-4">
+                <div className="flex-1 space-y-2 text-white">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     From:{" "}
                   </h2>
-                  <h3 className="font-semibold text-xs">
+                  <h3 className="text-xs font-semibold">
                     {getOrdersState.data?.order.clients_info.store_name}
                   </h3>
                   <h3 className="text-xs">
@@ -262,11 +257,11 @@ export function ShopOrder() {
                   </div>
                 </div>
 
-                <div className="text-white flex-1 space-y-2">
+                <div className="flex-1 space-y-2 text-white">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     Deliver To Address:{" "}
                   </h2>
-                  <h3 className="font-semibold text-xs">
+                  <h3 className="text-xs font-semibold">
                     {getOrdersState.data?.firstname +
                       " " +
                       getOrdersState.data?.lastname}
@@ -281,7 +276,7 @@ export function ShopOrder() {
                   </div>
                 </div>
 
-                <div className="text-white flex-1 space-y-2">
+                <div className="flex-1 space-y-2 text-white">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     Tracking Information
                   </h2>
@@ -289,7 +284,7 @@ export function ShopOrder() {
                     <strong>Tracking Number:</strong>{" "}
                     {getOrdersState.data?.order.clients_info.tracking_no}
                   </div>
-                  <div className="text-xs space-x-2">
+                  <div className="space-x-2 text-xs">
                     <strong>Status:</strong>{" "}
                     {getStatus(
                       getOrdersState.data?.order.clients_info.status,
@@ -323,12 +318,12 @@ export function ShopOrder() {
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt=""
                         />
-                        <div className="flex-1 text-white px-3 py-2 flex flex-col">
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
                             {order.product_label} {order.name}
                           </h3>
                           <h3 className="text-xs">
-                            Quntity:{" "}
+                            Quantity:{" "}
                             <span className="text-tertiary">
                               {order.quantity}
                             </span>
@@ -341,7 +336,7 @@ export function ShopOrder() {
                               </span>
                             </h3>
                           ) : null}
-                          <h3 className="text-base flex-1 flex justify-end items-end">
+                          <h3 className="flex items-end justify-end flex-1 text-base">
                             <NumberFormat
                               value={parseInt(order.calc_price).toFixed(2)}
                               displayType={"text"}
@@ -356,12 +351,12 @@ export function ShopOrder() {
                 </div>
               </div>
 
-              <div className="flex lg:flex-row flex-col lg:space-x-2 space-y-2 lg:space-y-0">
+              <div className="flex flex-col space-y-2 lg:flex-row lg:space-x-2 lg:space-y-0">
                 <div className="text-white lg:flex-1">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">
                     Delivery Information
                   </h2>
-                  <h3 className="font-semibold text-lg">
+                  <h3 className="text-lg font-semibold">
                     {getOrdersState.data?.order.clients_info.add_name}
                   </h3>
                   <h3 className="text-sm">
@@ -377,14 +372,14 @@ export function ShopOrder() {
                     Payment Options
                   </h2>
 
-                  {getOrdersState.data?.order.bank.qr_code == "" ? (
+                  {getOrdersState.data?.order.bank.qr_code === "" ? (
                     <>
                       <img
                         src={`https://ilovetaters.com/staging/v2/shop/assets/img/payops${getOrdersState.data?.order.bank.indicator}.png`}
                         alt=""
                       />
 
-                      {getOrdersState.data?.order.clients_info.payops != 3 ? (
+                      {getOrdersState.data?.order.clients_info.payops !== 3 ? (
                         <div>
                           <div>
                             <strong>Account Name:</strong>{" "}
@@ -495,22 +490,27 @@ export function ShopOrder() {
                         />
 
                         {isDragActive ? (
-                          <span className="text-white text-lg">
+                          <span className="text-lg text-white">
                             Drop the files here ...
                           </span>
                         ) : (
                           <>
                             {images ? (
-                              <img src={images.src} width={180} height={180} />
+                              <img
+                                src={images.src}
+                                width={180}
+                                height={180}
+                                alt="upload file"
+                              />
                             ) : (
                               <>
-                                <AiOutlineCloudUpload className="text-white text-5xl" />
-                                <span className="text-white text-lg">
+                                <AiOutlineCloudUpload className="text-5xl text-white" />
+                                <span className="text-lg text-white">
                                   Drag and drop here to upload
                                 </span>
                                 <button
                                   type="button"
-                                  className="text-white text-lg bg-secondary px-3 py-1 rounded-lg"
+                                  className="px-3 py-1 text-lg text-white rounded-lg bg-secondary"
                                 >
                                   Or select file
                                 </button>
@@ -527,14 +527,14 @@ export function ShopOrder() {
                         Upload
                       </button>
 
-                      <h4 className="text-white mt-1 leading-5 text-sm">
+                      <h4 className="mt-1 text-sm leading-5 text-white">
                         <strong>Note:</strong> Supported file types: JPG, JPEG,
                         PNG and GIF. Maximum file size is 2MB.
                       </h4>
                     </div>
                   </form>
                 </>
-              ) : getOrdersState.data?.order.clients_info.status == 2 ? (
+              ) : getOrdersState.data?.order.clients_info.status === 2 ? (
                 <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
                   <AiFillCheckCircle className="text-2xl" />
                   <span>Proof of Payment Uploaded</span>

@@ -31,7 +31,6 @@ import {
 } from "features/shared/presentation/slices/get-contacts.slice";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 
@@ -55,12 +54,12 @@ export function ShopCheckout() {
       navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
     }
-  }, [checkoutOrdersState, dispatch]);
+  }, [checkoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
     dispatch(getSession());
     dispatch(getContacts());
-  }, [addContactState]);
+  }, [addContactState, dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -77,9 +76,9 @@ export function ShopCheckout() {
     );
     if (
       (responseBody.phoneNumber.match(/63/) &&
-        responseBody.phoneNumber.length == 15) ||
+        responseBody.phoneNumber.length === 15) ||
       (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length == 14)
+        responseBody.phoneNumber.length === 14)
     ) {
       dispatch(checkoutOrders(responseBody));
     } else {
@@ -186,7 +185,7 @@ export function ShopCheckout() {
                   1
                 </div>
               </div>
-              <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pl-4 lg:pl-0">
+              <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
                 <BiUserCircle className="text-2xl" /> <span>Your Details</span>
               </div>
             </div>
@@ -197,7 +196,7 @@ export function ShopCheckout() {
                   2
                 </div>
               </div>
-              <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1">
+              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
                 <AiOutlineCreditCard className="text-2xl" />{" "}
                 <span>Payment</span>
               </div>
@@ -209,7 +208,7 @@ export function ShopCheckout() {
                   3
                 </div>
               </div>
-              <div className="flex justify-center items-center mt-5 text-xs text-white space-x-1 pr-4 lg:pr-0">
+              <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
                 <AiOutlineCheckCircle className="text-2xl" />{" "}
                 <span>Complete</span>
               </div>
@@ -258,7 +257,7 @@ export function ShopCheckout() {
                   />
                 )}
 
-                <div className="flex lg:space-x-4 flex-col lg:flex-row space-y-4 lg:space-y-0">
+                <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
                   <div className="flex-1">
                     {getSessionState.data?.userData.email ? (
                       <TextField
@@ -321,7 +320,7 @@ export function ShopCheckout() {
                       onClick={() => {
                         setOpenAddContactModal(true);
                       }}
-                      className="text-xs text-tertiary underline underline-offset-4"
+                      className="text-xs underline text-tertiary underline-offset-4"
                     >
                       Setup your phone number
                     </button>
@@ -336,25 +335,25 @@ export function ShopCheckout() {
                   name="address"
                 />
 
-                <div className="text-white lg:mt-0 mt-4">
+                <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Handling Method
                   </h2>
 
-                  <ul className="space-y-1 mt-2">
-                    <li className="flex space-x-2 items-center">
+                  <ul className="mt-2 space-y-1">
+                    <li className="flex items-center space-x-2">
                       <MdDeliveryDining className="text-2xl text-tertiary" />
                       <h3 className="text-sm">Delivery</h3>
                     </li>
-                    <li className="flex space-x-3 items-start">
+                    <li className="flex items-start space-x-3">
                       <FaStore className="text-lg text-tertiary" />
                       <h3 className="text-sm">
                         Store: Taters Robinsons Magnolia
                       </h3>
                     </li>
-                    <li className="flex space-x-3 items-start ">
+                    <li className="flex items-start space-x-3 ">
                       <FaMapMarkerAlt className="text-lg text-tertiary" />
-                      <h3 className="text-sm flex-1">
+                      <h3 className="flex-1 text-sm">
                         Store Address: 3rd Level, Robinsons Movieworld Magnolia
                         Town Center, Brgy Kaunlara, Quezon City
                       </h3>
@@ -362,12 +361,12 @@ export function ShopCheckout() {
                   </ul>
                 </div>
 
-                <div className="text-white lg:mt-0 mt-4">
+                <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Note:{" "}
                   </h2>
 
-                  <ul className="space-y-2 mt-2">
+                  <ul className="mt-2 space-y-2">
                     <li>
                       <h3 className="text-sm">
                         Delivery and/or Pick-up of items are from Monday to
@@ -395,14 +394,14 @@ export function ShopCheckout() {
                   </ul>
                 </div>
 
-                <div className="text-white lg:mt-0 mt-4">
+                <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
                   <PaymentAccordion />
                 </div>
 
-                <div className="flex justify-start items-center space-x-1 text-white">
+                <div className="flex items-center justify-start space-x-1 text-white">
                   <Checkbox color="tertiary" required />
                   <span>I agree with the </span>
                   <button type="button" className="text-tertiary">
@@ -413,7 +412,7 @@ export function ShopCheckout() {
                 <div className="flex flex-col lg:flex-row lg:space-x-4">
                   <button
                     type="button"
-                    className="bg-white font-bold text-black py-3 w-full uppercase border border-white rounded-xl mt-4 order-2 lg:order-1"
+                    className="order-2 w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl lg:order-1"
                     onClick={() => {
                       navigate(-1);
                     }}
@@ -447,12 +446,12 @@ export function ShopCheckout() {
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt=""
                         />
-                        <div className="flex-1 text-white px-3 py-2 flex flex-col">
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
                             {order.prod_size} {order.prod_name}
                           </h3>
                           <h3 className="text-xs">
-                            Quntity:{" "}
+                            Quantity:{" "}
                             <span className="text-tertiary">
                               {order.prod_qty}
                             </span>
@@ -466,7 +465,7 @@ export function ShopCheckout() {
                               </span>
                             </h3>
                           ) : null}
-                          <h3 className="text-base flex-1 flex justify-end items-end">
+                          <h3 className="flex items-end justify-end flex-1 text-base">
                             <NumberFormat
                               value={order.prod_calc_amount.toFixed(2)}
                               displayType={"text"}

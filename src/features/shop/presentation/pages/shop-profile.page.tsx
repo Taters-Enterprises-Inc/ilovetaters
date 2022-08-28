@@ -119,7 +119,7 @@ export function ShopProfile() {
         />
 
         <div className="py-8 space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
               Contact
             </h1>
@@ -136,10 +136,10 @@ export function ShopProfile() {
           <div className="space-y-4">
             {getContactsState.data?.map((val) => (
               <div className="flex">
-                <div className="border border-white rounded-l-md flex-1">
+                <div className="flex-1 border border-white rounded-l-md">
                   <input
                     readOnly
-                    className="px-4 text-white py-4 bg-transparent w-full"
+                    className="w-full px-4 py-4 text-white bg-transparent"
                     value={val.contact}
                   />
                 </div>
@@ -150,7 +150,7 @@ export function ShopProfile() {
                       contact: val,
                     });
                   }}
-                  className="text-white border border-blue-700 bg-blue-700 px-4"
+                  className="px-4 text-white bg-blue-700 border border-blue-700"
                 >
                   <FiEdit />
                 </button>
@@ -162,7 +162,7 @@ export function ShopProfile() {
                       })
                     );
                   }}
-                  className="text-white border border-orange-700 bg-orange-700 px-4"
+                  className="px-4 text-white bg-orange-700 border border-orange-700"
                 >
                   <BsFillTrashFill />
                 </button>

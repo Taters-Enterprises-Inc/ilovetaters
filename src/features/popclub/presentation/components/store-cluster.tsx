@@ -1,96 +1,129 @@
-import { useAppDispatch, useAppSelector, useQuery } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { selectSetStoreAndAddress, setStoreAndAddress, SetStoreAndAddressState } from "features/shared/presentation/slices/set-store-and-address.slice";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import {
+  selectSetStoreAndAddress,
+  setStoreAndAddress,
+  SetStoreAndAddressState,
+} from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
 import { selectGetStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
 
 interface StoreClusterProps {
-    onClose : any,
-    address: string,
+  onClose: any;
+  address: string;
 }
 
-export function StoreCluster(props: StoreClusterProps ){
-    const getStoresAvailablePopClubState  = useAppSelector(selectGetStoresAvailablePopClub);
-    const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    let { platform } = useParams();
-    const query = useQuery();
-    const category = query.get('category');
+export function StoreCluster(props: StoreClusterProps) {
+  const getStoresAvailablePopClubState = useAppSelector(
+    selectGetStoresAvailablePopClub
+  );
+  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { platform } = useParams();
+  const query = useQuery();
+  const category = query.get("category");
 
-    useEffect(()=>{
-        if(setStoreAndAddressState.status === SetStoreAndAddressState.success){
-            
-            if(platform !== undefined && category !== null){
-                dispatch(getDeals({platform_url_name:platform, category_url_name: category}));
-            }
-        }
-    }, [setStoreAndAddressState]);
-
-    const storeClicked =(storeId: number)=> {
-        dispatch(setStoreAndAddress({
-            address: props.address,
-            storeId,
-        }));
-
-        props.onClose();
-        
-        if(platform){
-            if(platform === 'store-visit'){
-                navigate(`../popclub/online-delivery?category=all`);
-            } else {
-                navigate(`?category=all`);
-            }
-        }else{
-            navigate(`online-delivery?category=all`);
-        }
-        document.body.classList.remove('overflow-hidden');
+  useEffect(() => {
+    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+      if (platform !== undefined && category !== null) {
+        dispatch(
+          getDeals({ platform_url_name: platform, category_url_name: category })
+        );
+      }
     }
+  }, [setStoreAndAddressState, dispatch, category, platform]);
 
-    return(
-        <section className='text-white '>
-            {getStoresAvailablePopClubState.data.map((store_cluster, index)=>(
-            <div key={index}>
-                <h1 className="text-sm font-normal pl-2">{store_cluster.region_name}</h1>
-                <section className="flex flex-wrap pb-2 ">
-                    {store_cluster.stores.map((store, index)=>{
-
-                        const distance_in_km = Math.ceil( store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5);
-
-                        const store_availability = distance_in_km > 10;
-
-                        return (
-                            <button 
-                                key={index}
-                                onClick={ store_availability && props.address != null ? () => {}  :  ()=>storeClicked(store.store_id)  }
-                                className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${store_availability && props.address != null ? 'store-not-available' : ''}`}>
-                                {
-                                    store_availability && props.address != null ?  <span className="p-1 not-within-reach-text text-center ">Store not within reach</span> : null
-                                }
-
-                                <div className="text-sm uppercase ">FULL MENU</div>
-
-                                <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                                        <div className="flex justify-end">
-                                            <span className="bg-secondary px-2 text-sm">
-                                                {distance_in_km} KM 
-                                            </span>
-                                        </div>
-                                </div>
-                                <img src={'https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/' + store.store_image} alt="" className="w-full"/>
-                                <div className="px-3 py-2">
-                                    <h1 className="mb-1 text-xs">{store.store_name}</h1>
-                                    <p className="text-[7px]">{store.store_address}</p>
-                                </div>
-                            </button>
-                        )
-                    }
-                    )}
-                </section>
-            </div>
-            ))}
-        </section>
+  const storeClicked = (storeId: number) => {
+    dispatch(
+      setStoreAndAddress({
+        address: props.address,
+        storeId,
+      })
     );
+
+    props.onClose();
+
+    if (platform) {
+      if (platform === "store-visit") {
+        navigate(`../popclub/online-delivery?category=all`);
+      } else {
+        navigate(`?category=all`);
+      }
+    } else {
+      navigate(`online-delivery?category=all`);
+    }
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  return (
+    <section className="text-white ">
+      {getStoresAvailablePopClubState.data.map((store_cluster, index) => (
+        <div key={index}>
+          <h1 className="text-sm font-normal pl-2">
+            {store_cluster.region_name}
+          </h1>
+          <section className="flex flex-wrap pb-2 ">
+            {store_cluster.stores.map((store, index) => {
+              const distance_in_km = Math.ceil(
+                store.store_distance * 1.609344 +
+                  store.store_distance * 1.609344 * 0.5
+              );
+
+              const store_availability = distance_in_km > 10;
+
+              return (
+                <button
+                  key={index}
+                  onClick={
+                    store_availability && props.address != null
+                      ? () => {}
+                      : () => storeClicked(store.store_id)
+                  }
+                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${
+                    store_availability && props.address != null
+                      ? "store-not-available"
+                      : ""
+                  }`}
+                >
+                  {store_availability && props.address != null ? (
+                    <span className="p-1 not-within-reach-text text-center ">
+                      Store not within reach
+                    </span>
+                  ) : null}
+
+                  <div className="text-sm uppercase ">FULL MENU</div>
+
+                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
+                    <div className="flex justify-end">
+                      <span className="bg-secondary px-2 text-sm">
+                        {distance_in_km} KM
+                      </span>
+                    </div>
+                  </div>
+                  <img
+                    src={
+                      "https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/" +
+                      store.store_image
+                    }
+                    alt=""
+                    className="w-full"
+                  />
+                  <div className="px-3 py-2">
+                    <h1 className="mb-1 text-xs">{store.store_name}</h1>
+                    <p className="text-[7px]">{store.store_address}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </section>
+        </div>
+      ))}
+    </section>
+  );
 }

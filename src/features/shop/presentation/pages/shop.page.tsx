@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export function Shop() {
   return (
-    <main className="bg-primary min-h-screen">
+    <main className="min-h-screen bg-primary">
       <HeaderNav
         activeUrl="SNACKSHOP"
         logoProps={{

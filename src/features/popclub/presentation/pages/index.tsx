@@ -1,2 +1,2 @@
-export { PopClub } from './popclub.page';
-export { PopClubDeal } from './popclub-deal.page';
+export { PopClub } from "./popclub.page";
+export { PopClubDeal } from "./popclub-deal.page";

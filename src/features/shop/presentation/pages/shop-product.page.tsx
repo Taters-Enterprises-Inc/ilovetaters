@@ -2,7 +2,6 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
@@ -31,14 +30,14 @@ import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-b
 import {
   getProductSku,
   GetProductSkuState,
-  selectgetProductSku,
+  selectGetProductSku,
 } from "../slices/get-product-sku.slice";
 import { ShopProductDetailsAccordion } from "../components/shop-product-details-accordion";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
-  const getProductSkuState = useAppSelector(selectgetProductSku);
+  const getProductSkuState = useAppSelector(selectGetProductSku);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartState = useAppSelector(selectAddToCart);
@@ -80,7 +79,7 @@ export function ShopProduct() {
       dispatch(getProductDetails({ hash }));
       dispatch(getSession());
     }
-  }, [location]);
+  }, [location, dispatch, hash]);
 
   const handleCheckout = () => {
     if (
@@ -102,13 +101,13 @@ export function ShopProduct() {
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
           prod_flavor:
-            currentFlavor == -1
+            currentFlavor === -1
               ? getProductDetailsState.data.product_flavor[0]
                 ? getProductDetailsState.data.product_flavor[0].id
                 : -1
               : currentFlavor,
           prod_size:
-            currentSize == -1
+            currentSize === -1
               ? getProductDetailsState.data.product_size[0]
                 ? getProductDetailsState.data.product_size[0].id
                 : -1
@@ -148,13 +147,13 @@ export function ShopProduct() {
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
           prod_flavor:
-            currentFlavor == -1
+            currentFlavor === -1
               ? getProductDetailsState.data.product_flavor[0]
                 ? getProductDetailsState.data.product_flavor[0].id
                 : -1
               : currentFlavor,
           prod_size:
-            currentSize == -1
+            currentSize === -1
               ? getProductDetailsState.data.product_size[0]
                 ? getProductDetailsState.data.product_size[0].id
                 : -1
@@ -175,13 +174,13 @@ export function ShopProduct() {
   const handleSizeAndFlavorChange = (size: number, flavor: number) => {
     if (getProductDetailsState.data) {
       flavor =
-        flavor == -1
+        flavor === -1
           ? getProductDetailsState.data.product_flavor[0]
             ? getProductDetailsState.data.product_flavor[0].id
             : -1
           : flavor;
       size =
-        size == -1
+        size === -1
           ? getProductDetailsState.data.product_size[0]
             ? getProductDetailsState.data.product_size[0].id
             : -1
@@ -206,7 +205,7 @@ export function ShopProduct() {
       <section className="min-h-screen lg:space-x-4 pb-36">
         <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
           <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
-            <div className="flex-col lg:flex-row flex lg:space-x-10 space-y-10 lg:space-y-0 ">
+            <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 {getProductDetailsState.data?.product.product_image ? (
                   <img
@@ -217,7 +216,7 @@ export function ShopProduct() {
                 ) : null}
               </div>
 
-              <div className="flex-1 space-y-10 lg:px-0 container">
+              <div className="container flex-1 space-y-10 lg:px-0">
                 {getProductDetailsState.data?.product.description ? (
                   <ShopProductDetailsAccordion
                     title={{
@@ -281,7 +280,7 @@ export function ShopProduct() {
                                 id={size.id.toString()}
                                 color="tertiary"
                                 checked={
-                                  currentSize == -1 && i == 0
+                                  currentSize === -1 && i === 0
                                     ? true
                                     : size.id === currentSize
                                 }
@@ -323,7 +322,7 @@ export function ShopProduct() {
                                 id={flavor.id.toString()}
                                 color="tertiary"
                                 checked={
-                                  currentFlavor == -1 && i == 0
+                                  currentFlavor === -1 && i === 0
                                     ? true
                                     : flavor.id === currentFlavor
                                 }
@@ -355,7 +354,7 @@ export function ShopProduct() {
                   </h2>
 
                   <div className="h-[60px] w-full mt-2">
-                    <div className="flex flex-row h-full w-full rounded-lg relative bg-transparent mt-1 border-2 border-white text-white">
+                    <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
                         onClick={() => {
                           if (quantity > 1 && quantity <= 10)
@@ -379,7 +378,7 @@ export function ShopProduct() {
                         type="number"
                         min="1"
                         max="10"
-                        className="text-3xl leading-2 bg-secondary outline-none text-center w-full font-semibold text-md  md:text-basecursor-default flex items-center"
+                        className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                         name="custom-input-number"
                       />
 
@@ -399,7 +398,7 @@ export function ShopProduct() {
                 </div>
 
                 {getProductDetailsState.data?.product.price ? (
-                  <h2 className="text-4xl text-white mt-4">
+                  <h2 className="mt-4 text-4xl text-white">
                     <NumberFormat
                       value={(
                         getProductDetailsState.data.product.price * quantity

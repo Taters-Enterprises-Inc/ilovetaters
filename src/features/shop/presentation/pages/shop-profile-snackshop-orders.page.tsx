@@ -26,7 +26,7 @@ export function ShopProfileSnackshopOrders() {
 
   useEffect(() => {
     dispatch(getSnackShopOrderHistory());
-  }, []);
+  }, [dispatch]);
 
   return (
     <ShopProfileContainer title="Snack Shop Orders" activeTab="snackshop">

@@ -1,1 +1,1 @@
-export { Reseller } from './reseller.page'
+export { Reseller } from "./reseller.page";

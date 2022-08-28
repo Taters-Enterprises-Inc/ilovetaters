@@ -1,1 +1,1 @@
-export { Franchising } from './franchising.page';
+export { Franchising } from "./franchising.page";

@@ -1,4 +1,4 @@
-export interface ContactModel{
-    id: number;
-    contact: string;
+export interface ContactModel {
+  id: number;
+  contact: string;
 }

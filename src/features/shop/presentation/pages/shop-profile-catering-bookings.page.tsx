@@ -25,7 +25,7 @@ export function ShopProfileCateringBookings() {
 
   useEffect(() => {
     dispatch(getCateringBookingHistory());
-  }, []);
+  }, [dispatch]);
 
   return (
     <ShopProfileContainer title="Catering Bookings" activeTab="catering">
