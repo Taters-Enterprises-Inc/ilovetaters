@@ -219,6 +219,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiSelect: {
+      styleOverrides: {
+        iconOutlined: {
+          color: "white",
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {

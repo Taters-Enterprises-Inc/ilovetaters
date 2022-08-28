@@ -339,65 +339,49 @@ export function ShopCheckout() {
                   name="address"
                   autoComplete="off"
                 />
+                {getSessionState.data?.cache_data ? (
+                  <>
+                    <div className="mt-4 text-white lg:mt-0">
+                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                        Handling Method
+                      </h2>
 
-                <div className="mt-4 text-white lg:mt-0">
-                  <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                    Handling Method
-                  </h2>
+                      <ul className="mt-2 space-y-1">
+                        <li className="flex items-center space-x-2">
+                          <MdDeliveryDining className="text-2xl text-tertiary" />
+                          <h3 className="text-sm">Delivery</h3>
+                        </li>
+                        <li className="flex items-start space-x-3">
+                          <FaStore className="text-lg text-tertiary" />
+                          <h3 className="text-sm">
+                            Store: {getSessionState.data.cache_data.store_name}
+                          </h3>
+                        </li>
+                        <li className="flex items-start space-x-3 ">
+                          <FaMapMarkerAlt className="text-lg text-tertiary" />
+                          <h3 className="flex-1 text-sm">
+                            Store Address:{" "}
+                            {getSessionState.data.cache_data.store_address}
+                          </h3>
+                        </li>
+                      </ul>
+                    </div>
 
-                  <ul className="mt-2 space-y-1">
-                    <li className="flex items-center space-x-2">
-                      <MdDeliveryDining className="text-2xl text-tertiary" />
-                      <h3 className="text-sm">Delivery</h3>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                      <FaStore className="text-lg text-tertiary" />
-                      <h3 className="text-sm">
-                        Store: Taters Robinsons Magnolia
-                      </h3>
-                    </li>
-                    <li className="flex items-start space-x-3 ">
-                      <FaMapMarkerAlt className="text-lg text-tertiary" />
-                      <h3 className="flex-1 text-sm">
-                        Store Address: 3rd Level, Robinsons Movieworld Magnolia
-                        Town Center, Brgy Kaunlara, Quezon City
-                      </h3>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="mt-4 text-white lg:mt-0">
-                  <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                    Note:{" "}
-                  </h2>
-
-                  <ul className="mt-2 space-y-2">
-                    <li>
-                      <h3 className="text-sm">
-                        Delivery and/or Pick-up of items are from Monday to
-                        Sunday (except holidays) between 11AM to 7PM
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        Delivery and/or Pick-up of product would be on the same
-                        day if paid before 5:00 pm
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        You will be charged with a delivery fee depending on
-                        your location
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        Our stores will reach out to you via SMS once orders are
-                        ready for delivery/pick-up
-                      </h3>
-                    </li>
-                  </ul>
-                </div>
+                    <div className="mt-4 text-white lg:mt-0">
+                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                        Note:
+                      </h2>
+                      <ul
+                        className="mt-2 space-y-2 text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: getSessionState.data.cache_data?.moh_notes
+                            ? getSessionState.data.cache_data.moh_notes
+                            : "",
+                        }}
+                      />
+                    </div>
+                  </>
+                ) : null}
 
                 <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
