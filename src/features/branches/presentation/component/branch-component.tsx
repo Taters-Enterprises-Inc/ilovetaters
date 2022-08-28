@@ -22,7 +22,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     const scrollDown = () => {
-      if (window.pageYOffset > 1300) {
+      if (window.pageYOffset > 1700) {
         setShowButton(true);
       } else {
         setShowButton(false);

@@ -6,6 +6,15 @@ interface StoreListDeliveryProps {
   address: string;
 }
 
+interface StoreType {
+  store_name: string;
+  store_distance: number;
+  store_image: string;
+  contactno: string;
+  operatinghours: string;
+  address: string;
+}
+
 export function NearyouSearchStore(props: StoreListDeliveryProps) {
   const getStoresAvailableBranchesState = useAppSelector(selectGetStoresAvailableBranches);
 
@@ -15,15 +24,14 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
         <div key={index} className="space-y-3">
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
-            {store_cluster.stores.map((store: any, index: number) => {
+            {store_cluster.stores.map((store: StoreType, index: number) => {
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
                   store.store_distance * 1.609344 * 0.5
               );
 
-
               return (
-                <button
+                <div
                   key={index}
                   className={`z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
                 >
@@ -31,9 +39,9 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                     {store.store_name}
                   </div>
 
-                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                    <div className="flex justify-end">
-                      <span className="bg-secondary px-2 text-sm">
+                  <div className="absolute flex flex-col items-stretch w-full md:mt-16 mt-20 space-y-2 bg-transparent">
+                    <div className="flex justify-end ">
+                      <span className="bg-secondary px-2 text-sm ">
                         {distance_in_km} KM
                       </span>
                     </div>
@@ -55,7 +63,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                         "linear-gradient( 0%, rgb(29, 17, 21) 45%, rgb(29, 17, 21) 100%)",
                       boxShadow: " 0px -39px 25px 13px rgba(0,0,0,0.75)",
                     }}
-                    className=" cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	z-10 relative py-2"
+                    className=" cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  h-[150px] md:h-[105px] 	 relative py-2"
                   >
                     <span
                       className={` p-4 md:relative md:top-0 md:left-0  absolute top-[-2px] left-[21px]`}
@@ -81,22 +89,22 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                         ></path>
                       </svg>
                     </span>
-                    <div
+                    <a
                       className="text-left pt
                     -2 block pr-1 leading-[20px] "
+                      href={`https://maps.google.com/?q=${store.store_name}`}
                     >
                       <p
                         className={` text-[.8125rem] pb-1 pt-1 md:text-left text-center`}
                       >
                         Find us
                       </p>
-                      <a
+                      <div
                         className={` text-[#fff] md:text-[12px] text-[11.9px] font-normal`}
-                        href={store.mapLink}
                       >
                         {store.address}
-                      </a>
-                    </div>
+                      </div>
+                    </a>
                   </div>
                   <div className="cursor-pointer flex  border-b border-[#7b7982] w-full">
                     <span className="p-4">
@@ -121,12 +129,13 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                       </p>
                       <a
                         className="text-[#fff] text-[12px] font-normal "
-                        href={`/tel:${store.contactno}`}
+                        href={`tel:${store.contactno}`}
                       >
                         {store.contactno}
                       </a>
                     </div>
                   </div>
+
                   <div className="flex  md:h-[85px] h-auto py-2 w-full">
                     <span className="p-4">
                       <svg
@@ -153,7 +162,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                       </div>
                     </div>
                   </div>
-                </button>
+                </div>
               );
             })}
           </section>
