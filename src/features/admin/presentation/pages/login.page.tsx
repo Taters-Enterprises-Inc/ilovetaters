@@ -15,7 +15,7 @@ export function Admin(){
 
             </section>
 
-            <FooterNav/>
+            <FooterNav activeUrl="HOME"/>
         </main>
     );
 }

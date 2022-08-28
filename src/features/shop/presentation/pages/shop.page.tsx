@@ -22,7 +22,7 @@ export function Shop(){
             
             <Outlet/>
 
-            <FooterNav/>
+            <FooterNav activeUrl="SNACKSHOP"/>
         </main>
     );
 }

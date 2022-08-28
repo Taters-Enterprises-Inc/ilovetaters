@@ -209,7 +209,7 @@ export function PopClub(){
                 setOpenStoreVisitStoreChooserModal(false);
             }}></StoreVisitStoreChooserModal>
 
-            <FooterNav></FooterNav>
+            <FooterNav activeUrl="POPCLUB"></FooterNav>
         </section>
     );
 }

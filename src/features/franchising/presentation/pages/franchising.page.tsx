@@ -64,7 +64,7 @@ export function Franchising(){
 
       {/* <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
       <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
-            <FooterNav/>
+            <FooterNav activeUrl="HOME"/>
         </main>
     );
 }

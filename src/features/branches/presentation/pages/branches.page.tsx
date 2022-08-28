@@ -31,7 +31,7 @@ export function Branches() {
     </section>
       <FranchisingContactComponent />
       <FranchisingBranchComponent />
-      <FooterNav />
+      <FooterNav activeUrl="BRANCHES" />
     </main>
   );
 }
