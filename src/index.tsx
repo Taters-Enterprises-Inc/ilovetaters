@@ -29,7 +29,7 @@ import {
 import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
-import { Admin } from "features/admin/presentation/pages";
+import { Admin, Login } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -94,6 +94,9 @@ root.render(
               <Route path="reseller" element={<Reseller />} />
               <Route path="branches" element={<Branches />} />
             </Route>
+
+            <Route path="admin/login" element={<Login />}></Route>
+            <Route path="admin/page" element={<Admin />}></Route>
           </Routes>
         </BrowserRouter>
       </Provider>
