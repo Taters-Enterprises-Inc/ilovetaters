@@ -13,18 +13,11 @@ import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snac
 export function ShopHome() {
   const dispatch = useAppDispatch();
   const [address, setAddress] = useState<any>("");
-  const getSessionState = useAppSelector(selectGetSession);
 
   useEffect(() => {
     dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState]);
 
   return (
     <section className="container pb-64">

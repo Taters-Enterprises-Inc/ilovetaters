@@ -7,10 +7,12 @@ import { Provider } from "react-redux";
 import { Home } from "features/home/presentation/pages";
 import { REACT_APP_BASE_NAME, theme } from "features/shared/constants";
 import { store } from "features/config/store";
-import { PopClub } from "features/popclub/presentation/pages/popclub.page";
-import { PopClubDeal } from "features/popclub/presentation/pages";
+import {
+  PopClub,
+  PopClubDeal,
+  PopClubHome,
+} from "features/popclub/presentation/pages";
 import { PopClubDealGuards } from "features/popclub/presentation/pages/guards";
-import { PopClubPlatformPicker } from "features/popclub/presentation/pages/popclub-platform-picker.page";
 import {
   Shop,
   ShopCheckout,
@@ -21,6 +23,7 @@ import {
   ShopProfile,
   ShopProfileCateringBookings,
   ShopProfileSnackshopOrders,
+  ShopTermsAndConditions,
 } from "features/shop/presentation/pages";
 import {
   Catering,
@@ -56,8 +59,13 @@ root.render(
             <Route element={<LoadingAndSnackbarWrapper />}>
               <Route path="/" element={<Home />} />
 
-              <Route path="popclub" element={<PopClubPlatformPicker />} />
-              <Route path="popclub/:platform" element={<PopClub />} />
+              <Route path="popclub" element={<PopClub />}>
+                <Route path=":platform" element={<PopClubHome />} />
+
+                <Route path="deal" element={<PopClubDealGuards />}>
+                  <Route path=":hash" element={<PopClubDeal />} />
+                </Route>
+              </Route>
 
               <Route path="popclub/deal" element={<PopClubDealGuards />}>
                 <Route path=":hash" element={<PopClubDeal />} />
@@ -69,6 +77,11 @@ root.render(
                 <Route path="order/:hash" element={<ShopOrder />} />
                 <Route path="products" element={<ShopProducts />} />
                 <Route path="checkout" element={<ShopCheckout />} />
+
+                <Route
+                  path="terms-and-conditions"
+                  element={<ShopTermsAndConditions />}
+                />
 
                 <Route path="profile">
                   <Route index element={<ShopProfile />} />

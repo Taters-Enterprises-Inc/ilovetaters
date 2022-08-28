@@ -1,10 +1,15 @@
 import { FooterNav, HeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
 
 export function Catering() {
   return (
-    <main className="bg-primary min-h-screen">
+    <main className="min-h-screen bg-primary">
+      <Helmet>
+        <title>Taters | Catering</title>
+      </Helmet>
+
       <HeaderNav
         activeUrl="CATERING"
         logoProps={{

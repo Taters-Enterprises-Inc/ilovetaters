@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 
 interface PlatformChooserModalProps {
   open: boolean;
+  onClose: () => void;
   platforms: Array<PlatformModel>;
   onSelectedPlatform: (platform: string) => void;
 }
@@ -24,9 +25,7 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
       <div className="bg-secondary p-4 round w-[80%] sm:w-[400px] rounded-lg relative">
         <button
           className="absolute top-2 right-4 text-white text-2xl"
-          onClick={() => {
-            navigate(-1);
-          }}
+          onClick={props.onClose}
         >
           <IoMdClose />
         </button>

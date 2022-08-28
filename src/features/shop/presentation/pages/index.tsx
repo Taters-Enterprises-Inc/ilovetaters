@@ -8,3 +8,5 @@ export { ShopOrder } from "./shop-order.page";
 export { ShopProfile } from "./shop-profile.page";
 export { ShopProfileSnackshopOrders } from "./shop-profile-snackshop-orders.page";
 export { ShopProfileCateringBookings } from "./shop-profile-catering-bookings.page";
+
+export { ShopTermsAndConditions } from "./shop-terms-and-condition.page";

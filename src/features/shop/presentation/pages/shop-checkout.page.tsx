@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment-accordion";
@@ -393,9 +393,12 @@ export function ShopCheckout() {
                 <div className="flex items-center justify-start space-x-1 text-white">
                   <Checkbox color="tertiary" required />
                   <span>I agree with the </span>
-                  <button type="button" className="text-tertiary">
+                  <Link
+                    to="/shop/info/terms-and-conditions"
+                    className="text-tertiary"
+                  >
                     Terms & Conditions
-                  </button>
+                  </Link>
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:space-x-4">

@@ -83,13 +83,6 @@ interface SearchAddressProps {
 export function SearchAddress(props: SearchAddressProps) {
   const [query, setQuery] = useState<any>("");
   const autoCompleteRef = useRef(null);
-  const getSessionState = useAppSelector(selectGetSession);
-
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setQuery(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState]);
 
   useEffect(() => {
     loadScript(
