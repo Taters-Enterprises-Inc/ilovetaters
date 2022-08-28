@@ -9,6 +9,9 @@ import {
   getSnackShopOrderHistory,
   selectGetSnackShopOrderHistory,
 } from "../slices/get-snackshop-order-history.slice";
+import Moment from "react-moment";
+import NumberFormat from "react-number-format";
+import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -22,11 +25,14 @@ export function ShopProfileSnackshopOrders() {
   const getSnackShopOrderHistoryState = useAppSelector(
     selectGetSnackShopOrderHistory
   );
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getSnackShopOrderHistory());
   }, [dispatch]);
+
+  console.log(getSnackShopOrderHistoryState.data);
 
   return (
     <ShopProfileContainer title="Snack Shop Orders" activeTab="snackshop">
@@ -38,7 +44,9 @@ export function ShopProfileSnackshopOrders() {
           {
             rowKey: "dateadded",
             align: "left",
-            isTime: true,
+            rowComponent: (row: SnackShopOrderModel) => (
+              <Moment format="LLL">{row.dateadded}</Moment>
+            ),
           },
           {
             rowKey: "tracking_no",
@@ -47,6 +55,18 @@ export function ShopProfileSnackshopOrders() {
           {
             rowKey: "purchase_amount",
             align: "left",
+            rowComponent: (row: SnackShopOrderModel) => (
+              <NumberFormat
+                value={(
+                  parseInt(row.purchase_amount) +
+                  parseInt(row.distance_price) +
+                  parseInt(row.cod_fee)
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            ),
           },
           {
             rowKey: "generated_raffle_code",

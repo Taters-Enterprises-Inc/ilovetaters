@@ -261,6 +261,7 @@ export function ShopCheckout() {
                   <div className="flex-1">
                     {getSessionState.data?.userData.email ? (
                       <TextField
+                        autoComplete="off"
                         aria-readonly
                         value={getSessionState.data.userData.email}
                         variant="outlined"
@@ -270,6 +271,7 @@ export function ShopCheckout() {
                     ) : (
                       <TextField
                         required
+                        autoComplete="off"
                         label="E-mail Address"
                         variant="outlined"
                         className="w-full"
@@ -288,6 +290,8 @@ export function ShopCheckout() {
                           className="w-full"
                           label="Contacts"
                           name="phoneNumber"
+                          required
+                          autoComplete="off"
                         >
                           {getContactsState.data.map((val) => (
                             <MenuItem value={val.contact}>
@@ -333,6 +337,7 @@ export function ShopCheckout() {
                   variant="outlined"
                   className="w-full"
                   name="address"
+                  autoComplete="off"
                 />
 
                 <div className="mt-4 text-white lg:mt-0">

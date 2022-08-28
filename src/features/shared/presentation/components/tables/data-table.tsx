@@ -1,66 +1,60 @@
-import * as React from 'react';
-import styled from '@mui/material/styles/styled';
-import useTheme from '@mui/material/styles/useTheme';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import TableHead from '@mui/material/TableHead';
-import { SnackShopOrderModel } from 'features/shop/core/domain/snackshop-order.model';
-import { FaEye } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import Moment from 'react-moment';
-import 'moment-timezone';
+import * as React from "react";
+import styled from "@mui/material/styles/styled";
+import useTheme from "@mui/material/styles/useTheme";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import TableHead from "@mui/material/TableHead";
+import { FaEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import "moment-timezone";
 
-const StyledIconButton= styled(IconButton)(({ theme }) => ({
-    color: 'white',
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  color: "white",
 }));
-
 
 const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
-    backgroundColor: '#22201A',
-    color: 'white',
-    '& .MuiTablePagination-menuItem': {
-      backgroundColor : '#22201A !important',
-    },
-    '& .MuiTablePagination-selectIcon':{
-      color : 'white !important'
-    },
-    '& .Mui-disabled':{
-      color: 'rgba(255,255,255,0.2) !important;'
-    }
+  backgroundColor: "#22201A",
+  color: "white",
+  "& .MuiTablePagination-menuItem": {
+    backgroundColor: "#22201A !important",
+  },
+  "& .MuiTablePagination-selectIcon": {
+    color: "white !important",
+  },
+  "& .Mui-disabled": {
+    color: "rgba(255,255,255,0.2) !important;",
+  },
 }));
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#22201A',
-      color: 'white',
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      backgroundColor: '#a21013',
-      color: 'white',
-    },
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#22201A",
+    color: "white",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    backgroundColor: "#a21013",
+    color: "white",
+  },
 }));
 
-
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
-  
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 interface DataTableActionsProps {
   count: number;
@@ -68,7 +62,7 @@ interface DataTableActionsProps {
   rowsPerPage: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number,
+    newPage: number
   ) => void;
 }
 
@@ -77,20 +71,26 @@ function DataTableActions(props: DataTableActionsProps) {
   const { count, page, rowsPerPage, onPageChange } = props;
 
   const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: React.MouseEvent<HTMLButtonElement>
   ) => {
     onPageChange(event, 0);
   };
 
-  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     onPageChange(event, page - 1);
   };
 
-  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     onPageChange(event, page + 1);
   };
 
-  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLastPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
@@ -101,28 +101,36 @@ function DataTableActions(props: DataTableActionsProps) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </StyledIconButton>
       <StyledIconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </StyledIconButton>
       <StyledIconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </StyledIconButton>
       <StyledIconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </StyledIconButton>
     </Box>
   );
@@ -132,17 +140,17 @@ export interface Column {
   id: string;
   label: string;
   minWidth?: number;
-  align?: 'right';
+  align?: "right";
   format?: (value: number) => string;
 }
 
 export interface Row {
   rowKey: string;
-  isTime?: boolean;
-  align: 'left' | 'right';
+  rowComponent?: (row: any) => React.ReactNode;
+  align: "left" | "right";
 }
 
-interface DataTableProps{
+interface DataTableProps {
   columns: Array<Column>;
   rowsOrder: Array<Row>;
   viewBaseUrl?: string;
@@ -155,17 +163,23 @@ export function DataTable(props: DataTableProps) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0)  : 0 ) ) : 0;
+    page > 0
+      ? Math.max(
+          0,
+          (1 + page) * rowsPerPage -
+            (props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0) : 0)
+        )
+      : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -174,86 +188,74 @@ export function DataTable(props: DataTableProps) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        
         <TableHead>
-            <StyledTableRow>
-                {props.columns.map((column) => (
-                <StyledTableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                >
-                    {column.label}
-                </StyledTableCell>
-                ))}
-                
+          <StyledTableRow>
+            {props.columns.map((column) => (
+              <StyledTableCell
+                key={column.id}
+                align={column.align}
+                style={{ minWidth: column.minWidth }}
+              >
+                {column.label}
+              </StyledTableCell>
+            ))}
 
-                {
-                  props.viewBaseUrl ? 
-                  <StyledTableCell
-                      key='action'
-                      align='left'
-                  >
-                    View
-                  </StyledTableCell>
-                  : null
-                }
-            </StyledTableRow>
+            {props.viewBaseUrl ? (
+              <StyledTableCell key="action" align="left">
+                View
+              </StyledTableCell>
+            ) : null}
+          </StyledTableRow>
         </TableHead>
-        
+
         <TableBody>
-          {
-            props.rows !== undefined ? 
+          {props.rows !== undefined ? (
             <>
-                {(rowsPerPage > 0
-                  ? props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : props.rows
-                ).map((row, i) => (
-                  <StyledTableRow key={i}>
-                    {
-                      props.rowsOrder.map((rowOrder,i)=>(
-                        <StyledTableCell key={i} align={rowOrder.align}>
-                          {
-                            rowOrder.isTime? 
-                            <Moment format='LLL'>{row[rowOrder.rowKey]}</Moment>
-                            : row[rowOrder.rowKey] || 'N/A' 
-                          }
-                          
-                        </StyledTableCell>
-                      ))
-                    }
-                    {
-                      props.viewBaseUrl ?
-                      <StyledTableCell align='left'>
-                        <Link to={`${props.viewBaseUrl}/${row.hash_key}`}>
-                          <FaEye className='text-lg'/>
-                        </Link>
-                      </StyledTableCell> 
-                      : null
-                    }
-                  </StyledTableRow>
-                ))}
-                {emptyRows > 0 && (
-                  <StyledTableRow style={{ height: 53 * emptyRows }}>
-                    <StyledTableCell colSpan={6} />
-                  </StyledTableRow>
-                )}
-          </>
-            : null
-          }
-         
+              {(rowsPerPage > 0
+                ? props.rows.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : props.rows
+              ).map((row, i) => (
+                <StyledTableRow key={i}>
+                  {props.rowsOrder.map((rowOrder, i) => (
+                    <StyledTableCell key={i} align={rowOrder.align}>
+                      {rowOrder.rowComponent
+                        ? rowOrder.rowComponent(row)
+                        : row[rowOrder.rowKey] || "N/A"}
+                    </StyledTableCell>
+                  ))}
+                  {props.viewBaseUrl ? (
+                    <StyledTableCell align="left">
+                      <Link to={`${props.viewBaseUrl}/${row.hash_key}`}>
+                        <FaEye className="text-lg" />
+                      </Link>
+                    </StyledTableCell>
+                  ) : null}
+                </StyledTableRow>
+              ))}
+              {emptyRows > 0 && (
+                <StyledTableRow style={{ height: 53 * emptyRows }}>
+                  <StyledTableCell colSpan={6} />
+                </StyledTableRow>
+              )}
+            </>
+          ) : null}
         </TableBody>
         <TableFooter>
           <StyledTableRow>
             <StyledTablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
               colSpan={props.columns.length + (props.viewBaseUrl ? 1 : 0)}
-              count={props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0) : 0}
+              count={
+                props.rows ? props.rows.length + (props.viewBaseUrl ? 1 : 0) : 0
+              }
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
                 inputProps: {
-                  'aria-label': 'rows per page',
+                  "aria-label": "rows per page",
                 },
                 native: true,
               }}

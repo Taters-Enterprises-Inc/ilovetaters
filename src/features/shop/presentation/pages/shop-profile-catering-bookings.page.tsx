@@ -9,6 +9,9 @@ import {
   getCateringBookingHistory,
   selectGetCateringBookingHistory,
 } from "../slices/get-catering-booking-history.slice";
+import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import Moment from "react-moment";
+import NumberFormat from "react-number-format";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -37,6 +40,9 @@ export function ShopProfileCateringBookings() {
           {
             rowKey: "dateadded",
             align: "left",
+            rowComponent: (row: SnackShopOrderModel) => (
+              <Moment format="LLL">{row.dateadded}</Moment>
+            ),
           },
           {
             rowKey: "tracking_no",
@@ -45,6 +51,14 @@ export function ShopProfileCateringBookings() {
           {
             rowKey: "purchase_amount",
             align: "left",
+            rowComponent: (row: SnackShopOrderModel) => (
+              <NumberFormat
+                value={parseInt(row.purchase_amount).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            ),
           },
           {
             rowKey: "status",
