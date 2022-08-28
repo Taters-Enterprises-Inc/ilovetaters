@@ -360,9 +360,11 @@ export function ShopProduct() {
                           if (quantity > 1 && quantity <= 10)
                             setQuantity(quantity - 1);
                         }}
-                        className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary"
+                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                          quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3">
+                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
                           −
                         </span>
                       </button>
@@ -387,9 +389,11 @@ export function ShopProduct() {
                           if (quantity >= 1 && quantity < 10)
                             setQuantity(quantity + 1);
                         }}
-                        className="h-full w-[150px] rounded-r cursor-pointer bg-primary"
+                        className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                          quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3">
+                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
                           +
                         </span>
                       </button>

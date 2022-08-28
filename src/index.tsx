@@ -34,8 +34,8 @@ import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import { Admin, Login } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
+import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components/wrappers";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

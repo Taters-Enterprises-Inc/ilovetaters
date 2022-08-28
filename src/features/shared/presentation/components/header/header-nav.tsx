@@ -1,17 +1,11 @@
-import axios from "axios";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import {
-  REACT_APP_DOMAIN_URL,
-  REACT_APP_UPLOADS_URL,
-  TABS,
-} from "features/shared/constants";
+import { TABS } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaUserAlt } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsCart4 } from "react-icons/bs";
 import { ShopCartModal } from "../../../../shop/presentation/modals";
@@ -83,7 +77,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
   useEffect(() => {
     dispatch(getSession());
-  }, [facebookLogoutState]);
+  }, [facebookLogoutState, dispatch]);
 
   const handleCart = () => {
     setOpenShopCartModal(true);
@@ -114,9 +108,11 @@ export function HeaderNav(props: HeaderNavProps) {
     <>
       <header className={"sticky w-full top-0 z-20"}>
         <div className={` w-full bg-primary shadow-2xl`}>
-          <nav className={`flex justify-between items-center container py-2`}>
+          <nav
+            className={`flex justify-between items-center container py-0 lg:py-2`}
+          >
             <Link to={"/shop"}>
-              <img {...props.logoProps} />
+              <img {...props.logoProps} alt="Taters Logo" />
             </Link>
 
             <div className="flex items-center justify-center space-x-4">
@@ -125,7 +121,7 @@ export function HeaderNav(props: HeaderNavProps) {
                   return (
                     <li
                       key={i}
-                      className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-extralight ${
+                      className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-light ${
                         tab.name === props.activeUrl
                           ? "text-tertiary"
                           : "text-white"
@@ -167,7 +163,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         className="rounded-full"
                         width={30}
                       ></img>
-                      <span className="text-xs text-white font-extralight">
+                      <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
                         {getSessionState.data?.userData.last_name}
                       </span>
@@ -195,7 +191,7 @@ export function HeaderNav(props: HeaderNavProps) {
                       className="flex flex-col items-center justify-center space-y-1 text-white rounded-xl"
                     >
                       <AiOutlineUser className="text-2xl" />
-                      <span className="tracking-[2px] text-xs font-extralight">
+                      <span className="tracking-[2px] text-xs font-light">
                         Sign In
                       </span>
                     </button>
@@ -204,7 +200,7 @@ export function HeaderNav(props: HeaderNavProps) {
                 {getSessionState.data?.cache_data ? (
                   <button
                     onClick={handleCart}
-                    className="flex-col items-center space-y-1 justifiy-center"
+                    className="flex-col items-center justify-center space-y-1"
                   >
                     <div className="relative flex flex-col items-center justify-center space-y-1 text-white rounded-xl">
                       <BsCart4 className="text-2xl text-white" />
@@ -214,7 +210,7 @@ export function HeaderNav(props: HeaderNavProps) {
                           : 0}
                       </span>
                     </div>
-                    <h5 className="text-[13px] font-extralight text-white">
+                    <h5 className="text-[13px] font-light text-white">
                       {calculateOrdersPrice()}
                     </h5>
                   </button>

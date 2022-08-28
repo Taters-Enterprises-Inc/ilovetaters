@@ -20,7 +20,7 @@ export function ShopHome() {
   }, [dispatch]);
 
   return (
-    <section className="container pb-64">
+    <>
       <img
         className="sm:hidden"
         src={
@@ -38,23 +38,25 @@ export function ShopHome() {
         alt="The best pop corn in town"
       ></img>
 
-      <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
-        Please search your address for delivery
-      </h1>
+      <section className="container pb-64">
+        <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
+          Please search your address for delivery
+        </h1>
 
-      <div className="flex justify-center">
-        <label className="pure-material-textfield-outlined w-[100%] mb-10">
-          <SearchAddress
-            onPlaceSelected={(place: string) => {
-              setAddress(place);
-              dispatch(getStoresAvailableSnackshop({ address: place }));
-            }}
-          />
-          <span>Search Address</span>
-        </label>
-      </div>
+        <div className="flex justify-center">
+          <label className="pure-material-textfield-outlined w-[100%] mb-10">
+            <SearchAddress
+              onPlaceSelected={(place: string) => {
+                setAddress(place);
+                dispatch(getStoresAvailableSnackshop({ address: place }));
+              }}
+            />
+            <span>Search Address</span>
+          </label>
+        </div>
 
-      <ShopStoreListDelivery address={address} />
-    </section>
+        <ShopStoreListDelivery address={address} />
+      </section>
+    </>
   );
 }

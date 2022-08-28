@@ -183,13 +183,13 @@ export function PopClubDeal() {
 
           return (
             <>
-              <div className="text-white flex justify-center items-center text-xl px-4 ">
-                <AiOutlineFieldTime className="text-4xl mr-3" />
+              <div className="flex items-center justify-center px-4 text-xl text-white ">
+                <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
                     {pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
-                  <span className="text-sm ml-2">{timeName}</span>
+                  <span className="ml-2 text-sm">{timeName}</span>
                 </div>
               </div>
             </>
@@ -198,7 +198,7 @@ export function PopClubDeal() {
       };
 
       return (
-        <div className="bg-secondary text-white py-3 w-full">
+        <div className="w-full py-3 text-white bg-secondary">
           <span className="mt-3">You can redeem after </span>
           <Countdown
             renderer={renderer}
@@ -250,13 +250,13 @@ export function PopClubDeal() {
 
           return (
             <>
-              <div className="text-white flex justify-center items-center text-xl px-4 ">
-                <AiOutlineFieldTime className="text-4xl mr-3" />
+              <div className="flex items-center justify-center px-4 text-xl text-white ">
+                <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
                     {pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
-                  <span className="text-sm ml-2">{timeName}</span>
+                  <span className="ml-2 text-sm">{timeName}</span>
                 </div>
               </div>
             </>
@@ -265,7 +265,7 @@ export function PopClubDeal() {
       };
 
       return (
-        <div className="bg-secondary text-white py-3 w-full">
+        <div className="w-full py-3 text-white bg-secondary">
           <span className="mt-3">Redeem cooldown: </span>
           <Countdown
             renderer={renderer}
@@ -279,9 +279,9 @@ export function PopClubDeal() {
       getRedeemState.data
     ) {
       return (
-        <div className="bg-green-700 text-white py-3 w-full uppercase border border-white rounded-xl">
+        <div className="w-full py-3 text-white uppercase bg-green-700 border border-white rounded-xl">
           CODE :
-          <span className="font-bold ml-1">
+          <span className="ml-1 font-bold">
             {getRedeemState.data.redeem_code}
           </span>
         </div>
@@ -292,7 +292,7 @@ export function PopClubDeal() {
       getLatestUnexpiredRedeemState.data?.deal_hash !== hash
     ) {
       return (
-        <div className="bg-primary text-white py-3 w-full uppercase border border-white rounded-xl">
+        <div className="w-full py-3 text-white uppercase border border-white bg-primary rounded-xl">
           You currently have running deal
         </div>
       );
@@ -319,14 +319,13 @@ export function PopClubDeal() {
 
   return (
     <>
-      <section className="bg-secondary relative min-h-screen flex flex-col pb-10">
-        <HomeHeaderNav serviceReached={true} active="POPCLUB" sticky />
+      <section className="relative flex flex-col min-h-screen pb-10 bg-secondary">
         <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">
           {getDealState.data?.category_name}
         </div>
 
         <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">
-          <div className="relative flex w-full flex-1 flex-col bg-secondary shadow-lg pb-10 ">
+          <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
             {getDealState.data?.original_price &&
             getDealState.data?.promo_price ? (
               <div className="absolute top-0 left-0">
@@ -357,11 +356,11 @@ export function PopClubDeal() {
               />
             ) : null}
             <CountdownTimer></CountdownTimer>
-            <div className="p-4 flex-col space-y-4">
+            <div className="flex-col p-4 space-y-4">
               <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                 {getDealState.data?.name}
               </h1>
-              <h1 className="text-white text-lg">
+              <h1 className="text-lg text-white">
                 {getDealState.data?.description}
               </h1>
 
@@ -369,7 +368,7 @@ export function PopClubDeal() {
                 {redeemButton()}
 
                 <button
-                  className="bg-white font-bold text-black py-3 w-full uppercase border border-white rounded-xl mt-4"
+                  className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
                   onClick={() => {
                     navigate(-1);
                   }}
@@ -395,8 +394,6 @@ export function PopClubDeal() {
           setOpenLoginChooserModal(false);
         }}
       />
-
-      <FooterNavDealPage />
     </>
   );
 }

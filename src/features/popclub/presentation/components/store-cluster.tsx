@@ -56,7 +56,7 @@ export function StoreCluster(props: StoreClusterProps) {
         navigate(`?category=all`);
       }
     } else {
-      navigate(`online-delivery?category=all`);
+      navigate(`/popclub/online-delivery?category=all`);
     }
     document.body.classList.remove("overflow-hidden");
   };
@@ -65,7 +65,7 @@ export function StoreCluster(props: StoreClusterProps) {
     <section className="text-white ">
       {getStoresAvailablePopClubState.data.map((store_cluster, index) => (
         <div key={index}>
-          <h1 className="text-sm font-normal pl-2">
+          <h1 className="pl-2 text-sm font-normal">
             {store_cluster.region_name}
           </h1>
           <section className="flex flex-wrap pb-2 ">
@@ -92,7 +92,7 @@ export function StoreCluster(props: StoreClusterProps) {
                   }`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 not-within-reach-text text-center ">
+                    <span className="p-1 text-center not-within-reach-text ">
                       Store not within reach
                     </span>
                   ) : null}
@@ -101,7 +101,7 @@ export function StoreCluster(props: StoreClusterProps) {
 
                   <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                     <div className="flex justify-end">
-                      <span className="bg-secondary px-2 text-sm">
+                      <span className="px-2 text-sm bg-secondary">
                         {distance_in_km} KM
                       </span>
                     </div>

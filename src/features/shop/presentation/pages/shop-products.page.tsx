@@ -46,32 +46,30 @@ export function ShopProducts() {
 
   return (
     <>
-      <section className="container">
-        <img
-          className="sm:hidden"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/shop/hero/mobile/snackshop_delivered.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/shop/hero/desktop/snackshop_delivered.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/shop/instructions/snackshop_instructions.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <img
+        className="sm:hidden"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/shop/hero/mobile/snackshop_delivered.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+      <img
+        className="hidden sm:block"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/shop/hero/desktop/snackshop_delivered.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+      <img
+        className="hidden sm:block"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/shop/instructions/snackshop_instructions.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
 
       <section className="space-y-10 pb-36 lg:pb-10">
         {getCategoryProductsState.data?.map((category, i) => {
