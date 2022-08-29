@@ -5,6 +5,7 @@
     "Brgy",
     "catigory",
     "contactno",
+    "contenteditable",
     "cooldown",
     "dateadded",
     "elepsis",
@@ -16,9 +17,11 @@
     "Franchisingfaqs",
     "geolocate",
     "giftcard",
+    "ilovetaters",
     "Kaunlara",
     "lastname",
     "lname",
+    "lockdown",
     "maplink",
     "Movieworld",
     "multiflavors",
@@ -34,9 +37,10 @@
     "Swiper",
     "toastify",
     "visayas",
+    "Waze",
     "webp"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.formatOnPaste": true
+  "editor.formatOnPaste": false
 }

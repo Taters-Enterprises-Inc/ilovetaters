@@ -390,7 +390,7 @@ export function ShopCheckout() {
                   <PaymentAccordion />
                 </div>
 
-                <div className="flex items-center justify-start space-x-1 text-white">
+                <div className="flex items-center justify-start space-x-1 text-sm text-white lg:text-base">
                   <Checkbox color="tertiary" required />
                   <span>I agree with the </span>
                   <Link

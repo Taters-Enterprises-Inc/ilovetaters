@@ -11,7 +11,6 @@ import { BsCart4 } from "react-icons/bs";
 import { ShopCartModal } from "../../../shop/presentation/modals";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import NumberFormat from "react-number-format";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {
@@ -108,9 +107,7 @@ export function HeaderNav(props: HeaderNavProps) {
     <>
       <header className={"sticky w-full top-0 z-20"}>
         <div className={` w-full bg-primary shadow-2xl`}>
-          <nav
-            className={`flex justify-between items-center container py-0 lg:py-2`}
-          >
+          <nav className={`flex justify-between items-center container py-2`}>
             <Link to={"/shop"}>
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
@@ -146,7 +143,7 @@ export function HeaderNav(props: HeaderNavProps) {
               <div className="flex items-center justify-center space-x-3 lg:space-x-6">
                 {getSessionState.data?.userData ? (
                   <div>
-                    <Button
+                    <button
                       aria-controls={
                         Boolean(openProfileMenu) ? "basic-menu" : undefined
                       }
@@ -167,7 +164,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         {getSessionState.data?.userData.first_name}{" "}
                         {getSessionState.data?.userData.last_name}
                       </span>
-                    </Button>
+                    </button>
                     <Menu
                       anchorEl={openProfileMenu}
                       open={Boolean(openProfileMenu)}

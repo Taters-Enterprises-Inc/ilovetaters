@@ -24,7 +24,7 @@ export function ShopProfileContainer(props: ShopProfileContainerProps) {
         <div className="lg:-mt-[80px] lg:space-y-8">
           <div className="container">
             <Tab tabs={SNACKSHOP_PROFILE_TABS} activeTab={props.activeTab}>
-              {props.children}
+              <div className="space-y-6">{props.children}</div>
             </Tab>
           </div>
         </div>

@@ -38,7 +38,7 @@ export function Tab(props: TabProps) {
         ))}
       </ul>
 
-      <div className="bg-primary profile-tab-content py-6 lg:shadow-[0_3px_10px_rgba(0,0,0,0.5)] w-full mb-10 lg:p-6 space-y-6">
+      <div className="bg-primary profile-tab-content py-6 lg:shadow-[0_3px_10px_rgba(0,0,0,0.5)] w-full mb-10 lg:p-6">
         {props.children}
       </div>
     </div>

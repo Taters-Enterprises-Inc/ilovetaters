@@ -8,6 +8,7 @@ import {
   SERVICES_DESKTOP,
   SERVICES_MOBILE,
 } from "features/shared/constants";
+import { Link } from "react-router-dom";
 
 export function Home() {
   const [serviceReached, setServiceReached] = useState(false);
@@ -122,7 +123,7 @@ export function Home() {
           return (
             <div key={i}>
               <div key={i} className="h-[250px] sm:h-[300px] text-white">
-                <a href={service_mobile.url}>
+                <Link to={service_mobile.url}>
                   <div
                     style={{
                       backgroundImage: `url("${
@@ -151,7 +152,7 @@ export function Home() {
                       </p>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           );
