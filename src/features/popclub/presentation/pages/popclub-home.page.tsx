@@ -3,7 +3,6 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { FooterNav, HomeHeaderNav } from "features/shared";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
@@ -72,22 +71,6 @@ export function PopClubHome() {
       );
     }
   }, [dispatch, platform, query, navigate, category]);
-
-  const [serviceReached, setServiceReached] = useState(false);
-
-  const listenScrollEvent = (event: any) => {
-    if (window.scrollY < 203) {
-      return setServiceReached(false);
-    } else if (window.scrollY > 200) {
-      return setServiceReached(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, []);
 
   return (
     <>

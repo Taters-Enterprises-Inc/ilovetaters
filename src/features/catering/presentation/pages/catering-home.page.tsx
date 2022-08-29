@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "features/shared/presentation/components/search-address";
 import {
   getSession,
   selectGetSession,

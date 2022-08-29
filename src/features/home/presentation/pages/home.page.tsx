@@ -1,4 +1,7 @@
-import { FooterNav, HomeHeaderNav } from "features/shared";
+import {
+  FooterNav,
+  HomeHeaderNav,
+} from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import {
   REACT_APP_UPLOADS_URL,
@@ -69,11 +72,11 @@ export function Home() {
 
       <section
         ref={servicesRef}
-        className="hidden sm:flex container flex-wrap pt-2 pb-[90px] lg:pb-0 justify-center items-center lg:min-h-screen content-start"
+        className="container hidden pb-[100px] grid-cols-3 gap-4 pt-4 sm:grid"
       >
         {SERVICES_DESKTOP.map(function (service_desktop, i) {
           return (
-            <div key={i} className="flex-[0_0_33.33%] max-w-[33.33%] p-2">
+            <div key={i}>
               <div className=" h-[250px] sm:h-[300px] text-white">
                 <a href={service_desktop.url} key={i}>
                   <div
@@ -113,11 +116,11 @@ export function Home() {
 
       <section
         ref={servicesRef}
-        className="sm:hidden container flex flex-wrap pt-2 pb-[90px] lg:pb-0 lg:justify-start justify-center items-center content-start"
+        className="container grid grid-cols-2 gap-4 pt-4 sm:hidden pb-[90px]"
       >
         {SERVICES_MOBILE.map(function (service_mobile, i) {
           return (
-            <div key={i} className="flex-[0_0_50%] mx-w-[0_0_50%] p-2">
+            <div key={i}>
               <div key={i} className="h-[250px] sm:h-[300px] text-white">
                 <a href={service_mobile.url}>
                   <div

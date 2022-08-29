@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsCart4 } from "react-icons/bs";
-import { ShopCartModal } from "../../../../shop/presentation/modals";
+import { ShopCartModal } from "../../../shop/presentation/modals";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import NumberFormat from "react-number-format";
 import Button from "@mui/material/Button";

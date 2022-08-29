@@ -1,6 +1,6 @@
 import { useAppSelector } from "features/config/hooks";
 import { useEffect, useRef, useState } from "react";
-import { selectGetSession } from "../../slices/get-session.slice";
+import { selectGetSession } from "../slices/get-session.slice";
 
 let autoComplete: any;
 

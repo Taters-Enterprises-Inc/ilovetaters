@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "../../../shared/presentation/components/search-address";
 import {
   getSession,
   selectGetSession,

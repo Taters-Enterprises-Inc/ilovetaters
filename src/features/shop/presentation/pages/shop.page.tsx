@@ -1,8 +1,7 @@
-import { FooterNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { HeaderNav } from "../../../shared/presentation/components/header/header-nav";
 import { Outlet } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 
 export function Shop() {
   return (

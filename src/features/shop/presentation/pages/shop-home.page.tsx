@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "features/shared/presentation/components/search-address";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";

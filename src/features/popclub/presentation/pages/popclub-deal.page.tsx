@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { HomeHeaderNav } from "features/shared";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -32,7 +31,6 @@ import {
 } from "../slices/get-latest-unexpired-redeem.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import { FooterNavDealPage } from "../footer/footer-nav-deal-page.component";
 import {
   getSession,
   selectGetSession,

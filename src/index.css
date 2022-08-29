@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.tab-active {
+  z-index: 1;
+}
+
+.tab-content {
+  position: relative !important;
+}
+
 .profile-tab-active {
   z-index: 1;
 }
