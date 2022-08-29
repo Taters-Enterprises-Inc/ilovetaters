@@ -10,3 +10,5 @@ export { ShopProfileSnackshopOrders } from "./shop-profile-snackshop-orders.page
 export { ShopProfileCateringBookings } from "./shop-profile-catering-bookings.page";
 
 export { ShopTermsAndConditions } from "./shop-terms-and-condition.page";
+export { ShopPrivacyPolicy } from "./shop-privacy-policy.page";
+export { ShopReturnPolicy } from "./shop-return-policy.page";

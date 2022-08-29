@@ -18,11 +18,13 @@ import {
   ShopCheckout,
   ShopHome,
   ShopOrder,
+  ShopPrivacyPolicy,
   ShopProduct,
   ShopProducts,
   ShopProfile,
   ShopProfileCateringBookings,
   ShopProfileSnackshopOrders,
+  ShopReturnPolicy,
   ShopTermsAndConditions,
 } from "features/shop/presentation/pages";
 import {
@@ -82,6 +84,9 @@ root.render(
                   path="terms-and-conditions"
                   element={<ShopTermsAndConditions />}
                 />
+
+                <Route path="privacy-policy" element={<ShopPrivacyPolicy />} />
+                <Route path="return-policy" element={<ShopReturnPolicy />} />
 
                 <Route path="profile">
                   <Route index element={<ShopProfile />} />

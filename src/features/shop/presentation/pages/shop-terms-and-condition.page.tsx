@@ -1,3 +1,9 @@
+import { ShopTermsAndConditionsTabs } from "../components/shop-terms-and-conditions-tabs";
+
 export function ShopTermsAndConditions() {
-  return <div>Terms and condition</div>;
+  return (
+    <section className="container">
+      <ShopTermsAndConditionsTabs />
+    </section>
+  );
 }

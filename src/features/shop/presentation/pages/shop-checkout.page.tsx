@@ -394,7 +394,7 @@ export function ShopCheckout() {
                   <Checkbox color="tertiary" required />
                   <span>I agree with the </span>
                   <Link
-                    to="/shop/info/terms-and-conditions"
+                    to="/shop/terms-and-conditions"
                     className="text-tertiary"
                   >
                     Terms & Conditions
