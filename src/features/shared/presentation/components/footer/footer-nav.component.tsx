@@ -11,6 +11,8 @@ import {
 import { useEffect } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import MoreDrawer from "./more-drawer.component";
+
 
 export function FooterNav() {
   const getLatestUnexpiredRedeemState = useAppSelector(
@@ -23,15 +25,15 @@ export function FooterNav() {
   }, [dispatch]);
 
   return (
-    <section className="fixed w-full bottom-0 z-20">
+    <section className="fixed bottom-0 z-20 w-full">
       {getLatestUnexpiredRedeemState.data ? (
         <Link
           to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash}
           className="text-white shadow-lg bg-secondary m-2 h-[105px] rounded-xl block"
         >
           <div className="flex">
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 p-4 leading-2 text-sm">
+            <div className="flex flex-col flex-1">
+              <div className="flex-1 p-4 text-sm leading-2">
                 <h1 className="elipsis-3-line">
                   {getLatestUnexpiredRedeemState.data.name}
                 </h1>
@@ -47,12 +49,12 @@ export function FooterNav() {
         </Link>
       ) : null}
       <footer className="w-full py-2 lg:hidden bg-secondary">
-        <nav className=" mx-auto">
-          <ul className="flex text-white items-stretch h-full md:px-10">
+        <nav className="mx-auto ">
+          <ul className="flex items-stretch h-full text-white md:px-10">
             <li className="flex-1">
               <Link
                 to={"/"}
-                className="flex justify-between items-center flex-col h-full pt-1"
+                className="flex flex-col items-center justify-between h-full pt-1"
               >
                 <img
                   src={REACT_APP_UPLOADS_URL + "images/shared/icons/home.webp"}
@@ -65,7 +67,7 @@ export function FooterNav() {
             <li className="flex-1">
               <Link
                 to={"/popclub"}
-                className="flex justify-between items-center flex-col h-full pt-1"
+                className="flex flex-col items-center justify-between h-full pt-1"
               >
                 <img
                   src={
@@ -80,7 +82,7 @@ export function FooterNav() {
             <li className="flex-1">
               <Link
                 to={"/shop"}
-                className="flex justify-center items-center flex-col h-full pt-1"
+                className="flex flex-col items-center justify-center h-full pt-1"
               >
                 <img
                   src={
@@ -97,7 +99,7 @@ export function FooterNav() {
             <li className="flex-1">
               <Link
                 to={"/catering"}
-                className="flex justify-center items-center flex-col h-full pt-1"
+                className="flex flex-col items-center justify-center h-full pt-1"
               >
                 <img
                   src={
@@ -114,7 +116,7 @@ export function FooterNav() {
             <li className="flex-1">
               <Link
                 to={"/branches"}
-                className="flex justify-center items-center flex-col h-full pt-1"
+                className="flex flex-col items-center justify-center h-full pt-1"
               >
                 <img
                   src={
@@ -129,10 +131,8 @@ export function FooterNav() {
               </Link>
             </li>
             <li className="flex-[0.8]">
-              <a className="flex justify-center items-center flex-col h-full pt-1 pr-2">
-                <FiMoreHorizontal className="text-[25px] sm:text-4xl"></FiMoreHorizontal>
-                <span className="text-[8px] sm:text-[14px] pt-[2px]">More</span>
-              </a>
+                <MoreDrawer/>
+             
             </li>
           </ul>
         </nav>
