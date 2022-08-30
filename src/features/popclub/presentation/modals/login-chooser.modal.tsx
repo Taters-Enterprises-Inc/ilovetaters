@@ -12,6 +12,7 @@ import {
 import { useEffect } from "react";
 import { BsFacebook } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
+import { HiOutlinePhone } from "react-icons/hi";
 
 interface LoginChooserModalProps {
   open: boolean;
@@ -68,6 +69,13 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
         >
           <BsFacebook className="mr-2" />
           <span>Continue with Facebook</span>
+        </button>
+        <button
+          onClick={facebook}
+          className="bg-button py-2 rounded-lg w-full flex justify-center items-center mt-4"
+        >
+          <HiOutlinePhone className="mr-2" />
+          <span> Continue with Mobile </span>
         </button>
       </div>
     </div>

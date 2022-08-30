@@ -3,7 +3,7 @@
 @tailwind utilities;
 /*IE9*/
 *::selection {
-  background-color: transparent;
+  background-color: gray;
 }
 *::-moz-selection {
   background-color: transparent;
@@ -54,7 +54,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: #fff !important;
+  -webkit-text-fill-color: rgb(19, 1, 1) !important;
 }
 
 input::-webkit-outer-spin-button,
