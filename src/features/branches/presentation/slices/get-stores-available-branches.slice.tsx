@@ -4,7 +4,7 @@ import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
 import { GetStoresAvailableRepository, GetStoresAvailableResponse } from "features/shared/data/repository/shared.repository";
 
-export enum GetStoresAvailableState{
+export enum GetStoresAvailableBranchesState{
     initial,
     inProgress,
     success,
@@ -13,16 +13,16 @@ export enum GetStoresAvailableState{
 
 
 const initialState : {
-    status: GetStoresAvailableState;
+    status: GetStoresAvailableBranchesState;
     data: Array<StoreModel>;
     message: string;
 } = {
-    status: GetStoresAvailableState.initial,
+    status: GetStoresAvailableBranchesState.initial,
     data: [],
     message : '',
 }
 
-export const getStoresAvailable = createAsyncThunk('getStoresAvailable',
+export const getStoresAvailableBranches = createAsyncThunk('getStoresAvailableBranches',
     async (param : GetStoresAvailableParam) => {
         const response : GetStoresAvailableResponse = await GetStoresAvailableRepository(param);
         return response.data;
@@ -30,21 +30,21 @@ export const getStoresAvailable = createAsyncThunk('getStoresAvailable',
 )
 
 /* Main Slice */
-export const getStoresAvailableSlice = createSlice({
-    name:'getStoresAvailable',
+export const getStoresAvailableBranchesSlice = createSlice({
+    name:'getStoresAvailableBranches',
     initialState,
     reducers : {},
     extraReducers: (builder: any) => {
-        builder.addCase(getStoresAvailable.pending, (state: any)=>{
-            state.status = GetStoresAvailableState.inProgress;
-        }).addCase(getStoresAvailable.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
+        builder.addCase(getStoresAvailableBranches.pending, (state: any)=>{
+            state.status = GetStoresAvailableBranchesState.inProgress;
+        }).addCase(getStoresAvailableBranches.fulfilled, (state: any, action : PayloadAction<{message: string, data: Array<StoreModel>}> ) => {
             const {data, message} = action.payload;
-            state.status = GetStoresAvailableState.success;
+            state.status = GetStoresAvailableBranchesState.success;
             
             state.data = data;
             state.message = message;
-        }).addCase(getStoresAvailable.rejected, (state: any, action: PayloadAction<{message : string}>) => {
-            state.status = GetStoresAvailableState.fail;
+        }).addCase(getStoresAvailableBranches.rejected, (state: any, action: PayloadAction<{message : string}>) => {
+            state.status = GetStoresAvailableBranchesState.fail;
             state.message = action.payload.message;
         })
     }
@@ -52,6 +52,6 @@ export const getStoresAvailableSlice = createSlice({
 
 
 
-export const selectGetStoresAvailable = (state : RootState) => state.getStoresAvailable;
+export const selectGetStoresAvailableBranches = (state : RootState) => state.getStoresAvailableBranches;
 
-export default getStoresAvailableSlice.reducer;
+export default getStoresAvailableBranchesSlice.reducer;

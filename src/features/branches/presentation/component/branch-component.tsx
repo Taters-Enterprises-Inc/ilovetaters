@@ -7,11 +7,10 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
   const [catigory, setCatigory] = useState<boolean>(false);
 
   const [isShow, setIsShow] = useState<boolean>(false);
-  
 
-  const seeItShow = useCallback((value:boolean)=>{
-    setIsShow(value)
-  },[])
+  const seeItShow = useCallback((value: boolean) => {
+    setIsShow(value);
+  }, []);
   const ref = useRef<null | HTMLTableSectionElement>(null);
 
   const scrollToTop = () => {
@@ -22,7 +21,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     const scrollDown = () => {
-      if (window.pageYOffset > 1300) {
+      if (window.pageYOffset > 1700) {
         setShowButton(true);
       } else {
         setShowButton(false);
@@ -32,10 +31,6 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
     return () => window.removeEventListener("scroll", scrollDown);
   }, []);
 
-
-  
-
-  
   return (
     <section className="bg-primary ">
       <section ref={ref} className="block  antialiased font-['Bebas_Neue']">
@@ -75,13 +70,12 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
       </section>
 
       {catigory ? (
-       <BranchesNearyouComponent />
+        <BranchesNearyouComponent />
       ) : (
         <>
-          <section className="  mb-20 z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
-
-            {['ncr' , 'luzon' ,'visayas' ,'mindanao'].map(
-              (data:string, idx: number): JSX.Element => {
+          <section className=" z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
+            {["ncr", "luzon", "visayas", "mindanao"].map(
+              (data: string, idx: number): JSX.Element => {
                 return (
                   <AccordionComponent
                     key={idx}
@@ -91,7 +85,7 @@ export const FranchisingBranchComponent: React.FC = (): JSX.Element => {
                 );
               }
             )}
-            {(isShow && showButton) && (
+            {isShow && showButton && (
               <button
                 onClick={scrollToTop}
                 className="shadow-none bg-tertiary fixed bottom-[84px] left-2/4 z-[100] -translate-x-2/4 w-fit rounded-full	"

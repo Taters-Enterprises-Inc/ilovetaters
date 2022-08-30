@@ -1,38 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { Home } from "features/home/presentation/pages";
+import { REACT_APP_BASE_NAME, theme } from "features/shared/constants";
+import { store } from "features/config/store";
 import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import { Home } from 'features/home/presentation/pages';
-import { REACT_APP_BASE_NAME, theme } from 'features/shared/constants';
-import { store } from 'features/config/store';
-import { PopClub } from 'features/popclub/presentation/pages/popclub.page';
-import { PopClubDeal } from 'features/popclub/presentation/pages';
-import { PopClubDealGuards } from 'features/popclub/presentation/pages/guards';
-import { PopClubPlatformPicker } from 'features/popclub/presentation/pages/popclub-platform-picker.page';
-import { Shop, ShopCheckout, ShopHome, ShopOrder, ShopProduct, ShopProducts, ShopProfile, ShopProfileCateringBookings, ShopProfileSnackshopOrders } from 'features/shop/presentation/pages';
-import { Catering, CateringProducts } from 'features/catering/presentation/pages';
-import { Franchising } from 'features/franchising/presentation/pages';
-import { Reseller } from 'features/reseller/presentation/pages';
-import { Branches } from 'features/branches/presentation/pages';
-import { Admin } from 'features/admin/presentation/pages';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import { LoadingAndSnackbarWrapper } from 'features/shared/presentation/components/wrappers/loading-and-snackbar-wrapper';
-import { CateringHome } from 'features/catering/presentation/pages/catering-home.page';
+  PopClub,
+  PopClubDeal,
+  PopClubHome,
+} from "features/popclub/presentation/pages";
+import { PopClubDealGuards } from "features/popclub/presentation/pages/guards";
+import {
+  Shop,
+  ShopCheckout,
+  ShopHome,
+  ShopOrder,
+  ShopPrivacyPolicy,
+  ShopProduct,
+  ShopProducts,
+  ShopProfile,
+  ShopProfileCateringBookings,
+  ShopProfileSnackshopOrders,
+  ShopReturnPolicy,
+  ShopTermsAndConditions,
+} from "features/shop/presentation/pages";
+import {
+  Catering,
+  CateringProduct,
+  CateringProducts,
+} from "features/catering/presentation/pages";
+import { Franchising } from "features/franchising/presentation/pages";
+import { Reseller } from "features/reseller/presentation/pages";
+import { Branches } from "features/branches/presentation/pages";
+import { Admin, Login } from "features/admin/presentation/pages";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
+import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
-if (window.location.hash === "#_=_"){
-  window.location.replace(window.location.protocol + "//" + window.location.host + window.location.pathname);
+if (window.location.hash === "#_=_") {
+  window.location.replace(
+    window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname
+  );
 }
-
 
 root.render(
   <React.StrictMode>
@@ -40,49 +59,58 @@ root.render(
       <Provider store={store}>
         <BrowserRouter basename={REACT_APP_BASE_NAME}>
           <Routes>
-            <Route element={<LoadingAndSnackbarWrapper/>}>
+            <Route element={<LoadingAndSnackbarWrapper />}>
+              <Route path="/" element={<Home />} />
 
-              <Route path='/' element={<Home />} />
+              <Route path="popclub" element={<PopClub />}>
+                <Route path=":platform" element={<PopClubHome />} />
 
-              <Route path="popclub" element={<PopClubPlatformPicker />}/>
-              <Route path="popclub/:platform" element={<PopClub />}/>
-
-              <Route path="popclub/deal" element={<PopClubDealGuards />}>
-                <Route path=":hash" element={<PopClubDeal />}/>
-              </Route>
-
-              <Route path='shop' element={<Shop/>}>
-                
-                <Route index element={<ShopHome/>}/>
-                <Route path="products/:hash" element={<ShopProduct/>}/>
-                <Route path="order/:hash" element={<ShopOrder/>}/>
-                <Route path="products" element={<ShopProducts/>}/>
-                <Route path="checkout" element={<ShopCheckout/>}/>
-
-                <Route path='profile'>
-                  <Route index element={<ShopProfile/>}/>
-                  <Route path='snackshop-orders' element={<ShopProfileSnackshopOrders/>}/>
-                  <Route path='catering-bookings' element={<ShopProfileCateringBookings/>}/>
+                <Route path="deal" element={<PopClubDealGuards />}>
+                  <Route path=":hash" element={<PopClubDeal />} />
                 </Route>
-
               </Route>
 
-              <Route path="catering" element={<Catering/>}>
+              <Route path="shop" element={<Shop />}>
+                <Route index element={<ShopHome />} />
+                <Route path="products/:hash" element={<ShopProduct />} />
+                <Route path="order/:hash" element={<ShopOrder />} />
+                <Route path="products" element={<ShopProducts />} />
+                <Route path="checkout" element={<ShopCheckout />} />
 
-                <Route index element={<CateringHome/>}/>
-                <Route path="products" element={<CateringProducts/>}/>
-                
+                <Route
+                  path="terms-and-conditions"
+                  element={<ShopTermsAndConditions />}
+                />
+
+                <Route path="privacy-policy" element={<ShopPrivacyPolicy />} />
+                <Route path="return-policy" element={<ShopReturnPolicy />} />
+
+                <Route path="profile">
+                  <Route index element={<ShopProfile />} />
+                  <Route
+                    path="snackshop-orders"
+                    element={<ShopProfileSnackshopOrders />}
+                  />
+                  <Route
+                    path="catering-bookings"
+                    element={<ShopProfileCateringBookings />}
+                  />
+                </Route>
               </Route>
 
+              <Route path="catering" element={<Catering />}>
+                <Route index element={<CateringHome />} />
+                <Route path="products/:hash" element={<CateringProduct />} />
+                <Route path="products" element={<CateringProducts />} />
+              </Route>
 
-              <Route path="franchising" element={<Franchising/>}/>
-              <Route path="admin"element={<Admin/>}> </Route>
+              <Route path="franchising" element={<Franchising />} />
+              <Route path="reseller" element={<Reseller />} />
+              <Route path="branches" element={<Branches />} />
 
-              <Route path="reseller" element={<Reseller/>}/>
-              <Route path="branches" element={<Branches/>}/>
-            
+              <Route path="admin" element={<Login />}></Route>
+              <Route path="admin/main" element={<Admin />}></Route>
             </Route>
-    
           </Routes>
         </BrowserRouter>
       </Provider>

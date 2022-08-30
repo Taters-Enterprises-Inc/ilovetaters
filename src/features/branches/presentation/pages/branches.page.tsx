@@ -1,4 +1,7 @@
-import { FooterNav, HomeHeaderNav } from "features/shared";
+import {
+  FooterNav,
+  HomeHeaderNav,
+} from "features/shared/presentation/components";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import React, { useEffect, useState } from "react";
 import { FranchisingBranchComponent } from "../component/branch-component";
@@ -6,7 +9,6 @@ import { FranchisingContactComponent } from "../component/contact-component";
 
 export function Branches() {
   const [serviceReached, setServiceReached] = useState<boolean>(false);
- 
 
   const listenScrollEvent = () => {
     if (window.scrollY < 203) {
@@ -21,17 +23,28 @@ export function Branches() {
     return () => window.removeEventListener("scroll", listenScrollEvent);
   }, []);
 
-
   return (
-    <main className="bg-primary h-auto w-full border-primary border-solid	border">
+    <main className="w-full h-auto border border-solid bg-primary border-primary">
       <HomeHeaderNav serviceReached={serviceReached} active="BRANCHES" />
-      <section className="container px-4" >
-    <img className="lg:hidden" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"} alt="The best pop corn in town"></img>
-            <img className="hidden lg:block" src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"} alt="The best pop corn in town"></img>
-    </section>
+      <img
+        className="lg:hidden"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/branches/hero/mobile/branches_nationwide.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+      <img
+        className="hidden lg:block"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/branches/hero/desktop/branches_nationwide.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
       <FranchisingContactComponent />
       <FranchisingBranchComponent />
-      <FooterNav />
+      <FooterNav activeUrl="BRANCHES" />
     </main>
   );
 }

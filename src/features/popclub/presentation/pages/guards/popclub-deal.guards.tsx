@@ -1,7 +1,5 @@
+import { Outlet } from "react-router-dom";
 
-import  { Outlet } from "react-router-dom";
-
-export function PopClubDealGuards(){
-    
-    return <Outlet/>;
+export function PopClubDealGuards() {
+  return <Outlet />;
 }

@@ -4,7 +4,6 @@ import { contactData, ContactDataType } from "../pages/data/contact-data";
 export const FranchisingContactComponent: React.FC = (): JSX.Element => {
   return (
     <>
-   
       <section className="block bg-primary font-['Bebas_Neue']">
         <h1 className="text-center my-4 text-white  md:text-[3rem] text-[2rem] font-normal tracking-[2px]">
           Contact Us
@@ -28,8 +27,10 @@ export const FranchisingContactComponent: React.FC = (): JSX.Element => {
                   </div>
                   <h5 className="mb-2 text-medium  text-[#fff] tracking-[2px] font-['Bebas_Neue']">
                     {heading}
-                   </h5>
-                  <p className="text-[12px] text-[#e7e6eb]	tracking-[1px]">{paragraph}</p>
+                  </h5>
+                  <p className="text-[12px] text-[#e7e6eb]	tracking-[1px]">
+                    {paragraph}
+                  </p>
                 </a>
               ) : (
                 <div
@@ -61,7 +62,9 @@ export const FranchisingContactComponent: React.FC = (): JSX.Element => {
                 <h5 className="mb-2 text-medium tracking-[2px] text-[#fff] font-['Bebas_Neue']">
                   {heading}
                 </h5>
-                <p className="text-[12px] text-[#e7e6eb] tracking-[1px]	">{paragraph}</p>
+                <p className="text-[12px] text-[#e7e6eb] tracking-[1px]	">
+                  {paragraph}
+                </p>
               </div>
             );
           }

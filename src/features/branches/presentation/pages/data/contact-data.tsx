@@ -38,7 +38,7 @@ export const contactData: Array<ContactDataType> = [
     heading: "Head Office Address",
     paragraph:
       "TEI Center, 3536 Hilario Street, Brgy. Palanan Makati City, 1235 PH",
-    href: "/one",
+    href: "https://www.google.com/maps/place/TEI+Center/@14.558713,120.9935478,15z/data=!4m12!1m6!3m5!1s0x3397c9710636ea31:0xf042ad0583cb4d42!2sTEI+Center!8m2!3d14.5587046!4d121.0022656!3m4!1s0x3397c9710636ea31:0xf042ad0583cb4d42!8m2!3d14.5587046!4d121.0022656",
     cardOpt: {
       active: true,
       title: "all",

@@ -1,1 +1,1 @@
-export { PopClubDealGuards } from './popclub-deal.guards';
+export { PopClubDealGuards } from "./popclub-deal.guards";
