@@ -203,7 +203,10 @@ export function ShopProduct() {
           url: "/shop",
         }}
         title={getProductDetailsState.data?.product.name}
-        pageTitles={["Products", getProductDetailsState.data?.product.name]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: getProductDetailsState.data?.product.name, url: "" },
+        ]}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">

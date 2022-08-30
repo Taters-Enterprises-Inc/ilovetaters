@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 interface PageTitleAndBreadCrumbsProps {
   title: string | undefined;
-  pageTitles: Array<string | undefined>;
+  pageTitles: Array<{
+    name?: string;
+    url?: string;
+  }>;
   children?: ReactNode;
   home: {
     title: string;
@@ -54,14 +57,14 @@ export function PageTitleAndBreadCrumbs(props: PageTitleAndBreadCrumbsProps) {
                     ></path>
                   </svg>
                   <Link
-                    to="/shop/products"
+                    to={title.url ? title.url : ""}
                     className={`${
                       i !== props.pageTitles.length - 1
                         ? "text-gray-400"
                         : "text-white"
                     } ml-1 text-xs lg:text-sm font-medium md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis`}
                   >
-                    {title}
+                    {title.name}
                   </Link>
                 </div>
               </li>

@@ -35,8 +35,8 @@ export function CateringProduct() {
         }}
         title={getCateringProductDetailsState.data?.product.name}
         pageTitles={[
-          "Products",
-          getCateringProductDetailsState.data?.product.name,
+          { name: "Products", url: "/catering/products" },
+          { name: getCateringProductDetailsState.data?.product.name },
         ]}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">

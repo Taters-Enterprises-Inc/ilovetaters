@@ -18,7 +18,10 @@ export function ShopProfileContainer(props: ShopProfileContainerProps) {
           url: "/shop",
         }}
         title={props.title}
-        pageTitles={["Products", props.title]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: props.title },
+        ]}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">

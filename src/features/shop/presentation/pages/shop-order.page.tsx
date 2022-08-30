@@ -160,7 +160,10 @@ export function ShopOrder() {
           url: "/shop",
         }}
         title="Order View"
-        pageTitles={["Products", "Order View"]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: "Order View" },
+        ]}
       />
 
       <div className="flex lg:hidden">

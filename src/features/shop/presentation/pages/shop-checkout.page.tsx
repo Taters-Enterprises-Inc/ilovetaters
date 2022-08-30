@@ -179,7 +179,10 @@ export function ShopCheckout() {
           url: "/shop",
         }}
         title="Checkout"
-        pageTitles={["Products", "Checkout"]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: "Checkout" },
+        ]}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
