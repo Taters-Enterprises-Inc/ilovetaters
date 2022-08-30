@@ -115,6 +115,7 @@ root.render(
               <Route path="franchising" element={<Franchising/>}/>
               <Route path="reseller" element={<Reseller/>}/>
               <Route path="branches" element={<Branches/>}/>
+              <Route path="near-you" element={<Branches/>}/>
 
               <Route path="admin"element={<Login/>}></Route>
               <Route path="admin/main"element={<Admin/>}></Route>
