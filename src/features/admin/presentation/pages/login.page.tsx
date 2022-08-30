@@ -2,7 +2,6 @@ import {BrowserRouter as Router, Link} from 'react-router-dom';
 import {FaRegEnvelope} from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
 import { useState } from "react";
-import { FooterNav, HomeHeaderNav } from "features/shared";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 
