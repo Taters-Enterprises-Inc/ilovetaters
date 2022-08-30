@@ -53,7 +53,7 @@ export function Franchising() {
       {/* <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
             <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="hidden w-full lg:block"/> */}
 
-      <section className="pt-6 pb-16 text-left lg:px-0 md:px-8 bg-primary">
+      <section className="pt-6 pb-32 text-left lg:pb-16 lg:px-0 md:px-8 bg-primary">
         <div className="container mb-6 text-white">
           <h1 className="text-3xl text-center font-bold leading-[2.3rem] font-['Bebas_Neue'] tracking-wide ">
             Ready to invest in the best Snacks in Town?
