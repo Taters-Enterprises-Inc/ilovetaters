@@ -81,7 +81,7 @@ export function Admin(){
                 </div>
                 
                 <div className='flex gap-x-4 items-center'>
-                    <img src="../favicon.png" className="rounded-full cursor-pointer border-white duration-500"/>
+                    <img src={require('assets/favicon.png')} className="rounded-full cursor-pointer border-white duration-500"/>
                     <h1 className={`whitespace-pre duration-300 text-white origin-left font-medium 
                     ${!open && 'opacity-0 translate-x-28 overflow-hidden'}`}>TEI Shop Admin</h1>
                 </div>
