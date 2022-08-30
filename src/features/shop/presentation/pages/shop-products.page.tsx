@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   getSession,
   GetSessionState,
@@ -49,24 +49,24 @@ export function ShopProducts() {
       <img
         className="sm:hidden"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/shop/hero/mobile/snackshop_delivered.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/shop/hero/mobile/snackshop_delivered.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/shop/hero/desktop/snackshop_delivered.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/shop/hero/desktop/snackshop_delivered.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/shop/instructions/snackshop_instructions.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/shop/instructions/snackshop_instructions.webp"
         }
         alt="The best pop corn in town"
       ></img>
@@ -80,7 +80,7 @@ export function ShopProducts() {
             >
               <div
                 style={{
-                  backgroundImage: `url('https://ilovetaters.com/shop/assets/img/categories/${category.category_image}')`,
+                  backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/shared/categories/${category.category_image}')`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                 }}

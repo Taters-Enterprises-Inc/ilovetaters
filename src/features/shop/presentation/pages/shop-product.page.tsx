@@ -37,6 +37,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -228,7 +229,7 @@ export function ShopProduct() {
                   {getProductDetailsState.data?.product.product_image ? (
                     <SwiperSlide>
                       <img
-                        src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getProductDetailsState.data?.product.product_image}`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />
