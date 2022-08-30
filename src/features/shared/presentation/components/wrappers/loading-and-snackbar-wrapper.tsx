@@ -3,7 +3,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { GetStoresAvailableState, selectGetStoresAvailable } from "../../slices/get-stores-available-slice";
 import BackdropLoading from "../loading/backdrop-loading-wrapper";
 import MuiAlert from '@mui/material/Alert';
 import { GetCategoryProductsState, selectGetCategoryProducts } from "features/shop/presentation/slices/get-category-products.slice";
@@ -15,6 +14,9 @@ import { FacebookLoginPointState, selectFacebookLoginPoint } from "../../slices/
 import { RemoveItemFromCartState, selectRemoveItemFromCart } from "../../slices/remove-item-from-cart.slice";
 import { selectUploadProofOfPayment, UploadProofOfPaymentState } from "../../slices/upload-proof-of-payment.slice";
 import { AddContactState, selectAddContact } from "../../slices/add-contact.slice";
+import { DeleteContactState, selectDeleteContact } from "../../slices/delete-contact.slice";
+import { selectUpdateContact, UpdateContactState } from "../../slices/update-contact.slice";
+import { GetStoresAvailableSnackshopState, selectGetStoresAvailableSnackshop } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
 
 export function LoadingAndSnackbarWrapper(){
     const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -28,7 +30,7 @@ export function LoadingAndSnackbarWrapper(){
     
     const dispatch = useAppDispatch();
 
-    const getStoresAvailableState = useAppSelector(selectGetStoresAvailable);
+    const getStoresAvailableSnackshopState = useAppSelector(selectGetStoresAvailableSnackshop);
     const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
     const getProductDetailsState = useAppSelector(selectGetProductDetails);
     const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
@@ -38,7 +40,66 @@ export function LoadingAndSnackbarWrapper(){
     const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
     const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
     const addContactState = useAppSelector(selectAddContact);
+    const deleteContactState = useAppSelector(selectDeleteContact);
+    const updateContactState = useAppSelector(selectUpdateContact);
     
+    useEffect(()=>{
+        switch(updateContactState.status){
+            case UpdateContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case UpdateContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case UpdateContactState.success:
+                showAlert(setSuccessAlert,updateContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case UpdateContactState.fail:
+                showAlert(setFailsAlert,updateContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[updateContactState, dispatch]);
+
+    useEffect(()=>{
+        switch(deleteContactState.status){
+            case DeleteContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case DeleteContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case DeleteContactState.success:
+                showAlert(setSuccessAlert,deleteContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case DeleteContactState.fail:
+                showAlert(setFailsAlert,deleteContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[deleteContactState, dispatch]);
+
+    useEffect(()=>{
+        switch(addContactState.status){
+            case AddContactState.inProgress:
+                setOpenBackdropLoading(true);
+                break;
+            case AddContactState.initial:
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.success:
+                showAlert(setSuccessAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+            case AddContactState.fail:
+                showAlert(setFailsAlert,addContactState.message);
+                setOpenBackdropLoading(false);
+                break;
+        }
+    },[addContactState, dispatch]);
+
     useEffect(()=>{
         switch(addContactState.status){
             case AddContactState.inProgress:
@@ -143,23 +204,23 @@ export function LoadingAndSnackbarWrapper(){
     },[setStoreAndAddressState, dispatch]);
 
     useEffect(()=>{
-        switch(getStoresAvailableState.status){
-            case GetStoresAvailableState.inProgress:
+        switch(getStoresAvailableSnackshopState.status){
+            case GetStoresAvailableSnackshopState.inProgress:
                 setOpenBackdropLoading(true);
                 break;
-            case GetStoresAvailableState.initial:
+            case GetStoresAvailableSnackshopState.initial:
                 setOpenBackdropLoading(false);
                 break;
-            case GetStoresAvailableState.success:
-                showAlert(setSuccessAlert,getStoresAvailableState.message);
+            case GetStoresAvailableSnackshopState.success:
+                showAlert(setSuccessAlert,getStoresAvailableSnackshopState.message);
                 setOpenBackdropLoading(false);
                 break;
-            case GetStoresAvailableState.fail:
-                showAlert(setFailsAlert,getStoresAvailableState.message);
+            case GetStoresAvailableSnackshopState.fail:
+                showAlert(setFailsAlert,getStoresAvailableSnackshopState.message);
                 setOpenBackdropLoading(false);
                 break;
         }
-    },[getStoresAvailableState]);
+    },[getStoresAvailableSnackshopState]);
 
     useEffect(()=>{
         switch(getCategoryProductsState.status){

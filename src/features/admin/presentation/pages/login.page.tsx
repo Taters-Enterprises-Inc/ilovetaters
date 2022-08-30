@@ -1,4 +1,3 @@
-
 import {BrowserRouter as Router, Link} from 'react-router-dom';
 import {FaRegEnvelope} from 'react-icons/fa';
 import { MdLockOutline } from 'react-icons/md';
@@ -50,3 +49,4 @@ export function Login(){
         </main>
     );
 }
+

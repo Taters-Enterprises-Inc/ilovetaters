@@ -1,7 +1,3 @@
-export function Reseller(){
-    return (
-        <div>
-            Reseller
-        </div>
-    );
+export function Reseller() {
+  return <div>Reseller</div>;
 }

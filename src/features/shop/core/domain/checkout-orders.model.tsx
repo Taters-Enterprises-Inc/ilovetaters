@@ -1,3 +1,3 @@
 export interface CheckoutOrdersModel {
-    hash : string;
+  hash: string;
 }

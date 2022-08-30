@@ -12,7 +12,11 @@ import { useEffect } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export function FooterNav() {
+interface FooterNavProps{
+  activeUrl: 'SNACKSHOP' | 'CATERING' | 'POPCLUB' | 'BRANCHES' | 'HOME';
+}
+
+export function FooterNav(props: FooterNavProps) {
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
@@ -55,11 +59,11 @@ export function FooterNav() {
                 className="flex justify-between items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/shared/icons/home.webp"}
+                  src={`${REACT_APP_UPLOADS_URL}images/shared/icons/home${props.activeUrl == 'HOME' ? '-active' : ''}.webp`}
                   className="w-[28px] sm:w-[40px]"
                   alt="Tater home icon"
                 ></img>
-                <span className="text-[8px] sm:text-[14px]">Home</span>
+                <span className={`text-[8px] sm:text-[14px] ${props.activeUrl == 'HOME' ? 'text-tertiary' : 'text-white'}`}>Home</span>
               </Link>
             </li>
             <li className="flex-1">
@@ -68,13 +72,11 @@ export function FooterNav() {
                 className="flex justify-between items-center flex-col h-full pt-1"
               >
                 <img
-                  src={
-                    REACT_APP_UPLOADS_URL + "images/shared/icons/popclub.webp"
-                  }
+                  src={`${REACT_APP_UPLOADS_URL}images/shared/icons/popclub${props.activeUrl == 'POPCLUB' ? '-active' : ''}.webp`}
                   className="w-[20px] sm:w-[24px]"
                   alt="Tater home icon"
                 ></img>
-                <span className="text-[8px] sm:text-[14px]">Popclub</span>
+                <span className={`text-[8px] sm:text-[14px] ${props.activeUrl == 'POPCLUB' ? 'text-tertiary' : 'text-white'}`}>Popclub</span>
               </Link>
             </li>
             <li className="flex-1">
@@ -83,13 +85,11 @@ export function FooterNav() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={
-                    REACT_APP_UPLOADS_URL + "images/shared/icons/snackshop.webp"
-                  }
+                  src={`${REACT_APP_UPLOADS_URL}images/shared/icons/snackshop${props.activeUrl == 'SNACKSHOP' ? '-active' : ''}.webp`}
                   className="w-[24px] sm:w-[30px]"
                   alt="Tater home icon"
                 ></img>
-                <span className="text-[8px] sm:text-[14px] pt-[2px]">
+                <span className={`text-[8px] sm:text-[14px] pt-[2px] ${props.activeUrl == 'SNACKSHOP' ? 'text-tertiary' : 'text-white'}`}>
                   Snackshop
                 </span>
               </Link>
@@ -100,13 +100,11 @@ export function FooterNav() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={
-                    REACT_APP_UPLOADS_URL + "images/shared/icons/catering.webp"
-                  }
+                  src={`${REACT_APP_UPLOADS_URL}images/shared/icons/catering${props.activeUrl == 'CATERING' ? '-active' : ''}.webp`}
                   className="w-[24px] sm:w-[30px]"
                   alt="Tater home icon"
                 ></img>
-                <span className="text-[8px] sm:text-[14px] pt-[2px]">
+                <span className={`text-[8px] sm:text-[14px] pt-[2px] ${props.activeUrl == 'CATERING' ? 'text-tertiary': 'text-white'}`}>
                   Catering
                 </span>
               </Link>
@@ -117,13 +115,11 @@ export function FooterNav() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={
-                    REACT_APP_UPLOADS_URL + "images/shared/icons/branches.webp"
-                  }
+                  src={`${REACT_APP_UPLOADS_URL}images/shared/icons/branches${props.activeUrl == 'BRANCHES' ? '-active' : ''}.webp`}
                   className="w-[18px] sm:w-[25px]"
                   alt="Tater home icon"
                 ></img>
-                <span className="text-[8px] sm:text-[14px] pt-[2px]">
+                <span className={`text-[8px] sm:text-[14px] pt-[2px] ${props.activeUrl == 'BRANCHES' ? 'text-tertiary' : 'text-white'}`}>
                   Branches
                 </span>
               </Link>

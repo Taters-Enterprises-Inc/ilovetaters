@@ -1,3 +1,3 @@
 export interface PopClubDataModel {
-    platform: string,
+  platform: string;
 }
