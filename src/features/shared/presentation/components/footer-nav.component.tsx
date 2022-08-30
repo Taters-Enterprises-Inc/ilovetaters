@@ -18,6 +18,7 @@ import {
   getAllPlatform,
   selectGetAllPlatform,
 } from "features/popclub/presentation/slices/get-all-platform.slice";
+import MoreDrawer from "./footer/more-drawer.component";
 
 interface FooterNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB" | "BRANCHES" | "HOME";
@@ -191,12 +192,7 @@ export function FooterNav(props: FooterNavProps) {
                 </Link>
               </li>
               <li className="flex-[0.8]">
-                <button className="flex flex-col items-center justify-center h-full pt-1 pr-2">
-                  <FiMoreHorizontal className="text-[25px] sm:text-4xl"></FiMoreHorizontal>
-                  <span className="text-[8px] sm:text-[14px] pt-[2px]">
-                    More
-                  </span>
-                </button>
+                <MoreDrawer />
               </li>
             </ul>
           </nav>
