@@ -14,6 +14,7 @@ import {
 } from "features/popclub/presentation/pages";
 import { PopClubDealGuards } from "features/popclub/presentation/pages/guards";
 import {
+
   Shop,
   ShopCheckout,
   ShopHome,
@@ -111,12 +112,15 @@ root.render(
               <Route path="franchising" element={<Franchising />} />
               <Route path="admin" element={<Admin />} />
 
-              <Route path="reseller" element={<Reseller />} />
-              <Route path="branches" element={<Branches />} />
+              <Route path="franchising" element={<Franchising/>}/>
+              <Route path="reseller" element={<Reseller/>}/>
+              <Route path="branches" element={<Branches/>}/>
+
+              <Route path="admin"element={<Login/>}></Route>
+              <Route path="admin/main"element={<Admin/>}></Route>
+
             </Route>
 
-            <Route path="admin/login" element={<Login />}></Route>
-            <Route path="admin/page" element={<Admin />}></Route>
           </Routes>
         </BrowserRouter>
       </Provider>
