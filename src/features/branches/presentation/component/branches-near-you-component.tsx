@@ -1,4 +1,4 @@
-import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "features/shared/presentation/components/search-address";
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "features/config/hooks";
 import { NearyouSearchStore } from "./near-you-search-store";

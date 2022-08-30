@@ -1,4 +1,9 @@
 import createTheme from "@mui/material/styles/createTheme";
+import { FaShoppingBag, FaUserAlt } from "react-icons/fa";
+import { MdPolicy, MdRule } from "react-icons/md";
+import { RiShoppingBag3Fill } from "react-icons/ri";
+import { GoLaw } from "react-icons/go";
+import { TabModel } from "./presentation/components/tab";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
@@ -129,6 +134,47 @@ export const TABS = [
   },
 ];
 
+export const SNACKSHOP_TERMS_AND_CONDITIONS_TABS: Array<TabModel> = [
+  {
+    name: "Terms And Conditions",
+    active: "terms-and-conditions",
+    url: "/shop/terms-and-conditions",
+    icon: <MdRule />,
+  },
+  {
+    name: "Privacy Policy",
+    active: "privacy-policy",
+    url: "/shop/privacy-policy",
+    icon: <MdPolicy />,
+  },
+  {
+    name: "Return Policy",
+    active: "return-policy",
+    url: "/shop/return-policy",
+    icon: <GoLaw />,
+  },
+];
+export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
+  {
+    name: "My Profile",
+    active: "profile",
+    icon: <FaUserAlt />,
+    url: "/shop/profile",
+  },
+  {
+    name: "Snack Shop Orders",
+    active: "snackshop",
+    icon: <FaShoppingBag />,
+    url: "/shop/profile/snackshop-orders",
+  },
+  {
+    name: "Catering Bookings",
+    active: "catering",
+    icon: <RiShoppingBag3Fill />,
+    url: "/shop/profile/catering-bookings",
+  },
+];
+
 declare module "@mui/material/styles" {
   interface Palette {
     tertiary: Palette["primary"];
@@ -216,6 +262,13 @@ export const theme = createTheme({
           "& label": {
             color: "white !important",
           },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        iconOutlined: {
+          color: "white",
         },
       },
     },

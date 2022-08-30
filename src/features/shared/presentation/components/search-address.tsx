@@ -1,6 +1,6 @@
 import { useAppSelector } from "features/config/hooks";
 import { useEffect, useRef, useState } from "react";
-import { selectGetSession } from "../../slices/get-session.slice";
+import { selectGetSession } from "../slices/get-session.slice";
 
 let autoComplete: any;
 
@@ -83,20 +83,13 @@ interface SearchAddressProps {
 export function SearchAddress(props: SearchAddressProps) {
   const [query, setQuery] = useState<any>("");
   const autoCompleteRef = useRef(null);
-  const getSessionState = useAppSelector(selectGetSession);
-
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setQuery(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState]);
 
   useEffect(() => {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8&libraries=places`,
       () => handleScriptLoad(setQuery, props.onPlaceSelected, autoCompleteRef)
     );
-  }, [props.onPlaceSelected]);
+  }, []);
 
   const geolocate = () => {
     if (navigator.geolocation) {

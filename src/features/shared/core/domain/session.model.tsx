@@ -6,6 +6,8 @@ export interface SessionModel {
     region_id?: number;
     region_name?: string;
     store_name?: string;
+    store_address?: string;
+    moh_notes?: string;
   };
 
   customer_address?: string;

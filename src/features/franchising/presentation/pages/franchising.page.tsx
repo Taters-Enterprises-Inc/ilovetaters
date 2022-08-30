@@ -1,4 +1,7 @@
-import { FooterNav, HomeHeaderNav } from "features/shared";
+import {
+  FooterNav,
+  HomeHeaderNav,
+} from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
@@ -39,7 +42,7 @@ export function Franchising() {
       ></img>
 
       <section ref={servicesRef} className="container min-h-min">
-        <section className="container lg:px-0 md:px-8 px-4 pt-6"></section>
+        <section className="container px-4 pt-6 lg:px-0 md:px-8"></section>
 
         <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center pb-6 '>
           FREQUENTLY ASKED QUESTIONS
@@ -48,10 +51,10 @@ export function Franchising() {
       </section>
 
       {/* <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
-            <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
+            <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="hidden w-full lg:block"/> */}
 
-      <section className="text-left lg:px-0 md:px-8 pt-6 pb-16 bg-primary">
-        <div className="container text-white mb-6">
+      <section className="pt-6 pb-16 text-left lg:px-0 md:px-8 bg-primary">
+        <div className="container mb-6 text-white">
           <h1 className="text-3xl text-center font-bold leading-[2.3rem] font-['Bebas_Neue'] tracking-wide ">
             Ready to invest in the best Snacks in Town?
           </h1>
@@ -62,7 +65,7 @@ export function Franchising() {
             your applications thru <strong>franchising@tatersgroup.com</strong>.
           </p>
 
-          <div className="sm:space-x-2 sm:space-y-0 space-y-2 flex flex-col sm:flex-row mt-6 justify-center">
+          <div className="flex flex-col justify-center mt-6 space-y-2 sm:space-x-2 sm:space-y-0 sm:flex-row">
             <a
               href="FranchiseApplicationForm.pdf"
               download="FranchiseApplicationForm.pdf"
@@ -82,7 +85,7 @@ export function Franchising() {
       </section>
 
       {/* <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
-      <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full hidden lg:block"/> */}
+      <img src="top.jpeg" alt='Taters Top Bottom Banner' className="hidden w-full lg:block"/> */}
       <FooterNav activeUrl="HOME" />
     </main>
   );

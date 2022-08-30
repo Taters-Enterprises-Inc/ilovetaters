@@ -11,12 +11,12 @@ import { useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import {
   selectUploadProofOfPayment,
   uploadProofOfPayment,
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -154,9 +154,16 @@ export function ShopOrder() {
 
   return (
     <>
-      <ShopPageTitleAndBreadCrumbs
+      <PageTitleAndBreadCrumbs
+        home={{
+          title: "Snackshop",
+          url: "/shop",
+        }}
         title="Order View"
-        pageTitles={["Products", "Order View"]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: "Order View" },
+        ]}
       />
 
       <div className="flex lg:hidden">

@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
-import { SearchAddress } from "features/shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "features/shared/presentation/components/search-address";
 import {
   getSession,
   selectGetSession,
@@ -52,7 +52,7 @@ export function CateringHome() {
   }, [dispatch, getSessionState]);
 
   return (
-    <section className="container pb-96">
+    <>
       <img
         className="lg:hidden"
         src={
@@ -70,85 +70,89 @@ export function CateringHome() {
         alt="The best pop corn in town"
       ></img>
 
-      <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
-        Thank you for considering Taters for your celebration. Kindly key in
-        your event details.
-      </h1>
+      <section className="container pb-96">
+        <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
+          Thank you for considering Taters for your celebration. Kindly key in
+          your event details.
+        </h1>
 
-      <div className="space-y-4">
-        <div className="flex justify-center">
-          <label className="pure-material-textfield-outlined w-[100%]">
-            <SearchAddress
-              onPlaceSelected={(place: string) => {
-                setAddress(place);
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
-
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <div className="space-x-4">
-            <DateTimePicker
-              label="Select Event Start Date"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  sx={{
-                    svg: { color: "white" },
-                    input: { color: "white" },
-                    label: { color: "white" },
-                  }}
-                />
-              )}
-              value={eventStartDate}
-              onChange={(newValue) => {
-                setEventStartDate(newValue);
-              }}
-            />
-
-            <DateTimePicker
-              label="Select Event End Date"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  sx={{
-                    svg: { color: "white" },
-                    input: { color: "white" },
-                    label: { color: "white" },
-                  }}
-                />
-              )}
-              value={eventEndDate}
-              onChange={(newValue) => {
-                setEventEndDate(newValue);
-              }}
-            />
+        <div className="space-y-4">
+          <div className="flex justify-center">
+            <label className="pure-material-textfield-outlined w-[100%]">
+              <SearchAddress
+                onPlaceSelected={(place: string) => {
+                  setAddress(place);
+                }}
+              />
+              <span>Search Address</span>
+            </label>
           </div>
-        </LocalizationProvider>
 
-        <button
-          onClick={() => {
-            dispatch(getStoresAvailableCatering({ address }));
-          }}
-          className="bg-button text-white rounded-xl px-4 py-2 text-lg font-bold flex items-center justify-center space-x-2"
-        >
-          <FaSearchLocation />
-          <span>Check Availability</span>
-        </button>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <div className="space-y-4 lg:space-y-0 lg:space-x-4">
+              <DateTimePicker
+                label="Select Event Start Date"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    sx={{
+                      svg: { color: "white" },
+                      input: { color: "white" },
+                      label: { color: "white" },
+                    }}
+                    className="w-full lg:w-fit"
+                  />
+                )}
+                value={eventStartDate}
+                onChange={(newValue) => {
+                  setEventStartDate(newValue);
+                }}
+              />
 
-        <CateringStoreList
-          onClickStore={(storeId: number) => {
-            dispatch(
-              setStoreAndAddress({
-                address,
-                storeId,
-              })
-            );
-          }}
-          address={address}
-        />
-      </div>
-    </section>
+              <DateTimePicker
+                label="Select Event End Date"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    sx={{
+                      svg: { color: "white" },
+                      input: { color: "white" },
+                      label: { color: "white" },
+                    }}
+                    className="w-full lg:w-fit"
+                  />
+                )}
+                value={eventEndDate}
+                onChange={(newValue) => {
+                  setEventEndDate(newValue);
+                }}
+              />
+            </div>
+          </LocalizationProvider>
+
+          <button
+            onClick={() => {
+              dispatch(getStoresAvailableCatering({ address }));
+            }}
+            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white bg-button rounded-xl"
+          >
+            <FaSearchLocation />
+            <span>Check Availability</span>
+          </button>
+
+          <CateringStoreList
+            onClickStore={(storeId: number) => {
+              dispatch(
+                setStoreAndAddress({
+                  address,
+                  storeId,
+                })
+              );
+            }}
+            address={address}
+          />
+        </div>
+      </section>
+    </>
   );
 }

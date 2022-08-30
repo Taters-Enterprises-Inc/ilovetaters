@@ -33,12 +33,12 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
     if (platform) {
       if (platform === "online-delivery") {
-        navigate(`../popclub/store-visit?category=all`);
+        navigate(`/popclub/store-visit?category=all`);
       } else {
         navigate(`?category=all`);
       }
     } else {
-      navigate(`store-visit?category=all`);
+      navigate(`/popclub/store-visit?category=all`);
     }
 
     document.body.classList.remove("overflow-hidden");
@@ -52,7 +52,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
     <section className="text-white ">
       {getAllAvailableStoresState.data.map((store_cluster, index) => (
         <div key={index}>
-          <h1 className="text-sm font-normal pl-2">
+          <h1 className="pl-2 text-sm font-normal">
             {store_cluster.region_name}
           </h1>
           <section className="flex flex-wrap pb-2">
@@ -69,9 +69,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                   key={index}
                   onClick={
                     store_availability && props.address != null
-                      ? () => {
-                          console.log("test");
-                        }
+                      ? () => {}
                       : () => storeClicked(store.store_id)
                   }
                   className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${
@@ -81,7 +79,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                   }`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 not-within-reach-text text-center ">
+                    <span className="p-1 text-center not-within-reach-text ">
                       Store not within reach
                     </span>
                   ) : null}

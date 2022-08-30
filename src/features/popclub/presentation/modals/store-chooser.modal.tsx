@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/inputs/search-address";
+import { SearchAddress } from "../../../shared/presentation/components/search-address";
 import {
   getSession,
   selectGetSession,
@@ -33,16 +33,17 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
     document.body.classList.add("overflow-hidden");
   } else {
     document.body.classList.remove("overflow-hidden");
+    return null;
   }
 
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
-      className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-30 flex justify-center items-start overflow-auto"
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
       <div className="bg-[#a21013] px-[10px] py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
-          className="absolute top-2 right-4 text-white text-2xl"
+          className="absolute text-2xl text-white top-2 right-4"
           onClick={() => {
             document.body.classList.remove("overflow-hidden");
             props.onClose();
@@ -51,12 +52,12 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
           <IoMdClose />
         </button>
 
-        <h1 className="text-white font-bold text-sm text-center pt-1 pb-2">
+        <h1 className="pt-1 pb-2 text-sm font-bold text-center text-white">
           Which store do you want for online delivery?
         </h1>
 
         <div className="flex items-center justify-center mb-3">
-          <label className="pure-material-textfield-outlined w-full">
+          <label className="w-full pure-material-textfield-outlined">
             <SearchAddress
               onPlaceSelected={(place: string) => {
                 setAddress(place);

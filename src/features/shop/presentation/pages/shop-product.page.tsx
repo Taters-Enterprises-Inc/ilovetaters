@@ -26,13 +26,13 @@ import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from "react-icons/bs";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import {
   getProductSku,
   GetProductSkuState,
   selectGetProductSku,
 } from "../slices/get-product-sku.slice";
-import { ShopProductDetailsAccordion } from "../components/shop-product-details-accordion";
+import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -197,9 +197,16 @@ export function ShopProduct() {
 
   return (
     <>
-      <ShopPageTitleAndBreadCrumbs
+      <PageTitleAndBreadCrumbs
+        home={{
+          title: "Snackshop",
+          url: "/shop",
+        }}
         title={getProductDetailsState.data?.product.name}
-        pageTitles={["Products", getProductDetailsState.data?.product.name]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: getProductDetailsState.data?.product.name, url: "" },
+        ]}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
@@ -218,7 +225,7 @@ export function ShopProduct() {
 
               <div className="container flex-1 space-y-10 lg:px-0">
                 {getProductDetailsState.data?.product.description ? (
-                  <ShopProductDetailsAccordion
+                  <ProductDetailsAccordion
                     title={{
                       name: "Product Info",
                       prefixIcon: <AiFillInfoCircle className="text-3xl" />,
@@ -227,11 +234,11 @@ export function ShopProduct() {
                     <div className="p-4 text-sm">
                       {getProductDetailsState.data.product.description}
                     </div>
-                  </ShopProductDetailsAccordion>
+                  </ProductDetailsAccordion>
                 ) : null}
 
                 {getProductDetailsState.data?.product.delivery_details ? (
-                  <ShopProductDetailsAccordion
+                  <ProductDetailsAccordion
                     title={{
                       name: "Delivery Details",
                       prefixIcon: <TbTruckDelivery className="text-3xl" />,
@@ -246,11 +253,11 @@ export function ShopProduct() {
                         }}
                       />
                     </div>
-                  </ShopProductDetailsAccordion>
+                  </ProductDetailsAccordion>
                 ) : null}
 
                 {getProductDetailsState.data?.addons ? (
-                  <ShopProductDetailsAccordion
+                  <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
                       prefixIcon: <MdFastfood className="text-3xl" />,
@@ -261,7 +268,7 @@ export function ShopProduct() {
                         <Addon key={i} product={product} />
                       ))}
                     </div>
-                  </ShopProductDetailsAccordion>
+                  </ProductDetailsAccordion>
                 ) : null}
 
                 {getProductDetailsState.data?.product_size &&
@@ -360,9 +367,11 @@ export function ShopProduct() {
                           if (quantity > 1 && quantity <= 10)
                             setQuantity(quantity - 1);
                         }}
-                        className=" h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary"
+                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                          quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3">
+                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
                           −
                         </span>
                       </button>
@@ -387,9 +396,11 @@ export function ShopProduct() {
                           if (quantity >= 1 && quantity < 10)
                             setQuantity(quantity + 1);
                         }}
-                        className="h-full w-[150px] rounded-r cursor-pointer bg-primary"
+                        className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                          quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3">
+                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
                           +
                         </span>
                       </button>

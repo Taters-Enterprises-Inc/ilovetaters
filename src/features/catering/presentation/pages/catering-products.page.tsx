@@ -49,40 +49,38 @@ export function CateringProducts() {
 
   return (
     <>
-      <section className="container">
-        <img
-          className="sm:hidden"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/catering/hero/mobile/catering_munch_better.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/catering/hero/desktop/catering_munch_better.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_UPLOADS_URL +
-            "images/catering/instructions/catering_instructions.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <img
+        className="sm:hidden"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/catering/hero/mobile/catering_munch_better.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+      <img
+        className="hidden sm:block"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/catering/hero/desktop/catering_munch_better.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+      <img
+        className="hidden sm:block"
+        src={
+          REACT_APP_UPLOADS_URL +
+          "images/catering/instructions/catering_instructions.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
 
       {getCateringCategoryProductsState.data?.map((category, i) => (
-        <section key={i} className="container space-y-3">
+        <section key={i} className="container space-y-3 pb-[90px]">
           <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px]">
             {category.category_name}
           </h1>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {category.category_products.map((product, i) => (
               <Link
                 key={i}
@@ -94,11 +92,11 @@ export function CateringProducts() {
                   className="rounded-t-[10px] w-full"
                   alt=""
                 />
-                <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                  <h2 className="text-white text-sm leading-4">
+                <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                  <h2 className="text-sm leading-4 text-white">
                     {product.name}
                   </h2>
-                  <h3 className="text-white font-bold">
+                  <h3 className="font-bold text-white">
                     <NumberFormat
                       value={product.price.toFixed(2)}
                       displayType={"text"}

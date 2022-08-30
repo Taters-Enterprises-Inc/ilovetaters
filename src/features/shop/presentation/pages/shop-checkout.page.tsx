@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { PaymentAccordion } from "../components/payment-accordion";
@@ -21,7 +21,6 @@ import {
   resetCheckoutOrders,
   selectCheckoutOrders,
 } from "../slices/checkout-orders.slice";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { AddContactModal } from "../modals";
@@ -33,6 +32,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -78,7 +78,9 @@ export function ShopCheckout() {
       (responseBody.phoneNumber.match(/63/) &&
         responseBody.phoneNumber.length === 15) ||
       (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 14)
+        responseBody.phoneNumber.length === 14) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 11)
     ) {
       dispatch(checkoutOrders(responseBody));
     } else {
@@ -171,9 +173,16 @@ export function ShopCheckout() {
   };
   return (
     <>
-      <ShopPageTitleAndBreadCrumbs
+      <PageTitleAndBreadCrumbs
+        home={{
+          title: "Snackshop",
+          url: "/shop",
+        }}
         title="Checkout"
-        pageTitles={["Products", "Checkout"]}
+        pageTitles={[
+          { name: "Products", url: "/shop/products" },
+          { name: "Checkout" },
+        ]}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
@@ -291,6 +300,7 @@ export function ShopCheckout() {
                           label="Contacts"
                           name="phoneNumber"
                           required
+                          ref={phoneNumberRef}
                           autoComplete="off"
                         >
                           {getContactsState.data.map((val) => (
@@ -339,65 +349,49 @@ export function ShopCheckout() {
                   name="address"
                   autoComplete="off"
                 />
+                {getSessionState.data?.cache_data ? (
+                  <>
+                    <div className="mt-4 text-white lg:mt-0">
+                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                        Handling Method
+                      </h2>
 
-                <div className="mt-4 text-white lg:mt-0">
-                  <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                    Handling Method
-                  </h2>
+                      <ul className="mt-2 space-y-1">
+                        <li className="flex items-center space-x-2">
+                          <MdDeliveryDining className="text-2xl text-tertiary" />
+                          <h3 className="text-sm">Delivery</h3>
+                        </li>
+                        <li className="flex items-start space-x-3">
+                          <FaStore className="text-lg text-tertiary" />
+                          <h3 className="text-sm">
+                            Store: {getSessionState.data.cache_data.store_name}
+                          </h3>
+                        </li>
+                        <li className="flex items-start space-x-3 ">
+                          <FaMapMarkerAlt className="text-lg text-tertiary" />
+                          <h3 className="flex-1 text-sm">
+                            Store Address:{" "}
+                            {getSessionState.data.cache_data.store_address}
+                          </h3>
+                        </li>
+                      </ul>
+                    </div>
 
-                  <ul className="mt-2 space-y-1">
-                    <li className="flex items-center space-x-2">
-                      <MdDeliveryDining className="text-2xl text-tertiary" />
-                      <h3 className="text-sm">Delivery</h3>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                      <FaStore className="text-lg text-tertiary" />
-                      <h3 className="text-sm">
-                        Store: Taters Robinsons Magnolia
-                      </h3>
-                    </li>
-                    <li className="flex items-start space-x-3 ">
-                      <FaMapMarkerAlt className="text-lg text-tertiary" />
-                      <h3 className="flex-1 text-sm">
-                        Store Address: 3rd Level, Robinsons Movieworld Magnolia
-                        Town Center, Brgy Kaunlara, Quezon City
-                      </h3>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="mt-4 text-white lg:mt-0">
-                  <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                    Note:{" "}
-                  </h2>
-
-                  <ul className="mt-2 space-y-2">
-                    <li>
-                      <h3 className="text-sm">
-                        Delivery and/or Pick-up of items are from Monday to
-                        Sunday (except holidays) between 11AM to 7PM
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        Delivery and/or Pick-up of product would be on the same
-                        day if paid before 5:00 pm
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        You will be charged with a delivery fee depending on
-                        your location
-                      </h3>
-                    </li>
-                    <li>
-                      <h3 className="text-sm">
-                        Our stores will reach out to you via SMS once orders are
-                        ready for delivery/pick-up
-                      </h3>
-                    </li>
-                  </ul>
-                </div>
+                    <div className="mt-4 text-white lg:mt-0">
+                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                        Note:
+                      </h2>
+                      <ul
+                        className="mt-2 space-y-2 text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: getSessionState.data.cache_data?.moh_notes
+                            ? getSessionState.data.cache_data.moh_notes
+                            : "",
+                        }}
+                      />
+                    </div>
+                  </>
+                ) : null}
 
                 <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
@@ -406,12 +400,15 @@ export function ShopCheckout() {
                   <PaymentAccordion />
                 </div>
 
-                <div className="flex items-center justify-start space-x-1 text-white">
+                <div className="flex items-center justify-start space-x-1 text-sm text-white lg:text-base">
                   <Checkbox color="tertiary" required />
                   <span>I agree with the </span>
-                  <button type="button" className="text-tertiary">
+                  <Link
+                    to="/shop/terms-and-conditions"
+                    className="text-tertiary"
+                  >
                     Terms & Conditions
-                  </button>
+                  </Link>
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:space-x-4">

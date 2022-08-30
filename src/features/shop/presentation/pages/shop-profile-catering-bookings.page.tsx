@@ -4,7 +4,7 @@ import { ShopProfileContainer } from "../components/shop-profile-container";
 import {
   Column,
   DataTable,
-} from "../../../shared/presentation/components/tables/data-table";
+} from "../../../shared/presentation/components/data-table";
 import {
   getCateringBookingHistory,
   selectGetCateringBookingHistory,
