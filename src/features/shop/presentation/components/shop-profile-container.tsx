@@ -1,11 +1,8 @@
 import { SNACKSHOP_PROFILE_TABS } from "features/shared/constants";
 import { Tab } from "features/shared/presentation/components";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { ReactNode } from "react";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
-import {
-  ShopProfileTabs,
-  ShopProfileTabsProps,
-} from "../components/shop-profile-tabs";
+import { ShopProfileTabsProps } from "../components/shop-profile-tabs";
 
 interface ShopProfileContainerProps extends ShopProfileTabsProps {
   title: string;
@@ -15,7 +12,11 @@ interface ShopProfileContainerProps extends ShopProfileTabsProps {
 export function ShopProfileContainer(props: ShopProfileContainerProps) {
   return (
     <>
-      <ShopPageTitleAndBreadCrumbs
+      <PageTitleAndBreadCrumbs
+        home={{
+          title: "Snackshop",
+          url: "/shop",
+        }}
         title={props.title}
         pageTitles={["Products", props.title]}
       />

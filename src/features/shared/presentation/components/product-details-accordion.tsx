@@ -35,7 +35,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: 0,
 }));
 
-export function ShopProductDetailsAccordion(
+export function ProductDetailsAccordion(
   props: ShopProductDetailsAccordionProps
 ) {
   const [open, setOpen] = React.useState(true);
@@ -47,7 +47,7 @@ export function ShopProductDetailsAccordion(
       }}
     >
       <AccordionSummary sx={{ borderBottom: open ? "1px white solid" : "" }}>
-        <div className="flex space-x-2 items-center">
+        <div className="flex items-center space-x-2">
           {props.title.prefixIcon}{" "}
           <h3 className="font-['Bebas_Neue'] text-lg tracking-[3px] font-light mt-1 flex-1">
             {props.title.name}

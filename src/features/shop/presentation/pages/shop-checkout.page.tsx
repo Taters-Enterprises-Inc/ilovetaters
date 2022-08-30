@@ -21,7 +21,6 @@ import {
   resetCheckoutOrders,
   selectCheckoutOrders,
 } from "../slices/checkout-orders.slice";
-import { ShopPageTitleAndBreadCrumbs } from "../components/shop-page-title-and-breadcrumbs";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { AddContactModal } from "../modals";
@@ -33,6 +32,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -78,7 +78,9 @@ export function ShopCheckout() {
       (responseBody.phoneNumber.match(/63/) &&
         responseBody.phoneNumber.length === 15) ||
       (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 14)
+        responseBody.phoneNumber.length === 14) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 11)
     ) {
       dispatch(checkoutOrders(responseBody));
     } else {
@@ -171,7 +173,11 @@ export function ShopCheckout() {
   };
   return (
     <>
-      <ShopPageTitleAndBreadCrumbs
+      <PageTitleAndBreadCrumbs
+        home={{
+          title: "Snackshop",
+          url: "/shop",
+        }}
         title="Checkout"
         pageTitles={["Products", "Checkout"]}
       />
@@ -291,6 +297,7 @@ export function ShopCheckout() {
                           label="Contacts"
                           name="phoneNumber"
                           required
+                          ref={phoneNumberRef}
                           autoComplete="off"
                         >
                           {getContactsState.data.map((val) => (

@@ -75,7 +75,7 @@ export function CateringProducts() {
       ></img>
 
       {getCateringCategoryProductsState.data?.map((category, i) => (
-        <section key={i} className="container space-y-3">
+        <section key={i} className="container space-y-3 pb-[90px]">
           <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px]">
             {category.category_name}
           </h1>

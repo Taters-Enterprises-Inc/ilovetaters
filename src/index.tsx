@@ -29,6 +29,7 @@ import {
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringProduct,
   CateringProducts,
 } from "features/catering/presentation/pages";
 import { Franchising } from "features/franchising/presentation/pages";
@@ -103,6 +104,7 @@ root.render(
 
               <Route path="catering" element={<Catering />}>
                 <Route index element={<CateringHome />} />
+                <Route path="products/:hash" element={<CateringProduct />} />
                 <Route path="products" element={<CateringProducts />} />
               </Route>
 

@@ -44,6 +44,8 @@ import getStoresAvailableCatering from "../catering/presentation/slices/get-stor
 import getStoresAvailableBranches from "../branches/presentation/slices/get-stores-available-branches.slice";
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
 
+import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform: getAllPlatform,
@@ -93,6 +95,8 @@ export const store = configureStore({
     updateContact: updateContact,
     deleteContact: deleteContact,
     getContacts: getContacts,
+
+    getCateringProductDetails: getCateringProductDetails,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

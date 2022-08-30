@@ -89,7 +89,7 @@ export function CateringHome() {
           </div>
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div className="space-x-4">
+            <div className="space-y-4 lg:space-y-0 lg:space-x-4">
               <DateTimePicker
                 label="Select Event Start Date"
                 renderInput={(params) => (
@@ -100,6 +100,7 @@ export function CateringHome() {
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
+                    className="w-full lg:w-fit"
                   />
                 )}
                 value={eventStartDate}
@@ -118,6 +119,7 @@ export function CateringHome() {
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
+                    className="w-full lg:w-fit"
                   />
                 )}
                 value={eventEndDate}
