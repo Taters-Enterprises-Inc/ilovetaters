@@ -18,7 +18,7 @@ import {
   getAllPlatform,
   selectGetAllPlatform,
 } from "features/popclub/presentation/slices/get-all-platform.slice";
-import MoreDrawer from "./footer/more-drawer.component";
+import MoreDrawer from "./more-drawer.component";
 
 interface FooterNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB" | "BRANCHES" | "HOME";
@@ -83,11 +83,11 @@ export function FooterNav(props: FooterNavProps) {
                     src={`${REACT_APP_UPLOADS_URL}images/shared/icons/home${
                       props.activeUrl === "HOME" ? "-active" : ""
                     }.webp`}
-                    className="w-[28px] sm:w-[40px]"
+                    className="w-[28px] sm:w-[40px] mt-2"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] ${
+                    className={`text-[8px] sm:text-[14px] mb-2 ${
                       props.activeUrl === "HOME"
                         ? "text-tertiary"
                         : "text-white"
@@ -108,11 +108,11 @@ export function FooterNav(props: FooterNavProps) {
                     src={`${REACT_APP_UPLOADS_URL}images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.webp`}
-                    className="w-[20px] sm:w-[24px]"
+                    className="w-[20px] sm:w-[24px] mt-2 "
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] ${
+                    className={`text-[8px] sm:text-[14px] mb-2 ${
                       props.activeUrl === "POPCLUB"
                         ? "text-tertiary"
                         : "text-white"
