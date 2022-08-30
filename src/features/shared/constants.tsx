@@ -7,7 +7,6 @@ import { TabModel } from "./presentation/components/tab";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
-export const REACT_APP_UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
 export const SERVICES_DESKTOP = [
   {

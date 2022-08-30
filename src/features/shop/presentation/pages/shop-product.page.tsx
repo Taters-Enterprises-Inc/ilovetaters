@@ -226,15 +226,15 @@ export function ShopProduct() {
                   navigation
                   className="w-full"
                 >
-                  {getProductDetailsState.data?.product.product_image ? (
+                  {getProductDetailsState.data?.product_images.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getProductDetailsState.data?.product.product_image}`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />
                     </SwiperSlide>
-                  ) : null}
+                  ))}
                 </Swiper>
               </div>
 

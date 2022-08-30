@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   getSession,
   GetSessionState,
@@ -53,24 +53,24 @@ export function CateringProducts() {
       <img
         className="sm:hidden"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/mobile/catering_munch_better.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/desktop/catering_munch_better.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/desktop/catering_munch_better.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/instructions/catering_instructions.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/instructions/catering_instructions.webp"
         }
         alt="The best pop corn in town"
       ></img>
@@ -89,7 +89,7 @@ export function CateringProducts() {
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
                 >
                   <img
-                    src={`https://ilovetaters.com/shop/assets/img/catering/packages/${product.image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${product.image}`}
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
