@@ -33,6 +33,10 @@ import {
 } from "../slices/get-product-sku.slice";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation } from "swiper";
+
+import "swiper/css";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -214,13 +218,23 @@ export function ShopProduct() {
           <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
-                {getProductDetailsState.data?.product.product_image ? (
-                  <img
-                    src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`}
-                    className="lg:rounded-[20px] w-full h-full object-cover"
-                    alt=""
-                  />
-                ) : null}
+                <Swiper
+                  slidesPerView={"auto"}
+                  autoplay={{ delay: 5000 }}
+                  modules={[Navigation, Autoplay]}
+                  navigation
+                  className="w-full"
+                >
+                  {getProductDetailsState.data?.product.product_image ? (
+                    <SwiperSlide>
+                      <img
+                        src={`https://ilovetaters.com/shop/assets/img/500/${getProductDetailsState.data?.product.product_image}`}
+                        className="lg:rounded-[20px] w-full h-full object-cover"
+                        alt=""
+                      />
+                    </SwiperSlide>
+                  ) : null}
+                </Swiper>
               </div>
 
               <div className="container flex-1 space-y-10 lg:px-0">
