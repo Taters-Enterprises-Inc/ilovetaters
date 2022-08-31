@@ -1,10 +1,10 @@
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   FooterNav,
   HomeHeaderNav,
 } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 export function Franchising() {
   const [serviceReached, setServiceReached] = useState(false);
@@ -32,12 +32,18 @@ export function Franchising() {
       ></HomeHeaderNav>
       <img
         className="lg:hidden"
-        src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"}
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/hero/mobile/popclub.webp"
+        }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden lg:block"
-        src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"}
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/hero/desktop/popclub.webp"
+        }
         alt="The best pop corn in town"
       ></img>
 

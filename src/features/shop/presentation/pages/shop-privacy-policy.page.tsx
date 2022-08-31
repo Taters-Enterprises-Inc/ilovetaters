@@ -12,7 +12,7 @@ export function ShopPrivacyPolicy() {
           Privacy Policy
         </h1>
         <hr className="mt-2 mb-4" />
-        <div className="text-white space-y-4">
+        <div className="space-y-4 text-white">
           <p>
             Taters Enterprises Inc., its subsidiaries and affiliates (“Company,”
             “We,” “Us,” “Our”), is committed to protecting the privacy and

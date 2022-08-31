@@ -18,6 +18,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -72,8 +73,8 @@ export function PaymentAccordion() {
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="text-white" />}
             >
-              <div className="flex space-x-4 justify-start items-center flex-1">
-                <AiFillCreditCard className="text-tertiary text-2xl" />{" "}
+              <div className="flex items-center justify-start flex-1 space-x-4">
+                <AiFillCreditCard className="text-2xl text-tertiary" />{" "}
                 <span>Pay with {payops.name}</span>
               </div>
             </AccordionSummary>
@@ -93,7 +94,7 @@ export function PaymentAccordion() {
               </ul>
               {payops.qr_code ? (
                 <img
-                  src={`https://ilovetaters.com/shop/assets/img/qr_codes/${payops.qr_code}`}
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/qr_codes/${payops.qr_code}`}
                   alt="Taters G-Cash QR"
                   width={230}
                 />

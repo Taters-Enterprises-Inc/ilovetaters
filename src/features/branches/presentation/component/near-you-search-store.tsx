@@ -1,6 +1,7 @@
 import React from "react";
 import { useAppSelector } from "features/config/hooks";
 import { selectGetStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface StoreListDeliveryProps {
   address: string;
@@ -26,7 +27,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
         (store_cluster: any, index: number) => (
           <div key={index} className="space-y-3">
             <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
-            <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+            <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
               {store_cluster.stores.map((store: StoreType, index: number) => {
                 const distance_in_km = Math.ceil(
                   store.store_distance * 1.609344 +
@@ -42,9 +43,9 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                       {store.store_name}
                     </div>
 
-                    <div className="absolute flex flex-col items-stretch w-full md:mt-16 mt-20 space-y-2 bg-transparent">
+                    <div className="absolute flex flex-col items-stretch w-full mt-20 space-y-2 bg-transparent md:mt-16">
                       <div className="flex justify-end ">
-                        <span className="bg-secondary px-2 text-sm ">
+                        <span className="px-2 text-sm bg-secondary ">
                           {distance_in_km} KM
                         </span>
                       </div>
@@ -53,8 +54,8 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                     <img
                       src={
                         store?.store_image
-                          ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store.store_image} `
-                          : "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
+                          ? `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image} `
+                          : `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/taters_ayalacircuit.jpg`
                       }
                       alt=""
                       className="w-full sm::w-[250px] sm::h-[250px] object-fit"
@@ -126,7 +127,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                           ></path>
                         </svg>
                       </span>
-                      <div className="block text-left py-2 ">
+                      <div className="block py-2 text-left ">
                         <p className="text-[.7125rem] text-[#bcd2d6] pb-1 ">
                           Call us
                         </p>
@@ -156,7 +157,7 @@ export function NearyouSearchStore(props: StoreListDeliveryProps) {
                           ></path>
                         </svg>
                       </span>
-                      <div className="block text-left py-1 ">
+                      <div className="block py-1 text-left ">
                         <p className="text-[.7125rem] text-[#bcd2d6] pb-1">
                           Operating Hours
                         </p>

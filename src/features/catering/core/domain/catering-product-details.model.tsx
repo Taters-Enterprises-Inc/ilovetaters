@@ -16,4 +16,5 @@ export interface CateringProductDetailsModel {
     price: number;
     min_qty: number;
   }>;
+  product_images: Array<string>;
 }

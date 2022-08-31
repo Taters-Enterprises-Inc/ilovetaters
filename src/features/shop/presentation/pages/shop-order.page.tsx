@@ -17,6 +17,7 @@ import {
   uploadProofOfPayment,
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -321,7 +322,7 @@ export function ShopOrder() {
                         className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
                       >
                         <img
-                          src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.product_image}`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt=""
                         />
@@ -382,7 +383,7 @@ export function ShopOrder() {
                   {getOrdersState.data?.order.bank.qr_code === "" ? (
                     <>
                       <img
-                        src={`https://ilovetaters.com/staging/v2/shop/assets/img/payops${getOrdersState.data?.order.bank.indicator}.png`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${getOrdersState.data?.order.bank.indicator}.png`}
                         alt=""
                       />
 
@@ -403,7 +404,7 @@ export function ShopOrder() {
                     <img
                       width="150"
                       height="150"
-                      src={`https://ilovetaters.com/staging/v2/shop/assets/img/qr_codes/${getOrdersState.data?.order.bank.qr_code}`}
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/qr_codes/${getOrdersState.data?.order.bank.qr_code}`}
                       alt="QR CODE"
                     />
                   )}

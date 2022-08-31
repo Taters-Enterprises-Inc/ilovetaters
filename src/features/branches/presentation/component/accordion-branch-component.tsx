@@ -5,6 +5,7 @@ import {
 } from "../slices/get-branches-store";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { BranchesStoreModel } from "features/branches/core/domain/branches-store.model";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 export const AccordionComponent: React.FC<{
   region: string;
   seeItShow: any;
@@ -82,8 +83,8 @@ export const AccordionComponent: React.FC<{
                       className="object-cover	w-[100%] h-[100%] max-h-[300px]  	"
                       src={
                         store_image
-                          ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store_image}`
-                          : "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
+                          ? `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store_image}`
+                          : `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/taters_ayalacircuit.jpg`
                       }
                       alt="taters_ayalacircuit"
                     />

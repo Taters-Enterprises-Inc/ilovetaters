@@ -4,10 +4,7 @@ import {
   getLatestUnexpiredRedeem,
   selectGetLatestUnexpiredRedeem,
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
-import {
-  REACT_APP_DOMAIN_URL,
-  REACT_APP_UPLOADS_URL,
-} from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -65,7 +62,7 @@ export function FooterNav(props: FooterNavProps) {
               </div>
               <img
                 className="rounded-r-xl w-[105px] h-[105px] object-contain"
-                src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getLatestUnexpiredRedeemState.data.product_image}`}
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
                 alt="Deals"
               />
             </div>
@@ -80,7 +77,7 @@ export function FooterNav(props: FooterNavProps) {
                   className="flex flex-col items-center justify-between h-full pt-1"
                 >
                   <img
-                    src={`${REACT_APP_UPLOADS_URL}images/shared/icons/home${
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
                       props.activeUrl === "HOME" ? "-active" : ""
                     }.webp`}
                     className="w-[28px] sm:w-[40px] mt-2"
@@ -105,7 +102,7 @@ export function FooterNav(props: FooterNavProps) {
                   className="flex flex-col items-center justify-between h-full pt-1 cursor-pointer"
                 >
                   <img
-                    src={`${REACT_APP_UPLOADS_URL}images/shared/icons/popclub${
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.webp`}
                     className="w-[20px] sm:w-[24px] mt-2 "
@@ -128,7 +125,7 @@ export function FooterNav(props: FooterNavProps) {
                   className="flex flex-col items-center justify-center h-full pt-1"
                 >
                   <img
-                    src={`${REACT_APP_UPLOADS_URL}images/shared/icons/snackshop${
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
                       props.activeUrl === "SNACKSHOP" ? "-active" : ""
                     }.webp`}
                     className="w-[24px] sm:w-[30px]"
@@ -151,7 +148,7 @@ export function FooterNav(props: FooterNavProps) {
                   className="flex flex-col items-center justify-center h-full pt-1"
                 >
                   <img
-                    src={`${REACT_APP_UPLOADS_URL}images/shared/icons/catering${
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering${
                       props.activeUrl === "CATERING" ? "-active" : ""
                     }.webp`}
                     className="w-[24px] sm:w-[30px]"
@@ -174,7 +171,7 @@ export function FooterNav(props: FooterNavProps) {
                   className="flex flex-col items-center justify-center h-full pt-1"
                 >
                   <img
-                    src={`${REACT_APP_UPLOADS_URL}images/shared/icons/branches${
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/branches${
                       props.activeUrl === "BRANCHES" ? "-active" : ""
                     }.webp`}
                     className="w-[18px] sm:w-[25px]"

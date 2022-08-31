@@ -1,5 +1,5 @@
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
 
@@ -14,8 +14,8 @@ export function Catering() {
         activeUrl="CATERING"
         logoProps={{
           src:
-            REACT_APP_UPLOADS_URL +
-            "images/shared/logo/taters-catering-logo.webp",
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-catering-logo.webp",
           alt: "Taters Logo",
           className: "w-[80px] lg:w-[140px]",
         }}

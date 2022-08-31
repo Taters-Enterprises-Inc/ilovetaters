@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useState } from "react";
@@ -49,7 +50,7 @@ export function Addon(props: AddonProps) {
       <div className="my-3 mb-6 shadow-md bg-secondary rounded-xl shadow-tertiary">
         <div className="flex p-4 space-x-2">
           <img
-            src={`http://ilovetaters.com/shop/assets/img/75/${props.product.product_image}`}
+            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.product.product_image}`}
             className="rounded-[10px] w-[100px] h-[100px]"
             alt=""
           />

@@ -4,7 +4,7 @@ import {
 } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import {
-  REACT_APP_UPLOADS_URL,
+  REACT_APP_DOMAIN_URL,
   SERVICES_DESKTOP,
   SERVICES_MOBILE,
 } from "features/shared/constants";
@@ -34,7 +34,7 @@ export function Home() {
 
       <section
         style={{
-          backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/home/hero/mobile/taters_entertainment_snacks.webp')`,
+          backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.webp')`,
           backgroundSize: "contain",
           backgroundPositionX: "center",
           backgroundRepeat: "no-repeat",
@@ -44,8 +44,8 @@ export function Home() {
       >
         <img
           src={
-            REACT_APP_UPLOADS_URL +
-            "images/home/hero/mobile/taters_entertainment_snacks.webp"
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/home/hero/mobile/taters_entertainment_snacks.webp"
           }
           alt="The best pop corn in town"
           style={{ visibility: "hidden" }}
@@ -54,7 +54,7 @@ export function Home() {
 
       <section
         style={{
-          backgroundImage: `url('${REACT_APP_UPLOADS_URL}images/home/hero/desktop/taters_entertainment_snacks.webp')`,
+          backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp')`,
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
@@ -63,8 +63,8 @@ export function Home() {
       >
         <img
           src={
-            REACT_APP_UPLOADS_URL +
-            "images/home/hero/desktop/taters_entertainment_snacks.webp"
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp"
           }
           alt="The best pop corn in town"
           style={{ visibility: "hidden" }}
@@ -83,7 +83,7 @@ export function Home() {
                   <div
                     style={{
                       backgroundImage: `url("${
-                        REACT_APP_UPLOADS_URL + service_desktop.image
+                        REACT_APP_DOMAIN_URL + service_desktop.image
                       }")`,
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
@@ -127,7 +127,7 @@ export function Home() {
                   <div
                     style={{
                       backgroundImage: `url("${
-                        REACT_APP_UPLOADS_URL + service_mobile.image
+                        REACT_APP_DOMAIN_URL + service_mobile.image
                       }")`,
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",

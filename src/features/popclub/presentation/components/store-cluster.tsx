@@ -3,6 +3,7 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   selectSetStoreAndAddress,
   setStoreAndAddress,
@@ -107,10 +108,7 @@ export function StoreCluster(props: StoreClusterProps) {
                     </div>
                   </div>
                   <img
-                    src={
-                      "https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/" +
-                      store.store_image
-                    }
+                    src={`${REACT_APP_DOMAIN_URL}/store_images/250/${store.store_image}`}
                     alt=""
                     className="w-full"
                   />

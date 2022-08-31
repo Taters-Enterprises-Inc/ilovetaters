@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { ProductModel } from "features/shared/core/domain/product.model";
+import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { GetProductDetailsParam } from "features/shop/core/shop.params";
 import {
   GetProductDetailsRepository,
@@ -16,21 +17,7 @@ export enum GetProductDetailsState {
 
 const initialState: {
   status: GetProductDetailsState;
-  data:
-    | {
-        product: ProductModel;
-        addons?: Array<ProductModel>;
-        product_size: Array<{
-          id: number;
-          name: string;
-        }>;
-        product_flavor: Array<{
-          id: number;
-          name: string;
-        }>;
-        suggested_products: Array<ProductModel>;
-      }
-    | undefined;
+  data: ProductDetailsModel | undefined;
   message: string;
 } = {
   status: GetProductDetailsState.initial,
@@ -76,12 +63,7 @@ export const getProductDetailsSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: {
-              product: ProductModel;
-              addons: Array<ProductModel>;
-              product_flavor: Array<any>;
-              suggested_products: Array<ProductModel>;
-            } | null;
+            data: ProductDetailsModel | null;
           }>
         ) => {
           const { data, message } = action.payload;

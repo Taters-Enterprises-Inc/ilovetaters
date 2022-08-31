@@ -51,6 +51,10 @@ import {
   selectGetStoresAvailableSnackshop,
 } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
 import { BackdropLoading } from "./backdrop-loading-wrapper";
+import {
+  GetStoresAvailableCateringState,
+  selectGetStoresAvailableCatering,
+} from "features/catering/presentation/slices/get-stores-available-catering.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -84,6 +88,28 @@ export function LoadingAndSnackbarWrapper() {
   const addContactState = useAppSelector(selectAddContact);
   const deleteContactState = useAppSelector(selectDeleteContact);
   const updateContactState = useAppSelector(selectUpdateContact);
+  const getStoresAvailableCateringState = useAppSelector(
+    selectGetStoresAvailableCatering
+  );
+
+  useEffect(() => {
+    switch (getStoresAvailableCateringState.status) {
+      case GetStoresAvailableCateringState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStoresAvailableCateringState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringState.success:
+        showAlert(setSuccessAlert, getStoresAvailableCateringState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringState.fail:
+        showAlert(setFailsAlert, getStoresAvailableCateringState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStoresAvailableCateringState, dispatch]);
 
   useEffect(() => {
     switch (updateContactState.status) {

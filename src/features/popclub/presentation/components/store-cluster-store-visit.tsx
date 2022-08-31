@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import {
   selectSetStoreAndAddress,
@@ -85,10 +86,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                   ) : null}
                   <div className="text-sm uppercase ">FULL MENU</div>
                   <img
-                    src={
-                      "https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/" +
-                      store.store_image
-                    }
+                    src={`${REACT_APP_DOMAIN_URL}/store_images/250/${store.store_image}`}
                     alt=""
                     className="w-full"
                   />
