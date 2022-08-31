@@ -40,11 +40,12 @@ export function StoreCluster(props: StoreClusterProps) {
     }
   }, [setStoreAndAddressState, dispatch, category, platform]);
 
-  const storeClicked = (storeId: number) => {
+  const storeClicked = (storeId: number, regionId: number) => {
     dispatch(
       setStoreAndAddress({
         address: props.address,
         storeId,
+        regionId,
       })
     );
 
@@ -84,7 +85,8 @@ export function StoreCluster(props: StoreClusterProps) {
                   onClick={
                     store_availability && props.address != null
                       ? () => {}
-                      : () => storeClicked(store.store_id)
+                      : () =>
+                          storeClicked(store.store_id, store.region_store_id)
                   }
                   className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${
                     store_availability && props.address != null

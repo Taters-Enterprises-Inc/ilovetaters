@@ -34,10 +34,6 @@ export function FooterNav(props: FooterNavProps) {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
-  // useEffect(() => {
-  //   dispatch(getAllPlatform());
-  // }, [dispatch]);
-
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
   }, [dispatch]);

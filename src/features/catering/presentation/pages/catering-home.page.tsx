@@ -17,7 +17,7 @@ import {
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useNavigate } from "react-router-dom";
-import { CateringStoreList } from "../components/catering-store-list";
+import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
@@ -141,11 +141,12 @@ export function CateringHome() {
           </button>
 
           <CateringStoreList
-            onClickStore={(storeId: number) => {
+            onClickStore={(storeId: number, regionId: number) => {
               dispatch(
                 setStoreAndAddress({
                   address,
                   storeId,
+                  regionId,
                 })
               );
             }}
