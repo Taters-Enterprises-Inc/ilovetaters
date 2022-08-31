@@ -113,6 +113,10 @@ input[type="number"] {
   z-index: 5;
 }
 
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background-color: #000;
+}
+
 .store-not-available::after {
   content: "";
   display: block;

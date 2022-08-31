@@ -3,14 +3,19 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { FiMoreHorizontal } from "react-icons/fi";
+import {
+  RiAccountBoxFill,
+  RiContactsBookLine,
+  RiFilePaper2Fill,
+} from "react-icons/ri";
+import { MdSell, MdStore } from "react-icons/md";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import Paper from "@mui/material/Paper";
 
 type Anchor = "left";
 
@@ -35,36 +40,49 @@ export default function MoreDrawer() {
 
   const list = (anchor: Anchor) => (
     <Box
+      className="h-full bg-secondary"
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {["Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum"].map(
-          (text, index) => (
+      <List className="text-white">
+        {[
+          {
+            text: "My Account",
+            icon: <RiAccountBoxFill className="text-white" />,
+          },
+          { text: "Franchising", icon: <MdStore className="text-white" /> },
+          {
+            text: "Reseller Program",
+            icon: <MdSell className="text-white" />,
+          },
+          {
+            text: "Explore Menu",
+            icon: <AiOutlineFileSearch className="text-white" />,
+          },
+          {
+            text: "Contact Us",
+            icon: <RiContactsBookLine className="text-white" />,
+          },
+          {
+            text: "Terms & Conditions",
+            icon: <RiFilePaper2Fill className="text-white" />,
+          },
+        ].map((item, index) => {
+          const { text, icon } = item;
+          return (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
+                {icon && (
+                  <ListItemIcon className="text-[25px] sm:text-4xl">
+                    {icon}
+                  </ListItemIcon>
+                )}
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
-          )
-        )}
-      </List>
-      <Divider />
-      <List>
-        {["Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+          );
+        })}
       </List>
     </Box>
   );
