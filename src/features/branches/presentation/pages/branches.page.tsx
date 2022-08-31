@@ -4,8 +4,8 @@ import {
   HomeHeaderNav,
 } from "features/shared/presentation/components";
 import React, { useEffect, useState } from "react";
-import { FranchisingBranchComponent } from "../component/branch-component";
-import { FranchisingContactComponent } from "../component/contact-component";
+import { BranchComponent } from "../component/branch-component";
+import { ContactComponent } from "../component/contact-component";
 
 export function Branches() {
   const [serviceReached, setServiceReached] = useState<boolean>(false);
@@ -42,8 +42,8 @@ export function Branches() {
         }
         alt="The best pop corn in town"
       ></img>
-      <FranchisingContactComponent />
-      <FranchisingBranchComponent />
+      <ContactComponent />
+      <BranchComponent />
       <FooterNav activeUrl="BRANCHES" />
     </main>
   );
