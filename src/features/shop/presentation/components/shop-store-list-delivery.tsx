@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   selectSetStoreAndAddress,
   setStoreAndAddress,
@@ -28,11 +29,12 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
     }
   }, [setStoreAndAddressState, navigate]);
 
-  const storeClicked = (storeId: number) => {
+  const storeClicked = (storeId: number, regionId: number) => {
     dispatch(
       setStoreAndAddress({
         address: props.address,
         storeId,
+        regionId,
       })
     );
   };
@@ -42,7 +44,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
       {getStoresAvailableSnackshopState.data.map((store_cluster, index) => (
         <div key={index} className="space-y-3">
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
-          <section className="pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
+          <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
             {store_cluster.stores.map((store, index) => {
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
@@ -57,7 +59,8 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                   onClick={
                     store_availability && props.address != null
                       ? () => {}
-                      : () => storeClicked(store.store_id)
+                      : () =>
+                          storeClicked(store.store_id, store.region_store_id)
                   }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${
                     store_availability && props.address != null
@@ -66,30 +69,27 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                   }`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 not-within-reach-text text-center ">
+                    <span className="p-1 text-center not-within-reach-text ">
                       Store not within reach
                     </span>
                   ) : null}
-                  <div className="text-sm uppercase py-1">FULL MENU</div>
+                  <div className="py-1 text-sm uppercase">FULL MENU</div>
 
                   <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                     <div className="flex justify-end">
-                      <span className="bg-secondary px-2 text-sm">
+                      <span className="px-2 text-sm bg-secondary">
                         {distance_in_km} KM
                       </span>
                     </div>
                   </div>
 
                   <img
-                    src={
-                      "https://ilovetaters.com/staging/v2/shop/assets/img/store_images/250/" +
-                      store.store_image
-                    }
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                     alt=""
                     className="w-full sm::w-[250px] sm::h-[250px] object-fit"
                   />
                   <div className="p-4 space-y-2">
-                    <h1 className="mb-1 text-sm leading-5 font-bold">
+                    <h1 className="mb-1 text-sm font-bold leading-5">
                       {store.store_name}
                     </h1>
                     <p className="text-xs">{store.store_address}</p>

@@ -1,7 +1,7 @@
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { Outlet } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function Shop() {
   return (
@@ -14,8 +14,8 @@ export function Shop() {
         activeUrl="SNACKSHOP"
         logoProps={{
           src:
-            REACT_APP_UPLOADS_URL +
-            "images/shared/logo/taters-snackshop-logo.webp",
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-snackshop-logo.webp",
           alt: "Taters Logo",
           className: "w-[100px] lg:w-[160px]",
         }}

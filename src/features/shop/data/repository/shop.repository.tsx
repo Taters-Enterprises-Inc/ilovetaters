@@ -3,6 +3,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
+import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 import {
@@ -24,18 +25,7 @@ export interface GetCategoryProductsResponse {
 export interface GetProductDetailsResponse {
   data: {
     message: string;
-    data: {
-      product: ProductModel;
-      addons: Array<ProductModel>;
-      product_size: Array<{
-        id: number;
-        name: string;
-      }>;
-      product_flavor: Array<{
-        id: number;
-        name: string;
-      }>;
-    };
+    data: ProductDetailsModel;
   };
 }
 

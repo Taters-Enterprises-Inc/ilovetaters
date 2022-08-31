@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   getSession,
   selectGetSession,
@@ -103,7 +104,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                 >
                   <img
-                    src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.prod_image_name}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                     className="rounded-[10px] w-[92px] h-[92px]"
                     alt=""
                   />

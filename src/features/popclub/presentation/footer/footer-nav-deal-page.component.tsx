@@ -1,4 +1,4 @@
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
@@ -14,7 +14,10 @@ export function FooterNavDealPage() {
                 className="flex justify-between items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/icons/home.png"}
+                  src={
+                    REACT_APP_DOMAIN_URL +
+                    "api/assets/images/shared/icons/home.png"
+                  }
                   className="w-[28px] sm:w-[40px]"
                   alt="Tater home icon"
                 ></img>
@@ -27,7 +30,10 @@ export function FooterNavDealPage() {
                 className="flex justify-between items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/icons/popclub.png"}
+                  src={
+                    REACT_APP_DOMAIN_URL +
+                    "api/assets/images/shared/icons/popclub.png"
+                  }
                   className="w-[20px] sm:w-[24px]"
                   alt="Tater home icon"
                 ></img>
@@ -40,7 +46,10 @@ export function FooterNavDealPage() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/icons/snackshop.png"}
+                  src={
+                    REACT_APP_DOMAIN_URL +
+                    "api/assets/images/shared/icons/snackshop.png"
+                  }
                   className="w-[24px] sm:w-[30px]"
                   alt="Tater home icon"
                 ></img>
@@ -55,7 +64,10 @@ export function FooterNavDealPage() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/icons/catering.png"}
+                  src={
+                    REACT_APP_DOMAIN_URL +
+                    "api/assets/images/shared/icons/catering.png"
+                  }
                   className="w-[24px] sm:w-[30px]"
                   alt="Tater home icon"
                 ></img>
@@ -70,7 +82,10 @@ export function FooterNavDealPage() {
                 className="flex justify-center items-center flex-col h-full pt-1"
               >
                 <img
-                  src={REACT_APP_UPLOADS_URL + "images/icons/branches.png"}
+                  src={
+                    REACT_APP_DOMAIN_URL +
+                    "api/assets/images/shared/icons/branches.png"
+                  }
                   className="w-[18px] sm:w-[25px]"
                   alt="Tater home icon"
                 ></img>

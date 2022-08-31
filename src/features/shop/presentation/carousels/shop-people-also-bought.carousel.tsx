@@ -6,6 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/autoplay";
 
 import { Autoplay, Navigation } from "swiper";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface ShopPeopleAlsoBoughtCarouselProps {
   products: Array<any>;
@@ -55,7 +56,7 @@ export function ShopPeopleAlsoBoughtCarousel(
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
                 >
                   <img
-                    src={`https://ilovetaters.com/staging/v2/shop/assets/img/250/${product.image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
@@ -92,7 +93,7 @@ export function ShopPeopleAlsoBoughtCarousel(
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
                 >
                   <img
-                    src={`https://ilovetaters.com/staging/v2/shop/assets/img/250/${product.image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
@@ -126,7 +127,7 @@ export function ShopPeopleAlsoBoughtCarousel(
                   className="bg-secondary h-full flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white "
                 >
                   <img
-                    src={`https://ilovetaters.com/staging/v2/shop/assets/img/250/${product.image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />

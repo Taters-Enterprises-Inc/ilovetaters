@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { SearchAddress } from "features/shared/presentation/components/search-address";
 import {
   getSession,
@@ -18,8 +17,9 @@ import {
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useNavigate } from "react-router-dom";
-import { CateringStoreList } from "../components/catering-store-list";
+import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
@@ -56,16 +56,16 @@ export function CateringHome() {
       <img
         className="lg:hidden"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/mobile/catering_landing_page.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden lg:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/desktop/catering_landing_page.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
         }
         alt="The best pop corn in town"
       ></img>
@@ -141,11 +141,12 @@ export function CateringHome() {
           </button>
 
           <CateringStoreList
-            onClickStore={(storeId: number) => {
+            onClickStore={(storeId: number, regionId: number) => {
               dispatch(
                 setStoreAndAddress({
                   address,
                   storeId,
+                  regionId,
                 })
               );
             }}

@@ -13,9 +13,9 @@ export function Sidebar() {
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } relative min-h-screen bg-primary px-4 font-["Roboto"] duration-500`}
+        } relative h-screen bg-primary px-4 font-["Roboto"] duration-500 overflow-y-scroll overflow-x-hidden`}
       >
-        <div className="relative flex justify-end text-white top-7">
+        <div className="relative flex justify-end text-white top-5">
           <FaBars
             className={`cursor-pointer ${!open && "-translate-x-4"}`}
             onClick={() => setOpen(!open)}
@@ -25,11 +25,11 @@ export function Sidebar() {
         <div className="flex items-center pl-1 gap-x-4">
           <img
             src={require("assets/favicon.png")}
-            className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-tertiary 
+            className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-tertiary -mt-2
             ${!open && "translate-y-12"}`}
           />
           <h1
-            className={`whitespace-pre duration-300 text-white origin-left font-medium 
+            className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
                     ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           >
             TEI Shop Admin

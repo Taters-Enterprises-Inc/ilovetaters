@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { SearchAddress } from "features/shared/presentation/components/search-address";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
 import {
@@ -9,6 +8,7 @@ import {
 } from "../../../shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
@@ -24,16 +24,16 @@ export function ShopHome() {
       <img
         className="sm:hidden"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/shop/hero/mobile/snackshop_landing_page_banner.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/shop/hero/desktop/snackshop_landing_page_banner.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
         }
         alt="The best pop corn in town"
       ></img>

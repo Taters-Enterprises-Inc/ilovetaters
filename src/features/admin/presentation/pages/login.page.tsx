@@ -1,8 +1,6 @@
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
-import { useState } from "react";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
 
 export function Login() {
   return (
@@ -14,12 +12,11 @@ export function Login() {
         >
           <div className="flex items-center justify-center header_image">
             <img
-              src="https://ilovetaters.com/staging/uploads/images/shop/snackshop-logo-creamy-red.png"
+              src={`${REACT_APP_DOMAIN_URL}api/assets/images/shop/snackshop-logo-creamy-red.png`}
               alt="taterslogo"
               className="w-36"
             ></img>
           </div>
-
           <div className="pt-4 login-body">
             <form>
               <p className="text-white">
@@ -44,7 +41,6 @@ export function Login() {
                   className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
                 ></input>
               </div>
-
               <div className="flex justify-between py-4 text-white">
                 <p className="flex items-center">
                   <input className="mr-2" type="checkbox" /> Remember Me

@@ -24,10 +24,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import {
-  REACT_APP_DOMAIN_URL,
-  REACT_APP_UPLOADS_URL,
-} from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function PopClubHome() {
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -76,20 +73,26 @@ export function PopClubHome() {
     <>
       <img
         className="lg:hidden"
-        src={REACT_APP_UPLOADS_URL + "images/popclub/hero/mobile/popclub.webp"}
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/hero/mobile/popclub.webp"
+        }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden lg:block"
-        src={REACT_APP_UPLOADS_URL + "images/popclub/hero/desktop/popclub.webp"}
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/hero/desktop/popclub.webp"
+        }
         alt="The best pop corn in town"
       ></img>
 
       <img
         className="hidden lg:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/popclub/banner/popclub_instruction.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/banner/popclub_instruction.webp"
         }
         alt="The best pop corn in town"
       ></img>
