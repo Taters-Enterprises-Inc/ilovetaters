@@ -41,7 +41,7 @@ export function FooterNav(props: FooterNavProps) {
 
   return (
     <>
-      <section className="fixed bottom-0 p-0 z-[2003] w-full">
+      <section className="fixed bottom-0 z-[2003]  w-full">
         {getLatestUnexpiredRedeemState.data ? (
           <Link
             to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash}

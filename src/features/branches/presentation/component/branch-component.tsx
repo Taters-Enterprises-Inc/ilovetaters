@@ -1,9 +1,9 @@
-import React  from "react";
+import React from "react";
 import { AccordionComponent } from "./accordion-branch-component";
-import {useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export const BranchComponent: React.FC = (): JSX.Element => {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   return (
     <section className="bg-primary ">
       <section className="block  antialiased font-['Bebas_Neue']">
@@ -15,7 +15,7 @@ export const BranchComponent: React.FC = (): JSX.Element => {
         <div className="flex justify-end">
           <button
             onClick={() => {
-              navigate('/branches')
+              navigate("/branches");
             }}
             className=" bg-tertiary text-secondary py-2 px-4  rounded-[10px] tracking-[1px]"
           >
@@ -25,7 +25,7 @@ export const BranchComponent: React.FC = (): JSX.Element => {
         <div>
           <button
             onClick={() => {
-              navigate('/near-you')
+              navigate("/near-you");
             }}
             className="bg-transparent  text-white border-solid border-2 border-tertiary py-2 px-4  rounded-[10px] tracking-[1px]"
           >
@@ -33,18 +33,14 @@ export const BranchComponent: React.FC = (): JSX.Element => {
           </button>
         </div>
       </section>
-          <section className=" z-1  mb-[100px] lg:grid lg:grid-cols-2 lg:gap-x-4  md:block container mx-auto h-auto  md:pb-0 pb-10	 px-4 ">
-            {["ncr", "luzon", "visayas", "mindanao"].map(
-              (data: string, idx: number): JSX.Element => {
-                return (
-                  <AccordionComponent
-                    key={idx}
-                    region={data}
-                  />
-                );
-              }
-            )}
-          </section>
+      {/* Deleted the 100px margin on bottom*/}
+      <section className="container h-auto px-4 pb-10 mx-auto  z-1 lg:grid lg:grid-cols-2 lg:gap-x-4 md:block md:pb-0">
+        {["ncr", "luzon", "visayas", "mindanao"].map(
+          (data: string, idx: number): JSX.Element => {
+            return <AccordionComponent key={idx} region={data} />;
+          }
+        )}
+      </section>
     </section>
   );
 };
