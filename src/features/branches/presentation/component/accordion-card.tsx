@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BranchesStoreModel } from "features/branches/core/domain/branches-store.model";
-
+import { useNavigate  } from "react-router-dom";
 export const AccordioCard: React.FC<{
   data: BranchesStoreModel;
   show: boolean;
@@ -19,6 +19,8 @@ export const AccordioCard: React.FC<{
   const [resize, setResize] = useState<number>(window.innerWidth);
   const textLenght = 40;
   const sliceText = address.slice(0, textLenght);
+  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     const resizeFunc = () => {
@@ -31,9 +33,11 @@ export const AccordioCard: React.FC<{
 
   return (
     <div
-    onClick={()=>{
-      window.location.href = `https://www.google.com/maps/search/${nameofstore}/@${latitude},${longitude},15z`
-    }}
+      onClick={() => {
+        navigate(
+          `https://www.google.com/maps/search/${nameofstore}/@${latitude},${longitude},15z`
+        );
+      }}
       className={` transition-all ${
         props.show ? "block" : "hidden"
       }z-0 overflow-hidden shadow-tertiary bg-secondary block  w-full rounded-[10px]  border-gray-200 shadow-md  `}
@@ -86,9 +90,7 @@ export const AccordioCard: React.FC<{
           <p className="text-[.8125rem] text-[#bcd2d6] pb-1 pt-1 md:text-left text-center">
             Find us
           </p>
-          <div
-            className="text-[#fff] md:text-[13px] text-[10px] font-normal 	"
-          >
+          <div className="text-[#fff] md:text-[13px] text-[10px] font-normal 	">
             {resize < 768 && address.length > textLenght && !showText
               ? sliceText + " . . . "
               : address}
@@ -97,9 +99,9 @@ export const AccordioCard: React.FC<{
                 className={`cursor-pointer hover:text-blue-300  text-white md:text-[13px] text-[10px] p-1 z-[100]  ${
                   showText && "block text w-full mt-2"
                 }`}
-                onClick={(e:any) => {
-                    e.stopPropagation();
-                    setShowText((s: boolean) => !s)
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setShowText((s: boolean) => !s);
                 }}
               >
                 {showText ? "Show Less" : "Read more"}
@@ -108,7 +110,13 @@ export const AccordioCard: React.FC<{
           </div>
         </div>
       </div>
-      <div className="cursor-pointer flex  border-b border-[#7b7982]">
+      <div
+        className="cursor-pointer flex  border-b border-[#7b7982]"
+        onClick={(e: any) => {
+          e.stopPropagation();
+        navigate(`tel:${contactno}`) 
+        }}
+      >
         <span className="p-4">
           <svg
             className="w-4 h-4 stroke-red-400"
@@ -127,12 +135,9 @@ export const AccordioCard: React.FC<{
         </span>
         <div className="block text-left py-2 ">
           <p className="text-[.7125rem] text-[#bcd2d6] pb-1 ">Call us</p>
-          <a
-            className="text-[#fff] md:text-[13px] text-[10px] font-normal "
-            href={`tel:${contactno}`}
-          >
+          <p className="text-[#fff] md:text-[13px] text-[10px] font-normal ">
             {contactno}
-          </a>
+          </p>
         </div>
       </div>
       <div className="flex  md:h-[85px] h-auto py-2 pr-4">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StoreType } from "./near-you-search-store";
+import { useNavigate } from "react-router-dom";
 export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
   store,
 }): JSX.Element => {
@@ -7,7 +8,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
   const [resize, setResize] = useState<number>(window.innerWidth);
   const textLenght = 40;
   const sliceText = store.address.slice(0, textLenght);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const resizeFunc = () => {
       setResize(window.innerWidth);
@@ -25,7 +26,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
   return (
     <div
       onClick={() => {
-        window.location.href = `https://maps.google.com/?q=${store.store_name}`;
+        navigate(`https://maps.google.com/?q=${store.store_name}`);
       }}
       className={`cursor-pointer z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
@@ -122,7 +123,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       <div
         onClick={(e:any) => {
             e.stopPropagation();
-          window.location.href = `tel:${store.contactno}`;
+            navigate(`tel:${store.contactno}`)
         }}
         className="cursor-pointer flex  border-b border-[#7b7982] w-full"
       >

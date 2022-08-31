@@ -40,7 +40,7 @@ import { Admin, Login } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
 import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components";
-
+import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -115,7 +115,7 @@ root.render(
               <Route path="franchising" element={<Franchising/>}/>
               <Route path="reseller" element={<Reseller/>}/>
               <Route path="branches" element={<Branches/>}/>
-              <Route path="near-you" element={<Branches/>}/>
+              <Route path="near-you" element={<NearyouComponent/>}/>
 
               <Route path="admin"element={<Login/>}></Route>
               <Route path="admin/main"element={<Admin/>}></Route>
