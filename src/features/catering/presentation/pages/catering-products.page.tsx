@@ -14,7 +14,7 @@ import {
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
-import CateringFaqs from "../components/catering-faqs";
+import { CateringFaqs } from "../components";
 
 export function CateringProducts() {
   const getSessionState = useAppSelector(selectGetSession);
