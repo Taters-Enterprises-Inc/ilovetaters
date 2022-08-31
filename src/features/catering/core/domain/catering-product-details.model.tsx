@@ -5,10 +5,13 @@ export interface CateringProductDetailsModel {
   addons: Array<ProductModel>;
   product_addons: Array<ProductModel>;
   product_flavor: Array<{
-    id: number;
-    name: string;
-    product_variant_id: number;
     parent_name: string;
+    flavors: Array<{
+      id: number;
+      name: string;
+      product_variant_id: number;
+      parent_name: string;
+    }>;
   }>;
   product_prices: Array<{
     id: number;

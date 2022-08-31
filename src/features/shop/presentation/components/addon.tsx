@@ -71,6 +71,14 @@ export function Addon(props: AddonProps) {
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
                   onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     if (quantity > 1 && quantity <= 10)
                       setQuantity(quantity - 1);
                   }}
@@ -84,6 +92,14 @@ export function Addon(props: AddonProps) {
                 <input
                   value={quantity}
                   onChange={(event: any) => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     const value = event.target.value;
                     if (value >= 1 && value <= 10)
                       setQuantity(Math.floor(event.target.value));
@@ -96,6 +112,14 @@ export function Addon(props: AddonProps) {
 
                 <button
                   onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     if (quantity >= 1 && quantity < 10)
                       setQuantity(quantity + 1);
                   }}

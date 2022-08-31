@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { ProductModel } from "features/shared/core/domain/product.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { GetProductDetailsParam } from "features/shop/core/shop.params";
 import {
