@@ -37,14 +37,14 @@ export function Sidebar() {
         </div>
 
         <div
-          className={`whitespace-pre duration-300 mt-4 text-white 
+          className={`whitespace-pre duration-300 mt-3 text-white 
                 ${!open && "opacity-0 translate-x-28 overflow-hidden "}`}
         >
           <h3 className="cursor-pointer">Administrator</h3>
           <h4 className="text-xs cursor-pointer">Admin, Members</h4>
         </div>
 
-        <div className="relative flex flex-col pb-4 mt-4 text-sm text-white">
+        <div className="relative flex flex-col pb-4 mt-3 text-sm text-white">
           {Menus?.map((menu, i) => (
             <Link
               to={menu?.link}
