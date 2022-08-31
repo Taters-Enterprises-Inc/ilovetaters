@@ -2,7 +2,7 @@ import React, { useEffect, useState }  from "react";
 import { BranchesNearyouComponent } from "./branches-near-you-component";
 import { useNavigate } from "react-router-dom";
 import { ContactComponent } from "./contact-component";
-import { REACT_APP_UPLOADS_URL  } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HomeHeaderNav } from "features/shared/presentation/components";
 
 
@@ -32,16 +32,16 @@ export const NearyouComponent:React.FC = (): JSX.Element => {
     <img
       className="lg:hidden"
       src={
-        REACT_APP_UPLOADS_URL +
-        "images/branches/hero/mobile/branches_nationwide.webp"
+        REACT_APP_DOMAIN_URL +
+        "api/assets/images/branches/hero/mobile/branches_nationwide.webp"
       }
       alt="The best pop corn in town"
     ></img>
     <img
       className="hidden lg:block"
       src={
-        REACT_APP_UPLOADS_URL +
-        "images/branches/hero/desktop/branches_nationwide.webp"
+        REACT_APP_DOMAIN_URL +
+        "api/assets/images/branches/hero/desktop/branches_nationwide.webp"
       }
       alt="The best pop corn in town"
     ></img>

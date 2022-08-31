@@ -33,6 +33,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -444,7 +445,7 @@ export function ShopCheckout() {
                         className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
                       >
                         <img
-                          src={`https://ilovetaters.com/staging/v2/shop/assets/img/75/${order.prod_image_name}`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt=""
                         />

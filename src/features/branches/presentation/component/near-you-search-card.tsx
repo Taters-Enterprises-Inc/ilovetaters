@@ -26,7 +26,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
   return (
     <div
       onClick={() => {
-        navigate(`https://maps.google.com/?q=${store.store_name}`);
+        window.location.href = `https://maps.google.com/?q=${store.store_name}`;
       }}
       className={`cursor-pointer z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
@@ -123,7 +123,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       <div
         onClick={(e:any) => {
             e.stopPropagation();
-            navigate(`tel:${store.contactno}`)
+            window.location.href =`tel:${store.contactno}`;
         }}
         className="cursor-pointer flex  border-b border-[#7b7982] w-full"
       >

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_UPLOADS_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   getSession,
   GetSessionState,
@@ -14,6 +14,7 @@ import {
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
+import CateringFaqs from "../components/catering-faqs";
 
 export function CateringProducts() {
   const getSessionState = useAppSelector(selectGetSession);
@@ -52,64 +53,76 @@ export function CateringProducts() {
       <img
         className="sm:hidden"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/mobile/catering_munch_better.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/hero/desktop/catering_munch_better.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/hero/desktop/catering_munch_better.webp"
         }
         alt="The best pop corn in town"
       ></img>
       <img
         className="hidden sm:block"
         src={
-          REACT_APP_UPLOADS_URL +
-          "images/catering/instructions/catering_instructions.webp"
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/catering/instructions/catering_instructions.webp"
         }
         alt="The best pop corn in town"
       ></img>
+      <section className="container space-y-10 pb-[90px]">
+        {getCateringCategoryProductsState.data?.map((category, i) => (
+          <section key={i}>
+            <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px]">
+              {category.category_name}
+            </h1>
 
-      {getCateringCategoryProductsState.data?.map((category, i) => (
-        <section key={i} className="container space-y-3 pb-[90px]">
-          <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px]">
-            {category.category_name}
-          </h1>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {category.category_products.map((product, i) => (
+                <Link
+                  key={i}
+                  to={product.hash}
+                  className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
+                >
+                  <img
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${product.image}`}
+                    className="rounded-t-[10px] w-full"
+                    alt=""
+                  />
+                  <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                    <h2 className="text-sm leading-4 text-white">
+                      {product.name}
+                    </h2>
+                    <h3 className="font-bold text-white">
+                      <NumberFormat
+                        value={product.price.toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ))}
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {category.category_products.map((product, i) => (
-              <Link
-                key={i}
-                to={product.hash}
-                className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
-              >
-                <img
-                  src={`https://ilovetaters.com/shop/assets/img/catering/packages/${product.image}`}
-                  className="rounded-t-[10px] w-full"
-                  alt=""
-                />
-                <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
-                  <h2 className="text-sm leading-4 text-white">
-                    {product.name}
-                  </h2>
-                  <h3 className="font-bold text-white">
-                    <NumberFormat
-                      value={product.price.toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ))}
+        <CateringFaqs />
+      </section>
+
+      <a
+        target="_blank"
+        rel="noreferrer"
+        href="https://ilovetaters.com/shop/assets/upload/catering/Catering%20Packages.pdf"
+        className="bg-secondary cursor-pointer h-[100px] flex justify-center items-center text-white font-['Bebas_Neue'] text-2xl tracking-[3px]"
+      >
+        Download our Catering Flyer
+      </a>
     </>
   );
 }

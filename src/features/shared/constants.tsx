@@ -7,7 +7,6 @@ import { TabModel } from "./presentation/components/tab";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
-export const REACT_APP_UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
 export const SERVICES_DESKTOP = [
   {
@@ -16,7 +15,7 @@ export const SERVICES_DESKTOP = [
     color: "#1d1115",
     textColor: "white",
     url: "shop",
-    image: "images/home/cards/taters_snackshop.webp",
+    image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
   {
     title: "Franchising",
@@ -24,7 +23,7 @@ export const SERVICES_DESKTOP = [
     color: "#1b1915",
     textColor: "white",
     url: "franchising",
-    image: "images/home/cards/taters_franchising.webp",
+    image: "api/assets/images/home/cards/taters_franchising.webp",
   },
   {
     title: "PopClub",
@@ -32,7 +31,7 @@ export const SERVICES_DESKTOP = [
     color: "#22201A",
     textColor: "white",
     url: "popclub",
-    image: "images/home/cards/taters_popclub.webp",
+    image: "api/assets/images/home/cards/taters_popclub.webp",
   },
   {
     title: "Taters Caters",
@@ -40,7 +39,7 @@ export const SERVICES_DESKTOP = [
     color: "#858173",
     textColor: "black",
     url: "catering",
-    image: "images/home/cards/taters_catering.webp",
+    image: "api/assets/images/home/cards/taters_catering.webp",
   },
   {
     title: "Reseller",
@@ -48,7 +47,7 @@ export const SERVICES_DESKTOP = [
     color: "#c7b7ad",
     textColor: "black",
     url: "reseller",
-    image: "images/home/cards/taters_reseller.webp",
+    image: "api/assets/images/home/cards/taters_reseller.webp",
   },
   {
     title: "Branches",
@@ -56,7 +55,7 @@ export const SERVICES_DESKTOP = [
     color: "#d7cdb7",
     textColor: "black",
     url: "branches",
-    image: "images/home/cards/taters_branches.webp",
+    image: "api/assets/images/home/cards/taters_branches.webp",
   },
 ];
 
@@ -67,7 +66,7 @@ export const SERVICES_MOBILE = [
     color: "#1d1115",
     textColor: "white",
     url: "shop",
-    image: "images/home/cards/taters_snackshop.webp",
+    image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
   {
     title: "Taters Caters",
@@ -75,7 +74,7 @@ export const SERVICES_MOBILE = [
     color: "#858173",
     textColor: "black",
     url: "catering",
-    image: "images/home/cards/taters_catering.webp",
+    image: "api/assets/images/home/cards/taters_catering.webp",
   },
   {
     title: "Franchising",
@@ -83,7 +82,7 @@ export const SERVICES_MOBILE = [
     color: "#1b1915",
     textColor: "white",
     url: "franchising",
-    image: "images/home/cards/taters_franchising.webp",
+    image: "api/assets/images/home/cards/taters_franchising.webp",
   },
   {
     title: "Reseller",
@@ -91,7 +90,7 @@ export const SERVICES_MOBILE = [
     color: "#c7b7ad",
     textColor: "black",
     url: "reseller",
-    image: "images/home/cards/taters_reseller.webp",
+    image: "api/assets/images/home/cards/taters_reseller.webp",
   },
   {
     title: "PopClub",
@@ -99,7 +98,7 @@ export const SERVICES_MOBILE = [
     color: "#22201A",
     textColor: "white",
     url: "popclub",
-    image: "images/home/cards/taters_popclub.webp",
+    image: "api/assets/images/home/cards/taters_popclub.webp",
   },
   {
     title: "Branches",
@@ -107,7 +106,7 @@ export const SERVICES_MOBILE = [
     color: "#d7cdb7",
     textColor: "black",
     url: "branches",
-    image: "images/home/cards/taters_branches.webp",
+    image: "api/assets/images/home/cards/taters_branches.webp",
   },
 ];
 

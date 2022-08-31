@@ -14,7 +14,6 @@ import {
 } from "features/popclub/presentation/pages";
 import { PopClubDealGuards } from "features/popclub/presentation/pages/guards";
 import {
-
   Shop,
   ShopCheckout,
   ShopHome,
@@ -71,10 +70,6 @@ root.render(
                 </Route>
               </Route>
 
-              <Route path="popclub/deal" element={<PopClubDealGuards />}>
-                <Route path=":hash" element={<PopClubDeal />} />
-              </Route>
-
               <Route path="shop" element={<Shop />}>
                 <Route index element={<ShopHome />} />
                 <Route path="products/:hash" element={<ShopProduct />} />
@@ -110,18 +105,14 @@ root.render(
               </Route>
 
               <Route path="franchising" element={<Franchising />} />
-              <Route path="admin" element={<Admin />} />
 
-              <Route path="franchising" element={<Franchising/>}/>
-              <Route path="reseller" element={<Reseller/>}/>
-              <Route path="branches" element={<Branches/>}/>
+              <Route path="reseller" element={<Reseller />} />
+              <Route path="branches" element={<Branches />} />
               <Route path="near-you" element={<NearyouComponent/>}/>
 
-              <Route path="admin"element={<Login/>}></Route>
-              <Route path="admin/main"element={<Admin/>}></Route>
-
+              <Route path="admin" element={<Login />}></Route>
+              <Route path="admin/main" element={<Admin />}></Route>
             </Route>
-
           </Routes>
         </BrowserRouter>
       </Provider>

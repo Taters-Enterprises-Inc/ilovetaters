@@ -34,9 +34,8 @@ export const AccordioCard: React.FC<{
   return (
     <div
       onClick={() => {
-        navigate(
-          `https://www.google.com/maps/search/${nameofstore}/@${latitude},${longitude},15z`
-        );
+        window.location.href =`https://www.google.com/maps/search/${nameofstore}/@${latitude},${longitude},15z`;
+      
       }}
       className={` transition-all ${
         props.show ? "block" : "hidden"
@@ -45,7 +44,7 @@ export const AccordioCard: React.FC<{
       <h1 className="font-['Bebas_Neue'] text-center tracking-[1.5px]  antialiased md:text-[1.0625rem] md:text-[13px] text-[10px] text-[#fff] py-2 relative md:px-0 px-4 h-auto flex items-center justify-center">
         {nameofstore}
       </h1>
-      <div className="w-full h-auto relative">
+      <div className="w-full h-auto relative cursor-pointer">
         <img
           className="object-cover	w-[100%] h-[100%] max-h-[300px]  	"
           src={
@@ -114,7 +113,7 @@ export const AccordioCard: React.FC<{
         className="cursor-pointer flex  border-b border-[#7b7982]"
         onClick={(e: any) => {
           e.stopPropagation();
-        navigate(`tel:${contactno}`) 
+          window.location.href =`tel:${contactno}`;
         }}
       >
         <span className="p-4">

@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { BranchesStoreModel } from "features/branches/core/domain/branches-store.model";
 import { AccordioCard } from "./accordion-card";
 
-
 export const AccordionComponent: React.FC<{
   region: string;
 }> = ({ region }): JSX.Element => {
