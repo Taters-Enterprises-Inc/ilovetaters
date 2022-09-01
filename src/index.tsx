@@ -26,6 +26,7 @@ import {
   ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
+  ShopEditCart
 } from "features/shop/presentation/pages";
 import {
   Catering,
@@ -76,6 +77,10 @@ root.render(
                 <Route path="order/:hash" element={<ShopOrder />} />
                 <Route path="products" element={<ShopProducts />} />
                 <Route path="checkout" element={<ShopCheckout />} />
+                <Route
+                  path="/shop/products/cart/:cart_id"
+                  element={<ShopEditCart/>}
+                />
 
                 <Route
                   path="terms-and-conditions"
@@ -108,7 +113,7 @@ root.render(
 
               <Route path="reseller" element={<Reseller />} />
               <Route path="branches" element={<Branches />} />
-              <Route path="near-you" element={<NearyouComponent/>}/>
+              <Route path="near-you" element={<NearyouComponent />} />
 
               <Route path="admin" element={<Login />}></Route>
               <Route path="admin/main" element={<Admin />}></Route>

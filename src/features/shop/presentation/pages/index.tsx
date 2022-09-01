@@ -12,3 +12,5 @@ export { ShopProfileCateringBookings } from "./shop-profile-catering-bookings.pa
 export { ShopTermsAndConditions } from "./shop-terms-and-condition.page";
 export { ShopPrivacyPolicy } from "./shop-privacy-policy.page";
 export { ShopReturnPolicy } from "./shop-return-policy.page";
+export {ShopEditCart} from './shop-edit-cart'
+ 
