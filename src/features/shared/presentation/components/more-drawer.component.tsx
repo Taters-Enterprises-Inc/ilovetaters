@@ -52,7 +52,11 @@ export default function MoreDrawer() {
             icon: <RiAccountBoxFill className="text-white" />,
             path: "shop/profile",
           },
-          { text: "Franchising", icon: <MdStore className="text-white" /> },
+          {
+            text: "Franchising",
+            icon: <MdStore className="text-white" />,
+            path: "/franchising",
+          },
           {
             text: "Reseller Program",
             icon: <MdSell className="text-white" />,
@@ -78,14 +82,15 @@ export default function MoreDrawer() {
           return (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                {path && (
+                {icon && (
                   <Link to={path}>
-                    {icon && (
-                      <ListItemIcon className="text-[25px] sm:text-4xl">
-                        {icon}
-                      </ListItemIcon>
-                    )}
-                    <ListItemText primary={text} />
+                    <ListItemIcon className="text-[25px] sm:text-4xl">
+                      {icon}
+                      <ListItemText
+                        className="ml-3 text-white"
+                        primary={text}
+                      />
+                    </ListItemIcon>
                   </Link>
                 )}
               </ListItemButton>
