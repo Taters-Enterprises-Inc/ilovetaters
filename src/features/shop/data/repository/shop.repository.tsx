@@ -1,18 +1,17 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { ProductModel } from "features/shared/core/domain/product.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 import {
-  AddToCartParam,
   CheckoutOrdersParam,
   GetCategoryProductsParam,
   GetOrdersParam,
   GetProductDetailsParam,
   GetProductSkuParam,
+  AddToCartShopParam,
 } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse {
@@ -26,12 +25,6 @@ export interface GetProductDetailsResponse {
   data: {
     message: string;
     data: ProductDetailsModel;
-  };
-}
-
-export interface AddToCartResponse {
-  data: {
-    message: string;
   };
 }
 
@@ -67,6 +60,22 @@ export interface GetProductSkuResponse {
     message: string;
     data: ProductSkuModel;
   };
+}
+export interface AddToCartShopResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AddToCartShopRepository(
+  param: AddToCartShopParam
+): Promise<AddToCartShopResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetProductSkuRepository(
@@ -118,17 +127,6 @@ export function CheckoutOrdersRepository(
   param: CheckoutOrdersParam
 ): Promise<CheckoutOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/transaction/shop`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
-export function AddToCartRepository(
-  param: AddToCartParam
-): Promise<AddToCartResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
     headers: {
       "Content-Type": "application/json",
     },

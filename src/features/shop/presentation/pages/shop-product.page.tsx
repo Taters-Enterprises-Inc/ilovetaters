@@ -13,11 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from "react-number-format";
-import {
-  addToCart,
-  AddToCartState,
-  selectAddToCart,
-} from "../slices/add-to-cart.slice";
+
 import {
   getSession,
   selectGetSession,
@@ -39,6 +35,11 @@ import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { QuantityInput } from "features/shared/presentation/components";
+import {
+  addToCartShop,
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "../slices/add-to-cart-shop.slice";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ export function ShopProduct() {
   const getProductSkuState = useAppSelector(selectGetProductSku);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
-  const addToCartState = useAppSelector(selectAddToCart);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -75,10 +76,10 @@ export function ShopProduct() {
   }, [getProductSkuState, dispatch]);
 
   useEffect(() => {
-    if (addToCartState.status === AddToCartState.success) {
+    if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [addToCartState, dispatch]);
+  }, [addToCartShopState, dispatch]);
 
   useEffect(() => {
     if (hash !== undefined) {
@@ -101,7 +102,7 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       dispatch(
-        addToCart({
+        addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
@@ -147,7 +148,7 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       dispatch(
-        addToCart({
+        addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,

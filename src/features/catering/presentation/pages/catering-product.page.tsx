@@ -8,9 +8,10 @@ import {
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   getCateringProductDetails,
+  GetCateringProductDetailsState,
   selectGetCateringProductDetails,
 } from "../slices/get-catering-product-details.slice";
 
@@ -25,6 +26,11 @@ import { MdFastfood } from "react-icons/md";
 import { Addon } from "features/shop/presentation/components/addon";
 import { CateringAddon } from "../components";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import {
+  addToCartShop,
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "features/shop/presentation/slices/add-to-cart-shop.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -45,16 +51,82 @@ export function CateringProduct() {
     selectGetCateringProductDetails
   );
   const getSessionState = useAppSelector(selectGetSession);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringProductDetails({ hash }));
       dispatch(getSession());
     }
   }, [location, dispatch, hash]);
+
+  useEffect(() => {
+    if (addToCartShopState.status === AddToCartShopState.success) {
+      dispatch(getSession());
+    }
+  }, [addToCartShopState, dispatch]);
+
+  const handleCheckout = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    navigate("/catering/checkout");
+  };
+
+  const handleAddToCart = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    if (
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success &&
+      getCateringProductDetailsState.data
+    ) {
+      dispatch(
+        addToCartShop({
+          prod_id: getCateringProductDetailsState.data.product.id,
+          prod_image_name:
+            getCateringProductDetailsState.data.product.product_image,
+          prod_name: getCateringProductDetailsState.data.product.name,
+          prod_qty: quantity,
+          prod_flavor: -1,
+          prod_size: -1,
+          prod_price: getCateringProductDetailsState.data.product.price,
+          prod_calc_amount:
+            getCateringProductDetailsState.data.product.price * quantity,
+          prod_category: getCateringProductDetailsState.data.product.category,
+          prod_with_drinks: -1,
+          flavors_details: "",
+          prod_sku_id: -1,
+          prod_sku: -1,
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -265,14 +337,20 @@ export function CateringProduct() {
                 ) : null}
 
                 <div className="space-y-4">
-                  <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
+                  <button
+                    onClick={handleCheckout}
+                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                  >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                       Checkout
                     </span>
                   </button>
 
-                  <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
+                  <button
+                    onClick={handleAddToCart}
+                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                  >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                       Add to cart

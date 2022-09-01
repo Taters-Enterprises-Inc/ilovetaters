@@ -17,6 +17,9 @@ import Checkbox from "@mui/material/Checkbox";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { AddContactModal } from "features/shared/presentation/modals";
+import NumberFormat from "react-number-format";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -26,6 +29,86 @@ export function CateringCheckout() {
   const getContactsState = useAppSelector(selectGetContacts);
 
   const phoneNumberRef = useRef(null);
+
+  const calculateSubTotalPrice = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+      return (
+        <NumberFormat
+          value={calculatedPrice.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return (
+        <NumberFormat
+          value={0}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    }
+  };
+
+  const calculateDeliveryFee = () => {
+    if (getSessionState.data?.distance_rate_price) {
+      return (
+        <NumberFormat
+          value={getSessionState.data.distance_rate_price.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return (
+        <NumberFormat
+          value={0}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+
+    if (orders && getSessionState.data?.distance_rate_price) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+
+      calculatedPrice += getSessionState.data.distance_rate_price;
+      return (
+        <NumberFormat
+          value={calculatedPrice.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return (
+        <NumberFormat
+          value={0}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    }
+  };
   const handleCheckout = () => {};
 
   return (
@@ -198,57 +281,77 @@ export function CateringCheckout() {
                   </div>
                 </div>
 
-                <TextField
-                  aria-readonly
-                  value={getSessionState.data?.customer_address}
-                  variant="outlined"
-                  className="w-full"
-                  name="address"
-                  autoComplete="off"
-                />
-                {getSessionState.data?.cache_data ? (
-                  <>
-                    <div className="mt-4 text-white lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Handling Method
-                      </h2>
+                <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <span className="text-base text-white">
+                      Event Start Date Time
+                    </span>
 
-                      <ul className="mt-2 space-y-1">
-                        <li className="flex items-center space-x-2">
-                          <MdDeliveryDining className="text-2xl text-tertiary" />
-                          <h3 className="text-sm">Delivery</h3>
-                        </li>
-                        <li className="flex items-start space-x-3">
-                          <FaStore className="text-lg text-tertiary" />
-                          <h3 className="text-sm">
-                            Store: {getSessionState.data.cache_data.store_name}
-                          </h3>
-                        </li>
-                        <li className="flex items-start space-x-3 ">
-                          <FaMapMarkerAlt className="text-lg text-tertiary" />
-                          <h3 className="flex-1 text-sm">
-                            Store Address:{" "}
-                            {getSessionState.data.cache_data.store_address}
-                          </h3>
-                        </li>
-                      </ul>
-                    </div>
+                    <TextField
+                      aria-readonly
+                      variant="outlined"
+                      className="w-full"
+                      name="event_start_date_time"
+                      autoComplete="off"
+                    />
+                  </div>
 
-                    <div className="mt-4 text-white lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Note:
-                      </h2>
-                      <ul
-                        className="mt-2 space-y-2 text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: getSessionState.data.cache_data?.moh_notes
-                            ? getSessionState.data.cache_data.moh_notes
-                            : "",
-                        }}
-                      />
-                    </div>
-                  </>
-                ) : null}
+                  <div className="flex-1 space-y-2">
+                    <span className="text-base text-white">
+                      Event End Date Time
+                    </span>
+
+                    <TextField
+                      aria-readonly
+                      variant="outlined"
+                      className="w-full"
+                      name="event_end_date_time"
+                      autoComplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">Serving Time</span>
+
+                  <TextField
+                    aria-readonly
+                    variant="outlined"
+                    className="w-full"
+                    name="serving_time"
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">
+                    Other event details or requests (optional)
+                  </span>
+
+                  <TextField
+                    aria-readonly
+                    variant="outlined"
+                    className="w-full"
+                    name="other_details"
+                    autoComplete="off"
+                    multiline
+                    rows={4}
+                    maxRows={5}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">Event Address</span>
+
+                  <TextField
+                    aria-readonly
+                    value={getSessionState.data?.customer_address}
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                </div>
 
                 <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
@@ -259,12 +362,12 @@ export function CateringCheckout() {
 
                 <div className="flex items-center justify-start space-x-1 text-sm text-white lg:text-base">
                   <Checkbox color="tertiary" required />
-                  <span>I agree with the </span>
+                  <span>I have read the full </span>
                   <Link
                     to="/shop/terms-and-conditions"
                     className="text-tertiary"
                   >
-                    Terms & Conditions
+                    Catering FAQs
                   </Link>
                 </div>
 
@@ -283,14 +386,86 @@ export function CateringCheckout() {
                     type="submit"
                     className="bg-[#CC5801] text-white py-3 w-full uppercase border rounded-xl mt-4 order-1 lg:order-2"
                   >
-                    Checkout
+                    Initial Checkout
                   </button>
                 </div>
+              </div>
+
+              <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
+                <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+                  Order Summary
+                </h2>
+
+                <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                  {/* {getSessionState.data?.orders.map((order, i) => (
+                      <div
+                        key={i}
+                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                      >
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                          className="rounded-[10px] w-[92px] h-[92px]"
+                          alt=""
+                        />
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                          <h3 className="text-sm">
+                            {order.prod_size} {order.prod_name}
+                          </h3>
+                          <h3 className="text-xs">
+                            Quantity:{" "}
+                            <span className="text-tertiary">
+                              {order.prod_qty}
+                            </span>
+                          </h3>
+
+                          {order.prod_flavor ? (
+                            <h3 className="text-xs">
+                              Flavor:{" "}
+                              <span className="text-tertiary">
+                                {order.prod_flavor}
+                              </span>
+                            </h3>
+                          ) : null}
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={order.prod_calc_amount.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
+                        </div>
+                      </div>
+                    ))} */}
+                </div>
+
+                <hr className="mt-1 mb-2" />
+                <div className="grid grid-cols-2 text-white">
+                  <span>Subtotal:</span>
+                  <span className="text-end">{calculateSubTotalPrice()}</span>
+                  <span>10% Service Charge:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Transportation Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Additional Hour Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Night Differential Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                </div>
+
+                <h1 className="text-4xl text-center text-white">₱0.00</h1>
               </div>
             </form>
           </div>
         </div>
       </section>
+
+      <AddContactModal
+        open={openAddContactModal}
+        onClose={() => {
+          setOpenAddContactModal(false);
+        }}
+      />
     </>
   );
 }

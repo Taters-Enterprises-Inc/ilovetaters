@@ -110,7 +110,7 @@ export function StoreCluster(props: StoreClusterProps) {
                     </div>
                   </div>
                   <img
-                    src={`${REACT_APP_DOMAIN_URL}/store_images/250/${store.store_image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                     alt=""
                     className="w-full"
                   />

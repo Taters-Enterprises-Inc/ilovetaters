@@ -23,7 +23,7 @@ import {
 } from "../slices/checkout-orders.slice";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { AddContactModal } from "../modals";
+import { AddContactModal } from "features/shared/presentation/modals";
 import {
   getContacts,
   selectGetContacts,

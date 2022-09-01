@@ -30,10 +30,10 @@ export function CateringHome() {
   const getSessionState = useAppSelector(selectGetSession);
 
   const [eventStartDate, setEventStartDate] = useState<Date | null>(
-    moment().add(13, "days").toDate()
+    moment().add(14, "days").toDate()
   );
   const [eventEndDate, setEventEndDate] = useState<Date | null>(
-    moment().add(13, "days").add(3, "hours").toDate()
+    moment().add(14, "days").add(3, "hours").toDate()
   );
 
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);

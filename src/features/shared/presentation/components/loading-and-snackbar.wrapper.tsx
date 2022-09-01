@@ -12,10 +12,7 @@ import {
   GetProductDetailsState,
   selectGetProductDetails,
 } from "features/shop/presentation/slices/get-product-details.slice";
-import {
-  AddToCartState,
-  selectAddToCart,
-} from "features/shop/presentation/slices/add-to-cart.slice";
+
 import {
   resetStoreAndAddress,
   selectSetStoreAndAddress,
@@ -55,6 +52,10 @@ import {
   GetStoresAvailableCateringState,
   selectGetStoresAvailableCatering,
 } from "features/catering/presentation/slices/get-stores-available-catering.slice";
+import {
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "features/shop/presentation/slices/add-to-cart-shop.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -80,7 +81,7 @@ export function LoadingAndSnackbarWrapper() {
   const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
-  const addToCartState = useAppSelector(selectAddToCart);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
   const facebookLoginState = useAppSelector(selectFacebookLogin);
   const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
   const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
@@ -326,23 +327,23 @@ export function LoadingAndSnackbarWrapper() {
   }, [getProductDetailsState]);
 
   useEffect(() => {
-    switch (addToCartState.status) {
-      case AddToCartState.inProgress:
+    switch (addToCartShopState.status) {
+      case AddToCartShopState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case AddToCartState.initial:
+      case AddToCartShopState.initial:
         setOpenBackdropLoading(false);
         break;
-      case AddToCartState.success:
-        showAlert(setSuccessAlert, addToCartState.message);
+      case AddToCartShopState.success:
+        showAlert(setSuccessAlert, addToCartShopState.message);
         setOpenBackdropLoading(false);
         break;
-      case AddToCartState.fail:
-        showAlert(setFailsAlert, addToCartState.message);
+      case AddToCartShopState.fail:
+        showAlert(setFailsAlert, addToCartShopState.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addToCartState]);
+  }, [addToCartShopState]);
 
   return (
     <div>
