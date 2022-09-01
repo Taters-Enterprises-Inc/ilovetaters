@@ -38,11 +38,6 @@ export const getProductDetailsSlice = createSlice({
   name: "getProductDetails",
   initialState,
   reducers: {
-    resetGetProductDetails: (state) => {
-      state.data = undefined;
-      state.message = "";
-      state.status = GetProductDetailsState.initial;
-    },
     changeProductPrice: (state, action: PayloadAction<{ price: number }>) => {
       const { price } = action.payload;
 
@@ -84,6 +79,5 @@ export const getProductDetailsSlice = createSlice({
 
 export const selectGetProductDetails = (state: RootState) =>
   state.getProductDetails;
-export const { resetGetProductDetails, changeProductPrice } =
-  getProductDetailsSlice.actions;
+export const { changeProductPrice } = getProductDetailsSlice.actions;
 export default getProductDetailsSlice.reducer;

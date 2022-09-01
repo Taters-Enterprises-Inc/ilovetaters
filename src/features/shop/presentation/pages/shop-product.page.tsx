@@ -51,8 +51,11 @@ export function ShopProduct() {
 
   const [quantity, setQuantity] = useState(1);
 
-  const [currentSize, setCurrentSize] = useState<number>(-1);
-  const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
+  const [currentSize, setCurrentSize] = useState<number | undefined>();
+  const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
+  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
+  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
+    useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -63,6 +66,39 @@ export function ShopProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (hash !== undefined) {
+      dispatch(getProductDetails({ hash }));
+      dispatch(getSession());
+    }
+  }, [location, dispatch, hash]);
+
+  useEffect(() => {
+    if (
+      getProductDetailsState.status &&
+      getProductDetailsState.data &&
+      getProductDetailsState.data.product_size &&
+      getProductDetailsState.data.product_size.length > 0 &&
+      getProductDetailsState.data.product.product_hash === hash &&
+      currentSize === undefined
+    ) {
+      setCurrentSize(getProductDetailsState.data.product_size[0].id);
+    }
+  }, [getProductDetailsState, currentSize, hash]);
+
+  useEffect(() => {
+    if (
+      getProductDetailsState.status &&
+      getProductDetailsState.data &&
+      getProductDetailsState.data.product_flavor &&
+      getProductDetailsState.data.product_flavor.length > 0 &&
+      getProductDetailsState.data.product.product_hash === hash &&
+      currentFlavor === undefined
+    ) {
+      setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
+    }
+  }, [getProductDetailsState, currentFlavor, hash]);
 
   useEffect(() => {
     if (
@@ -80,13 +116,6 @@ export function ShopProduct() {
       dispatch(getSession());
     }
   }, [addToCartShopState, dispatch]);
-
-  useEffect(() => {
-    if (hash !== undefined) {
-      dispatch(getProductDetails({ hash }));
-      dispatch(getSession());
-    }
-  }, [location, dispatch, hash]);
 
   const handleCheckout = () => {
     if (
@@ -107,18 +136,8 @@ export function ShopProduct() {
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
+          prod_flavor: currentFlavor,
+          prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
@@ -154,17 +173,8 @@ export function ShopProduct() {
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
           prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
+            currentMultiFlavors === undefined ? currentFlavor : undefined,
+          prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
@@ -178,25 +188,15 @@ export function ShopProduct() {
     }
   };
 
-  const handleSizeAndFlavorChange = (size: number, flavor: number) => {
+  const handleSizeAndFlavorChange = (
+    size: number | undefined,
+    flavor: number | undefined
+  ) => {
     if (getProductDetailsState.data) {
-      flavor =
-        flavor === -1
-          ? getProductDetailsState.data.product_flavor[0]
-            ? getProductDetailsState.data.product_flavor[0].id
-            : -1
-          : flavor;
-      size =
-        size === -1
-          ? getProductDetailsState.data.product_size[0]
-            ? getProductDetailsState.data.product_size[0].id
-            : -1
-          : size;
-
       dispatch(
         getProductSku({
-          prod_flavor: flavor,
-          prod_size: size,
+          prod_flavor: flavor ? flavor : -1,
+          prod_size: size ? size : -1,
         })
       );
     }
@@ -303,11 +303,7 @@ export function ShopProduct() {
                               <Radio
                                 id={size.id.toString()}
                                 color="tertiary"
-                                checked={
-                                  currentSize === -1 && i === 0
-                                    ? true
-                                    : size.id === currentSize
-                                }
+                                checked={size.id === currentSize}
                                 onChange={() => {
                                   setCurrentSize(size.id);
                                   handleSizeAndFlavorChange(
@@ -350,18 +346,45 @@ export function ShopProduct() {
                                     <span className="text-sm text-white">
                                       {flavor.name}
                                     </span>
-                                    <QuantityInput min={0} max={10} />
+                                    <QuantityInput
+                                      min={0}
+                                      disableAdd={
+                                        getProductDetailsState.data.product
+                                          .num_flavor *
+                                          quantity -
+                                          totalMultiFlavorsQuantity ===
+                                        0
+                                      }
+                                      onChange={(val) => {
+                                        if (currentMultiFlavors) {
+                                          currentMultiFlavors[flavor.id] = {
+                                            id: flavor.id,
+                                            quantity: val,
+                                          };
+
+                                          setCurrentMultiFlavors(
+                                            currentMultiFlavors
+                                          );
+                                        } else {
+                                          const temp: any = {};
+                                          temp[flavor.id] = {
+                                            id: flavor.id,
+                                            quantity: val,
+                                          };
+                                          setCurrentMultiFlavors(temp);
+                                        }
+                                        setTotalMultiFlavorsQuantity(
+                                          totalMultiFlavorsQuantity + 1
+                                        );
+                                      }}
+                                    />
                                   </li>
                                 ) : (
                                   <li key={i} className="flex items-center">
                                     <Radio
                                       id={flavor.id.toString()}
                                       color="tertiary"
-                                      checked={
-                                        currentFlavor === -1 && i === 0
-                                          ? true
-                                          : flavor.id === currentFlavor
-                                      }
+                                      checked={flavor.id === currentFlavor}
                                       onChange={() => {
                                         setCurrentFlavor(flavor.id);
                                         handleSizeAndFlavorChange(
@@ -381,6 +404,8 @@ export function ShopProduct() {
                               </>
                             );
                           }
+
+                          return null;
                         }
                       )}
                     </ul>
@@ -404,8 +429,9 @@ export function ShopProduct() {
                             return;
                           }
 
-                          if (quantity > 1 && quantity <= 10)
+                          if (quantity > 1) {
                             setQuantity(quantity - 1);
+                          }
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                           quantity === 1 ? "opacity-30 cursor-not-allowed" : ""

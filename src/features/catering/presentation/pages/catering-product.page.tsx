@@ -324,7 +324,13 @@ export function CateringProduct() {
                                     <span className="text-sm text-white">
                                       {flavor.name}
                                     </span>
-                                    <QuantityInput min={0} max={10} />
+                                    <QuantityInput
+                                      min={0}
+                                      max={10}
+                                      onChange={(quantity) => {
+                                        console.log(quantity);
+                                      }}
+                                    />
                                   </li>
                                 ))}
                               </ul>

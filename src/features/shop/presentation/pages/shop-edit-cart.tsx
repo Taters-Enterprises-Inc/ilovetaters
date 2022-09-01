@@ -77,27 +77,26 @@ export const ShopEditCart: React.FC = (): JSX.Element => {
   }, [location, dispatch, hash]);
 
   const handleSizeAndFlavorChange = (size: number, flavor: number) => {
-    if (getProductDetailsState?.data) {
-      flavor =
-        flavor === -1
-          ? getProductDetailsState.data.product_flavor[0]
-            ? getProductDetailsState.data.product_flavor[0].id
-            : -1
-          : flavor;
-      size =
-        size === -1
-          ? getProductDetailsState.data.product_size[0]
-            ? getProductDetailsState.data.product_size[0].id
-            : -1
-          : size;
-
-      dispatch(
-        getProductSku({
-          prod_flavor: flavor,
-          prod_size: size,
-        })
-      );
-    }
+    // if (getProductDetailsState?.data) {
+    //   flavor =
+    //     flavor === -1
+    //       ? getProductDetailsState.data.product_flavor[0]
+    //         ? getProductDetailsState.data.product_flavor[0].id
+    //         : -1
+    //       : flavor;
+    //   size =
+    //     size === -1
+    //       ? getProductDetailsState.data.product_size[0]
+    //         ? getProductDetailsState.data.product_size[0].id
+    //         : -1
+    //       : size;
+    //   dispatch(
+    //     getProductSku({
+    //       prod_flavor: flavor,
+    //       prod_size: size,
+    //     })
+    //   );
+    // }
   };
 
   return (
