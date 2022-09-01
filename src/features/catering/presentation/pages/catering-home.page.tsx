@@ -20,14 +20,21 @@ import { useNavigate } from "react-router-dom";
 import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import moment from "moment";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
   const [address, setAddress] = useState<any>("");
+  const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
+  const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
 
-  const [eventStartDate, setEventStartDate] = useState<Date | null>(null);
-  const [eventEndDate, setEventEndDate] = useState<Date | null>(null);
+  const [eventStartDate, setEventStartDate] = useState<Date | null>(
+    moment().add(13, "days").toDate()
+  );
+  const [eventEndDate, setEventEndDate] = useState<Date | null>(
+    moment().add(13, "days").add(3, "hours").toDate()
+  );
 
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
 
@@ -50,6 +57,10 @@ export function CateringHome() {
       setAddress(getSessionState.data?.customer_address);
     }
   }, [dispatch, getSessionState]);
+
+  function disableDates(date: Date) {
+    return moment(date) <= moment().add(13, "days");
+  }
 
   return (
     <>
@@ -92,6 +103,10 @@ export function CateringHome() {
             <div className="space-y-4 lg:space-y-0 lg:space-x-4">
               <DateTimePicker
                 label="Select Event Start Date"
+                shouldDisableDate={disableDates}
+                open={openStartEventCalendar}
+                onOpen={() => setOpenStartEventCalendar(true)}
+                onClose={() => setOpenStartEventCalendar(false)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -99,6 +114,9 @@ export function CateringHome() {
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
+                    }}
+                    onClick={() => {
+                      setOpenStartEventCalendar(true);
                     }}
                     className="w-full lg:w-fit"
                   />
@@ -106,20 +124,29 @@ export function CateringHome() {
                 value={eventStartDate}
                 onChange={(newValue) => {
                   setEventStartDate(newValue);
+                  setEventEndDate(moment(newValue).add(3, "hours").toDate());
                 }}
               />
 
               <DateTimePicker
                 label="Select Event End Date"
+                shouldDisableDate={disableDates}
+                open={openEndEventCalendar}
+                onOpen={() => setOpenEndEventCalendar(true)}
+                onClose={() => setOpenEndEventCalendar(false)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
+                    disabled={true}
                     sx={{
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
                     className="w-full lg:w-fit"
+                    onClick={() => {
+                      setOpenEndEventCalendar(true);
+                    }}
                   />
                 )}
                 value={eventEndDate}

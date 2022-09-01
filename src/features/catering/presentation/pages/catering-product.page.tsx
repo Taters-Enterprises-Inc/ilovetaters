@@ -2,7 +2,10 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useParams } from "react-router-dom";
@@ -16,12 +19,12 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import NumberFormat from "react-number-format";
-import Radio from "@mui/material/Radio";
 import { QuantityInput } from "features/shared/presentation/components";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
 import { Addon } from "features/shop/presentation/components/addon";
 import { CateringAddon } from "../components";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -36,11 +39,16 @@ export function CateringProduct() {
   const location = useLocation();
 
   const [quantity, setQuantity] = useState(1);
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
   const getCateringProductDetailsState = useAppSelector(
     selectGetCateringProductDetails
   );
+  const getSessionState = useAppSelector(selectGetSession);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringProductDetails({ hash }));
@@ -131,6 +139,14 @@ export function CateringProduct() {
                       <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                         <button
                           onClick={() => {
+                            if (
+                              getSessionState.data?.userData == null ||
+                              getSessionState.data?.userData === undefined
+                            ) {
+                              setOpenLoginChooserModal(true);
+                              return;
+                            }
+
                             if (quantity > 1 && quantity <= 10)
                               setQuantity(quantity - 1);
                           }}
@@ -149,6 +165,14 @@ export function CateringProduct() {
                           value={quantity}
                           readOnly
                           onChange={(event: any) => {
+                            if (
+                              getSessionState.data?.userData == null ||
+                              getSessionState.data?.userData === undefined
+                            ) {
+                              setOpenLoginChooserModal(true);
+                              return;
+                            }
+
                             const value = event.target.value;
                             if (value >= 1 && value <= 10)
                               setQuantity(Math.floor(event.target.value));
@@ -162,6 +186,14 @@ export function CateringProduct() {
 
                         <button
                           onClick={() => {
+                            if (
+                              getSessionState.data?.userData == null ||
+                              getSessionState.data?.userData === undefined
+                            ) {
+                              setOpenLoginChooserModal(true);
+                              return;
+                            }
+
                             if (quantity >= 1 && quantity < 10)
                               setQuantity(quantity + 1);
                           }}
@@ -206,14 +238,25 @@ export function CateringProduct() {
                       Choose Flavor
                     </h2>
 
-                    <ul className="space-y-3">
+                    <ul className="space-y-4">
                       {getCateringProductDetailsState.data?.product_flavor.map(
-                        (flavor, i) => {
+                        (product_flavor, i) => {
                           return (
-                            <li key={i}>
-                              <span className="text-white">{flavor.name}</span>
-                              <QuantityInput />
-                            </li>
+                            <div key={i}>
+                              <span className="text-white text-2xl tracking-[3px] font-['Bebas_Neue']">
+                                {product_flavor.parent_name}
+                              </span>
+                              <ul className="space-y-3">
+                                {product_flavor.flavors.map((flavor, i) => (
+                                  <li key={i}>
+                                    <span className="text-sm text-white">
+                                      {flavor.name}
+                                    </span>
+                                    <QuantityInput />
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           );
                         }
                       )}
@@ -275,6 +318,12 @@ export function CateringProduct() {
           </div>
         </div>
       </section>
+      <LoginChooserModal
+        open={openLoginChooserModal}
+        onClose={() => {
+          setOpenLoginChooserModal(false);
+        }}
+      />
     </>
   );
 }

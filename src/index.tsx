@@ -29,6 +29,7 @@ import {
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringCheckout,
   CateringProduct,
   CateringProducts,
 } from "features/catering/presentation/pages";
@@ -102,13 +103,14 @@ root.render(
                 <Route index element={<CateringHome />} />
                 <Route path="products/:hash" element={<CateringProduct />} />
                 <Route path="products" element={<CateringProducts />} />
+                <Route path="checkout" element={<CateringCheckout />} />
               </Route>
 
               <Route path="franchising" element={<Franchising />} />
 
               <Route path="reseller" element={<Reseller />} />
               <Route path="branches" element={<Branches />} />
-              <Route path="near-you" element={<NearyouComponent/>}/>
+              <Route path="near-you" element={<NearyouComponent />} />
 
               <Route path="admin" element={<Login />}></Route>
               <Route path="admin/main" element={<Admin />}></Route>
