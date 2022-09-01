@@ -1,30 +1,21 @@
 import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BsFillCartPlusFill } from "react-icons/bs";
+import { useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
   getProductDetails,
-  GetProductDetailsState,
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from "react-number-format";
-import {
-  addToCart,
-  AddToCartState,
-  selectAddToCart,
-} from "../slices/add-to-cart.slice";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
+import { AddToCartState, selectAddToCart } from "../slices/add-to-cart.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
-import { BsFillBagCheckFill } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   getProductSku,
@@ -38,22 +29,17 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { QuantityInput } from "features/shared/presentation/components";
+import { productCartEditData } from "features/shop/data/repository/custom-data-shop-cart-edit";
 
-export function ShopProduct() {
+export const ShopEditCart: React.FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const getProductSkuState = useAppSelector(selectGetProductSku);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const getSessionState = useAppSelector(selectGetSession);
   const addToCartState = useAppSelector(selectAddToCart);
-
   const [quantity, setQuantity] = useState(1);
-
   const [currentSize, setCurrentSize] = useState<number>(-1);
   const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
-
-  const navigate = useNavigate();
 
   let { hash } = useParams();
 
@@ -87,98 +73,8 @@ export function ShopProduct() {
     }
   }, [location, dispatch, hash]);
 
-  const handleCheckout = () => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
-
-    if (
-      getProductDetailsState.status === GetProductDetailsState.success &&
-      getProductDetailsState.data
-    ) {
-      dispatch(
-        addToCart({
-          prod_id: getProductDetailsState.data.product.id,
-          prod_image_name: getProductDetailsState.data.product.product_image,
-          prod_name: getProductDetailsState.data.product.name,
-          prod_qty: quantity,
-          prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
-          prod_price: getProductDetailsState.data.product.price,
-          prod_calc_amount:
-            getProductDetailsState.data.product.price * quantity,
-          prod_category: getProductDetailsState.data.product.category,
-          prod_with_drinks: -1,
-          flavors_details: "",
-          prod_sku_id: -1,
-          prod_sku: -1,
-        })
-      );
-
-      navigate("/shop/checkout");
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
-
-    if (
-      getProductDetailsState.status === GetProductDetailsState.success &&
-      getProductDetailsState.data
-    ) {
-      dispatch(
-        addToCart({
-          prod_id: getProductDetailsState.data.product.id,
-          prod_image_name: getProductDetailsState.data.product.product_image,
-          prod_name: getProductDetailsState.data.product.name,
-          prod_qty: quantity,
-          prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
-          prod_price: getProductDetailsState.data.product.price,
-          prod_calc_amount:
-            getProductDetailsState.data.product.price * quantity,
-          prod_category: getProductDetailsState.data.product.category,
-          prod_with_drinks: -1,
-          flavors_details: "",
-          prod_sku_id: -1,
-          prod_sku: -1,
-        })
-      );
-    }
-  };
-
   const handleSizeAndFlavorChange = (size: number, flavor: number) => {
-    if (getProductDetailsState.data) {
+    if (getProductDetailsState?.data) {
       flavor =
         flavor === -1
           ? getProductDetailsState.data.product_flavor[0]
@@ -200,7 +96,6 @@ export function ShopProduct() {
       );
     }
   };
- 
 
   return (
     <>
@@ -209,10 +104,10 @@ export function ShopProduct() {
           title: "Snackshop",
           url: "/shop",
         }}
-        title={getProductDetailsState.data?.product.name}
+        title={productCartEditData[0].productName}
         pageTitles={[
           { name: "Products", url: "/shop/products" },
-          { name: getProductDetailsState.data?.product.name, url: "" },
+          { name: productCartEditData[0].productName, url: "" },
         ]}
       />
 
@@ -228,7 +123,7 @@ export function ShopProduct() {
                   navigation
                   className="w-full"
                 >
-                  {getProductDetailsState.data?.product_images.map((name) => (
+                  {productCartEditData[0].productImages.map((name) => (
                     <SwiperSlide>
                       <img
                         src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
@@ -241,7 +136,7 @@ export function ShopProduct() {
               </div>
 
               <div className="container flex-1 space-y-10 lg:px-0">
-                {getProductDetailsState.data?.product.description ? (
+                {true ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Info",
@@ -249,12 +144,11 @@ export function ShopProduct() {
                     }}
                   >
                     <div className="p-4 text-sm">
-                      {getProductDetailsState.data.product.description}
+                      {productCartEditData[0].productDescription}
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
-
-                {getProductDetailsState.data?.product.delivery_details ? (
+                {true ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Delivery Details",
@@ -264,16 +158,13 @@ export function ShopProduct() {
                     <div className="p-4 text-sm">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html:
-                            getProductDetailsState.data.product
-                              .delivery_details,
+                          __html: productCartEditData[0].productDeliveryDetails,
                         }}
                       />
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
-
-                {getProductDetailsState.data?.addons ? (
+                {true ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
@@ -281,46 +172,84 @@ export function ShopProduct() {
                     }}
                   >
                     <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getProductDetailsState.data?.addons.map((product, i) => (
+                      {productCartEditData[0].productAdsOn.map((product, i) => (
                         <Addon key={i} product={product} />
                       ))}
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
-
-                {getProductDetailsState.data?.product_size &&
-                getProductDetailsState.data?.product_size.length > 0 ? (
+                {productCartEditData[0].product_size &&
+                productCartEditData[0].product_size.length > 0 ? (
                   <div>
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Size
                     </h2>
 
                     <ul>
-                      {getProductDetailsState.data?.product_size.map(
-                        (size, i) => {
+                      {productCartEditData[0].product_size.map((size, i) => {
+                        return (
+                          <li key={i} className="flex items-center">
+                            <Radio
+                              id={size.id.toString()}
+                              color="tertiary"
+                              checked={
+                                currentSize === -1 && i === 0
+                                  ? true
+                                  : size.id === currentSize
+                              }
+                              onChange={() => {
+                                setCurrentSize(size.id);
+                                handleSizeAndFlavorChange(
+                                  size.id,
+                                  currentFlavor
+                                );
+                              }}
+                            />
+                            <label
+                              htmlFor={size.id.toString()}
+                              className="text-white"
+                            >
+                              {size.name}
+                            </label>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ) : null}
+                {productCartEditData[0].product_flavor &&
+                productCartEditData[0].product_flavor.length > 0 ? (
+                  <div>
+                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+                      Choose Flavor
+                    </h2>
+
+                    <ul>
+                      {productCartEditData[0].product_flavor.map(
+                        (flavor: any, i) => {
                           return (
                             <li key={i} className="flex items-center">
                               <Radio
-                                id={size.id.toString()}
+                                id={flavor.id.toString()}
                                 color="tertiary"
                                 checked={
-                                  currentSize === -1 && i === 0
+                                  currentFlavor === -1 && i === 0
                                     ? true
-                                    : size.id === currentSize
+                                    : flavor.id === currentFlavor
                                 }
                                 onChange={() => {
-                                  setCurrentSize(size.id);
+                                  setCurrentFlavor(flavor.id);
                                   handleSizeAndFlavorChange(
-                                    size.id,
-                                    currentFlavor
+                                    currentSize,
+                                    flavor.id
                                   );
                                 }}
                               />
                               <label
-                                htmlFor={size.id.toString()}
+                                htmlFor={flavor.id.toString()}
                                 className="text-white"
                               >
-                                {size.name}
+                                {flavor.name}
                               </label>
                             </li>
                           );
@@ -329,64 +258,6 @@ export function ShopProduct() {
                     </ul>
                   </div>
                 ) : null}
-
-                {getProductDetailsState.data &&
-                getProductDetailsState.data.product_flavor &&
-                getProductDetailsState.data.product &&
-                getProductDetailsState.data.product_flavor.length > 0 ? (
-                  <div>
-                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                      Choose Flavor
-                    </h2>
-                    <ul>
-                      {getProductDetailsState.data.product_flavor.map(
-                        (flavor, i) => {
-                          if (getProductDetailsState.data) {
-                            return (
-                              <>
-                                {getProductDetailsState.data.product
-                                  .num_flavor > 1 ? (
-                                  <li key={i}>
-                                    <span className="text-sm text-white">
-                                      {flavor.name}
-                                    </span>
-                                    <QuantityInput />
-                                  </li>
-                                ) : (
-                                  <li key={i} className="flex items-center">
-                                    <Radio
-                                      id={flavor.id.toString()}
-                                      color="tertiary"
-                                      checked={
-                                        currentFlavor === -1 && i === 0
-                                          ? true
-                                          : flavor.id === currentFlavor
-                                      }
-                                      onChange={() => {
-                                        setCurrentFlavor(flavor.id);
-                                        handleSizeAndFlavorChange(
-                                          currentSize,
-                                          flavor.id
-                                        );
-                                      }}
-                                    />
-                                    <label
-                                      htmlFor={flavor.id.toString()}
-                                      className="text-white"
-                                    >
-                                      {flavor.name}
-                                    </label>
-                                  </li>
-                                )}
-                              </>
-                            );
-                          }
-                        }
-                      )}
-                    </ul>
-                  </div>
-                ) : null}
-
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
@@ -396,14 +267,6 @@ export function ShopProduct() {
                     <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
                         onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
                           if (quantity > 1 && quantity <= 10)
                             setQuantity(quantity - 1);
                         }}
@@ -420,14 +283,6 @@ export function ShopProduct() {
                         value={quantity}
                         readOnly
                         onChange={(event: any) => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
                           const value = event.target.value;
                           if (value >= 1 && value <= 10)
                             setQuantity(Math.floor(event.target.value));
@@ -441,14 +296,6 @@ export function ShopProduct() {
 
                       <button
                         onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
                           if (quantity >= 1 && quantity < 10)
                             setQuantity(quantity + 1);
                         }}
@@ -463,12 +310,11 @@ export function ShopProduct() {
                     </div>
                   </div>
                 </div>
-
-                {getProductDetailsState.data?.product.price ? (
+                {productCartEditData[0].product_price ? (
                   <h2 className="mt-4 text-4xl text-white">
                     <NumberFormat
                       value={(
-                        getProductDetailsState.data.product.price * quantity
+                        productCartEditData[0].product_price * quantity
                       ).toFixed(2)}
                       displayType={"text"}
                       thousandSeparator={true}
@@ -476,39 +322,25 @@ export function ShopProduct() {
                     />
                   </h2>
                 ) : null}
-
                 <div className="space-y-4">
-                  <button
-                    onClick={handleCheckout}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                  >
-                    <BsFillBagCheckFill className="text-3xl" />
+                  <button className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg">
+                    <FaEdit className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Checkout
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={handleAddToCart}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                  >
-                    <BsFillCartPlusFill className="text-3xl" />
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Add to cart
+                      Edit
                     </span>
                   </button>
                 </div>
               </div>
             </div>
 
-            {getProductDetailsState.data?.suggested_products &&
-            getProductDetailsState.data?.suggested_products.length > 0 ? (
+            {productCartEditData[0].suggested_products &&
+            productCartEditData[0].suggested_products.length > 0 ? (
               <div className="container space-y-3">
                 <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">
                   People Also Bought
                 </h1>
                 <ShopPeopleAlsoBoughtCarousel
-                  products={getProductDetailsState.data?.suggested_products}
+                  products={productCartEditData[0].suggested_products}
                 />
               </div>
             ) : null}
@@ -524,4 +356,4 @@ export function ShopProduct() {
       />
     </>
   );
-}
+};
