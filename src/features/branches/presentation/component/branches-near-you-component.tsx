@@ -8,12 +8,12 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
   return (
-    <section  className="container pb-[200px] px-4">
+    <section className="container pb-[200px] px-4">
       <h1 className="uppercase text-[1.3rem] text-[#fff] font-['Bebas_Neue'] tracking-[2px]">
         WHICH STORE IS NEAR YOU?
       </h1>
       <div className="flex items-center justify-center mb-3">
-        <label className="pure-material-textfield-outlined w-full">
+        <label className="w-full pure-material-textfield-outlined">
           <SearchAddress
             onPlaceSelected={(place: string) => {
               dispatch(getStoresAvailableBranches({ address: place }));
@@ -23,7 +23,7 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
         </label>
       </div>
 
-      <NearyouSearchStore  />
+      <NearyouSearchStore />
     </section>
   );
 };
