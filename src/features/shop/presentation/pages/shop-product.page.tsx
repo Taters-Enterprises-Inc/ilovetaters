@@ -201,7 +201,6 @@ export function ShopProduct() {
       );
     }
   };
- 
 
   return (
     <>
@@ -351,7 +350,7 @@ export function ShopProduct() {
                                     <span className="text-sm text-white">
                                       {flavor.name}
                                     </span>
-                                    <QuantityInput />
+                                    <QuantityInput min={0} max={10} />
                                   </li>
                                 ) : (
                                   <li key={i} className="flex items-center">

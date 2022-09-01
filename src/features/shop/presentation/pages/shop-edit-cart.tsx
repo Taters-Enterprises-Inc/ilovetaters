@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from "react-number-format";
-import { AddToCartState, selectAddToCart } from "../slices/add-to-cart.slice";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
@@ -30,13 +29,17 @@ import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { productCartEditData } from "features/shop/data/repository/custom-data-shop-cart-edit";
+import {
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "../slices/add-to-cart-shop.slice";
 
 export const ShopEditCart: React.FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const getProductSkuState = useAppSelector(selectGetProductSku);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const addToCartState = useAppSelector(selectAddToCart);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [quantity, setQuantity] = useState(1);
   const [currentSize, setCurrentSize] = useState<number>(-1);
   const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
@@ -61,10 +64,10 @@ export const ShopEditCart: React.FC = (): JSX.Element => {
   }, [getProductSkuState, dispatch]);
 
   useEffect(() => {
-    if (addToCartState.status === AddToCartState.success) {
+    if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [addToCartState, dispatch]);
+  }, [addToCartShopState, dispatch]);
 
   useEffect(() => {
     if (hash !== undefined) {

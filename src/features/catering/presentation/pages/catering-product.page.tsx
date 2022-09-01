@@ -324,7 +324,7 @@ export function CateringProduct() {
                                     <span className="text-sm text-white">
                                       {flavor.name}
                                     </span>
-                                    <QuantityInput />
+                                    <QuantityInput min={0} max={10} />
                                   </li>
                                 ))}
                               </ul>

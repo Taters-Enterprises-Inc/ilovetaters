@@ -1,17 +1,23 @@
 import { useState } from "react";
 
-export function QuantityInput() {
-  const [quantity, setQuantity] = useState(1);
+export interface QuantityInputProps {
+  min: number;
+  max: number;
+}
+
+export function QuantityInput(props: QuantityInputProps) {
+  const [quantity, setQuantity] = useState(props.min);
 
   return (
     <div className="w-[200px] h-12">
       <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
         <button
           onClick={() => {
-            if (quantity > 1 && quantity <= 10) setQuantity(quantity - 1);
+            if (quantity > props.min && quantity <= props.max)
+              setQuantity(quantity - 1);
           }}
           className={`w-20 h-full rounded-l outline-none cursor-pointer bg-primary ${
-            quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+            quantity === props.min ? "opacity-30 cursor-not-allowed" : ""
           }`}
         >
           <span className="m-auto text-2xl font-thin leading-3">−</span>
@@ -21,7 +27,7 @@ export function QuantityInput() {
           value={quantity}
           onChange={(event: any) => {
             const value = event.target.value;
-            if (value >= 1 && value <= 10)
+            if (value >= props.min && value <= props.max)
               setQuantity(Math.floor(event.target.value));
           }}
           type="number"
@@ -32,10 +38,11 @@ export function QuantityInput() {
 
         <button
           onClick={() => {
-            if (quantity >= 1 && quantity < 10) setQuantity(quantity + 1);
+            if (quantity >= props.min && quantity < props.max)
+              setQuantity(quantity + 1);
           }}
           className={`w-20 h-full rounded-r cursor-pointer bg-primary ${
-            quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+            quantity === props.max ? "opacity-30 cursor-not-allowed" : ""
           }`}
         >
           <span className="m-auto text-2xl font-thin leading-3 ">+</span>
