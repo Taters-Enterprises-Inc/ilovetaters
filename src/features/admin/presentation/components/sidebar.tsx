@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Menus } from "./sidebardata";
 import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Submenu from "./submenu";
 
-export function Sidebar() {
+const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
-  const [subnav, setSubnav] = useState(false);
-  const showSubnav = () => setSubnav(!subnav);
+
+  // const [subnav, setSubnav] = useState(false);
+  // const showSubnav = () => setSubnav(!subnav);
 
   return (
     <div className="flex ">
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } relative h-screen bg-primary px-4 font-["Roboto"] duration-500 overflow-y-scroll overflow-x-hidden`}
+        } relative h-screen bg-primary px-4 font-["Roboto"] duration-500 overflow-y-auto overflow-x-hidden`}
       >
         <div className="relative flex justify-end text-white top-5">
           <FaBars
@@ -48,8 +50,8 @@ export function Sidebar() {
           {Menus?.map((menu, i) => (
             <Link
               to={menu?.link}
-              onClick={menu.subNav && showSubnav}
               key={i}
+              // onClick={menu.subNav && showSubnav}
               className="flex items-center gap-3 p-2 duration-200 rounded-md hover:bg-white/30"
             >
               <div className="ml-1.5">
@@ -61,13 +63,20 @@ export function Sidebar() {
               >
                 {menu?.name}
               </h2>
-              <div>
-                {/* {menu.subNav && subnav ? menu.iconOpen : menu.subNav ? menu.iconClosed : null} */}
-              </div>
+              <Submenu menu={menu} key={i} />
+              {/* <div>
+                {menu.subNav && subnav
+                  ? menu.iconOpen
+                  : menu.subNav
+                  ? menu.iconClosed
+                  : null}
+              </div> */}
             </Link>
           ))}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

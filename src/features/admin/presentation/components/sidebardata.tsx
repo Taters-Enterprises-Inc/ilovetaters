@@ -15,8 +15,9 @@ import {
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { SidebarItem } from "../models/sidebaritems";
 
-export const Menus = [
+export const Menus: SidebarItem[] = [
   {
     name: "Orders",
     link: "/orders",
@@ -37,7 +38,7 @@ export const Menus = [
     link: "/raffles",
     icon: FaTicketAlt,
     iconClosed: MdOutlineKeyboardArrowDown,
-    iconOpen: MdOutlineKeyboardArrowUp,
+    iconOpened: MdOutlineKeyboardArrowUp,
     subNav: [
       {
         name: "Snackshop",
@@ -56,7 +57,7 @@ export const Menus = [
     link: "/availability",
     icon: MdProductionQuantityLimits,
     iconClosed: MdOutlineKeyboardArrowDown,
-    iconOpen: MdOutlineKeyboardArrowUp,
+    iconOpened: MdOutlineKeyboardArrowUp,
   },
   {
     name: "Products",
@@ -73,7 +74,7 @@ export const Menus = [
     link: "/settings",
     icon: MdOutlineSettings,
     iconClosed: MdOutlineKeyboardArrowDown,
-    iconOpen: MdOutlineKeyboardArrowUp,
+    iconOpened: MdOutlineKeyboardArrowUp,
   },
   {
     name: "FAQ's",

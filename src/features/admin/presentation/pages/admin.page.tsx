@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Sidebar } from "../components/sidebar";
+import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
 
 export function Admin() {
   return (
     // dont change code here
     <div className="flex ">
-      <div className="overflow-y-auto">
+      <div>
         <Sidebar />
       </div>
       <div className="flex-1 min-h-screen p-2 overflow-y-hidden text-white bg-secondary">
