@@ -6,12 +6,11 @@ import { selectGetSession } from "features/shared/presentation/slices/get-sessio
 import { useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCartShop } from "../slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }
 
-export function Addon(props: AddonProps) {
+export function CateringAddon(props: AddonProps) {
   const [quantity, setQuantity] = useState(1);
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -26,23 +25,23 @@ export function Addon(props: AddonProps) {
       return;
     }
 
-    dispatch(
-      addToCartShop({
-        prod_id: props.product.id,
-        prod_image_name: props.product.product_image,
-        prod_name: props.product.name,
-        prod_qty: quantity,
-        prod_flavor: -1,
-        prod_size: -1,
-        prod_price: props.product.price,
-        prod_calc_amount: props.product.price * quantity,
-        prod_category: props.product.category,
-        prod_with_drinks: -1,
-        flavors_details: "",
-        prod_sku_id: -1,
-        prod_sku: -1,
-      })
-    );
+    // dispatch(
+    //   addToCart({
+    //     prod_id: props.product.id,
+    //     prod_image_name: props.product.product_image,
+    //     prod_name: props.product.name,
+    //     prod_qty: quantity,
+    //     prod_flavor: -1,
+    //     prod_size: -1,
+    //     prod_price: props.product.price,
+    //     prod_calc_amount: props.product.price * quantity,
+    //     prod_category: props.product.category,
+    //     prod_with_drinks: -1,
+    //     flavors_details: "",
+    //     prod_sku_id: -1,
+    //     prod_sku: -1,
+    //   })
+    // );
   };
 
   return (
@@ -50,7 +49,7 @@ export function Addon(props: AddonProps) {
       <div className="my-3 mb-6 shadow-md bg-secondary rounded-xl shadow-tertiary">
         <div className="flex p-4 space-x-2">
           <img
-            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.product.product_image}`}
+            src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${props.product.product_image}`}
             className="rounded-[10px] w-[100px] h-[100px]"
             alt=""
           />
@@ -119,7 +118,6 @@ export function Addon(props: AddonProps) {
                       setOpenLoginChooserModal(true);
                       return;
                     }
-
                     if (quantity >= 1 && quantity < 10)
                       setQuantity(quantity + 1);
                   }}

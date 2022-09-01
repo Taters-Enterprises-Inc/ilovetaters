@@ -14,7 +14,7 @@ import {
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
-import CateringFaqs from "../components/catering-faqs";
+import { CateringFaqs } from "../components";
 
 export function CateringProducts() {
   const getSessionState = useAppSelector(selectGetSession);
@@ -97,14 +97,15 @@ export function CateringProducts() {
                     <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="font-bold text-white">
+                    <div className="font-bold text-white">
                       <NumberFormat
                         value={product.price.toFixed(2)}
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={"₱"}
-                      />
-                    </h3>
+                      />{" "}
+                      <span className="text-sm font-normal">per head</span>
+                    </div>
                   </div>
                 </Link>
               ))}

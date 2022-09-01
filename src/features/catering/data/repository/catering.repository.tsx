@@ -2,6 +2,7 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import {
+  AddToCartCateringParam,
   GetCategoryProductsParam,
   GetCateringProductDetailsParam,
 } from "features/catering/core/catering.params";
@@ -19,6 +20,23 @@ export interface GetCateringProductDetailsResponse {
     message: string;
     data: CateringProductDetailsModel;
   };
+}
+
+export interface AddToCartCateringResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AddToCartCateringRepository(
+  param: AddToCartCateringParam
+): Promise<AddToCartCateringResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetCateringProductDetailsRepository(

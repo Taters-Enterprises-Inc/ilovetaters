@@ -23,6 +23,7 @@ export interface GetStoresAvailableParam {
 export interface SetStoreAndAddressParm {
   address: string | null;
   storeId: number;
+  regionId: number;
 }
 
 export interface SetSessionParam {

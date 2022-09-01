@@ -26,9 +26,11 @@ import {
   ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
+  ShopEditCart
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringCheckout,
   CateringProduct,
   CateringProducts,
 } from "features/catering/presentation/pages";
@@ -39,7 +41,7 @@ import { Admin, Login } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
 import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components";
-
+import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -76,6 +78,10 @@ root.render(
                 <Route path="order/:hash" element={<ShopOrder />} />
                 <Route path="products" element={<ShopProducts />} />
                 <Route path="checkout" element={<ShopCheckout />} />
+                <Route
+                  path="/shop/products/cart/:cart_id"
+                  element={<ShopEditCart/>}
+                />
 
                 <Route
                   path="terms-and-conditions"
@@ -102,11 +108,14 @@ root.render(
                 <Route index element={<CateringHome />} />
                 <Route path="products/:hash" element={<CateringProduct />} />
                 <Route path="products" element={<CateringProducts />} />
+                <Route path="checkout" element={<CateringCheckout />} />
               </Route>
 
               <Route path="franchising" element={<Franchising />} />
+
               <Route path="reseller" element={<Reseller />} />
               <Route path="branches" element={<Branches />} />
+              <Route path="near-you" element={<NearyouComponent />} />
 
               <Route path="admin" element={<Login />}></Route>
               <Route path="admin/main" element={<Admin />}></Route>

@@ -1,7 +1,7 @@
 import React from "react";
 import { contactData, ContactDataType } from "../pages/data/contact-data";
 
-export const FranchisingContactComponent: React.FC = (): JSX.Element => {
+export const ContactComponent: React.FC = (): JSX.Element => {
   return (
     <>
       <section className="block bg-primary font-['Bebas_Neue']">

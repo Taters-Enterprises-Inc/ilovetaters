@@ -17,7 +17,7 @@ import getRedeem from "../popclub/presentation/slices/get-redeem.slice";
 import getLatestUnexpiredRedeem from "../popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import getCategoryProducts from "../shop/presentation/slices/get-category-products.slice";
 import getProductDetails from "../shop/presentation/slices/get-product-details.slice";
-import addToCart from "../shop/presentation/slices/add-to-cart.slice";
+import addToCartShop from "../shop/presentation/slices/add-to-cart-shop.slice";
 import getBranchesStore from "../branches/presentation/slices/get-branches-store";
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
@@ -45,6 +45,7 @@ import getStoresAvailableBranches from "../branches/presentation/slices/get-stor
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
+import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
 
 export const store = configureStore({
   reducer: {
@@ -74,7 +75,7 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
-    addToCart: addToCart,
+    addToCartShop: addToCartShop,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
@@ -97,6 +98,7 @@ export const store = configureStore({
     getContacts: getContacts,
 
     getCateringProductDetails: getCateringProductDetails,
+    addToCartCatering: addToCartCatering,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
