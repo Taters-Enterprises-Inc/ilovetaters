@@ -50,7 +50,7 @@ export default function MoreDrawer() {
           {
             text: "My Account",
             icon: <RiAccountBoxFill className="text-white" />,
-            path: "shop/profile",
+            path: "/shop/profile",
           },
           {
             text: "Franchising",
