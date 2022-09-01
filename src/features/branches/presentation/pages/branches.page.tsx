@@ -24,7 +24,7 @@ export function Branches() {
   }, []);
 
   return (
-    <main className="w-full h-auto border border-solid bg-primary border-primary">
+    <main className="w-full h-auto pb-24 bg-primary">
       <HomeHeaderNav serviceReached={serviceReached} active="BRANCHES" />
       <img
         className="lg:hidden"
@@ -44,6 +44,7 @@ export function Branches() {
       ></img>
       <ContactComponent />
       <BranchComponent />
+
       <FooterNav activeUrl="BRANCHES" />
     </main>
   );
