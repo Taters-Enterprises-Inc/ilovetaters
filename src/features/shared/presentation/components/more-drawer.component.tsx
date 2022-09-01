@@ -15,7 +15,7 @@ import {
 } from "react-icons/ri";
 import { MdSell, MdStore } from "react-icons/md";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
 
 type Anchor = "left";
 
@@ -50,35 +50,44 @@ export default function MoreDrawer() {
           {
             text: "My Account",
             icon: <RiAccountBoxFill className="text-white" />,
+            path: "shop/profile",
           },
           { text: "Franchising", icon: <MdStore className="text-white" /> },
           {
             text: "Reseller Program",
             icon: <MdSell className="text-white" />,
+            path: "/reseller",
           },
           {
             text: "Explore Menu",
             icon: <AiOutlineFileSearch className="text-white" />,
+            path: "/",
           },
           {
             text: "Contact Us",
             icon: <RiContactsBookLine className="text-white" />,
+            path: "/branches",
           },
           {
             text: "Terms & Conditions",
             icon: <RiFilePaper2Fill className="text-white" />,
+            path: "/shop/terms-and-conditions",
           },
         ].map((item, index) => {
-          const { text, icon } = item;
+          const { text, icon, path } = item;
           return (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                {icon && (
-                  <ListItemIcon className="text-[25px] sm:text-4xl">
-                    {icon}
-                  </ListItemIcon>
+                {path && (
+                  <Link to={path}>
+                    {icon && (
+                      <ListItemIcon className="text-[25px] sm:text-4xl">
+                        {icon}
+                      </ListItemIcon>
+                    )}
+                    <ListItemText primary={text} />
+                  </Link>
                 )}
-                <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
           );
