@@ -34,7 +34,10 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { QuantityInput } from "features/shared/presentation/components";
+import {
+  QuantityInput,
+  SnackbarAlert,
+} from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
@@ -117,6 +120,23 @@ export function ShopProduct() {
     }
   }, [addToCartShopState, dispatch]);
 
+  const createFlavorDetails = (): string | undefined => {
+    const multiFlavorsArray: Array<{
+      name: string;
+      quantity: number;
+    }> = Object.values(currentMultiFlavors);
+    let result: string | undefined;
+
+    for (let i = 0; i < multiFlavorsArray.length; i++) {
+      result =
+        (result === undefined ? "" : result) +
+        `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+          multiFlavorsArray[i].name
+        }</span><br/>`;
+    }
+    return result;
+  };
+
   const handleCheckout = () => {
     if (
       getSessionState.data?.userData == null ||
@@ -130,6 +150,8 @@ export function ShopProduct() {
       getProductDetailsState.status === GetProductDetailsState.success &&
       getProductDetailsState.data
     ) {
+      let flavors_details = createFlavorDetails();
+
       dispatch(
         addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
@@ -143,7 +165,7 @@ export function ShopProduct() {
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
           prod_with_drinks: -1,
-          flavors_details: "",
+          flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
         })
@@ -166,6 +188,15 @@ export function ShopProduct() {
       getProductDetailsState.status === GetProductDetailsState.success &&
       getProductDetailsState.data
     ) {
+      if (
+        getProductDetailsState.data.product.num_flavor > 1 &&
+        totalMultiFlavorsQuantity !==
+          getProductDetailsState.data.product.num_flavor
+      ) {
+        return;
+      }
+
+      let flavors_details = createFlavorDetails();
       dispatch(
         addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
@@ -180,7 +211,7 @@ export function ShopProduct() {
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
           prod_with_drinks: -1,
-          flavors_details: "",
+          flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
         })
@@ -355,10 +386,10 @@ export function ShopProduct() {
                                           totalMultiFlavorsQuantity ===
                                         0
                                       }
-                                      onChange={(val) => {
+                                      onChange={(val, action) => {
                                         if (currentMultiFlavors) {
                                           currentMultiFlavors[flavor.id] = {
-                                            id: flavor.id,
+                                            name: flavor.name,
                                             quantity: val,
                                           };
 
@@ -368,13 +399,15 @@ export function ShopProduct() {
                                         } else {
                                           const temp: any = {};
                                           temp[flavor.id] = {
-                                            id: flavor.id,
+                                            name: flavor.name,
                                             quantity: val,
                                           };
                                           setCurrentMultiFlavors(temp);
                                         }
+
                                         setTotalMultiFlavorsQuantity(
-                                          totalMultiFlavorsQuantity + 1
+                                          totalMultiFlavorsQuantity +
+                                            (action === "plus" ? 1 : -1)
                                         );
                                       }}
                                     />

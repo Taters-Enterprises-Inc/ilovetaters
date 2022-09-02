@@ -1,9 +1,6 @@
-import Slide from "@mui/material/Slide";
-import Snackbar from "@mui/material/Snackbar";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import MuiAlert from "@mui/material/Alert";
 import {
   GetCategoryProductsState,
   selectGetCategoryProducts,
@@ -56,6 +53,7 @@ import {
   AddToCartShopState,
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
+import { SnackbarAlert } from "./snackbar-alert";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -236,7 +234,7 @@ export function LoadingAndSnackbarWrapper() {
         dispatch(resetStoreAndAddress());
         break;
     }
-  }, [facebookLoginState, dispatch]);
+  }, [facebookLoginPointState, dispatch]);
 
   useEffect(() => {
     switch (facebookLoginState.status) {
@@ -380,19 +378,4 @@ function showAlert(
       message: message,
     });
   }, 3000);
-}
-
-function SnackbarAlert(props: any) {
-  const { open, severity, message } = props;
-
-  return (
-    <Snackbar
-      open={open}
-      autoHideDuration={10000}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      TransitionComponent={Slide}
-    >
-      <MuiAlert severity={severity}>{message}</MuiAlert>
-    </Snackbar>
-  );
 }

@@ -73,7 +73,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="bg-primary px-4 pt-[30px] pb-3 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
         <button
-          className="absolute text-2xl text-white top-2 right-4"
+          className="absolute text-2xl text-white top-2 right-4 "
           onClick={() => {
             document.body.classList.remove("overflow-hidden");
             props.onClose();
@@ -105,11 +105,11 @@ export function ShopCartModal(props: ShopCartModalProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                    className="rounded-[10px] w-[92px] h-[92px]"
+                    className="rounded-b-r-[10px] w-[92px] h-[92px]"
                     alt=""
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                    <h3 className="text-sm">
+                    <h3 className="text-sm w-[90%]">
                       {order.prod_size} {order.prod_name}
                     </h3>
                     <h3 className="text-xs">
@@ -124,6 +124,19 @@ export function ShopCartModal(props: ShopCartModalProps) {
                         </span>
                       </h3>
                     ) : null}
+
+                    {order.prod_multiflavors ? (
+                      <h3 className="text-xs">
+                        Flavor: <br />
+                        <span
+                          className="text-tertiary"
+                          dangerouslySetInnerHTML={{
+                            __html: order.prod_multiflavors,
+                          }}
+                        />
+                      </h3>
+                    ) : null}
+
                     <h3 className="flex items-end justify-end flex-1 text-base">
                       <NumberFormat
                         value={order.prod_calc_amount.toFixed(2)}
@@ -134,7 +147,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                     </h3>
                   </div>
                   <button
-                    className="absolute text-white top-2 right-4"
+                    className="absolute text-white top-2 right-4 "
                     onClick={() => {
                       dispatch(removeItemFromCart(i));
                     }}
