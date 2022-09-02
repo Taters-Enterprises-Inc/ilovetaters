@@ -35,7 +35,7 @@ export const Menus: SidebarItem[] = [
   },
   {
     name: "Raffles",
-    link: "/raffles",
+    link: "",
     icon: FaTicketAlt,
     iconClosed: MdOutlineKeyboardArrowDown,
     iconOpened: MdOutlineKeyboardArrowUp,
@@ -54,7 +54,7 @@ export const Menus: SidebarItem[] = [
   },
   {
     name: "Availability",
-    link: "/availability",
+    link: "",
     icon: MdProductionQuantityLimits,
     iconClosed: MdOutlineKeyboardArrowDown,
     iconOpened: MdOutlineKeyboardArrowUp,
@@ -71,7 +71,7 @@ export const Menus: SidebarItem[] = [
   },
   {
     name: "Settings",
-    link: "/settings",
+    link: "",
     icon: MdOutlineSettings,
     iconClosed: MdOutlineKeyboardArrowDown,
     iconOpened: MdOutlineKeyboardArrowUp,

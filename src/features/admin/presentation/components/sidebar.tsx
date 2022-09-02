@@ -47,7 +47,8 @@ const Sidebar: FC = () => {
         </div>
 
         <div className="relative flex flex-col pb-4 mt-3 text-sm text-white">
-          {Menus?.map((menu, i) => (
+          <Submenu />
+          {/* {Menus?.map((menu, i) => (
             <Link
               to={menu?.link}
               key={i}
@@ -61,18 +62,18 @@ const Sidebar: FC = () => {
                 className={`whitespace-pre duration-300 
                         ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               >
-                {menu?.name}
-              </h2>
-              <Submenu menu={menu} key={i} />
-              {/* <div>
+                {/* {menu?.name} */}
+          {/* </h2>
+              <Submenu menu={menu} key={i} /> */}
+          {/* <div>
                 {menu.subNav && subnav
                   ? menu.iconOpen
                   : menu.subNav
                   ? menu.iconClosed
                   : null}
               </div> */}
-            </Link>
-          ))}
+          {/* </Link>
+          ))} */}
         </div>
       </div>
     </div>
