@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { Menus } from "./sidebardata";
 import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Submenu from "./submenu";
+import Submenu from "./submenu1";
 
 const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
