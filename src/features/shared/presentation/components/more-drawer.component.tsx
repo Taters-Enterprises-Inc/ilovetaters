@@ -123,14 +123,14 @@ export default function MoreDrawer() {
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
-            className="flex flex-col items-center justify-center h-full pt-1"
+            className="flex flex-col items-center justify-center h-full pt-2"
             onClick={
               state[anchor]
                 ? toggleDrawer(anchor, false)
                 : toggleDrawer(anchor, true)
             }
           >
-            <FiMoreHorizontal className="text-[25px] mt-1 sm:text-4xl text-white"></FiMoreHorizontal>
+            <FiMoreHorizontal className="text-[25px] mt-[7.5px] sm:text-4xl text-white"></FiMoreHorizontal>
             <span className="text-[8px] sm:text-[14px] text-white capitalize">
               More
             </span>
