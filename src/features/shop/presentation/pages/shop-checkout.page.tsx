@@ -34,6 +34,9 @@ import InputLabel from "@mui/material/InputLabel";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { IoMdClose } from "react-icons/io";
+import { removeItemFromCart } from "features/shared/presentation/slices/remove-item-from-cart.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -442,7 +445,7 @@ export function ShopCheckout() {
                     {getSessionState.data?.orders.map((order, i) => (
                       <div
                         key={i}
-                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                       >
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
@@ -450,7 +453,7 @@ export function ShopCheckout() {
                           alt=""
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                          <h3 className="text-sm">
+                          <h3 className="text-sm w-[90%]">
                             {order.prod_size} {order.prod_name}
                           </h3>
                           <h3 className="text-xs">
@@ -468,6 +471,18 @@ export function ShopCheckout() {
                               </span>
                             </h3>
                           ) : null}
+
+                          {order.prod_multiflavors ? (
+                            <h3 className="text-xs">
+                              Flavor:
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: order.prod_multiflavors,
+                                }}
+                              />
+                            </h3>
+                          ) : null}
                           <h3 className="flex items-end justify-end flex-1 text-base">
                             <NumberFormat
                               value={order.prod_calc_amount.toFixed(2)}
@@ -477,6 +492,27 @@ export function ShopCheckout() {
                             />
                           </h3>
                         </div>
+                        <button
+                          type="button"
+                          className="absolute text-white top-2 right-4 "
+                          onClick={() => {
+                            if (
+                              getSessionState.data &&
+                              getSessionState.data.orders.length > 1
+                            ) {
+                              dispatch(removeItemFromCart(i));
+                            } else {
+                              dispatch(
+                                popUpSnackBar({
+                                  message: "You cannot delete this item",
+                                  severity: "error",
+                                })
+                              );
+                            }
+                          }}
+                        >
+                          <IoMdClose />
+                        </button>
                       </div>
                     ))}
                   </div>

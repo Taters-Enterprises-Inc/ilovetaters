@@ -54,6 +54,11 @@ import {
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
 import { SnackbarAlert } from "./snackbar-alert";
+import {
+  popOutSnackBar,
+  PopSnackBarState,
+  selectPopSnackBar,
+} from "../slices/pop-snackbar.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -90,6 +95,20 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringState = useAppSelector(
     selectGetStoresAvailableCatering
   );
+  const popSnackBarState = useAppSelector(selectPopSnackBar);
+
+  useEffect(() => {
+    switch (popSnackBarState.status) {
+      case PopSnackBarState.success:
+        if (popSnackBarState.data.severity === "success")
+          showAlert(setSuccessAlert, popSnackBarState.data.message);
+        else if (popSnackBarState.data.severity === "error")
+          showAlert(setFailsAlert, popSnackBarState.data.message);
+
+        dispatch(popOutSnackBar());
+        break;
+    }
+  }, [popSnackBarState, dispatch]);
 
   useEffect(() => {
     switch (getStoresAvailableCateringState.status) {

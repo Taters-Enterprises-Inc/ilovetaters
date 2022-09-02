@@ -43,6 +43,7 @@ import {
   AddToCartShopState,
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -51,6 +52,7 @@ export function ShopProduct() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -69,6 +71,12 @@ export function ShopProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (resetMultiFlavors === true) {
+      setResetMultiFlavors(false);
+    }
+  }, [resetMultiFlavors]);
 
   useEffect(() => {
     if (hash !== undefined) {
@@ -97,7 +105,8 @@ export function ShopProduct() {
       getProductDetailsState.data.product_flavor &&
       getProductDetailsState.data.product_flavor.length > 0 &&
       getProductDetailsState.data.product.product_hash === hash &&
-      currentFlavor === undefined
+      currentFlavor === undefined &&
+      getProductDetailsState.data.product.num_flavor === 1
     ) {
       setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
     }
@@ -121,23 +130,25 @@ export function ShopProduct() {
   }, [addToCartShopState, dispatch]);
 
   const createFlavorDetails = (): string | undefined => {
+    if (currentMultiFlavors === undefined) return undefined;
     const multiFlavorsArray: Array<{
       name: string;
       quantity: number;
     }> = Object.values(currentMultiFlavors);
-    let result: string | undefined;
+    let result: string = "<br/>";
 
     for (let i = 0; i < multiFlavorsArray.length; i++) {
-      result =
-        (result === undefined ? "" : result) +
-        `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
-          multiFlavorsArray[i].name
-        }</span><br/>`;
+      if (multiFlavorsArray[i].quantity > 0)
+        result =
+          (result === undefined ? "" : result) +
+          `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+            multiFlavorsArray[i].name
+          }</span><br/>`;
     }
-    return result;
+    return result === "<br/>" ? undefined : result;
   };
 
-  const handleCheckout = () => {
+  const dispatchAddToCart = (callBackSuccess?: () => void) => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -150,7 +161,23 @@ export function ShopProduct() {
       getProductDetailsState.status === GetProductDetailsState.success &&
       getProductDetailsState.data
     ) {
+      if (
+        getProductDetailsState.data.product.num_flavor > 1 &&
+        totalMultiFlavorsQuantity !==
+          getProductDetailsState.data.product.num_flavor * quantity
+      ) {
+        dispatch(
+          popUpSnackBar({
+            message: "Please meet the required number of flavors.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
       let flavors_details = createFlavorDetails();
+
+      if (callBackSuccess) callBackSuccess();
 
       dispatch(
         addToCartShop({
@@ -170,9 +197,20 @@ export function ShopProduct() {
           prod_sku: -1,
         })
       );
-
-      navigate("/shop/checkout");
     }
+  };
+  const handleCheckout = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    dispatchAddToCart(() => {
+      navigate("/shop/checkout");
+    });
   };
 
   const handleAddToCart = () => {
@@ -184,39 +222,7 @@ export function ShopProduct() {
       return;
     }
 
-    if (
-      getProductDetailsState.status === GetProductDetailsState.success &&
-      getProductDetailsState.data
-    ) {
-      if (
-        getProductDetailsState.data.product.num_flavor > 1 &&
-        totalMultiFlavorsQuantity !==
-          getProductDetailsState.data.product.num_flavor
-      ) {
-        return;
-      }
-
-      let flavors_details = createFlavorDetails();
-      dispatch(
-        addToCartShop({
-          prod_id: getProductDetailsState.data.product.id,
-          prod_image_name: getProductDetailsState.data.product.product_image,
-          prod_name: getProductDetailsState.data.product.name,
-          prod_qty: quantity,
-          prod_flavor:
-            currentMultiFlavors === undefined ? currentFlavor : undefined,
-          prod_size: currentSize,
-          prod_price: getProductDetailsState.data.product.price,
-          prod_calc_amount:
-            getProductDetailsState.data.product.price * quantity,
-          prod_category: getProductDetailsState.data.product.category,
-          prod_with_drinks: -1,
-          flavors_details: flavors_details,
-          prod_sku_id: -1,
-          prod_sku: -1,
-        })
-      );
-    }
+    dispatchAddToCart();
   };
 
   const handleSizeAndFlavorChange = (
@@ -378,6 +384,7 @@ export function ShopProduct() {
                                       {flavor.name}
                                     </span>
                                     <QuantityInput
+                                      reset={resetMultiFlavors}
                                       min={0}
                                       disableAdd={
                                         getProductDetailsState.data.product
@@ -404,10 +411,9 @@ export function ShopProduct() {
                                           };
                                           setCurrentMultiFlavors(temp);
                                         }
-
                                         setTotalMultiFlavorsQuantity(
                                           totalMultiFlavorsQuantity +
-                                            (action === "plus" ? 1 : -1)
+                                            (action === "plus" ? +1 : -1)
                                         );
                                       }}
                                     />
@@ -464,6 +470,16 @@ export function ShopProduct() {
 
                           if (quantity > 1) {
                             setQuantity(quantity - 1);
+
+                            if (
+                              getProductDetailsState.data &&
+                              getProductDetailsState.data?.product.num_flavor >
+                                1
+                            ) {
+                              setCurrentMultiFlavors(undefined);
+                              setTotalMultiFlavorsQuantity(0);
+                              setResetMultiFlavors(true);
+                            }
                           }
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${

@@ -25,14 +25,14 @@ export function ShopCartModal(props: ShopCartModalProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const remoteItemFromCartState = useAppSelector(selectRemoveItemFromCart);
+  const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
 
   useEffect(() => {
-    if (remoteItemFromCartState.status === RemoveItemFromCartState.success) {
+    if (removeItemFromCartState.status === RemoveItemFromCartState.success) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCart());
     }
-  }, [remoteItemFromCartState, dispatch]);
+  }, [removeItemFromCartState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -105,7 +105,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                    className="rounded-b-r-[10px] w-[92px] h-[92px]"
+                    className="rounded-br-[10px] w-[92px] h-[92px]"
                     alt=""
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
@@ -127,7 +127,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
 
                     {order.prod_multiflavors ? (
                       <h3 className="text-xs">
-                        Flavor: <br />
+                        Flavor:
                         <span
                           className="text-tertiary"
                           dangerouslySetInnerHTML={{

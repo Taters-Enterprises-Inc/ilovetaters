@@ -7,6 +7,7 @@ export interface QuantityInputProps {
   min: number;
   max?: number;
   disableAdd?: boolean;
+  reset?: boolean;
   onChange: (quantity: number, action: "minus" | "plus") => void;
 }
 
@@ -15,7 +16,11 @@ export function QuantityInput(props: QuantityInputProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
-  useEffect(() => {}, [quantity, props]);
+  useEffect(() => {
+    if (props.reset && quantity !== 0) {
+      setQuantity(0);
+    }
+  }, [quantity, props]);
 
   return (
     <>

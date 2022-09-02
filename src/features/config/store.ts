@@ -46,6 +46,7 @@ import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
+import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 
 export const store = configureStore({
   reducer: {
@@ -99,6 +100,7 @@ export const store = configureStore({
 
     getCateringProductDetails: getCateringProductDetails,
     addToCartCatering: addToCartCatering,
+    popSnackBar: popSnackBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

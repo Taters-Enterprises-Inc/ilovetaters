@@ -6,8 +6,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
-import { Container } from "react-bootstrap";
-
 export function Franchising() {
   const [serviceReached, setServiceReached] = useState(false);
   const servicesRef = useRef<any>(null);

@@ -24,7 +24,6 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.5.0",
     "react-collapsed": "^3.3.2",
     "react-countdown": "^2.3.2",
     "react-dom": "^18.2.0",
