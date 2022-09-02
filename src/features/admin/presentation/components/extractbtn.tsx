@@ -1,33 +1,32 @@
-// import PropTypes from 'prop-types';
-// import React from 'react';
-
-// const Button = ({ color, text, onClick }) => {
-//     return (
-//     <button
-//         onClick={onClick}
-//         style={{backgroundColor: color}}
-//         className='btn'>
-//         {text}
-//     </button>
-//     )
-// }
-
-// Button.defaultrops = {
-//     color: 'steelblue'
-// }
-
-// Button.propTypes = {
-//     text: PropTypes.string,
-//     color:PropTypes.string,
-//     onClick: PropTypes.func,
-// }
-
-// export default Button
-
+import { EmptyObject } from "@reduxjs/toolkit";
 import React from "react";
 
-const extractbtn = () => {
-  return <div>extractbtn</div>;
+type ExtractDataProps = {
+  type: any;
+  children: any;
+  processing: any;
+  className: any;
 };
 
-export default extractbtn;
+const ExtractBtn: React.FC<ExtractDataProps> = ({
+  className,
+  children,
+  processing,
+}) => {
+  return (
+    <button
+      type="submit"
+      className={
+        `inline-flex items-center px-4 py-2 bg-button border border-transparent rounded-md font-semibold 
+        text-xs text-white uppercase tracking-widest active:bg-button transition ease-in-out duration-150 ${
+          processing && "opacity-25"
+        } ` + className
+      }
+      disabled={processing}
+    >
+      {children}
+    </button>
+  );
+};
+
+export default ExtractBtn;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
+import ExtractBtn from "../components/extractbtn";
 
 export function Admin() {
   return (
