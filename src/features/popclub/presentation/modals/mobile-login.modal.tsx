@@ -23,15 +23,15 @@ export function MobileLoginModal(props: MobileLoginModalProps) {
     return (
         <main style={{ display: props.open ? "flex" : "none" }}
             className="h-screen bg-primary ">
-            <section className="grid h-screen ml-2 mr-2 place-items-center fixed inset-0 bg-secondary bg-opacity-30 backdrop-blur-sm z-30">
+            <section className="fixed inset-0 z-30 grid h-screen ml-2 mr-2 place-items-center bg-secondary bg-opacity-30 backdrop-blur-sm">
                 <div className='bg-secondary max-w-[350px] mx-auto p-6 px-6 
-                    font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>   
+                    font-["Roboto"] text-sm text-center rounded-3xl shadow-md shadow-tertiary'>    
                     <div className="pb-8">
                         <button
-                            className="absolute top-1/5 right-1/3 text-white text-2xl"
-                            onClick={props.onClose}>
-                            <IoMdClose />
-                        </button> 
+                                    className="float-right text-xl text-white mb-1.5"
+                                    onClick={props.onClose}>
+                                <IoMdClose />
+                        </button>                           
                         <ul className="flex items-center justify-evenly">
                             <li className={"flex items-center justify-center w-1/2 pb-2 text-base cursor-pointer border-tertiary hover:border-b-2 hover:border-tertiary hover:text-tertiary"
                                 + (active)}
@@ -57,7 +57,7 @@ export function MobileLoginModal(props: MobileLoginModalProps) {
                                 }}>
                                 <CgProfile className="mr-2"/>
                                 Sign up
-                            </li>
+                            </li> 
                         </ul>
                     </div>
                     
