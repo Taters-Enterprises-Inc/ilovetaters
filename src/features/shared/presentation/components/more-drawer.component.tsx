@@ -16,6 +16,11 @@ import {
 import { MdSell, MdStore } from "react-icons/md";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "features/config/hooks";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 
 type Anchor = "left";
 
@@ -23,6 +28,8 @@ export default function MoreDrawer() {
   const [state, setState] = React.useState({
     left: false,
   });
+
+  const getSessionState = useAppSelector(selectGetSession);
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -80,21 +87,31 @@ export default function MoreDrawer() {
         ].map((item, index) => {
           const { text, icon, path } = item;
           return (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                {icon && (
-                  <Link to={path}>
-                    <ListItemIcon className="text-[25px] sm:text-4xl">
-                      {icon}
-                      <ListItemText
-                        className="ml-3 text-white"
-                        primary={text}
-                      />
-                    </ListItemIcon>
-                  </Link>
-                )}
-              </ListItemButton>
-            </ListItem>
+            <div
+              className={`${
+                getSessionState.data?.userData === null
+                  ? text === "My Account"
+                    ? "hidden"
+                    : null
+                  : null
+              }`}
+            >
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  {icon && (
+                    <Link to={path}>
+                      <ListItemIcon className="text-[25px] sm:text-4xl">
+                        {icon}
+                        <ListItemText
+                          className="ml-3 text-white"
+                          primary={text}
+                        />
+                      </ListItemIcon>
+                    </Link>
+                  )}
+                </ListItemButton>
+              </ListItem>
+            </div>
           );
         })}
       </List>
