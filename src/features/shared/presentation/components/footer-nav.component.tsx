@@ -184,7 +184,7 @@ export function FooterNav(props: FooterNavProps) {
                   </span>
                 </Link>
               </li>
-              <li className="flex-[0.8]">
+              <li className="flex-1">
                 <MoreDrawer />
               </li>
             </ul>
