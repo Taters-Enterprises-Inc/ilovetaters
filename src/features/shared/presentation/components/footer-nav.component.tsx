@@ -118,7 +118,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/shop"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
@@ -141,7 +141,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/catering"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering${
@@ -164,7 +164,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/branches"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-1"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/branches${
@@ -184,7 +184,7 @@ export function FooterNav(props: FooterNavProps) {
                   </span>
                 </Link>
               </li>
-              <li className="flex-[0.8]">
+              <li className="flex-1">
                 <MoreDrawer />
               </li>
             </ul>
