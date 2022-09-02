@@ -6,6 +6,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
+import { Container } from "react-bootstrap";
+
 export function Franchising() {
   const [serviceReached, setServiceReached] = useState(false);
   const servicesRef = useRef<any>(null);
@@ -38,6 +40,7 @@ export function Franchising() {
         }
         alt="The best pop corn in town"
       ></img>
+
       <img
         className="hidden lg:block"
         src={
@@ -47,10 +50,20 @@ export function Franchising() {
         alt="The best pop corn in town"
       ></img>
 
-      <section ref={servicesRef} className="container min-h-min">
-        <section className="container px-4 pt-6 lg:px-0 md:px-8"></section>
+      <div className="vid-container">
+        <iframe
+          className="responsive-iframe"
+          src="https://www.youtube.com/embed/dvAGdCU6TTY?autoplay=1"
+          title="TATERS FRANCHISE"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
 
-        <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center pb-6 '>
+      <section ref={servicesRef} className="container min-h-min">
+        <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
+
+        <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center py-6 '>
           FREQUENTLY ASKED QUESTIONS
         </h1>
         <CustomizedAccordions></CustomizedAccordions>
