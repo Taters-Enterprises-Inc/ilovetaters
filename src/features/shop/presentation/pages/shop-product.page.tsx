@@ -13,11 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { Addon } from "../components/addon";
 import NumberFormat from "react-number-format";
-import {
-  addToCart,
-  AddToCartState,
-  selectAddToCart,
-} from "../slices/add-to-cart.slice";
+
 import {
   getSession,
   selectGetSession,
@@ -38,6 +34,12 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { QuantityInput } from "features/shared/presentation/components";
+import {
+  addToCartShop,
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "../slices/add-to-cart-shop.slice";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -45,12 +47,15 @@ export function ShopProduct() {
   const getProductSkuState = useAppSelector(selectGetProductSku);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
-  const addToCartState = useAppSelector(selectAddToCart);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
 
   const [quantity, setQuantity] = useState(1);
 
-  const [currentSize, setCurrentSize] = useState<number>(-1);
-  const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
+  const [currentSize, setCurrentSize] = useState<number | undefined>();
+  const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
+  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
+  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
+    useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -61,6 +66,39 @@ export function ShopProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (hash !== undefined) {
+      dispatch(getProductDetails({ hash }));
+      dispatch(getSession());
+    }
+  }, [location, dispatch, hash]);
+
+  useEffect(() => {
+    if (
+      getProductDetailsState.status &&
+      getProductDetailsState.data &&
+      getProductDetailsState.data.product_size &&
+      getProductDetailsState.data.product_size.length > 0 &&
+      getProductDetailsState.data.product.product_hash === hash &&
+      currentSize === undefined
+    ) {
+      setCurrentSize(getProductDetailsState.data.product_size[0].id);
+    }
+  }, [getProductDetailsState, currentSize, hash]);
+
+  useEffect(() => {
+    if (
+      getProductDetailsState.status &&
+      getProductDetailsState.data &&
+      getProductDetailsState.data.product_flavor &&
+      getProductDetailsState.data.product_flavor.length > 0 &&
+      getProductDetailsState.data.product.product_hash === hash &&
+      currentFlavor === undefined
+    ) {
+      setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
+    }
+  }, [getProductDetailsState, currentFlavor, hash]);
 
   useEffect(() => {
     if (
@@ -74,17 +112,10 @@ export function ShopProduct() {
   }, [getProductSkuState, dispatch]);
 
   useEffect(() => {
-    if (addToCartState.status === AddToCartState.success) {
+    if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [addToCartState, dispatch]);
-
-  useEffect(() => {
-    if (hash !== undefined) {
-      dispatch(getProductDetails({ hash }));
-      dispatch(getSession());
-    }
-  }, [location, dispatch, hash]);
+  }, [addToCartShopState, dispatch]);
 
   const handleCheckout = () => {
     if (
@@ -100,23 +131,13 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       dispatch(
-        addToCart({
+        addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
+          prod_flavor: currentFlavor,
+          prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
@@ -146,23 +167,14 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       dispatch(
-        addToCart({
+        addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
           prod_flavor:
-            currentFlavor === -1
-              ? getProductDetailsState.data.product_flavor[0]
-                ? getProductDetailsState.data.product_flavor[0].id
-                : -1
-              : currentFlavor,
-          prod_size:
-            currentSize === -1
-              ? getProductDetailsState.data.product_size[0]
-                ? getProductDetailsState.data.product_size[0].id
-                : -1
-              : currentSize,
+            currentMultiFlavors === undefined ? currentFlavor : undefined,
+          prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
@@ -176,25 +188,15 @@ export function ShopProduct() {
     }
   };
 
-  const handleSizeAndFlavorChange = (size: number, flavor: number) => {
+  const handleSizeAndFlavorChange = (
+    size: number | undefined,
+    flavor: number | undefined
+  ) => {
     if (getProductDetailsState.data) {
-      flavor =
-        flavor === -1
-          ? getProductDetailsState.data.product_flavor[0]
-            ? getProductDetailsState.data.product_flavor[0].id
-            : -1
-          : flavor;
-      size =
-        size === -1
-          ? getProductDetailsState.data.product_size[0]
-            ? getProductDetailsState.data.product_size[0].id
-            : -1
-          : size;
-
       dispatch(
         getProductSku({
-          prod_flavor: flavor,
-          prod_size: size,
+          prod_flavor: flavor ? flavor : -1,
+          prod_size: size ? size : -1,
         })
       );
     }
@@ -301,11 +303,7 @@ export function ShopProduct() {
                               <Radio
                                 id={size.id.toString()}
                                 color="tertiary"
-                                checked={
-                                  currentSize === -1 && i === 0
-                                    ? true
-                                    : size.id === currentSize
-                                }
+                                checked={size.id === currentSize}
                                 onChange={() => {
                                   setCurrentSize(size.id);
                                   handleSizeAndFlavorChange(
@@ -328,42 +326,86 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
-                {getProductDetailsState.data?.product_flavor &&
-                getProductDetailsState.data?.product_flavor.length > 0 ? (
+                {getProductDetailsState.data &&
+                getProductDetailsState.data.product_flavor &&
+                getProductDetailsState.data.product &&
+                getProductDetailsState.data.product_flavor.length > 0 ? (
                   <div>
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Flavor
                     </h2>
-
                     <ul>
-                      {getProductDetailsState.data?.product_flavor.map(
+                      {getProductDetailsState.data.product_flavor.map(
                         (flavor, i) => {
-                          return (
-                            <li key={i} className="flex items-center">
-                              <Radio
-                                id={flavor.id.toString()}
-                                color="tertiary"
-                                checked={
-                                  currentFlavor === -1 && i === 0
-                                    ? true
-                                    : flavor.id === currentFlavor
-                                }
-                                onChange={() => {
-                                  setCurrentFlavor(flavor.id);
-                                  handleSizeAndFlavorChange(
-                                    currentSize,
-                                    flavor.id
-                                  );
-                                }}
-                              />
-                              <label
-                                htmlFor={flavor.id.toString()}
-                                className="text-white"
-                              >
-                                {flavor.name}
-                              </label>
-                            </li>
-                          );
+                          if (getProductDetailsState.data) {
+                            return (
+                              <>
+                                {getProductDetailsState.data.product
+                                  .num_flavor > 1 ? (
+                                  <li key={i}>
+                                    <span className="text-sm text-white">
+                                      {flavor.name}
+                                    </span>
+                                    <QuantityInput
+                                      min={0}
+                                      disableAdd={
+                                        getProductDetailsState.data.product
+                                          .num_flavor *
+                                          quantity -
+                                          totalMultiFlavorsQuantity ===
+                                        0
+                                      }
+                                      onChange={(val) => {
+                                        if (currentMultiFlavors) {
+                                          currentMultiFlavors[flavor.id] = {
+                                            id: flavor.id,
+                                            quantity: val,
+                                          };
+
+                                          setCurrentMultiFlavors(
+                                            currentMultiFlavors
+                                          );
+                                        } else {
+                                          const temp: any = {};
+                                          temp[flavor.id] = {
+                                            id: flavor.id,
+                                            quantity: val,
+                                          };
+                                          setCurrentMultiFlavors(temp);
+                                        }
+                                        setTotalMultiFlavorsQuantity(
+                                          totalMultiFlavorsQuantity + 1
+                                        );
+                                      }}
+                                    />
+                                  </li>
+                                ) : (
+                                  <li key={i} className="flex items-center">
+                                    <Radio
+                                      id={flavor.id.toString()}
+                                      color="tertiary"
+                                      checked={flavor.id === currentFlavor}
+                                      onChange={() => {
+                                        setCurrentFlavor(flavor.id);
+                                        handleSizeAndFlavorChange(
+                                          currentSize,
+                                          flavor.id
+                                        );
+                                      }}
+                                    />
+                                    <label
+                                      htmlFor={flavor.id.toString()}
+                                      className="text-white"
+                                    >
+                                      {flavor.name}
+                                    </label>
+                                  </li>
+                                )}
+                              </>
+                            );
+                          }
+
+                          return null;
                         }
                       )}
                     </ul>
@@ -379,8 +421,17 @@ export function ShopProduct() {
                     <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
                         onClick={() => {
-                          if (quantity > 1 && quantity <= 10)
+                          if (
+                            getSessionState.data?.userData == null ||
+                            getSessionState.data?.userData === undefined
+                          ) {
+                            setOpenLoginChooserModal(true);
+                            return;
+                          }
+
+                          if (quantity > 1) {
                             setQuantity(quantity - 1);
+                          }
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                           quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
@@ -395,6 +446,14 @@ export function ShopProduct() {
                         value={quantity}
                         readOnly
                         onChange={(event: any) => {
+                          if (
+                            getSessionState.data?.userData == null ||
+                            getSessionState.data?.userData === undefined
+                          ) {
+                            setOpenLoginChooserModal(true);
+                            return;
+                          }
+
                           const value = event.target.value;
                           if (value >= 1 && value <= 10)
                             setQuantity(Math.floor(event.target.value));
@@ -408,6 +467,14 @@ export function ShopProduct() {
 
                       <button
                         onClick={() => {
+                          if (
+                            getSessionState.data?.userData == null ||
+                            getSessionState.data?.userData === undefined
+                          ) {
+                            setOpenLoginChooserModal(true);
+                            return;
+                          }
+
                           if (quantity >= 1 && quantity < 10)
                             setQuantity(quantity + 1);
                         }}

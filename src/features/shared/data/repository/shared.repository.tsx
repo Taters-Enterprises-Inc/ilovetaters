@@ -99,7 +99,6 @@ export interface UpdateContactResponse {
     message: string;
   };
 }
-
 export function UpdateContactRepository(
   param: UpdateContactParam
 ): Promise<UpdateContactResponse> {

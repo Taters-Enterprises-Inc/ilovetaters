@@ -54,7 +54,23 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: rgb(19, 1, 1) !important;
+  -webkit-text-fill-color: rgb(255, 255, 255) !important;
+}
+
+input.autolog:-webkit-autofill,
+input.autolog:-webkit-autofill:hover,
+input.autolog:-webkit-autofill:focus,
+input.autolog:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: rgb(0, 0, 0) !important;
+}
+
+input.autolog {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline: none;
+  width: 345px;
 }
 
 input::-webkit-outer-spin-button,

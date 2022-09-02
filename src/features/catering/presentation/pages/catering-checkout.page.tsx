@@ -1,97 +1,34 @@
-import { Link, useLocation } from "react-router-dom";
-import { MdDeliveryDining } from "react-icons/md";
-import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { PaymentAccordion } from "../components/payment-accordion";
-import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import Select from "@mui/material/Select";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import NumberFormat from "react-number-format";
-import { BiUserCircle } from "react-icons/bi";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
-import {
-  checkoutOrders,
-  CheckoutOrdersState,
-  resetCheckoutOrders,
-  selectCheckoutOrders,
-} from "../slices/checkout-orders.slice";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { AddContactModal } from "features/shared/presentation/modals";
-import {
-  getContacts,
-  selectGetContacts,
-} from "features/shared/presentation/slices/get-contacts.slice";
-import MenuItem from "@mui/material/MenuItem";
+import { BiUserCircle } from "react-icons/bi";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import TextField from "@mui/material/TextField";
+import { selectGetContacts } from "features/shared/presentation/slices/get-contacts.slice";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
-import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import MenuItem from "@mui/material/MenuItem";
+import PhoneInput from "react-phone-input-2";
+import Select from "@mui/material/Select";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
+import { MdDeliveryDining } from "react-icons/md";
+import Checkbox from "@mui/material/Checkbox";
+import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { AddContactModal } from "features/shared/presentation/modals";
+import NumberFormat from "react-number-format";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
-export function ShopCheckout() {
+export function CateringCheckout() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const location = useLocation();
-  const phoneNumberRef = useRef(null);
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
 
-  const getContactsState = useAppSelector(selectGetContacts);
-  const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
-  const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+  const getContactsState = useAppSelector(selectGetContacts);
 
-  useEffect(() => {
-    if (
-      checkoutOrdersState.status === CheckoutOrdersState.success &&
-      checkoutOrdersState.data
-    ) {
-      navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
-      dispatch(resetCheckoutOrders());
-    }
-  }, [checkoutOrdersState, dispatch, navigate]);
-
-  useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
-  }, [addContactState, dispatch]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  }, [location]);
-
-  const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const responseBody: any = {};
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    formData.forEach(
-      (value, property: string) => (responseBody[property] = value)
-    );
-    if (
-      (responseBody.phoneNumber.match(/63/) &&
-        responseBody.phoneNumber.length === 15) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 14) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 11)
-    ) {
-      dispatch(checkoutOrders(responseBody));
-    } else {
-      const phoneNumber: any = phoneNumberRef.current;
-
-      if (phoneNumber) {
-        phoneNumber.focus();
-      }
-    }
-  };
+  const phoneNumberRef = useRef(null);
 
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
@@ -172,16 +109,18 @@ export function ShopCheckout() {
       );
     }
   };
+  const handleCheckout = () => {};
+
   return (
     <>
       <PageTitleAndBreadCrumbs
         home={{
-          title: "Snackshop",
-          url: "/shop",
+          title: "Catering",
+          url: "/catering",
         }}
         title="Checkout"
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/catering/products" },
           { name: "Checkout" },
         ]}
       />
@@ -342,73 +281,93 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                <TextField
-                  aria-readonly
-                  value={getSessionState.data?.customer_address}
-                  variant="outlined"
-                  className="w-full"
-                  name="address"
-                  autoComplete="off"
-                />
-                {getSessionState.data?.cache_data ? (
-                  <>
-                    <div className="mt-4 text-white lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Handling Method
-                      </h2>
+                <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
+                  <div className="flex-1 space-y-2">
+                    <span className="text-base text-white">
+                      Event Start Date Time
+                    </span>
 
-                      <ul className="mt-2 space-y-1">
-                        <li className="flex items-center space-x-2">
-                          <MdDeliveryDining className="text-2xl text-tertiary" />
-                          <h3 className="text-sm">Delivery</h3>
-                        </li>
-                        <li className="flex items-start space-x-3">
-                          <FaStore className="text-lg text-tertiary" />
-                          <h3 className="text-sm">
-                            Store: {getSessionState.data.cache_data.store_name}
-                          </h3>
-                        </li>
-                        <li className="flex items-start space-x-3 ">
-                          <FaMapMarkerAlt className="text-lg text-tertiary" />
-                          <h3 className="flex-1 text-sm">
-                            Store Address:{" "}
-                            {getSessionState.data.cache_data.store_address}
-                          </h3>
-                        </li>
-                      </ul>
-                    </div>
+                    <TextField
+                      aria-readonly
+                      variant="outlined"
+                      className="w-full"
+                      name="event_start_date_time"
+                      autoComplete="off"
+                    />
+                  </div>
 
-                    <div className="mt-4 text-white lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Note:
-                      </h2>
-                      <ul
-                        className="mt-2 space-y-2 text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: getSessionState.data.cache_data?.moh_notes
-                            ? getSessionState.data.cache_data.moh_notes
-                            : "",
-                        }}
-                      />
-                    </div>
-                  </>
-                ) : null}
+                  <div className="flex-1 space-y-2">
+                    <span className="text-base text-white">
+                      Event End Date Time
+                    </span>
+
+                    <TextField
+                      aria-readonly
+                      variant="outlined"
+                      className="w-full"
+                      name="event_end_date_time"
+                      autoComplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">Serving Time</span>
+
+                  <TextField
+                    aria-readonly
+                    variant="outlined"
+                    className="w-full"
+                    name="serving_time"
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">
+                    Other event details or requests (optional)
+                  </span>
+
+                  <TextField
+                    aria-readonly
+                    variant="outlined"
+                    className="w-full"
+                    name="other_details"
+                    autoComplete="off"
+                    multiline
+                    rows={4}
+                    maxRows={5}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-base text-white">Event Address</span>
+
+                  <TextField
+                    aria-readonly
+                    value={getSessionState.data?.customer_address}
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                </div>
 
                 <div className="mt-4 text-white lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentAccordion />
+                  <CateringPaymentAccordion />
                 </div>
 
                 <div className="flex items-center justify-start space-x-1 text-sm text-white lg:text-base">
                   <Checkbox color="tertiary" required />
-                  <span>I agree with the </span>
+                  <span>I have read the full </span>
                   <Link
                     to="/shop/terms-and-conditions"
                     className="text-tertiary"
                   >
-                    Terms & Conditions
+                    Catering FAQs
                   </Link>
                 </div>
 
@@ -427,19 +386,18 @@ export function ShopCheckout() {
                     type="submit"
                     className="bg-[#CC5801] text-white py-3 w-full uppercase border rounded-xl mt-4 order-1 lg:order-2"
                   >
-                    Checkout
+                    Initial Checkout
                   </button>
                 </div>
               </div>
 
-              {getSessionState.data?.orders ? (
-                <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
-                  <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
-                    Order Summary
-                  </h2>
+              <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
+                <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+                  Order Summary
+                </h2>
 
-                  <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                    {getSessionState.data?.orders.map((order, i) => (
+                <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                  {/* {getSessionState.data?.orders.map((order, i) => (
                       <div
                         key={i}
                         className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
@@ -478,24 +436,25 @@ export function ShopCheckout() {
                           </h3>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  <hr className="mt-1 mb-2" />
-                  <div className="grid grid-cols-2 text-white">
-                    <span>Subtotal:</span>
-                    <span className="text-end">{calculateSubTotalPrice()}</span>
-                    <span>Delivery Fee:</span>
-                    <span className="text-end">{calculateDeliveryFee()}</span>
-                    <span>Discount:</span>
-                    <span className="text-end">( ₱ 0.00 )</span>
-                  </div>
-
-                  <h1 className="text-4xl text-center text-white">
-                    {calculateTotalPrice()}
-                  </h1>
+                    ))} */}
                 </div>
-              ) : null}
+
+                <hr className="mt-1 mb-2" />
+                <div className="grid grid-cols-2 text-white">
+                  <span>Subtotal:</span>
+                  <span className="text-end">{calculateSubTotalPrice()}</span>
+                  <span>10% Service Charge:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Transportation Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Additional Hour Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                  <span>Night Differential Fee:</span>
+                  <span className="text-end">₱0.00</span>
+                </div>
+
+                <h1 className="text-4xl text-center text-white">₱0.00</h1>
+              </div>
             </form>
           </div>
         </div>

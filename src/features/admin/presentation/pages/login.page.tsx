@@ -29,7 +29,7 @@ export function Login() {
                   type="text"
                   name="email"
                   placeholder="Email"
-                  className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
+                  className="autolog"
                 ></input>
               </div>
               <div className="flex items-center w-full mt-4 bg-gray-100 p2 rounded-2xl">
