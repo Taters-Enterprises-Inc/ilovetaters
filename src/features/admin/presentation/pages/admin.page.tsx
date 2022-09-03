@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
-import ExtractBtn from "../components/extractbtn";
+import { ExtractBtn } from "../components/extractbtn";
 
 export function Admin() {
   return (
@@ -14,7 +14,10 @@ export function Admin() {
         <Head />
 
         {/* change page info here */}
-        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Orders</h1>
+        <div className="relative flex">
+          <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Orders</h1>
+          <ExtractBtn></ExtractBtn>
+        </div>
       </div>
     </div>
   );

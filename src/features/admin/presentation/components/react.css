@@ -22,7 +22,7 @@
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.85rem;
   width: 100%;
 }
 .side-navigation-panel
@@ -104,7 +104,7 @@
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  padding: 0.1rem 2rem;
+  padding: 0.3rem 2rem;
 }
 
 /* sub nav items hover color */
@@ -141,7 +141,7 @@
   .side-navigation-panel-select-inner-option-text {
   font-size: 0.875rem;
   line-height: 1.25rem;
-  margin-left: 0.65rem;
+  margin-left: 1.1rem;
   margin-right: 0.75rem;
 }
 

@@ -1,32 +1,15 @@
+import { ClassNames } from "@emotion/react";
 import { EmptyObject } from "@reduxjs/toolkit";
 import React from "react";
+import { RiFileExcel2Line } from "react-icons/ri";
 
-type ExtractDataProps = {
-  type: any;
-  children: any;
-  processing: any;
-  className: any;
-};
-
-const ExtractBtn: React.FC<ExtractDataProps> = ({
-  className,
-  children,
-  processing,
-}) => {
+export function ExtractBtn() {
   return (
-    <button
-      type="submit"
-      className={
-        `inline-flex items-center px-4 py-2 bg-button border border-transparent rounded-md font-semibold 
-        text-xs text-white uppercase tracking-widest active:bg-button transition ease-in-out duration-150 ${
-          processing && "opacity-25"
-        } ` + className
-      }
-      disabled={processing}
-    >
-      {children}
-    </button>
+    <div>
+      <button className="inline-flex items-center px-2 py-1 mt-5 ml-8 bg-white rounded-md font-700 text-secondary hover:bg-gray-300">
+        <RiFileExcel2Line size={20} className="text-green-600" />
+        <span>&nbsp;Extract Data</span>
+      </button>
+    </div>
   );
-};
-
-export default ExtractBtn;
+}
