@@ -10,33 +10,34 @@ import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
 import { useNavigate } from "react-router-dom";
 import {
-  removeItemFromCartShop,
-  RemoveItemFromCartShopState,
-  resetRemoveItemFromCartShop,
-  selectRemoveItemFromCartShop,
-} from "../slices/remove-item-from-cart-shop.slice";
+  removeItemFromCartCatering,
+  RemoveItemFromCartCateringState,
+  resetRemoveItemFromCartCatering,
+  selectRemoveItemFromCartCatering,
+} from "../slices/remove-item-from-cart-catering.slice";
 
-interface ShopCartModalProps {
+interface CateringCartModalProps {
   open: boolean;
   onClose: any;
 }
 
-export function ShopCartModal(props: ShopCartModalProps) {
+export function CateringCartModal(props: CateringCartModalProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const removeItemFromCartShopState = useAppSelector(
-    selectRemoveItemFromCartShop
+  const removeItemFromCartCateringState = useAppSelector(
+    selectRemoveItemFromCartCatering
   );
 
   useEffect(() => {
     if (
-      removeItemFromCartShopState.status === RemoveItemFromCartShopState.success
+      removeItemFromCartCateringState.status ===
+      RemoveItemFromCartCateringState.success
     ) {
       dispatch(getSession());
-      dispatch(resetRemoveItemFromCartShop());
+      dispatch(resetRemoveItemFromCartCatering());
     }
-  }, [removeItemFromCartShopState, dispatch]);
+  }, [removeItemFromCartCateringState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -108,7 +109,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                 >
                   <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${order.prod_image_name}`}
                     className="rounded-br-[10px] w-[92px] h-[92px]"
                     alt=""
                   />
@@ -153,7 +154,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   <button
                     className="absolute text-white top-2 right-4 "
                     onClick={() => {
-                      dispatch(removeItemFromCartShop(i));
+                      dispatch(removeItemFromCartCatering(i));
                     }}
                   >
                     <IoMdClose />

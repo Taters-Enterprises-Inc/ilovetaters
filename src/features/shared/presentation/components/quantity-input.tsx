@@ -6,7 +6,7 @@ import { LoginChooserModal } from "features/popclub/presentation/modals/login-ch
 export interface QuantityInputProps {
   min: number;
   max?: number;
-  disableAdd?: boolean;
+  disableAdd: boolean;
   reset?: boolean;
   onChange: (quantity: number, action: "minus" | "plus") => void;
 }

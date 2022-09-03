@@ -199,31 +199,6 @@ export function ShopProduct() {
       );
     }
   };
-  const handleCheckout = () => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
-
-    dispatchAddToCart(() => {
-      navigate("/shop/checkout");
-    });
-  };
-
-  const handleAddToCart = () => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
-
-    dispatchAddToCart();
-  };
 
   const handleSizeAndFlavorChange = (
     size: number | undefined,
@@ -554,7 +529,11 @@ export function ShopProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={handleCheckout}
+                    onClick={() => {
+                      dispatchAddToCart(() => {
+                        navigate("/shop/checkout");
+                      });
+                    }}
                     className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
@@ -564,7 +543,9 @@ export function ShopProduct() {
                   </button>
 
                   <button
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      dispatchAddToCart();
+                    }}
                     className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />

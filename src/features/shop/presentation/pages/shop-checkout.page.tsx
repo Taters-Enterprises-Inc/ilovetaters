@@ -35,7 +35,7 @@ import { selectAddContact } from "features/shared/presentation/slices/add-contac
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
-import { removeItemFromCart } from "features/shared/presentation/slices/remove-item-from-cart.slice";
+import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export function ShopCheckout() {
@@ -500,7 +500,7 @@ export function ShopCheckout() {
                               getSessionState.data &&
                               getSessionState.data.orders.length > 1
                             ) {
-                              dispatch(removeItemFromCart(i));
+                              dispatch(removeItemFromCartShop(i));
                             } else {
                               dispatch(
                                 popUpSnackBar({

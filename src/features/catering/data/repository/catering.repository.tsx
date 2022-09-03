@@ -28,10 +28,30 @@ export interface AddToCartCateringResponse {
   };
 }
 
+export interface RemoveItemFromCartCateringResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function RemoveItemFromCartCateringRepository(
+  param: number
+): Promise<RemoveItemFromCartCateringResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/cart/catering?item-index=${param}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function AddToCartCateringRepository(
   param: AddToCartCateringParam
 ): Promise<AddToCartCateringResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart/catering`, param, {
     headers: {
       "Content-Type": "application/json",
     },

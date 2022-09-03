@@ -31,7 +31,7 @@ import storeReset from "../shared/presentation/slices/store-reset.slice";
 
 import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
-import removeItemFromCart from "../shared/presentation/slices/remove-item-from-cart.slice";
+import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
 
 import addContact from "../shared/presentation/slices/add-contact.slice";
@@ -46,6 +46,7 @@ import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
+import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 
 export const store = configureStore({
@@ -91,7 +92,7 @@ export const store = configureStore({
 
     getCateringCategoryProducts: getCateringCategoryProducts,
     getProductSku: getProductSku,
-    removeItemFromCart: removeItemFromCart,
+    removeItemFromCartShop: removeItemFromCartShop,
     uploadProofOfPayment: uploadProofOfPayment,
     addContact: addContact,
     updateContact: updateContact,
@@ -100,6 +101,7 @@ export const store = configureStore({
 
     getCateringProductDetails: getCateringProductDetails,
     addToCartCatering: addToCartCatering,
+    removeItemFromCartCatering: removeItemFromCartCatering,
     popSnackBar: popSnackBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

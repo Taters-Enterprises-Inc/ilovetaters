@@ -64,12 +64,6 @@ export interface StoreResetResponse {
   };
 }
 
-export interface RemoveItemFromCartResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface UploadProofOfPaymentResponse {
   data: {
     message: string;
@@ -161,17 +155,6 @@ export function UploadProofOfPaymentRepository(
       withCredentials: true,
     }
   );
-}
-
-export function RemoveItemFromCartRepository(
-  param: number
-): Promise<RemoveItemFromCartResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/cart/delete/${param}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
 }
 
 export function StoreResetRepository(): Promise<StoreResetResponse> {

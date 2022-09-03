@@ -67,10 +67,30 @@ export interface AddToCartShopResponse {
   };
 }
 
+export interface RemoveItemFromCartShopResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function RemoveItemFromCartShopRepository(
+  param: number
+): Promise<RemoveItemFromCartShopResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/cart/shop?item-index=${param}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function AddToCartShopRepository(
   param: AddToCartShopParam
 ): Promise<AddToCartShopResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart/shop`, param, {
     headers: {
       "Content-Type": "application/json",
     },
