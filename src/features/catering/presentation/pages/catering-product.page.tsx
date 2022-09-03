@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  changeCateringProductPrice,
   getCateringProductDetails,
   GetCateringProductDetailsState,
   selectGetCateringProductDetails,
@@ -20,7 +21,6 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import NumberFormat from "react-number-format";
-import { QuantityInput } from "features/shared/presentation/components";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
 import { Addon } from "features/shop/presentation/components/addon";
@@ -32,6 +32,7 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "../slices/add-to-cart-catering.slice";
+import { changeProductPrice } from "features/shop/presentation/slices/get-product-details.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -82,6 +83,23 @@ export function CateringProduct() {
       dispatch(getSession());
     }
   }, [addToCartCateringState, dispatch]);
+
+  const checkBaseProduct = (updatedQuantity: number) => {
+    if (
+      getCateringProductDetailsState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success
+    ) {
+      const productPrices = getCateringProductDetailsState.data.product_prices;
+      for (let i = 0; i < productPrices.length; i++) {
+        if (productPrices[i].min_qty <= updatedQuantity) {
+          dispatch(
+            changeCateringProductPrice({ price: productPrices[i].price })
+          );
+        }
+      }
+    }
+  };
 
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
@@ -253,6 +271,7 @@ export function CateringProduct() {
                             }
 
                             if (quantity > 1) {
+                              checkBaseProduct(quantity - 1);
                               setQuantity(quantity - 1);
                               setCurrentMultiFlavors(undefined);
                               setResetMultiFlavors(true);
@@ -302,8 +321,10 @@ export function CateringProduct() {
                               return;
                             }
 
-                            if (quantity >= 1 && quantity < 10)
+                            if (quantity >= 1) {
+                              checkBaseProduct(quantity + 1);
                               setQuantity(quantity + 1);
+                            }
                           }}
                           className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
                             quantity === 10
@@ -317,10 +338,20 @@ export function CateringProduct() {
                         </button>
                       </div>
                     </div>
-
-                    <span className="text-base text-white">
-                      base price: ₱ 315.00 x (21)
-                    </span>
+                    {getCateringProductDetailsState.data ? (
+                      <span className="text-base text-white">
+                        base price:{" "}
+                        <NumberFormat
+                          value={getCateringProductDetailsState.data.product.price.toFixed(
+                            2
+                          )}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />{" "}
+                        x ({quantity})
+                      </span>
+                    ) : null}
                   </div>
 
                   {getCateringProductDetailsState.data?.product.price ? (
@@ -373,7 +404,7 @@ export function CateringProduct() {
                   <button
                     onClick={() => {
                       dispatchAddToCartCatering(() => {
-                        navigate("/shop/checkout");
+                        navigate("/catering/checkout");
                       });
                     }}
                     className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"

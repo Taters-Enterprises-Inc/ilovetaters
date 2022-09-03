@@ -231,7 +231,7 @@ export function ShopCheckout() {
           <div className="container">
             <form
               onSubmit={handleCheckout}
-              className="bg-primary py-6 lg:shadow-[#540808] lg:shadow-md w-full lg:rounded-[30px] mb-10 lg:p-10 flex justify-between flex-col lg:flex-row"
+              className="flex flex-col justify-between w-full py-6 mb-10 bg-primary lg:flex-row"
             >
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (

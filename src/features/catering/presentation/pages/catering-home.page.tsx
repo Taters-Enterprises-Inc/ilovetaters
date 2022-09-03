@@ -29,10 +29,10 @@ export function CateringHome() {
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
 
-  const [eventStartDate, setEventStartDate] = useState<Date | null>(
+  const [eventStartDate, setEventStartDate] = useState<Date>(
     moment().add(14, "days").toDate()
   );
-  const [eventEndDate, setEventEndDate] = useState<Date | null>(
+  const [eventEndDate, setEventEndDate] = useState<Date>(
     moment().add(14, "days").add(3, "hours").toDate()
   );
 
@@ -123,8 +123,10 @@ export function CateringHome() {
                 )}
                 value={eventStartDate}
                 onChange={(newValue) => {
-                  setEventStartDate(newValue);
-                  setEventEndDate(moment(newValue).add(3, "hours").toDate());
+                  if (newValue) {
+                    setEventStartDate(newValue);
+                    setEventEndDate(moment(newValue).add(3, "hours").toDate());
+                  }
                 }}
               />
 
@@ -151,7 +153,7 @@ export function CateringHome() {
                 )}
                 value={eventEndDate}
                 onChange={(newValue) => {
-                  setEventEndDate(newValue);
+                  if (newValue) setEventEndDate(newValue);
                 }}
               />
             </div>
@@ -169,11 +171,15 @@ export function CateringHome() {
 
           <CateringStoreList
             onClickStore={(storeId: number, regionId: number) => {
+              console.log(eventEndDate, eventStartDate);
+
               dispatch(
                 setStoreAndAddress({
                   address,
                   storeId,
                   regionId,
+                  cateringEndDate: eventEndDate,
+                  cateringStartDate: eventStartDate,
                 })
               );
             }}

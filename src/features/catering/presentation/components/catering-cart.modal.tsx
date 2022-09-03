@@ -176,7 +176,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
               <button
                 onClick={() => {
                   props.onClose();
-                  navigate("/shop/checkout");
+                  navigate("/catering/checkout");
                 }}
                 className="w-full py-2 text-lg text-white rounded-lg bg-button"
               >

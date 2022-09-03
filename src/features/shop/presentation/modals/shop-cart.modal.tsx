@@ -18,7 +18,7 @@ import {
 
 interface ShopCartModalProps {
   open: boolean;
-  onClose: any;
+  onClose: () => void;
 }
 
 export function ShopCartModal(props: ShopCartModalProps) {
