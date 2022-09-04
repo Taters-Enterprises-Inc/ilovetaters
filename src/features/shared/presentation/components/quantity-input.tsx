@@ -60,7 +60,6 @@ export function QuantityInput(props: QuantityInputProps) {
             type="number"
             readOnly
             className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-            name="custom-input-number"
           />
 
           <button

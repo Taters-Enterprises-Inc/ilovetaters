@@ -27,7 +27,7 @@ export function CateringFlavors(props: CateringFlavorsProps) {
   }, [totalMultiFlavorsQuantity, props]);
 
   return (
-    <>
+    <div>
       <span className="text-white text-2xl tracking-[3px] font-['Bebas_Neue']">
         {props.parent_name}
       </span>
@@ -38,9 +38,8 @@ export function CateringFlavors(props: CateringFlavorsProps) {
             <CateringFlavorQuantity
               min={0}
               reset={props.resetFlavorsQuantity}
-              disableAdd={
-                props.productQuantity - totalMultiFlavorsQuantity <= 0
-              }
+              productQuantity={props.productQuantity}
+              totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
               onChange={(flavorQuantity, action) => {
                 if (props.currentMultiFlavors) {
                   props.currentMultiFlavors[flavor.id] = {
@@ -66,6 +65,6 @@ export function CateringFlavors(props: CateringFlavorsProps) {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

@@ -6,7 +6,7 @@ import { selectGetSession } from "features/shared/presentation/slices/get-sessio
 import { useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCartShop } from "../slices/add-to-cart-shop.slice";
+import { addToCartShop } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }

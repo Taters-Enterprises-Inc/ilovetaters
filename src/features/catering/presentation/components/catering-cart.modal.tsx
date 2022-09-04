@@ -109,7 +109,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
                   className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                 >
                   <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${order.prod_image_name}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                     className="rounded-br-[10px] w-[92px] h-[92px]"
                     alt=""
                   />

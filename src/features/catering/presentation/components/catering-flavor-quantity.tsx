@@ -1,11 +1,12 @@
-import { LongPressQuantityInput } from "features/shared/presentation/components";
 import { useEffect, useState } from "react";
+import { CateringLongPressQuantityInput } from "./catering-long-press-quantity-input";
 
 export interface CateringFlavorQuantityProps {
   min: number;
   max?: number;
-  disableAdd: boolean;
   reset?: boolean;
+  productQuantity: number;
+  totalMultiFlavorsQuantity: number;
   onChange: (quantity: number, action: "minus" | "plus") => void;
 }
 
@@ -20,15 +21,16 @@ export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
 
   return (
     <>
-      <LongPressQuantityInput
+      <CateringLongPressQuantityInput
         min={props.min}
         max={props.max}
+        productQuantity={props.productQuantity}
+        totalMultiFlavorsQuantity={props.totalMultiFlavorsQuantity}
         quantity={quantity}
-        disableAdd={props.disableAdd}
         onChange={(action) => {
           switch (action) {
             case "plus":
-              if (props.disableAdd === false) {
+              if (props.productQuantity - props.totalMultiFlavorsQuantity > 0) {
                 props.onChange(quantity + 1, action);
                 setQuantity((value) => value + 1);
               }

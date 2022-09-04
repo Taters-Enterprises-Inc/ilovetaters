@@ -6,15 +6,11 @@ import {
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "features/popclub/presentation/slices/get-all-platform.slice";
+import { selectGetAllPlatform } from "features/popclub/presentation/slices/get-all-platform.slice";
 import MoreDrawer from "./more-drawer.component";
 
 interface FooterNavProps {

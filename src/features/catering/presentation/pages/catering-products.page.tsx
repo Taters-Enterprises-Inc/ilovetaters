@@ -89,7 +89,7 @@ export function CateringProducts() {
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
                 >
                   <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${product.image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />

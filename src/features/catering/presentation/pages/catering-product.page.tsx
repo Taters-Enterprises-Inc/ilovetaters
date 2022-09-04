@@ -23,7 +23,6 @@ import "swiper/css";
 import NumberFormat from "react-number-format";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
-import { Addon } from "features/shop/presentation/components/addon";
 import {
   CateringAddon,
   CateringFlavors,
@@ -36,7 +35,12 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "../slices/add-to-cart-catering.slice";
-import { changeProductPrice } from "features/shop/presentation/slices/get-product-details.slice";
+import { Addon } from "features/shared/presentation/components";
+import {
+  addToCartShop,
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "features/shop/presentation/slices/add-to-cart-shop.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -58,6 +62,7 @@ export function CateringProduct() {
   );
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
@@ -87,6 +92,12 @@ export function CateringProduct() {
       dispatch(getSession());
     }
   }, [addToCartCateringState, dispatch]);
+
+  useEffect(() => {
+    if (addToCartShopState.status === AddToCartShopState.success) {
+      dispatch(getSession());
+    }
+  }, [addToCartShopState, dispatch]);
 
   const checkBaseProduct = (updatedQuantity: number) => {
     if (
@@ -174,6 +185,8 @@ export function CateringProduct() {
         GetCateringProductDetailsState.success &&
       getCateringProductDetailsState.data
     ) {
+      console.log(totalMultiFlavorsQuantity, quantity);
+
       if (
         totalMultiFlavorsQuantity !==
         quantity * getCateringProductDetailsState.data?.product_flavor.length
@@ -240,7 +253,7 @@ export function CateringProduct() {
                     (name) => (
                       <SwiperSlide>
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${name}.jpg`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
                           className="lg:rounded-[20px] w-full h-full object-cover"
                           alt=""
                         />
@@ -250,7 +263,7 @@ export function CateringProduct() {
                   {DEFAULT_CAROUSEL.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/catering_addon/${name}.jpg`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}.jpg`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />
@@ -351,7 +364,7 @@ export function CateringProduct() {
                       Choose Flavor
                     </h2>
 
-                    <ul className="space-y-4">
+                    <ul className="space-y-6">
                       {getCateringProductDetailsState.data?.product_flavor.map(
                         (product_flavor, i) => (
                           <CateringFlavors
@@ -363,8 +376,7 @@ export function CateringProduct() {
                             onChange={(updatedMultiFlavors, action) => {
                               setCurrentMultiFlavors(updatedMultiFlavors);
                               setTotalMultiFlavorsQuantity(
-                                totalMultiFlavorsQuantity +
-                                  (action === "plus" ? 1 : -1)
+                                (value) => value + (action === "plus" ? 1 : -1)
                               );
                             }}
                           />

@@ -9,4 +9,4 @@ export { FooterNav } from "./footer-nav.component";
 export { SocialMediaLink } from "./social-media-link.button";
 export { QuantityInput } from "./quantity-input";
 export { SnackbarAlert } from "./snackbar-alert";
-export { LongPressQuantityInput } from "./long-press-quantity-input";
+export { Addon } from "./addon";

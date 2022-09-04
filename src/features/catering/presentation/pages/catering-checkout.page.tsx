@@ -519,7 +519,7 @@ export function CateringCheckout() {
                       className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
                     >
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${order.prod_image_name}`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
                         className="rounded-[10px] w-[92px] h-[92px]"
                         alt=""
                       />

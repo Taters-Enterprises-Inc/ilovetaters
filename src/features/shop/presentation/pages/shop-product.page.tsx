@@ -11,7 +11,7 @@ import {
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
-import { Addon } from "../components/addon";
+import { Addon } from "../../../shared/presentation/components/addon";
 import NumberFormat from "react-number-format";
 
 import {

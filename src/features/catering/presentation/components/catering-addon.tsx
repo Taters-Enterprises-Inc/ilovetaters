@@ -6,6 +6,7 @@ import { selectGetSession } from "features/shared/presentation/slices/get-sessio
 import { useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
+import { addToCartCatering } from "../slices/add-to-cart-catering.slice";
 interface AddonProps {
   product: ProductModel;
 }
@@ -25,23 +26,21 @@ export function CateringAddon(props: AddonProps) {
       return;
     }
 
-    // dispatch(
-    //   addToCart({
-    //     prod_id: props.product.id,
-    //     prod_image_name: props.product.product_image,
-    //     prod_name: props.product.name,
-    //     prod_qty: quantity,
-    //     prod_flavor: -1,
-    //     prod_size: -1,
-    //     prod_price: props.product.price,
-    //     prod_calc_amount: props.product.price * quantity,
-    //     prod_category: props.product.category,
-    //     prod_with_drinks: -1,
-    //     flavors_details: "",
-    //     prod_sku_id: -1,
-    //     prod_sku: -1,
-    //   })
-    // );
+    dispatch(
+      addToCartCatering({
+        prod_id: props.product.id,
+        prod_image_name: props.product.product_image,
+        prod_name: props.product.name,
+        prod_qty: quantity,
+        prod_price: props.product.price,
+        prod_calc_amount: props.product.price * quantity,
+        prod_category: props.product.category,
+        prod_with_drinks: -1,
+        flavors_details: "",
+        prod_sku_id: -1,
+        prod_sku: -1,
+      })
+    );
   };
 
   return (
