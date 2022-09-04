@@ -349,7 +349,7 @@ export function PopClubDeal() {
             ) : null}
             {getDealState.data?.product_image ? (
               <img
-                src={`${REACT_APP_DOMAIN_URL}v2/shop/assets/img/500/${getDealState.data?.product_image}`}
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data?.product_image}`}
                 alt="Deals"
               />
             ) : null}

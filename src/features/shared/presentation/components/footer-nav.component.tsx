@@ -64,7 +64,7 @@ export function FooterNav(props: FooterNavProps) {
             </div>
           </Link>
         ) : null}
-        <footer className="w-full py-2 lg:hidden bg-secondary">
+        <footer className="w-full lg:hidden bg-secondary">
           <nav className="mx-auto ">
             <ul className="flex items-stretch h-full text-white md:px-10">
               <li className="flex-1">
