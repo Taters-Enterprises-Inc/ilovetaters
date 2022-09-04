@@ -24,7 +24,11 @@ import NumberFormat from "react-number-format";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
 import { Addon } from "features/shop/presentation/components/addon";
-import { CateringAddon, CateringFlavors } from "../components";
+import {
+  CateringAddon,
+  CateringFlavors,
+  CateringProductQuantity,
+} from "../components";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
@@ -99,6 +103,34 @@ export function CateringProduct() {
         }
       }
     }
+  };
+
+  const calculateTotalSavings = () => {
+    if (
+      getCateringProductDetailsState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success &&
+      getCateringProductDetailsState.data.product.base_price &&
+      getCateringProductDetailsState.data.product.base_price !==
+        getCateringProductDetailsState.data.product.price
+    ) {
+      const totalSavings =
+        getCateringProductDetailsState.data.product.base_price * quantity -
+        getCateringProductDetailsState.data.product.price * quantity;
+      return (
+        <div className="text-white ">
+          total Savings:{" "}
+          <NumberFormat
+            value={totalSavings.toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        </div>
+      );
+    }
+
+    return null;
   };
 
   const createFlavorDetails = (): string | undefined => {
@@ -257,87 +289,28 @@ export function CateringProduct() {
                     <span className="text-base text-white">
                       Note: base price varies on order qty
                     </span>
-
-                    <div className="h-[60px] w-full">
-                      <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-                        <button
-                          onClick={() => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
-                            }
-
-                            if (quantity > 1) {
-                              checkBaseProduct(quantity - 1);
-                              setQuantity(quantity - 1);
+                    <CateringProductQuantity
+                      min={1}
+                      quantity={quantity}
+                      onChange={(action) => {
+                        switch (action) {
+                          case "minus":
+                            setQuantity((value) => {
+                              checkBaseProduct(value - 1);
                               setCurrentMultiFlavors(undefined);
                               setResetMultiFlavors(true);
-                            }
-                          }}
-                          className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                            quantity === 1
-                              ? "opacity-30 cursor-not-allowed"
-                              : ""
-                          }`}
-                        >
-                          <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                            −
-                          </span>
-                        </button>
-
-                        <input
-                          value={quantity}
-                          readOnly
-                          onChange={(event: any) => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
-                            }
-
-                            const value = event.target.value;
-                            if (value >= 1)
-                              setQuantity(Math.floor(event.target.value));
-                          }}
-                          type="number"
-                          min="1"
-                          max="10"
-                          className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-                          name="custom-input-number"
-                        />
-
-                        <button
-                          onClick={() => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
-                            }
-
-                            if (quantity >= 1) {
-                              checkBaseProduct(quantity + 1);
-                              setQuantity(quantity + 1);
-                            }
-                          }}
-                          className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                            quantity === 10
-                              ? "opacity-30 cursor-not-allowed"
-                              : ""
-                          }`}
-                        >
-                          <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                            +
-                          </span>
-                        </button>
-                      </div>
-                    </div>
+                              return value - 1;
+                            });
+                            break;
+                          case "plus":
+                            setQuantity((value) => {
+                              checkBaseProduct(value + 1);
+                              return value + 1;
+                            });
+                            break;
+                        }
+                      }}
+                    />
                     {getCateringProductDetailsState.data ? (
                       <span className="text-base text-white">
                         base price:{" "}
@@ -352,6 +325,7 @@ export function CateringProduct() {
                         x ({quantity})
                       </span>
                     ) : null}
+                    {calculateTotalSavings()}
                   </div>
 
                   {getCateringProductDetailsState.data?.product.price ? (

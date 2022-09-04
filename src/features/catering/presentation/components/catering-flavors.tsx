@@ -1,5 +1,6 @@
 import { QuantityInput } from "features/shared/presentation/components";
 import { useEffect, useState } from "react";
+import { CateringFlavorQuantity } from "./catering-flavor-quantity";
 
 interface CateringFlavorsProps {
   parent_name: string;
@@ -34,20 +35,17 @@ export function CateringFlavors(props: CateringFlavorsProps) {
         {props.flavors.map((flavor, i) => (
           <li key={i}>
             <span className="text-sm text-white">{flavor.name}</span>
-            <QuantityInput
+            <CateringFlavorQuantity
               min={0}
               reset={props.resetFlavorsQuantity}
               disableAdd={
-                props.productQuantity - totalMultiFlavorsQuantity === 0
+                props.productQuantity - totalMultiFlavorsQuantity <= 0
               }
-              max={10}
-              onChange={(val, action) => {
-                const updateTotalMultiFlavorsQuantity =
-                  totalMultiFlavorsQuantity + (action === "plus" ? +1 : -1);
+              onChange={(flavorQuantity, action) => {
                 if (props.currentMultiFlavors) {
                   props.currentMultiFlavors[flavor.id] = {
                     name: flavor.name,
-                    quantity: val,
+                    quantity: flavorQuantity,
                   };
 
                   props.onChange(props.currentMultiFlavors, action);
@@ -55,11 +53,14 @@ export function CateringFlavors(props: CateringFlavorsProps) {
                   const temp: any = {};
                   temp[flavor.id] = {
                     name: flavor.name,
-                    quantity: val,
+                    quantity: flavorQuantity,
                   };
                   props.onChange(temp, action);
                 }
-                setTotalMultiFlavorsQuantity(updateTotalMultiFlavorsQuantity);
+
+                setTotalMultiFlavorsQuantity(
+                  (value) => value + (action === "plus" ? +1 : -1)
+                );
               }}
             />
           </li>
