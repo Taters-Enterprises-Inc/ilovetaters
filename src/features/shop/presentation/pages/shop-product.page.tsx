@@ -213,7 +213,6 @@ export function ShopProduct() {
       );
     }
   };
-
   return (
     <>
       <PageTitleAndBreadCrumbs

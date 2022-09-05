@@ -14,7 +14,7 @@ export interface ProductModel {
   add_remarks: number;
   product_hash: string;
   note: string;
-  tags: string;
+  tags: string ;
   dateadded: string;
   product_code: string;
   report_status: number;
