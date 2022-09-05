@@ -19,4 +19,5 @@ export interface ProductModel {
   product_code: string;
   report_status: number;
   to_gc_value: number;
+  free_threshold?: number;
 }

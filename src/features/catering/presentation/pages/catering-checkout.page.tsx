@@ -30,6 +30,8 @@ import { FaFileContract } from "react-icons/fa";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
 
@@ -37,6 +39,10 @@ export function CateringCheckout() {
   const getContactsState = useAppSelector(selectGetContacts);
 
   const phoneNumberRef = useRef(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
@@ -477,6 +483,7 @@ export function CateringCheckout() {
                     />
                     <span>I have read the full </span>
                     <button
+                      type="button"
                       onClick={() => {
                         setOpenCateringFaqsModal(true);
                       }}
@@ -507,82 +514,90 @@ export function CateringCheckout() {
                 </div>
               </div>
 
-              <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
-                <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
-                  Order Summary
-                </h2>
+              {getSessionState.data && getSessionState.data.orders ? (
+                <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
+                  <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+                    Order Summary
+                  </h2>
 
-                <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                  {getSessionState.data?.orders.map((order, i) => (
-                    <div
-                      key={i}
-                      className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
-                    >
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
-                        className="rounded-[10px] w-[92px] h-[92px]"
-                        alt=""
-                      />
-                      <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                        <h3 className="text-sm w-[90%]">
-                          {order.prod_size} {order.prod_name}
-                        </h3>
-                        <h3 className="text-xs">
-                          Quantity:{" "}
-                          <span className="text-tertiary">
-                            {order.prod_qty}
-                          </span>
-                        </h3>
-
-                        {order.prod_flavor ? (
+                  <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                    {getSessionState.data.orders.map((order, i) => (
+                      <div
+                        key={i}
+                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                      >
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
+                          className="rounded-[10px] w-[92px] h-[92px]"
+                          alt=""
+                        />
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                          <h3 className="text-sm w-[90%]">
+                            {order.prod_size} {order.prod_name}
+                          </h3>
                           <h3 className="text-xs">
-                            Flavor:{" "}
+                            Quantity:{" "}
                             <span className="text-tertiary">
-                              {order.prod_flavor}
+                              {order.prod_qty}
                             </span>
                           </h3>
-                        ) : null}
 
-                        {order.prod_multiflavors ? (
-                          <h3 className="text-xs">
-                            Flavor:
-                            <span
-                              className="text-tertiary"
-                              dangerouslySetInnerHTML={{
-                                __html: order.prod_multiflavors,
-                              }}
-                            />
+                          {order.prod_flavor ? (
+                            <h3 className="text-xs">
+                              Flavor:{" "}
+                              <span className="text-tertiary">
+                                {order.prod_flavor}
+                              </span>
+                            </h3>
+                          ) : null}
+
+                          {order.prod_multiflavors ? (
+                            <h3 className="text-xs">
+                              Flavor:
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: order.prod_multiflavors,
+                                }}
+                              />
+                            </h3>
+                          ) : null}
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            {order.prod_calc_amount > 0 ? (
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            ) : (
+                              <span className="font-bold text-tertiary">
+                                FREE
+                              </span>
+                            )}
                           </h3>
-                        ) : null}
-                        <h3 className="flex items-end justify-end flex-1 text-base">
-                          <NumberFormat
-                            value={order.prod_calc_amount.toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
-                        </h3>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
 
-                <hr className="mt-1 mb-2" />
-                <div className="grid grid-cols-2 text-white">
-                  <span>Subtotal:</span>
-                  <span className="text-end">{calculateSubTotalPrice()}</span>
-                  <span>10% Service Charge:</span>
-                  <span className="text-end">₱0.00</span>
-                  <span>Transportation Fee:</span>
-                  <span className="text-end">₱0.00</span>
-                  <span>Additional Hour Fee:</span>
-                  <span className="text-end">₱0.00</span>
-                  <span>Night Differential Fee:</span>
-                  <span className="text-end">₱0.00</span>
-                </div>
+                  <hr className="mt-1 mb-2" />
+                  <div className="grid grid-cols-2 text-white">
+                    <span>Subtotal:</span>
+                    <span className="text-end">{calculateSubTotalPrice()}</span>
+                    <span>10% Service Charge:</span>
+                    <span className="text-end">₱0.00</span>
+                    <span>Transportation Fee:</span>
+                    <span className="text-end">₱0.00</span>
+                    <span>Additional Hour Fee:</span>
+                    <span className="text-end">₱0.00</span>
+                    <span>Night Differential Fee:</span>
+                    <span className="text-end">₱0.00</span>
+                  </div>
 
-                <h1 className="text-4xl text-center text-white">₱0.00</h1>
-              </div>
+                  <h1 className="text-4xl text-center text-white">₱0.00</h1>
+                </div>
+              ) : null}
             </form>
           </div>
         </div>

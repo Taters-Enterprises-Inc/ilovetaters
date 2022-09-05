@@ -29,7 +29,7 @@ export interface SessionModel {
 
   redeem_data: Array<RedeemDealModel>;
 
-  orders: Array<{
+  orders?: Array<{
     prod_id: number;
     prod_image_name: string;
     prod_name: string;
@@ -46,6 +46,8 @@ export interface SessionModel {
     prod_sku?: number;
     prod_discount?: number;
     prod_category: number;
+    is_free_item?: number;
+    free_threshold?: number;
   }>;
 
   deals: any;

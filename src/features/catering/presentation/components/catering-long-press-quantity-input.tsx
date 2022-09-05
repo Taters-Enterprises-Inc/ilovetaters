@@ -17,7 +17,7 @@ export function CateringLongPressQuantityInput(
     if (isTouch === false) props.onChange(action);
 
     timeout = setTimeout(function () {
-      let counter = props.quantity;
+      let counter = action === "plus" ? 0 : props.quantity;
       interval = setInterval(function () {
         counter = counter + (action === "plus" ? +1 : -1);
 
