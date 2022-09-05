@@ -25,6 +25,7 @@ import {
   selectGetAllPlatform,
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
+import { MdLocationPin } from "react-icons/md";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -228,6 +229,31 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
+        {getSessionState.data?.cache_data ? (
+          <div className="w-full py-1 text-white bg-secondary">
+            <div className="container flex">
+              <div className="truncate w-[400px]">
+                {" "}
+                <strong>
+                  {props.activeUrl === "CATERING" ? "Event Address" : "Address"}
+                  :{" "}
+                </strong>{" "}
+                {getSessionState.data.customer_address}
+              </div>
+              <div className="flex-1"></div>
+              <div className="flex items-center justify-center space-x-2">
+                {" "}
+                <MdLocationPin className="text-lg" />
+                <Link
+                  to={props.activeUrl == "CATERING" ? "/catering" : "/shop"}
+                >
+                  <strong> Store: </strong>{" "}
+                  {getSessionState.data.cache_data?.store_name}
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </header>
 
       <CateringCartModal

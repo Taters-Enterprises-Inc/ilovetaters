@@ -533,7 +533,7 @@ export function ShopProduct() {
                         navigate("/shop/checkout");
                       });
                     }}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -545,7 +545,7 @@ export function ShopProduct() {
                     onClick={() => {
                       dispatchAddToCart();
                     }}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

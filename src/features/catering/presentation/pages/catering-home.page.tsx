@@ -170,7 +170,7 @@ export function CateringHome() {
                 getStoresAvailableCatering({ address, service: "CATERING" })
               );
             }}
-            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white bg-button rounded-xl"
+            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
           >
             <FaSearchLocation />
             <span>Check Availability</span>

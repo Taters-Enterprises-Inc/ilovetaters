@@ -532,7 +532,7 @@ export function ShopOrder() {
 
                       <button
                         type="submit"
-                        className="bg-button w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                        className="bg-button border border-white w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
                       >
                         Upload
                       </button>
