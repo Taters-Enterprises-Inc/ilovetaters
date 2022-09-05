@@ -4,6 +4,7 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
@@ -37,10 +38,16 @@ import {
 } from "../slices/add-to-cart-catering.slice";
 import { Addon } from "features/shared/presentation/components";
 import {
-  addToCartShop,
   AddToCartShopState,
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import {
+  removeItemFromCartCatering,
+  RemoveItemFromCartCateringState,
+  resetRemoveItemFromCartCatering,
+  selectRemoveItemFromCartCatering,
+} from "../slices/remove-item-from-cart-catering.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -63,7 +70,7 @@ export function CateringProduct() {
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
-  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
+  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<Object>({});
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
     useState<number>(0);
@@ -79,7 +86,6 @@ export function CateringProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
-
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringProductDetails({ hash }));
@@ -116,6 +122,73 @@ export function CateringProduct() {
     }
   };
 
+  const calculateFreeAddon = () => {
+    if (
+      getCateringProductDetailsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success
+    ) {
+      const addons = getCateringProductDetailsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+
+      const orders = getSessionState.data.orders;
+      let existingFreeOrder:
+        | undefined
+        | {
+            index: number;
+            data: any;
+          };
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+          if (order.is_free_item) {
+            existingFreeOrder = { index: i, data: order };
+          }
+        }
+      }
+      const totalPrice =
+        getCateringProductDetailsState.data.product.price * quantity +
+        calculatedPrice;
+
+      if (
+        existingFreeOrder &&
+        existingFreeOrder.data.free_threshold &&
+        existingFreeOrder.data.free_threshold >
+          getCateringProductDetailsState.data.product.price * quantity +
+            calculatedPrice
+      ) {
+        dispatch(removeItemFromCartCatering(existingFreeOrder.index));
+      }
+
+      for (let i = 0; i < addons.length; i++) {
+        const freeThreshold = addons[i].free_threshold;
+        if (freeThreshold) {
+          if (totalPrice >= freeThreshold) {
+            freeItem.push(addons[i]);
+          }
+        }
+      }
+
+      if (freeItem.length > 0) {
+        return (
+          <div className="text-white ">
+            🎉 <strong>Claim</strong> FREE{" "}
+            <strong>{freeItem[freeItem.length - 1].name}</strong>
+          </div>
+        );
+      }
+
+      return null;
+    }
+
+    return null;
+  };
+
   const calculateTotalSavings = () => {
     if (
       getCateringProductDetailsState.data &&
@@ -130,7 +203,7 @@ export function CateringProduct() {
         getCateringProductDetailsState.data.product.price * quantity;
       return (
         <div className="text-white ">
-          total Savings:{" "}
+          total savings:{" "}
           <NumberFormat
             value={totalSavings.toFixed(2)}
             displayType={"text"}
@@ -185,8 +258,6 @@ export function CateringProduct() {
         GetCateringProductDetailsState.success &&
       getCateringProductDetailsState.data
     ) {
-      console.log(totalMultiFlavorsQuantity, quantity);
-
       if (
         totalMultiFlavorsQuantity !==
         quantity * getCateringProductDetailsState.data?.product_flavor.length
@@ -308,12 +379,15 @@ export function CateringProduct() {
                       onChange={(action) => {
                         switch (action) {
                           case "minus":
-                            setQuantity((value) => {
-                              checkBaseProduct(value - 1);
-                              setCurrentMultiFlavors(undefined);
-                              setResetMultiFlavors(true);
-                              return value - 1;
-                            });
+                            if (quantity > 1) {
+                              setQuantity((value) => {
+                                checkBaseProduct(value - 1);
+                                setCurrentMultiFlavors({});
+                                setTotalMultiFlavorsQuantity(0);
+                                setResetMultiFlavors(true);
+                                return value - 1;
+                              });
+                            }
                             break;
                           case "plus":
                             setQuantity((value) => {
@@ -339,6 +413,7 @@ export function CateringProduct() {
                       </span>
                     ) : null}
                     {calculateTotalSavings()}
+                    {calculateFreeAddon()}
                   </div>
 
                   {getCateringProductDetailsState.data?.product.price ? (
@@ -421,7 +496,7 @@ export function CateringProduct() {
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
                       {getCateringProductDetailsState.data?.product_addons.map(
                         (product, i) => (
                           <Addon key={i} product={product} />
@@ -431,18 +506,57 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data?.addons ? (
+                {getCateringProductDetailsState.data ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getCateringProductDetailsState.data?.addons.map(
-                        (product, i) => (
-                          <CateringAddon key={i} product={product} />
-                        )
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getCateringProductDetailsState.data.addons.map(
+                        (product, i) => {
+                          if (
+                            getCateringProductDetailsState.data &&
+                            getSessionState.data
+                          ) {
+                            let calculatedPrice = 0;
+
+                            const orders = getSessionState.data.orders;
+                            let isFreeItemClaimed = false;
+
+                            if (orders) {
+                              for (let i = 0; i < orders.length; i++) {
+                                calculatedPrice += orders[i].prod_calc_amount;
+
+                                if (
+                                  orders[i].prod_id === product.id &&
+                                  orders[i].prod_price === 0
+                                ) {
+                                  isFreeItemClaimed = true;
+                                }
+                              }
+                            }
+
+                            let isFreeItem = product.free_threshold
+                              ? getCateringProductDetailsState.data.product
+                                  .price *
+                                  quantity +
+                                  calculatedPrice >=
+                                product.free_threshold
+                              : false;
+
+                            return (
+                              <CateringAddon
+                                key={i}
+                                product={product}
+                                isFreeItem={isFreeItem}
+                                isFreeItemClaimed={isFreeItemClaimed}
+                              />
+                            );
+                          }
+                          return null;
+                        }
                       )}
                     </div>
                   </ProductDetailsAccordion>

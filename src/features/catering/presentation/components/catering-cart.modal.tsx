@@ -102,7 +102,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
               My Cart
             </h1>
 
-            <div className="space-y-6 overflow-y-auto max-h-[400px] px-[4px] py-[10px]">
+            <div className="space-y-6 overflow-y-auto max-h-[400px] lg:max-h-[300px] px-[4px] py-[10px]">
               {getSessionState.data?.orders.map((order, i) => (
                 <div
                   key={i}
@@ -110,11 +110,11 @@ export function CateringCartModal(props: CateringCartModalProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                    className="rounded-br-[10px] w-[92px] h-[92px]"
+                    className="rounded-[10px] w-[92px] h-[92px]"
                     alt=""
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                    <h3 className="text-sm w-[90%]">
+                    <h3 className="text-sm w-[90%]  font-bold leading-4">
                       {order.prod_size} {order.prod_name}
                     </h3>
                     <h3 className="text-xs">
@@ -143,12 +143,16 @@ export function CateringCartModal(props: CateringCartModalProps) {
                     ) : null}
 
                     <h3 className="flex items-end justify-end flex-1 text-base">
-                      <NumberFormat
-                        value={order.prod_calc_amount.toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
+                      {order.prod_calc_amount > 0 ? (
+                        <NumberFormat
+                          value={order.prod_calc_amount.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      ) : (
+                        <span className="font-bold text-tertiary">FREE</span>
+                      )}
                     </h3>
                   </div>
                   <button

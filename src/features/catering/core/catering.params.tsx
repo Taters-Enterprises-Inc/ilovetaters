@@ -15,6 +15,7 @@ export interface AddToCartCateringParam {
   prod_sku?: number;
   prod_discount?: number;
   prod_category: number;
+  is_free_item?: boolean;
 }
 export interface GetCateringProductDetailsParam {
   hash: string;

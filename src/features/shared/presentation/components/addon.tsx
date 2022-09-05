@@ -2,20 +2,30 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useState } from "react";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCartShop } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
+import { addToCartShop, selectAddToCartShop ,AddToCartShopState } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }
+
 
 export function Addon(props: AddonProps) {
   const [quantity, setQuantity] = useState(1);
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
+
+
+  useEffect(() => {
+    if (addToCartShopState.status === AddToCartShopState.success) {
+      dispatch(getSession());
+    }
+  }, [addToCartShopState, dispatch]);
+
 
   const handleAddToCart = () => {
     if (

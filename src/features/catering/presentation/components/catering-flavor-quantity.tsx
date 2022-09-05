@@ -7,7 +7,7 @@ export interface CateringFlavorQuantityProps {
   reset?: boolean;
   productQuantity: number;
   totalMultiFlavorsQuantity: number;
-  onChange: (quantity: number, action: "minus" | "plus") => void;
+  onChange: (action: "minus" | "plus") => void;
 }
 
 export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
@@ -31,13 +31,13 @@ export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
           switch (action) {
             case "plus":
               if (props.productQuantity - props.totalMultiFlavorsQuantity > 0) {
-                props.onChange(quantity + 1, action);
+                props.onChange(action);
                 setQuantity((value) => value + 1);
               }
               break;
             case "minus":
               if (quantity > props.min) {
-                props.onChange(quantity - 1, action);
+                props.onChange(action);
                 setQuantity((value) => value - 1);
               }
               break;
