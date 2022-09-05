@@ -46,11 +46,11 @@ import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
-import editCartItem  from "features/shop/presentation/slices/edit-cart-item.slice";
+import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
 import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
-import cateringCheckoutOrders
+import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
 
 export const store = configureStore({
   reducer: {
@@ -80,8 +80,8 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
-    getCartItem:getCartItem,
-    editCartItem:editCartItem,
+    getCartItem: getCartItem,
+    editCartItem: editCartItem,
     addToCartShop: addToCartShop,
 
     getBranchesStore: getBranchesStore,
@@ -103,11 +103,12 @@ export const store = configureStore({
     updateContact: updateContact,
     deleteContact: deleteContact,
     getContacts: getContacts,
-    
+
     getCateringProductDetails: getCateringProductDetails,
     addToCartCatering: addToCartCatering,
     removeItemFromCartCatering: removeItemFromCartCatering,
     popSnackBar: popSnackBar,
+    cateringCheckoutOrders: cateringCheckoutOrders,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

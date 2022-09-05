@@ -27,6 +27,7 @@ export const cateringCheckoutOrders = createAsyncThunk(
   async (param: CateringCheckoutOrdersParam) => {
     const response: CateringCheckoutOrdersResponse =
       await CateringCheckoutOrdersRepository(param);
+
     return response.data;
   }
 );

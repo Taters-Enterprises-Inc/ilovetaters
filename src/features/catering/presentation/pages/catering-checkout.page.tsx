@@ -35,11 +35,11 @@ import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 import {
-  checkoutOrders,
-  CheckoutOrdersState,
-  resetCheckoutOrders,
-  selectCheckoutOrders,
-} from "features/shop/presentation/slices/checkout-orders.slice";
+  cateringCheckoutOrders,
+  CateringCheckoutOrdersState,
+  resetCateringCheckoutOrders,
+  selectCateringCheckoutOrders,
+} from "../slices/catering-checkout-orders.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -52,19 +52,22 @@ export function CateringCheckout() {
   const getSessionState = useAppSelector(selectGetSession);
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
-  const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+  const cateringCheckoutOrdersState = useAppSelector(
+    selectCateringCheckoutOrders
+  );
 
   const phoneNumberRef = useRef(null);
 
   useEffect(() => {
     if (
-      checkoutOrdersState.status === CheckoutOrdersState.success &&
-      checkoutOrdersState.data
+      cateringCheckoutOrdersState.status ===
+        CateringCheckoutOrdersState.success &&
+      cateringCheckoutOrdersState.data
     ) {
-      // navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
-      dispatch(resetCheckoutOrders());
+      navigate(`/catering/contract/${cateringCheckoutOrdersState.data.hash}`);
+      dispatch(resetCateringCheckoutOrders());
     }
-  }, [checkoutOrdersState, dispatch, navigate]);
+  }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
     dispatch(getSession());
@@ -213,7 +216,8 @@ export function CateringCheckout() {
       (responseBody.phoneNumber.match(/09/) &&
         responseBody.phoneNumber.length === 11)
     ) {
-      dispatch(checkoutOrders(responseBody));
+      console.log(responseBody);
+      dispatch(cateringCheckoutOrders(responseBody));
     } else {
       const phoneNumber: any = phoneNumberRef.current;
 
@@ -247,7 +251,8 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
-                <BiUserCircle className="text-2xl" /> <span>Your Details</span>
+                <BiUserCircle className="text-2xl hidden sm:block" />{" "}
+                <span>Your Details</span>
               </div>
             </div>
 
@@ -258,7 +263,8 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <FaFileContract className="text-2xl" /> <span>Contract</span>
+                <FaFileContract className="text-2xl hidden sm:block" />{" "}
+                <span>Contract</span>
               </div>
             </div>
 
@@ -269,7 +275,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <AiOutlineCreditCard className="text-2xl" />{" "}
+                <AiOutlineCreditCard className="text-2xl hidden sm:block" />{" "}
                 <span>Payment</span>
               </div>
             </div>
@@ -281,7 +287,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
-                <AiOutlineCheckCircle className="text-2xl" />{" "}
+                <AiOutlineCheckCircle className="text-2xl hidden sm:block" />{" "}
                 <span>Checkout Complete</span>
               </div>
             </div>
