@@ -58,6 +58,8 @@ export interface SessionModel {
   minimum_rate: string;
   catering_delivery_rate: string;
   catering_minimum_rate: string;
+  catering_start_date: string;
+  catering_end_date: string;
   distance: number;
   distance_rate_id: number;
   distance_rate_price: number;

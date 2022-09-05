@@ -45,7 +45,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   backgroundColor: "rgba(46, 43, 35, 0.6)",
 }));
 
-export default function CateringFaqs() {
+export function CateringFaqs() {
   const [expanded, setExpanded] = React.useState<string | false>("panel0");
 
   const handleChange =

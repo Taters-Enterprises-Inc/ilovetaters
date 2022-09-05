@@ -2,20 +2,30 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useState } from "react";
+import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCart } from "../slices/add-to-cart.slice";
+import { addToCartShop, selectAddToCartShop ,AddToCartShopState } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }
+
 
 export function Addon(props: AddonProps) {
   const [quantity, setQuantity] = useState(1);
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
+
+
+  useEffect(() => {
+    if (addToCartShopState.status === AddToCartShopState.success) {
+      dispatch(getSession());
+    }
+  }, [addToCartShopState, dispatch]);
+
 
   const handleAddToCart = () => {
     if (
@@ -27,7 +37,7 @@ export function Addon(props: AddonProps) {
     }
 
     dispatch(
-      addToCart({
+      addToCartShop({
         prod_id: props.product.id,
         prod_image_name: props.product.product_image,
         prod_name: props.product.name,
@@ -71,6 +81,14 @@ export function Addon(props: AddonProps) {
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
                   onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     if (quantity > 1 && quantity <= 10)
                       setQuantity(quantity - 1);
                   }}
@@ -84,6 +102,14 @@ export function Addon(props: AddonProps) {
                 <input
                   value={quantity}
                   onChange={(event: any) => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     const value = event.target.value;
                     if (value >= 1 && value <= 10)
                       setQuantity(Math.floor(event.target.value));
@@ -96,6 +122,14 @@ export function Addon(props: AddonProps) {
 
                 <button
                   onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
                     if (quantity >= 1 && quantity < 10)
                       setQuantity(quantity + 1);
                   }}

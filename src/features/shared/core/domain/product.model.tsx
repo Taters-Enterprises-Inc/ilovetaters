@@ -5,6 +5,7 @@ export interface ProductModel {
   description: string;
   delivery_details: string;
   price: number;
+  base_price?: number;
   uom: string;
   add_details: string;
   status: number;

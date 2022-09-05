@@ -17,7 +17,7 @@ import getRedeem from "../popclub/presentation/slices/get-redeem.slice";
 import getLatestUnexpiredRedeem from "../popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import getCategoryProducts from "../shop/presentation/slices/get-category-products.slice";
 import getProductDetails from "../shop/presentation/slices/get-product-details.slice";
-import addToCart from "../shop/presentation/slices/add-to-cart.slice";
+import addToCartShop from "../shop/presentation/slices/add-to-cart-shop.slice";
 import getBranchesStore from "../branches/presentation/slices/get-branches-store";
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
@@ -31,7 +31,7 @@ import storeReset from "../shared/presentation/slices/store-reset.slice";
 
 import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
-import removeItemFromCart from "../shared/presentation/slices/remove-item-from-cart.slice";
+import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
 
 import addContact from "../shared/presentation/slices/add-contact.slice";
@@ -47,6 +47,10 @@ import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
 import editCartItem  from "features/shop/presentation/slices/edit-cart-item.slice";
+import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
+import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
+import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform: getAllPlatform,
@@ -75,9 +79,9 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
-    addToCart: addToCart,
     getCartItem:getCartItem,
     editCartItem:editCartItem,
+    addToCartShop: addToCartShop,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
@@ -92,7 +96,7 @@ export const store = configureStore({
 
     getCateringCategoryProducts: getCateringCategoryProducts,
     getProductSku: getProductSku,
-    removeItemFromCart: removeItemFromCart,
+    removeItemFromCartShop: removeItemFromCartShop,
     uploadProofOfPayment: uploadProofOfPayment,
     addContact: addContact,
     updateContact: updateContact,
@@ -100,6 +104,9 @@ export const store = configureStore({
     getContacts: getContacts,
     
     getCateringProductDetails: getCateringProductDetails,
+    addToCartCatering: addToCartCatering,
+    removeItemFromCartCatering: removeItemFromCartCatering,
+    popSnackBar: popSnackBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

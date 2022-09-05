@@ -6,15 +6,12 @@ import {
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "features/popclub/presentation/slices/get-all-platform.slice";
+import { selectGetAllPlatform } from "features/popclub/presentation/slices/get-all-platform.slice";
+import MoreDrawer from "./more-drawer.component";
 
 interface FooterNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB" | "BRANCHES" | "HOME";
@@ -34,17 +31,13 @@ export function FooterNav(props: FooterNavProps) {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
-  // useEffect(() => {
-  //   dispatch(getAllPlatform());
-  // }, [dispatch]);
-
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
   }, [dispatch]);
 
   return (
     <>
-      <section className="fixed bottom-0 z-[2003] w-full">
+      <section className="fixed bottom-0 z-[2003]  w-full">
         {getLatestUnexpiredRedeemState.data ? (
           <Link
             to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash}
@@ -67,7 +60,7 @@ export function FooterNav(props: FooterNavProps) {
             </div>
           </Link>
         ) : null}
-        <footer className="w-full py-2 lg:hidden bg-secondary">
+        <footer className="w-full lg:hidden bg-secondary">
           <nav className="mx-auto ">
             <ul className="flex items-stretch h-full text-white md:px-10">
               <li className="flex-1">
@@ -79,11 +72,11 @@ export function FooterNav(props: FooterNavProps) {
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
                       props.activeUrl === "HOME" ? "-active" : ""
                     }.webp`}
-                    className="w-[28px] sm:w-[40px]"
+                    className="w-[28px] sm:w-[40px] mt-2"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] ${
+                    className={`text-[8px] sm:text-[14px] mb-2 ${
                       props.activeUrl === "HOME"
                         ? "text-tertiary"
                         : "text-white"
@@ -104,11 +97,11 @@ export function FooterNav(props: FooterNavProps) {
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.webp`}
-                    className="w-[20px] sm:w-[24px]"
+                    className="w-[20px] sm:w-[24px] mt-2 "
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] ${
+                    className={`text-[8px] sm:text-[14px] mb-2 ${
                       props.activeUrl === "POPCLUB"
                         ? "text-tertiary"
                         : "text-white"
@@ -121,7 +114,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/shop"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
@@ -144,7 +137,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/catering"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering${
@@ -167,7 +160,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <Link
                   to={"/branches"}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-1"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/branches${
@@ -187,13 +180,8 @@ export function FooterNav(props: FooterNavProps) {
                   </span>
                 </Link>
               </li>
-              <li className="flex-[0.8]">
-                <button className="flex flex-col items-center justify-center h-full pt-1 pr-2">
-                  <FiMoreHorizontal className="text-[25px] sm:text-4xl"></FiMoreHorizontal>
-                  <span className="text-[8px] sm:text-[14px] pt-[2px]">
-                    More
-                  </span>
-                </button>
+              <li className="flex-1">
+                <MoreDrawer />
               </li>
             </ul>
           </nav>

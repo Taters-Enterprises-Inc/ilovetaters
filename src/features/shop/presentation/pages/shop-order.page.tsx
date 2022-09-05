@@ -339,9 +339,12 @@ export function ShopOrder() {
                           {order.remarks ? (
                             <h3 className="text-xs">
                               Flavor:{" "}
-                              <span className="text-tertiary">
-                                {order.remarks}
-                              </span>
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: order.remarks,
+                                }}
+                              />
                             </h3>
                           ) : null}
                           <h3 className="flex items-end justify-end flex-1 text-base">
@@ -506,8 +509,7 @@ export function ShopOrder() {
                             {images ? (
                               <img
                                 src={images.src}
-                                width={180}
-                                height={180}
+                                className="object-contain h-[150px] w-[150px]"
                                 alt="upload file"
                               />
                             ) : (

@@ -29,11 +29,12 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
     }
   }, [setStoreAndAddressState, navigate]);
 
-  const storeClicked = (storeId: number) => {
+  const storeClicked = (storeId: number, regionId: number) => {
     dispatch(
       setStoreAndAddress({
         address: props.address,
         storeId,
+        regionId,
       })
     );
   };
@@ -58,7 +59,8 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                   onClick={
                     store_availability && props.address != null
                       ? () => {}
-                      : () => storeClicked(store.store_id)
+                      : () =>
+                          storeClicked(store.store_id, store.region_store_id)
                   }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${
                     store_availability && props.address != null

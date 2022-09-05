@@ -39,12 +39,12 @@ export function ShopHome() {
       ></img>
 
       <section className="container pb-64">
-        <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
+        <h1 className='text-white text-sm lg:text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
           Please search your address for delivery
         </h1>
 
         <div className="flex justify-center">
-          <label className="pure-material-textfield-outlined w-[100%] mb-10">
+          <label className="pure-material-textfield-outlined w-[100%] mb-4">
             <SearchAddress
               onPlaceSelected={(place: string) => {
                 setAddress(place);

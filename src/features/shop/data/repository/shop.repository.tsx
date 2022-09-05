@@ -9,12 +9,12 @@ import { ProductDetailsModel } from "features/shop/core/domain/product-details.m
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 import {
-  AddToCartParam,
   CheckoutOrdersParam,
   GetCategoryProductsParam,
   GetOrdersParam,
   GetProductDetailsParam,
   GetProductSkuParam,
+  AddToCartShopParam,
 } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse {
@@ -28,12 +28,6 @@ export interface GetProductDetailsResponse {
   data: {
     message: string;
     data: ProductDetailsModel;
-  };
-}
-
-export interface AddToCartResponse {
-  data: {
-    message: string;
   };
 }
 
@@ -69,6 +63,42 @@ export interface GetProductSkuResponse {
     message: string;
     data: ProductSkuModel;
   };
+}
+export interface AddToCartShopResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface RemoveItemFromCartShopResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function RemoveItemFromCartShopRepository(
+  param: number
+): Promise<RemoveItemFromCartShopResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/cart/shop?item-index=${param}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function AddToCartShopRepository(
+  param: AddToCartShopParam
+): Promise<AddToCartShopResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart/shop`, param, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export interface GetCartItemResponse {
@@ -139,17 +169,6 @@ export function CheckoutOrdersRepository(
   });
 }
 
-export function AddToCartRepository(
-  param: AddToCartParam
-): Promise<AddToCartResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
 export function GetProductDetailsRepository(
   param: GetProductDetailsParam
 ): Promise<GetProductDetailsResponse> {
@@ -185,7 +204,7 @@ export function GetCategoryProductsRepository(
 export function GetCartItemRepository(
   id: string | undefined
 ): Promise<GetCartItemResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/cart?id=${id}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/cart/shop?id=${id}`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -196,7 +215,7 @@ export function GetCartItemRepository(
 export function GetEditCartItemRepository(
   params: EditCartItemModel
 ): Promise<GetEditCartItemResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/cart`, params, {
+  return axios.put(`${REACT_APP_DOMAIN_URL}api/cart/shop`, params, {
     headers: {
       "Content-Type": "application/json",
     },

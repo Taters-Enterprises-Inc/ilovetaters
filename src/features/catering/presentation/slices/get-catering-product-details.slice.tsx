@@ -41,7 +41,18 @@ export const getCateringProductDetails = createAsyncThunk(
 export const getCateringProductDetailsSlice = createSlice({
   name: "getCateringProductDetails",
   initialState,
-  reducers: {},
+  reducers: {
+    changeCateringProductPrice: (
+      state,
+      action: PayloadAction<{ price: number }>
+    ) => {
+      const { price } = action.payload;
+
+      if (state.data) {
+        state.data.product.price = price;
+      }
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(getCateringProductDetails.pending, (state: any) => {
@@ -75,5 +86,8 @@ export const getCateringProductDetailsSlice = createSlice({
 
 export const selectGetCateringProductDetails = (state: RootState) =>
   state.getCateringProductDetails;
+
+export const { changeCateringProductPrice } =
+  getCateringProductDetailsSlice.actions;
 
 export default getCateringProductDetailsSlice.reducer;

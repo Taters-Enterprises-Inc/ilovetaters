@@ -1,9 +1,6 @@
-import Slide from "@mui/material/Slide";
-import Snackbar from "@mui/material/Snackbar";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import MuiAlert from "@mui/material/Alert";
 import {
   GetCategoryProductsState,
   selectGetCategoryProducts,
@@ -12,10 +9,7 @@ import {
   GetProductDetailsState,
   selectGetProductDetails,
 } from "features/shop/presentation/slices/get-product-details.slice";
-import {
-  AddToCartState,
-  selectAddToCart,
-} from "features/shop/presentation/slices/add-to-cart.slice";
+
 import {
   resetStoreAndAddress,
   selectSetStoreAndAddress,
@@ -29,10 +23,6 @@ import {
   FacebookLoginPointState,
   selectFacebookLoginPoint,
 } from "../slices/facebook-login-point.slice";
-import {
-  RemoveItemFromCartState,
-  selectRemoveItemFromCart,
-} from "../slices/remove-item-from-cart.slice";
 import {
   selectUploadProofOfPayment,
   UploadProofOfPaymentState,
@@ -55,6 +45,24 @@ import {
   GetStoresAvailableCateringState,
   selectGetStoresAvailableCatering,
 } from "features/catering/presentation/slices/get-stores-available-catering.slice";
+import {
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "features/shop/presentation/slices/add-to-cart-shop.slice";
+import { SnackbarAlert } from "./snackbar-alert";
+import {
+  popOutSnackBar,
+  PopSnackBarState,
+  selectPopSnackBar,
+} from "../slices/pop-snackbar.slice";
+import {
+  RemoveItemFromCartShopState,
+  selectRemoveItemFromCartShop,
+} from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
+import {
+  AddToCartCateringState,
+  selectAddToCartCatering,
+} from "features/catering/presentation/slices/add-to-cart-catering.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -80,10 +88,12 @@ export function LoadingAndSnackbarWrapper() {
   const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
-  const addToCartState = useAppSelector(selectAddToCart);
+  const addToCartShopState = useAppSelector(selectAddToCartShop);
   const facebookLoginState = useAppSelector(selectFacebookLogin);
   const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
-  const removeItemFromCartState = useAppSelector(selectRemoveItemFromCart);
+  const removeItemFromCartShopState = useAppSelector(
+    selectRemoveItemFromCartShop
+  );
   const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
   const addContactState = useAppSelector(selectAddContact);
   const deleteContactState = useAppSelector(selectDeleteContact);
@@ -91,6 +101,21 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringState = useAppSelector(
     selectGetStoresAvailableCatering
   );
+  const popSnackBarState = useAppSelector(selectPopSnackBar);
+  const addToCartCateringState = useAppSelector(selectAddToCartCatering);
+
+  useEffect(() => {
+    switch (popSnackBarState.status) {
+      case PopSnackBarState.success:
+        if (popSnackBarState.data.severity === "success")
+          showAlert(setSuccessAlert, popSnackBarState.data.message);
+        else if (popSnackBarState.data.severity === "error")
+          showAlert(setFailsAlert, popSnackBarState.data.message);
+
+        dispatch(popOutSnackBar());
+        break;
+    }
+  }, [popSnackBarState, dispatch]);
 
   useEffect(() => {
     switch (getStoresAvailableCateringState.status) {
@@ -207,23 +232,23 @@ export function LoadingAndSnackbarWrapper() {
   }, [uploadProofOfPaymentState, dispatch]);
 
   useEffect(() => {
-    switch (removeItemFromCartState.status) {
-      case RemoveItemFromCartState.inProgress:
+    switch (removeItemFromCartShopState.status) {
+      case RemoveItemFromCartShopState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case RemoveItemFromCartState.initial:
+      case RemoveItemFromCartShopState.initial:
         setOpenBackdropLoading(false);
         break;
-      case RemoveItemFromCartState.success:
-        showAlert(setSuccessAlert, removeItemFromCartState.message);
+      case RemoveItemFromCartShopState.success:
+        showAlert(setSuccessAlert, removeItemFromCartShopState.message);
         setOpenBackdropLoading(false);
         break;
-      case RemoveItemFromCartState.fail:
-        showAlert(setFailsAlert, removeItemFromCartState.message);
+      case RemoveItemFromCartShopState.fail:
+        showAlert(setFailsAlert, removeItemFromCartShopState.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [removeItemFromCartState, dispatch]);
+  }, [removeItemFromCartShopState, dispatch]);
 
   useEffect(() => {
     switch (facebookLoginPointState.status) {
@@ -235,7 +260,7 @@ export function LoadingAndSnackbarWrapper() {
         dispatch(resetStoreAndAddress());
         break;
     }
-  }, [facebookLoginState, dispatch]);
+  }, [facebookLoginPointState, dispatch]);
 
   useEffect(() => {
     switch (facebookLoginState.status) {
@@ -326,23 +351,42 @@ export function LoadingAndSnackbarWrapper() {
   }, [getProductDetailsState]);
 
   useEffect(() => {
-    switch (addToCartState.status) {
-      case AddToCartState.inProgress:
+    switch (addToCartShopState.status) {
+      case AddToCartShopState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case AddToCartState.initial:
+      case AddToCartShopState.initial:
         setOpenBackdropLoading(false);
         break;
-      case AddToCartState.success:
-        showAlert(setSuccessAlert, addToCartState.message);
+      case AddToCartShopState.success:
+        showAlert(setSuccessAlert, addToCartShopState.message);
         setOpenBackdropLoading(false);
         break;
-      case AddToCartState.fail:
-        showAlert(setFailsAlert, addToCartState.message);
+      case AddToCartShopState.fail:
+        showAlert(setFailsAlert, addToCartShopState.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addToCartState]);
+  }, [addToCartShopState]);
+
+  useEffect(() => {
+    switch (addToCartCateringState.status) {
+      case AddToCartCateringState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AddToCartCateringState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringState.success:
+        showAlert(setSuccessAlert, addToCartCateringState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringState.fail:
+        showAlert(setFailsAlert, addToCartCateringState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [addToCartCateringState]);
 
   return (
     <div>
@@ -379,19 +423,4 @@ function showAlert(
       message: message,
     });
   }, 3000);
-}
-
-function SnackbarAlert(props: any) {
-  const { open, severity, message } = props;
-
-  return (
-    <Snackbar
-      open={open}
-      autoHideDuration={10000}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      TransitionComponent={Slide}
-    >
-      <MuiAlert severity={severity}>{message}</MuiAlert>
-    </Snackbar>
-  );
 }

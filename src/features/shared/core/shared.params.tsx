@@ -23,6 +23,9 @@ export interface GetStoresAvailableParam {
 export interface SetStoreAndAddressParm {
   address: string | null;
   storeId: number;
+  regionId: number;
+  cateringStartDate?: Date;
+  cateringEndDate?: Date;
 }
 
 export interface SetSessionParam {

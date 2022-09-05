@@ -24,6 +24,7 @@ import {
   getAllPlatform,
   selectGetAllPlatform,
 } from "features/popclub/presentation/slices/get-all-platform.slice";
+import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -37,6 +38,7 @@ interface HeaderNavProps {
 export function HeaderNav(props: HeaderNavProps) {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openShopCartModal, setOpenShopCartModal] = useState(false);
+  const [openCateringCartModal, setOpenCateringCartModal] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
@@ -79,7 +81,17 @@ export function HeaderNav(props: HeaderNavProps) {
   }, [facebookLogoutState, dispatch]);
 
   const handleCart = () => {
-    setOpenShopCartModal(true);
+    switch (props.activeUrl) {
+      case "SNACKSHOP":
+        setOpenShopCartModal(true);
+        break;
+      case "POPCLUB":
+        setOpenShopCartModal(true);
+        break;
+      case "CATERING":
+        setOpenCateringCartModal(true);
+        break;
+    }
   };
 
   const calculateOrdersPrice = () => {
@@ -217,6 +229,13 @@ export function HeaderNav(props: HeaderNavProps) {
           </nav>
         </div>
       </header>
+
+      <CateringCartModal
+        open={openCateringCartModal}
+        onClose={() => {
+          setOpenCateringCartModal(false);
+        }}
+      />
 
       <ShopCartModal
         open={openShopCartModal}

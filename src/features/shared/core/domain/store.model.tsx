@@ -7,7 +7,7 @@ export interface StoreModel {
     store_address: string;
     menu_type: number;
     store_image: string;
-    region_store_id: string;
+    region_store_id: number;
     action: string;
     opening_time: string;
     closing_time: string;

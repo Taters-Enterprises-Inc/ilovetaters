@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { ProductModel } from "features/shared/core/domain/product.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { GetProductDetailsParam } from "features/shop/core/shop.params";
 import {
@@ -39,11 +38,6 @@ export const getProductDetailsSlice = createSlice({
   name: "getProductDetails",
   initialState,
   reducers: {
-    resetGetProductDetails: (state) => {
-      state.data = undefined;
-      state.message = "";
-      state.status = GetProductDetailsState.initial;
-    },
     changeProductPrice: (state, action: PayloadAction<{ price: number }>) => {
       const { price } = action.payload;
 
@@ -85,6 +79,5 @@ export const getProductDetailsSlice = createSlice({
 
 export const selectGetProductDetails = (state: RootState) =>
   state.getProductDetails;
-export const { resetGetProductDetails, changeProductPrice } =
-  getProductDetailsSlice.actions;
+export const { changeProductPrice } = getProductDetailsSlice.actions;
 export default getProductDetailsSlice.reducer;

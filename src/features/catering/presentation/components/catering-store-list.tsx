@@ -4,7 +4,7 @@ import { selectGetStoresAvailableCatering } from "../slices/get-stores-available
 
 interface StoreListProps {
   address: string;
-  onClickStore: (storeId: number) => void;
+  onClickStore: (storeId: number, regionId: number) => void;
 }
 
 export function CateringStoreList(props: StoreListProps) {
@@ -32,7 +32,11 @@ export function CateringStoreList(props: StoreListProps) {
                   onClick={
                     store_availability && props.address != null
                       ? () => {}
-                      : () => props.onClickStore(store.store_id)
+                      : () =>
+                          props.onClickStore(
+                            store.store_id,
+                            store.region_store_id
+                          )
                   }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${
                     store_availability && props.address != null
