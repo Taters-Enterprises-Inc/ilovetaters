@@ -16,7 +16,7 @@ import {
   setStoreAndAddress,
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -39,6 +39,11 @@ export function CateringHome() {
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
@@ -171,8 +176,6 @@ export function CateringHome() {
 
           <CateringStoreList
             onClickStore={(storeId: number, regionId: number) => {
-              console.log(eventEndDate, eventStartDate);
-
               dispatch(
                 setStoreAndAddress({
                   address,
@@ -180,6 +183,7 @@ export function CateringHome() {
                   regionId,
                   cateringEndDate: eventEndDate,
                   cateringStartDate: eventStartDate,
+                  service: "CATERING",
                 })
               );
             }}

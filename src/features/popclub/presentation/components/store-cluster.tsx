@@ -46,6 +46,7 @@ export function StoreCluster(props: StoreClusterProps) {
         address: props.address,
         storeId,
         regionId,
+        service: "SNACKSHOP",
       })
     );
 

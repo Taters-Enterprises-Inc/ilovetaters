@@ -61,18 +61,68 @@ export function CateringCheckout() {
         />
       );
     } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateServiceCharge = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const service_charge_percentage = 0.1;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+
       return (
         <NumberFormat
-          value={0}
+          value={(calculatedPrice * service_charge_percentage).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
         />
       );
+    } else {
+      return <>₱0.00</>;
     }
   };
 
-  const calculateDeliveryFee = () => {
+  const calculateNightDifferentialFee = () => {
+    if (getSessionState.data?.catering_night_differential_fee) {
+      return (
+        <NumberFormat
+          value={getSessionState.data.catering_night_differential_fee.toFixed(
+            2
+          )}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateSucceedingHourCharge = () => {
+    if (getSessionState.data?.catering_succeeding_hour_charge) {
+      return (
+        <NumberFormat
+          value={getSessionState.data.catering_succeeding_hour_charge.toFixed(
+            2
+          )}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateTransportationFee = () => {
     if (getSessionState.data?.distance_rate_price) {
       return (
         <NumberFormat
@@ -83,20 +133,14 @@ export function CateringCheckout() {
         />
       );
     } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return <>₱0.00</>;
     }
   };
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const service_charge_percentage = 0.1;
 
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
@@ -104,6 +148,10 @@ export function CateringCheckout() {
       }
 
       calculatedPrice += getSessionState.data.distance_rate_price;
+      calculatedPrice += getSessionState.data.catering_night_differential_fee;
+      calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
+      calculatedPrice += calculatedPrice * service_charge_percentage;
+
       return (
         <NumberFormat
           value={calculatedPrice.toFixed(2)}
@@ -113,14 +161,7 @@ export function CateringCheckout() {
         />
       );
     } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return <>₱0.00</>;
     }
   };
   const handleCheckout = () => {};
@@ -586,16 +627,24 @@ export function CateringCheckout() {
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
                     <span>10% Service Charge:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateTransportationFee()}
+                    </span>
                     <span>Additional Hour Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateSucceedingHourCharge()}
+                    </span>
                     <span>Night Differential Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateNightDifferentialFee()}
+                    </span>
                   </div>
 
-                  <h1 className="text-4xl text-center text-white">₱0.00</h1>
+                  <h1 className="text-4xl text-center text-white">
+                    {calculateTotalPrice()}
+                  </h1>
                 </div>
               ) : null}
             </form>
