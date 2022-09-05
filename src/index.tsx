@@ -26,7 +26,7 @@ import {
   ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
-  ShopEditCart
+  ShopEditCartItem
 } from "features/shop/presentation/pages";
 import {
   Catering,
@@ -79,7 +79,7 @@ root.render(
                 <Route path="checkout" element={<ShopCheckout />} />
                 <Route
                   path="/shop/products/cart/:cart_id"
-                  element={<ShopEditCart/>}
+                  element={<ShopEditCartItem/>}
                 />
 
                 <Route

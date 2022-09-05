@@ -28,7 +28,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       onClick={() => {
         window.location.href = `https://maps.google.com/?q=${store.store_name}`;
       }}
-      className={`cursor-pointer z-0 overflow-x-hidden bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
+      className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
       <div
         className=" cursor-pointer	 md:text-[13px] text-[10px] md:h-auto h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px]"
@@ -59,7 +59,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
 
       <div
 
-        className={`transition-all cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px]  ${ showText ? 'h-auto' : 'h-[90px]'} md:h-[105px] 	 relative py-2`}
+        className={`transition-all cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px] md:h-[160px]  ${ showText ? 'h-auto' : 'h-[90px]'} md:h-[105px] 	 relative py-2`}
       >
         <span
           className={`cursor-pointer	 p-4 md:relative md:top-0 md:left-0  absolute top-[-2px] left-[21px]`}
@@ -98,7 +98,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
           </p>
           <div
           
-            className={` text-[#fff] md:text-[13px] text-[10px] font-normal cursor-pointer	`}
+            className={` text-[#fff] md:text-[12px] text-[10px] font-normal cursor-pointer	`}
           >
             {resize < 768 && store.address.length > textLenght && !showText
               ? sliceText + " . . . "
@@ -152,7 +152,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       </div>
 
       <div
-        className="flex  md:h-[85px] h-auto py-2 w-full pointer-cusor cursor-pointer	pr-4"
+        className="flex  lg:h-[85px] md:h-[98px] h-auto py-2 w-full pointer-cusor cursor-pointer	pr-4"
       >
         <span
           className="p-4"

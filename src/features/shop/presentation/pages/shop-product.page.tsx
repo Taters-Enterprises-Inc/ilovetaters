@@ -199,8 +199,8 @@ export function ShopProduct() {
       );
     }
   };
- 
-
+  
+  console.log(getProductDetailsState.data)
   return (
     <>
       <PageTitleAndBreadCrumbs

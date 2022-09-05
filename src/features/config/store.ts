@@ -45,7 +45,8 @@ import getStoresAvailableBranches from "../branches/presentation/slices/get-stor
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
-
+import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
+import editCartItem  from "features/shop/presentation/slices/edit-cart-item.slice";
 export const store = configureStore({
   reducer: {
     getAllPlatform: getAllPlatform,
@@ -75,6 +76,8 @@ export const store = configureStore({
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
     addToCart: addToCart,
+    getCartItem:getCartItem,
+    editCartItem:editCartItem,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
@@ -95,7 +98,7 @@ export const store = configureStore({
     updateContact: updateContact,
     deleteContact: deleteContact,
     getContacts: getContacts,
-
+    
     getCateringProductDetails: getCateringProductDetails,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
