@@ -1,10 +1,16 @@
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import TextField from "@mui/material/TextField";
-import { selectGetContacts } from "features/shared/presentation/slices/get-contacts.slice";
+import {
+  getContacts,
+  selectGetContacts,
+} from "features/shared/presentation/slices/get-contacts.slice";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,9 +33,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
+import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  checkoutOrders,
+  CheckoutOrdersState,
+  resetCheckoutOrders,
+  selectCheckoutOrders,
+} from "features/shop/presentation/slices/checkout-orders.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const location = useLocation();
 
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
@@ -37,8 +51,25 @@ export function CateringCheckout() {
 
   const getSessionState = useAppSelector(selectGetSession);
   const getContactsState = useAppSelector(selectGetContacts);
+  const addContactState = useAppSelector(selectAddContact);
+  const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
 
   const phoneNumberRef = useRef(null);
+
+  useEffect(() => {
+    if (
+      checkoutOrdersState.status === CheckoutOrdersState.success &&
+      checkoutOrdersState.data
+    ) {
+      // navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
+      dispatch(resetCheckoutOrders());
+    }
+  }, [checkoutOrdersState, dispatch, navigate]);
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(getContacts());
+  }, [addContactState, dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -164,7 +195,33 @@ export function CateringCheckout() {
       return <>₱0.00</>;
     }
   };
-  const handleCheckout = () => {};
+  const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const responseBody: any = {};
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    formData.forEach(
+      (value, property: string) => (responseBody[property] = value)
+    );
+
+    if (
+      (responseBody.phoneNumber.match(/63/) &&
+        responseBody.phoneNumber.length === 15) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 14) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 11)
+    ) {
+      dispatch(checkoutOrders(responseBody));
+    } else {
+      const phoneNumber: any = phoneNumberRef.current;
+
+      if (phoneNumber) {
+        phoneNumber.focus();
+      }
+    }
+  };
 
   return (
     <>
@@ -415,7 +472,7 @@ export function CateringCheckout() {
                     <Select
                       className="w-full"
                       label="Event Class"
-                      name="eventClass"
+                      name="event_class"
                       required
                       autoComplete="off"
                     >
@@ -434,7 +491,6 @@ export function CateringCheckout() {
                   </span>
 
                   <TextField
-                    aria-readonly
                     variant="outlined"
                     className="w-full"
                     name="other_details"
@@ -459,11 +515,11 @@ export function CateringCheckout() {
                 </div>
 
                 <FormControl className="space-y-2">
-                  <FormLabel id="payment-plan">Choose payment plan</FormLabel>
+                  <FormLabel id="payment_plan">Choose payment plan</FormLabel>
                   <RadioGroup
-                    aria-labelledby="payment-plan"
+                    aria-labelledby="payment_plan"
                     defaultValue="full"
-                    name="payment-plan-group"
+                    name="payment_plan"
                     className="space-y-4"
                   >
                     <FormControlLabel
@@ -477,6 +533,7 @@ export function CateringCheckout() {
                           sx={{
                             padding: "0 10px 0 10px",
                           }}
+                          required
                         />
                       }
                       label=" Full Payment - 1 week before the event or earlier"

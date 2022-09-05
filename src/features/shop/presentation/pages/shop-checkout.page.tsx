@@ -78,6 +78,7 @@ export function ShopCheckout() {
     formData.forEach(
       (value, property: string) => (responseBody[property] = value)
     );
+
     if (
       (responseBody.phoneNumber.match(/63/) &&
         responseBody.phoneNumber.length === 15) ||

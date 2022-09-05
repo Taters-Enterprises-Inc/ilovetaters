@@ -166,7 +166,9 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              dispatch(getStoresAvailableCatering({ address }));
+              dispatch(
+                getStoresAvailableCatering({ address, service: "CATERING" })
+              );
             }}
             className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white bg-button rounded-xl"
           >

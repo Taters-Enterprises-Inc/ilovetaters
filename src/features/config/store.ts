@@ -50,6 +50,7 @@ import editCartItem  from "features/shop/presentation/slices/edit-cart-item.slic
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
 import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
+import cateringCheckoutOrders
 
 export const store = configureStore({
   reducer: {

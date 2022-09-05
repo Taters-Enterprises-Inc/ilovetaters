@@ -48,7 +48,12 @@ export function ShopHome() {
             <SearchAddress
               onPlaceSelected={(place: string) => {
                 setAddress(place);
-                dispatch(getStoresAvailableSnackshop({ address: place }));
+                dispatch(
+                  getStoresAvailableSnackshop({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
               }}
             />
             <span>Search Address</span>

@@ -16,7 +16,12 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
         <label className="w-full pure-material-textfield-outlined">
           <SearchAddress
             onPlaceSelected={(place: string) => {
-              dispatch(getStoresAvailableBranches({ address: place }));
+              dispatch(
+                getStoresAvailableBranches({
+                  address: place,
+                  service: "SNACKSHOP",
+                })
+              );
             }}
           />
           <span>Search Address</span>
