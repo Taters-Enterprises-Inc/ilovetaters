@@ -40,22 +40,15 @@ export function CateringFlavors(props: CateringFlavorsProps) {
               reset={props.resetFlavorsQuantity}
               productQuantity={props.productQuantity}
               totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
-              onChange={(flavorQuantity, action) => {
-                if (props.currentMultiFlavors) {
-                  props.currentMultiFlavors[flavor.id] = {
-                    name: flavor.name,
-                    quantity: flavorQuantity,
-                  };
+              onChange={(action) => {
+                props.currentMultiFlavors[flavor.id] = {
+                  name: flavor.name,
+                  quantity: props.currentMultiFlavors[flavor.id]
+                    ? props.currentMultiFlavors[flavor.id].quantity + 1
+                    : 1,
+                };
 
-                  props.onChange(props.currentMultiFlavors, action);
-                } else {
-                  const temp: any = {};
-                  temp[flavor.id] = {
-                    name: flavor.name,
-                    quantity: flavorQuantity,
-                  };
-                  props.onChange(temp, action);
-                }
+                props.onChange(props.currentMultiFlavors, action);
 
                 setTotalMultiFlavorsQuantity(
                   (value) => value + (action === "plus" ? +1 : -1)

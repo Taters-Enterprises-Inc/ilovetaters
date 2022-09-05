@@ -109,11 +109,11 @@ export function ShopCartModal(props: ShopCartModalProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                    className="rounded-br-[10px] w-[92px] h-[92px]"
+                    className="rounded-[10px] w-[92px] h-[92px]"
                     alt=""
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                    <h3 className="text-sm w-[90%]">
+                    <h3 className="text-sm w-[90%] font-bold leading-4">
                       {order.prod_size} {order.prod_name}
                     </h3>
                     <h3 className="text-xs">

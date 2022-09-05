@@ -498,6 +498,7 @@ export function ShopCheckout() {
                           onClick={() => {
                             if (
                               getSessionState.data &&
+                              getSessionState.data.orders &&
                               getSessionState.data.orders.length > 1
                             ) {
                               dispatch(removeItemFromCartShop(i));
