@@ -120,14 +120,48 @@ export interface CateringOrderModel {
       qr_code: string;
     };
   };
+
+  package_selection: Array<{
+    product_id: number;
+    combination_id: number;
+    type: string;
+    quantity: number;
+    status: number;
+    remarks: string;
+    promo_id: number;
+    promo_price: "";
+    sku: string;
+    sku_id: number;
+    calc_price: string;
+    product_price: string;
+    product_image: string;
+    name: string;
+    description: string;
+    delivery_details: string;
+    add_remarks: number;
+    product_hash: string;
+    note: null;
+    product_code: string;
+    category: number;
+    product_label: string;
+    freebie_prod_name: null;
+    flavors: Array<{
+      name: string;
+      quantity: number;
+    }>;
+  }>;
+
   firstname: string;
   lastname: string;
   grand_total: number;
   subtotal: string;
-  transportation_fee: string;
-  night_diff_charge: number;
   service_fee: number;
   cod_fee: string;
+  package_price: number;
+  service_charge: number;
+  transportation_fee: string;
+  additional_hour_fee: string;
+  night_diff_charge: number;
   no_of_pax: number;
   date_of_event: string;
   event_date_and_time: string;

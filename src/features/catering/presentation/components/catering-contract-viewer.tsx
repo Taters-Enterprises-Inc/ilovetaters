@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect } from "react";
+import NumberFormat from "react-number-format";
 import { useParams } from "react-router-dom";
 import {
   getCateringOrders,
@@ -104,7 +105,10 @@ export function CateringContractViewer() {
               <tr>
                 <td>Payment Terms:</td>
                 <td>
-                  {getCateringOrdersState.data.order.clients_info.payment_plan}
+                  {getCateringOrdersState.data.order.clients_info
+                    .payment_plan === "full"
+                    ? "Full Payment (100%)"
+                    : "Partial Payment (50% / 50%)"}
                 </td>
               </tr>
 
@@ -131,65 +135,86 @@ export function CateringContractViewer() {
                   Total Cost
                 </td>
               </tr>
+
               {/* For Loop HERE: */}
-              <tr>
-                <td
-                  style={{
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    color: "red",
-                  }}
-                >
-                  4
-                </td>
-                <td style={{ fontWeight: "bold", textAlign: "center" }}>4</td>
-                <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
-                </td>
-                <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
-                </td>
-              </tr>
+              {getCateringOrdersState.data.package_selection.map(
+                (package_product) => (
+                  <>
+                    <tr>
+                      <td
+                        style={{
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          color: "red",
+                        }}
+                      >
+                        {package_product.quantity}
+                      </td>
+                      <td style={{ fontWeight: "bold", textAlign: "center" }}>
+                        {package_product.name}
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span
+                          style={{ fontFamily: "DejaVu Sans; sans-serif;" }}
+                        >
+                          &#8369;
+                        </span>{" "}
+                        {package_product.product_price}
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <span
+                          style={{ fontFamily: "DejaVu Sans; sans-serif;" }}
+                        >
+                          &#8369;
+                        </span>{" "}
+                        {package_product.calc_price}
+                      </td>
+                    </tr>
 
-              {/* If statement here */}
-              <tr>
-                <td></td>
-                <td
-                  style={{
-                    color: "rgb(0, 110, 255)",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  Available Flavors:
-                </td>
-                <td></td>
-                <td></td>
-              </tr>
+                    {package_product.flavors.length > 0 ? (
+                      <tr>
+                        <td></td>
+                        <td
+                          style={{
+                            color: "rgb(0, 110, 255)",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                          }}
+                        >
+                          Available Flavors:
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    ) : null}
 
-              {/* Another for loop here */}
-              <tr>
-                <td style={{ textAlign: "center", fontWeight: "bold" }}>4</td>
-                <td style={{ textAlign: "center", color: "rgb(0, 110, 255)" }}>
-                  Flavor Name
-                </td>
-                <td></td>
-                <td></td>
-              </tr>
+                    {package_product.flavors.map((flavor) => (
+                      <tr>
+                        <td style={{ textAlign: "center", fontWeight: "bold" }}>
+                          {flavor.quantity}
+                        </td>
+                        <td
+                          style={{
+                            textAlign: "center",
+                            color: "rgb(0, 110, 255)",
+                          }}
+                        >
+                          {flavor.name}
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    ))}
 
-              <tr>
-                <td style={{ height: 40 }}></td>
-                <td style={{ height: 40 }}></td>
-                <td style={{ height: 40 }}></td>
-                <td style={{ height: 40 }}></td>
-              </tr>
-
+                    <tr>
+                      <td style={{ height: 40 }}></td>
+                      <td style={{ height: 40 }}></td>
+                      <td style={{ height: 40 }}></td>
+                      <td style={{ height: 40 }}></td>
+                    </tr>
+                  </>
+                )
+              )}
               <tr>
                 <td style={{ height: 40 }}></td>
                 <td style={{ height: 40 }}></td>
@@ -211,7 +236,7 @@ export function CateringContractViewer() {
                   <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
                     &#8369;
                   </span>{" "}
-                  20
+                  {getCateringOrdersState.data.package_price}
                 </td>
               </tr>
 
@@ -223,7 +248,7 @@ export function CateringContractViewer() {
                   <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
                     &#8369;
                   </span>{" "}
-                  20
+                  {getCateringOrdersState.data.package_price}
                 </td>
               </tr>
 
@@ -241,10 +266,14 @@ export function CateringContractViewer() {
                 <td>Transportation Fee:</td>
                 <td></td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
+                  <NumberFormat
+                    value={parseInt(
+                      getCateringOrdersState.data.transportation_fee
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
               <tr>
@@ -252,10 +281,14 @@ export function CateringContractViewer() {
                 <td>Additional Hour Fee:</td>
                 <td></td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
+                  <NumberFormat
+                    value={parseInt(
+                      getCateringOrdersState.data.additional_hour_fee
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
               <tr>
@@ -263,10 +296,14 @@ export function CateringContractViewer() {
                 <td>Night Differential Fee:</td>
                 <td></td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
+                  <NumberFormat
+                    value={getCateringOrdersState.data.night_diff_charge.toFixed(
+                      2
+                    )}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
 
@@ -290,10 +327,12 @@ export function CateringContractViewer() {
                   Package Total:
                 </td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  20
+                  <NumberFormat
+                    value={getCateringOrdersState.data.grand_total.toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
 
