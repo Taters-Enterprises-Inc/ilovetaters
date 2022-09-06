@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
 import { ExtractBtn } from "../components/extractbtn";
+import { AdminOrders } from "../components/tables/admin-orders-table";
 
 export function Admin() {
   return (
@@ -17,6 +18,7 @@ export function Admin() {
         <div className="relative flex">
           <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Orders</h1>
           <ExtractBtn></ExtractBtn>
+          <AdminOrders></AdminOrders>
         </div>
       </div>
     </div>
