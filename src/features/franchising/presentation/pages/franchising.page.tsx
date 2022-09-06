@@ -6,8 +6,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
-import { Container } from "react-bootstrap";
-
 export function Franchising() {
   const [serviceReached, setServiceReached] = useState(false);
   const servicesRef = useRef<any>(null);
@@ -32,6 +30,20 @@ export function Franchising() {
         serviceReached={serviceReached}
         active="FRANCHISING"
       ></HomeHeaderNav>
+
+      <div className="vid-container m-auto lg:hidden pt-5">
+        <iframe
+          className="m-auto"
+          width="360"
+          height="200"
+          src="https://www.youtube.com/embed/dvAGdCU6TTY"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+
       <img
         className="lg:hidden"
         src={
@@ -41,24 +53,27 @@ export function Franchising() {
         alt="The best pop corn in town"
       ></img>
 
+      <div className="vid-container m-auto hidden lg:block pt-16">
+        <iframe
+          className="m-auto"
+          width="1160"
+          height="650"
+          src="https://www.youtube.com/embed/dvAGdCU6TTY"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+
       <img
-        className="hidden lg:block"
+        className="m-auto hidden lg:block pt-5"
         src={
           REACT_APP_DOMAIN_URL +
           "api/assets/images/popclub/hero/desktop/popclub.webp"
         }
         alt="The best pop corn in town"
       ></img>
-
-      <div className="vid-container">
-        <iframe
-          className="responsive-iframe"
-          src="https://www.youtube.com/embed/dvAGdCU6TTY?autoplay=1"
-          title="TATERS FRANCHISE"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
 
       <section ref={servicesRef} className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
