@@ -23,7 +23,7 @@ export function CateringContractViewer() {
       {getCateringOrdersState.data ? (
         <section className="p-4 bg-white rounded-lg">
           <div id="contract_paper" style={{ marginBottom: 10 }}>
-            <div id="title_wrapper">
+            <div id="title_wrapper" style={{ marginBottom: 20 }}>
               <img
                 src={require("assets/contract_logo.png")}
                 width="250"

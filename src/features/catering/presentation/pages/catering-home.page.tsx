@@ -27,6 +27,7 @@ import {
   setEventStartDateCateringHomePage,
   setAddressCateringHomePage,
 } from "../slices/catering-home-page.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
@@ -181,18 +182,42 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              if (
-                cateringHomePageState &&
-                cateringHomePageState.address &&
-                cateringHomePageState.eventStartDate &&
-                cateringHomePageState.eventEndDate
-              )
+              if (cateringHomePageState.address === null) {
                 dispatch(
-                  getStoresAvailableCatering({
-                    address: cateringHomePageState.address,
-                    service: "CATERING",
+                  popUpSnackBar({
+                    message: "Please input an address",
+                    severity: "error",
                   })
                 );
+                return;
+              }
+
+              if (cateringHomePageState.eventStartDate === null) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please select a event end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              if (cateringHomePageState.eventEndDate === null) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please select a event end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              dispatch(
+                getStoresAvailableCatering({
+                  address: cateringHomePageState.address,
+                  service: "CATERING",
+                })
+              );
             }}
             className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
           >

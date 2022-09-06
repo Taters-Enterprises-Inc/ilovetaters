@@ -338,7 +338,7 @@ export function ShopOrder() {
                           </h3>
                           {order.remarks ? (
                             <h3 className="text-xs">
-                              Flavor:{" "}
+                              Flavor: <br />
                               <span
                                 className="text-tertiary"
                                 dangerouslySetInnerHTML={{
