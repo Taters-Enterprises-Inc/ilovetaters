@@ -31,11 +31,9 @@ export function Franchising() {
         active="FRANCHISING"
       ></HomeHeaderNav>
 
-      <div className="vid-container m-auto lg:hidden pt-5">
+      <div className="lg:hidden container">
         <iframe
-          className="m-auto"
-          width="360"
-          height="200"
+          className="responsive"
           src="https://www.youtube.com/embed/dvAGdCU6TTY"
           title="YouTube video player"
           frameBorder="0"
