@@ -61,7 +61,12 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
             <SearchAddress
               onPlaceSelected={(place: string) => {
                 setAddress(place);
-                dispatch(getStoresAvailablePopClub({ address: place }));
+                dispatch(
+                  getStoresAvailablePopClub({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
               }}
             />
             <span>Search Address</span>

@@ -29,6 +29,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         address: props.address,
         storeId,
         regionId,
+        service: "SNACKSHOP",
       })
     );
     props.onClose();

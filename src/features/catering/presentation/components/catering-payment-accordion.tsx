@@ -69,13 +69,18 @@ export function CateringPaymentAccordion() {
     <FormControl className="w-full">
       <RadioGroup aria-labelledby="payops aria label" name="payops">
         {getSessionState.data?.payops_list.map((payops, i) => (
-          <Accordion key={i}>
+          <Accordion key={i} defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="text-white" />}
             >
               <div className="flex items-center justify-start flex-1 space-x-4">
                 <AiFillCreditCard className="text-2xl text-tertiary" />{" "}
-                <span>Pay with {payops.name}</span>
+                <span>
+                  Pay with{" "}
+                  {payops.name == "CASH"
+                    ? payops.name + " (visit to store)"
+                    : payops.name}
+                </span>
               </div>
             </AccordionSummary>
             <AccordionDetails>

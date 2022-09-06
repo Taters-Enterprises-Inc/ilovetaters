@@ -25,6 +25,7 @@ import {
   selectGetAllPlatform,
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
+import { MdLocationPin } from "react-icons/md";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -119,7 +120,9 @@ export function HeaderNav(props: HeaderNavProps) {
     <>
       <header className={"sticky w-full top-0 z-20"}>
         <div className={` w-full bg-primary shadow-2xl`}>
-          <nav className={`flex justify-between items-center container py-2`}>
+          <nav
+            className={`flex justify-between items-center container py-2 h-[64px]`}
+          >
             <Link to={"/shop"}>
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
@@ -170,7 +173,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         src={getSessionState.data?.userData.picture}
                         alt="Profile pic"
                         className="rounded-full"
-                        width={30}
+                        width={25}
                       ></img>
                       <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
@@ -199,7 +202,7 @@ export function HeaderNav(props: HeaderNavProps) {
                       onClick={() => setOpenLoginChooserModal(true)}
                       className="flex flex-col items-center justify-center space-y-1 text-white rounded-xl"
                     >
-                      <AiOutlineUser className="text-2xl" />
+                      <AiOutlineUser className="text-xl" />
                       <span className="tracking-[2px] text-xs font-light">
                         Sign In
                       </span>
@@ -211,13 +214,15 @@ export function HeaderNav(props: HeaderNavProps) {
                     onClick={handleCart}
                     className="flex-col items-center justify-center space-y-1"
                   >
-                    <div className="relative flex flex-col items-center justify-center space-y-1 text-white rounded-xl">
-                      <BsCart4 className="text-2xl text-white" />
-                      <span className="absolute rounded-full bg-red-500 h-[1.2rem] w-[1.2rem] lg:h-[1.25rem] lg:w-[1.25rem] -top-2 -right-2 lg:-top-3 lg:-right-2 flex justify-center items-center text-[10px]">
-                        {getSessionState.data?.orders
-                          ? getSessionState.data.orders.length
-                          : 0}
-                      </span>
+                    <div className="flex justify-center items-center">
+                      <div className="relative flex flex-col items-center w-8 justify-center space-y-1 text-white rounded-xl">
+                        <BsCart4 className="text-xl text-white" />
+                        <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
+                          {getSessionState.data?.orders
+                            ? getSessionState.data.orders.length
+                            : 0}
+                        </span>
+                      </div>
                     </div>
                     <h5 className="text-[13px] font-light text-white">
                       {calculateOrdersPrice()}
@@ -228,6 +233,31 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
+        {getSessionState.data?.cache_data ? (
+          <div className="w-full py-1 text-white bg-secondary">
+            <div className="container flex">
+              <div className="truncate w-full lg:w-[400px]">
+                {" "}
+                <strong>
+                  {props.activeUrl === "CATERING" ? "Event Address" : "Address"}
+                  :{" "}
+                </strong>{" "}
+                {getSessionState.data.customer_address}
+              </div>
+              <div className="flex-1"></div>
+              <div className="items-center justify-center space-x-2 hidden lg:flex">
+                {" "}
+                <MdLocationPin className="text-lg" />
+                <Link
+                  to={props.activeUrl === "CATERING" ? "/catering" : "/shop"}
+                >
+                  <strong> Store: </strong>{" "}
+                  {getSessionState.data.cache_data?.store_name}
+                </Link>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </header>
 
       <CateringCartModal

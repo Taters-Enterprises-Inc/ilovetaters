@@ -1,10 +1,16 @@
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import TextField from "@mui/material/TextField";
-import { selectGetContacts } from "features/shared/presentation/slices/get-contacts.slice";
+import {
+  getContacts,
+  selectGetContacts,
+} from "features/shared/presentation/slices/get-contacts.slice";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,9 +33,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
+import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  cateringCheckoutOrders,
+  CateringCheckoutOrdersState,
+  resetCateringCheckoutOrders,
+  selectCateringCheckoutOrders,
+} from "../slices/catering-checkout-orders.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const location = useLocation();
 
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
@@ -37,8 +51,28 @@ export function CateringCheckout() {
 
   const getSessionState = useAppSelector(selectGetSession);
   const getContactsState = useAppSelector(selectGetContacts);
+  const addContactState = useAppSelector(selectAddContact);
+  const cateringCheckoutOrdersState = useAppSelector(
+    selectCateringCheckoutOrders
+  );
 
   const phoneNumberRef = useRef(null);
+
+  useEffect(() => {
+    if (
+      cateringCheckoutOrdersState.status ===
+        CateringCheckoutOrdersState.success &&
+      cateringCheckoutOrdersState.data
+    ) {
+      navigate(`/catering/contract/${cateringCheckoutOrdersState.data.hash}`);
+      dispatch(resetCateringCheckoutOrders());
+    }
+  }, [cateringCheckoutOrdersState, dispatch, navigate]);
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(getContacts());
+  }, [addContactState, dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -61,18 +95,68 @@ export function CateringCheckout() {
         />
       );
     } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateServiceCharge = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const service_charge_percentage = 0.1;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+
       return (
         <NumberFormat
-          value={0}
+          value={(calculatedPrice * service_charge_percentage).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
         />
       );
+    } else {
+      return <>₱0.00</>;
     }
   };
 
-  const calculateDeliveryFee = () => {
+  const calculateNightDifferentialFee = () => {
+    if (getSessionState.data?.catering_night_differential_fee) {
+      return (
+        <NumberFormat
+          value={getSessionState.data.catering_night_differential_fee.toFixed(
+            2
+          )}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateSucceedingHourCharge = () => {
+    if (getSessionState.data?.catering_succeeding_hour_charge) {
+      return (
+        <NumberFormat
+          value={getSessionState.data.catering_succeeding_hour_charge.toFixed(
+            2
+          )}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    } else {
+      return <>₱0.00</>;
+    }
+  };
+
+  const calculateTransportationFee = () => {
     if (getSessionState.data?.distance_rate_price) {
       return (
         <NumberFormat
@@ -83,20 +167,14 @@ export function CateringCheckout() {
         />
       );
     } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return <>₱0.00</>;
     }
   };
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const service_charge_percentage = 0.1;
 
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
@@ -104,6 +182,10 @@ export function CateringCheckout() {
       }
 
       calculatedPrice += getSessionState.data.distance_rate_price;
+      calculatedPrice += getSessionState.data.catering_night_differential_fee;
+      calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
+      calculatedPrice += calculatedPrice * service_charge_percentage;
+
       return (
         <NumberFormat
           value={calculatedPrice.toFixed(2)}
@@ -113,17 +195,37 @@ export function CateringCheckout() {
         />
       );
     } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return <>₱0.00</>;
     }
   };
-  const handleCheckout = () => {};
+  const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const responseBody: any = {};
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    formData.forEach(
+      (value, property: string) => (responseBody[property] = value)
+    );
+
+    if (
+      (responseBody.phoneNumber.match(/63/) &&
+        responseBody.phoneNumber.length === 15) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 14) ||
+      (responseBody.phoneNumber.match(/09/) &&
+        responseBody.phoneNumber.length === 11)
+    ) {
+      console.log(responseBody);
+      dispatch(cateringCheckoutOrders(responseBody));
+    } else {
+      const phoneNumber: any = phoneNumberRef.current;
+
+      if (phoneNumber) {
+        phoneNumber.focus();
+      }
+    }
+  };
 
   return (
     <>
@@ -149,7 +251,8 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
-                <BiUserCircle className="text-2xl" /> <span>Your Details</span>
+                <BiUserCircle className="text-2xl hidden sm:block" />{" "}
+                <span>Your Details</span>
               </div>
             </div>
 
@@ -160,7 +263,8 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <FaFileContract className="text-2xl" /> <span>Contract</span>
+                <FaFileContract className="text-2xl hidden sm:block" />{" "}
+                <span>Contract</span>
               </div>
             </div>
 
@@ -171,7 +275,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <AiOutlineCreditCard className="text-2xl" />{" "}
+                <AiOutlineCreditCard className="text-2xl hidden sm:block" />{" "}
                 <span>Payment</span>
               </div>
             </div>
@@ -183,7 +287,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
-                <AiOutlineCheckCircle className="text-2xl" />{" "}
+                <AiOutlineCheckCircle className="text-2xl hidden sm:block" />{" "}
                 <span>Checkout Complete</span>
               </div>
             </div>
@@ -374,7 +478,7 @@ export function CateringCheckout() {
                     <Select
                       className="w-full"
                       label="Event Class"
-                      name="eventClass"
+                      name="event_class"
                       required
                       autoComplete="off"
                     >
@@ -393,7 +497,6 @@ export function CateringCheckout() {
                   </span>
 
                   <TextField
-                    aria-readonly
                     variant="outlined"
                     className="w-full"
                     name="other_details"
@@ -418,11 +521,11 @@ export function CateringCheckout() {
                 </div>
 
                 <FormControl className="space-y-2">
-                  <FormLabel id="payment-plan">Choose payment plan</FormLabel>
+                  <FormLabel id="payment_plan">Choose payment plan</FormLabel>
                   <RadioGroup
-                    aria-labelledby="payment-plan"
+                    aria-labelledby="payment_plan"
                     defaultValue="full"
-                    name="payment-plan-group"
+                    name="payment_plan"
                     className="space-y-4"
                   >
                     <FormControlLabel
@@ -436,6 +539,7 @@ export function CateringCheckout() {
                           sx={{
                             padding: "0 10px 0 10px",
                           }}
+                          required
                         />
                       }
                       label=" Full Payment - 1 week before the event or earlier"
@@ -586,16 +690,24 @@ export function CateringCheckout() {
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
                     <span>10% Service Charge:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateTransportationFee()}
+                    </span>
                     <span>Additional Hour Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateSucceedingHourCharge()}
+                    </span>
                     <span>Night Differential Fee:</span>
-                    <span className="text-end">₱0.00</span>
+                    <span className="text-end">
+                      {calculateNightDifferentialFee()}
+                    </span>
                   </div>
 
-                  <h1 className="text-4xl text-center text-white">₱0.00</h1>
+                  <h1 className="text-4xl text-center text-white">
+                    {calculateTotalPrice()}
+                  </h1>
                 </div>
               ) : null}
             </form>

@@ -26,11 +26,12 @@ import {
   ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
-  ShopEditCartItem
+  ShopEditCartItem,
 } from "features/shop/presentation/pages";
 import {
   Catering,
   CateringCheckout,
+  CateringContract,
   CateringProduct,
   CateringProducts,
 } from "features/catering/presentation/pages";
@@ -80,7 +81,7 @@ root.render(
                 <Route path="checkout" element={<ShopCheckout />} />
                 <Route
                   path="/shop/products/cart/:cart_id"
-                  element={<ShopEditCartItem/>}
+                  element={<ShopEditCartItem />}
                 />
 
                 <Route
@@ -107,6 +108,7 @@ root.render(
               <Route path="catering" element={<Catering />}>
                 <Route index element={<CateringHome />} />
                 <Route path="products/:hash" element={<CateringProduct />} />
+                <Route path="contract/:hash" element={<CateringContract />} />
                 <Route path="products" element={<CateringProducts />} />
                 <Route path="checkout" element={<CateringCheckout />} />
               </Route>

@@ -127,7 +127,7 @@ export function ShopProfile() {
               onClick={() => {
                 setOpenAddContactModal(true);
               }}
-              className="bg-button text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
+              className="bg-button border border-white text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
             >
               <IoMdAdd />
             </button>
