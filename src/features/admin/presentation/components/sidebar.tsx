@@ -8,7 +8,11 @@ import {
   FaTicketAlt,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { MdProductionQuantityLimits, MdFoodBank } from "react-icons/md";
+import {
+  MdProductionQuantityLimits,
+  MdFoodBank,
+  MdKeyboardArrowRight,
+} from "react-icons/md";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 import { MdOutlineSettings } from "react-icons/md";
@@ -129,6 +133,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -140,6 +145,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/in-store",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],
                   },
@@ -165,6 +171,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -176,6 +183,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -187,6 +195,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -198,6 +207,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -209,6 +219,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],
                   },
@@ -258,6 +269,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -269,6 +281,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -280,6 +293,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
                         title: (
@@ -291,6 +305,7 @@ const Sidebar: FC = () => {
                           </h1>
                         ),
                         itemId: "/raffles/snackshop",
+                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],
                   },

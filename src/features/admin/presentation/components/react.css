@@ -99,12 +99,12 @@
   .side-navigation-panel-select-inner-option {
   --tw-text-opacity: 1;
   align-items: center;
-  border-left-width: 2px;
+  border-left-width: 1px;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  padding: 0.3rem 2rem;
+  padding: 0.4rem 0.9rem;
 }
 
 /* sub nav items hover color */
@@ -141,7 +141,7 @@
   .side-navigation-panel-select-inner-option-text {
   font-size: 0.875rem;
   line-height: 1.25rem;
-  margin-left: 1.1rem;
+  margin-left: 0.9rem;
   margin-right: 0.75rem;
 }
 
