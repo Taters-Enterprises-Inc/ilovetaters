@@ -31,7 +31,7 @@ export function Franchising() {
         active="FRANCHISING"
       ></HomeHeaderNav>
 
-      <div className="lg:hidden container">
+      <div className="lg:hidden mobcontainer">
         <iframe
           className="responsive"
           src="https://www.youtube.com/embed/dvAGdCU6TTY"
