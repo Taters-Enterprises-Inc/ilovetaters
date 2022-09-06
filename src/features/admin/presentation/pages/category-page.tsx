@@ -4,7 +4,7 @@ import { Head } from "../components/head";
 import { ExtractBtn } from "../components/extractbtn";
 import { AdminOrders } from "../tables/admin-orders-table";
 
-export function Admin() {
+export function Category() {
   return (
     // dont change code here
     <div className="flex min-h-screen ">
@@ -16,7 +16,7 @@ export function Admin() {
 
         {/* change page info here */}
         <div className="relative flex">
-          <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Orders</h1>
+          <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Category</h1>
           <ExtractBtn></ExtractBtn>
         </div>
         <div className="font-['Bebas_Neue'] text-3xl ml-4 mr-4 mt-4">
