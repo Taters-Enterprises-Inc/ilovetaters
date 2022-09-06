@@ -53,7 +53,7 @@ export function HomeHeaderNav(props: HeaderNavProps) {
           }`}
         >
           <nav
-            className={`lg:flex hidden justify-between items-center container py-2`}
+            className={`lg:flex hidden justify-between items-center container py-2 h-[64px]`}
           >
             <img
               src={
