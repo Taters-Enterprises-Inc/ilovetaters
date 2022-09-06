@@ -21,16 +21,18 @@ import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
+import {
+  selectCateringHomePage,
+  setEventEndDateCateringHomePage,
+  setEventStartDateCateringHomePage,
+  setAddressCateringHomePage,
+} from "../slices/catering-home-page.slice";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = useState<any>("");
+  const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
-  const getSessionState = useAppSelector(selectGetSession);
-
-  const [eventStartDate, setEventStartDate] = useState<Date | null>(null);
-  const [eventEndDate, setEventEndDate] = useState<Date | null>(null);
 
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
 
@@ -87,8 +89,16 @@ export function CateringHome() {
           <div className="flex justify-center">
             <label className="pure-material-textfield-outlined w-[100%]">
               <SearchAddress
+                value={
+                  cateringHomePageState.address
+                    ? cateringHomePageState.address
+                    : ""
+                }
+                onChange={(value: string) => {
+                  dispatch(setAddressCateringHomePage({ address: value }));
+                }}
                 onPlaceSelected={(place: string) => {
-                  setAddress(place);
+                  dispatch(setAddressCateringHomePage({ address: place }));
                 }}
               />
               <span>Search Address</span>
@@ -117,11 +127,19 @@ export function CateringHome() {
                     className="w-full lg:w-fit"
                   />
                 )}
-                value={eventStartDate}
+                value={cateringHomePageState.eventStartDate}
                 onChange={(newValue) => {
                   if (newValue) {
-                    setEventStartDate(newValue);
-                    setEventEndDate(moment(newValue).add(3, "hours").toDate());
+                    dispatch(
+                      setEventStartDateCateringHomePage({
+                        eventStartDate: newValue,
+                      })
+                    );
+                    dispatch(
+                      setEventEndDateCateringHomePage({
+                        eventEndDate: moment(newValue).add(3, "hours").toDate(),
+                      })
+                    );
                   }
                 }}
               />
@@ -147,9 +165,15 @@ export function CateringHome() {
                     }}
                   />
                 )}
-                value={eventEndDate}
+                value={cateringHomePageState.eventEndDate}
                 onChange={(newValue) => {
-                  if (newValue) setEventEndDate(newValue);
+                  if (newValue) {
+                    dispatch(
+                      setEventEndDateCateringHomePage({
+                        eventEndDate: newValue,
+                      })
+                    );
+                  }
                 }}
               />
             </div>
@@ -157,9 +181,17 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              if (address && eventStartDate && eventEndDate)
+              if (
+                cateringHomePageState &&
+                cateringHomePageState.address &&
+                cateringHomePageState.eventStartDate &&
+                cateringHomePageState.eventEndDate
+              )
                 dispatch(
-                  getStoresAvailableCatering({ address, service: "CATERING" })
+                  getStoresAvailableCatering({
+                    address: cateringHomePageState.address,
+                    service: "CATERING",
+                  })
                 );
             }}
             className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
@@ -168,22 +200,29 @@ export function CateringHome() {
             <span>Check Availability</span>
           </button>
 
-          <CateringStoreList
-            onClickStore={(storeId: number, regionId: number) => {
-              if (eventEndDate && eventStartDate && address)
-                dispatch(
-                  setStoreAndAddress({
-                    address,
-                    storeId,
-                    regionId,
-                    cateringEndDate: eventEndDate,
-                    cateringStartDate: eventStartDate,
-                    service: "CATERING",
-                  })
-                );
-            }}
-            address={address}
-          />
+          {cateringHomePageState.address ? (
+            <CateringStoreList
+              onClickStore={(storeId: number, regionId: number) => {
+                if (
+                  cateringHomePageState &&
+                  cateringHomePageState.address &&
+                  cateringHomePageState.eventStartDate &&
+                  cateringHomePageState.eventEndDate
+                )
+                  dispatch(
+                    setStoreAndAddress({
+                      address: cateringHomePageState.address,
+                      storeId,
+                      regionId,
+                      cateringEndDate: cateringHomePageState.eventEndDate,
+                      cateringStartDate: cateringHomePageState.eventStartDate,
+                      service: "CATERING",
+                    })
+                  );
+              }}
+              address={cateringHomePageState.address}
+            />
+          ) : null}
         </div>
       </section>
     </>

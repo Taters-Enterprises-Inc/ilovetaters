@@ -63,6 +63,14 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "features/catering/presentation/slices/add-to-cart-catering.slice";
+import {
+  CheckoutOrdersState,
+  selectCheckoutOrders,
+} from "features/shop/presentation/slices/checkout-orders.slice";
+import {
+  CateringCheckoutOrdersState,
+  selectCateringCheckoutOrders,
+} from "features/catering/presentation/slices/catering-checkout-orders.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -103,6 +111,48 @@ export function LoadingAndSnackbarWrapper() {
   );
   const popSnackBarState = useAppSelector(selectPopSnackBar);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
+  const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+  const cateringCheckoutOrdersState = useAppSelector(
+    selectCateringCheckoutOrders
+  );
+
+  useEffect(() => {
+    switch (cateringCheckoutOrdersState.status) {
+      case CateringCheckoutOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CateringCheckoutOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CateringCheckoutOrdersState.success:
+        showAlert(setSuccessAlert, cateringCheckoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CateringCheckoutOrdersState.fail:
+        showAlert(setFailsAlert, cateringCheckoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [cateringCheckoutOrdersState]);
+
+  useEffect(() => {
+    switch (checkoutOrdersState.status) {
+      case CheckoutOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CheckoutOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CheckoutOrdersState.success:
+        showAlert(setSuccessAlert, checkoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CheckoutOrdersState.fail:
+        showAlert(setFailsAlert, checkoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [checkoutOrdersState]);
 
   useEffect(() => {
     switch (popSnackBarState.status) {
