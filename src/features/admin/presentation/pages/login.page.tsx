@@ -1,8 +1,6 @@
-
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
-
 
 export function Login() {
   return (
@@ -41,7 +39,7 @@ export function Login() {
                   type="password"
                   name="passw"
                   placeholder="Password"
-                  className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
+                  className="autolog"
                 ></input>
               </div>
 
