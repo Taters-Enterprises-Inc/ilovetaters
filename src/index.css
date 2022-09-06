@@ -57,24 +57,6 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: rgb(19, 1, 1) !important;
 }
 
-/* .vid-container {
-  position: relative;
-  padding-bottom: 56.25%; 
-  height: 0;
-  max-width: 70%;
-  margin: auto;
-  background-color: azure;
-}*/
-
-/* .responsive-iframe {
-  position: relative;
-  top: 0;
-  bottom: 20px;
-  padding-bottom: auto;
-  left: 0;
-  max-width: 500px;
-} */
-
 .web {
   position: relative;
   max-width: 100%;
