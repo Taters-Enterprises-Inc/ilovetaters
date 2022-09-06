@@ -6,7 +6,7 @@ import {
 } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
 
-export enum AddToCartCatering {
+export enum AddToCartCateringState {
   initial,
   inProgress,
   success,
@@ -14,10 +14,10 @@ export enum AddToCartCatering {
 }
 
 const initialState: {
-  status: AddToCartCatering;
+  status: AddToCartCateringState;
   message: string;
 } = {
-  status: AddToCartCatering.initial,
+  status: AddToCartCateringState.initial,
   message: "",
 };
 
@@ -38,13 +38,13 @@ export const addToCartCateringSlice = createSlice({
   extraReducers: (builder: any) => {
     builder
       .addCase(addToCartCatering.pending, (state: any) => {
-        state.status = AddToCartCatering.inProgress;
+        state.status = AddToCartCateringState.inProgress;
       })
       .addCase(
         addToCartCatering.fulfilled,
         (state: any, action: PayloadAction<{ message: string }>) => {
           const { message } = action.payload;
-          state.status = AddToCartCatering.success;
+          state.status = AddToCartCateringState.success;
 
           state.message = message;
         }
@@ -53,7 +53,7 @@ export const addToCartCateringSlice = createSlice({
         addToCartCatering.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           state.message = action.payload.message;
-          state.status = AddToCartCatering.success;
+          state.status = AddToCartCateringState.success;
         }
       );
   },

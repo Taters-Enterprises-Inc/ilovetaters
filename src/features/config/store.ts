@@ -31,7 +31,7 @@ import storeReset from "../shared/presentation/slices/store-reset.slice";
 
 import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
-import removeItemFromCart from "../shared/presentation/slices/remove-item-from-cart.slice";
+import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
 
 import addContact from "../shared/presentation/slices/add-contact.slice";
@@ -45,7 +45,17 @@ import getStoresAvailableBranches from "../branches/presentation/slices/get-stor
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
+import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
+import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
+import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
+import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
+import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
+
+import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
+import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
+import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
+import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -75,6 +85,8 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
+    getCartItem: getCartItem,
+    editCartItem: editCartItem,
     addToCartShop: addToCartShop,
 
     getBranchesStore: getBranchesStore,
@@ -90,7 +102,7 @@ export const store = configureStore({
 
     getCateringCategoryProducts: getCateringCategoryProducts,
     getProductSku: getProductSku,
-    removeItemFromCart: removeItemFromCart,
+    removeItemFromCartShop: removeItemFromCartShop,
     uploadProofOfPayment: uploadProofOfPayment,
     addContact: addContact,
     updateContact: updateContact,
@@ -99,6 +111,14 @@ export const store = configureStore({
 
     getCateringProductDetails: getCateringProductDetails,
     addToCartCatering: addToCartCatering,
+    removeItemFromCartCatering: removeItemFromCartCatering,
+    popSnackBar: popSnackBar,
+    cateringCheckoutOrders: cateringCheckoutOrders,
+
+    cateringHomePage: cateringHomePage,
+    shopHomePage: shopHomePage,
+    branchesNearYouComponent: branchesNearYouComponent,
+    storeChooserModal: storeChooserModal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -339,9 +339,12 @@ export function ShopOrder() {
                           {order.remarks ? (
                             <h3 className="text-xs">
                               Flavor:{" "}
-                              <span className="text-tertiary">
-                                {order.remarks}
-                              </span>
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: order.remarks,
+                                }}
+                              />
                             </h3>
                           ) : null}
                           <h3 className="flex items-end justify-end flex-1 text-base">
@@ -445,6 +448,25 @@ export function ShopOrder() {
                     prefix={"₱"}
                   />
                 </span>
+
+                {getOrdersState.data?.cod_fee !== "0" ? (
+                  <>
+                    <span>Cash on Delivery charge:</span>
+                    <span className="text-end">
+                      +{" "}
+                      <NumberFormat
+                        value={
+                          getOrdersState.data?.cod_fee
+                            ? parseInt(getOrdersState.data.cod_fee).toFixed(2)
+                            : 0.0
+                        }
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                  </>
+                ) : null}
               </div>
 
               <hr className="mt-1" />
@@ -506,8 +528,7 @@ export function ShopOrder() {
                             {images ? (
                               <img
                                 src={images.src}
-                                width={180}
-                                height={180}
+                                className="object-contain h-[150px] w-[150px]"
                                 alt="upload file"
                               />
                             ) : (
@@ -530,7 +551,7 @@ export function ShopOrder() {
 
                       <button
                         type="submit"
-                        className="bg-button w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                        className="bg-button border border-white w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
                       >
                         Upload
                       </button>

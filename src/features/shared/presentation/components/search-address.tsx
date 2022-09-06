@@ -78,16 +78,18 @@ async function handlePlaceSelect() {
 
 interface SearchAddressProps {
   onPlaceSelected: any;
+  value: string;
+  onChange: (newValue: string) => void;
 }
 
 export function SearchAddress(props: SearchAddressProps) {
-  const [query, setQuery] = useState<any>("");
   const autoCompleteRef = useRef(null);
 
   useEffect(() => {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8&libraries=places`,
-      () => handleScriptLoad(setQuery, props.onPlaceSelected, autoCompleteRef)
+      () =>
+        handleScriptLoad(props.onChange, props.onPlaceSelected, autoCompleteRef)
     );
   }, []);
 
@@ -110,8 +112,8 @@ export function SearchAddress(props: SearchAddressProps) {
   return (
     <input
       ref={autoCompleteRef}
-      onChange={(event) => setQuery(event.target.value)}
-      value={query}
+      onChange={(event) => props.onChange(event.target.value)}
+      value={props.value}
       placeholder=" "
       onFocus={geolocate}
     />

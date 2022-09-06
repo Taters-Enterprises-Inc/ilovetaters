@@ -64,12 +64,6 @@ export interface StoreResetResponse {
   };
 }
 
-export interface RemoveItemFromCartResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface UploadProofOfPaymentResponse {
   data: {
     message: string;
@@ -163,17 +157,6 @@ export function UploadProofOfPaymentRepository(
   );
 }
 
-export function RemoveItemFromCartRepository(
-  param: number
-): Promise<RemoveItemFromCartResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/cart/delete/${param}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
 export function StoreResetRepository(): Promise<StoreResetResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/store/reset/`, {
     headers: {
@@ -222,9 +205,7 @@ export function GetStoresAvailableRepository(
   param: GetStoresAvailableParam
 ): Promise<GetStoresAvailableResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/store${
-      param.address ? "?address=" + param.address : ""
-    }`,
+    `${REACT_APP_DOMAIN_URL}api/store?address=${param.address}&service=${param.service}`,
     {
       headers: {
         "Content-Type": "application/json",

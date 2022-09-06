@@ -3,6 +3,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import {
   AddToCartCateringParam,
+  CateringCheckoutOrdersParam,
   GetCategoryProductsParam,
   GetCateringProductDetailsParam,
 } from "features/catering/core/catering.params";
@@ -28,10 +29,47 @@ export interface AddToCartCateringResponse {
   };
 }
 
+export interface RemoveItemFromCartCateringResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CateringCheckoutOrdersResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function CateringCheckoutOrdersRepository(
+  param: CateringCheckoutOrdersParam
+): Promise<CateringCheckoutOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/transaction/catering`, param, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}
+
+export function RemoveItemFromCartCateringRepository(
+  param: number
+): Promise<RemoveItemFromCartCateringResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/cart/catering?item-index=${param}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function AddToCartCateringRepository(
   param: AddToCartCateringParam
 ): Promise<AddToCartCateringResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart`, param, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/cart/catering`, param, {
     headers: {
       "Content-Type": "application/json",
     },

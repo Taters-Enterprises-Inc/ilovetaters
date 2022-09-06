@@ -38,7 +38,7 @@ export function Login() {
                   type="password"
                   name="passw"
                   placeholder="Password"
-                  className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
+                  className="autolog"
                 ></input>
               </div>
               <div className="flex justify-between py-4 text-white">

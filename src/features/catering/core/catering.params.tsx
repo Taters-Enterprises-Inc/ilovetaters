@@ -15,10 +15,20 @@ export interface AddToCartCateringParam {
   prod_sku?: number;
   prod_discount?: number;
   prod_category: number;
+  is_free_item?: boolean;
 }
 export interface GetCateringProductDetailsParam {
   hash: string;
 }
 export interface GetCategoryProductsParam {
   region_id: number;
+}
+
+export interface CateringCheckoutOrdersParam {
+  firstName: string;
+  lastName: string;
+  eMail: string;
+  phoneNumber: string;
+  payops: string;
+  address: string;
 }

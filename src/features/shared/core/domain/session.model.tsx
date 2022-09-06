@@ -29,7 +29,7 @@ export interface SessionModel {
 
   redeem_data: Array<RedeemDealModel>;
 
-  orders: Array<{
+  orders?: Array<{
     prod_id: number;
     prod_image_name: string;
     prod_name: string;
@@ -46,6 +46,8 @@ export interface SessionModel {
     prod_sku?: number;
     prod_discount?: number;
     prod_category: number;
+    is_free_item?: number;
+    free_threshold?: number;
   }>;
 
   deals: any;
@@ -58,6 +60,10 @@ export interface SessionModel {
   minimum_rate: string;
   catering_delivery_rate: string;
   catering_minimum_rate: string;
+  catering_start_date: string;
+  catering_end_date: string;
+  catering_night_differential_fee: number;
+  catering_succeeding_hour_charge: number;
   distance: number;
   distance_rate_id: number;
   distance_rate_price: number;

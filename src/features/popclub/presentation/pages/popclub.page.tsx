@@ -17,7 +17,7 @@ export function PopClub() {
             REACT_APP_DOMAIN_URL +
             "api/assets/images/shared/logo/taters-logo.webp",
           alt: "Taters Logo",
-          className: "w-[100px] lg:w-[160px]",
+          className: "w-[100px] lg:w-[140px]",
         }}
       />
 

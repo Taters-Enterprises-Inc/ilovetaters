@@ -69,7 +69,7 @@ export function PaymentAccordion() {
     <FormControl className="w-full">
       <RadioGroup aria-labelledby="payops aria label" name="payops">
         {getSessionState.data?.payops_list.map((payops, i) => (
-          <Accordion key={i}>
+          <Accordion key={i} defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon className="text-white" />}
             >
@@ -82,7 +82,11 @@ export function PaymentAccordion() {
               <FormControlLabel
                 value={payops.id}
                 control={<Radio color="tertiary" required />}
-                label={payops.name}
+                label={
+                  payops.name === "CASH"
+                    ? payops.name + " (additional ₱ 50.00)"
+                    : payops.name
+                }
               />
               <ul>
                 {payops.acct_name ? (

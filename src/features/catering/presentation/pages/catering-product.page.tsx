@@ -4,12 +4,14 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  changeCateringProductPrice,
   getCateringProductDetails,
   GetCateringProductDetailsState,
   selectGetCateringProductDetails,
@@ -20,17 +22,32 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import NumberFormat from "react-number-format";
-import { QuantityInput } from "features/shared/presentation/components";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
-import { Addon } from "features/shop/presentation/components/addon";
-import { CateringAddon } from "../components";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
-  addToCartShop,
+  CateringAddon,
+  CateringFlavors,
+  CateringProductQuantity,
+} from "../components";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import {
+  addToCartCatering,
+  AddToCartCateringState,
+  selectAddToCartCatering,
+} from "../slices/add-to-cart-catering.slice";
+import { Addon } from "features/shared/presentation/components";
+import {
   AddToCartShopState,
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import {
+  removeItemFromCartCatering,
+  RemoveItemFromCartCateringState,
+  resetRemoveItemFromCartCatering,
+  selectRemoveItemFromCartCatering,
+} from "../slices/remove-item-from-cart-catering.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -51,14 +68,24 @@ export function CateringProduct() {
     selectGetCateringProductDetails
   );
   const getSessionState = useAppSelector(selectGetSession);
+  const addToCartCateringState = useAppSelector(selectAddToCartCatering);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<Object>({});
+  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
+  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
+    useState<number>(0);
+
+  useEffect(() => {
+    if (resetMultiFlavors === true) {
+      setResetMultiFlavors(false);
+    }
+  }, [resetMultiFlavors]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
-
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringProductDetails({ hash }));
@@ -67,24 +94,149 @@ export function CateringProduct() {
   }, [location, dispatch, hash]);
 
   useEffect(() => {
+    if (addToCartCateringState.status === AddToCartCateringState.success) {
+      dispatch(getSession());
+    }
+  }, [addToCartCateringState, dispatch]);
+
+  useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
   }, [addToCartShopState, dispatch]);
 
-  const handleCheckout = () => {
+  const checkBaseProduct = (updatedQuantity: number) => {
     if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
+      getCateringProductDetailsState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success
     ) {
-      setOpenLoginChooserModal(true);
-      return;
+      const productPrices = getCateringProductDetailsState.data.product_prices;
+      for (let i = 0; i < productPrices.length; i++) {
+        if (productPrices[i].min_qty <= updatedQuantity) {
+          dispatch(
+            changeCateringProductPrice({ price: productPrices[i].price })
+          );
+        }
+      }
     }
-
-    navigate("/catering/checkout");
   };
 
-  const handleAddToCart = () => {
+  const calculateFreeAddon = () => {
+    if (
+      getCateringProductDetailsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success
+    ) {
+      const addons = getCateringProductDetailsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+
+      const orders = getSessionState.data.orders;
+      let existingFreeOrder:
+        | undefined
+        | {
+            index: number;
+            data: any;
+          };
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+          if (order.is_free_item) {
+            existingFreeOrder = { index: i, data: order };
+          }
+        }
+      }
+      const totalPrice =
+        getCateringProductDetailsState.data.product.price * quantity +
+        calculatedPrice;
+
+      if (
+        existingFreeOrder &&
+        existingFreeOrder.data.free_threshold &&
+        existingFreeOrder.data.free_threshold >
+          getCateringProductDetailsState.data.product.price * quantity +
+            calculatedPrice
+      ) {
+        dispatch(removeItemFromCartCatering(existingFreeOrder.index));
+      }
+
+      for (let i = 0; i < addons.length; i++) {
+        const freeThreshold = addons[i].free_threshold;
+        if (freeThreshold) {
+          if (totalPrice >= freeThreshold) {
+            freeItem.push(addons[i]);
+          }
+        }
+      }
+
+      if (freeItem.length > 0) {
+        return (
+          <div className="text-white ">
+            🎉 <strong>Claim</strong> FREE{" "}
+            <strong>{freeItem[freeItem.length - 1].name}</strong>
+          </div>
+        );
+      }
+
+      return null;
+    }
+
+    return null;
+  };
+
+  const calculateTotalSavings = () => {
+    if (
+      getCateringProductDetailsState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success &&
+      getCateringProductDetailsState.data.product.base_price &&
+      getCateringProductDetailsState.data.product.base_price !==
+        getCateringProductDetailsState.data.product.price
+    ) {
+      const totalSavings =
+        getCateringProductDetailsState.data.product.base_price * quantity -
+        getCateringProductDetailsState.data.product.price * quantity;
+      return (
+        <div className="text-white ">
+          total savings:{" "}
+          <NumberFormat
+            value={totalSavings.toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const createFlavorDetails = (): string | undefined => {
+    if (currentMultiFlavors === undefined) return undefined;
+    const multiFlavorsArray: Array<{
+      name: string;
+      quantity: number;
+    }> = Object.values(currentMultiFlavors);
+    let result: string = "<br/>";
+
+    for (let i = 0; i < multiFlavorsArray.length; i++) {
+      if (multiFlavorsArray[i].quantity > 0)
+        result =
+          (result === undefined ? "" : result) +
+          `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+            multiFlavorsArray[i].name
+          }</span><br/>`;
+    }
+    return result === "<br/>" ? undefined : result;
+  };
+
+  const dispatchAddToCartCatering = (callBackSuccess?: () => void) => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -106,21 +258,36 @@ export function CateringProduct() {
         GetCateringProductDetailsState.success &&
       getCateringProductDetailsState.data
     ) {
+      if (
+        totalMultiFlavorsQuantity !==
+        quantity * getCateringProductDetailsState.data?.product_flavor.length
+      ) {
+        dispatch(
+          popUpSnackBar({
+            message: "Please meet the required number of flavors.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
+      let flavors_details = createFlavorDetails();
+
+      if (callBackSuccess) callBackSuccess();
+
       dispatch(
-        addToCartShop({
+        addToCartCatering({
           prod_id: getCateringProductDetailsState.data.product.id,
           prod_image_name:
             getCateringProductDetailsState.data.product.product_image,
           prod_name: getCateringProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor: -1,
-          prod_size: -1,
           prod_price: getCateringProductDetailsState.data.product.price,
           prod_calc_amount:
             getCateringProductDetailsState.data.product.price * quantity,
           prod_category: getCateringProductDetailsState.data.product.category,
           prod_with_drinks: -1,
-          flavors_details: "",
+          flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
         })
@@ -157,7 +324,7 @@ export function CateringProduct() {
                     (name) => (
                       <SwiperSlide>
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${name}.jpg`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
                           className="lg:rounded-[20px] w-full h-full object-cover"
                           alt=""
                         />
@@ -167,7 +334,7 @@ export function CateringProduct() {
                   {DEFAULT_CAROUSEL.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/catering_addon/${name}.jpg`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}.jpg`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />
@@ -206,85 +373,47 @@ export function CateringProduct() {
                     <span className="text-base text-white">
                       Note: base price varies on order qty
                     </span>
-
-                    <div className="h-[60px] w-full">
-                      <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-                        <button
-                          onClick={() => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
+                    <CateringProductQuantity
+                      min={1}
+                      quantity={quantity}
+                      onChange={(action) => {
+                        switch (action) {
+                          case "minus":
+                            if (quantity > 1) {
+                              setQuantity((value) => {
+                                checkBaseProduct(value - 1);
+                                setCurrentMultiFlavors({});
+                                setTotalMultiFlavorsQuantity(0);
+                                setResetMultiFlavors(true);
+                                return value - 1;
+                              });
                             }
-
-                            if (quantity > 1 && quantity <= 10)
-                              setQuantity(quantity - 1);
-                          }}
-                          className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                            quantity === 1
-                              ? "opacity-30 cursor-not-allowed"
-                              : ""
-                          }`}
-                        >
-                          <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                            −
-                          </span>
-                        </button>
-
-                        <input
-                          value={quantity}
-                          readOnly
-                          onChange={(event: any) => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
-                            }
-
-                            const value = event.target.value;
-                            if (value >= 1 && value <= 10)
-                              setQuantity(Math.floor(event.target.value));
-                          }}
-                          type="number"
-                          min="1"
-                          max="10"
-                          className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-                          name="custom-input-number"
-                        />
-
-                        <button
-                          onClick={() => {
-                            if (
-                              getSessionState.data?.userData == null ||
-                              getSessionState.data?.userData === undefined
-                            ) {
-                              setOpenLoginChooserModal(true);
-                              return;
-                            }
-
-                            if (quantity >= 1 && quantity < 10)
-                              setQuantity(quantity + 1);
-                          }}
-                          className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                            quantity === 10
-                              ? "opacity-30 cursor-not-allowed"
-                              : ""
-                          }`}
-                        >
-                          <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                            +
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <span className="text-base text-white">
-                      base price: ₱ 315.00 x (21)
-                    </span>
+                            break;
+                          case "plus":
+                            setQuantity((value) => {
+                              checkBaseProduct(value + 1);
+                              return value + 1;
+                            });
+                            break;
+                        }
+                      }}
+                    />
+                    {getCateringProductDetailsState.data ? (
+                      <span className="text-base text-white">
+                        base price:{" "}
+                        <NumberFormat
+                          value={getCateringProductDetailsState.data.product.price.toFixed(
+                            2
+                          )}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />{" "}
+                        x ({quantity})
+                      </span>
+                    ) : null}
+                    {calculateTotalSavings()}
+                    {calculateFreeAddon()}
                   </div>
 
                   {getCateringProductDetailsState.data?.product.price ? (
@@ -310,33 +439,23 @@ export function CateringProduct() {
                       Choose Flavor
                     </h2>
 
-                    <ul className="space-y-4">
+                    <ul className="space-y-6">
                       {getCateringProductDetailsState.data?.product_flavor.map(
-                        (product_flavor, i) => {
-                          return (
-                            <div key={i}>
-                              <span className="text-white text-2xl tracking-[3px] font-['Bebas_Neue']">
-                                {product_flavor.parent_name}
-                              </span>
-                              <ul className="space-y-3">
-                                {product_flavor.flavors.map((flavor, i) => (
-                                  <li key={i}>
-                                    <span className="text-sm text-white">
-                                      {flavor.name}
-                                    </span>
-                                    <QuantityInput
-                                      min={0}
-                                      max={10}
-                                      onChange={(quantity) => {
-                                        console.log(quantity);
-                                      }}
-                                    />
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          );
-                        }
+                        (product_flavor, i) => (
+                          <CateringFlavors
+                            resetFlavorsQuantity={resetMultiFlavors}
+                            currentMultiFlavors={currentMultiFlavors}
+                            parent_name={product_flavor.parent_name}
+                            flavors={product_flavor.flavors}
+                            productQuantity={quantity}
+                            onChange={(updatedMultiFlavors, action) => {
+                              setCurrentMultiFlavors(updatedMultiFlavors);
+                              setTotalMultiFlavorsQuantity(
+                                (value) => value + (action === "plus" ? 1 : -1)
+                              );
+                            }}
+                          />
+                        )
                       )}
                     </ul>
                   </div>
@@ -344,8 +463,12 @@ export function CateringProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={handleCheckout}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() => {
+                      dispatchAddToCartCatering(() => {
+                        navigate("/catering/checkout");
+                      });
+                    }}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -354,8 +477,10 @@ export function CateringProduct() {
                   </button>
 
                   <button
-                    onClick={handleAddToCart}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() => {
+                      dispatchAddToCartCatering();
+                    }}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -371,7 +496,7 @@ export function CateringProduct() {
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
                       {getCateringProductDetailsState.data?.product_addons.map(
                         (product, i) => (
                           <Addon key={i} product={product} />
@@ -381,18 +506,57 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data?.addons ? (
+                {getCateringProductDetailsState.data ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getCateringProductDetailsState.data?.addons.map(
-                        (product, i) => (
-                          <CateringAddon key={i} product={product} />
-                        )
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getCateringProductDetailsState.data.addons.map(
+                        (product, i) => {
+                          if (
+                            getCateringProductDetailsState.data &&
+                            getSessionState.data
+                          ) {
+                            let calculatedPrice = 0;
+
+                            const orders = getSessionState.data.orders;
+                            let isFreeItemClaimed = false;
+
+                            if (orders) {
+                              for (let i = 0; i < orders.length; i++) {
+                                calculatedPrice += orders[i].prod_calc_amount;
+
+                                if (
+                                  orders[i].prod_id === product.id &&
+                                  orders[i].prod_price === 0
+                                ) {
+                                  isFreeItemClaimed = true;
+                                }
+                              }
+                            }
+
+                            let isFreeItem = product.free_threshold
+                              ? getCateringProductDetailsState.data.product
+                                  .price *
+                                  quantity +
+                                  calculatedPrice >=
+                                product.free_threshold
+                              : false;
+
+                            return (
+                              <CateringAddon
+                                key={i}
+                                product={product}
+                                isFreeItem={isFreeItem}
+                                isFreeItemClaimed={isFreeItemClaimed}
+                              />
+                            );
+                          }
+                          return null;
+                        }
                       )}
                     </div>
                   </ProductDetailsAccordion>

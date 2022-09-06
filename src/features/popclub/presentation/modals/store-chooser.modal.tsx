@@ -8,6 +8,10 @@ import {
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { getStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
+import {
+  selectStoreChooserModal,
+  setAddressStoreChooserModal,
+} from "../slices/store-chooser-modal.slice";
 
 interface StoreChooserModalProps {
   open: boolean;
@@ -16,18 +20,11 @@ interface StoreChooserModalProps {
 
 export function StoreChooserModal(props: StoreChooserModalProps) {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = useState<any>("");
-  const getSessionState = useAppSelector(selectGetSession);
+  const storeChooserModalState = useAppSelector(selectStoreChooserModal);
 
   useEffect(() => {
     dispatch(getSession());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -59,15 +56,33 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <div className="flex items-center justify-center mb-3">
           <label className="w-full pure-material-textfield-outlined">
             <SearchAddress
+              value={
+                storeChooserModalState.address
+                  ? storeChooserModalState.address
+                  : ""
+              }
+              onChange={(value: string) => {
+                dispatch(setAddressStoreChooserModal({ address: value }));
+              }}
               onPlaceSelected={(place: string) => {
-                setAddress(place);
-                dispatch(getStoresAvailablePopClub({ address: place }));
+                dispatch(setAddressStoreChooserModal({ address: place }));
+                dispatch(
+                  getStoresAvailablePopClub({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
               }}
             />
             <span>Search Address</span>
           </label>
         </div>
-        <StoreCluster onClose={props.onClose} address={address}></StoreCluster>
+        <StoreCluster
+          onClose={props.onClose}
+          address={
+            storeChooserModalState.address ? storeChooserModalState.address : ""
+          }
+        ></StoreCluster>
       </div>
     </div>
   );

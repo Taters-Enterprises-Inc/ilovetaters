@@ -11,7 +11,7 @@ import {
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
 import { useEffect, useState } from "react";
-import { Addon } from "../components/addon";
+import { Addon } from "../../../shared/presentation/components/addon";
 import NumberFormat from "react-number-format";
 
 import {
@@ -34,12 +34,16 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { QuantityInput } from "features/shared/presentation/components";
+import {
+  QuantityInput,
+  SnackbarAlert,
+} from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -48,6 +52,7 @@ export function ShopProduct() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -66,6 +71,12 @@ export function ShopProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (resetMultiFlavors === true) {
+      setResetMultiFlavors(false);
+    }
+  }, [resetMultiFlavors]);
 
   useEffect(() => {
     if (hash !== undefined) {
@@ -94,7 +105,8 @@ export function ShopProduct() {
       getProductDetailsState.data.product_flavor &&
       getProductDetailsState.data.product_flavor.length > 0 &&
       getProductDetailsState.data.product.product_hash === hash &&
-      currentFlavor === undefined
+      currentFlavor === undefined &&
+      getProductDetailsState.data.product.num_flavor === 1
     ) {
       setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
     }
@@ -117,7 +129,26 @@ export function ShopProduct() {
     }
   }, [addToCartShopState, dispatch]);
 
-  const handleCheckout = () => {
+  const createFlavorDetails = (): string | undefined => {
+    if (currentMultiFlavors === undefined) return undefined;
+    const multiFlavorsArray: Array<{
+      name: string;
+      quantity: number;
+    }> = Object.values(currentMultiFlavors);
+    let result: string = "<br/>";
+
+    for (let i = 0; i < multiFlavorsArray.length; i++) {
+      if (multiFlavorsArray[i].quantity > 0)
+        result =
+          (result === undefined ? "" : result) +
+          `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+            multiFlavorsArray[i].name
+          }</span><br/>`;
+    }
+    return result === "<br/>" ? undefined : result;
+  };
+
+  const dispatchAddToCart = (callBackSuccess?: () => void) => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -130,6 +161,24 @@ export function ShopProduct() {
       getProductDetailsState.status === GetProductDetailsState.success &&
       getProductDetailsState.data
     ) {
+      if (
+        getProductDetailsState.data.product.num_flavor > 1 &&
+        totalMultiFlavorsQuantity !==
+          getProductDetailsState.data.product.num_flavor * quantity
+      ) {
+        dispatch(
+          popUpSnackBar({
+            message: "Please meet the required number of flavors.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
+      let flavors_details = createFlavorDetails();
+
+      if (callBackSuccess) callBackSuccess();
+
       dispatch(
         addToCartShop({
           prod_id: getProductDetailsState.data.product.id,
@@ -143,44 +192,7 @@ export function ShopProduct() {
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
           prod_with_drinks: -1,
-          flavors_details: "",
-          prod_sku_id: -1,
-          prod_sku: -1,
-        })
-      );
-
-      navigate("/shop/checkout");
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
-
-    if (
-      getProductDetailsState.status === GetProductDetailsState.success &&
-      getProductDetailsState.data
-    ) {
-      dispatch(
-        addToCartShop({
-          prod_id: getProductDetailsState.data.product.id,
-          prod_image_name: getProductDetailsState.data.product.product_image,
-          prod_name: getProductDetailsState.data.product.name,
-          prod_qty: quantity,
-          prod_flavor:
-            currentMultiFlavors === undefined ? currentFlavor : undefined,
-          prod_size: currentSize,
-          prod_price: getProductDetailsState.data.product.price,
-          prod_calc_amount:
-            getProductDetailsState.data.product.price * quantity,
-          prod_category: getProductDetailsState.data.product.category,
-          prod_with_drinks: -1,
-          flavors_details: "",
+          flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
         })
@@ -201,7 +213,6 @@ export function ShopProduct() {
       );
     }
   };
-
   return (
     <>
       <PageTitleAndBreadCrumbs
@@ -347,6 +358,7 @@ export function ShopProduct() {
                                       {flavor.name}
                                     </span>
                                     <QuantityInput
+                                      reset={resetMultiFlavors}
                                       min={0}
                                       disableAdd={
                                         getProductDetailsState.data.product
@@ -355,10 +367,10 @@ export function ShopProduct() {
                                           totalMultiFlavorsQuantity ===
                                         0
                                       }
-                                      onChange={(val) => {
+                                      onChange={(val, action) => {
                                         if (currentMultiFlavors) {
                                           currentMultiFlavors[flavor.id] = {
-                                            id: flavor.id,
+                                            name: flavor.name,
                                             quantity: val,
                                           };
 
@@ -368,13 +380,14 @@ export function ShopProduct() {
                                         } else {
                                           const temp: any = {};
                                           temp[flavor.id] = {
-                                            id: flavor.id,
+                                            name: flavor.name,
                                             quantity: val,
                                           };
                                           setCurrentMultiFlavors(temp);
                                         }
                                         setTotalMultiFlavorsQuantity(
-                                          totalMultiFlavorsQuantity + 1
+                                          totalMultiFlavorsQuantity +
+                                            (action === "plus" ? +1 : -1)
                                         );
                                       }}
                                     />
@@ -431,6 +444,16 @@ export function ShopProduct() {
 
                           if (quantity > 1) {
                             setQuantity(quantity - 1);
+
+                            if (
+                              getProductDetailsState.data &&
+                              getProductDetailsState.data?.product.num_flavor >
+                                1
+                            ) {
+                              setCurrentMultiFlavors(undefined);
+                              setTotalMultiFlavorsQuantity(0);
+                              setResetMultiFlavors(true);
+                            }
                           }
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
@@ -505,8 +528,12 @@ export function ShopProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={handleCheckout}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() => {
+                      dispatchAddToCart(() => {
+                        navigate("/shop/checkout");
+                      });
+                    }}
+                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -515,8 +542,10 @@ export function ShopProduct() {
                   </button>
 
                   <button
-                    onClick={handleAddToCart}
-                    className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() => {
+                      dispatchAddToCart();
+                    }}
+                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
