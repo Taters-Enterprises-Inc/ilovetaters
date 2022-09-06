@@ -4,6 +4,7 @@ import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { FaFileContract } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { CateringContractViewer } from "../components";
 
 export function CateringContract() {
   const location = useLocation();
@@ -80,13 +81,13 @@ export function CateringContract() {
         </div>
         <div className="container py-16">
           <div
-            className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-4"
+            className="px-4 py-3 mb-4 text-teal-900 bg-teal-100 border-t-4 border-teal-500 rounded-b shadow-md"
             role="alert"
           >
             <div className="flex">
               <div className="py-1">
                 <svg
-                  className="fill-current h-6 w-6 text-teal-500 mr-4"
+                  className="w-6 h-6 mr-4 text-teal-500 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -94,10 +95,10 @@ export function CateringContract() {
                 </svg>
               </div>
               <div>
-                <p className="font-bold m-0">
+                <p className="m-0 font-bold">
                   Thank you for booking with Taters!
                 </p>
-                <p className="text-sm m-0">
+                <p className="m-0 text-sm">
                   Kindly expect a call from one of our friendly Taters
                   representatives within 48 hours to assist you in finalizing
                   your booking.
@@ -105,6 +106,8 @@ export function CateringContract() {
               </div>
             </div>
           </div>
+
+          <CateringContractViewer />
         </div>
       </section>
     </>

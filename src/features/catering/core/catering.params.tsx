@@ -32,3 +32,7 @@ export interface CateringCheckoutOrdersParam {
   payops: string;
   address: string;
 }
+
+export interface GetCateringOrdersParam {
+  hash: string;
+}

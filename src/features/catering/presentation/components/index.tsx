@@ -5,3 +5,4 @@ export { CateringPaymentAccordion } from "./catering-payment-accordion";
 export { CateringFlavors } from "./catering-flavors";
 export { CateringProductQuantity } from "./catering-product-quantity";
 export { CateringFlavorQuantity } from "./catering-flavor-quantity";
+export { CateringContractViewer } from "./catering-contract-viewer";
