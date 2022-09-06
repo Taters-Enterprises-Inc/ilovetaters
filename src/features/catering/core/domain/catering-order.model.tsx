@@ -128,4 +128,8 @@ export interface CateringOrderModel {
   night_diff_charge: number;
   service_fee: number;
   cod_fee: string;
+  no_of_pax: number;
+  date_of_event: string;
+  event_date_and_time: string;
+  serving_time: string;
 }

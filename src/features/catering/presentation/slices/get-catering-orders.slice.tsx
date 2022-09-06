@@ -1,9 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AddToCartCateringParam } from "features/catering/core/catering.params";
+import {
+  AddToCartCateringParam,
+  GetCateringOrdersParam,
+} from "features/catering/core/catering.params";
 import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
 import {
   AddToCartCateringRepository,
   AddToCartCateringResponse,
+  GetCateringOrdersRepository,
+  GetCateringOrdersResponse,
 } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
 
@@ -24,36 +29,42 @@ const initialState: {
   data: undefined,
 };
 
-export const addToCartCatering = createAsyncThunk(
-  "addToCartCatering",
-  async (param: AddToCartCateringParam) => {
-    const response: AddToCartCateringResponse =
-      await AddToCartCateringRepository(param);
+export const getCateringOrders = createAsyncThunk(
+  "getCateringOrders",
+  async (param: GetCateringOrdersParam) => {
+    const response: GetCateringOrdersResponse =
+      await GetCateringOrdersRepository(param);
     return response.data;
   }
 );
 
 /* Main Slice */
-export const addToCartCateringSlice = createSlice({
-  name: "addToCartCatering",
+export const getCateringOrdersSlice = createSlice({
+  name: "getCateringOrders",
   initialState,
   reducers: {},
   extraReducers: (builder: any) => {
     builder
-      .addCase(addToCartCatering.pending, (state: any) => {
+      .addCase(getCateringOrders.pending, (state: any) => {
         state.status = GetCateringOrdersState.inProgress;
       })
       .addCase(
-        addToCartCatering.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
+        getCateringOrders.fulfilled,
+        (
+          state: any,
+          action: PayloadAction<{
+            message: string;
+            data: CateringOrderModel | null;
+          }>
+        ) => {
+          const { message, data } = action.payload;
           state.status = GetCateringOrdersState.success;
-
+          state.data = data;
           state.message = message;
         }
       )
       .addCase(
-        addToCartCatering.rejected,
+        getCateringOrders.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           state.message = action.payload.message;
           state.status = GetCateringOrdersState.success;
@@ -62,7 +73,7 @@ export const addToCartCateringSlice = createSlice({
   },
 });
 
-export const selectAddToCartCatering = (state: RootState) =>
-  state.addToCartCatering;
+export const selectGetCateringOrders = (state: RootState) =>
+  state.getCateringOrders;
 
-export default addToCartCateringSlice.reducer;
+export default getCateringOrdersSlice.reducer;

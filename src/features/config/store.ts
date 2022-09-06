@@ -56,6 +56,7 @@ import cateringHomePage from "../catering/presentation/slices/catering-home-page
 import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
 import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
 import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
+import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
 
 export const store = configureStore({
   reducer: {
@@ -119,6 +120,7 @@ export const store = configureStore({
     shopHomePage: shopHomePage,
     branchesNearYouComponent: branchesNearYouComponent,
     storeChooserModal: storeChooserModal,
+    getCateringOrders: getCateringOrders,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
