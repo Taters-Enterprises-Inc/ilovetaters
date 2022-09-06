@@ -21,22 +21,24 @@ export function ShopHome() {
 
   return (
     <>
-      <img
-        className="sm:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
+      <section className="container">
+        <img
+          className="sm:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden sm:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
 
       <section className="container pb-64">
         <h1 className='text-white text-sm lg:text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>

@@ -29,12 +29,8 @@ export function CateringHome() {
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
 
-  const [eventStartDate, setEventStartDate] = useState<Date>(
-    moment().add(14, "days").toDate()
-  );
-  const [eventEndDate, setEventEndDate] = useState<Date>(
-    moment().add(14, "days").add(3, "hours").toDate()
-  );
+  const [eventStartDate, setEventStartDate] = useState<Date | null>(null);
+  const [eventEndDate, setEventEndDate] = useState<Date | null>(null);
 
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
 
@@ -57,35 +53,30 @@ export function CateringHome() {
     dispatch(storeReset());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [dispatch, getSessionState]);
-
   function disableDates(date: Date) {
     return moment(date) <= moment().add(13, "days");
   }
 
   return (
     <>
-      <img
-        className="lg:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-
+      <section className="container">
+        <img
+          className="lg:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
           Thank you for considering Taters for your celebration. Kindly key in
@@ -166,9 +157,10 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              dispatch(
-                getStoresAvailableCatering({ address, service: "CATERING" })
-              );
+              if (address && eventStartDate && eventEndDate)
+                dispatch(
+                  getStoresAvailableCatering({ address, service: "CATERING" })
+                );
             }}
             className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
           >
@@ -178,16 +170,17 @@ export function CateringHome() {
 
           <CateringStoreList
             onClickStore={(storeId: number, regionId: number) => {
-              dispatch(
-                setStoreAndAddress({
-                  address,
-                  storeId,
-                  regionId,
-                  cateringEndDate: eventEndDate,
-                  cateringStartDate: eventStartDate,
-                  service: "CATERING",
-                })
-              );
+              if (eventEndDate && eventStartDate && address)
+                dispatch(
+                  setStoreAndAddress({
+                    address,
+                    storeId,
+                    regionId,
+                    cateringEndDate: eventEndDate,
+                    cateringStartDate: eventStartDate,
+                    service: "CATERING",
+                  })
+                );
             }}
             address={address}
           />

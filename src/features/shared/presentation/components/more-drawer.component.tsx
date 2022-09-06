@@ -119,22 +119,22 @@ export default function MoreDrawer() {
   );
 
   return (
-    <div>
+    <div className="flex justify-center items-center pr-[8px] pt-[5px] sm:pt-[4px]">
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            className="flex flex-col items-center justify-center h-full pt-2"
+          <button
+            className="flex flex-col items-center justify-center"
             onClick={
               state[anchor]
                 ? toggleDrawer(anchor, false)
                 : toggleDrawer(anchor, true)
             }
           >
-            <FiMoreHorizontal className="text-[25px] mt-[7.5px] sm:text-4xl text-white"></FiMoreHorizontal>
+            <FiMoreHorizontal className="text-[25px] mt-[7.5px] sm:mt-[3px] sm:text-4xl text-white"></FiMoreHorizontal>
             <span className="text-[8px] sm:text-[14px] text-white capitalize">
               More
             </span>
-          </Button>
+          </button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}

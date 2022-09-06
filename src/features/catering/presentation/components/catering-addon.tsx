@@ -50,7 +50,7 @@ export function CateringAddon(props: AddonProps) {
       <div className="my-3 mb-6 shadow-md bg-secondary rounded-xl shadow-tertiary">
         <div className="flex p-4 space-x-2">
           <img
-            src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/products/${props.product.product_image}`}
+            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.product.product_image}`}
             className="rounded-[10px] w-[100px] h-[100px]"
             alt=""
           />
