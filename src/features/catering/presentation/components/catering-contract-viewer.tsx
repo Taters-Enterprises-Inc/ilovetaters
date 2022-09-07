@@ -6,6 +6,7 @@ import {
   getCateringOrders,
   selectGetCateringOrders,
 } from "../slices/get-catering-orders.slice";
+import { CateringContractTermsAndConditions } from "./catering-contract-terms-and-conditions";
 
 export function CateringContractViewer() {
   let { hash } = useParams();
@@ -21,8 +22,12 @@ export function CateringContractViewer() {
   return (
     <>
       {getCateringOrdersState.data ? (
-        <section className="p-4 bg-white rounded-lg">
-          <div id="contract_paper" style={{ marginBottom: 10 }}>
+        <section className="p-4 overflow-x-auto bg-white rounded-lg">
+          <div
+            id="contract_paper"
+            className="!w-[1000px] lg:!w-full"
+            style={{ marginBottom: 10 }}
+          >
             <div id="title_wrapper" style={{ marginBottom: 20 }}>
               <img
                 src={require("assets/contract_logo.png")}
@@ -248,7 +253,7 @@ export function CateringContractViewer() {
                   <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
                     &#8369;
                   </span>{" "}
-                  {getCateringOrdersState.data.package_price}
+                  {getCateringOrdersState.data.service_charge}
                 </td>
               </tr>
 
@@ -351,6 +356,13 @@ export function CateringContractViewer() {
           </div>
         </section>
       ) : null}
+
+      {getCateringOrdersState.data?.status === 1 ? null : (
+        <>
+          <div className="mb-6 page_break"></div>
+          <CateringContractTermsAndConditions />
+        </>
+      )}
     </>
   );
 }

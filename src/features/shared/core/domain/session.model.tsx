@@ -50,7 +50,16 @@ export interface SessionModel {
     free_threshold?: number;
   }>;
 
-  deals: any;
+  deals: Array<{
+    deal_id: number;
+    deal_image_name: string;
+    deal_name: string;
+    description: string;
+    deal_qty: number;
+    deal_original_price: number;
+    deal_promo_price: number;
+    deal_remarks: string;
+  }>;
 
   km_radius: string;
   km_min: string;

@@ -421,3 +421,28 @@ input[type="number"] {
 .page_break {
   page-break-before: always;
 }
+
+#terms-and-condition h1 {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 0 10px 0;
+  color: white;
+}
+#terms-and-condition h4,
+#terms-and-condition p {
+  color: black;
+  padding: 0;
+  margin: 0;
+}
+#terms-and-condition h4 {
+  margin-bottom: 4px;
+}
+
+#terms-and-condition p {
+  font-size: 13px;
+}
+#terms-and-condition h4 {
+  text-decoration: underline;
+  font-size: 14px;
+  font-weight: bold;
+}

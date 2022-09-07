@@ -7,6 +7,8 @@ import {
   GetCategoryProductsParam,
   GetCateringOrdersParam,
   GetCateringProductDetailsParam,
+  UploadContractParam,
+  CateringUploadProofOfPaymentParam,
 } from "features/catering/core/catering.params";
 import { CateringProductDetailsModel } from "features/catering/core/domain/catering-product-details.model";
 import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
@@ -47,6 +49,46 @@ export interface GetCateringOrdersResponse {
     message: string;
     data: CateringOrderModel;
   };
+}
+
+export interface UploadContractResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CateringUploadProofOfPaymentResponse {
+  data: {
+    message: string;
+  };
+}
+export function CateringUploadProofOfPaymentRepository(
+  param: CateringUploadProofOfPaymentParam
+): Promise<CateringUploadProofOfPaymentResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/shared/catering_upload_payment/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+export function UploadContractRepository(
+  param: UploadContractParam
+): Promise<UploadContractResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/catering/upload_contract/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetCateringOrdersRepository(

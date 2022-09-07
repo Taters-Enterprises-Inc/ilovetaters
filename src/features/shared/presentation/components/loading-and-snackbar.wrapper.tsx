@@ -71,6 +71,10 @@ import {
   CateringCheckoutOrdersState,
   selectCateringCheckoutOrders,
 } from "features/catering/presentation/slices/catering-checkout-orders.slice";
+import {
+  selectUploadContract,
+  UploadContractState,
+} from "features/catering/presentation/slices/upload-contract.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -115,6 +119,7 @@ export function LoadingAndSnackbarWrapper() {
   const cateringCheckoutOrdersState = useAppSelector(
     selectCateringCheckoutOrders
   );
+  const uploadContractState = useAppSelector(selectUploadContract);
 
   useEffect(() => {
     switch (cateringCheckoutOrdersState.status) {
@@ -280,6 +285,25 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [uploadProofOfPaymentState, dispatch]);
+
+  useEffect(() => {
+    switch (uploadContractState.status) {
+      case UploadContractState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadContractState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.success:
+        showAlert(setSuccessAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.fail:
+        showAlert(setFailsAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadContractState, dispatch]);
 
   useEffect(() => {
     switch (removeItemFromCartShopState.status) {
