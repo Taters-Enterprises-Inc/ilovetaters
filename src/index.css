@@ -381,3 +381,43 @@ input[type="number"] {
     }
   }
 }
+
+#contract_paper {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+#contract_paper th {
+  font-size: 16px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+#contract_paper table,
+#contract_paper td {
+  font-size: 14px;
+  border: 1px solid black;
+  border-collapse: collapse;
+  color: black;
+}
+
+#contract_paper td,
+#contract_paper th {
+  padding: 4px 10px 4px 10px;
+}
+
+#contract_paper #title_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#contract_paper #title_wrapper img {
+  margin: 10px 0 10px 0;
+}
+#contract_paper #title_wrapper h1 {
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+}
+
+.page_break {
+  page-break-before: always;
+}

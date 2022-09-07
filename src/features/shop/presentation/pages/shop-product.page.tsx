@@ -177,17 +177,17 @@ export function ShopProduct() {
       name: string;
       quantity: number;
     }> = Object.values(currentMultiFlavors);
-    let result: string = "<br/>";
+    let result: string | undefined;
 
     for (let i = 0; i < multiFlavorsArray.length; i++) {
       if (multiFlavorsArray[i].quantity > 0)
         result =
           (result === undefined ? "" : result) +
-          `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+          `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
             multiFlavorsArray[i].name
-          }</span><br/>`;
+          }<br/>`;
     }
-    return result === "<br/>" ? undefined : result;
+    return result ? result : undefined;
   };
 
   const dispatchAddToCart = (callBackSuccess?: () => void) => {

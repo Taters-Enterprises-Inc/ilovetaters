@@ -5,9 +5,11 @@ import {
   AddToCartCateringParam,
   CateringCheckoutOrdersParam,
   GetCategoryProductsParam,
+  GetCateringOrdersParam,
   GetCateringProductDetailsParam,
 } from "features/catering/core/catering.params";
 import { CateringProductDetailsModel } from "features/catering/core/domain/catering-product-details.model";
+import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -39,6 +41,28 @@ export interface CateringCheckoutOrdersResponse {
   data: {
     message: string;
   };
+}
+export interface GetCateringOrdersResponse {
+  data: {
+    message: string;
+    data: CateringOrderModel;
+  };
+}
+
+export function GetCateringOrdersRepository(
+  param: GetCateringOrdersParam
+): Promise<GetCateringOrdersResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/catering/orders${
+      param.hash ? "?hash=" + param.hash : ""
+    }`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function CateringCheckoutOrdersRepository(

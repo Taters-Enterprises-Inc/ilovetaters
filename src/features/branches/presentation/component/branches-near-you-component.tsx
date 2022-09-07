@@ -1,11 +1,18 @@
 import { SearchAddress } from "features/shared/presentation/components/search-address";
 import React from "react";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { NearyouSearchStore } from "./near-you-search-store";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
+import {
+  selectBranchesNearYouComponent,
+  setAddressBranchesNearYouComponent,
+} from "../slices/branches-near-you-component.slice";
 
 export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const branchesNearYouComponentSlice = useAppSelector(
+    selectBranchesNearYouComponent
+  );
 
   return (
     <section className="container pb-[200px] px-4">
@@ -15,6 +22,14 @@ export const BranchesNearyouComponent: React.FC = (): JSX.Element => {
       <div className="flex items-center justify-center mb-3">
         <label className="w-full pure-material-textfield-outlined">
           <SearchAddress
+            value={
+              branchesNearYouComponentSlice.address
+                ? branchesNearYouComponentSlice.address
+                : ""
+            }
+            onChange={(value: string) => {
+              dispatch(setAddressBranchesNearYouComponent({ address: value }));
+            }}
             onPlaceSelected={(place: string) => {
               dispatch(
                 getStoresAvailableBranches({

@@ -52,6 +52,12 @@ import removeItemFromCartCatering from "../catering/presentation/slices/remove-i
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
 
+import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
+import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
+import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
+import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
+import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform: getAllPlatform,
@@ -109,6 +115,12 @@ export const store = configureStore({
     removeItemFromCartCatering: removeItemFromCartCatering,
     popSnackBar: popSnackBar,
     cateringCheckoutOrders: cateringCheckoutOrders,
+
+    cateringHomePage: cateringHomePage,
+    shopHomePage: shopHomePage,
+    branchesNearYouComponent: branchesNearYouComponent,
+    storeChooserModal: storeChooserModal,
+    getCateringOrders: getCateringOrders,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

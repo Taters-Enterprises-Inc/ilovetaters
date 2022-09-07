@@ -50,30 +50,32 @@ export function CateringProducts() {
 
   return (
     <>
-      <img
-        className="sm:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/desktop/catering_munch_better.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/instructions/catering_instructions.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
+      <section className="container">
+        <img
+          className="sm:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden sm:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/desktop/catering_munch_better.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden sm:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/instructions/catering_instructions.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
       <section className="container space-y-10 pb-[90px]">
         {getCateringCategoryProductsState.data?.map((category, i) => (
           <section key={i}>

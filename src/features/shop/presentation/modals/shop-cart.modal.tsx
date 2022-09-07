@@ -132,6 +132,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                     {order.prod_multiflavors ? (
                       <h3 className="text-xs">
                         Flavor:
+                        <br />
                         <span
                           className="text-tertiary"
                           dangerouslySetInnerHTML={{

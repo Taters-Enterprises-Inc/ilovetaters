@@ -338,7 +338,7 @@ export function ShopOrder() {
                           </h3>
                           {order.remarks ? (
                             <h3 className="text-xs">
-                              Flavor:{" "}
+                              Flavor: <br />
                               <span
                                 className="text-tertiary"
                                 dangerouslySetInnerHTML={{
@@ -448,6 +448,25 @@ export function ShopOrder() {
                     prefix={"₱"}
                   />
                 </span>
+
+                {getOrdersState.data?.cod_fee !== "0" ? (
+                  <>
+                    <span>Cash on Delivery charge:</span>
+                    <span className="text-end">
+                      +{" "}
+                      <NumberFormat
+                        value={
+                          getOrdersState.data?.cod_fee
+                            ? parseInt(getOrdersState.data.cod_fee).toFixed(2)
+                            : 0.0
+                        }
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                  </>
+                ) : null}
               </div>
 
               <hr className="mt-1" />
