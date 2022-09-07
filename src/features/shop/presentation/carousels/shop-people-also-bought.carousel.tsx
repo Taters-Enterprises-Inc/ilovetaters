@@ -38,7 +38,7 @@ export function ShopPeopleAlsoBoughtCarousel(
       modules={[Navigation, Autoplay]}
       navigation
       autoplay={{ delay: 5000 }}
-      className=" h-[400px] w-full"
+      className="h-[30%] w-full"
     >
       {_4x2.map((chunk, i) => {
         return (
