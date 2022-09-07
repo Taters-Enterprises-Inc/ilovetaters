@@ -44,6 +44,7 @@ import {
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { AnyAction } from "@reduxjs/toolkit";
 
 let quantityId: any;
 
@@ -148,16 +149,16 @@ export function ShopProduct() {
   }
 
   function handleonMouseDown(action: string) {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      clearInterval(quantityId);
-      setOpenLoginChooserModal(true);
-    } else {
-      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-      onpressed(action);
-    }
+    // if (
+    //   getSessionState.data?.userData == null ||
+    //   getSessionState.data?.userData === undefined
+    // ) {
+    //   clearInterval(quantityId);
+    //   setOpenLoginChooserModal(true);
+    // } else {
+    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    onpressed(action);
+    // }
   }
 
   const onpressed = (action: string) => {
@@ -498,8 +499,26 @@ export function ShopProduct() {
 
                       <input
                         value={quantity}
-                        readOnly
                         type="number"
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          if (
+                            getSessionState.data?.userData == null ||
+                            getSessionState.data?.userData === undefined
+                          ) {
+                            clearInterval(quantityId);
+                            setOpenLoginChooserModal(true);
+                          } else {
+                            parseInt(value) >= 10
+                              ? setQuantity(10)
+                              : setQuantity(parseInt(value));
+
+                            parseInt(value) <= 1
+                              ? setQuantity(1)
+                              : setQuantity(parseInt(value));
+                          }
+                        }}
                         min="1"
                         max="10"
                         className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
