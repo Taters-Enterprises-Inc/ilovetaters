@@ -77,7 +77,7 @@ export function AddContactModal(props: AddContactModalProps) {
                   }
                 }
               }}
-              className="w-full py-2 text-lg text-white rounded-lg bg-button"
+              className="w-full py-2 text-lg text-white rounded-lg bg-button border border-white"
             >
               Add Contact
             </button>

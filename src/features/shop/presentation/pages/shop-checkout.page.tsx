@@ -477,6 +477,7 @@ export function ShopCheckout() {
                             {order.prod_multiflavors ? (
                               <h3 className="text-xs">
                                 Flavor:
+                                <br />
                                 <span
                                   className="text-tertiary"
                                   dangerouslySetInnerHTML={{

@@ -122,6 +122,7 @@ export function CateringHome() {
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
+                    autoComplete="off"
                     onClick={() => {
                       setOpenStartEventCalendar(true);
                     }}
@@ -160,6 +161,7 @@ export function CateringHome() {
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
+                    autoComplete="off"
                     className="w-full lg:w-fit"
                     onClick={() => {
                       setOpenEndEventCalendar(true);

@@ -86,7 +86,7 @@ export function UpdateContactModal(props: UpdateContactModalProps) {
                   }
                 }
               }}
-              className="w-full py-2 text-lg text-white rounded-lg bg-button"
+              className="w-full py-2 text-lg text-white border rounded-lg bg-button border-whitet"
             >
               Update Contact
             </button>

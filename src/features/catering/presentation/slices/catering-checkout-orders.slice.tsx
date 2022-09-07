@@ -25,7 +25,7 @@ const initialState: {
 };
 
 export const cateringCheckoutOrders = createAsyncThunk(
-  "checkoutOrders",
+  "cateringCheckoutOrders",
   async (param: CateringCheckoutOrdersParam) => {
     const response: CateringCheckoutOrdersResponse =
       await CateringCheckoutOrdersRepository(param);

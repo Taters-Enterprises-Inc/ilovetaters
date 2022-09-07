@@ -525,7 +525,7 @@ export function CateringOrder() {
                 </div>
                 <hr className="mt-1" />
 
-                <div className="flex justify-center items-center flex-col">
+                <div className="flex flex-col items-center justify-center">
                   <h1 className="text-4xl text-center text-white">
                     <NumberFormat
                       value={getCateringOrdersState.data.grand_total.toFixed(2)}
@@ -535,7 +535,7 @@ export function CateringOrder() {
                     />
                   </h1>
 
-                  <span className="text-center text-white text-lg">
+                  <span className="text-lg text-center text-white">
                     Final Payment
                   </span>
                 </div>
@@ -544,7 +544,7 @@ export function CateringOrder() {
 
                 <div className="grid grid-cols-2 text-white">
                   <span className="font-bold">Payment Plan :</span>
-                  <span className="text-end font-bold uppercase">
+                  <span className="font-bold uppercase text-end">
                     {
                       getCateringOrdersState.data.order.clients_info
                         .payment_plan
@@ -556,7 +556,7 @@ export function CateringOrder() {
                     <>
                       <span
                         className={`${
-                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 6 ||
                           getCateringOrdersState.data.status === 8
                             ? "line-through"
                             : ""
@@ -566,7 +566,7 @@ export function CateringOrder() {
                       </span>
                       <span
                         className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 6 ||
                           getCateringOrdersState.data.status === 8
                             ? "line-through"
                             : ""
@@ -609,7 +609,7 @@ export function CateringOrder() {
                       </span>
 
                       <span>Total :</span>
-                      <span className="text-end uppercase">
+                      <span className="uppercase text-end">
                         <NumberFormat
                           value={getCateringOrdersState.data.grand_total.toFixed(
                             2
@@ -654,11 +654,30 @@ export function CateringOrder() {
                   ) : null}
                 </div>
 
-                {getCateringOrdersState.data?.order.clients_info.status ===
-                4 ? (
+                {getCateringOrdersState.data?.order.clients_info.status === 4 ||
+                getCateringOrdersState.data?.order.clients_info.status === 6 ||
+                getCateringOrdersState.data?.order.clients_info.status === 22 ||
+                getCateringOrdersState.data?.order.clients_info.status ===
+                  23 ? (
                   <>
                     <h2 className="font-['Bebas_Neue'] text-xl  text-white tracking-[3px] text-center">
-                      Upload Proof of Payment
+                      {getCateringOrdersState.data?.order.clients_info.status ==
+                        4 &&
+                      getCateringOrdersState.data.order.clients_info
+                        .payment_plan === "half"
+                        ? "Upload Initial Proof of Payment"
+                        : ""}
+                      {getCateringOrdersState.data?.order.clients_info.status ==
+                        4 &&
+                      getCateringOrdersState.data.order.clients_info
+                        .payment_plan === "full"
+                        ? "Upload Proof of Payment"
+                        : ""}
+
+                      {getCateringOrdersState.data?.order.clients_info.status ==
+                      6
+                        ? "Upload Final Proof of Payment"
+                        : ""}
                     </h2>
 
                     <form onSubmit={handleProofOfPayment}>
