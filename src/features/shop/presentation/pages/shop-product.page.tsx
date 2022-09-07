@@ -44,6 +44,7 @@ import {
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { ProductQuantity } from "../components/shop-product-quantity";
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -149,13 +150,13 @@ export function ShopProduct() {
   };
 
   const dispatchAddToCart = (callBackSuccess?: () => void) => {
-    if (
-      getSessionState.data?.userData == null ||
-      getSessionState.data?.userData === undefined
-    ) {
-      setOpenLoginChooserModal(true);
-      return;
-    }
+    // if (
+    //   getSessionState.data?.userData == null ||
+    //   getSessionState.data?.userData === undefined
+    // ) {
+    //   setOpenLoginChooserModal(true);
+    //   return;
+    // }
 
     if (
       getProductDetailsState.status === GetProductDetailsState.success &&
@@ -425,7 +426,9 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
-                <div>
+                <ProductQuantity />
+
+                {/* <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
                   </h2>
@@ -511,7 +514,7 @@ export function ShopProduct() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {getProductDetailsState.data?.product.price ? (
                   <h2 className="mt-4 text-4xl text-white">
