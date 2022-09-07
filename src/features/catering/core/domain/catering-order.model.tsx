@@ -1,4 +1,5 @@
 export interface CateringOrderModel {
+  status: number;
   order: {
     clients_info: {
       fb_user_id: number;

@@ -95,25 +95,45 @@ export function HeaderNav(props: HeaderNavProps) {
     }
   };
 
+  const calculateCartQuantity = () => {
+    let calculatedQuantity = 0;
+
+    if (getSessionState.data?.orders) {
+      calculatedQuantity += getSessionState.data.orders.length;
+    }
+
+    if (getSessionState.data?.deals) {
+      calculatedQuantity += getSessionState.data.deals.length;
+    }
+
+    return calculatedQuantity;
+  };
+
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return <>₱0.00</>;
     }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
   };
 
   return (
@@ -214,13 +234,11 @@ export function HeaderNav(props: HeaderNavProps) {
                     onClick={handleCart}
                     className="flex-col items-center justify-center space-y-1"
                   >
-                    <div className="flex justify-center items-center">
-                      <div className="relative flex flex-col items-center w-8 justify-center space-y-1 text-white rounded-xl">
+                    <div className="flex items-center justify-center">
+                      <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">
                         <BsCart4 className="text-xl text-white" />
                         <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
-                          {getSessionState.data?.orders
-                            ? getSessionState.data.orders.length
-                            : 0}
+                          {calculateCartQuantity()}
                         </span>
                       </div>
                     </div>
@@ -245,7 +263,7 @@ export function HeaderNav(props: HeaderNavProps) {
                 {getSessionState.data.customer_address}
               </div>
               <div className="flex-1"></div>
-              <div className="items-center justify-center space-x-2 hidden lg:flex">
+              <div className="items-center justify-center hidden space-x-2 lg:flex">
                 {" "}
                 <MdLocationPin className="text-lg" />
                 <Link

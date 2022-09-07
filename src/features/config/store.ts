@@ -57,6 +57,9 @@ import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
 import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
 import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
 import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
+import uploadContract from "../catering/presentation/slices/upload-contract.slice";
+
+import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
 
 export const store = configureStore({
   reducer: {
@@ -121,6 +124,9 @@ export const store = configureStore({
     branchesNearYouComponent: branchesNearYouComponent,
     storeChooserModal: storeChooserModal,
     getCateringOrders: getCateringOrders,
+
+    uploadContract: uploadContract,
+    cateringUploadProofOfPayment: cateringUploadProofOfPayment,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
