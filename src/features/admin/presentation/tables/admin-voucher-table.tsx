@@ -8,24 +8,25 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { ExtractBtn } from "../components/extractbtn";
+import { VoucherBtn } from "../components/add-voucher-btn";
 
 const columns: Array<Column> = [
+  { id: "name", label: "Name" },
+  { id: "desc", label: "Description" },
   { id: "status", label: "Status" },
-  { id: "date", label: "Order Date" },
-  { id: "tracker", label: "Tracking No." },
-  { id: "name", label: "Client Name" },
-  { id: "amount", label: "Amount" },
-  { id: "hub", label: "Hub" },
-  { id: "mop", label: "Mode of Payment" },
-  { id: "moh", label: "Mode of Handling" },
-  { id: "invoice", label: "Invoice Number" },
+  { id: "code", label: "Code" },
+  { id: "ctype", label: "Code Type" },
+  { id: "otype", label: "Offer Type" },
+  { id: "dtype", label: "Discount Type" },
+  { id: "value", label: "Voucher Value" },
+  { id: "dstart", label: "Date Start" },
+  { id: "dend", label: "Date End" },
   { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminOrders() {
+export function AdminVouchers() {
   const dispatch = useAppDispatch();
 
   return (
@@ -34,9 +35,9 @@ export function AdminOrders() {
         <div className="container">
           <div className="space-y-2"></div>
           <div className="flex justify-between">
-            <h1 className="pt-4 lg:-ml-12">List of Orders</h1>
+            <h1 className="pt-4 lg:-ml-12">List of Vouchers</h1>
             <div className="lg:-mr-12">
-              <ExtractBtn />
+              <VoucherBtn />
             </div>
           </div>
 

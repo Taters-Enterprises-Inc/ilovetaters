@@ -8,24 +8,22 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { ExtractBtn } from "../components/extractbtn";
+import { UserBtn } from "../components/create-user-btn";
+import { GrpBtn } from "../components/create-grp-btn";
 
 const columns: Array<Column> = [
+  { id: "firstname", label: "First Name" },
+  { id: "lastname", label: "Last Name" },
+  { id: "email", label: "Email Address" },
+  { id: "groups", label: "Groups" },
   { id: "status", label: "Status" },
-  { id: "date", label: "Order Date" },
-  { id: "tracker", label: "Tracking No." },
-  { id: "name", label: "Client Name" },
-  { id: "amount", label: "Amount" },
-  { id: "hub", label: "Hub" },
-  { id: "mop", label: "Mode of Payment" },
-  { id: "moh", label: "Mode of Handling" },
-  { id: "invoice", label: "Invoice Number" },
   { id: "action", label: "Action" },
+  { id: "store", label: "Store" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminOrders() {
+export function AdminUsers() {
   const dispatch = useAppDispatch();
 
   return (
@@ -34,9 +32,9 @@ export function AdminOrders() {
         <div className="container">
           <div className="space-y-2"></div>
           <div className="flex justify-between">
-            <h1 className="pt-4 lg:-ml-12">List of Orders</h1>
+            <h1 className="pt-4 lg:-ml-12">Below is a list of the users</h1>
             <div className="lg:-mr-12">
-              <ExtractBtn />
+              <UserBtn /> <GrpBtn />
             </div>
           </div>
 

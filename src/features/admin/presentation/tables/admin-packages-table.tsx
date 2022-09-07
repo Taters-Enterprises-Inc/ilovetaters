@@ -9,21 +9,14 @@ import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status" },
-  { id: "date", label: "Order Date" },
-  { id: "tracker", label: "Tracking No." },
-  { id: "name", label: "Client Name" },
-  { id: "amount", label: "Amount" },
-  { id: "hub", label: "Hub" },
-  { id: "mop", label: "Mode of Payment" },
-  { id: "moh", label: "Mode of Handling" },
-  { id: "invoice", label: "Invoice Number" },
+  { id: "addonName", label: "Packages Add-on Name" },
+  { id: "desc", label: "Description" },
   { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminCategory() {
+export function AdminPackages() {
   const dispatch = useAppDispatch();
 
   return (
@@ -31,7 +24,7 @@ export function AdminCategory() {
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">Category</h1>
+          <h1 className="pt-4 lg:-ml-12">List of Available Packages for:</h1>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable
