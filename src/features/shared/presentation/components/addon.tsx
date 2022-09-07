@@ -133,7 +133,25 @@ export function Addon(props: AddonProps) {
                 <input
                   value={quantity}
                   type="number"
-                  readOnly
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      clearInterval(quantityId);
+                      setOpenLoginChooserModal(true);
+                    } else {
+                      parseInt(value) >= 10
+                        ? setQuantity(10)
+                        : setQuantity(parseInt(value));
+
+                      parseInt(value) <= 1
+                        ? setQuantity(1)
+                        : setQuantity(parseInt(value));
+                    }
+                  }}
                   className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                   name="custom-input-number"
                 />
