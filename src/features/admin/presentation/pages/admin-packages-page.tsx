@@ -3,7 +3,7 @@ import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
 import { AdminPackages } from "../tables/admin-packages-table";
 
-export function ProdAdd() {
+export function Packages() {
   return (
     // dont change code here
     <div className="flex min-h-screen ">

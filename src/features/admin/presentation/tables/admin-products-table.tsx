@@ -7,6 +7,7 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { AddBtn } from "../components/addproductbtn";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -31,7 +32,12 @@ export function AdminProducts() {
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">List of Products</h1>
+          <div className="flex justify-between">
+            <h1 className="pt-4 lg:-ml-12">List of Products</h1>
+            <div className="lg:-mr-12">
+              <AddBtn />
+            </div>
+          </div>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable

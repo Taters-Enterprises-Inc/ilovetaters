@@ -1,2 +1,16 @@
 export { Login } from "./login.page";
 export { Admin } from "./admin-orders-page";
+export { Cater } from "./admin-catering-page";
+export { Popclub } from "./admin-popclub-page";
+export { Snackshop } from "./admin-raffles-snackshop-page";
+export { Instore } from "./admin-raffles-instore-page";
+export { CaterAdd } from "./admin-catering-addon-page";
+export { ProdAdd } from "./admin-product-addon-page";
+export { Packages } from "./admin-packages-page";
+export { ProdAvail } from "./admin-product-avail-page";
+export { Banner } from "./admin-banner-page";
+export { Products } from "./admin-products-page";
+export { Category } from "./admin-category-page";
+export { Users } from "./admin-users-page";
+export { Vouchers } from "./admin-voucher-page";
+export { Stores } from "./admin-stores-page";

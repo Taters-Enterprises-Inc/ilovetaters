@@ -25,7 +25,7 @@ export function AdminBanner() {
         <div className="container">
           <div className="space-y-2"></div>
 
-          <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
+          <div className="pt-6 pb-6 lg:-mr-12 lg:-ml-12">
             <DataTable
               rowsOrder={[
                 {

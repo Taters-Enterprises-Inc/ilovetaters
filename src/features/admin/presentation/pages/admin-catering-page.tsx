@@ -3,7 +3,7 @@ import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
 import { AdminCatering } from "../tables/admin-catering-table";
 
-export function Catering() {
+export function Cater() {
   return (
     // dont change code here
     <div className="flex min-h-screen ">

@@ -94,7 +94,7 @@ const Sidebar: FC = () => {
                         Catering
                       </h1>
                     ),
-                    itemId: "/catering",
+                    itemId: "/catering-orders",
                     // icon: MdFoodBank,
                     elemBefore: () => <MdFoodBank size={20} />,
                   },
@@ -107,7 +107,7 @@ const Sidebar: FC = () => {
                         Popclub
                       </h1>
                     ),
-                    itemId: "/popclub",
+                    itemId: "/admin-popclub",
                     // icon: FaCartArrowDown,
                     elemBefore: () => <FaCartArrowDown size={20} />,
                   },
@@ -132,7 +132,7 @@ const Sidebar: FC = () => {
                             Snackshop
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/raffles-snackshop",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -144,7 +144,7 @@ const Sidebar: FC = () => {
                             In-store
                           </h1>
                         ),
-                        itemId: "/raffles/in-store",
+                        itemId: "/raffles-instore",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],
@@ -170,7 +170,7 @@ const Sidebar: FC = () => {
                             Catering Add-on Availability
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/catering-addons",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -182,7 +182,7 @@ const Sidebar: FC = () => {
                             Product Add-on Availability
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/product-addons",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -194,7 +194,7 @@ const Sidebar: FC = () => {
                             Product Availability
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/product-availability",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -206,7 +206,7 @@ const Sidebar: FC = () => {
                             Packages Availability
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/packages",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -218,7 +218,7 @@ const Sidebar: FC = () => {
                             Banner Availability
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/banner",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],
@@ -232,7 +232,7 @@ const Sidebar: FC = () => {
                         Products
                       </h1>
                     ),
-                    itemId: "/products",
+                    itemId: "/admin-products",
                     elemBefore: () => <GiCardboardBoxClosed size={20} />,
                   },
                   {
@@ -268,7 +268,7 @@ const Sidebar: FC = () => {
                             Category
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/category",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -280,7 +280,7 @@ const Sidebar: FC = () => {
                             Users
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/users",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -292,7 +292,7 @@ const Sidebar: FC = () => {
                             Vouchers
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/vouchers",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                       {
@@ -304,7 +304,7 @@ const Sidebar: FC = () => {
                             Stores
                           </h1>
                         ),
-                        itemId: "/raffles/snackshop",
+                        itemId: "/stores",
                         elemBefore: () => <MdKeyboardArrowRight size={20} />,
                       },
                     ],

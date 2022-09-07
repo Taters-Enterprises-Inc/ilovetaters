@@ -33,8 +33,9 @@ export function AdminUsers() {
           <div className="space-y-2"></div>
           <div className="flex justify-between">
             <h1 className="pt-4 lg:-ml-12">Below is a list of the users</h1>
-            <div className="lg:-mr-12">
-              <UserBtn /> <GrpBtn />
+            <div className="flex lg:-mr-12">
+              <UserBtn />
+              <GrpBtn />
             </div>
           </div>
 
