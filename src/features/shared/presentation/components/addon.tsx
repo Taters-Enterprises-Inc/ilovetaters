@@ -2,15 +2,23 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
-import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { useEffect, useState } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCartShop, selectAddToCartShop ,AddToCartShopState } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
+import {
+  addToCartShop,
+  selectAddToCartShop,
+  AddToCartShopState,
+} from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }
 
+let quantityId: any;
 
 export function Addon(props: AddonProps) {
   const [quantity, setQuantity] = useState(1);
@@ -18,7 +26,7 @@ export function Addon(props: AddonProps) {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
   const addToCartShopState = useAppSelector(selectAddToCartShop);
-
+  const [setDisabled] = useState(true);
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
@@ -26,6 +34,33 @@ export function Addon(props: AddonProps) {
     }
   }, [addToCartShopState, dispatch]);
 
+  function handleonMouseUp() {
+    clearInterval(quantityId);
+  }
+
+  function handleonMouseDown(action: string) {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+      onpressed(action);
+    }
+  }
+
+  const onpressed = (action: string) => {
+    let counter = quantity;
+    quantityId = setInterval(function () {
+      if (action === "add") counter += 1;
+      else counter -= 1;
+      setQuantity(counter);
+
+      if (counter === 10 || counter === 1) clearInterval(quantityId);
+    }, 500);
+  };
 
   const handleAddToCart = () => {
     if (
@@ -80,20 +115,16 @@ export function Addon(props: AddonProps) {
             <div className="w-24 h-10">
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    if (quantity > 1 && quantity <= 10)
-                      setQuantity(quantity - 1);
-                  }}
-                  className={`w-20 h-full rounded-l outline-none cursor-pointer bg-primary ${
-                    quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                  onMouseDown={() =>
+                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  }
+                  onTouchEnd={handleonMouseUp}
+                  className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                    quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3">−</span>
@@ -101,19 +132,6 @@ export function Addon(props: AddonProps) {
 
                 <input
                   value={quantity}
-                  onChange={(event: any) => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    const value = event.target.value;
-                    if (value >= 1 && value <= 10)
-                      setQuantity(Math.floor(event.target.value));
-                  }}
                   type="number"
                   readOnly
                   className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
@@ -121,20 +139,16 @@ export function Addon(props: AddonProps) {
                 />
 
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    if (quantity >= 1 && quantity < 10)
-                      setQuantity(quantity + 1);
-                  }}
-                  className={`w-20 h-full rounded-r cursor-pointer bg-primary ${
-                    quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                  onMouseDown={() =>
+                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity <= 1 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onTouchEnd={handleonMouseUp}
+                  className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                    quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3 ">

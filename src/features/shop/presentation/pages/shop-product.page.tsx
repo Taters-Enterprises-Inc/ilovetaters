@@ -46,6 +46,8 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { ProductQuantity } from "../components/shop-product-quantity";
 
+let quantityId: any;
+
 export function ShopProduct() {
   const dispatch = useAppDispatch();
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
@@ -54,6 +56,7 @@ export function ShopProduct() {
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
+  const [setDisabled] = useState(true);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -130,6 +133,45 @@ export function ShopProduct() {
     }
   }, [addToCartShopState, dispatch]);
 
+  function handleonMouseUp() {
+    clearInterval(quantityId);
+
+    if (quantity > 1) {
+      if (
+        getProductDetailsState.data &&
+        getProductDetailsState.data?.product.num_flavor > 1
+      ) {
+        setCurrentMultiFlavors(undefined);
+        setTotalMultiFlavorsQuantity(0);
+        setResetMultiFlavors(true);
+      }
+    }
+  }
+
+  function handleonMouseDown(action: string) {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+      onpressed(action);
+    }
+  }
+
+  const onpressed = (action: string) => {
+    let counter = quantity;
+    quantityId = setInterval(function () {
+      if (action === "add") counter += 1;
+      else counter -= 1;
+      setQuantity(counter);
+
+      if (counter === 10 || counter === 1) clearInterval(quantityId);
+    }, 500);
+  };
+
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
     const multiFlavorsArray: Array<{
@@ -150,13 +192,13 @@ export function ShopProduct() {
   };
 
   const dispatchAddToCart = (callBackSuccess?: () => void) => {
-    // if (
-    //   getSessionState.data?.userData == null ||
-    //   getSessionState.data?.userData === undefined
-    // ) {
-    //   setOpenLoginChooserModal(true);
-    //   return;
-    // }
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
 
     if (
       getProductDetailsState.status === GetProductDetailsState.success &&
@@ -426,9 +468,9 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
-                <ProductQuantity />
+                {/* <ProductQuantity /> */}
 
-                {/* <div>
+                <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
                   </h2>
@@ -436,31 +478,20 @@ export function ShopProduct() {
                   <div className="h-[60px] w-full mt-2">
                     <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
-                        onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
-                          if (quantity > 1) {
-                            setQuantity(quantity - 1);
-
-                            if (
-                              getProductDetailsState.data &&
-                              getProductDetailsState.data?.product.num_flavor >
-                                1
-                            ) {
-                              setCurrentMultiFlavors(undefined);
-                              setTotalMultiFlavorsQuantity(0);
-                              setResetMultiFlavors(true);
-                            }
-                          }
-                        }}
+                        onMouseDown={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleonMouseDown("minus")
+                        }
+                        onMouseUp={handleonMouseUp}
+                        onTouchStart={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleonMouseDown("minus")
+                        }
+                        onTouchEnd={handleonMouseUp}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                          quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                          quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
                         <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
@@ -471,19 +502,6 @@ export function ShopProduct() {
                       <input
                         value={quantity}
                         readOnly
-                        onChange={(event: any) => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
-                          const value = event.target.value;
-                          if (value >= 1 && value <= 10)
-                            setQuantity(Math.floor(event.target.value));
-                        }}
                         type="number"
                         min="1"
                         max="10"
@@ -492,20 +510,18 @@ export function ShopProduct() {
                       />
 
                       <button
-                        onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
-                          if (quantity >= 1 && quantity < 10)
-                            setQuantity(quantity + 1);
-                        }}
+                        onMouseDown={() =>
+                          quantity >= 10
+                            ? setDisabled
+                            : handleonMouseDown("add")
+                        }
+                        onMouseUp={handleonMouseUp}
+                        onTouchStart={() =>
+                          quantity <= 1 ? setDisabled : handleonMouseDown("add")
+                        }
+                        onTouchEnd={handleonMouseUp}
                         className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                          quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                          quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
                         <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
@@ -514,7 +530,7 @@ export function ShopProduct() {
                       </button>
                     </div>
                   </div>
-                </div> */}
+                </div>
 
                 {getProductDetailsState.data?.product.price ? (
                   <h2 className="mt-4 text-4xl text-white">

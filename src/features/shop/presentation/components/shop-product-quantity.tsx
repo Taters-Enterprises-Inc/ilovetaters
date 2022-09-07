@@ -10,28 +10,27 @@ import { LoginChooserModal } from "features/popclub/presentation/modals/login-ch
 let timeout: any;
 let quantityId: any;
 
-export function ProductQuantity() {
+export function ProductQuantity({}) {
   const [quantity, setQuantity] = useState(1);
   const [setDisabled] = useState(true);
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const itLongpress = useRef();
 
   function handleonMouseUp() {
     clearInterval(quantityId);
   }
 
   function handleonMouseDown(action: string) {
-    // if (
-    //   getSessionState.data?.userData == null ||
-    //   getSessionState.data?.userData === undefined
-    // ) {
-    //   clearInterval(quantityId);
-    //   setOpenLoginChooserModal(true);
-    // } else {
-    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-    onpressed(action);
-    //}
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+      onpressed(action);
+    }
   }
 
   const onpressed = (action: string) => {
@@ -44,13 +43,6 @@ export function ProductQuantity() {
       if (counter === 10 || counter === 1) clearInterval(quantityId);
     }, 500);
   };
-
-  // function needLogin() {
-  //   if (
-  //     getSessionState.data?.userData == null ||
-  //     getSessionState.data?.userData === undefined
-  //   )
-  // }
 
   return (
     <div>
