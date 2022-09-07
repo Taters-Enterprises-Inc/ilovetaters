@@ -510,13 +510,13 @@ export function ShopProduct() {
                             clearInterval(quantityId);
                             setOpenLoginChooserModal(true);
                           } else {
-                            parseInt(value) >= 10
-                              ? setQuantity(10)
-                              : setQuantity(parseInt(value));
-
-                            parseInt(value) <= 1
-                              ? setQuantity(1)
-                              : setQuantity(parseInt(value));
+                            if (parseInt(value) >= 10) {
+                              setQuantity(10);
+                            } else if (parseInt(value) <= 1) {
+                              setQuantity(1);
+                            } else {
+                              setQuantity(parseInt(value));
+                            }
                           }
                         }}
                         min="1"
