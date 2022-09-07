@@ -44,7 +44,6 @@ import {
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { ProductQuantity } from "../components/shop-product-quantity";
 
 let quantityId: any;
 
@@ -467,8 +466,6 @@ export function ShopProduct() {
                     </ul>
                   </div>
                 ) : null}
-
-                {/* <ProductQuantity /> */}
 
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
