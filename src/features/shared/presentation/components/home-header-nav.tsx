@@ -53,7 +53,7 @@ export function HomeHeaderNav(props: HeaderNavProps) {
           }`}
         >
           <nav
-            className={`lg:flex hidden justify-between items-center container py-2`}
+            className={`lg:flex hidden justify-between items-center container py-2 h-[64px]`}
           >
             <img
               src={
@@ -61,7 +61,7 @@ export function HomeHeaderNav(props: HeaderNavProps) {
                 "api/assets/images/shared/logo/taters-logo.webp"
               }
               alt="Taters Logo"
-              className="w-[150px] lg:w-[160px]"
+              className="w-[150px] lg:w-[160px] px-6"
             ></img>
 
             <div className="flex items-center justify-center space-x-4">
