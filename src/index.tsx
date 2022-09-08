@@ -147,6 +147,7 @@ root.render(
               <Route path="catering-addons" element={<CaterAdd />}></Route>
               <Route path="product-addons" element={<ProdAdd />}></Route>
               <Route path="packages" element={<Packages />}></Route>
+
               <Route
                 path="product-availability"
                 element={<ProdAvail />}
