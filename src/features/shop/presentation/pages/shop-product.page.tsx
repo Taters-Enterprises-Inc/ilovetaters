@@ -149,16 +149,16 @@ export function ShopProduct() {
   }
 
   function handleonMouseDown(action: string) {
-    // if (
-    //   getSessionState.data?.userData == null ||
-    //   getSessionState.data?.userData === undefined
-    // ) {
-    //   clearInterval(quantityId);
-    //   setOpenLoginChooserModal(true);
-    // } else {
-    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-    onpressed(action);
-    // }
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+      onpressed(action);
+    }
   }
 
   const onpressed = (action: string) => {
