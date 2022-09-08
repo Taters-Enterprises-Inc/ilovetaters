@@ -141,7 +141,6 @@ export function CateringContractViewer() {
                 </td>
               </tr>
 
-              {/* For Loop HERE: */}
               {getCateringOrdersState.data.package_selection.map(
                 (package_product) => (
                   <>
@@ -159,20 +158,24 @@ export function CateringContractViewer() {
                         {package_product.name}
                       </td>
                       <td style={{ textAlign: "right" }}>
-                        <span
-                          style={{ fontFamily: "DejaVu Sans; sans-serif;" }}
-                        >
-                          &#8369;
-                        </span>{" "}
-                        {package_product.product_price}
+                        <NumberFormat
+                          value={parseInt(
+                            package_product.product_price
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
                       </td>
                       <td style={{ textAlign: "right" }}>
-                        <span
-                          style={{ fontFamily: "DejaVu Sans; sans-serif;" }}
-                        >
-                          &#8369;
-                        </span>{" "}
-                        {package_product.calc_price}
+                        <NumberFormat
+                          value={parseInt(package_product.calc_price).toFixed(
+                            2
+                          )}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
                       </td>
                     </tr>
 
@@ -238,10 +241,12 @@ export function CateringContractViewer() {
                 <td></td>
                 <td>Package Price:</td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  {getCateringOrdersState.data.package_price}
+                  <NumberFormat
+                    value={getCateringOrdersState.data.package_price.toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
 
@@ -250,10 +255,12 @@ export function CateringContractViewer() {
                 <td></td>
                 <td>10% Service Charge:</td>
                 <td style={{ textAlign: "right" }}>
-                  <span style={{ fontFamily: "DejaVu Sans; sans-serif;" }}>
-                    &#8369;
-                  </span>{" "}
-                  {getCateringOrdersState.data.service_charge}
+                  <NumberFormat
+                    value={getCateringOrdersState.data.service_fee.toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
                 </td>
               </tr>
 

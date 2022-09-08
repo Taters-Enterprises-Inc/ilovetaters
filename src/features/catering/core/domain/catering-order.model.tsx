@@ -159,7 +159,6 @@ export interface CateringOrderModel {
   service_fee: number;
   cod_fee: string;
   package_price: number;
-  service_charge: number;
   transportation_fee: string;
   additional_hour_fee: string;
   night_diff_charge: number;

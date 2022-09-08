@@ -45,27 +45,6 @@ export function CateringSignedContractIsRequired() {
     }
   }, [dispatch, hash]);
 
-  const calculateSubTotalPrice = () => {
-    let calculatedPrice = 0;
-    const orders = getCateringOrdersState.data?.order.order_details;
-
-    if (orders) {
-      for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += parseInt(orders[i].calc_price);
-      }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return <>₱0.00</>;
-    }
-  };
-
   const handleContract = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -159,7 +138,16 @@ export function CateringSignedContractIsRequired() {
           <hr className="mt-1 mb-2" />
           <div className="grid grid-cols-2 text-white">
             <span>Subtotal:</span>
-            <span className="text-end">{calculateSubTotalPrice()}</span>
+            <span className="text-end">
+              <NumberFormat
+                value={parseInt(
+                  getCateringOrdersState.data.order.clients_info.purchase_amount
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </span>
             {getCateringOrdersState.data.service_fee ? (
               <>
                 <span>10% Service Charge:</span>
