@@ -28,7 +28,6 @@ export function PopClub() {
       <Outlet />
 
       <FooterNav activeUrl="POPCLUB" />
-      <UnExpiredRedeem />
     </main>
   );
 }

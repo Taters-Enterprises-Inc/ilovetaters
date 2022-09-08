@@ -46,7 +46,7 @@ export function ShopProducts() {
 
   return (
     <>
-      <section className="container">
+      <section className="lg:container">
         <img
           className="sm:hidden"
           src={

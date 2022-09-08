@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getLatestUnexpiredRedeem,
@@ -11,6 +11,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
+  const { hash } = useParams();
 
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
@@ -23,7 +24,13 @@ export function UnExpiredRedeem() {
   return (
     <>
       {getLatestUnexpiredRedeemState.data ? (
-        <div className="fixed z-[2003] bottom-[70px] sm:top-[80px] h-[90px] w-full ">
+        <div
+          className={`fixed z-[2003] bottom-[70px] sm:top-[80px] h-[90px] w-full ${
+            hash === getLatestUnexpiredRedeemState.data.deal_hash
+              ? "hidden"
+              : ""
+          }`}
+        >
           <div className="container flex items-start justify-end h-full">
             <Link
               to={

@@ -45,7 +45,6 @@ export function Shop() {
       <Outlet />
 
       <FooterNav activeUrl="SNACKSHOP" />
-      <UnExpiredRedeem />
     </main>
   );
 }

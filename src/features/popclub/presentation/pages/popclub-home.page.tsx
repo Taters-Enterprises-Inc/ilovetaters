@@ -71,7 +71,7 @@ export function PopClubHome() {
 
   return (
     <>
-      <section className="container">
+      <section className="lg:container">
         <img
           className="lg:hidden"
           src={
