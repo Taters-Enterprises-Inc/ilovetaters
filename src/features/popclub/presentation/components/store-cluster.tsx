@@ -59,7 +59,7 @@ export function StoreCluster(props: StoreClusterProps) {
 
     if (platform) {
       if (platform === "store-visit") {
-        navigate(`../popclub/online-delivery?category=all`);
+        navigate(`/popclub/online-delivery?category=all`);
       } else {
         navigate(`?category=all`);
       }

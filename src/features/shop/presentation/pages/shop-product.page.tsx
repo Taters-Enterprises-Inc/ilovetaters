@@ -34,17 +34,19 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {
-  QuantityInput,
-  SnackbarAlert,
-} from "features/shared/presentation/components";
+import { QuantityInput } from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
+import {
+  addToCartCheckoutShop,
+  AddToCartCheckoutShopState,
+  resetAddToCartCheckout,
+  selectAddToCartCheckoutShop,
+} from "../slices/add-to-cart-checkout-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { AnyAction } from "@reduxjs/toolkit";
 
 let quantityId: any;
 
@@ -55,6 +57,9 @@ export function ShopProduct() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const addToCartCheckoutShopState = useAppSelector(
+    selectAddToCartCheckoutShop
+  );
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [setDisabled] = useState(true);
 
@@ -133,6 +138,16 @@ export function ShopProduct() {
     }
   }, [addToCartShopState, dispatch]);
 
+  useEffect(() => {
+    if (
+      addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
+    ) {
+      dispatch(getSession());
+      navigate("/shop/checkout");
+      dispatch(resetAddToCartCheckout());
+    }
+  }, [addToCartCheckoutShopState, navigate, dispatch]);
+
   function handleonMouseUp() {
     clearInterval(quantityId);
 
@@ -191,7 +206,7 @@ export function ShopProduct() {
     return result ? result : undefined;
   };
 
-  const dispatchAddToCart = (callBackSuccess?: () => void) => {
+  const handleAddToCartCheckout = () => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -220,7 +235,54 @@ export function ShopProduct() {
 
       let flavors_details = createFlavorDetails();
 
-      if (callBackSuccess) callBackSuccess();
+      dispatch(
+        addToCartCheckoutShop({
+          prod_id: getProductDetailsState.data.product.id,
+          prod_image_name: getProductDetailsState.data.product.product_image,
+          prod_name: getProductDetailsState.data.product.name,
+          prod_qty: quantity,
+          prod_flavor: currentFlavor,
+          prod_size: currentSize,
+          prod_price: getProductDetailsState.data.product.price,
+          prod_calc_amount:
+            getProductDetailsState.data.product.price * quantity,
+          prod_category: getProductDetailsState.data.product.category,
+          prod_with_drinks: -1,
+          flavors_details: flavors_details,
+          prod_sku_id: -1,
+          prod_sku: -1,
+        })
+      );
+    }
+  };
+  const handleAddToCart = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    if (
+      getProductDetailsState.status === GetProductDetailsState.success &&
+      getProductDetailsState.data
+    ) {
+      if (
+        getProductDetailsState.data.product.num_flavor > 1 &&
+        totalMultiFlavorsQuantity !==
+          getProductDetailsState.data.product.num_flavor * quantity
+      ) {
+        dispatch(
+          popUpSnackBar({
+            message: "Please meet the required number of flavors.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
+      let flavors_details = createFlavorDetails();
 
       dispatch(
         addToCartShop({
@@ -563,11 +625,7 @@ export function ShopProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={() => {
-                      dispatchAddToCart(() => {
-                        navigate("/shop/checkout");
-                      });
-                    }}
+                    onClick={handleAddToCartCheckout}
                     className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
@@ -577,9 +635,7 @@ export function ShopProduct() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      dispatchAddToCart();
-                    }}
+                    onClick={handleAddToCart}
                     className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />

@@ -25,6 +25,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectSetStoreAndAddressPopClub } from "../slices/set-store-and-address-popclub.slice";
 
 export function PopClubHome() {
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -42,6 +43,9 @@ export function PopClubHome() {
 
   const setPopClubDataState = useAppSelector(selectSetPopClubData);
   const setSessionState = useAppSelector(selectSetSession);
+  const setStoreAndAddressPopClubState = useAppSelector(
+    selectSetStoreAndAddressPopClub
+  );
 
   const dispatch = useAppDispatch();
   let { platform } = useParams();
@@ -55,10 +59,6 @@ export function PopClubHome() {
 
   useEffect(() => {
     dispatch(getSession());
-  }, [setSessionState, dispatch]);
-
-  useEffect(() => {
-    dispatch(getSession());
 
     if (platform !== undefined && category !== null) {
       dispatch(getAllPlatform());
@@ -67,7 +67,15 @@ export function PopClubHome() {
         getDeals({ platform_url_name: platform, category_url_name: category })
       );
     }
-  }, [dispatch, platform, query, navigate, category]);
+  }, [
+    dispatch,
+    platform,
+    query,
+    navigate,
+    category,
+    setStoreAndAddressPopClubState,
+    setSessionState,
+  ]);
 
   return (
     <>
@@ -99,16 +107,15 @@ export function PopClubHome() {
         ></img>
       </section>
       <section className="container ">
-        <div className="flex flex-col items-start justify-start">
+        <div className="flex flex-col items-start justify-start text-xs sm:text-sm md:text-base">
           {getSessionState.data?.popclub_data ? (
             <button
-              className="text-xs"
               onClick={() => {
                 setOpenPlatformChooserModal(true);
               }}
             >
-              <span className="text-white lg:text-lg">Claim deals via : </span>
-              <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
+              <span className="text-white">Claim deals via : </span>
+              <span className="text-[#ffcd17] font-['Bebas_Neue'] tracking-widest">
                 {getSessionState.data?.popclub_data.platform.replace("-", "  ")}
               </span>
             </button>
@@ -116,7 +123,7 @@ export function PopClubHome() {
 
           {getSessionState.data?.cache_data ? (
             <button
-              className="text-xs text-white"
+              className="text-white "
               onClick={() => {
                 switch (platform) {
                   case "online-delivery":
@@ -128,8 +135,8 @@ export function PopClubHome() {
                 }
               }}
             >
-              <span className="text-white lg:text-lg">Chosen store: </span>
-              <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
+              <span className="text-white">Chosen store: </span>
+              <span className="text-[#ffcd17] font-['Bebas_Neue'] tracking-widest">
                 {getSessionState.data?.cache_data.store_name}
               </span>
             </button>
@@ -138,7 +145,7 @@ export function PopClubHome() {
           {getSessionState.data?.customer_address &&
           platform === "online-delivery" ? (
             <button
-              className="flex space-x-1 text-xs text-white text-start"
+              className="flex space-x-1 text-white text-start"
               onClick={() => {
                 switch (platform) {
                   case "online-delivery":
@@ -151,7 +158,7 @@ export function PopClubHome() {
               }}
             >
               <span className="text-white">Address: </span>
-              <span className="text-[#ffcd17] truncate w-[200px]">
+              <span className="text-[#ffcd17] truncate w-[200px] sm:w-[400px] md:w-[600px]">
                 {getSessionState.data?.customer_address}
               </span>
             </button>
@@ -199,7 +206,7 @@ export function PopClubHome() {
       <section className="container pb-96">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
           {getDealsState.data.map((deal, i) => (
-            <Link key={i} to={`/popclub/deal/${deal.hash}`} className="">
+            <Link key={i} to={`/popclub/deal/${deal.hash}`}>
               <div className=" relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full">
                 <h1 className="text-[12px] lg:text-lg pt-1 text-white uppercase font-['Bebas_Neue'] tracking-[2px] text-center ">
                   {deal.category_name}

@@ -8,6 +8,7 @@ import {
 import { useEffect } from "react";
 import { CountdownTimerLatestRedeem } from "features/popclub/presentation/components";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getSession } from "../slices/get-session.slice";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -16,6 +17,10 @@ export function UnExpiredRedeem() {
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+
+  useEffect(() => {
+    dispatch(getSession());
+  }, [dispatch, getLatestUnexpiredRedeemState]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());

@@ -14,6 +14,7 @@ export function SnackbarAlert(props: SnackbarAlertProps) {
       open={props.open}
       autoHideDuration={10000}
       sx={{ zIndex: 2004 }}
+      className="mb-[7px] lg:mb-0"
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       TransitionComponent={Slide}
     >

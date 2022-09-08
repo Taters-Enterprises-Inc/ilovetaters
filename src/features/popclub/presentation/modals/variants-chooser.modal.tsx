@@ -1,4 +1,7 @@
-import { selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
+import {
+  resetGetDealProductVariantsState,
+  selectGetDealProductVariants,
+} from "../slices/get-deal-product-variants.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   redeemDeal,
@@ -39,7 +42,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
 
   useEffect(() => {
     if (redeemDealState.status === RedeemDealState.success) {
-      dispatch(getSession());
     }
   }, [redeemDealState, dispatch]);
 
@@ -50,9 +52,11 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       getSessionState.data?.popclub_data.platform === "online-delivery" &&
       redeemDealState.data
     ) {
+      navigate("/shop/checkout");
+      dispatch(getSession());
       dispatch(resetRedeemDeal());
     }
-  }, [getSessionState, redeemDealState, getRedeemsState]);
+  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -67,7 +71,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
 
     if (getDealState.data?.hash && remarks) {
       props.onClose();
-      navigate("/shop/checkout");
+      dispatch(resetGetDealProductVariantsState());
       dispatch(
         redeemDeal({
           hash: getDealState.data?.hash,

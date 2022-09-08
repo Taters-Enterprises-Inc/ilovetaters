@@ -499,20 +499,7 @@ export function ShopCheckout() {
                             type="button"
                             className="absolute text-white top-2 right-4 "
                             onClick={() => {
-                              if (
-                                getSessionState.data &&
-                                getSessionState.data.orders &&
-                                getSessionState.data.orders.length > 1
-                              ) {
-                                dispatch(removeItemFromCartShop(i));
-                              } else {
-                                dispatch(
-                                  popUpSnackBar({
-                                    message: "You cannot delete this item",
-                                    severity: "error",
-                                  })
-                                );
-                              }
+                              dispatch(removeItemFromCartShop(i));
                             }}
                           >
                             <IoMdClose />

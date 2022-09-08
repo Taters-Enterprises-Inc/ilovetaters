@@ -96,6 +96,10 @@ import {
   selectSetStoreAndAddressPopClub,
   SetStoreAndAddressPopClubState,
 } from "features/popclub/presentation/slices/set-store-and-address-popclub.slice";
+import {
+  RedeemDealState,
+  selectRedeemDeal,
+} from "features/popclub/presentation/slices/redeem-deal.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -154,6 +158,26 @@ export function LoadingAndSnackbarWrapper() {
   const setStoreAndAddressPopClub = useAppSelector(
     selectSetStoreAndAddressPopClub
   );
+  const redeemDealState = useAppSelector(selectRedeemDeal);
+
+  useEffect(() => {
+    switch (redeemDealState.status) {
+      case RedeemDealState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case RedeemDealState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case RedeemDealState.success:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+      case RedeemDealState.fail:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+    }
+  }, [redeemDealState, dispatch]);
 
   useEffect(() => {
     switch (setStoreAndAddressPopClub.status) {

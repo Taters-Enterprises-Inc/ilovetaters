@@ -12,7 +12,6 @@ import {
   PopClubDeal,
   PopClubHome,
 } from "features/popclub/presentation/pages";
-import { PopClubDealGuards } from "features/popclub/presentation/pages/guards";
 import {
   Shop,
   ShopCheckout,
@@ -64,6 +63,7 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
+import { ShopCheckoutGuard } from "features/shop/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -90,9 +90,7 @@ root.render(
                 <Route path="popclub" element={<PopClub />}>
                   <Route path=":platform" element={<PopClubHome />} />
 
-                  <Route path="deal" element={<PopClubDealGuards />}>
-                    <Route path=":hash" element={<PopClubDeal />} />
-                  </Route>
+                  <Route path="deal/:hash" element={<PopClubDeal />} />
                 </Route>
 
                 <Route path="shop" element={<Shop />}>
@@ -100,7 +98,9 @@ root.render(
                   <Route path="products/:hash" element={<ShopProduct />} />
                   <Route path="order/:hash" element={<ShopOrder />} />
                   <Route path="products" element={<ShopProducts />} />
-                  <Route path="checkout" element={<ShopCheckout />} />
+                  <Route element={<ShopCheckoutGuard />}>
+                    <Route path="checkout" element={<ShopCheckout />} />
+                  </Route>
                   <Route
                     path="/shop/products/cart/:cart_id"
                     element={<ShopEditCartItem />}

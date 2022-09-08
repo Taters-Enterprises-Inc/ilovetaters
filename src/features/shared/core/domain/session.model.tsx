@@ -53,7 +53,7 @@ export interface SessionModel {
     free_threshold?: number;
   }>;
 
-  deals: Array<{
+  deals?: Array<{
     deal_id: number;
     deal_image_name: string;
     deal_name: string;

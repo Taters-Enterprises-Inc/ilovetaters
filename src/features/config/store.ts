@@ -63,6 +63,7 @@ import cateringUploadProofOfPayment from "../catering/presentation/slices/cateri
 import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
 
 import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
+import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
 
 export const store = configureStore({
   reducer: {
@@ -95,6 +96,7 @@ export const store = configureStore({
     getCartItem: getCartItem,
     editCartItem: editCartItem,
     addToCartShop: addToCartShop,
+    addToCartCheckoutShop: addToCartCheckoutShop,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
