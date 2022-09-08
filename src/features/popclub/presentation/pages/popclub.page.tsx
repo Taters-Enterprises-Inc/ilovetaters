@@ -1,5 +1,9 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import {
+  FooterNav,
+  HeaderNav,
+  UnExpiredRedeem,
+} from "features/shared/presentation/components";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
 
@@ -24,6 +28,7 @@ export function PopClub() {
       <Outlet />
 
       <FooterNav activeUrl="POPCLUB" />
+      <UnExpiredRedeem />
     </main>
   );
 }

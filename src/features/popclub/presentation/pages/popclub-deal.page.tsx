@@ -354,7 +354,7 @@ export function PopClubDeal() {
               />
             ) : null}
             <CountdownTimer></CountdownTimer>
-            <div className="flex-col p-4 space-y-4">
+            <div className="container flex-col py-4 space-y-4 lg:px-4">
               <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                 {getDealState.data?.name}
               </h1>

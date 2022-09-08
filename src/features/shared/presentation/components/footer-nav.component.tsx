@@ -1,11 +1,6 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { CountdownTimerLatestRedeem } from "features/popclub/presentation/components";
-import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
@@ -18,11 +13,6 @@ interface FooterNavProps {
 }
 
 export function FooterNav(props: FooterNavProps) {
-  const getLatestUnexpiredRedeemState = useAppSelector(
-    selectGetLatestUnexpiredRedeem
-  );
-  const dispatch = useAppDispatch();
-
   const getAllPlatformState = useAppSelector(selectGetAllPlatform);
 
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
@@ -31,36 +21,10 @@ export function FooterNav(props: FooterNavProps) {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
-  useEffect(() => {
-    dispatch(getLatestUnexpiredRedeem());
-  }, [dispatch]);
-
   return (
     <>
       <section className="fixed bottom-0 z-[2003]  w-full">
-        {getLatestUnexpiredRedeemState.data ? (
-          <Link
-            to={"/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash}
-            className="text-white shadow-lg bg-secondary m-2 h-[105px] rounded-xl block"
-          >
-            <div className="flex">
-              <div className="flex flex-col flex-1">
-                <div className="flex-1 p-4 text-sm leading-2">
-                  <h1 className="elipsis-3-line">
-                    {getLatestUnexpiredRedeemState.data.name}
-                  </h1>
-                </div>
-                <CountdownTimerLatestRedeem />
-              </div>
-              <img
-                className="rounded-r-xl w-[105px] h-[105px] object-contain"
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
-                alt="Deals"
-              />
-            </div>
-          </Link>
-        ) : null}
-        <footer className="w-full lg:hidden bg-secondary">
+        <footer className="w-full shadowl-2xl lg:hidden bg-secondary">
           <nav className="mx-auto ">
             <ul className="flex items-stretch h-full text-white md:px-10">
               <li className="flex-1">
