@@ -65,7 +65,7 @@ export function Home() {
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
-        className="relative items-end justify-center hidden sm:flex "
+        className="relative items-end justify-center hidden filter saturate-150 contrast-100 brightness-75 sm:flex "
       >
         <img
           src={
