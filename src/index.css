@@ -128,6 +128,7 @@ input[type="number"] {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .fade-seperator {
   position: absolute;
   width: 100%;

@@ -39,7 +39,24 @@ import {
 import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
-import { Admin, Login } from "features/admin/presentation/pages";
+import {
+  Admin,
+  Banner,
+  Category,
+  Cater,
+  CaterAdd,
+  Instore,
+  Login,
+  Packages,
+  Popclub,
+  ProdAdd,
+  ProdAvail,
+  Products,
+  Snackshop,
+  Stores,
+  Users,
+  Vouchers,
+} from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
 import { LoadingAndSnackbarWrapper } from "features/shared/presentation/components";
@@ -122,7 +139,24 @@ root.render(
               <Route path="near-you" element={<NearyouComponent />} />
 
               <Route path="admin" element={<Login />}></Route>
-              <Route path="admin/main" element={<Admin />}></Route>
+              <Route path="orders" element={<Admin />}></Route>
+              <Route path="catering-orders" element={<Cater />}></Route>
+              <Route path="admin-popclub" element={<Popclub />}></Route>
+              <Route path="raffles-snackshop" element={<Snackshop />}></Route>
+              <Route path="raffles-instore" element={<Instore />}></Route>
+              <Route path="catering-addons" element={<CaterAdd />}></Route>
+              <Route path="product-addons" element={<ProdAdd />}></Route>
+              <Route path="packages" element={<Packages />}></Route>
+              <Route
+                path="product-availability"
+                element={<ProdAvail />}
+              ></Route>
+              <Route path="banner" element={<Banner />}></Route>
+              <Route path="admin-products" element={<Products />}></Route>
+              <Route path="category" element={<Category />}></Route>
+              <Route path="users" element={<Users />}></Route>
+              <Route path="vouchers" element={<Vouchers />}></Route>
+              <Route path="stores" element={<Stores />}></Route>
             </Route>
           </Routes>
         </BrowserRouter>

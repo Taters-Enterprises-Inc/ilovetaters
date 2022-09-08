@@ -17,7 +17,6 @@ export function Login() {
               className="w-36"
             ></img>
           </div>
-
           <div className="pt-4 login-body">
             <form>
               <p className="text-white">
@@ -42,7 +41,6 @@ export function Login() {
                   className="autolog"
                 ></input>
               </div>
-
               <div className="flex justify-between py-4 text-white">
                 <p className="flex items-center">
                   <input className="mr-2" type="checkbox" /> Remember Me
