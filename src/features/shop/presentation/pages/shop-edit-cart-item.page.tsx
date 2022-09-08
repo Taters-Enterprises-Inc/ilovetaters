@@ -5,7 +5,7 @@ import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { getCartItem, selectGetCartItem } from "../slices/get-cart-item.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {Addon} from 'features/shared/presentation/components/'
+import { Addon, QuantityInput } from "features/shared/presentation/components/";
 import { MdFastfood } from "react-icons/md";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -21,19 +21,27 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import {
   editCartItem,
   selectEditCartItem,
+  EditCartItemState,
+  resetEditCartItem,
 } from "../slices/edit-cart-item.slice";
-
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [flavorName, setFlavorName] = useState<string>("");
   const [sizeName, setSizeName] = useState<string>("");
-  const [quantity, setQuantity] = useState(1);
-  const [currentFlavor, setCurrentFlavor] = useState<number>(-1);
-  const [currentSize, setCurrentSize] = useState<number>(-1);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [currentFlavor, setCurrentFlavor] = useState<number | undefined>(
+    undefined
+  );
+  const [currentSize, setCurrentSize] = useState<number | undefined>(undefined);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
   const getEditCartProduct = useAppSelector(selectGetCartItem);
-  const editCartProduct = useAppSelector(selectEditCartItem);
+  const editCartProductState = useAppSelector(selectEditCartItem);
+  const [resetMultiFlavors, setResetMultiFlavors] = useState<boolean>(false);
+  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
+    useState<number>(0);
+  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
 
   let { cart_id } = useParams();
   const location = useLocation();
@@ -49,13 +57,39 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
+  useEffect(() => {
+    if (
+      getEditCartProduct.status &&
+      getEditCartProduct.data &&
+      (currentFlavor === undefined || currentSize === undefined)
+    ) {
+      setCurrentFlavor(getEditCartProduct.data.cart_item.prod_flavor_id);
+      setCurrentSize(getEditCartProduct.data.cart_item.prod_size_id);
+    }
+  }, [getEditCartProduct, currentFlavor]);
 
+  useEffect(() => {
+    if (resetMultiFlavors === true) {
+      setResetMultiFlavors(false);
+    }
+  }, [resetMultiFlavors]);
 
   useEffect(() => {
     dispatch(getCartItem(cart_id));
-  }, [ dispatch]);
+  }, [cart_id, dispatch]);
 
-  const handleSizeAndFlavorChange = (size: number, flavor: number) => {
+  useEffect(() => {
+    if (editCartProductState.status === EditCartItemState.success) {
+      setCurrentMultiFlavors(undefined);
+      dispatch(getSession());
+      dispatch(resetEditCartItem());
+    }
+  }, [editCartProductState, dispatch]);
+
+  const handleSizeAndFlavorChange = (
+    size: number | undefined,
+    flavor: number | undefined
+  ) => {
     if (getEditCartProduct.data) {
       flavor =
         flavor === -1
@@ -70,8 +104,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
             : -1
           : size;
 
-      
-
       dispatch(
         getProductSku({
           prod_flavor: flavor,
@@ -82,6 +114,18 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   };
 
   const handleEditSubmit = () => {
+    let toString_prod_multiflavors = "";
+    if (currentMultiFlavors) {
+      const arrayOfOBj = Object.entries(currentMultiFlavors);
+      arrayOfOBj.forEach((init: any) => {
+        init.forEach((data: any, idx: number) => {
+          if (idx === 1 && data.quantity !== 0) {
+            toString_prod_multiflavors += `<br/><span>(${data.quantity})${data.name} </span>`;
+          }
+        });
+      });
+    }
+
     dispatch(
       editCartItem({
         product_id: cart_id,
@@ -90,13 +134,14 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         currentSize,
         sizeName,
         flavorName,
-        total_amount: getEditCartProduct.data?.product.price  && getEditCartProduct.data?.product.price * quantity
+        total_amount:
+          getEditCartProduct.data?.product.price &&
+          getEditCartProduct.data?.product.price * quantity,
+        prod_multiflavors: toString_prod_multiflavors,
       })
     );
   };
 
-  // console.log(addToCartShopState)
-  // console.log(editCartProduct)
 
   return (
     <>
@@ -179,7 +224,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                   >
                     <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
                       {getEditCartProduct?.data?.product_addson.map(
-                        (product, i) => (
+                        (product, i: number) => (
                           <Addon key={i} product={product} />
                         )
                       )}
@@ -209,23 +254,30 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                   </div>
                 ) : null}
 
-                {getEditCartProduct.data?.product_flavor &&
-                getEditCartProduct.data?.product_flavor.length > 0 ? (
+                {getEditCartProduct.data &&
+                getEditCartProduct.data.product_flavor &&
+                getEditCartProduct.data.product &&
+                getEditCartProduct.data.product_flavor.length > 0 ? (
                   <div>
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Flavor
                     </h2>
-
                     <ul>
                       <RadioFlavorComponent
                         currentFlavor={currentFlavor}
+                        currentMultiFlavors={currentMultiFlavors}
                         currentSize={currentSize}
-                        getEditCartProduct={
-                          getEditCartProduct.data?.product_flavor
-                        }
-                        handleSizeAndFlavorChange={handleSizeAndFlavorChange}
-                        setCurrentFlavor={setCurrentFlavor}
                         flavorCallBack={flavorCallBack}
+                        handleSizeAndFlavorChange={handleSizeAndFlavorChange}
+                        quantity={quantity}
+                        resetMultiFlavors={resetMultiFlavors}
+                        setCurrentFlavor={setCurrentFlavor}
+                        setCurrentMultiFlavors={setCurrentMultiFlavors}
+                        setTotalMultiFlavorsQuantity={
+                          setTotalMultiFlavorsQuantity
+                        }
+                        totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
+                        getEditCartProduct={getEditCartProduct.data}
                       />
                     </ul>
                   </div>
@@ -283,7 +335,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                     </div>
                   </div>
                 </div>
-
                 {getEditCartProduct.data?.product.price ? (
                   <h2 className="mt-4 text-4xl text-white">
                     <NumberFormat
@@ -337,12 +388,18 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
 };
 
 const RadioFlavorComponent: React.FC<{
-  currentFlavor: number;
-  handleSizeAndFlavorChange: (size: number, flavor: number) => void;
-  setCurrentFlavor: React.Dispatch<React.SetStateAction<number>>;
-  currentSize: number;
-  getEditCartProduct: Array<{ id: number; name: string }>;
+  currentFlavor: number | undefined;
+  handleSizeAndFlavorChange: (size: number | undefined, flavor: number) => void;
+  setCurrentFlavor: React.Dispatch<React.SetStateAction<number | undefined>>;
+  currentSize: number | undefined;
+  getEditCartProduct: any;
   flavorCallBack: any;
+  setCurrentMultiFlavors: React.Dispatch<any>;
+  resetMultiFlavors: boolean;
+  totalMultiFlavorsQuantity: number;
+  currentMultiFlavors: any;
+  quantity: number;
+  setTotalMultiFlavorsQuantity: React.Dispatch<React.SetStateAction<number>>;
 }> = ({
   currentFlavor,
   handleSizeAndFlavorChange,
@@ -350,52 +407,94 @@ const RadioFlavorComponent: React.FC<{
   currentSize,
   getEditCartProduct,
   flavorCallBack,
+  setCurrentMultiFlavors,
+  resetMultiFlavors,
+  totalMultiFlavorsQuantity,
+  currentMultiFlavors,
+  quantity,
+  setTotalMultiFlavorsQuantity,
 }): JSX.Element => {
   return (
     <>
-      {getEditCartProduct.map(
-        (flavor: { id: number; name: string }, i: number) => {
+      {getEditCartProduct.product_flavor.map((flavor: any, i: number) => {
+        if (getEditCartProduct) {
           return (
-            <li key={i} className="flex items-center">
-              <Radio
-                id={flavor.id.toString()}
-                color="tertiary"
-                checked={
-                  currentFlavor === -1 && i === 0
-                    ? true
-                    : flavor.id === currentFlavor
-                }
-                onChange={() => {
-                  setCurrentFlavor(flavor.id);
-                  handleSizeAndFlavorChange(currentSize, flavor.id);
-                  flavorCallBack(flavor.name);
-                }}
-              />
-              <label htmlFor={flavor.id.toString()} className="text-white">
-                {flavor.name}
-              </label>
-            </li>
+            <>
+              {getEditCartProduct.product.num_flavor > 1 ? (
+                <li key={i}>
+                  <span className="text-sm text-white">{flavor.name}</span>
+                  <QuantityInput
+                    reset={resetMultiFlavors}
+                    min={0}
+                    disableAdd={
+                      getEditCartProduct.product.num_flavor * quantity -
+                        totalMultiFlavorsQuantity ===
+                      0
+                    }
+                    onChange={(val, action) => {
+                      if (currentMultiFlavors) {
+                        currentMultiFlavors[flavor.id] = {
+                          name: flavor.name,
+                          quantity: val,
+                        };
+
+                        setCurrentMultiFlavors(currentMultiFlavors);
+                      } else {
+                        const temp: any = {};
+                        temp[flavor.id] = {
+                          name: flavor.name,
+                          quantity: val,
+                        };
+                        setCurrentMultiFlavors(temp);
+                      }
+                      setTotalMultiFlavorsQuantity(
+                        totalMultiFlavorsQuantity +
+                          (action === "plus" ? +1 : -1)
+                      );
+                    }}
+                  />
+                </li>
+              ) : (
+                <li key={i} className="flex items-center">
+                  <Radio
+                    id={flavor.id.toString()}
+                    color="tertiary"
+                    checked={flavor.id === currentFlavor}
+                    onChange={() => {
+                      setCurrentFlavor(flavor.id);
+                      handleSizeAndFlavorChange(currentSize, flavor.id);
+                      flavorCallBack(flavor.name);
+                    }}
+                  />
+                  <label htmlFor={flavor.id.toString()} className="text-white">
+                    {flavor.name}
+                  </label>
+                </li>
+              )}
+            </>
           );
         }
-      )}
+
+        return null;
+      })}
     </>
   );
 };
 
 const RadioSizeComponent: React.FC<{
-  currentFlavor: number;
+  currentFlavor: number | undefined;
   getEditCartProduct: Array<{ id: number; name: string }>;
-  currentSize: number;
-  setCurrentSize: React.Dispatch<React.SetStateAction<number>>;
-  handleSizeAndFlavorChange: (size: number, flavor: number) => void;
-  SizeCallBack:any
+  currentSize: number | undefined;
+  setCurrentSize: React.Dispatch<React.SetStateAction<number | undefined>>;
+  handleSizeAndFlavorChange: (size: number, flavor: number | undefined) => void;
+  SizeCallBack: any;
 }> = ({
   getEditCartProduct,
   currentSize,
   handleSizeAndFlavorChange,
   setCurrentSize,
   currentFlavor,
-  SizeCallBack
+  SizeCallBack,
 }): JSX.Element => {
   return (
     <>
@@ -410,7 +509,7 @@ const RadioSizeComponent: React.FC<{
                   currentSize === -1 && i === 0 ? true : size.id === currentSize
                 }
                 onChange={() => {
-                  SizeCallBack(size.name)
+                  SizeCallBack(size.name);
                   setCurrentSize(size.id);
                   handleSizeAndFlavorChange(size.id, currentFlavor);
                 }}
@@ -425,7 +524,3 @@ const RadioSizeComponent: React.FC<{
     </>
   );
 };
-function getSession(): any {
-  throw new Error("Function not implemented.");
-}
-

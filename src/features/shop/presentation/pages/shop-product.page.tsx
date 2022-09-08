@@ -112,6 +112,9 @@ export function ShopProduct() {
     }
   }, [getProductDetailsState, currentFlavor, hash]);
 
+
+  
+
   useEffect(() => {
     if (
       getProductSkuState.status === GetProductSkuState.success &&
@@ -213,6 +216,8 @@ export function ShopProduct() {
       );
     }
   };
+
+  console.log(getProductDetailsState?.data);
   return (
     <>
       <PageTitleAndBreadCrumbs

@@ -63,6 +63,7 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "features/catering/presentation/slices/add-to-cart-catering.slice";
+import { selectEditCartItem   ,EditCartItemState} from "features/shop/presentation/slices/edit-cart-item.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
@@ -103,6 +104,7 @@ export function LoadingAndSnackbarWrapper() {
   );
   const popSnackBarState = useAppSelector(selectPopSnackBar);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
+  const editCartProduct = useAppSelector(selectEditCartItem);
 
   useEffect(() => {
     switch (popSnackBarState.status) {
@@ -387,6 +389,27 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [addToCartCateringState]);
+
+
+
+  useEffect(() => {
+    switch (editCartProduct.status) {
+      case EditCartItemState  .inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditCartItemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditCartItemState.success:
+        showAlert(setSuccessAlert, editCartProduct.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditCartItemState.fail:
+        showAlert(setFailsAlert, editCartProduct.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editCartProduct]);
 
   return (
     <div>
