@@ -1,3 +1,8 @@
+export interface SignInMobileUserParam {
+  mobile_num: string;
+  login_password: string;
+}
+
 export interface DeleteContactParam {
   id: number;
 }

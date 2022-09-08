@@ -8,6 +8,7 @@ import {
   GetStoresAvailableParam,
   SetSessionParam,
   SetStoreAndAddressParm,
+  SignInMobileUserParam,
   UpdateContactParam,
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
@@ -93,6 +94,27 @@ export interface UpdateContactResponse {
     message: string;
   };
 }
+
+export interface SignInMobileUserResponse {
+  data: {
+    message: string;
+  };
+}
+export function SignInMobileUserRepository(
+  param: SignInMobileUserParam
+): Promise<SignInMobileUserResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/mobile_users/login_mobile_user`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateContactRepository(
   param: UpdateContactParam
 ): Promise<UpdateContactResponse> {

@@ -26,6 +26,7 @@ import {
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -189,12 +190,17 @@ export function HeaderNav(props: HeaderNavProps) {
                       onClick={handleProfileMenuClick}
                       className="flex justify-center items-center flex-col space-y-1 mt-[-5px]"
                     >
-                      <img
-                        src={getSessionState.data?.userData.picture}
-                        alt="Profile pic"
-                        className="rounded-full"
-                        width={25}
-                      ></img>
+                      {getSessionState.data?.userData.login_type ===
+                      "mobile" ? (
+                        <FaUserCircle className="text-2xl text-white" />
+                      ) : (
+                        <img
+                          src={getSessionState.data?.userData.picture}
+                          alt="Profile pic"
+                          className="rounded-full"
+                          width={25}
+                        ></img>
+                      )}
                       <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
                         {getSessionState.data?.userData.last_name}
@@ -251,7 +257,8 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
-        {getSessionState.data?.cache_data ? (
+        {getSessionState.data?.cache_data &&
+        (props.activeUrl === "CATERING" || props.activeUrl === "SNACKSHOP") ? (
           <div className="w-full py-1 text-white bg-secondary">
             <div className="container flex">
               <div className="truncate w-full lg:w-[400px]">

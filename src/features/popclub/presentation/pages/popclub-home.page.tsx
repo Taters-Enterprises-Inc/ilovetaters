@@ -71,88 +71,92 @@ export function PopClubHome() {
 
   return (
     <>
-      <img
-        className="lg:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/mobile/popclub.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/desktop/popclub.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
+      <section className="container">
+        <img
+          className="lg:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/mobile/popclub.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/desktop/popclub.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
 
-      <img
-        className="hidden lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/banner/popclub_instruction.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <section className="container flex flex-col items-start justify-start pt-4 ">
-        {getSessionState.data?.popclub_data ? (
-          <button
-            className="text-xs"
-            onClick={() => {
-              setOpenPlatformChooserModal(true);
-            }}
-          >
-            <span className="text-white lg:text-lg">Claim deals via : </span>
-            <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
-              {getSessionState.data?.popclub_data.platform.replace("-", "  ")}
-            </span>
-          </button>
-        ) : null}
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/banner/popclub_instruction.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
+      <section className="container ">
+        <div className="flex flex-col items-start justify-start">
+          {getSessionState.data?.popclub_data ? (
+            <button
+              className="text-xs"
+              onClick={() => {
+                setOpenPlatformChooserModal(true);
+              }}
+            >
+              <span className="text-white lg:text-lg">Claim deals via : </span>
+              <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
+                {getSessionState.data?.popclub_data.platform.replace("-", "  ")}
+              </span>
+            </button>
+          ) : null}
 
-        {getSessionState.data?.cache_data ? (
-          <button
-            className="text-xs text-white"
-            onClick={() => {
-              switch (platform) {
-                case "online-delivery":
-                  setOpenStoreChooserModal(true);
-                  break;
-                case "store-visit":
-                  setOpenStoreVisitStoreChooserModal(true);
-                  break;
-              }
-            }}
-          >
-            <span className="text-white lg:text-lg">Chosen store: </span>
-            <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
-              {getSessionState.data?.cache_data.store_name}
-            </span>
-          </button>
-        ) : null}
+          {getSessionState.data?.cache_data ? (
+            <button
+              className="text-xs text-white"
+              onClick={() => {
+                switch (platform) {
+                  case "online-delivery":
+                    setOpenStoreChooserModal(true);
+                    break;
+                  case "store-visit":
+                    setOpenStoreVisitStoreChooserModal(true);
+                    break;
+                }
+              }}
+            >
+              <span className="text-white lg:text-lg">Chosen store: </span>
+              <span className="text-[#ffcd17] lg:text-lg font-['Bebas_Neue'] tracking-widest">
+                {getSessionState.data?.cache_data.store_name}
+              </span>
+            </button>
+          ) : null}
 
-        {getSessionState.data?.customer_address &&
-        platform === "online-delivery" ? (
-          <button
-            className="text-xs text-white text-start"
-            onClick={() => {
-              switch (platform) {
-                case "online-delivery":
-                  setOpenStoreChooserModal(true);
-                  break;
-                case "store-visit":
-                  setOpenStoreVisitStoreChooserModal(true);
-                  break;
-              }
-            }}
-          >
-            <span className="text-white">Address: </span>
-            <span className="text-[#ffcd17]">
-              {getSessionState.data?.customer_address}
-            </span>
-          </button>
-        ) : null}
+          {getSessionState.data?.customer_address &&
+          platform === "online-delivery" ? (
+            <button
+              className="flex space-x-1 text-xs text-white text-start"
+              onClick={() => {
+                switch (platform) {
+                  case "online-delivery":
+                    setOpenStoreChooserModal(true);
+                    break;
+                  case "store-visit":
+                    setOpenStoreVisitStoreChooserModal(true);
+                    break;
+                }
+              }}
+            >
+              <span className="text-white">Address: </span>
+              <span className="text-[#ffcd17] truncate w-[200px]">
+                {getSessionState.data?.customer_address}
+              </span>
+            </button>
+          ) : null}
+        </div>
 
         <div className="overflow-y-auto w-full hide-scrollbar font-['Bebas_Neue'] my-2">
           <ul className="flex items-start justify-start space-x-6 mt-2 w-[400px] lg:w-full">

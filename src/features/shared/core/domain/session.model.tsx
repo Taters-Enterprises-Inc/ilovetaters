@@ -21,6 +21,9 @@ export interface SessionModel {
     gender: string;
     picture: string;
     link: string;
+    login_type: "mobile" | "facebook";
+    mobile_user_id: number;
+    mobile_number: string;
   };
 
   popclub_data: {

@@ -60,6 +60,9 @@ import getCateringOrders from "../catering/presentation/slices/get-catering-orde
 import uploadContract from "../catering/presentation/slices/upload-contract.slice";
 
 import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
+
+import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
 
 export const store = configureStore({
   reducer: {
@@ -127,6 +130,9 @@ export const store = configureStore({
 
     uploadContract: uploadContract,
     cateringUploadProofOfPayment: cateringUploadProofOfPayment,
+    signInMobileUser: signInMobileUser,
+
+    setStoreAndAddressPopClub: setStoreAndAddressPopClub,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

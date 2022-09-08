@@ -206,6 +206,13 @@ declare module "@mui/material/CircularProgress" {
   }
 }
 
+// Update the Button's color prop options
+declare module "@mui/material/Tabs" {
+  interface TabsPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -268,6 +275,28 @@ export const theme = createTheme({
       styleOverrides: {
         iconOutlined: {
           color: "white",
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#ffcd17",
+          height: 3,
+        },
+        root: {
+          height: 60,
+          "& .MuiTab-root.Mui-selected": {
+            color: "#ffcd17",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          height: 60,
         },
       },
     },

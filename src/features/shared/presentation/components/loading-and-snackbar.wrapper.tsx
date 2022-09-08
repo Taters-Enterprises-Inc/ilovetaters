@@ -79,9 +79,28 @@ import {
   CateringUploadProofOfPaymentState,
   selectCateringUploadProofOfPayment,
 } from "features/catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import {
+  selectSignInMobileUser,
+  SignInMobileUserState,
+} from "../slices/sign-in-mobile-user.slice";
+import { BackdropLoadingPopClub } from "features/popclub/presentation/components";
+import {
+  GetStoresAvailablePopClubState,
+  selectGetStoresAvailablePopClub,
+} from "features/popclub/presentation/slices/get-stores-available-popclub.slice";
+import {
+  GetDealsState,
+  selectGetDeals,
+} from "features/popclub/presentation/slices/get-deals.slice";
+import {
+  selectSetStoreAndAddressPopClub,
+  SetStoreAndAddressPopClubState,
+} from "features/popclub/presentation/slices/set-store-and-address-popclub.slice";
 
 export function LoadingAndSnackbarWrapper() {
-  const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
+  const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
+  const [openBackdropPopClubLoading, setOpenBackdropPopClubLoading] =
+    useState(false);
   const [successAlert, setSuccessAlert] = useState<{
     status: boolean;
     message?: string;
@@ -127,6 +146,86 @@ export function LoadingAndSnackbarWrapper() {
   const cateringUploadProofOfPaymentState = useAppSelector(
     selectCateringUploadProofOfPayment
   );
+  const signInMobileUserState = useAppSelector(selectSignInMobileUser);
+  const getStoresAvailablePopClubState = useAppSelector(
+    selectGetStoresAvailablePopClub
+  );
+  const getDealsState = useAppSelector(selectGetDeals);
+  const setStoreAndAddressPopClub = useAppSelector(
+    selectSetStoreAndAddressPopClub
+  );
+
+  useEffect(() => {
+    switch (setStoreAndAddressPopClub.status) {
+      case SetStoreAndAddressPopClubState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case SetStoreAndAddressPopClubState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case SetStoreAndAddressPopClubState.success:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+      case SetStoreAndAddressPopClubState.fail:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+    }
+  }, [setStoreAndAddressPopClub, dispatch]);
+
+  useEffect(() => {
+    switch (getDealsState.status) {
+      case GetDealsState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealsState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealsState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealsState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealsState]);
+
+  useEffect(() => {
+    switch (getStoresAvailablePopClubState.status) {
+      case GetStoresAvailablePopClubState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetStoresAvailablePopClubState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetStoresAvailablePopClubState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetStoresAvailablePopClubState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getStoresAvailablePopClubState]);
+
+  useEffect(() => {
+    switch (signInMobileUserState.status) {
+      case SignInMobileUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SignInMobileUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SignInMobileUserState.success:
+        showAlert(setSuccessAlert, signInMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SignInMobileUserState.fail:
+        showAlert(setFailsAlert, signInMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [signInMobileUserState]);
 
   useEffect(() => {
     switch (cateringCheckoutOrdersState.status) {
@@ -502,6 +601,7 @@ export function LoadingAndSnackbarWrapper() {
         message={failsAlert.message}
       />
       <BackdropLoading open={openBackdropLoading} />
+      <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
     </div>
   );
 }
