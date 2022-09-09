@@ -100,29 +100,28 @@ export function ShopCheckout() {
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
     }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
   };
 
   const calculateDeliveryFee = () => {
@@ -150,31 +149,32 @@ export function ShopCheckout() {
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
 
-    if (orders && getSessionState.data?.distance_rate_price) {
+    if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-
-      calculatedPrice += getSessionState.data.distance_rate_price;
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
     }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    if (getSessionState.data?.distance_rate_price) {
+      calculatedPrice += getSessionState.data.distance_rate_price;
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
   };
   return (
     <>
@@ -436,88 +436,149 @@ export function ShopCheckout() {
                 </div>
               </div>
 
-              {getSessionState.data?.orders ? (
+              {getSessionState.data?.orders || getSessionState.data?.deals ? (
                 <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
                   <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
                     Order Summary
                   </h2>
 
-                  <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                    {getSessionState.data?.orders.map((order, i) => (
-                      <div
-                        key={i}
-                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                      >
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                          className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
-                        />
-                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                          <h3 className="text-sm w-[90%]">
-                            {order.prod_size} {order.prod_name}
-                          </h3>
-                          <h3 className="text-xs">
-                            Quantity:{" "}
-                            <span className="text-tertiary">
-                              {order.prod_qty}
-                            </span>
-                          </h3>
-
-                          {order.prod_flavor ? (
+                  {getSessionState.data?.orders ? (
+                    <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                      {getSessionState.data?.orders.map((order, i) => (
+                        <div
+                          key={i}
+                          className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
+                        >
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                            className="rounded-[10px] w-[92px] h-[92px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {order.prod_size} {order.prod_name}
+                            </h3>
                             <h3 className="text-xs">
-                              Flavor:{" "}
+                              Quantity:{" "}
                               <span className="text-tertiary">
-                                {order.prod_flavor}
+                                {order.prod_qty}
                               </span>
                             </h3>
-                          ) : null}
 
-                          {order.prod_multiflavors ? (
-                            <h3 className="text-xs">
-                              Flavor:
-                              <span
-                                className="text-tertiary"
-                                dangerouslySetInnerHTML={{
-                                  __html: order.prod_multiflavors,
-                                }}
+                            {order.prod_flavor ? (
+                              <h3 className="text-xs">
+                                Flavor:{" "}
+                                <span className="text-tertiary">
+                                  {order.prod_flavor}
+                                </span>
+                              </h3>
+                            ) : null}
+
+                            {order.prod_multiflavors ? (
+                              <h3 className="text-xs">
+                                Flavor:
+                                <br />
+                                <span
+                                  className="text-tertiary"
+                                  dangerouslySetInnerHTML={{
+                                    __html: order.prod_multiflavors,
+                                  }}
+                                />
+                              </h3>
+                            ) : null}
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
                               />
                             </h3>
-                          ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={order.prod_calc_amount.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
-                        </div>
-                        <button
-                          type="button"
-                          className="absolute text-white top-2 right-4 "
-                          onClick={() => {
-                            if (
-                              getSessionState.data &&
-                              getSessionState.data.orders &&
-                              getSessionState.data.orders.length > 1
-                            ) {
+                          </div>
+                          <button
+                            type="button"
+                            className="absolute text-white top-2 right-4 "
+                            onClick={() => {
                               dispatch(removeItemFromCartShop(i));
-                            } else {
-                              dispatch(
-                                popUpSnackBar({
-                                  message: "You cannot delete this item",
-                                  severity: "error",
-                                })
-                              );
-                            }
-                          }}
+                            }}
+                          >
+                            <IoMdClose />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                  {getSessionState.data?.deals ? (
+                    <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                      {getSessionState.data?.deals.map((deal, i) => (
+                        <div
+                          key={i}
+                          className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                         >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
+                            className="rounded-[10px] w-[92px] h-[92px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {deal.deal_name}
+                            </h3>
+                            <h3 className="text-xs">
+                              Quantity:{" "}
+                              <span className="text-tertiary">
+                                {deal.deal_qty}
+                              </span>
+                            </h3>
+
+                            {deal.deal_remarks ? (
+                              <h3 className="text-xs">
+                                Flavor:
+                                <br />
+                                <span
+                                  className="text-tertiary"
+                                  dangerouslySetInnerHTML={{
+                                    __html: deal.deal_remarks,
+                                  }}
+                                />
+                              </h3>
+                            ) : null}
+
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={deal.deal_promo_price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          </div>
+                          <button
+                            type="button"
+                            className="absolute text-white top-2 right-4 "
+                            onClick={() => {
+                              if (
+                                getSessionState.data &&
+                                getSessionState.data.orders &&
+                                getSessionState.data.orders.length > 1
+                              ) {
+                                dispatch(removeItemFromCartShop(i));
+                              } else {
+                                dispatch(
+                                  popUpSnackBar({
+                                    message: "You cannot delete this item",
+                                    severity: "error",
+                                  })
+                                );
+                              }
+                            }}
+                          >
+                            <IoMdClose />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
 
                   <hr className="mt-1 mb-2" />
                   <div className="grid grid-cols-2 text-white">

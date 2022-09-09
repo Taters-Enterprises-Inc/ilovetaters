@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
 import {
   getDealProductVariants,
@@ -55,6 +55,12 @@ export function PopClubDeal() {
   const getSessionState = useAppSelector(selectGetSession);
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   useEffect(() => {
     if (
@@ -190,6 +196,16 @@ export function PopClubDeal() {
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
               </div>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
             </>
           );
         }
@@ -269,6 +285,17 @@ export function PopClubDeal() {
             renderer={renderer}
             date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}
           />
+
+          <button
+            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+            onClick={() => {
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
+            }}
+          >
+            Go Back
+          </button>
         </div>
       );
     } else if (
@@ -277,12 +304,49 @@ export function PopClubDeal() {
       getRedeemState.data
     ) {
       return (
-        <div className="w-full py-3 text-white uppercase bg-green-700 border border-white rounded-xl">
-          CODE :
-          <span className="ml-1 font-bold">
-            {getRedeemState.data.redeem_code}
-          </span>
-        </div>
+        <>
+          {getSessionState.data.popclub_data.platform === "online-delivery" ? (
+            <>
+              <button
+                onClick={() => {
+                  navigate("/shop/checkout");
+                }}
+                className="w-full py-3 text-white uppercase border border-white bg-button rounded-xl"
+              >
+                Checkout
+              </button>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="w-full py-3 text-white uppercase bg-green-700 border border-white rounded-xl">
+                CODE :
+                <span className="ml-1 font-bold">
+                  {getRedeemState.data.redeem_code}
+                </span>
+              </div>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          )}
+        </>
       );
     } else if (
       getSessionState.data?.userData &&
@@ -290,27 +354,57 @@ export function PopClubDeal() {
       getLatestUnexpiredRedeemState.data?.deal_hash !== hash
     ) {
       return (
-        <div className="w-full py-3 text-white uppercase border border-white bg-primary rounded-xl">
-          You currently have running deal
-        </div>
+        <>
+          <div className="w-full py-3 text-white uppercase border border-white bg-primary rounded-xl">
+            You currently have running deal
+          </div>
+          <button
+            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Go Back
+          </button>
+        </>
       );
     } else if (getSessionState.data?.userData) {
       return (
-        <button
-          className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
-          onClick={handleRedeem}
-        >
-          Redeem
-        </button>
+        <>
+          <button
+            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
+            onClick={handleRedeem}
+          >
+            Redeem
+          </button>
+          <button
+            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Go Back
+          </button>
+        </>
       );
     } else if (getSessionState.data?.userData === null) {
       return (
-        <button
-          className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
-          onClick={loginToRedeem}
-        >
-          Login to Redeem
-        </button>
+        <>
+          <button
+            className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
+            onClick={loginToRedeem}
+          >
+            Login to Redeem
+          </button>
+          <button
+            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Go Back
+          </button>
+        </>
       );
     }
   };
@@ -318,65 +412,58 @@ export function PopClubDeal() {
   return (
     <>
       <section className="relative flex flex-col min-h-screen pb-10 bg-secondary">
-        <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">
-          {getDealState.data?.category_name}
-        </div>
-
-        <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">
-          <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
-            {getDealState.data?.original_price &&
-            getDealState.data?.promo_price ? (
-              <div className="absolute top-0 left-0">
-                <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
-                  {Math.floor(
-                    ((getDealState.data?.original_price -
-                      getDealState.data?.promo_price) /
-                      getDealState.data?.original_price) *
-                      100
-                  )}
-                  % OFF
-                </div>
-                <div className=" bg-red-500 pl-2 text-white rounded-r-[4px] pr-2 leading-5 py-[3px]">
-                  <div className="text-left text-[14px] font-normal line-through mb-[1px]">
-                    ₱{getDealState.data?.original_price}
-                  </div>
-                  <span className="text-[28px] font-bold">
-                    {" "}
-                    ₱{getDealState.data?.promo_price}
-                  </span>
-                </div>
-              </div>
-            ) : null}
-            {getDealState.data?.product_image ? (
-              <img
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data?.product_image}`}
-                alt="Deals"
-              />
-            ) : null}
-            <CountdownTimer></CountdownTimer>
-            <div className="flex-col p-4 space-y-4">
-              <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
-                {getDealState.data?.name}
-              </h1>
-              <h1 className="text-lg text-white">
-                {getDealState.data?.description}
-              </h1>
-
-              <div className="text-center">
-                {redeemButton()}
-
-                <button
-                  className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-                >
-                  Go Back
-                </button>
-              </div>
+        {getDealState.data ? (
+          <>
+            <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] text-xl">
+              {getDealState.data.category_name}
             </div>
-          </div>
-        </section>
+
+            <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">
+              <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
+                {getDealState.data.original_price &&
+                getDealState.data.promo_price ? (
+                  <div className="absolute top-0 left-0">
+                    <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
+                      {Math.floor(
+                        ((getDealState.data.original_price -
+                          getDealState.data.promo_price) /
+                          getDealState.data.original_price) *
+                          100
+                      )}
+                      % OFF
+                    </div>
+                    <div className=" bg-red-500 pl-2 text-white rounded-r-[4px] pr-2 leading-5 py-[3px]">
+                      <div className="text-left text-[14px] font-normal line-through mb-[1px]">
+                        ₱{getDealState.data.original_price}
+                      </div>
+                      <span className="text-[28px] font-bold">
+                        {" "}
+                        ₱{getDealState.data.promo_price}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+                {getDealState.data.product_image ? (
+                  <img
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
+                    alt="Deals"
+                  />
+                ) : null}
+                <CountdownTimer></CountdownTimer>
+                <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
+                  <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
+                    {getDealState.data.name}
+                  </h1>
+                  <h1 className="text-lg text-white">
+                    {getDealState.data.description}
+                  </h1>
+
+                  <div className="text-center">{redeemButton()}</div>
+                </div>
+              </div>
+            </section>
+          </>
+        ) : null}
       </section>
 
       <VariantsChooserModal

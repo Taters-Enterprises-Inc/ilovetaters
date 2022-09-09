@@ -5,9 +5,13 @@ import {
   AddToCartCateringParam,
   CateringCheckoutOrdersParam,
   GetCategoryProductsParam,
+  GetCateringOrdersParam,
   GetCateringProductDetailsParam,
+  UploadContractParam,
+  CateringUploadProofOfPaymentParam,
 } from "features/catering/core/catering.params";
 import { CateringProductDetailsModel } from "features/catering/core/domain/catering-product-details.model";
+import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -39,6 +43,68 @@ export interface CateringCheckoutOrdersResponse {
   data: {
     message: string;
   };
+}
+export interface GetCateringOrdersResponse {
+  data: {
+    message: string;
+    data: CateringOrderModel;
+  };
+}
+
+export interface UploadContractResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CateringUploadProofOfPaymentResponse {
+  data: {
+    message: string;
+  };
+}
+export function CateringUploadProofOfPaymentRepository(
+  param: CateringUploadProofOfPaymentParam
+): Promise<CateringUploadProofOfPaymentResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/shared/catering_upload_payment/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+export function UploadContractRepository(
+  param: UploadContractParam
+): Promise<UploadContractResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/catering/upload_contract/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCateringOrdersRepository(
+  param: GetCateringOrdersParam
+): Promise<GetCateringOrdersResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/catering/orders${
+      param.hash ? "?hash=" + param.hash : ""
+    }`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function CateringCheckoutOrdersRepository(

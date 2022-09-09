@@ -22,6 +22,259 @@ const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
   const history = useNavigate();
 
+  const SIDEBAR_ITEMS: any = [
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Orders
+        </h1>
+      ),
+      itemId: "/orders",
+      // icon: FaRegListAlt,
+      elemBefore: () => <FaRegListAlt size={20} />,
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Catering
+        </h1>
+      ),
+      itemId: "/catering-orders",
+      // icon: MdFoodBank,
+      elemBefore: () => <MdFoodBank size={20} />,
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Popclub
+        </h1>
+      ),
+      itemId: "/admin-popclub",
+      // icon: FaCartArrowDown,
+      elemBefore: () => <FaCartArrowDown size={20} />,
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Raffles
+        </h1>
+      ),
+      itemId: "",
+      elemBefore: () => <FaTicketAlt size={20} />,
+      subNav: [
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Snackshop
+            </h1>
+          ),
+          itemId: "/raffles-snackshop",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              In-store
+            </h1>
+          ),
+          itemId: "/raffles-instore",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+      ],
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Availability
+        </h1>
+      ),
+      itemId: "#",
+      elemBefore: () => <MdProductionQuantityLimits size={20} />,
+      subNav: [
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Catering Add-on Availability
+            </h1>
+          ),
+          itemId: "/catering-addons",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Product Add-on Availability
+            </h1>
+          ),
+          itemId: "/product-addons",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Product Availability
+            </h1>
+          ),
+          itemId: "/product-availability",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Packages Availability
+            </h1>
+          ),
+          itemId: "/packages",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Banner Availability
+            </h1>
+          ),
+          itemId: "/banner",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+      ],
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Products
+        </h1>
+      ),
+      itemId: "/admin-products",
+      elemBefore: () => <GiCardboardBoxClosed size={20} />,
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Reports
+        </h1>
+      ),
+      itemId: "/reports",
+      elemBefore: () => <TbReport size={20} />,
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          Settings
+        </h1>
+      ),
+      itemId: "##",
+      elemBefore: () => <MdOutlineSettings size={20} />,
+      subNav: [
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Category
+            </h1>
+          ),
+          itemId: "/category",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Users
+            </h1>
+          ),
+          itemId: "/users",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Vouchers
+            </h1>
+          ),
+          itemId: "/vouchers",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Stores
+            </h1>
+          ),
+          itemId: "/stores",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+      ],
+    },
+    {
+      title: (
+        <h1
+          className={`whitespace-pre duration-300 
+${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+        >
+          FAQ's
+        </h1>
+      ),
+      itemId: "/faqs",
+      // icon: FaQuestionCircle,
+      elemBefore: () => <FaQuestionCircle size={20} />,
+    },
+  ];
+
   // const [subnav, setSubnav] = useState(false);
   // const showSubnav = () => setSubnav(!subnav);
 
@@ -71,258 +324,7 @@ const Sidebar: FC = () => {
                   history(itemId);
                   // maybe push to the route
                 }}
-                items={[
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Orders
-                      </h1>
-                    ),
-                    itemId: "/orders",
-                    // icon: FaRegListAlt,
-                    elemBefore: () => <FaRegListAlt size={20} />,
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Catering
-                      </h1>
-                    ),
-                    itemId: "/catering-orders",
-                    // icon: MdFoodBank,
-                    elemBefore: () => <MdFoodBank size={20} />,
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Popclub
-                      </h1>
-                    ),
-                    itemId: "/admin-popclub",
-                    // icon: FaCartArrowDown,
-                    elemBefore: () => <FaCartArrowDown size={20} />,
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Raffles
-                      </h1>
-                    ),
-                    itemId: "",
-                    elemBefore: () => <FaTicketAlt size={20} />,
-                    subNav: [
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Snackshop
-                          </h1>
-                        ),
-                        itemId: "/raffles-snackshop",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            In-store
-                          </h1>
-                        ),
-                        itemId: "/raffles-instore",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                    ],
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Availability
-                      </h1>
-                    ),
-                    itemId: "#",
-                    elemBefore: () => <MdProductionQuantityLimits size={20} />,
-                    subNav: [
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Catering Add-on Availability
-                          </h1>
-                        ),
-                        itemId: "/catering-addons",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Product Add-on Availability
-                          </h1>
-                        ),
-                        itemId: "/product-addons",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Product Availability
-                          </h1>
-                        ),
-                        itemId: "/product-availability",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Packages Availability
-                          </h1>
-                        ),
-                        itemId: "/packages",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Banner Availability
-                          </h1>
-                        ),
-                        itemId: "/banner",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                    ],
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Products
-                      </h1>
-                    ),
-                    itemId: "/admin-products",
-                    elemBefore: () => <GiCardboardBoxClosed size={20} />,
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Reports
-                      </h1>
-                    ),
-                    itemId: "/reports",
-                    elemBefore: () => <TbReport size={20} />,
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        Settings
-                      </h1>
-                    ),
-                    itemId: "##",
-                    elemBefore: () => <MdOutlineSettings size={20} />,
-                    subNav: [
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Category
-                          </h1>
-                        ),
-                        itemId: "/category",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Users
-                          </h1>
-                        ),
-                        itemId: "/users",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Vouchers
-                          </h1>
-                        ),
-                        itemId: "/vouchers",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                      {
-                        title: (
-                          <h1
-                            className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                          >
-                            Stores
-                          </h1>
-                        ),
-                        itemId: "/stores",
-                        elemBefore: () => <MdKeyboardArrowRight size={20} />,
-                      },
-                    ],
-                  },
-                  {
-                    title: (
-                      <h1
-                        className={`whitespace-pre duration-300 
-            ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-                      >
-                        FAQ's
-                      </h1>
-                    ),
-                    itemId: "/faqs",
-                    // icon: FaQuestionCircle,
-                    elemBefore: () => <FaQuestionCircle size={20} />,
-                  },
-                ]}
+                items={SIDEBAR_ITEMS}
               />
             </>
           </React.Fragment>

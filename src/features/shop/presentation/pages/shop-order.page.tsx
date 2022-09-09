@@ -338,7 +338,7 @@ export function ShopOrder() {
                           </h3>
                           {order.remarks ? (
                             <h3 className="text-xs">
-                              Flavor:{" "}
+                              Flavor: <br />
                               <span
                                 className="text-tertiary"
                                 dangerouslySetInnerHTML={{
@@ -350,6 +350,49 @@ export function ShopOrder() {
                           <h3 className="flex items-end justify-end flex-1 text-base">
                             <NumberFormat
                               value={parseInt(order.calc_price).toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
+                        </div>
+                      </div>
+                    )
+                  )}
+
+                  {getOrdersState.data?.order.deals_details.map(
+                    (deal, index) => (
+                      <div
+                        key={index}
+                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                      >
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.product_image}`}
+                          className="rounded-[10px] w-[92px] h-[92px]"
+                          alt=""
+                        />
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                          <h3 className="text-sm">{deal.name}</h3>
+                          <h3 className="text-xs">
+                            Quantity:{" "}
+                            <span className="text-tertiary">
+                              {deal.quantity}
+                            </span>
+                          </h3>
+                          {deal.remarks ? (
+                            <h3 className="text-xs">
+                              Flavor: <br />
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: deal.remarks,
+                                }}
+                              />
+                            </h3>
+                          ) : null}
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={deal.price.toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}

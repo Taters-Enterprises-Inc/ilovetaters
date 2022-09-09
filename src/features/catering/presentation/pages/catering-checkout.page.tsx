@@ -15,7 +15,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import PhoneInput from "react-phone-input-2";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
 import { MdDeliveryDining } from "react-icons/md";
@@ -48,6 +48,7 @@ export function CateringCheckout() {
 
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
+  const [enableCompanyName, setEnableCompanyName] = useState(false);
 
   const getSessionState = useAppSelector(selectGetSession);
   const getContactsState = useAppSelector(selectGetContacts);
@@ -181,10 +182,17 @@ export function CateringCheckout() {
         calculatedPrice += orders[i].prod_calc_amount;
       }
 
+      calculatedPrice += calculatedPrice * service_charge_percentage;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
-      calculatedPrice += calculatedPrice * service_charge_percentage;
+
+      console.log(
+        getSessionState.data.distance_rate_price,
+        getSessionState.data.catering_night_differential_fee,
+        getSessionState.data.catering_succeeding_hour_charge,
+        calculatedPrice * service_charge_percentage
+      );
 
       return (
         <NumberFormat
@@ -251,7 +259,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
-                <BiUserCircle className="text-2xl hidden sm:block" />{" "}
+                <BiUserCircle className="hidden text-2xl sm:block" />{" "}
                 <span>Your Details</span>
               </div>
             </div>
@@ -263,7 +271,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <FaFileContract className="text-2xl hidden sm:block" />{" "}
+                <FaFileContract className="hidden text-2xl sm:block" />{" "}
                 <span>Contract</span>
               </div>
             </div>
@@ -275,7 +283,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
-                <AiOutlineCreditCard className="text-2xl hidden sm:block" />{" "}
+                <AiOutlineCreditCard className="hidden text-2xl sm:block" />{" "}
                 <span>Payment</span>
               </div>
             </div>
@@ -287,7 +295,7 @@ export function CateringCheckout() {
                 </div>
               </div>
               <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
-                <AiOutlineCheckCircle className="text-2xl hidden sm:block" />{" "}
+                <AiOutlineCheckCircle className="hidden text-2xl sm:block" />{" "}
                 <span>Checkout Complete</span>
               </div>
             </div>
@@ -361,9 +369,7 @@ export function CateringCheckout() {
                     {getContactsState?.data &&
                     getContactsState.data.length > 0 ? (
                       <FormControl className="w-full">
-                        <InputLabel id="demo-simple-select-helper-label">
-                          Contacts
-                        </InputLabel>
+                        <InputLabel>Contacts</InputLabel>
                         <Select
                           className="w-full"
                           label="Contacts"
@@ -481,6 +487,13 @@ export function CateringCheckout() {
                       name="event_class"
                       required
                       autoComplete="off"
+                      onChange={(event: SelectChangeEvent) => {
+                        if (event.target.value === "corporate") {
+                          setEnableCompanyName(true);
+                        } else {
+                          setEnableCompanyName(false);
+                        }
+                      }}
                     >
                       <MenuItem value="personal">Personal</MenuItem>
                       <MenuItem value="corporate">Corporate</MenuItem>
@@ -490,6 +503,20 @@ export function CateringCheckout() {
                     </Select>
                   </FormControl>
                 </div>
+
+                {enableCompanyName ? (
+                  <div className="space-y-2">
+                    <span className="text-base text-white">Company Name</span>
+
+                    <TextField
+                      variant="outlined"
+                      className="w-full"
+                      name="catering_company_name"
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                ) : null}
 
                 <div className="space-y-2">
                   <span className="text-base text-white">
@@ -658,6 +685,7 @@ export function CateringCheckout() {
                           {order.prod_multiflavors ? (
                             <h3 className="text-xs">
                               Flavor:
+                              <br />
                               <span
                                 className="text-tertiary"
                                 dangerouslySetInnerHTML={{

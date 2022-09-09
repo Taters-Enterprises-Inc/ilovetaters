@@ -4,10 +4,12 @@ import { ProgressBar } from "./progress-bar";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 
 import {
+  getLatestUnexpiredRedeem,
   GetLatestUnexpiredRedeemState,
   resetGetLatestUnexpiredRedeem,
   selectGetLatestUnexpiredRedeem,
 } from "../slices/get-latest-unexpired-redeem.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function CountdownTimerLatestRedeem() {
   const getLatestUnexpiredRedeemState = useAppSelector(
@@ -32,7 +34,13 @@ export function CountdownTimerLatestRedeem() {
 
     const renderer = ({ hours, minutes, seconds, completed }: any) => {
       if (completed) {
-        dispatch(resetGetLatestUnexpiredRedeem());
+        if (
+          getLatestUnexpiredRedeemState.status ===
+          GetLatestUnexpiredRedeemState.success
+        ) {
+          dispatch(getLatestUnexpiredRedeem());
+          dispatch(resetGetLatestUnexpiredRedeem());
+        }
       } else if (!completed) {
         var today = moment();
         let timeName = "";

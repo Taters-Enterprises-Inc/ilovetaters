@@ -26,6 +26,7 @@ import {
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -95,25 +96,45 @@ export function HeaderNav(props: HeaderNavProps) {
     }
   };
 
+  const calculateCartQuantity = () => {
+    let calculatedQuantity = 0;
+
+    if (getSessionState.data?.orders) {
+      calculatedQuantity += getSessionState.data.orders.length;
+    }
+
+    if (getSessionState.data?.deals) {
+      calculatedQuantity += getSessionState.data.deals.length;
+    }
+
+    return calculatedQuantity;
+  };
+
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return <>₱0.00</>;
     }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
   };
 
   return (
@@ -169,12 +190,17 @@ export function HeaderNav(props: HeaderNavProps) {
                       onClick={handleProfileMenuClick}
                       className="flex justify-center items-center flex-col space-y-1 mt-[-5px]"
                     >
-                      <img
-                        src={getSessionState.data?.userData.picture}
-                        alt="Profile pic"
-                        className="rounded-full"
-                        width={25}
-                      ></img>
+                      {getSessionState.data?.userData.login_type ===
+                      "mobile" ? (
+                        <FaUserCircle className="text-2xl text-white" />
+                      ) : (
+                        <img
+                          src={getSessionState.data?.userData.picture}
+                          alt="Profile pic"
+                          className="rounded-full"
+                          width={25}
+                        ></img>
+                      )}
                       <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
                         {getSessionState.data?.userData.last_name}
@@ -209,18 +235,18 @@ export function HeaderNav(props: HeaderNavProps) {
                     </button>
                   </>
                 ) : null}
-                {getSessionState.data?.cache_data ? (
+                {getSessionState.data?.cache_data &&
+                (props.activeUrl === "CATERING" ||
+                  props.activeUrl === "SNACKSHOP") ? (
                   <button
                     onClick={handleCart}
                     className="flex-col items-center justify-center space-y-1"
                   >
-                    <div className="flex justify-center items-center">
-                      <div className="relative flex flex-col items-center w-8 justify-center space-y-1 text-white rounded-xl">
+                    <div className="flex items-center justify-center">
+                      <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">
                         <BsCart4 className="text-xl text-white" />
                         <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
-                          {getSessionState.data?.orders
-                            ? getSessionState.data.orders.length
-                            : 0}
+                          {calculateCartQuantity()}
                         </span>
                       </div>
                     </div>
@@ -233,7 +259,8 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
-        {getSessionState.data?.cache_data ? (
+        {getSessionState.data?.cache_data &&
+        (props.activeUrl === "CATERING" || props.activeUrl === "SNACKSHOP") ? (
           <div className="w-full py-1 text-white bg-secondary">
             <div className="container flex">
               <div className="truncate w-full lg:w-[400px]">
@@ -245,7 +272,7 @@ export function HeaderNav(props: HeaderNavProps) {
                 {getSessionState.data.customer_address}
               </div>
               <div className="flex-1"></div>
-              <div className="items-center justify-center space-x-2 hidden lg:flex">
+              <div className="items-center justify-center hidden space-x-2 lg:flex">
                 {" "}
                 <MdLocationPin className="text-lg" />
                 <Link
@@ -304,14 +331,14 @@ export function HeaderNav(props: HeaderNavProps) {
         onClose={() => {
           setOpenStoreChooserModal(false);
         }}
-      ></StoreChooserModal>
+      />
 
       <StoreVisitStoreChooserModal
         open={openStoreVisitStoreChooserModal}
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
-      ></StoreVisitStoreChooserModal>
+      />
     </>
   );
 }

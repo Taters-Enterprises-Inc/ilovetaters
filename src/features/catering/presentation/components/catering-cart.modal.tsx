@@ -132,7 +132,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
 
                     {order.prod_multiflavors ? (
                       <h3 className="text-xs">
-                        Flavor:
+                        Flavor: <br />
                         <span
                           className="text-tertiary"
                           dangerouslySetInnerHTML={{

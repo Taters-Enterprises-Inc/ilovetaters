@@ -56,6 +56,14 @@ import cateringHomePage from "../catering/presentation/slices/catering-home-page
 import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
 import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
 import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
+import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
+import uploadContract from "../catering/presentation/slices/upload-contract.slice";
+
+import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
+
+import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
+import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
 
 export const store = configureStore({
   reducer: {
@@ -88,6 +96,7 @@ export const store = configureStore({
     getCartItem: getCartItem,
     editCartItem: editCartItem,
     addToCartShop: addToCartShop,
+    addToCartCheckoutShop: addToCartCheckoutShop,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
@@ -119,6 +128,13 @@ export const store = configureStore({
     shopHomePage: shopHomePage,
     branchesNearYouComponent: branchesNearYouComponent,
     storeChooserModal: storeChooserModal,
+    getCateringOrders: getCateringOrders,
+
+    uploadContract: uploadContract,
+    cateringUploadProofOfPayment: cateringUploadProofOfPayment,
+    signInMobileUser: signInMobileUser,
+
+    setStoreAndAddressPopClub: setStoreAndAddressPopClub,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

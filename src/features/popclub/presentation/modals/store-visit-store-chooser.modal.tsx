@@ -30,7 +30,7 @@ export function StoreVisitStoreChooserModal(
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-primary px-[5px] py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
+      <div className="bg-primary px-3 py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
           className="absolute text-2xl text-white top-2 right-4"
           onClick={() => {
