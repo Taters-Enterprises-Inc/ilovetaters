@@ -235,7 +235,9 @@ export function HeaderNav(props: HeaderNavProps) {
                     </button>
                   </>
                 ) : null}
-                {getSessionState.data?.cache_data ? (
+                {getSessionState.data?.cache_data &&
+                (props.activeUrl === "CATERING" ||
+                  props.activeUrl === "SNACKSHOP") ? (
                   <button
                     onClick={handleCart}
                     className="flex-col items-center justify-center space-y-1"
@@ -329,14 +331,14 @@ export function HeaderNav(props: HeaderNavProps) {
         onClose={() => {
           setOpenStoreChooserModal(false);
         }}
-      ></StoreChooserModal>
+      />
 
       <StoreVisitStoreChooserModal
         open={openStoreVisitStoreChooserModal}
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
-      ></StoreVisitStoreChooserModal>
+      />
     </>
   );
 }

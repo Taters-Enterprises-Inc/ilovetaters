@@ -199,7 +199,9 @@ export function PopClubDeal() {
               <button
                 className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
                 onClick={() => {
-                  navigate(-1);
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
                 }}
               >
                 Go Back
@@ -287,7 +289,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back
@@ -301,20 +305,47 @@ export function PopClubDeal() {
     ) {
       return (
         <>
-          <div className="w-full py-3 text-white uppercase bg-green-700 border border-white rounded-xl">
-            CODE :
-            <span className="ml-1 font-bold">
-              {getRedeemState.data.redeem_code}
-            </span>
-          </div>
-          <button
-            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            Go Back
-          </button>
+          {getSessionState.data.popclub_data.platform === "online-delivery" ? (
+            <>
+              <button
+                onClick={() => {
+                  navigate("/shop/checkout");
+                }}
+                className="w-full py-3 text-white uppercase border border-white bg-button rounded-xl"
+              >
+                Checkout
+              </button>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="w-full py-3 text-white uppercase bg-green-700 border border-white rounded-xl">
+                CODE :
+                <span className="ml-1 font-bold">
+                  {getRedeemState.data.redeem_code}
+                </span>
+              </div>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          )}
         </>
       );
     } else if (
@@ -341,7 +372,7 @@ export function PopClubDeal() {
       return (
         <>
           <button
-            className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
+            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
             onClick={handleRedeem}
           >
             Redeem
@@ -383,7 +414,7 @@ export function PopClubDeal() {
       <section className="relative flex flex-col min-h-screen pb-10 bg-secondary">
         {getDealState.data ? (
           <>
-            <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] pt-2 text-xl">
+            <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] text-xl">
               {getDealState.data.category_name}
             </div>
 

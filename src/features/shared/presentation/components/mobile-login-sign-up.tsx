@@ -28,7 +28,8 @@ export function MobileLoginSignUp() {
                 type="text"
                 name="firstName"
                 placeholder="First Name"
-                className="w-full text-sm bg-gray-100 outline-none none h-9 rounded-2xl"
+                autoComplete="off"
+                className="w-full text-sm bg-gray-100 outline-none none h-9 rounded-2xl "
               ></input>
             </div>
             <div className="flex items-center justify-center w-[49%] bg-gray-100 rounded-2xl">
@@ -36,8 +37,9 @@ export function MobileLoginSignUp() {
               <input
                 type="text"
                 name="lastName"
+                autoComplete="off"
                 placeholder="Last Name"
-                className="w-full text-sm bg-gray-100 outline-none h-9 rounded-2xl"
+                className="w-full text-sm bg-gray-100 outline-none h-9 rounded-2xl "
               ></input>
             </div>
           </div>
@@ -49,6 +51,7 @@ export function MobileLoginSignUp() {
               inputProps={{
                 ref: phoneNumberRef,
                 required: true,
+                autoComplete: "off",
               }}
               isValid={(value, country: any) => {
                 if (value.match(/63/) || value.match(/09/)) {
@@ -81,8 +84,9 @@ export function MobileLoginSignUp() {
             <input
               type="email"
               name="email"
+              autoComplete="off"
               placeholder="Email"
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
+              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
             ></input>
           </div>
           <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
@@ -90,8 +94,9 @@ export function MobileLoginSignUp() {
             <input
               type="password"
               name="passw"
+              autoComplete="off"
               placeholder="Password"
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9"
+              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
             ></input>
           </div>
 

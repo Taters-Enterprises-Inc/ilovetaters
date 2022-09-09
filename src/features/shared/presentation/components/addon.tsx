@@ -115,14 +115,26 @@ export function Addon(props: AddonProps) {
             <div className="w-24 h-10">
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
-                  onMouseDown={() =>
-                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
-                  }
-                  onMouseUp={handleonMouseUp}
-                  onTouchStart={() =>
-                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
-                  }
-                  onTouchEnd={handleonMouseUp}
+                  onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
+                    if (quantity > 1 && quantity <= 10)
+                      setQuantity(quantity - 1);
+                  }}
+                  // onMouseDown={() =>
+                  //   quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  // }
+                  // onMouseUp={handleonMouseUp}
+                  // onTouchStart={() =>
+                  //   quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  // }
+                  // onTouchEnd={handleonMouseUp}
                   className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                     quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
@@ -133,38 +145,64 @@ export function Addon(props: AddonProps) {
                 <input
                   value={quantity}
                   type="number"
-                  onChange={(e) => {
-                    const value = e.target.value;
-
+                  onChange={(event: any) => {
                     if (
                       getSessionState.data?.userData == null ||
                       getSessionState.data?.userData === undefined
                     ) {
-                      clearInterval(quantityId);
                       setOpenLoginChooserModal(true);
-                    } else {
-                      if (parseInt(value) >= 10) {
-                        setQuantity(10);
-                      } else if (parseInt(value) <= 1) {
-                        setQuantity(1);
-                      } else {
-                        setQuantity(parseInt(value));
-                      }
+                      return;
                     }
+
+                    const value = event.target.value;
+                    if (value >= 1 && value <= 10)
+                      setQuantity(Math.floor(event.target.value));
                   }}
+                  readOnly
+                  // onChange={(e) => {
+                  //   const value = e.target.value;
+
+                  //   if (
+                  //     getSessionState.data?.userData == null ||
+                  //     getSessionState.data?.userData === undefined
+                  //   ) {
+                  //     clearInterval(quantityId);
+                  //     setOpenLoginChooserModal(true);
+                  //   } else {
+                  //     if (parseInt(value) >= 10) {
+                  //       setQuantity(10);
+                  //     } else if (parseInt(value) <= 1) {
+                  //       setQuantity(1);
+                  //     } else {
+                  //       setQuantity(parseInt(value));
+                  //     }
+                  //   }
+                  // }}
                   className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                   name="custom-input-number"
                 />
 
                 <button
-                  onMouseDown={() =>
-                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
-                  }
-                  onMouseUp={handleonMouseUp}
-                  onTouchStart={() =>
-                    quantity <= 1 ? setDisabled : handleonMouseDown("add")
-                  }
-                  onTouchEnd={handleonMouseUp}
+                  onClick={() => {
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      setOpenLoginChooserModal(true);
+                      return;
+                    }
+
+                    if (quantity >= 1 && quantity < 10)
+                      setQuantity(quantity + 1);
+                  }}
+                  // onMouseDown={() =>
+                  //   quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  // }
+                  // onMouseUp={handleonMouseUp}
+                  // onTouchStart={() =>
+                  //   quantity <= 1 ? setDisabled : handleonMouseDown("add")
+                  // }
+                  // onTouchEnd={handleonMouseUp}
                   className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
                     quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                   }`}

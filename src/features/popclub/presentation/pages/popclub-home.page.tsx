@@ -107,7 +107,7 @@ export function PopClubHome() {
         ></img>
       </section>
       <section className="container ">
-        <div className="flex flex-col items-start justify-start text-xs sm:text-sm md:text-base">
+        <div className="flex flex-col items-start justify-start text-xs leading-4 lg:leading-5 sm:text-sm md:text-base lg:mt-2">
           {getSessionState.data?.popclub_data ? (
             <button
               onClick={() => {
@@ -158,18 +158,18 @@ export function PopClubHome() {
               }}
             >
               <span className="text-white">Address: </span>
-              <span className="text-[#ffcd17] truncate w-[200px] sm:w-[400px] md:w-[600px]">
+              <span className="text-[#ffcd17] truncate w-[200px] sm:w-[400px] font-bold">
                 {getSessionState.data?.customer_address}
               </span>
             </button>
           ) : null}
         </div>
 
-        <div className="overflow-y-auto w-full hide-scrollbar font-['Bebas_Neue'] my-2">
-          <ul className="flex items-start justify-start space-x-6 mt-2 w-[400px] lg:w-full">
+        <div className="overflow-y-auto w-full hide-scrollbar font-['Bebas_Neue'] mb-[13px] mt-[4px] sm:mt-[10px] md:mt-[23px] lg:mt-[10px]">
+          <ul className="flex items-start justify-start space-x-6 mt-2 w-[500px] lg:w-full">
             <Link
               to={`?category=all`}
-              className="flex items-center justify-center space-x-1 text-lg tracking-widest text-gray-500 lg:px-2 font-semi-bold "
+              className="flex items-center justify-center space-x-1 text-lg tracking-[3px] text-gray-500 lg:px-2 font-semi-bold "
             >
               <span
                 className={
@@ -185,7 +185,7 @@ export function PopClubHome() {
               <li key={i}>
                 <Link
                   to={`?category=${category.url_name}`}
-                  className="flex items-center justify-center space-x-1 text-lg tracking-widest text-gray-500 lg:px-2 font-semi-bold"
+                  className="flex items-center justify-center space-x-1 text-lg tracking-[3px] text-gray-500 lg:px-2 font-semi-bold"
                 >
                   <span
                     className={
@@ -204,7 +204,19 @@ export function PopClubHome() {
       </section>
 
       <section className="container pb-96">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
+        {getDealsState.data.length <= 0 ? (
+          <div className="flex flex-col items-center justify-center">
+            <img
+              src={`${REACT_APP_DOMAIN_URL}api/assets/images/popclub/mr_poppy/Poppie_Surprised.png`}
+              alt="Taters Mr Poppy Suprised"
+              width={300}
+            />
+            <span className="text-white text-3xl font-['Bebas_Neue'] tracking-[3px]">
+              Oops.. No Deals Found
+            </span>
+          </div>
+        ) : null}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:grid-cols-5">
           {getDealsState.data.map((deal, i) => (
             <Link key={i} to={`/popclub/deal/${deal.hash}`}>
               <div className=" relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full">
@@ -212,7 +224,7 @@ export function PopClubHome() {
                   {deal.category_name}
                 </h1>
                 {deal.original_price && deal.promo_price ? (
-                  <div className="absolute top-0 left-0 mt-9 lg:mt-8">
+                  <div className="absolute top-0 left-0 mt-9 lg:mt-12">
                     <div
                       className={`text-[11px] lg:text-[12px] mb-[2px] bg-yellow-500 text-white rounded-r-[2px] font-bold px-1`}
                     >
@@ -223,12 +235,12 @@ export function PopClubHome() {
                       )}
                       % OFF
                     </div>
-                    <div className=" bg-red-500 text-white rounded-r-[4px] leading-[13px] lg:leading-[15px] px-1 py-[2px]">
+                    <div className=" bg-red-500 text-white rounded-r-[4px] leading-[13px] lg:leading-[15px] px-1 py-[4px] lg:py-[6px]">
                       <div className="text-left md:text-[12px] text-[11px] lg:text-[12px] font-normal line-through">
-                        ₱ {deal.original_price}
+                        ₱{deal.original_price}
                       </div>
                       <div className="text-[15px] lg:text-[20px] text-start">
-                        ₱ {deal.promo_price}
+                        ₱{deal.promo_price}
                       </div>
                     </div>
                   </div>
@@ -241,7 +253,7 @@ export function PopClubHome() {
 
                 <div className="relative flex mb-2">
                   <div className="fade-seperator"></div>
-                  <h4 className="text-white text-[12px]  pb-3 pt-4 px-2  leading-4 lg:text-base font-light text-start text-sm whitespace-pre-wrap ">
+                  <h4 className="text-white text-[11px] pb-3 pt-4 px-3  leading-4 lg:text-base font-semibold text-start text-sm whitespace-pre-wrap ">
                     {deal.name}
                   </h4>
                 </div>

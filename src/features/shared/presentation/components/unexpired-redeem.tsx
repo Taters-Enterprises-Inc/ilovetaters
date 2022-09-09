@@ -30,7 +30,7 @@ export function UnExpiredRedeem() {
     <>
       {getLatestUnexpiredRedeemState.data ? (
         <div
-          className={`fixed z-[2003] bottom-[70px] sm:top-[80px] h-[90px] w-full ${
+          className={`fixed z-[2003] bottom-[70px] sm:top-[80px] lg:top-[100px] h-[90px] w-full ${
             hash === getLatestUnexpiredRedeemState.data.deal_hash
               ? "hidden"
               : ""

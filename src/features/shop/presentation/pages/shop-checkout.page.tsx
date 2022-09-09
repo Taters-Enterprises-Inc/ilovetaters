@@ -455,7 +455,7 @@ export function ShopCheckout() {
                             alt=""
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-sm w-[90%]">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
                               {order.prod_size} {order.prod_name}
                             </h3>
                             <h3 className="text-xs">
@@ -521,7 +521,7 @@ export function ShopCheckout() {
                             alt=""
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-sm w-[90%]">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
                               {deal.deal_name}
                             </h3>
                             <h3 className="text-xs">
