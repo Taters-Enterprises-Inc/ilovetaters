@@ -150,9 +150,10 @@
   .side-navigation-panel-select-inner
   .side-navigation-panel-select-inner-wrap
   .side-navigation-panel-select-inner-option-selected {
-  --tw-border-opacity: 0.3;
-  --tw-bg-opacity: 0.3;
+  --tw-border-opacity: 1;
+  --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
+  border-radius: 0.375rem;
   background-color: rgba(255, 205, 23, var(--tw-bg-opacity));
   border-color: rgba(255, 205, 23, var(--tw-border-opacity));
   color: rgba(31, 41, 55, var(--tw-text-opacity));
