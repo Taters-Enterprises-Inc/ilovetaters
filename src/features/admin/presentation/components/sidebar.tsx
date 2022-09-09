@@ -32,7 +32,7 @@ const Sidebar: FC = () => {
           Orders
         </h1>
       ),
-      itemId: "/orders",
+      itemId: "/admin/orders",
       // icon: FaRegListAlt,
       elemBefore: () => <FaRegListAlt size={20} />,
     },
@@ -45,7 +45,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Catering
         </h1>
       ),
-      itemId: "/catering-orders",
+      itemId: "/admin/catering-orders",
       // icon: MdFoodBank,
       elemBefore: () => <MdFoodBank size={20} />,
     },
@@ -58,7 +58,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Popclub
         </h1>
       ),
-      itemId: "/admin-popclub",
+      itemId: "/admin/popclub",
       // icon: FaCartArrowDown,
       elemBefore: () => <FaCartArrowDown size={20} />,
     },
@@ -83,7 +83,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Snackshop
             </h1>
           ),
-          itemId: "/raffles-snackshop",
+          itemId: "/admin/raffles-snackshop",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -95,7 +95,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               In-store
             </h1>
           ),
-          itemId: "/raffles-instore",
+          itemId: "/admin/raffles-instore",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -121,7 +121,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Catering Add-on Availability
             </h1>
           ),
-          itemId: "/catering-addons",
+          itemId: "/admin/catering-add-ons-availability",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -133,7 +133,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Product Add-on Availability
             </h1>
           ),
-          itemId: "/product-addons",
+          itemId: "/admin/product-add-ons-availability",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -145,7 +145,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Product Availability
             </h1>
           ),
-          itemId: "/product-availability",
+          itemId: "/admin/product-availability",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -157,7 +157,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Packages Availability
             </h1>
           ),
-          itemId: "/packages",
+          itemId: "/admin/packages/availability",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -169,7 +169,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Banner Availability
             </h1>
           ),
-          itemId: "/banner",
+          itemId: "/admin/banner/availability",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -183,7 +183,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Products
         </h1>
       ),
-      itemId: "/admin-products",
+      itemId: "/admin/products",
       elemBefore: () => <GiCardboardBoxClosed size={20} />,
     },
     {
@@ -195,7 +195,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Reports
         </h1>
       ),
-      itemId: "/reports",
+      itemId: "/admin/reports",
       elemBefore: () => <TbReport size={20} />,
     },
     {
@@ -219,7 +219,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Category
             </h1>
           ),
-          itemId: "/category",
+          itemId: "/admin/settings-category",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -231,7 +231,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Users
             </h1>
           ),
-          itemId: "/users",
+          itemId: "/admin/users",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -243,7 +243,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Vouchers
             </h1>
           ),
-          itemId: "/vouchers",
+          itemId: "/admin/settings-vouchers",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -255,7 +255,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Stores
             </h1>
           ),
-          itemId: "/stores",
+          itemId: "/admin/settings-stores",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -269,7 +269,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           FAQ's
         </h1>
       ),
-      itemId: "/faqs",
+      itemId: "/admin/faqs",
       // icon: FaQuestionCircle,
       elemBefore: () => <FaQuestionCircle size={20} />,
     },
