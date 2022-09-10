@@ -6,7 +6,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
 import {
@@ -27,6 +27,8 @@ export function Addon(props: AddonProps) {
   const dispatch = useAppDispatch();
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [setDisabled] = useState(true);
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
@@ -34,7 +36,17 @@ export function Addon(props: AddonProps) {
     }
   }, [addToCartShopState, dispatch]);
 
+  function handleonClick(action: string) {
+    if (isLongPress.current === true) {
+      return;
+    }
+    setTimeout(() => {
+      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    }, 200);
+  }
+
   function handleonMouseUp() {
+    clearTimeout(timerRef.current);
     clearInterval(quantityId);
   }
 
@@ -46,21 +58,32 @@ export function Addon(props: AddonProps) {
       clearInterval(quantityId);
       setOpenLoginChooserModal(true);
     } else {
-      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-      onpressed(action);
+      pressTimer(action);
     }
   }
 
-  const onpressed = (action: string) => {
-    let counter = quantity;
-    quantityId = setInterval(function () {
-      if (action === "add") counter += 1;
-      else counter -= 1;
-      setQuantity(counter);
+  function pressTimer(action: string) {
+    isLongPress.current = false;
+    timerRef.current = window.setTimeout(() => {
+      let counter = quantity;
+      quantityId = setInterval(function () {
+        if (action === "add") counter += 1;
+        else counter -= 1;
 
-      if (counter === 10 || counter === 1) clearInterval(quantityId);
+        setQuantity(counter);
+
+        if (counter >= 10) {
+          clearInterval(quantityId);
+          setQuantity(10);
+        } else if (counter <= 1) {
+          clearInterval(quantityId);
+          setQuantity(1);
+        }
+      }, 500);
+
+      isLongPress.current = true;
     }, 500);
-  };
+  }
 
   const handleAddToCart = () => {
     if (
@@ -115,26 +138,29 @@ export function Addon(props: AddonProps) {
             <div className="w-24 h-10">
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
+                  // onClick={() => {
+                  //   if (
+                  //     getSessionState.data?.userData == null ||
+                  //     getSessionState.data?.userData === undefined
+                  //   ) {
+                  //     setOpenLoginChooserModal(true);
+                  //     return;
+                  //   }
 
-                    if (quantity > 1 && quantity <= 10)
-                      setQuantity(quantity - 1);
-                  }}
-                  // onMouseDown={() =>
-                  //   quantity <= 1 ? setDisabled : handleonMouseDown("minus")
-                  // }
-                  // onMouseUp={handleonMouseUp}
-                  // onTouchStart={() =>
-                  //   quantity <= 1 ? setDisabled : handleonMouseDown("minus")
-                  // }
-                  // onTouchEnd={handleonMouseUp}
+                  //   if (quantity > 1 && quantity <= 10)
+                  //     setQuantity(quantity - 1);
+                  // }}
+                  onClick={() =>
+                    quantity <= 1 ? setDisabled : handleonClick("minus")
+                  }
+                  onMouseDown={() =>
+                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                  }
+                  onTouchEnd={handleonMouseUp}
                   className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                     quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
@@ -145,64 +171,67 @@ export function Addon(props: AddonProps) {
                 <input
                   value={quantity}
                   type="number"
-                  onChange={(event: any) => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    const value = event.target.value;
-                    if (value >= 1 && value <= 10)
-                      setQuantity(Math.floor(event.target.value));
-                  }}
-                  readOnly
-                  // onChange={(e) => {
-                  //   const value = e.target.value;
-
+                  // onChange={(event: any) => {
                   //   if (
                   //     getSessionState.data?.userData == null ||
                   //     getSessionState.data?.userData === undefined
                   //   ) {
-                  //     clearInterval(quantityId);
                   //     setOpenLoginChooserModal(true);
-                  //   } else {
-                  //     if (parseInt(value) >= 10) {
-                  //       setQuantity(10);
-                  //     } else if (parseInt(value) <= 1) {
-                  //       setQuantity(1);
-                  //     } else {
-                  //       setQuantity(parseInt(value));
-                  //     }
+                  //     return;
                   //   }
+
+                  //   const value = event.target.value;
+                  //   if (value >= 1 && value <= 10)
+                  //     setQuantity(Math.floor(event.target.value));
                   // }}
+                  // readOnly
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      clearInterval(quantityId);
+                      setOpenLoginChooserModal(true);
+                    } else {
+                      if (parseInt(value) >= 10) {
+                        setQuantity(10);
+                      } else if (parseInt(value) <= 1) {
+                        setQuantity(1);
+                      } else {
+                        setQuantity(parseInt(value));
+                      }
+                    }
+                  }}
                   className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                   name="custom-input-number"
                 />
 
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
+                  // onClick={() => {
+                  //   if (
+                  //     getSessionState.data?.userData == null ||
+                  //     getSessionState.data?.userData === undefined
+                  //   ) {
+                  //     setOpenLoginChooserModal(true);
+                  //     return;
+                  //   }
 
-                    if (quantity >= 1 && quantity < 10)
-                      setQuantity(quantity + 1);
-                  }}
-                  // onMouseDown={() =>
-                  //   quantity >= 10 ? setDisabled : handleonMouseDown("add")
-                  // }
-                  // onMouseUp={handleonMouseUp}
-                  // onTouchStart={() =>
-                  //   quantity <= 1 ? setDisabled : handleonMouseDown("add")
-                  // }
-                  // onTouchEnd={handleonMouseUp}
+                  //   if (quantity >= 1 && quantity < 10)
+                  //     setQuantity(quantity + 1);
+                  // }}
+                  onClick={() =>
+                    quantity >= 10 ? setDisabled : handleonClick("add")
+                  }
+                  onMouseDown={() =>
+                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onTouchEnd={handleonMouseUp}
                   className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
                     quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
