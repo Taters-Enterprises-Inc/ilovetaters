@@ -229,14 +229,14 @@ export const theme = createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: {
-          color: "white",
+          color: "#22201A",
         },
       },
     },
     MuiRadio: {
       styleOverrides: {
         root: {
-          color: "white",
+          color: "#22201A",
         },
       },
     },
@@ -244,18 +244,18 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& fieldset": {
-            borderColor: "white !important",
+            borderColor: "#22201A !important",
           },
           "&:hover fieldset": {
-            borderColor: "white !important",
+            borderColor: "#22201A !important",
           },
           "&.Mui-focused fieldset": {
-            borderColor: "white !important",
+            borderColor: "#22201A !important",
           },
         },
         input: {
-          color: "white",
-          "-webkit-text-fill-color": "white !important",
+          color: "#22201A",
+          "-webkit-text-fill-color": "#22201A !important",
         },
       },
     },
@@ -263,10 +263,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& label.Mui-focused": {
-            color: "white",
+            color: "#22201A",
           },
           "& label": {
-            color: "white !important",
+            color: "#22201A !important",
           },
         },
       },
@@ -274,7 +274,7 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         iconOutlined: {
-          color: "white",
+          color: "#22201A",
         },
       },
     },
@@ -304,10 +304,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& label.Mui-focused": {
-            color: "white",
+            color: "#22201A",
           },
           "& label": {
-            color: "white !important",
+            color: "#22201A !important",
           },
         },
       },

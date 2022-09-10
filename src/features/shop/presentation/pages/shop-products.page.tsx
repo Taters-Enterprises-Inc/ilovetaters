@@ -45,7 +45,7 @@ export function ShopProducts() {
   }, [dispatch, getSessionState]);
 
   return (
-    <>
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="sm:hidden"
@@ -113,6 +113,6 @@ export function ShopProducts() {
           );
         })}
       </section>
-    </>
+    </main>
   );
 }

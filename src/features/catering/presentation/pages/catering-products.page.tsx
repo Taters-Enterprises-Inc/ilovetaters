@@ -122,7 +122,7 @@ export function CateringProducts() {
         target="_blank"
         rel="noreferrer"
         href="https://ilovetaters.com/shop/assets/upload/catering/Catering%20Packages.pdf"
-        className="bg-secondary cursor-pointer h-[100px] flex justify-center items-center text-white font-['Bebas_Neue'] text-2xl tracking-[3px]"
+        className="bg-secondary cursor-pointer h-[100px] flex justify-center items-center mb-14 text-white font-['Bebas_Neue'] text-lg lg:text-2xl tracking-[3px]"
       >
         Download our Catering Flyer
       </a>

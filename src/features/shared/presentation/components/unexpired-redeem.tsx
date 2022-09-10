@@ -8,11 +8,14 @@ import {
 import { useEffect } from "react";
 import { CountdownTimerLatestRedeem } from "features/popclub/presentation/components";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { getSession } from "../slices/get-session.slice";
+import { getSession, selectGetSession } from "../slices/get-session.slice";
+import { selectFacebookLogout } from "../slices/facebook-logout.slice";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
   const { hash } = useParams();
+
+  const facebookLogoutState = useAppSelector(selectFacebookLogout);
 
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
@@ -24,7 +27,7 @@ export function UnExpiredRedeem() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
-  }, [dispatch]);
+  }, [facebookLogoutState, dispatch]);
 
   return (
     <>

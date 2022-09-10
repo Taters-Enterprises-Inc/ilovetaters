@@ -1,4 +1,8 @@
-import { AiFillInfoCircle } from "react-icons/ai";
+import {
+  AiFillInfoCircle,
+  AiOutlineMinus,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -342,7 +346,7 @@ export function ShopProduct() {
     }
   };
   return (
-    <>
+    <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
@@ -356,8 +360,8 @@ export function ShopProduct() {
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
-        <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
-          <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
+        <div className="lg:space-y-10 lg:container">
+          <div className="bg-secondary pb-20 w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 <Swiper
@@ -603,9 +607,7 @@ export function ShopProduct() {
                           quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          −
-                        </span>
+                        <AiOutlineMinus className="text-3xl" />
                       </button>
 
                       <input
@@ -682,9 +684,7 @@ export function ShopProduct() {
                           quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          +
-                        </span>
+                        <AiOutlinePlus className="text-3xl" />
                       </button>
                     </div>
                   </div>
@@ -748,6 +748,6 @@ export function ShopProduct() {
           setOpenLoginChooserModal(false);
         }}
       />
-    </>
+    </main>
   );
 }

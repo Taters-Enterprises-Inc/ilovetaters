@@ -26,7 +26,7 @@ export function Shop() {
   }, [dispatch]);
 
   return (
-    <main className="min-h-screen bg-primary">
+    <>
       <Helmet>
         <title>Taters | Snackshop</title>
       </Helmet>
@@ -45,6 +45,6 @@ export function Shop() {
       <Outlet />
 
       <FooterNav activeUrl="SNACKSHOP" />
-    </main>
+    </>
   );
 }

@@ -26,6 +26,21 @@ import {
 } from "features/shared/presentation/slices/get-session.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectSetStoreAndAddressPopClub } from "../slices/set-store-and-address-popclub.slice";
+import { HiClock } from "react-icons/hi";
+import moment from "moment";
+import { BsFillCalendar2WeekFill } from "react-icons/bs";
+import { RiTimerFlashFill } from "react-icons/ri";
+function secondsToHms(d: any) {
+  d = Number(d);
+  var h = Math.floor(d / 3600);
+  var m = Math.floor((d % 3600) / 60);
+  var s = Math.floor((d % 3600) % 60);
+
+  var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
+  var mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes ") : "";
+  var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
+  return hDisplay + mDisplay + sDisplay;
+}
 
 export function PopClubHome() {
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -251,11 +266,45 @@ export function PopClubHome() {
                   className="card-clickable h-[200px] lg:h-[350px] object-cover"
                 />
 
-                <div className="relative flex mb-2">
-                  <div className="fade-seperator"></div>
-                  <h4 className="text-white text-[11px] pb-3 pt-4 px-3  leading-4 lg:text-base font-semibold text-start text-sm whitespace-pre-wrap ">
-                    {deal.name}
-                  </h4>
+                <div className="px-3 pt-4 pb-3 ">
+                  <div className="relative flex mb-2">
+                    <div className="fade-seperator"></div>
+                    <h4 className="text-white text-[11px] leading-4 lg:text-base font-semibold text-start text-sm whitespace-pre-wrap ">
+                      {deal.name}
+                    </h4>
+                  </div>
+                  <hr />
+                  {deal.available_days ? (
+                    <>
+                      <div className="flex items-center pt-2 space-x-1">
+                        <BsFillCalendar2WeekFill className="text-base text-white" />
+                        <span className="text-xs text-white">Weekdays</span>
+                      </div>
+                    </>
+                  ) : null}
+                  {deal.available_end_time && deal.available_end_time ? (
+                    <>
+                      <div className="flex items-center pt-2 space-x-1">
+                        <HiClock className="text-base text-white" />
+                        <span className="text-[10px] text-white">
+                          {moment(deal.available_start_time, "HH:mm:ss").format(
+                            "LT"
+                          )}{" "}
+                          -{" "}
+                          {moment(deal.available_end_time, "HH:mm:ss").format(
+                            "LT"
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  ) : null}
+
+                  <div className="flex items-center pt-2 space-x-1">
+                    <RiTimerFlashFill className="text-base text-white" />
+                    <span className="text-[10px] sm:text-xs text-white">
+                      {secondsToHms(deal.seconds_before_expiration)}
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>

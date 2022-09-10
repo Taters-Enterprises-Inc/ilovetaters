@@ -17,7 +17,6 @@ import {
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 
 interface HeaderNavProps {
-  serviceReached?: boolean;
   active: string;
   sticky?: boolean;
 }
@@ -47,11 +46,7 @@ export function HomeHeaderNav(props: HeaderNavProps) {
       <header
         className={`${props.sticky ? "sticky" : "fixed"} w-full top-0 z-20 `}
       >
-        <div
-          className={` w-full ${
-            props.serviceReached ? "bg-primary shadow-2xl" : ""
-          }`}
-        >
+        <div className={` w-full bg-primary shadow-2xl`}>
           <nav
             className={`lg:flex hidden justify-between items-center container py-2 h-[64px]`}
           >

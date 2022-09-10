@@ -8,24 +8,9 @@ import { BranchComponent } from "../component/branch-component";
 import { ContactComponent } from "../component/contact-component";
 
 export function Branches() {
-  const [serviceReached, setServiceReached] = useState<boolean>(false);
-
-  const listenScrollEvent = () => {
-    if (window.scrollY < 203) {
-      return setServiceReached(false);
-    } else if (window.scrollY > 200) {
-      return setServiceReached(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, []);
-
   return (
     <main className="w-full h-auto pb-24 bg-primary">
-      <HomeHeaderNav serviceReached={serviceReached} active="BRANCHES" />
+      <HomeHeaderNav active="BRANCHES" />
       <img
         className="lg:hidden"
         src={
