@@ -27,6 +27,7 @@ import {
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 interface HeaderNavProps {
   activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
@@ -197,7 +198,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         <img
                           src={getSessionState.data?.userData.picture}
                           alt="Profile pic"
-                          className="rounded-full"
+                          className="mt-2 rounded-full"
                           width={25}
                         ></img>
                       )}
@@ -226,9 +227,9 @@ export function HeaderNav(props: HeaderNavProps) {
                   <>
                     <button
                       onClick={() => setOpenLoginChooserModal(true)}
-                      className="flex flex-col items-center justify-center space-y-1 text-white rounded-xl"
+                      className="flex flex-col items-center justify-center space-y-1 text-white rounded-xl "
                     >
-                      <AiOutlineUser className="text-xl" />
+                      <AiOutlineUser className="text-xl " />
                       <span className="tracking-[2px] text-xs font-light">
                         Sign In
                       </span>
@@ -240,7 +241,7 @@ export function HeaderNav(props: HeaderNavProps) {
                   props.activeUrl === "SNACKSHOP") ? (
                   <button
                     onClick={handleCart}
-                    className="flex-col items-center justify-center space-y-1"
+                    className="flex-col items-center justify-center mt-2 space-y-1"
                   >
                     <div className="flex items-center justify-center">
                       <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">

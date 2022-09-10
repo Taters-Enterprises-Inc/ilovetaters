@@ -35,6 +35,11 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import {
+  FacebookLogoutState,
+  resetFacebookLogout,
+  selectFacebookLogout,
+} from "features/shared/presentation/slices/facebook-logout.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -57,6 +62,7 @@ export function PopClubDeal() {
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
 
   const location = useLocation();
+  const facebookLogoutState = useAppSelector(selectFacebookLogout);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -101,6 +107,16 @@ export function PopClubDeal() {
       dispatch(resetRedeemDeal());
     }
   }, [redeemDealState, dispatch, getDealState]);
+
+  useEffect(() => {
+    if (facebookLogoutState.status === FacebookLogoutState.success) {
+      navigate(
+        `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+      );
+
+      dispatch(resetFacebookLogout());
+    }
+  }, [facebookLogoutState, navigate, dispatch, getSessionState]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -361,7 +377,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back
@@ -380,7 +398,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back
@@ -399,7 +419,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back

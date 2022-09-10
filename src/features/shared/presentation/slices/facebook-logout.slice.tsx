@@ -27,7 +27,11 @@ export const facebookLogout = createAsyncThunk("facebookLogout", async () => {
 export const facebookLogoutSlice = createSlice({
   name: "facebookLogout",
   initialState,
-  reducers: {},
+  reducers: {
+    resetFacebookLogout: (state) => {
+      state.status = FacebookLogoutState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(facebookLogout.pending, (state: any) => {
@@ -44,4 +48,5 @@ export const facebookLogoutSlice = createSlice({
 
 export const selectFacebookLogout = (state: RootState) => state.facebookLogout;
 
+export const { resetFacebookLogout } = facebookLogoutSlice.actions;
 export default facebookLogoutSlice.reducer;

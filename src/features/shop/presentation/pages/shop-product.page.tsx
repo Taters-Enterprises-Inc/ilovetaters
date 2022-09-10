@@ -1,4 +1,8 @@
-import { AiFillInfoCircle } from "react-icons/ai";
+import {
+  AiFillInfoCircle,
+  AiOutlineMinus,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -573,13 +577,11 @@ export function ShopProduct() {
                         //     : handleonMouseDown("minus")
                         // }
                         // onTouchEnd={handleonMouseUp}
-                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none flex justify-center items-center bg-primary ${
                           quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          −
-                        </span>
+                        <AiOutlineMinus className="text-3xl" />
                       </button>
 
                       <input
@@ -647,13 +649,11 @@ export function ShopProduct() {
                         //   quantity <= 1 ? setDisabled : handleonMouseDown("add")
                         // }
                         // onTouchEnd={handleonMouseUp}
-                        className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                        className={`h-full w-[150px] rounded-r cursor-pointer flex justify-center items-center bg-primary ${
                           quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          +
-                        </span>
+                        <AiOutlinePlus className="text-3xl" />
                       </button>
                     </div>
                   </div>

@@ -26,21 +26,21 @@ export function FooterNav(props: FooterNavProps) {
       <section className="fixed bottom-0 z-[2003]  w-full">
         <footer className="w-full shadowl-2xl lg:hidden bg-secondary">
           <nav className="mx-auto ">
-            <ul className="flex items-stretch h-full text-white md:px-10">
+            <ul className="flex items-stretch h-full py-1 text-white md:px-10">
               <li className="flex-1">
                 <Link
                   to={"/"}
-                  className="flex flex-col items-center justify-between h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-1"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
                       props.activeUrl === "HOME" ? "-active" : ""
                     }.webp`}
-                    className="w-[28px] sm:w-[40px] mt-2"
+                    className="w-[28px] sm:w-[40px]"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] mb-2 ${
+                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "HOME"
                         ? "text-tertiary"
                         : "text-white"
@@ -55,17 +55,17 @@ export function FooterNav(props: FooterNavProps) {
                   onClick={() => {
                     setOpenPlatformChooserModal(true);
                   }}
-                  className="flex flex-col items-center justify-between h-full pt-1 cursor-pointer"
+                  className="flex flex-col items-center justify-center h-full pt-1 cursor-pointer"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.webp`}
-                    className="w-[20px] sm:w-[24px] mt-2 "
+                    className="w-[20px] sm:w-[24px]"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] mb-2 ${
+                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "POPCLUB"
                         ? "text-tertiary"
                         : "text-white"
@@ -88,7 +88,7 @@ export function FooterNav(props: FooterNavProps) {
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[2px] ${
+                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "SNACKSHOP"
                         ? "text-tertiary"
                         : "text-white"
@@ -111,7 +111,7 @@ export function FooterNav(props: FooterNavProps) {
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[2px] ${
+                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "CATERING"
                         ? "text-tertiary"
                         : "text-white"
@@ -134,7 +134,7 @@ export function FooterNav(props: FooterNavProps) {
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[2px] ${
+                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "BRANCHES"
                         ? "text-tertiary"
                         : "text-white"

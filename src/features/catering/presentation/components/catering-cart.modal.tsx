@@ -46,6 +46,18 @@ export function CateringCartModal(props: CateringCartModalProps) {
     return null;
   }
 
+  const isAvailableToProcess = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+    return calculatedPrice > 0;
+  };
+
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
@@ -167,26 +179,30 @@ export function CateringCartModal(props: CateringCartModalProps) {
               ))}
             </div>
 
-            <hr className="mt-6 mb-2 border-t-1" />
+            {isAvailableToProcess() ? (
+              <>
+                <hr className="mt-6 mb-2 border-t-1" />
 
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-white">Total:</span>
-                <span className="font-bold text-white">
-                  {calculateOrdersPrice()}
-                </span>
-              </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-white">Total:</span>
+                    <span className="font-bold text-white">
+                      {calculateOrdersPrice()}
+                    </span>
+                  </div>
 
-              <button
-                onClick={() => {
-                  props.onClose();
-                  navigate("/catering/checkout");
-                }}
-                className="w-full py-2 text-lg text-white border border-white rounded-lg bg-button"
-              >
-                Process Orders
-              </button>
-            </div>
+                  <button
+                    onClick={() => {
+                      props.onClose();
+                      navigate("/catering/checkout");
+                    }}
+                    className="w-full py-2 text-lg text-white border border-white rounded-lg bg-button"
+                  >
+                    Process Orders
+                  </button>
+                </div>
+              </>
+            ) : null}
           </div>
         )}
       </div>

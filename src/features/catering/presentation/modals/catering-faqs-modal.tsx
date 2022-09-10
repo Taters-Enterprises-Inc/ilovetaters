@@ -15,7 +15,7 @@ export function CateringFaqsModal(props: CateringFaqsModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-primary px-4 pt-[30px] pb-3 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
+      <div className="bg-primary pt-[30px] pb-16 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
           className="absolute text-2xl text-white top-2 right-4 "
           onClick={() => {
