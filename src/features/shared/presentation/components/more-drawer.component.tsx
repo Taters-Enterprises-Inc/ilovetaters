@@ -123,7 +123,7 @@ export default function MoreDrawer() {
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           <button
-            className="flex flex-col items-center justify-center mt-[8px]"
+            className="flex flex-col items-center justify-center mt-[8px] sm:mt-[0px]"
             onClick={
               state[anchor]
                 ? toggleDrawer(anchor, false)

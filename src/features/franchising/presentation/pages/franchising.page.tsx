@@ -7,29 +7,9 @@ import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
-  const [serviceReached, setServiceReached] = useState(false);
-  const servicesRef = useRef<any>(null);
-
-  const listenScrollEvent = (event: any) => {
-    if (window.scrollY < 203) {
-      return setServiceReached(false);
-    } else if (window.scrollY > 200) {
-      return setServiceReached(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, []);
-
   return (
     <main className="bg-primary">
-      <HomeHeaderNav
-        serviceReached={serviceReached}
-        active="FRANCHISING"
-      ></HomeHeaderNav>
+      <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav>
       <img
         className="lg:hidden"
         src={
@@ -58,7 +38,7 @@ export function Franchising() {
         ></iframe>
       </div>
 
-      <section ref={servicesRef} className="container min-h-min">
+      <section className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
 
         <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center py-6 '>

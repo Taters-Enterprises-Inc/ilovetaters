@@ -11,12 +11,13 @@ interface ShopProfileContainerProps extends ShopProfileTabsProps {
 
 export function ShopProfileContainer(props: ShopProfileContainerProps) {
   return (
-    <>
+    <main className="bg-primary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
           url: "/shop",
         }}
+        className="lg:h-[200px]"
         title={props.title}
         pageTitles={[
           { name: "Products", url: "/shop/products" },
@@ -33,6 +34,6 @@ export function ShopProfileContainer(props: ShopProfileContainerProps) {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }

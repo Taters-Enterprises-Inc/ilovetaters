@@ -323,7 +323,7 @@ export function ShopProduct() {
     }
   };
   return (
-    <>
+    <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
@@ -337,8 +337,8 @@ export function ShopProduct() {
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
-        <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
-          <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
+        <div className="lg:space-y-10 lg:container">
+          <div className="bg-secondary pb-20 w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 <Swiper
@@ -717,6 +717,6 @@ export function ShopProduct() {
           setOpenLoginChooserModal(false);
         }}
       />
-    </>
+    </main>
   );
 }
