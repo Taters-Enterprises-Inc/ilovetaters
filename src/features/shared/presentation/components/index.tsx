@@ -14,3 +14,5 @@ export { MobileLoginSignIn } from "./mobile-login-sign-in";
 export { MobileLoginSignUp } from "./mobile-login-sign-up";
 export { UnExpiredRedeem } from "./unexpired-redeem";
 export { NotificationWrapper } from "./notification.wrapper";
+export { PhoneInput } from "./phone-input";
+export { MobileLoginPhoneInput } from "./mobile-login-phone-input";

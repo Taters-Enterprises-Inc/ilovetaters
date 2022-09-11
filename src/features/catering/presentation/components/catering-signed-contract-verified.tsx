@@ -45,13 +45,13 @@ export function CateringSignedContractVerified() {
     <div className="container flex flex-col justify-between space-y-4 lg:flex-row ">
       <div className="lg:flex-[0_0_57%] lg:max-w-[57%] order-2 lg:order-1 lg:mt-0 mt-4">
         <div
-          className="bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md mb-4 flex-1 lg:items-start flex justify-between lg:flex-row flex-col"
+          className="flex flex-col justify-between flex-1 px-4 py-3 mb-4 text-green-900 bg-green-100 border-t-4 border-green-500 rounded-b shadow-md lg:items-start lg:flex-row"
           role="alert"
         >
-          <div className="flex relative">
+          <div className="relative flex">
             <div className="py-1">
               <svg
-                className="fill-current h-6 w-6 text-green-500 mr-4"
+                className="w-6 h-6 mr-4 text-green-500 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
               >
@@ -59,7 +59,7 @@ export function CateringSignedContractVerified() {
               </svg>
             </div>
             <div>
-              <p className="font-bold m-0">Signed contract verified</p>
+              <p className="m-0 font-bold">Signed contract verified</p>
               <p className="text-xs">
                 We successfully verify your contract, you can proceed to payment
                 now.{" "}
@@ -69,7 +69,7 @@ export function CateringSignedContractVerified() {
 
           <Link
             to={`/catering/order/${hash}`}
-            className="bg-button text-white text-sm text-center lg:mt-0 mt-2 py-2 px-4 rounded-lg"
+            className="px-4 py-2 mt-2 text-sm text-center text-white border rounded-lg bg-button border-secondary lg:mt-0"
           >
             Proceed to payment
           </Link>
@@ -79,7 +79,7 @@ export function CateringSignedContractVerified() {
       {getCateringOrdersState.data &&
       getCateringOrdersState.data.order.order_details ? (
         <div className="lg:flex-[0_0_40%] lg:max-w-[40%] order-1 space-y-4  lg:order-2">
-          <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+          <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
             Order Summary
           </h2>
 
@@ -87,7 +87,7 @@ export function CateringSignedContractVerified() {
             {getCateringOrdersState.data.order.order_details.map((order, i) => (
               <div
                 key={i}
-                className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                className="flex bg-secondary shadow-md rounded-[10px]"
               >
                 <img
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.product_image}`}
@@ -129,7 +129,7 @@ export function CateringSignedContractVerified() {
           </div>
 
           <hr className="mt-1 mb-2" />
-          <div className="grid grid-cols-2 text-white">
+          <div className="grid grid-cols-2 text-secondary">
             <span>Subtotal:</span>
             <span className="text-end">{calculateSubTotalPrice()}</span>
             {getCateringOrdersState.data.service_fee ? (
@@ -178,7 +178,7 @@ export function CateringSignedContractVerified() {
             </span>
           </div>
 
-          <h1 className="text-4xl text-center text-white">
+          <h1 className="text-4xl text-center text-secondary">
             <NumberFormat
               value={getCateringOrdersState.data.grand_total.toFixed(2)}
               displayType={"text"}

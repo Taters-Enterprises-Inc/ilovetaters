@@ -36,7 +36,7 @@ export function CateringWaitingForBookingConfirmation() {
       <div className="flex items-start justify-start">
         <a
           href={`${REACT_APP_DOMAIN_URL}api/download/contract/${hash}`}
-          className="flex items-center justify-center px-4 py-2 space-x-2 text-lg text-white border border-white rounded-md bg-button"
+          className="flex items-center justify-center px-4 py-2 space-x-2 text-lg text-white border rounded-md border-secondary bg-button"
         >
           <FiDownload className="text-2xl" />{" "}
           <span className="text-base font-bold">Download Order Summary</span>

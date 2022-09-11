@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import TextField from "@mui/material/TextField";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FaSearchLocation } from "react-icons/fa";
 import {
   selectSetStoreAndAddress,
@@ -28,6 +28,28 @@ import {
   setAddressCateringHomePage,
 } from "../slices/catering-home-page.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { styled } from "@mui/material/styles";
+
+const DateTimeTextField = styled((props: TextFieldProps) => (
+  <TextField {...props} />
+))(({ theme }) => ({
+  "& input": {
+    color: "white !important",
+    "-webkit-text-fill-color": "white !important",
+  },
+  "& label": {
+    color: "white !important",
+  },
+  "& fieldset": {
+    borderColor: "white !important",
+  },
+  "&:hover fieldset": {
+    borderColor: "white !important",
+  },
+  "&.Mui-focused fieldset": {
+    borderColor: "white !important",
+  },
+}));
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
@@ -61,7 +83,7 @@ export function CateringHome() {
   }
 
   return (
-    <>
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="lg:hidden"
@@ -115,12 +137,13 @@ export function CateringHome() {
                 onOpen={() => setOpenStartEventCalendar(true)}
                 onClose={() => setOpenStartEventCalendar(false)}
                 renderInput={(params) => (
-                  <TextField
+                  <DateTimeTextField
                     {...params}
                     sx={{
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
+                      borderColor: "white !important",
                     }}
                     autoComplete="off"
                     onClick={() => {
@@ -153,9 +176,8 @@ export function CateringHome() {
                 onOpen={() => setOpenEndEventCalendar(true)}
                 onClose={() => setOpenEndEventCalendar(false)}
                 renderInput={(params) => (
-                  <TextField
+                  <DateTimeTextField
                     {...params}
-                    disabled={true}
                     sx={{
                       svg: { color: "white" },
                       input: { color: "white" },
@@ -252,6 +274,6 @@ export function CateringHome() {
           ) : null}
         </div>
       </section>
-    </>
+    </main>
   );
 }

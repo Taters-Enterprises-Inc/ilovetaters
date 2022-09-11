@@ -513,7 +513,7 @@ export function ShopOrder() {
                 ) : null}
               </div>
 
-              <hr className="mt-1" />
+              <hr className="mt-1 border-secondary" />
 
               <h1 className="text-3xl text-center text-secondary">
                 <NumberFormat
@@ -595,7 +595,7 @@ export function ShopOrder() {
 
                       <button
                         type="submit"
-                        className="bg-green-700 border border-white w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                        className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
                       >
                         Upload
                       </button>

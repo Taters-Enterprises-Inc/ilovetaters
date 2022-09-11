@@ -15,9 +15,9 @@ export function CateringFaqsModal(props: CateringFaqsModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-primary pt-[30px] pb-16 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
+      <div className="bg-paper pt-[30px] pb-16 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
-          className="absolute text-2xl text-white top-2 right-4 "
+          className="absolute text-2xl text-secondary top-2 right-4 "
           onClick={() => {
             document.body.classList.remove("overflow-hidden");
             props.onClose();
@@ -27,7 +27,7 @@ export function CateringFaqsModal(props: CateringFaqsModalProps) {
         </button>
 
         <div className="p-4 space-y-2">
-          <span className="text-white text-4xl font-['Bebas_Neue'] tracking-[3px]">
+          <span className="text-secondary text-4xl font-['Bebas_Neue'] tracking-[3px]">
             Catering FAQ's
           </span>
           <CateringFaqs />

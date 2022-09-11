@@ -1,5 +1,6 @@
 import {
   FooterNav,
+  HeaderNav,
   HomeHeaderNav,
 } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
@@ -18,8 +19,19 @@ export function Home() {
   }, [location]);
 
   return (
-    <main className="bg-primary">
-      {/* <HomeHeaderNav active="HOME" /> */}
+    <main className="min-h-screen bg-primary">
+      {/* <HomeHeaderNav active="HOME" sticky /> */}
+
+      <HeaderNav
+        activeUrl="HOME"
+        logoProps={{
+          src:
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-logo.webp",
+          alt: "Taters Logo",
+          className: "w-[150px] lg:w-[120px]",
+        }}
+      />
 
       <section
         style={{
@@ -40,15 +52,22 @@ export function Home() {
           style={{ visibility: "hidden" }}
         ></img>
       </section>
-
-      <section
+      <img
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp"
+        }
+        className="hidden w-full lg:block"
+        alt="The best pop corn in town"
+      ></img>
+      {/* <section
         style={{
           backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp')`,
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
         }}
-        className="relative mpt-[64px] items-end justify-center hidden sm:flex "
+        className="relative items-end justify-center hidden sm:flex "
       >
         <img
           src={
@@ -58,7 +77,7 @@ export function Home() {
           alt="The best pop corn in town"
           style={{ visibility: "hidden" }}
         ></img>
-      </section>
+      </section> */}
 
       <section className="container lg:mx-auto pb-[100px] grid-cols-3 gap-4 pt-4 hidden sm:grid">
         {SERVICES_DESKTOP.map(function (service_desktop, i) {

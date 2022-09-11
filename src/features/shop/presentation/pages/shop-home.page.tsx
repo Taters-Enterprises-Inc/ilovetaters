@@ -24,7 +24,7 @@ export function ShopHome() {
   }, [dispatch]);
 
   return (
-    <main className="bg-primary">
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="sm:hidden"

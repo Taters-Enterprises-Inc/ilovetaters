@@ -21,8 +21,6 @@ import {
   resetCheckoutOrders,
   selectCheckoutOrders,
 } from "../slices/checkout-orders.slice";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
 import { AddContactModal } from "features/shared/presentation/modals";
 import {
   getContacts,
@@ -37,12 +35,12 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { PhoneInput } from "features/shared/presentation/components";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const phoneNumberRef = useRef(null);
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
 
   const getContactsState = useAppSelector(selectGetContacts);
@@ -79,21 +77,15 @@ export function ShopCheckout() {
       (value, property: string) => (responseBody[property] = value)
     );
 
-    if (
-      (responseBody.phoneNumber.match(/63/) &&
-        responseBody.phoneNumber.length === 15) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 14) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 11)
-    ) {
+    if (responseBody.phoneNumber.length === 11) {
       dispatch(checkoutOrders(responseBody));
     } else {
-      const phoneNumber: any = phoneNumberRef.current;
-
-      if (phoneNumber) {
-        phoneNumber.focus();
-      }
+      dispatch(
+        popUpSnackBar({
+          message: "Invalid phone number",
+          severity: "error",
+        })
+      );
     }
   };
 
@@ -306,7 +298,6 @@ export function ShopCheckout() {
                           label="Contacts"
                           name="phoneNumber"
                           required
-                          ref={phoneNumberRef}
                           autoComplete="off"
                         >
                           {getContactsState.data.map((val) => (
@@ -317,23 +308,7 @@ export function ShopCheckout() {
                         </Select>
                       </FormControl>
                     ) : (
-                      <PhoneInput
-                        country={"ph"}
-                        disableDropdown
-                        inputClass="!bg-transparent !text-white !py-[27px] !w-full"
-                        inputProps={{
-                          name: "phoneNumber",
-                          ref: phoneNumberRef,
-                          required: true,
-                        }}
-                        isValid={(value, country: any) => {
-                          if (value.match(/63/) || value.match(/09/)) {
-                            return true;
-                          } else {
-                            return "Please use +63 or 09";
-                          }
-                        }}
-                      />
+                      <PhoneInput />
                     )}
                     <button
                       type="button"
@@ -430,7 +405,7 @@ export function ShopCheckout() {
 
                   <button
                     type="submit"
-                    className="order-1 w-full py-3 mt-4 text-white uppercase bg-green-700 border border-secondary rounded-xl lg:order-2"
+                    className="order-1 w-full py-3 mt-4 text-white uppercase border bg-button border-secondary rounded-xl lg:order-2"
                   >
                     Checkout
                   </button>

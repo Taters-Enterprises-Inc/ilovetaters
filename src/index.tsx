@@ -63,7 +63,6 @@ import {
   LoadingAndSnackbarWrapper,
   NotificationWrapper,
 } from "features/shared/presentation/components";
-import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -144,7 +143,6 @@ root.render(
 
                 <Route path="reseller" element={<Reseller />} />
                 <Route path="branches" element={<Branches />} />
-                <Route path="near-you" element={<NearyouComponent />} />
 
                 <Route path="admin" element={<Login />}></Route>
                 <Route path="orders" element={<Admin />}></Route>

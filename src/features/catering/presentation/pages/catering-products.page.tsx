@@ -49,7 +49,7 @@ export function CateringProducts() {
   }, [dispatch, getSessionState]);
 
   return (
-    <>
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="sm:hidden"
@@ -126,6 +126,6 @@ export function CateringProducts() {
       >
         Download our Catering Flyer
       </a>
-    </>
+    </main>
   );
 }

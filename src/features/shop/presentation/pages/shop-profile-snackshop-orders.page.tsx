@@ -36,7 +36,7 @@ export function ShopProfileSnackshopOrders() {
 
   return (
     <ShopProfileContainer title="Snack Shop Orders" activeTab="snackshop">
-      <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
+      <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Snack Shop Orders
       </h1>
       <DataTable

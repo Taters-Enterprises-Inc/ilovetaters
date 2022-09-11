@@ -41,11 +41,6 @@ textarea,
 .profile-tab-content {
   position: relative !important;
 }
-.invalid-number-message {
-  background-color: #a21013 !important;
-  color: white !important;
-  padding: 0 3px 0 3px !important;
-}
 html {
   scroll-behavior: smooth;
 }
@@ -53,14 +48,6 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: rgb(255, 255, 255) !important;
-}
-
-input.autolog:-webkit-autofill,
-input.autolog:-webkit-autofill:hover,
-input.autolog:-webkit-autofill:focus,
-input.autolog:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: rgb(0, 0, 0) !important;
 }
