@@ -246,7 +246,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   props.onClose();
                   navigate("/shop/checkout");
                 }}
-                className="w-full py-2 text-lg text-white bg-green-700 rounded-lg"
+                className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
               >
                 Process Orders
               </button>

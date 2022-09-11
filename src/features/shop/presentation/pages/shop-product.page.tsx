@@ -446,6 +446,7 @@ export function ShopProduct() {
                               <Radio
                                 id={size.id.toString()}
                                 color="tertiary"
+                                sx={{ color: "white" }}
                                 checked={size.id === currentSize}
                                 onChange={() => {
                                   setCurrentSize(size.id);
@@ -529,6 +530,7 @@ export function ShopProduct() {
                                     <Radio
                                       id={flavor.id.toString()}
                                       color="tertiary"
+                                      sx={{ color: "white" }}
                                       checked={flavor.id === currentFlavor}
                                       onChange={() => {
                                         setCurrentFlavor(flavor.id);

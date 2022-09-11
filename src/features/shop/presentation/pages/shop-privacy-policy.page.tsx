@@ -8,11 +8,11 @@ export function ShopPrivacyPolicy() {
         tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
         activeTab="privacy-policy"
       >
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl">
           Privacy Policy
         </h1>
-        <hr className="mt-2 mb-4" />
-        <div className="space-y-4 text-white">
+        <hr className="mt-2 mb-4 border-secondary" />
+        <div className="space-y-4 text-secondary">
           <p>
             Taters Enterprises Inc., its subsidiaries and affiliates (“Company,”
             “We,” “Us,” “Our”), is committed to protecting the privacy and

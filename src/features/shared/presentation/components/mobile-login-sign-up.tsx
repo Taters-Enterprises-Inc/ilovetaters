@@ -1,11 +1,10 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { MdLockOutline } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import PhoneInput from "react-phone-input-2";
 import { useRef } from "react";
+import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 
 export function MobileLoginSignUp() {
-  const phoneNumberRef = useRef(null);
   return (
     <>
       <div className="flex items-center justify-center header_image">
@@ -44,41 +43,8 @@ export function MobileLoginSignUp() {
             </div>
           </div>
 
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl font-['Roboto']">
-            <PhoneInput
-              country={"ph"}
-              disableDropdown
-              inputProps={{
-                ref: phoneNumberRef,
-                required: true,
-                autoComplete: "off",
-              }}
-              isValid={(value, country: any) => {
-                if (value.match(/63/) || value.match(/09/)) {
-                  return true;
-                } else {
-                  return "Please use +63 or 09";
-                }
-              }}
-              placeholder="Use +63 or 09 format"
-              inputStyle={{
-                flex: "1, 1, 10%",
-                width: "100%",
-                fontSize: "0.875rem",
-                lineHeight: "1.25rem",
-                backgroundColor: "rgb(243, 244, 246)",
-                outline: "2px solid transparent",
-                outlineOffset: "2px",
-                height: "2.25rem",
-                borderRadius: "1rem",
-                fontStyle: "Roboto",
-              }}
-              buttonStyle={{
-                borderRadius: "1rem",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
+          <MobileLoginPhoneInput />
+
           <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
             <MdLockOutline className="m-3" />
             <input

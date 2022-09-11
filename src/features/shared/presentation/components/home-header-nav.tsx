@@ -56,8 +56,8 @@ export function HomeHeaderNav(props: HeaderNavProps) {
                 "api/assets/images/shared/logo/taters-logo.webp"
               }
               alt="Taters Logo"
-              className="w-[150px] lg:w-[160px] px-6"
-            ></img>
+              className="w-[150px] lg:w-[120px]"
+            />
 
             <div className="flex items-center justify-center space-x-4">
               <ul className="flex text-white font-semibold items-stretch h-[40px] justify-center ">

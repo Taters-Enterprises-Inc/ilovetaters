@@ -9,20 +9,20 @@ import {
   SignInMobileUserState,
 } from "../slices/sign-in-mobile-user.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
 
-  const [mobileNumber, setMobileNumber] = useState();
   const [password, setPassword] = useState();
 
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (mobileNumber && password)
-      dispatch(
-        signInMobileUser({ mobile_num: mobileNumber, login_password: password })
-      );
+    // if (mobileNumber && password)
+    //   dispatch(
+    //     signInMobileUser({ mobile_num: mobileNumber, login_password: password })
+    //   );
   };
 
   return (
@@ -39,20 +39,9 @@ export function MobileLoginSignIn() {
           <p className="text-white">
             Login with your mobile number and password below.{" "}
           </p>
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <AiFillPhone className="m-3" />
-            <input
-              type="text"
-              name="mobile_num"
-              placeholder="Phone"
-              required
-              value={mobileNumber}
-              onChange={(e: any) => {
-                setMobileNumber(e.target.value);
-              }}
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
-          </div>
+          
+          <MobileLoginPhoneInput/>
+
           <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
             <MdLockOutline className="m-3" />
             <input

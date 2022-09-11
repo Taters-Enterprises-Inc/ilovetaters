@@ -16,11 +16,11 @@ export function ShopTermsAndConditions() {
         tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
         activeTab="terms-and-conditions"
       >
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
           Taters Snack Shop (Terms and Conditions)
         </h1>
-        <hr className="mt-2 mb-4" />
-        <div className="space-y-4 text-white">
+        <hr className="mt-2 mb-4 border-secondary" />
+        <div className="space-y-4 text-secondary">
           <p>1. Customers can order through www.ilovetaters.com/shop.</p>
           <p>
             2. Delivery and/or pick up of items is from Mondays to Saturdays

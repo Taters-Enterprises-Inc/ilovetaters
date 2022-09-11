@@ -40,13 +40,13 @@ import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
-  Admin,
+  AdminShopOrders,
   Banner,
   Category,
   Cater,
   CaterAdd,
   Instore,
-  Login,
+  AdminLogin,
   Packages,
   Popclub,
   ProdAdd,
@@ -63,8 +63,10 @@ import {
   LoadingAndSnackbarWrapper,
   NotificationWrapper,
 } from "features/shared/presentation/components";
-import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import { AdminOrders } from "features/admin/presentation/tables/admin-orders-table";
+import { Admin } from "features/admin/presentation/pages/admin.page";
+import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -144,28 +146,61 @@ root.render(
 
                 <Route path="reseller" element={<Reseller />} />
                 <Route path="branches" element={<Branches />} />
-                <Route path="near-you" element={<NearyouComponent />} />
 
-                <Route path="admin" element={<Login />}></Route>
-                <Route path="orders" element={<Admin />}></Route>
-                <Route path="catering-orders" element={<Cater />}></Route>
-                <Route path="admin-popclub" element={<Popclub />}></Route>
-                <Route path="raffles-snackshop" element={<Snackshop />}></Route>
-                <Route path="raffles-instore" element={<Instore />}></Route>
-                <Route path="catering-addons" element={<CaterAdd />}></Route>
-                <Route path="product-addons" element={<ProdAdd />}></Route>
-                <Route path="packages" element={<Packages />}></Route>
+                <Route path="admin" element={<Admin />}>
+                  <Route index element={<AdminLogin />} />
+
+                  <Route element={<AdminSidebarWrapper />}>
+                    <Route path="orders" element={<AdminShopOrders />} />
+                  </Route>
+                </Route>
+
+                {/* <Route path="admin/orders" element={<AdminOrders />}></Route>
+                <Route path="admin/catering-orders" element={<Cater />}></Route>
+                <Route path="admin/popclub" element={<Popclub />}></Route>
+                <Route
+                  path="admin/raffles-snackshop"
+                  element={<Snackshop />}
+                ></Route>
+                <Route
+                  path="admin/raffles-instore"
+                  element={<Instore />}
+                ></Route>
+                <Route
+                  path="admin/catering-add-ons-availability"
+                  element={<CaterAdd />}
+                ></Route>
+                <Route
+                  path="admin/product-add-ons-availability"
+                  element={<ProdAdd />}
+                ></Route>
+                <Route
+                  path="admin/packages-availability"
+                  element={<Packages />}
+                ></Route>
 
                 <Route
-                  path="product-availability"
+                  path="admin/product-availability"
                   element={<ProdAvail />}
                 ></Route>
-                <Route path="banner" element={<Banner />}></Route>
-                <Route path="admin-products" element={<Products />}></Route>
-                <Route path="category" element={<Category />}></Route>
-                <Route path="users" element={<Users />}></Route>
-                <Route path="vouchers" element={<Vouchers />}></Route>
-                <Route path="stores" element={<Stores />}></Route>
+                <Route
+                  path="admin/banner-availability"
+                  element={<Banner />}
+                ></Route>
+                <Route path="admin/products" element={<Products />}></Route>
+                <Route
+                  path="admin/settings-category"
+                  element={<Category />}
+                ></Route>
+                <Route path="admin/settings-users" element={<Users />}></Route>
+                <Route
+                  path="admin/settings-vouchers"
+                  element={<Vouchers />}
+                ></Route>
+                <Route
+                  path="admin/settings-stores"
+                  element={<Stores />}
+                ></Route> */}
               </Route>
             </Route>
           </Routes>

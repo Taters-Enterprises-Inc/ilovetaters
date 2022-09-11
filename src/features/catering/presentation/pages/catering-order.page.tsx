@@ -158,6 +158,7 @@ export function CateringOrder() {
           title: "Catering",
           url: "/catering",
         }}
+        className="lg:h-[200px]"
         title="Order View"
         pageTitles={[
           { name: "Products", url: "/catering/products" },
@@ -167,36 +168,36 @@ export function CateringOrder() {
 
       <div className="flex lg:hidden">
         <div className="flex-1">
-          <div className="bg-white h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div className="bg-green-700 h-[0.25rem] relative">
+            <div className="absolute rounded-[50%] text-white bg-green-700 font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
               1
             </div>
           </div>
-          <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
+          <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-secondary lg:pl-0">
             <BiUserCircle className="hidden text-2xl sm:block" />{" "}
             <span>Your Details</span>
           </div>
         </div>
 
         <div className="flex-1">
-          <div className="bg-white h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div className="bg-green-700 h-[0.25rem] relative">
+            <div className="absolute rounded-[50%] font-bold bg-green-700 text-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
               2
             </div>
           </div>
-          <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+          <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary ">
             <FaFileContract className="hidden text-2xl sm:block" />{" "}
             <span>Contract</span>
           </div>
         </div>
 
         <div className="flex-1">
-          <div className="bg-white h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div className="bg-green-700 h-[0.25rem] relative">
+            <div className="absolute rounded-[50%] font-bold bg-green-700 text-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
               3
             </div>
           </div>
-          <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+          <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary ">
             <AiOutlineCreditCard className="hidden text-2xl sm:block" />{" "}
             <span>Payment</span>
           </div>
@@ -208,7 +209,7 @@ export function CateringOrder() {
               4
             </div>
           </div>
-          <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
+          <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-secondary lg:pr-0">
             <AiOutlineCheckCircle className="hidden text-2xl sm:block" />{" "}
             <span>Checkout Complete</span>
           </div>
@@ -221,8 +222,8 @@ export function CateringOrder() {
             <div className="space-y-8 lg:flex-[0_0_60%] lg:max-w-[60%]">
               <div className="hidden pb-8 lg:flex">
                 <div className="flex-1">
-                  <div className="bg-white h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div className="bg-green-700 h-[0.25rem] relative">
+                    <div className="absolute rounded-[50%] bg-green-700 text-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                       1
                     </div>
                   </div>
@@ -233,8 +234,8 @@ export function CateringOrder() {
                 </div>
 
                 <div className="flex-1">
-                  <div className="bg-white h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div className="bg-green-700 h-[0.25rem] relative">
+                    <div className="absolute rounded-[50%] font-bold bg-green-700 text-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                       2
                     </div>
                   </div>
@@ -245,8 +246,8 @@ export function CateringOrder() {
                 </div>
 
                 <div className="flex-1">
-                  <div className="bg-white h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div className="bg-green-700 h-[0.25rem] relative">
+                    <div className="absolute rounded-[50%] font-bold bg-green-700 text-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                       3
                     </div>
                   </div>
@@ -270,7 +271,7 @@ export function CateringOrder() {
               </div>
 
               <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-4">
-                <div className="flex-1 space-y-2 text-white">
+                <div className="flex-1 space-y-2 text-secondary">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     From:{" "}
                   </h2>
@@ -299,7 +300,7 @@ export function CateringOrder() {
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-2 text-white">
+                <div className="flex-1 space-y-2 text-secondary">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     Deliver To Address:{" "}
                   </h2>
@@ -318,7 +319,7 @@ export function CateringOrder() {
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-2 text-white">
+                <div className="flex-1 space-y-2 text-secondary">
                   <h2 className="text-xl font-['Bebas_Neue'] tracking-[3px]">
                     Tracking Information
                   </h2>
@@ -344,12 +345,12 @@ export function CateringOrder() {
                   </div>
                 </div>
               </div>
-              <div className="text-white">
-                <h2 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl mb-2">
+              <div className="text-secondary">
+                <h2 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-2xl mb-2">
                   Orders
                 </h2>
 
-                <hr className="mt-1 mb-4" />
+                <hr className="mt-1 mb-4 border-secondary" />
 
                 <div className="space-y-6">
                   {getCateringOrdersState.data?.order.order_details.map(
@@ -400,7 +401,7 @@ export function CateringOrder() {
               </div>
 
               <div className="flex flex-col space-y-2 lg:flex-row lg:space-x-2 lg:space-y-0">
-                <div className="text-white lg:flex-1">
+                <div className="text-secondary lg:flex-1">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">
                     Delivery Information
                   </h2>
@@ -421,7 +422,7 @@ export function CateringOrder() {
                   </h3>
                 </div>
 
-                <div className="text-white lg:flex-1">
+                <div className="text-secondary lg:flex-1">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[3px]">
                     Payment Options
                   </h2>
@@ -467,11 +468,11 @@ export function CateringOrder() {
 
             {getCateringOrdersState.data &&
             getCateringOrdersState.data.order.order_details ? (
-              <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] bg-primary lg:shadow-[#540808] lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
-                <h2 className="font-['Bebas_Neue'] text-4xl  text-white tracking-[3px] text-center">
+              <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+                <h2 className="font-['Bebas_Neue'] text-4xl  text-secondary tracking-[3px] text-center">
                   Order Summary
                 </h2>
-                <div className="grid grid-cols-2 text-white">
+                <div className="grid grid-cols-2 text-secondary">
                   <span>Subtotal:</span>
                   <span className="text-end">{calculateSubTotalPrice()}</span>
                   {getCateringOrdersState.data.service_fee ? (
@@ -523,10 +524,10 @@ export function CateringOrder() {
                     />
                   </span>
                 </div>
-                <hr className="mt-1" />
+                <hr className="mt-1 border-secondary" />
 
                 <div className="flex flex-col items-center justify-center">
-                  <h1 className="text-4xl text-center text-white">
+                  <h1 className="text-4xl text-center text-secondary">
                     <NumberFormat
                       value={getCateringOrdersState.data.grand_total.toFixed(2)}
                       displayType={"text"}
@@ -535,14 +536,14 @@ export function CateringOrder() {
                     />
                   </h1>
 
-                  <span className="text-lg text-center text-white">
+                  <span className="text-lg text-center text-secondary">
                     Final Payment
                   </span>
                 </div>
 
-                <hr className="mt-1" />
+                <hr className="mt-1 border-secondary" />
 
-                <div className="grid grid-cols-2 text-white">
+                <div className="grid grid-cols-2 text-secondary">
                   <span className="font-bold">Payment Plan :</span>
                   <span className="font-bold uppercase text-end">
                     {
@@ -722,7 +723,7 @@ export function CateringOrder() {
                       <div>
                         <div
                           {...getRootProps()}
-                          className="border-dashed border-t-2 border-l-2 border-r-2 border-white h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
+                          className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
                         >
                           <input
                             type="file"
@@ -731,7 +732,7 @@ export function CateringOrder() {
                           />
 
                           {isDragActive ? (
-                            <span className="text-lg text-white">
+                            <span className="text-lg text-secondary">
                               Drop the files here ...
                             </span>
                           ) : (
@@ -744,8 +745,8 @@ export function CateringOrder() {
                                 />
                               ) : (
                                 <>
-                                  <AiOutlineCloudUpload className="text-5xl text-white" />
-                                  <span className="text-lg text-white">
+                                  <AiOutlineCloudUpload className="text-5xl text-secondary" />
+                                  <span className="text-lg text-secondary">
                                     Drag and drop here to upload
                                   </span>
                                   <button
@@ -762,12 +763,12 @@ export function CateringOrder() {
 
                         <button
                           type="submit"
-                          className="bg-button border border-white w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                          className="bg-button border border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
                         >
                           Upload
                         </button>
 
-                        <h4 className="mt-1 text-sm leading-5 text-white">
+                        <h4 className="mt-1 text-sm leading-5 text-secondary">
                           <strong>Note:</strong> Supported file types: JPG,
                           JPEG, PNG and GIF. Maximum file size is 2MB.
                         </h4>

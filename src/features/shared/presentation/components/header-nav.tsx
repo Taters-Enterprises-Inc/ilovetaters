@@ -27,10 +27,16 @@ import {
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
-import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 interface HeaderNavProps {
-  activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB";
+  className?: string;
+  activeUrl:
+    | "SNACKSHOP"
+    | "CATERING"
+    | "POPCLUB"
+    | "HOME"
+    | "BRANCHES"
+    | "FRANCHISING";
   logoProps: {
     src: string;
     alt: string;
@@ -140,7 +146,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
   return (
     <>
-      <header className={"sticky w-full top-0 z-20"}>
+      <header className={`sticky w-full top-0 z-20 ${props.className}`}>
         <div className={` w-full bg-primary shadow-2xl`}>
           <nav
             className={`flex justify-between items-center container py-2 h-[64px]`}
@@ -189,7 +195,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         Boolean(openProfileMenu) ? "true" : undefined
                       }
                       onClick={handleProfileMenuClick}
-                      className="flex justify-center items-center flex-col space-y-1 mt-[-5px]"
+                      className="flex flex-col items-center justify-center space-y-1"
                     >
                       {getSessionState.data?.userData.login_type ===
                       "mobile" ? (
@@ -198,7 +204,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         <img
                           src={getSessionState.data?.userData.picture}
                           alt="Profile pic"
-                          className="mt-2 rounded-full"
+                          className="rounded-full"
                           width={25}
                         ></img>
                       )}
@@ -227,9 +233,9 @@ export function HeaderNav(props: HeaderNavProps) {
                   <>
                     <button
                       onClick={() => setOpenLoginChooserModal(true)}
-                      className="flex flex-col items-center justify-center space-y-1 text-white rounded-xl "
+                      className="flex flex-col items-center justify-center mt-1 space-y-1 text-white rounded-xl"
                     >
-                      <AiOutlineUser className="text-xl " />
+                      <AiOutlineUser className="text-2xl " />
                       <span className="tracking-[2px] text-xs font-light">
                         Sign In
                       </span>
@@ -241,17 +247,17 @@ export function HeaderNav(props: HeaderNavProps) {
                   props.activeUrl === "SNACKSHOP") ? (
                   <button
                     onClick={handleCart}
-                    className="flex-col items-center justify-center mt-2 space-y-1"
+                    className="flex flex-col items-center justify-center mt-1 space-y-1"
                   >
                     <div className="flex items-center justify-center">
                       <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">
-                        <BsCart4 className="text-xl text-white" />
+                        <BsCart4 className="text-2xl text-white" />
                         <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
                           {calculateCartQuantity()}
                         </span>
                       </div>
                     </div>
-                    <h5 className="text-[13px] font-light text-white">
+                    <h5 className="text-xs font-light text-white">
                       {calculateOrdersPrice()}
                     </h5>
                   </button>

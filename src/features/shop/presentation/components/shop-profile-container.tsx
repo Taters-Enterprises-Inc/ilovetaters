@@ -11,7 +11,7 @@ interface ShopProfileContainerProps extends ShopProfileTabsProps {
 
 export function ShopProfileContainer(props: ShopProfileContainerProps) {
   return (
-    <main className="bg-primary">
+    <main className="bg-paper">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",

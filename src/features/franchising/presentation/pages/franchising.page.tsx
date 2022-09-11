@@ -1,15 +1,23 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {
-  FooterNav,
-  HomeHeaderNav,
-} from "features/shared/presentation/components";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
   return (
     <main className="bg-primary">
-      <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav>
+      {/* <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav> */}
+
+      <HeaderNav
+        activeUrl="FRANCHISING"
+        logoProps={{
+          src:
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-logo.webp",
+          alt: "Taters Logo",
+          className: "w-[150px] lg:w-[120px]",
+        }}
+      />
       <img
         className="lg:hidden"
         src={

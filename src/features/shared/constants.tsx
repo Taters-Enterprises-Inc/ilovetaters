@@ -240,19 +240,29 @@ export const theme = createTheme({
         },
       },
     },
-    MuiInputBase: {
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
           "& fieldset": {
-            borderColor: "#22201A !important",
+            borderColor: "#22201A",
           },
           "&:hover fieldset": {
-            borderColor: "#22201A !important",
+            borderColor: "#22201A",
           },
-          "&.Mui-focused fieldset": {
-            borderColor: "#22201A !important",
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#22201A",
           },
+          ".Mui-error .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#22201A",
+          },
+          // "&.Mui-focused fieldset": {
+          //   borderColor: "blue !important",
+          // },
         },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
         input: {
           color: "#22201A",
           "-webkit-text-fill-color": "#22201A !important",

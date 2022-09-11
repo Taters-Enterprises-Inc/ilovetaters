@@ -18,6 +18,37 @@
   /*You just need this if you are only concerned with android and not desktop browsers.*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+.payment-method-active > .icon-tick-bold {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  font-size: 8px;
+}
+.taters-svg-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  position: relative;
+}
+.payment-method-active {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  position: absolute;
+  overflow: hidden;
+  right: 0;
+  bottom: 0;
+}
+
+.payment-method-active:before {
+  border: 0.9375rem solid transparent;
+  border-bottom: 0.9375rem solid var(--brand-primary-color, green);
+  content: "";
+  position: absolute;
+  right: -0.9375rem;
+  bottom: 0;
+}
 input[type="text"],
 textarea,
 [contenteditable] {
@@ -41,11 +72,6 @@ textarea,
 .profile-tab-content {
   position: relative !important;
 }
-.invalid-number-message {
-  background-color: #a21013 !important;
-  color: white !important;
-  padding: 0 3px 0 3px !important;
-}
 html {
   scroll-behavior: smooth;
 }
@@ -53,14 +79,6 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: rgb(255, 255, 255) !important;
-}
-
-input.autolog:-webkit-autofill,
-input.autolog:-webkit-autofill:hover,
-input.autolog:-webkit-autofill:focus,
-input.autolog:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: rgb(0, 0, 0) !important;
 }
