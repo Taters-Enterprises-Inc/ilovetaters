@@ -64,6 +64,11 @@ import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.
 
 import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
 import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
+import signUpMobileUser from "../shared/presentation/slices/sign-up-mobile-user.slice";
+import changeForgotPasswordStatus from "../shared/presentation/slices/change-forgot-password-status.slice";
+import forgotPasswordGenerateOTP from "../shared/presentation/slices/forgot-password-generate-otp.slice";
+import forgotPasswordValidateOTP from "../shared/presentation/slices/forgot-password-validate-otp.slice";
+import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-password-new-password-otp.slice";
 
 export const store = configureStore({
   reducer: {
@@ -135,6 +140,12 @@ export const store = configureStore({
     signInMobileUser: signInMobileUser,
 
     setStoreAndAddressPopClub: setStoreAndAddressPopClub,
+    signUpMobileUser: signUpMobileUser,
+    changeForgotPasswordStatus: changeForgotPasswordStatus,
+
+    forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
+    forgotPasswordValidateOTP: forgotPasswordValidateOTP,
+    forgotPasswordNewPassword: forgotPasswordNewPassword,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

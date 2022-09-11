@@ -16,3 +16,6 @@ export { UnExpiredRedeem } from "./unexpired-redeem";
 export { NotificationWrapper } from "./notification.wrapper";
 export { PhoneInput } from "./phone-input";
 export { MobileLoginPhoneInput } from "./mobile-login-phone-input";
+export { MobileForgotPasswordOtp } from "./mobile-forgot-password-otp";
+export { MobileForgotPasswordOtpAuthentication } from "./mobile-forgot-password-otp-authentication";
+export { MobileForgotPasswordNewPassword } from "./mobile-forgot-password-new-password";

@@ -6,9 +6,11 @@ import {
   AddContactResponse,
   SignInMobileUserRepository,
   SignInMobileUserResponse,
+  SignUpMobileUserRepository,
+  SignUpMobileUserResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum SignInMobileUserState {
+export enum SignUpMobileUserState {
   initial,
   inProgress,
   success,
@@ -16,19 +18,20 @@ export enum SignInMobileUserState {
 }
 
 const initialState: {
-  status: SignInMobileUserState;
+  status: SignUpMobileUserState;
   message: string;
 } = {
-  status: SignInMobileUserState.initial,
+  status: SignUpMobileUserState.initial,
   message: "",
 };
 
-export const signInMobileUser = createAsyncThunk(
-  "signInMobileUser",
+export const signUpMobileUser = createAsyncThunk(
+  "signUpMobileUser",
   async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: SignInMobileUserResponse =
-        await SignInMobileUserRepository(param);
+      const response: SignUpMobileUserResponse =
+        await SignUpMobileUserRepository(param);
+
       console.log(response.data);
       return fulfillWithValue(response.data);
     } catch (error: any) {
@@ -39,38 +42,38 @@ export const signInMobileUser = createAsyncThunk(
 );
 
 /* Main Slice */
-export const signInMobileUserSlice = createSlice({
-  name: "signInMobileUser",
+export const signUpMobileUserSlice = createSlice({
+  name: "signUpMobileUser",
   initialState,
   reducers: {
-    resetSignInMobileUser: (state) => {
-      state.status = SignInMobileUserState.initial;
+    resetSignUpMobileUser: (state) => {
+      state.status = SignUpMobileUserState.initial;
       state.message = "";
     },
   },
   extraReducers: (builder: any) => {
     builder
-      .addCase(signInMobileUser.pending, (state: any) => {
-        state.status = SignInMobileUserState.inProgress;
+      .addCase(signUpMobileUser.pending, (state: any) => {
+        state.status = SignUpMobileUserState.inProgress;
       })
       .addCase(
-        signInMobileUser.fulfilled,
+        signUpMobileUser.fulfilled,
         (state: any, action: PayloadAction<{ message: string }>) => {
           state.message = action.payload.message;
-          state.status = SignInMobileUserState.success;
+          state.status = SignUpMobileUserState.success;
         }
       )
       .addCase(
-        signInMobileUser.rejected,
+        signUpMobileUser.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           state.message = action.payload.message;
-          state.status = SignInMobileUserState.fail;
+          state.status = SignUpMobileUserState.fail;
         }
       );
   },
 });
 
-export const selectSignInMobileUser = (state: RootState) =>
-  state.signInMobileUser;
-export const { resetSignInMobileUser } = signInMobileUserSlice.actions;
-export default signInMobileUserSlice.reducer;
+export const selectSignUpMobileUser = (state: RootState) =>
+  state.signUpMobileUser;
+export const { resetSignUpMobileUser } = signUpMobileUserSlice.actions;
+export default signUpMobileUserSlice.reducer;
