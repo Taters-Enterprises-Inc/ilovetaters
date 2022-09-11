@@ -29,12 +29,12 @@ export function AdminOrders() {
   const dispatch = useAppDispatch();
 
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen bg-white rounded-md shadow-lg lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
           <div className="flex justify-between">
-            <h1 className="pt-4 lg:-ml-12">List of Orders</h1>
+            <h1 className="pt-4 lg:-ml-12 text-secondary">List of Orders</h1>
             <div className="lg:-mr-12">
               <ExtractBtn />
             </div>

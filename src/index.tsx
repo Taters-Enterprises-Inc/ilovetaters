@@ -40,13 +40,13 @@ import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
-  Admin,
+  AdminShopOrders,
   Banner,
   Category,
   Cater,
   CaterAdd,
   Instore,
-  Login,
+  AdminLogin,
   Packages,
   Popclub,
   ProdAdd,
@@ -64,6 +64,9 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import { AdminOrders } from "features/admin/presentation/tables/admin-orders-table";
+import { Admin } from "features/admin/presentation/pages/admin.page";
+import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -144,9 +147,15 @@ root.render(
                 <Route path="reseller" element={<Reseller />} />
                 <Route path="branches" element={<Branches />} />
 
-                <Route path="login" element={<Login />}></Route>
+                <Route path="admin" element={<Admin />}>
+                  <Route index element={<AdminLogin />} />
 
-                <Route path="admin/orders" element={<Admin />}></Route>
+                  <Route element={<AdminSidebarWrapper />}>
+                    <Route path="orders" element={<AdminShopOrders />} />
+                  </Route>
+                </Route>
+
+                {/* <Route path="admin/orders" element={<AdminOrders />}></Route>
                 <Route path="admin/catering-orders" element={<Cater />}></Route>
                 <Route path="admin/popclub" element={<Popclub />}></Route>
                 <Route
@@ -191,7 +200,7 @@ root.render(
                 <Route
                   path="admin/settings-stores"
                   element={<Stores />}
-                ></Route>
+                ></Route> */}
               </Route>
             </Route>
           </Routes>

@@ -2,7 +2,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
 
-export function Login() {
+export function AdminLogin() {
   return (
     <main className="h-screen bg-primary ">
       <section className="grid h-screen ml-2 mr-2 place-items-center">

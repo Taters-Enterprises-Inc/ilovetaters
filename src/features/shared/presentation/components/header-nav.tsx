@@ -29,6 +29,7 @@ import { MdLocationPin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 
 interface HeaderNavProps {
+  className?: string;
   activeUrl:
     | "SNACKSHOP"
     | "CATERING"
@@ -145,7 +146,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
   return (
     <>
-      <header className={"sticky w-full top-0 z-20"}>
+      <header className={`sticky w-full top-0 z-20 ${props.className}`}>
         <div className={` w-full bg-primary shadow-2xl`}>
           <nav
             className={`flex justify-between items-center container py-2 h-[64px]`}

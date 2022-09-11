@@ -283,7 +283,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } relative h-screen bg-primary px-4 font-["Roboto"] duration-500 overflow-y-auto overflow-x-hidden`}
+        } relative h-screen bg-secondary px-4 font-["Roboto"] duration-500 overflow-y-auto overflow-x-hidden`}
       >
         <div className="relative flex justify-end text-white top-5">
           <FaBars
@@ -295,8 +295,9 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
         <div className="flex items-center pl-1 gap-x-4">
           <img
             src={require("assets/favicon.png")}
-            className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-tertiary -mt-2
+            className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-primary -mt-2
             ${!open && "translate-y-12"}`}
+            alt="taters admin logo"
           />
           <h1
             className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2

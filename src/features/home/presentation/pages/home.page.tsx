@@ -24,6 +24,7 @@ export function Home() {
 
       <HeaderNav
         activeUrl="HOME"
+        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

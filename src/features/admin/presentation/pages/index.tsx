@@ -1,5 +1,5 @@
-export { Login } from "./login.page";
-export { Admin } from "./admin-orders-page";
+export { AdminLogin } from "./admin-login.page";
+export { AdminShopOrders } from "./admin-shop-orders-page";
 export { Cater } from "./admin-catering-page";
 export { Popclub } from "./admin-popclub-page";
 export { Snackshop } from "./admin-raffles-snackshop-page";

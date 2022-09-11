@@ -36,6 +36,7 @@ import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { PhoneInput } from "features/shared/presentation/components";
+import { PaymentMethod } from "../components";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -374,11 +375,13 @@ export function ShopCheckout() {
                   </>
                 ) : null}
 
-                <div className="mt-4 text-secondary lg:mt-0">
+                <div className="mt-4 space-y-2 text-secondary lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentAccordion />
+                  <PaymentMethod />
+
+                  {/* <PaymentAccordion /> */}
                 </div>
 
                 <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">

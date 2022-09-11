@@ -8,6 +8,7 @@ export function Branches() {
     <>
       <HeaderNav
         activeUrl="BRANCHES"
+        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
@@ -17,7 +18,7 @@ export function Branches() {
         }}
       />
       <ContactComponent />
-      <BranchComponent />
+      {/* <BranchComponent /> */}
       <FooterNav activeUrl="BRANCHES" />
     </>
   );
