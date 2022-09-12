@@ -729,7 +729,7 @@ export function ShopProduct() {
                     onClick={() =>
                       isQuantityNull.current
                         ? setDisabled
-                        : handleAddToCartCheckout
+                        : handleAddToCartCheckout()
                     }
                     className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
                       isQuantityNull.current
