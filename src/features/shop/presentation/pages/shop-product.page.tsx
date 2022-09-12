@@ -66,8 +66,8 @@ export function ShopProduct() {
   );
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [setDisabled] = useState(true);
-
   const [quantity, setQuantity] = useState(1);
+
   const timerRef = useRef(0);
   const isLongPress = useRef(false);
   const isQuantityNull = useRef(false);
@@ -181,6 +181,8 @@ export function ShopProduct() {
   }
 
   function handleonMouseDown(action: string) {
+    isQuantityNull.current = false;
+
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -592,10 +594,12 @@ export function ShopProduct() {
                         //   }
                         // }}
                         onClick={() =>
-                          quantity <= 1 ? setDisabled : handleonClick("minus")
+                          quantity <= 1 || isQuantityNull.current
+                            ? setDisabled
+                            : handleonClick("minus")
                         }
                         onMouseDown={() =>
-                          quantity <= 1
+                          quantity <= 1 || isQuantityNull.current
                             ? setDisabled
                             : handleonMouseDown("minus")
                         }
@@ -607,7 +611,9 @@ export function ShopProduct() {
                         }
                         onTouchEnd={handleonMouseUp}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                          quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
+                          quantity <= 1 || isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
                         }`}
                       >
                         <AiOutlineMinus className="text-3xl" />
@@ -645,9 +651,16 @@ export function ShopProduct() {
                             if (isNaN(parseInt(value))) {
                               isQuantityNull.current = true;
                             }
+
+                            setTimeout(() => {
+                              if (isQuantityNull.current) {
+                                setQuantity(0);
+                              }
+                            }, 1000);
+
                             if (parseInt(value) >= 10) {
                               setQuantity(10);
-                            } else if (parseInt(value) <= 1) {
+                            } else if (parseInt(value) < 0) {
                               setQuantity(1);
                             } else {
                               setQuantity(parseInt(value));
