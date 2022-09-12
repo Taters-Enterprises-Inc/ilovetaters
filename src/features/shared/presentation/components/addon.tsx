@@ -27,8 +27,10 @@ export function Addon(props: AddonProps) {
   const dispatch = useAppDispatch();
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [setDisabled] = useState(true);
+
   const timerRef = useRef(0);
   const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
@@ -187,6 +189,7 @@ export function Addon(props: AddonProps) {
                   // readOnly
                   onChange={(e) => {
                     const value = e.target.value;
+                    isQuantityNull.current = false;
 
                     if (
                       getSessionState.data?.userData == null ||
@@ -195,6 +198,9 @@ export function Addon(props: AddonProps) {
                       clearInterval(quantityId);
                       setOpenLoginChooserModal(true);
                     } else {
+                      if (isNaN(parseInt(value))) {
+                        isQuantityNull.current = true;
+                      }
                       if (parseInt(value) >= 10) {
                         setQuantity(10);
                       } else if (parseInt(value) <= 1) {
@@ -245,8 +251,12 @@ export function Addon(props: AddonProps) {
           </div>
         </div>
         <button
-          onClick={handleAddToCart}
-          className="flex items-center justify-center w-full py-2 space-x-4 font-light bg-primary rounded-b-xl"
+          onClick={() =>
+            isQuantityNull.current ? setDisabled : handleAddToCart()
+          }
+          className={`flex items-center justify-center w-full py-2 space-x-4 font-light bg-primary rounded-b-xl ${
+            isQuantityNull.current ? "opacity-30 cursor-not-allowed" : ""
+          }`}
         >
           <BsFillCartPlusFill className="text-2xl" />
           <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

@@ -70,6 +70,7 @@ export function ShopProduct() {
   const [quantity, setQuantity] = useState(1);
   const timerRef = useRef(0);
   const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
 
   const [currentSize, setCurrentSize] = useState<number | undefined>();
   const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
@@ -615,6 +616,7 @@ export function ShopProduct() {
                       <input
                         value={quantity}
                         type="number"
+                        required
                         //readOnly
                         // onChange={(event: any) => {
                         //   if (
@@ -630,7 +632,8 @@ export function ShopProduct() {
                         //     setQuantity(Math.floor(event.target.value));
                         // }}
                         onChange={(e) => {
-                          const value = e.target.value;
+                          let value = e.target.value;
+                          isQuantityNull.current = false;
 
                           if (
                             getSessionState.data?.userData == null ||
@@ -639,6 +642,9 @@ export function ShopProduct() {
                             clearInterval(quantityId);
                             setOpenLoginChooserModal(true);
                           } else {
+                            if (isNaN(parseInt(value))) {
+                              isQuantityNull.current = true;
+                            }
                             if (parseInt(value) >= 10) {
                               setQuantity(10);
                             } else if (parseInt(value) <= 1) {
@@ -707,8 +713,16 @@ export function ShopProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={handleAddToCartCheckout}
-                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() =>
+                      isQuantityNull.current
+                        ? setDisabled
+                        : handleAddToCartCheckout
+                    }
+                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                      isQuantityNull.current
+                        ? "opacity-30 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -717,8 +731,14 @@ export function ShopProduct() {
                   </button>
 
                   <button
-                    onClick={handleAddToCart}
-                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() =>
+                      isQuantityNull.current ? setDisabled : handleAddToCart()
+                    }
+                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                      isQuantityNull.current
+                        ? "opacity-30 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
