@@ -53,6 +53,8 @@ export function Addon(props: AddonProps) {
   }
 
   function handleonMouseDown(action: string) {
+    isQuantityNull.current = false;
+
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -153,18 +155,26 @@ export function Addon(props: AddonProps) {
                   //     setQuantity(quantity - 1);
                   // }}
                   onClick={() =>
-                    quantity <= 1 ? setDisabled : handleonClick("minus")
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonClick("minus")
                   }
                   onMouseDown={() =>
-                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonMouseDown("minus")
                   }
                   onMouseUp={handleonMouseUp}
                   onTouchStart={() =>
-                    quantity <= 1 ? setDisabled : handleonMouseDown("minus")
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonMouseDown("minus")
                   }
                   onTouchEnd={handleonMouseUp}
                   className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                    quantity <= 1 ? "opacity-30 cursor-not-allowed" : ""
+                    quantity <= 1 || isQuantityNull.current
+                      ? "opacity-30 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3">−</span>
@@ -188,7 +198,7 @@ export function Addon(props: AddonProps) {
                   // }}
                   // readOnly
                   onChange={(e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
                     isQuantityNull.current = false;
 
                     if (
@@ -201,9 +211,16 @@ export function Addon(props: AddonProps) {
                       if (isNaN(parseInt(value))) {
                         isQuantityNull.current = true;
                       }
+
+                      setTimeout(() => {
+                        if (isQuantityNull.current) {
+                          setQuantity(0);
+                        }
+                      }, 1000);
+
                       if (parseInt(value) >= 10) {
                         setQuantity(10);
-                      } else if (parseInt(value) <= 1) {
+                      } else if (parseInt(value) < 0) {
                         setQuantity(1);
                       } else {
                         setQuantity(parseInt(value));
