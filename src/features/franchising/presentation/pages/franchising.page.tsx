@@ -31,6 +31,15 @@ export function Franchising() {
         active="FRANCHISING"
       ></HomeHeaderNav>
 
+      <img
+        className="pt-6 lg:hidden"
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/popclub/hero/mobile/popclub.webp"
+        }
+        alt="The best pop corn in town"
+      ></img>
+
       <div className="lg:hidden mobview">
         <iframe
           className="responsive"
@@ -44,20 +53,19 @@ export function Franchising() {
         ></iframe>
       </div>
 
-      <img
-        className="pt-6 lg:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/mobile/popclub.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-
-      <div className="content-center hidden pt-16 m-auto lg:block">
+      <div className="relative hidden pt-10 m-auto lg:block ">
+        <img
+          className="relative pt-10 m-auto lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/desktop/popclub.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
         <iframe
-          className="content-center m-auto"
-          width="1060"
-          height="598"
+          className=" webview"
+          width="560"
+          height="315"
           src="https://www.youtube.com/embed/dvAGdCU6TTY"
           title="YouTube video player"
           frameBorder="0"
@@ -65,15 +73,6 @@ export function Franchising() {
           allowFullScreen
         ></iframe>
       </div>
-
-      <img
-        className="hidden pt-16 m-auto lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/desktop/popclub.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
 
       <section ref={servicesRef} className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
