@@ -204,9 +204,9 @@ export function HeaderNav(props: HeaderNavProps) {
                         <img
                           src={getSessionState.data?.userData.picture}
                           alt="Profile pic"
-                          className="rounded-full"
+                          className="rounded-full mt-[2px]"
                           width={25}
-                        ></img>
+                        />
                       )}
                       <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
