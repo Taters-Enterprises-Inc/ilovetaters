@@ -18,7 +18,7 @@ export function MobileLoginPhoneInput() {
       <AiFillPhone className="m-3" />
       <input
         type="text"
-        name="mobile_num"
+        name="phoneNumber"
         placeholder="Phone"
         required
         value={phoneNumber}

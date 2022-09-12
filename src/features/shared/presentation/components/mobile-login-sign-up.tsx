@@ -1,10 +1,22 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { MdLockOutline } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { useRef } from "react";
 import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
+import { FormEvent } from "react";
+import { useAppDispatch } from "features/config/hooks";
+import { signUpMobileUser } from "../slices/sign-up-mobile-user.slice";
 
 export function MobileLoginSignUp() {
+  const dispatch = useAppDispatch();
+
+  const handleMobileSignUp = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    dispatch(signUpMobileUser(formData));
+  };
+
   return (
     <>
       <div className="flex items-center justify-center header_image">
@@ -15,7 +27,7 @@ export function MobileLoginSignUp() {
         ></img>
       </div>
       <div className="pt-4 login-body">
-        <form>
+        <form onSubmit={handleMobileSignUp}>
           <p className="text-white">
             Please fill up the required information for each field.
           </p>
@@ -55,26 +67,9 @@ export function MobileLoginSignUp() {
               className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
             ></input>
           </div>
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="password"
-              name="passw"
-              autoComplete="off"
-              placeholder="Password"
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
-          </div>
 
-          <div className="flex justify-between py-4 text-white">
-            <p className="flex items-center">
-              <input className="mr-2" type="checkbox" />
-              Remember Me
-            </p>
-            <a href="#"> Forgot Password? </a>
-          </div>
-          <button className="w-full py-2 my-2 text-white shadow-md bg-button rounded-3xl">
-            Sign in
+          <button className="w-full py-2 mt-4 mb-2 text-white shadow-md bg-button rounded-3xl">
+            Sign Up
           </button>
         </form>
       </div>
