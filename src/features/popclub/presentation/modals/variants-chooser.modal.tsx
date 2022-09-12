@@ -32,31 +32,10 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     selectGetDealProductVariants
   );
   const getDealState = useAppSelector(selectGetDeal);
-  const getRedeemsState = useAppSelector(selectGetRedeems);
-  const getSessionState = useAppSelector(selectGetSession);
-  const redeemDealState = useAppSelector(selectRedeemDeal);
 
   const [optionsSelected, setOptionsSelected] = useState({});
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (redeemDealState.status === RedeemDealState.success) {
-    }
-  }, [redeemDealState, dispatch]);
-
-  useEffect(() => {
-    if (
-      redeemDealState.status === RedeemDealState.success &&
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery" &&
-      redeemDealState.data
-    ) {
-      navigate("/shop/checkout");
-      dispatch(getSession());
-      dispatch(resetRedeemDeal());
-    }
-  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
