@@ -1,9 +1,19 @@
+import { useAppDispatch } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useRef, useState } from "react";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
+
   return (
     <main className="bg-primary">
       {/* <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav> */}

@@ -27,6 +27,7 @@ import {
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import { MessageModal } from "../modals";
 
 interface HeaderNavProps {
   className?: string;
@@ -68,6 +69,41 @@ export function HeaderNav(props: HeaderNavProps) {
   useEffect(() => {
     dispatch(getAllPlatform());
   }, [dispatch]);
+
+  const [
+    openMessageModalWhenSwitchingTabWhenCacheDataExist,
+    setOpenMessageModalWhenSwitchingTabWhenCacheDataExist,
+  ] = useState<{
+    status: boolean;
+    message: string;
+    url?: string;
+    onYes?: () => void;
+  }>({
+    status: false,
+    message: "",
+  });
+
+  const handleSwitchTab = (param: {
+    url?: string;
+    tabName: string;
+    onYes?: () => void;
+  }) => {
+    if (
+      getSessionState.data &&
+      getSessionState.data.cache_data &&
+      getSessionState.data.customer_address
+    ) {
+      setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
+        status: true,
+        url: param.url,
+        onYes: param.onYes,
+        message: `This would remove all your cart items, store selection and send you to the ${param.tabName} home page. Are you sure you want to proceed?`,
+      });
+    } else {
+      if (param.url) navigate(param.url);
+      if (param.onYes) param.onYes();
+    }
+  };
 
   const handleProfileMenuClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -157,7 +193,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
             <div className="flex items-center justify-center space-x-4">
               <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
-                {TABS.map((tab: any, i) => {
+                {TABS.map((tab, i) => {
                   return (
                     <li
                       key={i}
@@ -168,16 +204,31 @@ export function HeaderNav(props: HeaderNavProps) {
                       }`}
                     >
                       {tab.name === "POPCLUB" ? (
-                        <button
-                          className="tracking-[4px]"
+                        <div
+                          className="tracking-[4px] cursor-pointer"
                           onClick={() => {
-                            setOpenPlatformChooserModal(true);
+                            handleSwitchTab({
+                              onYes: () => {
+                                setOpenPlatformChooserModal(true);
+                              },
+                              tabName: "popclub",
+                            });
                           }}
                         >
                           {tab.name}
-                        </button>
+                        </div>
                       ) : (
-                        <Link to={tab.url}>{tab.name}</Link>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => {
+                            handleSwitchTab({
+                              url: tab.url,
+                              tabName: tab.name.toLowerCase(),
+                            });
+                          }}
+                        >
+                          {tab.name}
+                        </div>
                       )}
                     </li>
                   );
@@ -345,6 +396,32 @@ export function HeaderNav(props: HeaderNavProps) {
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
+      />
+
+      <MessageModal
+        open={openMessageModalWhenSwitchingTabWhenCacheDataExist.status}
+        onClose={() => {
+          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
+            status: false,
+            message: "",
+            url: undefined,
+            onYes: undefined,
+          });
+        }}
+        onYes={() => {
+          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
+            status: false,
+            message: "",
+            url: undefined,
+            onYes: undefined,
+          });
+          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.url)
+            navigate(openMessageModalWhenSwitchingTabWhenCacheDataExist.url);
+
+          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes)
+            openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes();
+        }}
+        message={openMessageModalWhenSwitchingTabWhenCacheDataExist.message}
       />
     </>
   );

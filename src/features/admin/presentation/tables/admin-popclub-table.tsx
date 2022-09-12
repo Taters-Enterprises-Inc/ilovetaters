@@ -24,11 +24,9 @@ const columns: Array<Column> = [
 
 const rows: Array<Row> = [];
 
-export function AdminPopclub() {
-  const dispatch = useAppDispatch();
-
+export function AdminPopclubTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen rounded-md lg:space-x-4 bg-white">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>

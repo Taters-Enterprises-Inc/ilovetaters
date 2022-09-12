@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -16,15 +15,13 @@ const columns: Array<Column> = [
 
 const rows: Array<Row> = [];
 
-export function AdminCaterAdd() {
-  const dispatch = useAppDispatch();
-
+export function AdminAvailabilityCateringAddOnTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">
+          <h1 className="pt-4 lg:-ml-12 text-secondary">
             List of Available Catering Add-ons for:
           </h1>
 

@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -7,25 +6,36 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { VoucherBtn } from "../components/add-voucher-btn";
 
 const columns: Array<Column> = [
-  { id: "transactdate", label: "Transaction Date" },
-  { id: "fname", label: "Full Name" },
-  { id: "type", label: "Raffle Type" },
-  { id: "code", label: "Raffle Code" },
+  { id: "name", label: "Name" },
+  { id: "desc", label: "Description" },
+  { id: "status", label: "Status" },
+  { id: "code", label: "Code" },
+  { id: "ctype", label: "Code Type" },
+  { id: "otype", label: "Offer Type" },
+  { id: "dtype", label: "Discount Type" },
+  { id: "value", label: "Voucher Value" },
+  { id: "dstart", label: "Date Start" },
+  { id: "dend", label: "Date End" },
+  { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminSnackshop() {
-  const dispatch = useAppDispatch();
-
+export function AdminSettingVoucherTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen rounded-md lg:space-x-4 bg-WHITE">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">List raffle entries for:</h1>
+          <div className="flex justify-between">
+            <h1 className="pt-4 lg:-ml-12 text-secondary">List of Vouchers</h1>
+            <div className="lg:-mr-12">
+              <VoucherBtn />
+            </div>
+          </div>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable

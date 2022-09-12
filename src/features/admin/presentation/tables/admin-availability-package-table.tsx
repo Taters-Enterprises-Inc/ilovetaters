@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -9,26 +8,22 @@ import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 
 const columns: Array<Column> = [
-  { id: "receipt", label: "Receipt Number" },
-  { id: "fname", label: "Full Name" },
-  { id: "contact", label: "Contact" },
-  { id: "address", label: "Address" },
-  { id: "code", label: "Raffle Code" },
-  { id: "image", label: "Receipt Image" },
+  { id: "addonName", label: "Packages Add-on Name" },
+  { id: "desc", label: "Description" },
   { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminInstore() {
-  const dispatch = useAppDispatch();
-
+export function AdminAvailabilityPackageTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen rounded-md lg:space-x-4 bg-white">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">List raffle entries for:</h1>
+          <h1 className="pt-4 lg:-ml-12 text-secondary">
+            List of Available Packages for:
+          </h1>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable
