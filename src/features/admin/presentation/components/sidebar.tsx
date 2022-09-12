@@ -32,7 +32,7 @@ const Sidebar: FC = () => {
           Orders
         </h1>
       ),
-      itemId: "/admin/orders",
+      itemId: "/admin/order",
       // icon: FaRegListAlt,
       elemBefore: () => <FaRegListAlt size={20} />,
     },
@@ -45,7 +45,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Catering
         </h1>
       ),
-      itemId: "/admin/catering-orders",
+      itemId: "/admin/catering",
       // icon: MdFoodBank,
       elemBefore: () => <MdFoodBank size={20} />,
     },
@@ -71,7 +71,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Raffles
         </h1>
       ),
-      itemId: "",
+      itemId: "#",
       elemBefore: () => <FaTicketAlt size={20} />,
       subNav: [
         {
@@ -83,7 +83,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Snackshop
             </h1>
           ),
-          itemId: "/admin/raffles-snackshop",
+          itemId: "/admin/raffle/snackshop",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -95,7 +95,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               In-store
             </h1>
           ),
-          itemId: "/admin/raffles-instore",
+          itemId: "/admin/raffle/instore",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -109,7 +109,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Availability
         </h1>
       ),
-      itemId: "#",
+      itemId: "##",
       elemBefore: () => <MdProductionQuantityLimits size={20} />,
       subNav: [
         {
@@ -118,10 +118,10 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               className={`whitespace-pre duration-300 
   ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
             >
-              Catering Add-on Availability
+              Product Availability
             </h1>
           ),
-          itemId: "/admin/catering-add-ons-availability",
+          itemId: "/admin/availability/product",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -133,19 +133,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Product Add-on Availability
             </h1>
           ),
-          itemId: "/admin/product-add-ons-availability",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Product Availability
-            </h1>
-          ),
-          itemId: "/admin/product-availability",
+          itemId: "/admin/availability/product-add-on",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -157,7 +145,19 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Packages Availability
             </h1>
           ),
-          itemId: "/admin/packages/availability",
+          itemId: "/admin/availability/package",
+          elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        },
+        {
+          title: (
+            <h1
+              className={`whitespace-pre duration-300 
+  ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              Catering Add-on Availability
+            </h1>
+          ),
+          itemId: "/admin/availability/catering-add-on",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -169,7 +169,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Banner Availability
             </h1>
           ),
-          itemId: "/admin/banner/availability",
+          itemId: "/admin/availability/banner",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -183,7 +183,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Products
         </h1>
       ),
-      itemId: "/admin/products",
+      itemId: "/admin/product",
       elemBefore: () => <GiCardboardBoxClosed size={20} />,
     },
     {
@@ -195,7 +195,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Reports
         </h1>
       ),
-      itemId: "/admin/reports",
+      itemId: "/admin/report",
       elemBefore: () => <TbReport size={20} />,
     },
     {
@@ -207,7 +207,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           Settings
         </h1>
       ),
-      itemId: "##",
+      itemId: "###",
       elemBefore: () => <MdOutlineSettings size={20} />,
       subNav: [
         {
@@ -219,7 +219,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Category
             </h1>
           ),
-          itemId: "/admin/settings-category",
+          itemId: "/admin/setting/category",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -231,7 +231,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Users
             </h1>
           ),
-          itemId: "/admin/users",
+          itemId: "/admin/setting/user",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -243,7 +243,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Vouchers
             </h1>
           ),
-          itemId: "/admin/settings-vouchers",
+          itemId: "/admin/setting/voucher",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
         {
@@ -255,7 +255,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               Stores
             </h1>
           ),
-          itemId: "/admin/settings-stores",
+          itemId: "/admin/setting/store",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
       ],
@@ -269,7 +269,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           FAQ's
         </h1>
       ),
-      itemId: "/admin/faqs",
+      itemId: "/admin/faq",
       // icon: FaQuestionCircle,
       elemBefore: () => <FaQuestionCircle size={20} />,
     },
@@ -322,7 +322,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
                 // you can use your own router's api to get pathname
                 activeItemId="/admin/orders"
                 onSelect={({ itemId }) => {
-                  history(itemId);
+                  if (itemId) history(itemId);
                   // maybe push to the route
                 }}
                 items={SIDEBAR_ITEMS}

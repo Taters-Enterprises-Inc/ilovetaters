@@ -110,7 +110,7 @@ export const SERVICES_MOBILE = [
   },
 ];
 
-export const TABS = [
+export const TABS: Array<{ name: string; url: string }> = [
   {
     name: "HOME",
     url: "/",

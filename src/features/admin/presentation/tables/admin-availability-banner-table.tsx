@@ -1,5 +1,3 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -8,39 +6,23 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { ExtractBtn } from "../components/extractbtn";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status" },
-  { id: "date", label: "Order Date" },
-  { id: "tracker", label: "Tracking No." },
-  { id: "name", label: "Client Name" },
-  { id: "amount", label: "Amount" },
-  { id: "hub", label: "Hub" },
-  { id: "mop", label: "Mode of Payment" },
-  { id: "moh", label: "Mode of Handling" },
-  { id: "invoice", label: "Invoice Number" },
+  { id: "bannerName", label: "Banner Name" },
+  { id: "image", label: "Image" },
   { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminOrders() {
-  const dispatch = useAppDispatch();
-
+export function AdminAvailabilityBannerTable() {
   return (
-    <section className="max-h-screen bg-white rounded-md shadow-lg lg:space-x-4">
+    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <div className="flex justify-between">
-            <h1 className="pt-4 lg:-ml-12 text-secondary">List of Orders</h1>
-            <div className="lg:-mr-12">
-              <ExtractBtn />
-            </div>
-          </div>
 
-          <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
+          <div className="pt-6 pb-6 lg:-mr-12 lg:-ml-12">
             <DataTable
               rowsOrder={[
                 {

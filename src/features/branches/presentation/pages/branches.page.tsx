@@ -1,9 +1,20 @@
+import { useAppDispatch } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import { useEffect } from "react";
 import { BranchComponent } from "../component/branch-component";
 import { ContactComponent } from "../component/contact-component";
 
 export function Branches() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
+
   return (
     <>
       <HeaderNav

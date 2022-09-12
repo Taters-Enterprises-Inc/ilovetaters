@@ -10,9 +10,18 @@ import {
   SERVICES_MOBILE,
 } from "features/shared/constants";
 import { Link, useLocation } from "react-router-dom";
+import { useAppDispatch } from "features/config/hooks";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function Home() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });

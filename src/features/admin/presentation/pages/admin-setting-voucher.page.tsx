@@ -1,17 +1,17 @@
 import { Head } from "../components/head";
-import { AdminOrders } from "../tables/admin-orders-table";
+import { AdminSettingVoucherTable } from "../tables/admin-setting-voucher-table";
 
-export function AdminShopOrders() {
+export function AdminSettingVoucher() {
   return (
     <>
       <Head />
 
       <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary">
-        Orders
+        Vouchers
       </h1>
 
       <div className="font-['Bebas_Neue'] text-3xl ml-4 mr-4 mt-4">
-        <AdminOrders />
+        <AdminSettingVoucherTable />
       </div>
     </>
   );

@@ -1,5 +1,3 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -8,38 +6,28 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { VoucherBtn } from "../components/add-voucher-btn";
 
 const columns: Array<Column> = [
-  { id: "name", label: "Name" },
-  { id: "desc", label: "Description" },
-  { id: "status", label: "Status" },
-  { id: "code", label: "Code" },
-  { id: "ctype", label: "Code Type" },
-  { id: "otype", label: "Offer Type" },
-  { id: "dtype", label: "Discount Type" },
-  { id: "value", label: "Voucher Value" },
-  { id: "dstart", label: "Date Start" },
-  { id: "dend", label: "Date End" },
+  { id: "receipt", label: "Receipt Number" },
+  { id: "fname", label: "Full Name" },
+  { id: "contact", label: "Contact" },
+  { id: "address", label: "Address" },
+  { id: "code", label: "Raffle Code" },
+  { id: "image", label: "Receipt Image" },
   { id: "action", label: "Action" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminVouchers() {
-  const dispatch = useAppDispatch();
-
+export function AdminRaffleInstoreTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <div className="flex justify-between">
-            <h1 className="pt-4 lg:-ml-12">List of Vouchers</h1>
-            <div className="lg:-mr-12">
-              <VoucherBtn />
-            </div>
-          </div>
+          <h1 className="pt-4 lg:-ml-12 text-secondary">
+            List raffle entries for:
+          </h1>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable
