@@ -45,6 +45,7 @@ import {
   Category,
   Cater,
   CaterAdd,
+  Faqs,
   Instore,
   Login,
   Packages,
@@ -65,6 +66,7 @@ import {
 } from "features/shared/presentation/components";
 import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import { Reports } from "features/admin/presentation/pages/admin-reports-page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -181,6 +183,7 @@ root.render(
                   element={<Banner />}
                 ></Route>
                 <Route path="admin/products" element={<Products />}></Route>
+                <Route path="admin/reports" element={<Reports />}></Route>
                 <Route
                   path="admin/settings-category"
                   element={<Category />}
@@ -194,6 +197,7 @@ root.render(
                   path="admin/settings-stores"
                   element={<Stores />}
                 ></Route>
+                <Route path="admin/faqs" element={<Faqs />}></Route>
               </Route>
             </Route>
           </Routes>

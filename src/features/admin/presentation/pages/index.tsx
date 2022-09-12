@@ -14,3 +14,5 @@ export { Category } from "./admin-category-page";
 export { Users } from "./admin-users-page";
 export { Vouchers } from "./admin-voucher-page";
 export { Stores } from "./admin-stores-page";
+export { Reports } from "./admin-reports-page";
+export { Faqs } from "./admin-faqs-page";

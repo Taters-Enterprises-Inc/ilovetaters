@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Sidebar from "../components/sidebar";
 import { Head } from "../components/head";
 import { AdminBanner } from "../tables/admin-banner-table";
