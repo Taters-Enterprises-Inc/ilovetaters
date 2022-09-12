@@ -616,7 +616,7 @@ export function ShopProduct() {
                             : ""
                         }`}
                       >
-                        <AiOutlineMinus className="text-3xl" />
+                        <AiOutlineMinus className="mx-8 text-3xl " />
                       </button>
 
                       <input
@@ -705,7 +705,7 @@ export function ShopProduct() {
                           quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <AiOutlinePlus className="text-3xl" />
+                        <AiOutlinePlus className="mx-8 text-3xl" />
                       </button>
                     </div>
                   </div>
