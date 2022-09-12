@@ -65,7 +65,7 @@ export function Home() {
       <img
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp"
+          "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.webp"
         }
         className="hidden w-full lg:block"
         alt="The best pop corn in town"
