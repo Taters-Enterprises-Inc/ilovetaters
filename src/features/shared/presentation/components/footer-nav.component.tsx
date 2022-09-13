@@ -1,7 +1,7 @@
 import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
@@ -18,6 +18,18 @@ export function FooterNav(props: FooterNavProps) {
   const navigate = useNavigate();
   const getAllPlatformState = useAppSelector(selectGetAllPlatform);
   const getSessionState = useAppSelector(selectGetSession);
+  const currentLocation = useLocation();
+
+  function isMoreActive() {
+    const loc = currentLocation.pathname;
+    if (
+      loc === "/franchising" ||
+      loc === "/shop/profile" ||
+      loc === "/shop/terms-and-conditions"
+    ) {
+      return true;
+    }
+  }
 
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
@@ -75,14 +87,16 @@ export function FooterNav(props: FooterNavProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
-                      props.activeUrl === "HOME" ? "-active" : ""
+                      props.activeUrl === "HOME" && !isMoreActive()
+                        ? "-active"
+                        : ""
                     }.webp`}
                     className="w-[28px] sm:w-[40px]"
                     alt="Tater home icon"
                   />
                   <span
                     className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
-                      props.activeUrl === "HOME"
+                      props.activeUrl === "HOME" && !isMoreActive()
                         ? "text-tertiary"
                         : "text-white"
                     }`}
@@ -130,14 +144,16 @@ export function FooterNav(props: FooterNavProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
-                      props.activeUrl === "SNACKSHOP" ? "-active" : ""
+                      props.activeUrl === "SNACKSHOP" && !isMoreActive()
+                        ? "-active"
+                        : ""
                     }.webp`}
                     className="w-[24px] sm:w-[30px]"
                     alt="Tater home icon"
                   ></img>
                   <span
                     className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
-                      props.activeUrl === "SNACKSHOP"
+                      props.activeUrl === "SNACKSHOP" && !isMoreActive()
                         ? "text-tertiary"
                         : "text-white"
                     }`}
@@ -197,7 +213,7 @@ export function FooterNav(props: FooterNavProps) {
                 </div>
               </li>
               <li className="flex-1">
-                <MoreDrawer />
+                <MoreDrawer isMoreActive={isMoreActive() ? true : false} />
               </li>
             </ul>
           </nav>
