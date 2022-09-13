@@ -41,8 +41,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [resetMultiFlavors, setResetMultiFlavors] = useState<boolean>(false);
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
     useState<number>(0);
-  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
-
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<any>(undefined);
   let { cart_id } = useParams();
   const location = useLocation();
 
@@ -51,6 +51,10 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   }, []);
   const SizeCallBack = useCallback((value: string) => {
     setSizeName(value);
+  }, []);
+
+  const multiFlavorContainer = useCallback((value: any) => {
+    setCurrentMultiFlavors(value);
   }, []);
 
   useEffect(() => {
@@ -66,7 +70,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
       setCurrentFlavor(getEditCartProduct.data.cart_item.prod_flavor_id);
       setCurrentSize(getEditCartProduct.data.cart_item.prod_size_id);
     }
-  }, [getEditCartProduct, currentFlavor]);
+  }, [getEditCartProduct, currentFlavor, currentSize]);
 
   useEffect(() => {
     if (resetMultiFlavors === true) {
@@ -114,16 +118,14 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   };
 
   const handleEditSubmit = () => {
-    let toString_prod_multiflavors = "";
+    let toString_prod_multiflavors= "";
+
     if (currentMultiFlavors) {
-      const arrayOfOBj = Object.entries(currentMultiFlavors);
-      arrayOfOBj.forEach((init: any) => {
-        init.forEach((data: any, idx: number) => {
-          if (idx === 1 && data.quantity !== 0) {
-            toString_prod_multiflavors += `<br/><span>(${data.quantity})${data.name} </span>`;
+        Object.entries(currentMultiFlavors).forEach(([__,value]:any)=>{
+          if(value.quantity !== 0){
+            toString_prod_multiflavors += `</br><span>(${value.quantity}) ${value.name}</span>`
           }
-        });
-      });
+        })
     }
 
     dispatch(
@@ -141,7 +143,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
       })
     );
   };
-
 
   return (
     <>
@@ -272,12 +273,12 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                         quantity={quantity}
                         resetMultiFlavors={resetMultiFlavors}
                         setCurrentFlavor={setCurrentFlavor}
-                        setCurrentMultiFlavors={setCurrentMultiFlavors}
                         setTotalMultiFlavorsQuantity={
                           setTotalMultiFlavorsQuantity
                         }
                         totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
                         getEditCartProduct={getEditCartProduct.data}
+                        multiFlavorContainer={multiFlavorContainer}
                       />
                     </ul>
                   </div>
@@ -394,12 +395,12 @@ const RadioFlavorComponent: React.FC<{
   currentSize: number | undefined;
   getEditCartProduct: any;
   flavorCallBack: any;
-  setCurrentMultiFlavors: React.Dispatch<any>;
   resetMultiFlavors: boolean;
   totalMultiFlavorsQuantity: number;
   currentMultiFlavors: any;
   quantity: number;
   setTotalMultiFlavorsQuantity: React.Dispatch<React.SetStateAction<number>>;
+  multiFlavorContainer: any;
 }> = ({
   currentFlavor,
   handleSizeAndFlavorChange,
@@ -407,13 +408,19 @@ const RadioFlavorComponent: React.FC<{
   currentSize,
   getEditCartProduct,
   flavorCallBack,
-  setCurrentMultiFlavors,
   resetMultiFlavors,
   totalMultiFlavorsQuantity,
   currentMultiFlavors,
   quantity,
   setTotalMultiFlavorsQuantity,
+  multiFlavorContainer,
 }): JSX.Element => {
+  const [con, setCon] = useState<any>(undefined);
+
+  useEffect(() => {
+    multiFlavorContainer(con);
+  });
+
   return (
     <>
       {getEditCartProduct.product_flavor.map((flavor: any, i: number) => {
@@ -437,15 +444,14 @@ const RadioFlavorComponent: React.FC<{
                           name: flavor.name,
                           quantity: val,
                         };
-
-                        setCurrentMultiFlavors(currentMultiFlavors);
+                        setCon(currentMultiFlavors);
                       } else {
                         const temp: any = {};
                         temp[flavor.id] = {
                           name: flavor.name,
                           quantity: val,
                         };
-                        setCurrentMultiFlavors(temp);
+                        setCon(temp);
                       }
                       setTotalMultiFlavorsQuantity(
                         totalMultiFlavorsQuantity +
