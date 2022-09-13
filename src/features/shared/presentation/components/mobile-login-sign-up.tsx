@@ -1,11 +1,22 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { MdLockOutline } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import PhoneInput from "react-phone-input-2";
-import { useRef } from "react";
+import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
+import { FormEvent } from "react";
+import { useAppDispatch } from "features/config/hooks";
+import { signUpMobileUser } from "../slices/sign-up-mobile-user.slice";
 
 export function MobileLoginSignUp() {
-  const phoneNumberRef = useRef(null);
+  const dispatch = useAppDispatch();
+
+  const handleMobileSignUp = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    dispatch(signUpMobileUser(formData));
+  };
+
   return (
     <>
       <div className="flex items-center justify-center header_image">
@@ -16,7 +27,7 @@ export function MobileLoginSignUp() {
         ></img>
       </div>
       <div className="pt-4 login-body">
-        <form>
+        <form onSubmit={handleMobileSignUp}>
           <p className="text-white">
             Please fill up the required information for each field.
           </p>
@@ -44,41 +55,8 @@ export function MobileLoginSignUp() {
             </div>
           </div>
 
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl font-['Roboto']">
-            <PhoneInput
-              country={"ph"}
-              disableDropdown
-              inputProps={{
-                ref: phoneNumberRef,
-                required: true,
-                autoComplete: "off",
-              }}
-              isValid={(value, country: any) => {
-                if (value.match(/63/) || value.match(/09/)) {
-                  return true;
-                } else {
-                  return "Please use +63 or 09";
-                }
-              }}
-              placeholder="Use +63 or 09 format"
-              inputStyle={{
-                flex: "1, 1, 10%",
-                width: "100%",
-                fontSize: "0.875rem",
-                lineHeight: "1.25rem",
-                backgroundColor: "rgb(243, 244, 246)",
-                outline: "2px solid transparent",
-                outlineOffset: "2px",
-                height: "2.25rem",
-                borderRadius: "1rem",
-                fontStyle: "Roboto",
-              }}
-              buttonStyle={{
-                borderRadius: "1rem",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
+          <MobileLoginPhoneInput />
+
           <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
             <MdLockOutline className="m-3" />
             <input
@@ -89,26 +67,9 @@ export function MobileLoginSignUp() {
               className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
             ></input>
           </div>
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="password"
-              name="passw"
-              autoComplete="off"
-              placeholder="Password"
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
-          </div>
 
-          <div className="flex justify-between py-4 text-white">
-            <p className="flex items-center">
-              <input className="mr-2" type="checkbox" />
-              Remember Me
-            </p>
-            <a href="#"> Forgot Password? </a>
-          </div>
-          <button className="w-full py-2 my-2 text-white shadow-md bg-button rounded-3xl">
-            Sign in
+          <button className="w-full py-2 mt-4 mb-2 text-white shadow-md bg-button rounded-3xl">
+            Sign Up
           </button>
         </form>
       </div>

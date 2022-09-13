@@ -54,7 +54,7 @@ export function ShopProfile() {
   return (
     <>
       <ShopProfileContainer title="My Profile" activeTab="profile">
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
           Personal Information
         </h1>
 
@@ -120,14 +120,14 @@ export function ShopProfile() {
 
         <div className="py-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
+            <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
               Contact
             </h1>
             <button
               onClick={() => {
                 setOpenAddContactModal(true);
               }}
-              className="bg-button border border-white text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
+              className="bg-button border border-secondary  text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
             >
               <IoMdAdd />
             </button>
@@ -136,10 +136,10 @@ export function ShopProfile() {
           <div className="space-y-4">
             {getContactsState.data?.map((val) => (
               <div className="flex">
-                <div className="flex-1 border border-white rounded-l-md">
+                <div className="flex-1 border border-secondary rounded-l-md">
                   <input
                     readOnly
-                    className="w-full px-4 py-4 text-white bg-transparent"
+                    className="w-full px-4 py-4 bg-transparent text-secondary"
                     value={val.contact}
                   />
                 </div>

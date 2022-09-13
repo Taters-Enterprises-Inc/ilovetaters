@@ -40,6 +40,7 @@ import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
+<<<<<<< HEAD
   Admin,
   Banner,
   Category,
@@ -57,6 +58,26 @@ import {
   Stores,
   Users,
   Vouchers,
+=======
+  AdminShopOrder,
+  AdminLogin,
+  AdminCateringOrder,
+  AdminPopclub,
+  AdminRaffleInstore,
+  AdminRaffleSnackshop,
+  AdminReport,
+  AdminFaq,
+  AdminAvailabilityCateringAddOn,
+  AdminAvailabilityProductAddOn,
+  AdminAvailabilityPackage,
+  AdminAvailabilityProduct,
+  AdminAvailabilityBanner,
+  AdminSettingCategory,
+  AdminProduct,
+  AdminSettingUser,
+  AdminSettingVoucher,
+  AdminSettingStore,
+>>>>>>> main
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -64,10 +85,14 @@ import {
   LoadingAndSnackbarWrapper,
   NotificationWrapper,
 } from "features/shared/presentation/components";
-import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+<<<<<<< HEAD
 import { Reports } from "features/admin/presentation/pages/admin-reports-page";
 import { OrderModal } from "features/admin/presentation/modals/orders-modal";
+=======
+import { Admin } from "features/admin/presentation/pages/admin.page";
+import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
+>>>>>>> main
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -90,6 +115,9 @@ root.render(
             <Route element={<LoadingAndSnackbarWrapper />}>
               <Route element={<NotificationWrapper />}>
                 <Route path="/" element={<Home />} />
+                <Route path="reseller" element={<Reseller />} />
+                <Route path="branches" element={<Branches />} />
+                <Route path="franchising" element={<Franchising />} />
 
                 <Route path="popclub" element={<PopClub />}>
                   <Route index element={<PopClubIndexPage />} />
@@ -143,38 +171,36 @@ root.render(
                   <Route path="checkout" element={<CateringCheckout />} />
                 </Route>
 
-                <Route path="franchising" element={<Franchising />} />
+                <Route path="admin" element={<Admin />}>
+                  <Route index element={<AdminLogin />} />
 
-                <Route path="reseller" element={<Reseller />} />
-                <Route path="branches" element={<Branches />} />
-                <Route path="near-you" element={<NearyouComponent />} />
+                  <Route element={<AdminSidebarWrapper />}>
+                    <Route path="order" element={<AdminShopOrder />} />
+                    <Route path="catering" element={<AdminCateringOrder />} />
+                    <Route path="popclub" element={<AdminPopclub />} />
+                    <Route path="product" element={<AdminProduct />} />
+                    <Route path="report" element={<AdminReport />} />
+                    <Route path="faq" element={<AdminFaq />} />
 
-                <Route path="login" element={<Login />}></Route>
+                    <Route path="raffle">
+                      <Route
+                        path="snackshop"
+                        element={<AdminRaffleSnackshop />}
+                      />
+                      <Route path="instore" element={<AdminRaffleInstore />} />
+                    </Route>
 
-                <Route path="admin/orders" element={<Admin />}></Route>
-                <Route path="admin/catering-orders" element={<Cater />}></Route>
-                <Route path="admin/popclub" element={<Popclub />}></Route>
-                <Route
-                  path="admin/raffles-snackshop"
-                  element={<Snackshop />}
-                ></Route>
-                <Route
-                  path="admin/raffles-instore"
-                  element={<Instore />}
-                ></Route>
-                <Route
-                  path="admin/catering-add-ons-availability"
-                  element={<CaterAdd />}
-                ></Route>
-                <Route
-                  path="admin/product-add-ons-availability"
-                  element={<ProdAdd />}
-                ></Route>
-                <Route
-                  path="admin/packages-availability"
-                  element={<Packages />}
-                ></Route>
+                    <Route path="availability">
+                      <Route
+                        path="catering-add-on"
+                        element={<AdminAvailabilityCateringAddOn />}
+                      />
+                      <Route
+                        path="product-add-on"
+                        element={<AdminAvailabilityProductAddOn />}
+                      />
 
+<<<<<<< HEAD
                 <Route
                   path="admin/product-availability"
                   element={<ProdAvail />}
@@ -200,6 +226,33 @@ root.render(
                 ></Route>
                 <Route path="admin/faqs" element={<Faqs />}></Route>
                 <Route path="orders/modal" element={<OrderModal />}></Route>
+=======
+                      <Route
+                        path="package"
+                        element={<AdminAvailabilityPackage />}
+                      />
+                      <Route
+                        path="product"
+                        element={<AdminAvailabilityProduct />}
+                      />
+                      <Route
+                        path="banner"
+                        element={<AdminAvailabilityBanner />}
+                      />
+                    </Route>
+
+                    <Route path="setting">
+                      <Route
+                        path="category"
+                        element={<AdminSettingCategory />}
+                      />
+                      <Route path="user" element={<AdminSettingUser />} />
+                      <Route path="voucher" element={<AdminSettingVoucher />} />
+                      <Route path="store" element={<AdminSettingStore />} />
+                    </Route>
+                  </Route>
+                </Route>
+>>>>>>> main
               </Route>
             </Route>
           </Routes>

@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export function Catering() {
   return (
-    <main className="min-h-screen bg-primary">
+    <>
       <Helmet>
         <title>Taters | Catering</title>
       </Helmet>
@@ -24,6 +24,6 @@ export function Catering() {
       <Outlet />
 
       <FooterNav activeUrl="CATERING" />
-    </main>
+    </>
   );
 }

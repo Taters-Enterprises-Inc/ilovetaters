@@ -19,6 +19,11 @@ export interface DealModel {
   product_code: string;
   report_status: number;
 
+  available_start_time: string;
+  available_end_time: string;
+  available_days: string;
+  seconds_before_expiration: string;
+
   deal_id: number;
   platform_category_id: number;
   category_name: string;

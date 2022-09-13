@@ -74,9 +74,9 @@ export function ShopCartModal(props: ShopCartModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-primary px-4 pt-[30px] pb-3 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
+      <div className="bg-white border-secondary border-2 px-4 pt-[30px] pb-3 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
         <button
-          className="absolute text-2xl text-white top-2 right-4 "
+          className="absolute text-2xl text-secondary top-2 right-4 "
           onClick={() => {
             document.body.classList.remove("overflow-hidden");
             props.onClose();
@@ -92,14 +92,14 @@ export function ShopCartModal(props: ShopCartModalProps) {
           getSessionState.data?.deals == null ||
           getSessionState.data?.deals.length <= 0) ? (
           <div className="flex flex-col items-center justify-center space-y-2">
-            <BsCartX className="text-white text-7xl" />
-            <span className="text-white text-4xl font-['Bebas_Neue'] tracking-[2px]">
+            <BsCartX className="text-secondary text-7xl" />
+            <span className="text-secondary text-4xl font-['Bebas_Neue'] tracking-[2px]">
               Cart Empty
             </span>
           </div>
         ) : (
           <div>
-            <h1 className="text-white text-3xl font-['Bebas_Neue'] tracking-[2px] text-center border-white border-2 rounded-t-2xl py-2 my-4">
+            <h1 className="text-secondary text-3xl font-['Bebas_Neue'] tracking-[2px] text-center border-secondary border-2 rounded-t-2xl py-2 my-4">
               My Cart
             </h1>
 
@@ -111,7 +111,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   {getSessionState.data.orders.map((order, i) => (
                     <div
                       key={i}
-                      className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
+                      className="flex bg-secondary rounded-[10px] relative"
                     >
                       <img
                         src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
@@ -231,12 +231,12 @@ export function ShopCartModal(props: ShopCartModalProps) {
               ) : null}
             </div>
 
-            <hr className="mt-6 mb-2 border-t-1" />
+            <hr className="mt-6 mb-2 border-t-1 border-secondary" />
 
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-white">Total:</span>
-                <span className="font-bold text-white">
+                <span className="text-secondary">Total:</span>
+                <span className="font-bold text-secondary">
                   {calculateOrdersPrice()}
                 </span>
               </div>
@@ -246,7 +246,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   props.onClose();
                   navigate("/shop/checkout");
                 }}
-                className="w-full py-2 text-lg text-white border border-white rounded-lg bg-button"
+                className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
               >
                 Process Orders
               </button>

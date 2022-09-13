@@ -74,7 +74,7 @@ export function CateringSignedContractIsRequired() {
             </div>
             <div>
               <p className="m-0 font-bold">Signed contract is required</p>
-              <p className=" text-xs">
+              <p className="text-xs ">
                 We have succesfully verified the store, please read the contract
                 and upload it with signature.
               </p>
@@ -86,7 +86,7 @@ export function CateringSignedContractIsRequired() {
       {getCateringOrdersState.data &&
       getCateringOrdersState.data.order.order_details ? (
         <div className="lg:flex-[0_0_40%] lg:max-w-[40%] order-1 space-y-4  lg:order-2">
-          <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+          <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
             Order Summary
           </h2>
 
@@ -135,8 +135,8 @@ export function CateringSignedContractIsRequired() {
             ))}
           </div>
 
-          <hr className="mt-1 mb-2" />
-          <div className="grid grid-cols-2 text-white">
+          <hr className="mt-1 mb-2 border-secondary" />
+          <div className="grid grid-cols-2 text-secondary">
             <span>Subtotal:</span>
             <span className="text-end">
               <NumberFormat
@@ -194,7 +194,7 @@ export function CateringSignedContractIsRequired() {
             </span>
           </div>
 
-          <h1 className="text-4xl text-center text-white">
+          <h1 className="text-4xl text-center text-secondary">
             <NumberFormat
               value={getCateringOrdersState.data.grand_total.toFixed(2)}
               displayType={"text"}
@@ -206,7 +206,7 @@ export function CateringSignedContractIsRequired() {
           <div className="flex items-center justify-center pt-4">
             <a
               href={`${REACT_APP_DOMAIN_URL}api/download/contract/${hash}`}
-              className="flex items-center justify-center px-4 py-2 space-x-2 text-lg text-white border border-white rounded-md bg-button"
+              className="flex items-center justify-center px-4 py-2 space-x-2 text-lg text-white border rounded-md border-secondary bg-button"
             >
               <FiDownload className="text-2xl" />{" "}
               <span className="text-base font-bold">
@@ -216,7 +216,7 @@ export function CateringSignedContractIsRequired() {
           </div>
 
           <div className="pt-4">
-            <h2 className="font-['Bebas_Neue'] text-xl lg:text-3xl  text-white tracking-[3px] text-center mb-4">
+            <h2 className="font-['Bebas_Neue'] text-xl lg:text-3xl  text-secondary tracking-[3px] text-center mb-4">
               Upload Signed Contract
             </h2>
 
@@ -231,7 +231,7 @@ export function CateringSignedContractIsRequired() {
               <div>
                 <div
                   {...getRootProps()}
-                  className="border-dashed border-t-2 border-l-2 border-r-2 border-white h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
+                  className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
                 >
                   <input
                     type="file"
@@ -240,22 +240,22 @@ export function CateringSignedContractIsRequired() {
                   />
 
                   {isDragActive ? (
-                    <span className="text-lg text-white">
+                    <span className="text-lg text-secondary">
                       Drop the files here ...
                     </span>
                   ) : (
                     <>
                       {contract ? (
-                        <div className="flex justify-center items-center flex-col space-y-2">
-                          <FaFileContract className="text-6xl text-white" />
-                          <span className="text-white text-sm truncate w-36">
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                          <FaFileContract className="text-6xl text-secondary" />
+                          <span className="text-sm truncate text-secondary w-36">
                             {contract.name}
                           </span>
                         </div>
                       ) : (
                         <>
-                          <AiOutlineCloudUpload className="text-5xl text-white" />
-                          <span className="text-lg text-white">
+                          <AiOutlineCloudUpload className="text-5xl text-secondary" />
+                          <span className="text-lg text-secondary">
                             Drag and drop here to upload
                           </span>
                           <button
@@ -272,12 +272,12 @@ export function CateringSignedContractIsRequired() {
 
                 <button
                   type="submit"
-                  className="bg-button border border-white w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                  className="bg-button border border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
                 >
                   Upload
                 </button>
 
-                <h4 className="mt-1 text-sm leading-5 text-white">
+                <h4 className="mt-1 text-sm leading-5 text-secondary">
                   <strong>Note:</strong> Supported file types: JPG, JPEG, PNG
                   and GIF. Maximum file size is 2MB.
                 </h4>

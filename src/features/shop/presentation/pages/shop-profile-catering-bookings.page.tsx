@@ -32,7 +32,7 @@ export function ShopProfileCateringBookings() {
 
   return (
     <ShopProfileContainer title="Catering Bookings" activeTab="catering">
-      <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
+      <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Catering Bookings
       </h1>
       <DataTable

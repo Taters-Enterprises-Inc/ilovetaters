@@ -100,6 +100,23 @@ import {
   RedeemDealState,
   selectRedeemDeal,
 } from "features/popclub/presentation/slices/redeem-deal.slice";
+import {
+  selectSignUpMobileUser,
+  signUpMobileUser,
+  SignUpMobileUserState,
+} from "../slices/sign-up-mobile-user.slice";
+import {
+  ForgotPasswordGenerateOTPState,
+  selectForgotPasswordGenerateOTP,
+} from "../slices/forgot-password-generate-otp.slice";
+import {
+  ForgotPasswordValidateOTPState,
+  selectForgotPasswordValidateOTP,
+} from "../slices/forgot-password-validate-otp.slice";
+import {
+  ForgotPasswordNewPasswordState,
+  selectForgotPasswordNewPassword,
+} from "../slices/forgot-password-new-password-otp.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -159,6 +176,92 @@ export function LoadingAndSnackbarWrapper() {
     selectSetStoreAndAddressPopClub
   );
   const redeemDealState = useAppSelector(selectRedeemDeal);
+  const signUpMobileUserState = useAppSelector(selectSignUpMobileUser);
+  const forgotPasswordGenerateOTP = useAppSelector(
+    selectForgotPasswordGenerateOTP
+  );
+  const forgotPasswordValidateOTP = useAppSelector(
+    selectForgotPasswordValidateOTP
+  );
+  const forgotPasswordNewPasswordOTP = useAppSelector(
+    selectForgotPasswordNewPassword
+  );
+
+  useEffect(() => {
+    switch (forgotPasswordNewPasswordOTP.status) {
+      case ForgotPasswordNewPasswordState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordNewPasswordState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordNewPasswordState.success:
+        showAlert(setSuccessAlert, forgotPasswordNewPasswordOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordNewPasswordState.fail:
+        showAlert(setFailsAlert, forgotPasswordNewPasswordOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordNewPasswordOTP]);
+
+  useEffect(() => {
+    switch (forgotPasswordValidateOTP.status) {
+      case ForgotPasswordValidateOTPState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordValidateOTPState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordValidateOTPState.success:
+        showAlert(setSuccessAlert, forgotPasswordValidateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordValidateOTPState.fail:
+        showAlert(setFailsAlert, forgotPasswordValidateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordValidateOTP]);
+
+  useEffect(() => {
+    switch (forgotPasswordGenerateOTP.status) {
+      case ForgotPasswordGenerateOTPState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordGenerateOTPState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordGenerateOTPState.success:
+        showAlert(setSuccessAlert, forgotPasswordGenerateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordGenerateOTPState.fail:
+        showAlert(setFailsAlert, forgotPasswordGenerateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordGenerateOTP]);
+
+  useEffect(() => {
+    switch (signUpMobileUserState.status) {
+      case SignUpMobileUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SignUpMobileUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SignUpMobileUserState.success:
+        showAlert(setSuccessAlert, signUpMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SignUpMobileUserState.fail:
+        showAlert(setFailsAlert, signUpMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [signUpMobileUserState]);
 
   useEffect(() => {
     switch (redeemDealState.status) {

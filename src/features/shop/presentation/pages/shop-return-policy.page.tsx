@@ -5,11 +5,11 @@ export function ShopReturnPolicy() {
   return (
     <section className="container py-6">
       <Tab tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS} activeTab="return-policy">
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-3xl">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl">
           Return Policy
         </h1>
-        <hr className="mt-2 mb-4" />
-        <div className="text-white space-y-4">
+        <hr className="mt-2 mb-4 border-secondary" />
+        <div className="space-y-4 text-secondary">
           <p>
             Strictly no refund, change, or cancellation once the order has been
             confirmed.

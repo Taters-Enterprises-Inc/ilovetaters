@@ -2,6 +2,7 @@ import { useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 interface CateringProductQuantityProps {
   min: number;
@@ -56,13 +57,11 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             onMouseUp={quantityOffPressed}
             onTouchStart={() => quantityOnPressed("minus", true)}
             onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+            className={`h-full w-[150px] rounded-l cursor-pointer outline-none flex justify-center items-center bg-primary ${
               props.quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
             }`}
           >
-            <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-              −
-            </span>
+            <AiOutlineMinus className="text-3xl" />
           </button>
 
           <input
@@ -79,11 +78,9 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             onMouseUp={quantityOffPressed}
             onTouchStart={() => quantityOnPressed("plus", true)}
             onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] rounded-r cursor-pointer bg-primary`}
+            className={`h-full w-[150px] rounded-r cursor-pointer flex justify-center items-center bg-primary`}
           >
-            <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-              +
-            </span>
+            <AiOutlinePlus className="text-3xl" />
           </button>
         </div>
       </div>

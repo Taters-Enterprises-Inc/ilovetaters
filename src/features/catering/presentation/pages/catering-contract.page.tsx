@@ -1,14 +1,11 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { useEffect } from "react";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { FaFileContract } from "react-icons/fa";
-import { FiDownload } from "react-icons/fi";
 import { useLocation, useParams } from "react-router-dom";
 import {
-  CateringContractViewer,
   CateringSignedContractIsOnVerification,
   CateringSignedContractIsRequired,
   CateringSignedContractVerified,
@@ -40,12 +37,13 @@ export function CateringContract() {
   }, [location]);
 
   return (
-    <>
+    <main className="min-h-screen bg-paper">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
           url: "/catering",
         }}
+        className="lg:h-[200px]"
         title="Contract"
         pageTitles={[
           { name: "Products", url: "/catering/products" },
@@ -57,24 +55,24 @@ export function CateringContract() {
         <div className="lg:-mt-[80px] lg:space-y-8">
           <div className="flex lg:container">
             <div className="flex-1">
-              <div className="bg-white h-[0.25rem] relative">
-                <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+              <div className="bg-green-700 h-[0.25rem] relative">
+                <div className="absolute rounded-[50%] bg-green-700 text-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                   1
                 </div>
               </div>
-              <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
+              <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-secondary lg:text-white lg:pl-0">
                 <BiUserCircle className="hidden text-2xl sm:block" />{" "}
                 <span>Your Details</span>
               </div>
             </div>
 
             <div className="flex-1">
-              <div className="bg-white h-[0.25rem] relative">
-                <div className="absolute rounded-[50%] font-bold bg-white h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+              <div className="bg-green-700 h-[0.25rem] relative">
+                <div className="absolute rounded-[50%] font-bold text-white bg-green-700 h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                   2
                 </div>
               </div>
-              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary lg:text-white">
                 <FaFileContract className="hidden text-2xl sm:block" />{" "}
                 <span>Contract</span>
               </div>
@@ -86,7 +84,7 @@ export function CateringContract() {
                   3
                 </div>
               </div>
-              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary lg:text-white">
                 <AiOutlineCreditCard className="hidden text-2xl sm:block" />{" "}
                 <span>Payment</span>
               </div>
@@ -98,7 +96,7 @@ export function CateringContract() {
                   4
                 </div>
               </div>
-              <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
+              <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-secondary lg:text-white lg:pr-0">
                 <AiOutlineCheckCircle className="hidden text-2xl sm:block" />{" "}
                 <span className="text-center">Checkout Complete</span>
               </div>
@@ -120,6 +118,6 @@ export function CateringContract() {
           ) : null}
         </div>
       </section>
-    </>
+    </main>
   );
 }

@@ -14,7 +14,6 @@ import {
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import PhoneInput from "react-phone-input-2";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
@@ -236,12 +235,13 @@ export function CateringCheckout() {
   };
 
   return (
-    <>
+    <main className="bg-paper">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
           url: "/catering",
         }}
+        className="lg:h-[200px]"
         title="Checkout"
         pageTitles={[
           { name: "Products", url: "/catering/products" },
@@ -253,12 +253,12 @@ export function CateringCheckout() {
         <div className="lg:-mt-[80px] lg:space-y-8">
           <div className="flex lg:container">
             <div className="flex-1">
-              <div className="bg-white h-[0.25rem] relative">
-                <div className="absolute rounded-[50%] bg-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+              <div className="bg-green-700 h-[0.25rem] relative">
+                <div className="absolute rounded-[50%] bg-green-700 text-white font-bold h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
                   1
                 </div>
               </div>
-              <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-white lg:pl-0">
+              <div className="flex items-center justify-center pl-4 mt-5 space-x-1 text-xs text-secondary lg:text-white lg:pl-0">
                 <BiUserCircle className="hidden text-2xl sm:block" />{" "}
                 <span>Your Details</span>
               </div>
@@ -270,7 +270,7 @@ export function CateringCheckout() {
                   2
                 </div>
               </div>
-              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary lg:text-white">
                 <FaFileContract className="hidden text-2xl sm:block" />{" "}
                 <span>Contract</span>
               </div>
@@ -282,7 +282,7 @@ export function CateringCheckout() {
                   3
                 </div>
               </div>
-              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-white">
+              <div className="flex items-center justify-center mt-5 space-x-1 text-xs text-secondary lg:text-white">
                 <AiOutlineCreditCard className="hidden text-2xl sm:block" />{" "}
                 <span>Payment</span>
               </div>
@@ -294,7 +294,7 @@ export function CateringCheckout() {
                   4
                 </div>
               </div>
-              <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-white lg:pr-0">
+              <div className="flex items-center justify-center pr-4 mt-5 space-x-1 text-xs text-secondary lg:text-white lg:pr-0">
                 <AiOutlineCheckCircle className="hidden text-2xl sm:block" />{" "}
                 <span>Checkout Complete</span>
               </div>
@@ -304,7 +304,7 @@ export function CateringCheckout() {
           <div className="container">
             <form
               onSubmit={handleCheckout}
-              className="flex flex-col justify-between w-full py-6 mb-10 bg-primary lg:flex-row"
+              className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
             >
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (
@@ -386,30 +386,31 @@ export function CateringCheckout() {
                         </Select>
                       </FormControl>
                     ) : (
-                      <PhoneInput
-                        country={"ph"}
-                        disableDropdown
-                        inputClass="!bg-transparent !text-white !py-[27px] !w-full"
-                        inputProps={{
-                          name: "phoneNumber",
-                          ref: phoneNumberRef,
-                          required: true,
-                        }}
-                        isValid={(value, country: any) => {
-                          if (value.match(/63/) || value.match(/09/)) {
-                            return true;
-                          } else {
-                            return "Please use +63 or 09";
-                          }
-                        }}
-                      />
+                      <></>
+                      // <PhoneInput
+                      //   country={"ph"}
+                      //   disableDropdown
+                      //   inputClass="!bg-transparent !text-white !py-[27px] !w-full"
+                      //   inputProps={{
+                      //     name: "phoneNumber",
+                      //     ref: phoneNumberRef,
+                      //     required: true,
+                      //   }}
+                      //   isValid={(value, country: any) => {
+                      //     if (value.match(/63/) || value.match(/09/)) {
+                      //       return true;
+                      //     } else {
+                      //       return "Please use +63 or 09";
+                      //     }
+                      //   }}
+                      // />
                     )}
                     <button
                       type="button"
                       onClick={() => {
                         setOpenAddContactModal(true);
                       }}
-                      className="text-xs underline text-tertiary underline-offset-4"
+                      className="text-xs underline text-primary underline-offset-4"
                     >
                       Setup your phone number
                     </button>
@@ -419,7 +420,7 @@ export function CateringCheckout() {
                 {getSessionState.data ? (
                   <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
                     <div className="flex-1 space-y-2">
-                      <span className="text-base text-white">
+                      <span className="text-base text-secondary">
                         Event Start Date Time
                       </span>
                       <TextField
@@ -437,7 +438,7 @@ export function CateringCheckout() {
                     </div>
 
                     <div className="flex-1 space-y-2">
-                      <span className="text-base text-white">
+                      <span className="text-base text-secondary">
                         Event End Date Time
                       </span>
 
@@ -459,7 +460,9 @@ export function CateringCheckout() {
 
                 {getSessionState.data ? (
                   <div className="space-y-2">
-                    <span className="text-base text-white">Serving Time</span>
+                    <span className="text-base text-secondary">
+                      Serving Time
+                    </span>
 
                     <TextField
                       aria-readonly
@@ -519,7 +522,7 @@ export function CateringCheckout() {
                 ) : null}
 
                 <div className="space-y-2">
-                  <span className="text-base text-white">
+                  <span className="text-base text-secondary">
                     Other event details or requests (optional)
                   </span>
 
@@ -535,7 +538,9 @@ export function CateringCheckout() {
                 </div>
 
                 <div className="space-y-2">
-                  <span className="text-base text-white">Event Address</span>
+                  <span className="text-base text-secondary">
+                    Event Address
+                  </span>
 
                   <TextField
                     aria-readonly
@@ -562,7 +567,7 @@ export function CateringCheckout() {
                       }}
                       control={
                         <Radio
-                          color="tertiary"
+                          color="primary"
                           sx={{
                             padding: "0 10px 0 10px",
                           }}
@@ -578,7 +583,7 @@ export function CateringCheckout() {
                       }}
                       control={
                         <Radio
-                          color="tertiary"
+                          color="primary"
                           sx={{
                             padding: "0 10px 0 10px",
                           }}
@@ -588,27 +593,27 @@ export function CateringCheckout() {
                     />
                   </RadioGroup>
                 </FormControl>
-                <div className="mt-4 text-white lg:mt-0">
+                <div className="mt-4 text-secondary lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
                   <CateringPaymentAccordion />
                 </div>
 
-                <div className="mt-4 text-white lg:mt-0">
+                <div className="mt-4 text-secondary lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Catering Reminders :
                   </h2>
-                  <p className="text-sm text-tertiary">
+                  <p className="text-sm text-primary">
                     A. Package Inclusions: Free use of table set-up / cart for 3
                     hours + 2 accommodating staff <br />
                     B. Apart from a 10% service fee, there are additional
                     charges for logistics (transpo, toll fee) and fees for
                     on-site cooking*
                   </p>
-                  <div className="flex items-center justify-start space-x-1 text-sm text-white lg:text-base">
+                  <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">
                     <Checkbox
-                      color="tertiary"
+                      color="primary"
                       required
                       sx={{ padding: "10px 10px 10px 0" }}
                     />
@@ -618,7 +623,7 @@ export function CateringCheckout() {
                       onClick={() => {
                         setOpenCateringFaqsModal(true);
                       }}
-                      className="text-tertiary"
+                      className="text-primary"
                     >
                       Catering FAQs
                     </button>
@@ -628,7 +633,7 @@ export function CateringCheckout() {
                 <div className="flex flex-col lg:flex-row lg:space-x-4">
                   <button
                     type="button"
-                    className="order-2 w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl lg:order-1"
+                    className="order-2 w-full py-3 mt-4 font-bold text-white uppercase border bg-secondary border-secondary rounded-xl lg:order-1"
                     onClick={() => {
                       navigate(-1);
                     }}
@@ -638,7 +643,7 @@ export function CateringCheckout() {
 
                   <button
                     type="submit"
-                    className="bg-[#CC5801] text-white py-3 w-full uppercase border rounded-xl mt-4 order-1 lg:order-2"
+                    className="bg-[#CC5801] text-white py-3 w-full uppercase border border-secondary rounded-xl mt-4 order-1 lg:order-2"
                   >
                     Initial Checkout
                   </button>
@@ -647,7 +652,7 @@ export function CateringCheckout() {
 
               {getSessionState.data && getSessionState.data.orders ? (
                 <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
-                  <h2 className="font-['Bebas_Neue'] text-3xl  text-white tracking-[3px] text-center">
+                  <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                     Order Summary
                   </h2>
 
@@ -655,7 +660,7 @@ export function CateringCheckout() {
                     {getSessionState.data.orders.map((order, i) => (
                       <div
                         key={i}
-                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
+                        className="flex bg-secondary shadow-md  rounded-[10px]"
                       >
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
@@ -713,8 +718,8 @@ export function CateringCheckout() {
                     ))}
                   </div>
 
-                  <hr className="mt-1 mb-2" />
-                  <div className="grid grid-cols-2 text-white">
+                  <hr className="mt-1 mb-2 border-secondary" />
+                  <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
                     <span>10% Service Charge:</span>
@@ -733,7 +738,7 @@ export function CateringCheckout() {
                     </span>
                   </div>
 
-                  <h1 className="text-4xl text-center text-white">
+                  <h1 className="text-4xl font-bold text-center text-secondary">
                     {calculateTotalPrice()}
                   </h1>
                 </div>
@@ -756,6 +761,6 @@ export function CateringCheckout() {
           setOpenCateringFaqsModal(false);
         }}
       />
-    </>
+    </main>
   );
 }

@@ -1,28 +1,20 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { MdLockOutline } from "react-icons/md";
-import { FormEvent, useEffect, useState } from "react";
-import { AiFillPhone } from "react-icons/ai";
-import {
-  resetSignInMobileUser,
-  selectSignInMobileUser,
-  signInMobileUser,
-  SignInMobileUserState,
-} from "../slices/sign-in-mobile-user.slice";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { FormEvent, useState } from "react";
+import { signInMobileUser } from "../slices/sign-in-mobile-user.slice";
+import { useAppDispatch } from "features/config/hooks";
+import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
+import { MobileForgotPasswordModal } from "../modals";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
 
-  const [mobileNumber, setMobileNumber] = useState();
-  const [password, setPassword] = useState();
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
 
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (mobileNumber && password)
-      dispatch(
-        signInMobileUser({ mobile_num: mobileNumber, login_password: password })
-      );
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    dispatch(signInMobileUser(formData));
   };
 
   return (
@@ -39,20 +31,9 @@ export function MobileLoginSignIn() {
           <p className="text-white">
             Login with your mobile number and password below.{" "}
           </p>
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <AiFillPhone className="m-3" />
-            <input
-              type="text"
-              name="mobile_num"
-              placeholder="Phone"
-              required
-              value={mobileNumber}
-              onChange={(e: any) => {
-                setMobileNumber(e.target.value);
-              }}
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
-          </div>
+
+          <MobileLoginPhoneInput />
+
           <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
             <MdLockOutline className="m-3" />
             <input
@@ -60,10 +41,6 @@ export function MobileLoginSignIn() {
               name="login_password"
               placeholder="Password"
               required
-              value={password}
-              onChange={(e: any) => {
-                setPassword(e.target.value);
-              }}
               className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
             ></input>
           </div>
@@ -73,7 +50,15 @@ export function MobileLoginSignIn() {
               <input className="mr-2" type="checkbox" />
               Remember Me
             </p>
-            <a href="#"> Forgot Password? </a>
+            <button
+              type="button"
+              onClick={() => {
+                setOpenForgotPassword(true);
+              }}
+            >
+              {" "}
+              Forgot Password?{" "}
+            </button>
           </div>
           <button
             type="submit"
@@ -83,6 +68,13 @@ export function MobileLoginSignIn() {
           </button>
         </form>
       </div>
+
+      <MobileForgotPasswordModal
+        open={openForgotPassword}
+        onClose={() => {
+          setOpenForgotPassword(false);
+        }}
+      />
     </>
   );
 }

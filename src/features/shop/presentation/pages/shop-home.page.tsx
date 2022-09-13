@@ -24,7 +24,7 @@ export function ShopHome() {
   }, [dispatch]);
 
   return (
-    <>
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="sm:hidden"
@@ -74,6 +74,6 @@ export function ShopHome() {
           <ShopStoreListDelivery address={shopHomePageState.address} />
         ) : null}
       </section>
-    </>
+    </main>
   );
 }

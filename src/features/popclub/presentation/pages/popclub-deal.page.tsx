@@ -33,8 +33,15 @@ import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import {
+  FacebookLogoutState,
+  resetFacebookLogout,
+  selectFacebookLogout,
+} from "features/shared/presentation/slices/facebook-logout.slice";
+import { selectGetRedeems } from "../slices/get-redeems.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -57,10 +64,26 @@ export function PopClubDeal() {
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
 
   const location = useLocation();
+  const facebookLogoutState = useAppSelector(selectFacebookLogout);
+  const getRedeemsState = useAppSelector(selectGetRedeems);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (
+      redeemDealState.status === RedeemDealState.success &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.popclub_data.platform === "online-delivery" &&
+      redeemDealState.data
+    ) {
+      navigate("/shop/checkout");
+      dispatch(getSession());
+    }
+
+    dispatch(resetRedeemDeal());
+  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
 
   useEffect(() => {
     if (
@@ -76,9 +99,9 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
-          dispatch(resetGetDealProductVariantsState());
         }
       }
+      dispatch(resetGetDealProductVariantsState());
     }
   }, [getDealProductVariantsState, dispatch, getDealState]);
 
@@ -98,9 +121,18 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
-      dispatch(resetRedeemDeal());
     }
   }, [redeemDealState, dispatch, getDealState]);
+
+  useEffect(() => {
+    if (facebookLogoutState.status === FacebookLogoutState.success) {
+      navigate(
+        `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+      );
+
+      dispatch(resetFacebookLogout());
+    }
+  }, [facebookLogoutState, navigate, dispatch, getSessionState]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -361,7 +393,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back
@@ -380,7 +414,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back
@@ -399,7 +435,9 @@ export function PopClubDeal() {
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
             onClick={() => {
-              navigate(-1);
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
             }}
           >
             Go Back

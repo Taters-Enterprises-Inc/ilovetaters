@@ -42,12 +42,7 @@ import {
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
 import { ProductModel } from "features/shared/core/domain/product.model";
-import {
-  removeItemFromCartCatering,
-  RemoveItemFromCartCateringState,
-  resetRemoveItemFromCartCatering,
-  selectRemoveItemFromCartCatering,
-} from "../slices/remove-item-from-cart-catering.slice";
+import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -296,7 +291,7 @@ export function CateringProduct() {
   };
 
   return (
-    <>
+    <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
@@ -309,8 +304,8 @@ export function CateringProduct() {
         ]}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">
-        <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
-          <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
+        <div className=" lg:space-y-10 lg:container">
+          <div className="bg-secondary pb-20 lg:shadow-lg w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 <Swiper
@@ -572,6 +567,6 @@ export function CateringProduct() {
           setOpenLoginChooserModal(false);
         }}
       />
-    </>
+    </main>
   );
 }

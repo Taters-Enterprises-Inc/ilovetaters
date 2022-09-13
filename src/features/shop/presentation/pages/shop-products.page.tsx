@@ -45,7 +45,7 @@ export function ShopProducts() {
   }, [dispatch, getSessionState]);
 
   return (
-    <>
+    <main className="min-h-screen bg-primary">
       <section className="lg:container">
         <img
           className="sm:hidden"
@@ -59,7 +59,7 @@ export function ShopProducts() {
           className="hidden sm:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/desktop/snackshop_delivered.webp"
+            "api/assets/images/shop/hero/desktop/snackshop_delivered_black.webp"
           }
           alt="The best pop corn in town"
         ></img>
@@ -113,6 +113,6 @@ export function ShopProducts() {
           );
         })}
       </section>
-    </>
+    </main>
   );
 }

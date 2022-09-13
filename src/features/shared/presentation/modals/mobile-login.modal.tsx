@@ -12,6 +12,11 @@ import {
 } from "../slices/sign-in-mobile-user.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession } from "../slices/get-session.slice";
+import {
+  resetSignUpMobileUser,
+  selectSignUpMobileUser,
+  SignUpMobileUserState,
+} from "../slices/sign-up-mobile-user.slice";
 
 interface MobileLoginModalProps {
   open: boolean;
@@ -50,7 +55,16 @@ function TabPanel(props: TabPanelProps) {
 export function MobileLoginModal(props: MobileLoginModalProps) {
   const [value, setValue] = useState(0);
   const signInMobileUserState = useAppSelector(selectSignInMobileUser);
+  const signUpMobileUserState = useAppSelector(selectSignUpMobileUser);
+
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (signUpMobileUserState.status === SignUpMobileUserState.success) {
+      setValue(0);
+      dispatch(resetSignUpMobileUser());
+    }
+  }, [signUpMobileUserState, dispatch, props]);
 
   useEffect(() => {
     if (signInMobileUserState.status === SignInMobileUserState.success) {
