@@ -570,29 +570,6 @@ export function ShopProduct() {
                   <div className="h-[60px] w-full mt-2">
                     <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
-                        // onClick={() => {
-                        //   if (
-                        //     getSessionState.data?.userData == null ||
-                        //     getSessionState.data?.userData === undefined
-                        //   ) {
-                        //     setOpenLoginChooserModal(true);
-                        //     return;
-                        //   }
-
-                        //   if (quantity > 1) {
-                        //     setQuantity(quantity - 1);
-
-                        //     if (
-                        //       getProductDetailsState.data &&
-                        //       getProductDetailsState.data?.product.num_flavor >
-                        //         1
-                        //     ) {
-                        //       setCurrentMultiFlavors(undefined);
-                        //       setTotalMultiFlavorsQuantity(0);
-                        //       setResetMultiFlavors(true);
-                        //     }
-                        //   }
-                        // }}
                         onClick={() =>
                           quantity <= 1 || isQuantityNull.current
                             ? setDisabled
@@ -622,21 +599,6 @@ export function ShopProduct() {
                       <input
                         value={quantity}
                         type="number"
-                        required
-                        //readOnly
-                        // onChange={(event: any) => {
-                        //   if (
-                        //     getSessionState.data?.userData == null ||
-                        //     getSessionState.data?.userData === undefined
-                        //   ) {
-                        //     setOpenLoginChooserModal(true);
-                        //     return;
-                        //   }
-
-                        //   const value = event.target.value;
-                        //   if (value >= 1 && value <= 10)
-                        //     setQuantity(Math.floor(event.target.value));
-                        // }}
                         onChange={(e) => {
                           let value = e.target.value;
                           isQuantityNull.current = false;
@@ -674,18 +636,6 @@ export function ShopProduct() {
                       />
 
                       <button
-                        // onClick={() => {
-                        //   if (
-                        //     getSessionState.data?.userData == null ||
-                        //     getSessionState.data?.userData === undefined
-                        //   ) {
-                        //     setOpenLoginChooserModal(true);
-                        //     return;
-                        //   }
-
-                        //   if (quantity >= 1 && quantity < 10)
-                        //     setQuantity(quantity + 1);
-                        // }}
                         onClick={() =>
                           quantity >= 10 ? setDisabled : handleonClick("add")
                         }
