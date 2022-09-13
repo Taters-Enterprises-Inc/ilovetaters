@@ -33,6 +33,7 @@ import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import {
@@ -40,6 +41,7 @@ import {
   resetFacebookLogout,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
+import { selectGetRedeems } from "../slices/get-redeems.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -63,10 +65,25 @@ export function PopClubDeal() {
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
+  const getRedeemsState = useAppSelector(selectGetRedeems);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
+  useEffect(() => {
+    if (
+      redeemDealState.status === RedeemDealState.success &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.popclub_data.platform === "online-delivery" &&
+      redeemDealState.data
+    ) {
+      navigate("/shop/checkout");
+      dispatch(getSession());
+    }
+
+    dispatch(resetRedeemDeal());
+  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
 
   useEffect(() => {
     if (
@@ -82,9 +99,9 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
-          dispatch(resetGetDealProductVariantsState());
         }
       }
+      dispatch(resetGetDealProductVariantsState());
     }
   }, [getDealProductVariantsState, dispatch, getDealState]);
 
@@ -104,7 +121,6 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
-      dispatch(resetRedeemDeal());
     }
   }, [redeemDealState, dispatch, getDealState]);
 

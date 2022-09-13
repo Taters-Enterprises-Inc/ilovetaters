@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   Column,
   Row,
@@ -7,30 +6,36 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { UserBtn } from "../components/create-user-btn";
+import { GrpBtn } from "../components/create-grp-btn";
 
 const columns: Array<Column> = [
+  { id: "firstname", label: "First Name" },
+  { id: "lastname", label: "Last Name" },
+  { id: "email", label: "Email Address" },
+  { id: "groups", label: "Groups" },
   { id: "status", label: "Status" },
-  { id: "date", label: "Order Date" },
-  { id: "event", label: "Event Date" },
-  { id: "tracker", label: "Tracking No." },
-  { id: "name", label: "Client Name" },
-  { id: "amount", label: "Amount" },
-  { id: "hub", label: "Hub" },
-  { id: "mop", label: "Mode of Payment" },
   { id: "action", label: "Action" },
+  { id: "store", label: "Store" },
 ];
 
 const rows: Array<Row> = [];
 
-export function AdminCatering() {
-  const dispatch = useAppDispatch();
-
+export function AdminSettingUserTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-primary">
+    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
-          <h1 className="pt-4 lg:-ml-12">List of Catering Orders</h1>
+          <div className="flex justify-between">
+            <h1 className="pt-4 lg:-ml-12 text-secondary">
+              Below is a list of the users
+            </h1>
+            <div className="flex lg:-mr-12">
+              <UserBtn />
+              <GrpBtn />
+            </div>
+          </div>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
             <DataTable

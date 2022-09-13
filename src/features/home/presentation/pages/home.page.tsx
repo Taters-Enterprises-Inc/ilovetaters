@@ -10,9 +10,18 @@ import {
   SERVICES_MOBILE,
 } from "features/shared/constants";
 import { Link, useLocation } from "react-router-dom";
+import { useAppDispatch } from "features/config/hooks";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function Home() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -56,7 +65,7 @@ export function Home() {
       <img
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp"
+          "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.webp"
         }
         className="hidden w-full lg:block"
         alt="The best pop corn in town"

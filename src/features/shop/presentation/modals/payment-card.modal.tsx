@@ -27,10 +27,10 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
           <IoMdClose />
         </button>
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="space-y-2">
+          <div className="flex flex-col space-y-3 lg:items-center lg:justify-between lg:flex-row lg:space-y-0">
             <h1 className="text-2xl font-bold">Card Details</h1>
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center justify-end space-x-2">
               <img
                 className="w-[30px] h-[24px]"
                 src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/visa.png`}
@@ -50,7 +50,7 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
             </div>
           </div>
           <TextField variant="outlined" label="Card Name" fullWidth />
-          <div className="flex space-x-4">
+          <div className="flex space-x-2">
             <TextField
               variant="outlined"
               label="Expiry Date (MM/YY)"
@@ -60,8 +60,20 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
           </div>
           <TextField variant="outlined" label="Name on Card" fullWidth />
           <div className="flex items-center justify-end space-x-4">
-            <button className="font-bold">Cancel</button>
-            <button className="px-4 py-1 text-white rounded-full bg-button">
+            <button
+              className="font-bold"
+              onClick={() => {
+                props.onClose();
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                props.onClose();
+              }}
+              className="px-4 py-1 text-white rounded-full bg-button"
+            >
               Submit
             </button>
           </div>
