@@ -211,7 +211,7 @@ export function ShopProduct() {
           clearInterval(quantityId);
           setQuantity(1);
         }
-      }, 500);
+      }, 100);
 
       isLongPress.current = true;
     }, 500);
