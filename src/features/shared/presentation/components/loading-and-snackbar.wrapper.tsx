@@ -63,10 +63,24 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "features/catering/presentation/slices/add-to-cart-catering.slice";
+import {
+  selectUploadContract,
+  UploadContractState,
+} from "features/catering/presentation/slices/upload-contract.slice";
+import {
+  CateringUploadProofOfPaymentState,
+  selectCateringUploadProofOfPayment,
+} from "features/catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import { BackdropLoadingPopClub } from "features/popclub/presentation/components";
+
+
+
 import { selectEditCartItem   ,EditCartItemState} from "features/shop/presentation/slices/edit-cart-item.slice";
 
 export function LoadingAndSnackbarWrapper() {
-  const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
+  const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
+  const [openBackdropPopClubLoading, setOpenBackdropPopClubLoading] =
+    useState(false);
   const [successAlert, setSuccessAlert] = useState<{
     status: boolean;
     message?: string;
@@ -105,6 +119,8 @@ export function LoadingAndSnackbarWrapper() {
   const popSnackBarState = useAppSelector(selectPopSnackBar);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
   const editCartProduct = useAppSelector(selectEditCartItem);
+    const uploadContractState= useAppSelector(selectUploadContract)
+const cateringUploadProofOfPaymentState = useAppSelector(selectCateringUploadProofOfPayment)
 
   useEffect(() => {
     switch (popSnackBarState.status) {
@@ -215,6 +231,25 @@ export function LoadingAndSnackbarWrapper() {
   }, [addContactState, dispatch]);
 
   useEffect(() => {
+    switch (cateringUploadProofOfPaymentState.status) {
+      case CateringUploadProofOfPaymentState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CateringUploadProofOfPaymentState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CateringUploadProofOfPaymentState.success:
+        showAlert(setSuccessAlert, cateringUploadProofOfPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CateringUploadProofOfPaymentState.fail:
+        showAlert(setFailsAlert, cateringUploadProofOfPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [cateringUploadProofOfPaymentState, dispatch]);
+
+  useEffect(() => {
     switch (uploadProofOfPaymentState.status) {
       case UploadProofOfPaymentState.inProgress:
         setOpenBackdropLoading(true);
@@ -232,6 +267,25 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [uploadProofOfPaymentState, dispatch]);
+
+  useEffect(() => {
+    switch (uploadContractState.status) {
+      case UploadContractState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadContractState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.success:
+        showAlert(setSuccessAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.fail:
+        showAlert(setFailsAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadContractState, dispatch]);
 
   useEffect(() => {
     switch (removeItemFromCartShopState.status) {
@@ -394,7 +448,7 @@ export function LoadingAndSnackbarWrapper() {
 
   useEffect(() => {
     switch (editCartProduct.status) {
-      case EditCartItemState  .inProgress:
+      case EditCartItemState.inProgress:
         setOpenBackdropLoading(true);
         break;
       case EditCartItemState.initial:
@@ -425,6 +479,7 @@ export function LoadingAndSnackbarWrapper() {
         message={failsAlert.message}
       />
       <BackdropLoading open={openBackdropLoading} />
+      <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
     </div>
   );
 }

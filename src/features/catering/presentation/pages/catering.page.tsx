@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 export function Catering() {
   return (
-    <main className="min-h-screen bg-primary">
+    <>
       <Helmet>
         <title>Taters | Catering</title>
       </Helmet>
@@ -17,13 +17,13 @@ export function Catering() {
             REACT_APP_DOMAIN_URL +
             "api/assets/images/shared/logo/taters-catering-logo.webp",
           alt: "Taters Logo",
-          className: "w-[80px] lg:w-[140px]",
+          className: "w-[80px] lg:w-[90px]",
         }}
       />
 
       <Outlet />
 
       <FooterNav activeUrl="CATERING" />
-    </main>
+    </>
   );
 }

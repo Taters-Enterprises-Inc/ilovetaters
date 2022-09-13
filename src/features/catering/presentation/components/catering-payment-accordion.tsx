@@ -37,10 +37,10 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     {...props}
   />
 ))(({ theme }) => ({
-  backgroundColor: "#a21013",
-  borderBottom: "1px solid white",
+  backgroundColor: "transparent",
+  borderBottom: "1px solid #22201A",
   padding: 0,
-  color: "white",
+  color: "#22201A",
   flexDirection: "row-reverse",
   "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
     transform: "rotate(90deg)",
@@ -52,8 +52,8 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
-  backgroundColor: "#a21013",
-  color: "white",
+  backgroundColor: "transparent",
+  color: "#22201A",
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
@@ -69,19 +69,24 @@ export function CateringPaymentAccordion() {
     <FormControl className="w-full">
       <RadioGroup aria-labelledby="payops aria label" name="payops">
         {getSessionState.data?.payops_list.map((payops, i) => (
-          <Accordion key={i}>
+          <Accordion key={i} defaultExpanded={true}>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
+              expandIcon={<ExpandMoreIcon className="text-secondary" />}
             >
               <div className="flex items-center justify-start flex-1 space-x-4">
-                <AiFillCreditCard className="text-2xl text-tertiary" />{" "}
-                <span>Pay with {payops.name}</span>
+                <AiFillCreditCard className="text-2xl text-primary" />{" "}
+                <span>
+                  Pay with{" "}
+                  {payops.name === "CASH"
+                    ? payops.name + " (visit to store)"
+                    : payops.name}
+                </span>
               </div>
             </AccordionSummary>
             <AccordionDetails>
               <FormControlLabel
                 value={payops.id}
-                control={<Radio color="tertiary" required />}
+                control={<Radio color="primary" required />}
                 label={payops.name}
               />
               <ul>

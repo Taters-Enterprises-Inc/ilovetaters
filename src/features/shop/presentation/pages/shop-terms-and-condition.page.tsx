@@ -1,18 +1,26 @@
 import { SNACKSHOP_TERMS_AND_CONDITIONS_TABS } from "features/shared/constants";
 import { Tab } from "features/shared/presentation/components";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export function ShopTermsAndConditions() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
+
   return (
     <section className="container py-6">
       <Tab
         tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
         activeTab="terms-and-conditions"
       >
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
           Taters Snack Shop (Terms and Conditions)
         </h1>
-        <hr className="mt-2 mb-4" />
-        <div className="space-y-4 text-white">
+        <hr className="mt-2 mb-4 border-secondary" />
+        <div className="space-y-4 text-secondary">
           <p>1. Customers can order through www.ilovetaters.com/shop.</p>
           <p>
             2. Delivery and/or pick up of items is from Mondays to Saturdays

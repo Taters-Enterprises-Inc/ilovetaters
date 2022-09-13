@@ -67,8 +67,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
       getEditCartProduct.data &&
       (currentFlavor === undefined || currentSize === undefined)
     ) {
-      setCurrentFlavor(getEditCartProduct.data.cart_item.prod_flavor_id);
-      setCurrentSize(getEditCartProduct.data.cart_item.prod_size_id);
+      setCurrentFlavor(getEditCartProduct.data.cart_item?.prod_flavor_id);
+      setCurrentSize(getEditCartProduct.data.cart_item?.prod_size_id);
     }
   }, [getEditCartProduct, currentFlavor, currentSize]);
 
@@ -139,13 +139,13 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         total_amount:
           getEditCartProduct.data?.product.price &&
           getEditCartProduct.data?.product.price * quantity,
-        prod_multiflavors: toString_prod_multiflavors,
+          prod_multiflavors: toString_prod_multiflavors,
       })
     );
   };
 
   return (
-    <>
+    <section className="bg-secondary text-white">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
@@ -157,11 +157,10 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           { name: getEditCartProduct.data?.product.name, url: "" },
         ]}
       />
-
-      <section className="min-h-screen lg:space-x-4 pb-36">
-        <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
-          <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
-            <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
+      <section  className="  min-h-screen lg:space-x-4 pb-36 ">
+        <div className="lg:space-y-10 lg:container">
+          <div className="bg-secondary  pb-20 w-full lg:rounded-[30px] space-y-10">
+            <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0" >
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 <Swiper
                   slidesPerView={"auto"}
@@ -384,7 +383,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           setOpenLoginChooserModal(false);
         }}
       />
-    </>
+    </section>
   );
 };
 
@@ -511,6 +510,7 @@ const RadioSizeComponent: React.FC<{
               <Radio
                 id={size.id.toString()}
                 color="tertiary"
+                sx={{color:"white"}}
                 checked={
                   currentSize === -1 && i === 0 ? true : size.id === currentSize
                 }
@@ -530,3 +530,4 @@ const RadioSizeComponent: React.FC<{
     </>
   );
 };
+

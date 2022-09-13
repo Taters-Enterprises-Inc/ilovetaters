@@ -9,10 +9,14 @@ import {
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  selectShopHomePage,
+  setAddressShopHomePage,
+} from "../slices/shop-home-page.slice";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = useState<any>("");
+  const shopHomePageState = useAppSelector(selectShopHomePage);
 
   useEffect(() => {
     dispatch(getSession());
@@ -20,23 +24,25 @@ export function ShopHome() {
   }, [dispatch]);
 
   return (
-    <>
-      <img
-        className="sm:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
+    <main className="min-h-screen bg-primary">
+      <section className="lg:container">
+        <img
+          className="sm:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden sm:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
 
       <section className="container pb-64">
         <h1 className='text-white text-sm lg:text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
@@ -46,17 +52,28 @@ export function ShopHome() {
         <div className="flex justify-center">
           <label className="pure-material-textfield-outlined w-[100%] mb-4">
             <SearchAddress
+              value={shopHomePageState.address ? shopHomePageState.address : ""}
+              onChange={(value: string) => {
+                dispatch(setAddressShopHomePage({ address: value }));
+              }}
               onPlaceSelected={(place: string) => {
-                setAddress(place);
-                dispatch(getStoresAvailableSnackshop({ address: place }));
+                dispatch(setAddressShopHomePage({ address: place }));
+                dispatch(
+                  getStoresAvailableSnackshop({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
               }}
             />
             <span>Search Address</span>
           </label>
         </div>
 
-        <ShopStoreListDelivery address={address} />
+        {shopHomePageState.address ? (
+          <ShopStoreListDelivery address={shopHomePageState.address} />
+        ) : null}
       </section>
-    </>
+    </main>
   );
 }

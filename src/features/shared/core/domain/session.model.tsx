@@ -21,6 +21,9 @@ export interface SessionModel {
     gender: string;
     picture: string;
     link: string;
+    login_type: "mobile" | "facebook";
+    mobile_user_id: number;
+    mobile_number: string;
   };
 
   popclub_data: {
@@ -50,7 +53,16 @@ export interface SessionModel {
     free_threshold?: number;
   }>;
 
-  deals: any;
+  deals?: Array<{
+    deal_id: number;
+    deal_image_name: string;
+    deal_name: string;
+    description: string;
+    deal_qty: number;
+    deal_original_price: number;
+    deal_promo_price: number;
+    deal_remarks: string;
+  }>;
 
   km_radius: string;
   km_min: string;
@@ -62,6 +74,8 @@ export interface SessionModel {
   catering_minimum_rate: string;
   catering_start_date: string;
   catering_end_date: string;
+  catering_night_differential_fee: number;
+  catering_succeeding_hour_charge: number;
   distance: number;
   distance_rate_id: number;
   distance_rate_price: number;

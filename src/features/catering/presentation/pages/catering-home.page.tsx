@@ -9,36 +9,62 @@ import { useEffect, useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import TextField from "@mui/material/TextField";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FaSearchLocation } from "react-icons/fa";
 import {
   selectSetStoreAndAddress,
   setStoreAndAddress,
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
+import {
+  selectCateringHomePage,
+  setEventEndDateCateringHomePage,
+  setEventStartDateCateringHomePage,
+  setAddressCateringHomePage,
+} from "../slices/catering-home-page.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { styled } from "@mui/material/styles";
+
+const DateTimeTextField = styled((props: TextFieldProps) => (
+  <TextField {...props} />
+))(({ theme }) => ({
+  "& input": {
+    color: "white !important",
+    "-webkit-text-fill-color": "white !important",
+  },
+  "& label": {
+    color: "white !important",
+  },
+  "& fieldset": {
+    borderColor: "white !important",
+  },
+  "&:hover fieldset": {
+    borderColor: "white !important",
+  },
+  "&.Mui-focused fieldset": {
+    borderColor: "white !important",
+  },
+}));
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = useState<any>("");
+  const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
-  const getSessionState = useAppSelector(selectGetSession);
-
-  const [eventStartDate, setEventStartDate] = useState<Date>(
-    moment().add(14, "days").toDate()
-  );
-  const [eventEndDate, setEventEndDate] = useState<Date>(
-    moment().add(14, "days").add(3, "hours").toDate()
-  );
 
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
@@ -52,35 +78,30 @@ export function CateringHome() {
     dispatch(storeReset());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [dispatch, getSessionState]);
-
   function disableDates(date: Date) {
     return moment(date) <= moment().add(13, "days");
   }
 
   return (
-    <>
-      <img
-        className="lg:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-
+    <main className="min-h-screen bg-primary">
+      <section className="lg:container">
+        <img
+          className="lg:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+      </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
           Thank you for considering Taters for your celebration. Kindly key in
@@ -91,8 +112,16 @@ export function CateringHome() {
           <div className="flex justify-center">
             <label className="pure-material-textfield-outlined w-[100%]">
               <SearchAddress
+                value={
+                  cateringHomePageState.address
+                    ? cateringHomePageState.address
+                    : ""
+                }
+                onChange={(value: string) => {
+                  dispatch(setAddressCateringHomePage({ address: value }));
+                }}
                 onPlaceSelected={(place: string) => {
-                  setAddress(place);
+                  dispatch(setAddressCateringHomePage({ address: place }));
                 }}
               />
               <span>Search Address</span>
@@ -108,24 +137,34 @@ export function CateringHome() {
                 onOpen={() => setOpenStartEventCalendar(true)}
                 onClose={() => setOpenStartEventCalendar(false)}
                 renderInput={(params) => (
-                  <TextField
+                  <DateTimeTextField
                     {...params}
                     sx={{
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
+                      borderColor: "white !important",
                     }}
+                    autoComplete="off"
                     onClick={() => {
                       setOpenStartEventCalendar(true);
                     }}
                     className="w-full lg:w-fit"
                   />
                 )}
-                value={eventStartDate}
+                value={cateringHomePageState.eventStartDate}
                 onChange={(newValue) => {
                   if (newValue) {
-                    setEventStartDate(newValue);
-                    setEventEndDate(moment(newValue).add(3, "hours").toDate());
+                    dispatch(
+                      setEventStartDateCateringHomePage({
+                        eventStartDate: newValue,
+                      })
+                    );
+                    dispatch(
+                      setEventEndDateCateringHomePage({
+                        eventEndDate: moment(newValue).add(3, "hours").toDate(),
+                      })
+                    );
                   }
                 }}
               />
@@ -137,23 +176,29 @@ export function CateringHome() {
                 onOpen={() => setOpenEndEventCalendar(true)}
                 onClose={() => setOpenEndEventCalendar(false)}
                 renderInput={(params) => (
-                  <TextField
+                  <DateTimeTextField
                     {...params}
-                    disabled={true}
                     sx={{
                       svg: { color: "white" },
                       input: { color: "white" },
                       label: { color: "white" },
                     }}
+                    autoComplete="off"
                     className="w-full lg:w-fit"
                     onClick={() => {
                       setOpenEndEventCalendar(true);
                     }}
                   />
                 )}
-                value={eventEndDate}
+                value={cateringHomePageState.eventEndDate}
                 onChange={(newValue) => {
-                  if (newValue) setEventEndDate(newValue);
+                  if (newValue) {
+                    dispatch(
+                      setEventEndDateCateringHomePage({
+                        eventEndDate: newValue,
+                      })
+                    );
+                  }
                 }}
               />
             </div>
@@ -161,32 +206,74 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              dispatch(getStoresAvailableCatering({ address }));
+              if (cateringHomePageState.address === null) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please input an address",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              if (cateringHomePageState.eventStartDate === null) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please select a event end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              if (cateringHomePageState.eventEndDate === null) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please select a event end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              dispatch(
+                getStoresAvailableCatering({
+                  address: cateringHomePageState.address,
+                  service: "CATERING",
+                })
+              );
             }}
-            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white bg-button rounded-xl"
+            className="flex items-center justify-center px-4 py-2 space-x-2 text-lg font-bold text-white border border-white bg-button rounded-xl"
           >
             <FaSearchLocation />
             <span>Check Availability</span>
           </button>
 
-          <CateringStoreList
-            onClickStore={(storeId: number, regionId: number) => {
-              console.log(eventEndDate, eventStartDate);
-
-              dispatch(
-                setStoreAndAddress({
-                  address,
-                  storeId,
-                  regionId,
-                  cateringEndDate: eventEndDate,
-                  cateringStartDate: eventStartDate,
-                })
-              );
-            }}
-            address={address}
-          />
+          {cateringHomePageState.address ? (
+            <CateringStoreList
+              onClickStore={(storeId: number, regionId: number) => {
+                if (
+                  cateringHomePageState &&
+                  cateringHomePageState.address &&
+                  cateringHomePageState.eventStartDate &&
+                  cateringHomePageState.eventEndDate
+                )
+                  dispatch(
+                    setStoreAndAddress({
+                      address: cateringHomePageState.address,
+                      storeId,
+                      regionId,
+                      cateringEndDate: cateringHomePageState.eventEndDate,
+                      cateringStartDate: cateringHomePageState.eventStartDate,
+                      service: "CATERING",
+                    })
+                  );
+              }}
+              address={cateringHomePageState.address}
+            />
+          ) : null}
         </div>
       </section>
-    </>
+    </main>
   );
 }

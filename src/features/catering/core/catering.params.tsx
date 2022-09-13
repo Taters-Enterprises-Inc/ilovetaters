@@ -23,3 +23,23 @@ export interface GetCateringProductDetailsParam {
 export interface GetCategoryProductsParam {
   region_id: number;
 }
+
+export interface CateringCheckoutOrdersParam {
+  firstName: string;
+  lastName: string;
+  eMail: string;
+  phoneNumber: string;
+  payops: string;
+  address: string;
+}
+
+export interface GetCateringOrdersParam {
+  hash: string;
+}
+
+export interface UploadContractParam {
+  formData: FormData;
+}
+export interface CateringUploadProofOfPaymentParam {
+  formData: FormData;
+}

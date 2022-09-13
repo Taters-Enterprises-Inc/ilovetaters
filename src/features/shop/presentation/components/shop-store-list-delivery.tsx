@@ -35,6 +35,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
         address: props.address,
         storeId,
         regionId,
+        service: "SNACKSHOP",
       })
     );
   };

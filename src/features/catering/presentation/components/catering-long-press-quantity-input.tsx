@@ -1,3 +1,8 @@
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { useState } from "react";
+import { useAppSelector } from "features/config/hooks";
+
 interface LongPressQuantityInputProps {
   min: number;
   max?: number;
@@ -13,7 +18,18 @@ let interval: any;
 export function CateringLongPressQuantityInput(
   props: LongPressQuantityInputProps
 ) {
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const getSessionState = useAppSelector(selectGetSession);
+
   const quantityOnPressed = (action: "plus" | "minus", isTouch = false) => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
     if (isTouch === false) props.onChange(action);
 
     timeout = setTimeout(function () {
@@ -46,45 +62,56 @@ export function CateringLongPressQuantityInput(
   };
 
   return (
-    <div className="w-full sm:w-[200px] h-12">
-      <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-        <button
-          onMouseDown={() => quantityOnPressed("minus")}
-          onMouseUp={quantityOffPressed}
-          onTouchStart={() => quantityOnPressed("minus", true)}
-          onTouchEnd={quantityOffPressed}
-          className={`w-[150px] h-full rounded-l outline-none cursor-pointer bg-primary ${
-            props.quantity === props.min ? "opacity-30 cursor-not-allowed" : ""
-          }`}
-        >
-          <span className="m-auto text-2xl font-thin leading-3">−</span>
-        </button>
+    <>
+      <div className="w-full sm:w-[200px] h-12">
+        <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
+          <button
+            onMouseDown={() => quantityOnPressed("minus")}
+            onMouseUp={quantityOffPressed}
+            onTouchStart={() => quantityOnPressed("minus", true)}
+            onTouchEnd={quantityOffPressed}
+            className={`w-[150px] h-full rounded-l outline-none cursor-pointer bg-primary ${
+              props.quantity === props.min
+                ? "opacity-30 cursor-not-allowed"
+                : ""
+            }`}
+          >
+            <span className="m-auto text-2xl font-thin leading-3">−</span>
+          </button>
 
-        <input
-          value={props.quantity}
-          readOnly
-          type="number"
-          className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-        />
+          <input
+            value={props.quantity}
+            readOnly
+            type="number"
+            className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+          />
 
-        <button
-          onMouseDown={() => quantityOnPressed("plus")}
-          onMouseUp={quantityOffPressed}
-          onTouchStart={() => quantityOnPressed("plus", true)}
-          onTouchEnd={quantityOffPressed}
-          className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-            (props.quantity === props.max) === true
-              ? "opacity-30 cursor-not-allowed"
-              : ""
-          } ${
-            props.productQuantity - props.totalMultiFlavorsQuantity <= 0
-              ? "opacity-30 cursor-not-allowed"
-              : ""
-          }`}
-        >
-          <span className="m-auto text-2xl font-thin leading-3">+</span>
-        </button>
+          <button
+            onMouseDown={() => quantityOnPressed("plus")}
+            onMouseUp={quantityOffPressed}
+            onTouchStart={() => quantityOnPressed("plus", true)}
+            onTouchEnd={quantityOffPressed}
+            className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+              (props.quantity === props.max) === true
+                ? "opacity-30 cursor-not-allowed"
+                : ""
+            } ${
+              props.productQuantity - props.totalMultiFlavorsQuantity <= 0
+                ? "opacity-30 cursor-not-allowed"
+                : ""
+            }`}
+          >
+            <span className="m-auto text-2xl font-thin leading-3">+</span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      <LoginChooserModal
+        open={openLoginChooserModal}
+        onClose={() => {
+          setOpenLoginChooserModal(false);
+        }}
+      />
+    </>
   );
 }

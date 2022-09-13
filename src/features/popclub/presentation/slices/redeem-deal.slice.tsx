@@ -52,8 +52,6 @@ export const redeemDealSlice = createSlice({
         ) => {
           const data = action.payload.data;
 
-          console.log(action.payload.message);
-
           state.data = data;
           state.status = RedeemDealState.success;
         }

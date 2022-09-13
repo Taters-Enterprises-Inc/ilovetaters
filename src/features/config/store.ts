@@ -46,10 +46,29 @@ import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores
 
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
-import editCartItem  from "features/shop/presentation/slices/edit-cart-item.slice";
+import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
 import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
+import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
+
+import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
+import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
+import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
+import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
+import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
+import uploadContract from "../catering/presentation/slices/upload-contract.slice";
+
+import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
+
+import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
+import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
+import signUpMobileUser from "../shared/presentation/slices/sign-up-mobile-user.slice";
+import changeForgotPasswordStatus from "../shared/presentation/slices/change-forgot-password-status.slice";
+import forgotPasswordGenerateOTP from "../shared/presentation/slices/forgot-password-generate-otp.slice";
+import forgotPasswordValidateOTP from "../shared/presentation/slices/forgot-password-validate-otp.slice";
+import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-password-new-password-otp.slice";
 
 export const store = configureStore({
   reducer: {
@@ -79,9 +98,10 @@ export const store = configureStore({
 
     getCategoryProducts: getCategoryProducts,
     getProductDetails: getProductDetails,
-    getCartItem:getCartItem,
-    editCartItem:editCartItem,
+    getCartItem: getCartItem,
+    editCartItem: editCartItem,
     addToCartShop: addToCartShop,
+    addToCartCheckoutShop: addToCartCheckoutShop,
 
     getBranchesStore: getBranchesStore,
     checkoutOrders: checkoutOrders,
@@ -102,11 +122,30 @@ export const store = configureStore({
     updateContact: updateContact,
     deleteContact: deleteContact,
     getContacts: getContacts,
-    
+
     getCateringProductDetails: getCateringProductDetails,
     addToCartCatering: addToCartCatering,
     removeItemFromCartCatering: removeItemFromCartCatering,
     popSnackBar: popSnackBar,
+    cateringCheckoutOrders: cateringCheckoutOrders,
+
+    cateringHomePage: cateringHomePage,
+    shopHomePage: shopHomePage,
+    branchesNearYouComponent: branchesNearYouComponent,
+    storeChooserModal: storeChooserModal,
+    getCateringOrders: getCateringOrders,
+
+    uploadContract: uploadContract,
+    cateringUploadProofOfPayment: cateringUploadProofOfPayment,
+    signInMobileUser: signInMobileUser,
+
+    setStoreAndAddressPopClub: setStoreAndAddressPopClub,
+    signUpMobileUser: signUpMobileUser,
+    changeForgotPasswordStatus: changeForgotPasswordStatus,
+
+    forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
+    forgotPasswordValidateOTP: forgotPasswordValidateOTP,
+    forgotPasswordNewPassword: forgotPasswordNewPassword,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
