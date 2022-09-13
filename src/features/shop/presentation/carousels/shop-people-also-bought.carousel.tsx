@@ -42,7 +42,7 @@ export function ShopPeopleAlsoBoughtCarousel(
     >
       {_4x2.map((chunk, i) => {
         return (
-          <SwiperSlide key={i} className={`hidden xl:block pb-2`}>
+          <SwiperSlide key={i} className={`hidden xl:block pb-[1.25%]`}>
             <div className="grid grid-cols-4 gap-4">
               {chunk.map((product, i) => (
                 <button
@@ -83,7 +83,7 @@ export function ShopPeopleAlsoBoughtCarousel(
         return (
           <SwiperSlide
             key={i}
-            className={`hidden sm:block xl:hidden pb-2 lg:px-0`}
+            className={`hidden sm:block xl:hidden lg:px-0 pb-[1.5%]`}
           >
             <div className="grid grid-cols-3 gap-4">
               {chunk.map((product, i) => (
@@ -118,7 +118,7 @@ export function ShopPeopleAlsoBoughtCarousel(
       })}
       {_2x2.map((chunk, i) => {
         return (
-          <SwiperSlide key={i} className={`sm:hidden pb-2`}>
+          <SwiperSlide key={i} className={`sm:hidden pb-[1.5%]`}>
             <div className="grid grid-cols-2 gap-4">
               {chunk.map((product, i) => (
                 <Link
