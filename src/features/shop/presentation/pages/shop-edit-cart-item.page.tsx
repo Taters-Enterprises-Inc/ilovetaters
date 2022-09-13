@@ -5,7 +5,7 @@ import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { getCartItem, selectGetCartItem } from "../slices/get-cart-item.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {Addon} from 'features/shared/presentation/components/'
+import { Addon } from "features/shared/presentation/components/";
 import { MdFastfood } from "react-icons/md";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -22,7 +22,6 @@ import {
   editCartItem,
   selectEditCartItem,
 } from "../slices/edit-cart-item.slice";
-
 
 export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [flavorName, setFlavorName] = useState<string>("");
@@ -49,11 +48,9 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
-
-
   useEffect(() => {
     dispatch(getCartItem(cart_id));
-  }, [ dispatch]);
+  }, [dispatch]);
 
   const handleSizeAndFlavorChange = (size: number, flavor: number) => {
     if (getEditCartProduct.data) {
@@ -69,8 +66,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
             ? getEditCartProduct.data.product_size[0].id
             : -1
           : size;
-
-      
 
       dispatch(
         getProductSku({
@@ -90,7 +85,9 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         currentSize,
         sizeName,
         flavorName,
-        total_amount: getEditCartProduct.data?.product.price  && getEditCartProduct.data?.product.price * quantity
+        total_amount:
+          getEditCartProduct.data?.product.price &&
+          getEditCartProduct.data?.product.price * quantity,
       })
     );
   };
@@ -388,14 +385,14 @@ const RadioSizeComponent: React.FC<{
   currentSize: number;
   setCurrentSize: React.Dispatch<React.SetStateAction<number>>;
   handleSizeAndFlavorChange: (size: number, flavor: number) => void;
-  SizeCallBack:any
+  SizeCallBack: any;
 }> = ({
   getEditCartProduct,
   currentSize,
   handleSizeAndFlavorChange,
   setCurrentSize,
   currentFlavor,
-  SizeCallBack
+  SizeCallBack,
 }): JSX.Element => {
   return (
     <>
@@ -410,7 +407,7 @@ const RadioSizeComponent: React.FC<{
                   currentSize === -1 && i === 0 ? true : size.id === currentSize
                 }
                 onChange={() => {
-                  SizeCallBack(size.name)
+                  SizeCallBack(size.name);
                   setCurrentSize(size.id);
                   handleSizeAndFlavorChange(size.id, currentFlavor);
                 }}
@@ -428,4 +425,3 @@ const RadioSizeComponent: React.FC<{
 function getSession(): any {
   throw new Error("Function not implemented.");
 }
-
