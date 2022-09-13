@@ -67,6 +67,7 @@ import {
 import { NearyouComponent } from "features/branches/presentation/component/near-you-component";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
 import { Reports } from "features/admin/presentation/pages/admin-reports-page";
+import { OrderModal } from "features/admin/presentation/modals/orders-modal";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -198,6 +199,7 @@ root.render(
                   element={<Stores />}
                 ></Route>
                 <Route path="admin/faqs" element={<Faqs />}></Route>
+                <Route path="orders/modal" element={<OrderModal />}></Route>
               </Route>
             </Route>
           </Routes>
