@@ -19,6 +19,10 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useNavigate } from "react-router-dom";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 interface VariantChooserModalProps {
   open: boolean;
   onClose: () => void;
@@ -122,6 +126,43 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     setOptionsSelected(data);
   };
 
+  useEffect(() => {
+    if (getDealProductVariantsState.data) {
+      const data: any = optionsSelected;
+
+      for (let i = 0; i < getDealProductVariantsState.data.length; i++) {
+        const dealProductVariant: DealProductVariantsModel =
+          getDealProductVariantsState.data[i];
+        if (dealProductVariant) {
+          const productVariants = dealProductVariant.product_variants;
+          for (let x = 0; x < productVariants.length; x++) {
+            const productVariant = productVariants[x];
+            const firstOption = productVariants[x].options[0];
+
+            const name = dealProductVariant.option_id + "_" + productVariant.id;
+
+            const optionName = firstOption.name;
+            const productName = dealProductVariant.product.name;
+            const quantity = dealProductVariant.quantity;
+
+            data[name] =
+              "<strong>" +
+              quantity +
+              "</strong> - " +
+              productName +
+              " (" +
+              optionName +
+              ")<br/>";
+          }
+        }
+      }
+
+      if (data) {
+        setOptionsSelected(data);
+      }
+    }
+  }, []);
+
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
@@ -137,7 +178,12 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         <form onSubmit={onSubmit}>
           {getDealProductVariantsState.data?.map((dealProductVariant, i) => {
             return (
-              <div key={i} className="pb-4">
+              <div
+                key={i}
+                className={`${
+                  dealProductVariant.product_variants.length > 0 ? "pb-4" : ""
+                }`}
+              >
                 <h1 className="text-lg font-bold">
                   {dealProductVariant.quantity}{" "}
                   {dealProductVariant.product.name}
@@ -145,52 +191,45 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
                 {dealProductVariant.product_variants.map(
                   (productVariant, i) => (
                     <div key={i}>
-                      <h2 className="text-base uppercase">
-                        PICK A {productVariant.name}
-                      </h2>
-                      <ul className="w-full mt-2 text-sm font-medium text-white border border-gray-200 rounded-lg bg-secondary 0 dark:border-gray-600 dark:text-white">
-                        {productVariant.options.map((option, i) => (
-                          <li
-                            key={i}
-                            className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
-                          >
-                            <div className="flex items-center pl-3">
-                              <input
-                                onChange={(e) =>
-                                  handleFormChange(e, dealProductVariant)
-                                }
-                                id={
-                                  dealProductVariant.option_id +
-                                  "_" +
-                                  productVariant.id +
-                                  "_" +
-                                  option.id
-                                }
-                                type="radio"
-                                value={option.name}
-                                name={
-                                  dealProductVariant.option_id +
-                                  "_" +
-                                  productVariant.id
-                                }
-                                className="w-4 h-4 text-blue-600 border-gray-300 bg-secondary focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                              />
-                              <label
-                                htmlFor={
-                                  dealProductVariant.option_id +
-                                  "_" +
-                                  productVariant.id +
-                                  "_" +
-                                  option.id
-                                }
-                                className="py-3 ml-2 w-full text-sm font-medium !text-white"
-                              >
-                                {option.name}
-                              </label>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                      <FormControl>
+                        <RadioGroup
+                          name={
+                            dealProductVariant.option_id +
+                            "_" +
+                            productVariant.id
+                          }
+                          onChange={(e) =>
+                            handleFormChange(e, dealProductVariant)
+                          }
+                          value={productVariant.options[0].name}
+                        >
+                          <h2 className="text-base uppercase">
+                            PICK A {productVariant.name}
+                          </h2>
+                          <ul className="w-full mt-2 text-sm font-medium text-white rounded-lg bg-secondary">
+                            {productVariant.options.map((option, i) => (
+                              <li key={i} className="w-full ">
+                                <div className="flex items-center pl-3">
+                                  <FormControlLabel
+                                    value={option.name}
+                                    control={
+                                      <Radio
+                                        color="tertiary"
+                                        sx={{ color: "white" }}
+                                      />
+                                    }
+                                    label={
+                                      <span className="py-3 ml-2 w-full text-sm font-medium !text-white">
+                                        {option.name}
+                                      </span>
+                                    }
+                                  />
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </RadioGroup>
+                      </FormControl>
                     </div>
                   )
                 )}
@@ -200,7 +239,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
 
           <button
             type="submit"
-            className="bg-button border border-white w-full py-2 rounded-md font-['Bebas_Neue'] tracking-widest"
+            className="bg-button border mt-8 border-white w-full py-2 rounded-md font-['Bebas_Neue'] tracking-widest"
           >
             Redeem Deal
           </button>
