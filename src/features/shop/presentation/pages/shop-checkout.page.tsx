@@ -169,6 +169,7 @@ export function ShopCheckout() {
       />
     );
   };
+
   return (
     <main className="bg-paper">
       <PageTitleAndBreadCrumbs
@@ -298,6 +299,7 @@ export function ShopCheckout() {
                           className="w-full"
                           label="Contacts"
                           name="phoneNumber"
+                          defaultValue={getContactsState.data[0].contact}
                           required
                           autoComplete="off"
                         >
@@ -323,14 +325,24 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                <TextField
-                  aria-readonly
-                  value={getSessionState.data?.customer_address}
-                  variant="outlined"
-                  className="w-full"
-                  name="address"
-                  autoComplete="off"
-                />
+                {getSessionState.data?.customer_address ? (
+                  <TextField
+                    aria-readonly
+                    value={getSessionState.data?.customer_address}
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                ) : (
+                  <TextField
+                    required
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                )}
                 {getSessionState.data?.cache_data ? (
                   <>
                     <div className="mt-4 text-secondary lg:mt-0">
@@ -381,7 +393,7 @@ export function ShopCheckout() {
                   </h2>
                   <PaymentMethod />
 
-                  {/* <PaymentAccordion /> */}
+                  <PaymentAccordion />
                 </div>
 
                 <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">

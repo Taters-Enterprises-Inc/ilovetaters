@@ -30,7 +30,12 @@ export const getDeal = createAsyncThunk("getDeal", async (hash: string) => {
 export const getDealSlice = createSlice({
   name: "getDeal",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetDeal: (state) => {
+      state.status = GetDealState.inProgress;
+      state.data = undefined;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(getDeal.pending, (state: any) => {
@@ -52,5 +57,7 @@ export const getDealSlice = createSlice({
 });
 
 export const selectGetDeal = (state: RootState) => state.getDeal;
+
+export const { resetGetDeal } = getDealSlice.actions;
 
 export default getDealSlice.reducer;

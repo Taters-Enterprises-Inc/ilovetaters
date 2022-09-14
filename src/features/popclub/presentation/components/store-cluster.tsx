@@ -101,8 +101,8 @@ export function StoreCluster(props: StoreClusterProps) {
                   }`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 text-center not-within-reach-text ">
-                      Store not within reach
+                    <span className="p-1 text-center deal-not-available-text ">
+                      You can't redeem this deal
                     </span>
                   ) : null}
 

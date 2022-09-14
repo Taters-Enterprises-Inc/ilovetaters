@@ -7,13 +7,11 @@ import {
   redeemDeal,
   RedeemDealState,
   resetRedeemDeal,
+  selectRedeemDeal,
 } from "../slices/redeem-deal.slice";
 import { selectGetDeal } from "../slices/get-deal.slice";
 import { useEffect, useState } from "react";
 import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
-import { selectRedeemDeal } from "../slices/redeem-deal.slice";
-import axios from "axios";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetRedeems } from "../slices/get-redeems.slice";
 import {
   getSession,
@@ -21,7 +19,6 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useNavigate } from "react-router-dom";
-
 interface VariantChooserModalProps {
   open: boolean;
   onClose: () => void;
@@ -32,31 +29,76 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     selectGetDealProductVariants
   );
   const getDealState = useAppSelector(selectGetDeal);
+  const getRedeemsState = useAppSelector(selectGetRedeems);
+  const redeemDealState = useAppSelector(selectRedeemDeal);
+  const getSessionState = useAppSelector(selectGetSession);
+  const navigate = useNavigate();
 
   const [optionsSelected, setOptionsSelected] = useState({});
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
     document.body.classList.remove("overflow-hidden");
   }
 
+  useEffect(() => {
+    if (
+      redeemDealState.status === RedeemDealState.success &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.popclub_data.platform === "online-delivery" &&
+      redeemDealState.data
+    ) {
+      navigate("/shop/checkout");
+      dispatch(getSession());
+      dispatch(resetRedeemDeal());
+    } else if (
+      redeemDealState.status === RedeemDealState.success &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.popclub_data.platform === "store-visit" &&
+      redeemDealState.data
+    ) {
+      props.onClose();
+      dispatch(resetRedeemDeal());
+    }
+  }, [
+    getSessionState,
+    navigate,
+    redeemDealState,
+    getRedeemsState,
+    dispatch,
+    props,
+  ]);
+
   const onSubmit = (event: any) => {
     event.preventDefault();
 
-    const remarks = Object.values(optionsSelected).join("");
+    if (getDealProductVariantsState.data) {
+      const dealProductVariants = getDealProductVariantsState.data;
+      let remarks = Object.values(optionsSelected).join("");
 
-    if (getDealState.data?.hash && remarks) {
-      props.onClose();
-      dispatch(resetGetDealProductVariantsState());
-      dispatch(
-        redeemDeal({
-          hash: getDealState.data?.hash,
-          remarks,
-        })
-      );
+      for (let i = 0; i < dealProductVariants.length; i++) {
+        const dealProductVariant = dealProductVariants[i];
+
+        if (dealProductVariant.product_variants.length <= 0) {
+          remarks +=
+            "<strong>" +
+            dealProductVariant.quantity +
+            "</strong> - " +
+            dealProductVariant.product.name +
+            "<br/>";
+        }
+      }
+
+      if (getDealState.data?.hash && remarks) {
+        dispatch(resetGetDealProductVariantsState());
+        dispatch(
+          redeemDeal({
+            hash: getDealState.data?.hash,
+            remarks,
+          })
+        );
+      }
     }
   };
 
@@ -77,7 +119,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       " (" +
       optionName +
       ")<br/>";
-    // "(" + quantity + ")" + productName + " (" + optionName + ")<br>";
     setOptionsSelected(data);
   };
 
@@ -86,7 +127,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-secondary px-4 py-8 lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px] text-white mb-10">
+      <div className="bg-secondary px-4 py-8 lg:p-8 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px] text-white mb-10">
         <button
           className="absolute text-white top-2 right-4"
           onClick={props.onClose}
@@ -98,13 +139,14 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
             return (
               <div key={i} className="pb-4">
                 <h1 className="text-lg font-bold">
+                  {dealProductVariant.quantity}{" "}
                   {dealProductVariant.product.name}
                 </h1>
                 {dealProductVariant.product_variants.map(
                   (productVariant, i) => (
                     <div key={i}>
                       <h2 className="text-base uppercase">
-                        {productVariant.name}
+                        PICK A {productVariant.name}
                       </h2>
                       <ul className="w-full mt-2 text-sm font-medium text-white border border-gray-200 rounded-lg bg-secondary 0 dark:border-gray-600 dark:text-white">
                         {productVariant.options.map((option, i) => (
@@ -158,9 +200,9 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
 
           <button
             type="submit"
-            className="bg-primary w-full py-2 rounded-md font-['Bebas_Neue'] tracking-widest"
+            className="bg-button border border-white w-full py-2 rounded-md font-['Bebas_Neue'] tracking-widest"
           >
-            Checkout to Snackshop
+            Redeem Deal
           </button>
         </form>
       </div>

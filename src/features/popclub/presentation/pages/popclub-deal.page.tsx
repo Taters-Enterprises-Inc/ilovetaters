@@ -2,7 +2,12 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
+import {
+  getDeal,
+  GetDealState,
+  resetGetDeal,
+  selectGetDeal,
+} from "../slices/get-deal.slice";
 import {
   getDealProductVariants,
   GetDealProductVariantsState,
@@ -11,12 +16,7 @@ import {
 } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
 import { CountdownTimer } from "../components";
-import {
-  redeemDeal,
-  RedeemDealState,
-  resetRedeemDeal,
-  selectRedeemDeal,
-} from "../slices/redeem-deal.slice";
+import { RedeemDealState, selectRedeemDeal } from "../slices/redeem-deal.slice";
 import {
   getRedeem,
   GetRedeemState,
@@ -26,14 +26,13 @@ import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "../slices/get-latest-unexpired-redeem.slice";
+  getLatestUnexpiredRedeemInsideDealPage,
+  selectGetLatestUnexpiredRedeemInsideDealPage,
+} from "../slices/get-latest-unexpired-redeem-inside-deal-page.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {
   getSession,
-  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import {
@@ -41,7 +40,7 @@ import {
   resetFacebookLogout,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { selectGetRedeems } from "../slices/get-redeems.slice";
+import { getLatestUnexpiredRedeem } from "../slices/get-latest-unexpired-redeem.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -51,8 +50,8 @@ export function PopClubDeal() {
   );
   const redeemDealState = useAppSelector(selectRedeemDeal);
   const getRedeemState = useAppSelector(selectGetRedeem);
-  const getLatestUnexpiredRedeemState = useAppSelector(
-    selectGetLatestUnexpiredRedeem
+  const getLatestUnexpiredRedeemInsideDealPageState = useAppSelector(
+    selectGetLatestUnexpiredRedeemInsideDealPage
   );
   const navigate = useNavigate();
 
@@ -65,7 +64,6 @@ export function PopClubDeal() {
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
-  const getRedeemsState = useAppSelector(selectGetRedeems);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -73,40 +71,17 @@ export function PopClubDeal() {
 
   useEffect(() => {
     if (
-      redeemDealState.status === RedeemDealState.success &&
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery" &&
-      redeemDealState.data
-    ) {
-      navigate("/shop/checkout");
-      dispatch(getSession());
-    }
-
-    dispatch(resetRedeemDeal());
-  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
-
-  useEffect(() => {
-    if (
       getDealState.status === GetDealState.success &&
       getDealProductVariantsState.status === GetDealProductVariantsState.success
     ) {
-      if (getDealProductVariantsState.data?.length > 0) {
-        setOpenVariantChooserModal(true);
-      } else {
-        if (getDealState.data?.hash) {
-          dispatch(
-            redeemDeal({
-              hash: getDealState.data?.hash,
-            })
-          );
-        }
-      }
+      setOpenVariantChooserModal(true);
       dispatch(resetGetDealProductVariantsState());
     }
   }, [getDealProductVariantsState, dispatch, getDealState]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());
+    dispatch(getLatestUnexpiredRedeemInsideDealPage());
     dispatch(getLatestUnexpiredRedeem());
   }, [dispatch]);
 
@@ -135,6 +110,7 @@ export function PopClubDeal() {
   }, [facebookLogoutState, navigate, dispatch, getSessionState]);
 
   useEffect(() => {
+    dispatch(getLatestUnexpiredRedeemInsideDealPage());
     dispatch(getLatestUnexpiredRedeem());
 
     if (
@@ -156,6 +132,7 @@ export function PopClubDeal() {
 
   useEffect(() => {
     if (hash) {
+      dispatch(resetGetDeal());
       dispatch(getDeal(hash));
     }
   }, [dispatch, hash]);
@@ -177,7 +154,7 @@ export function PopClubDeal() {
   const redeemButton = () => {
     if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.next_avialable_redeem
+      getLatestUnexpiredRedeemInsideDealPageState.next_avialable_redeem
     ) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -193,6 +170,7 @@ export function PopClubDeal() {
               })
             );
           }
+          dispatch(getLatestUnexpiredRedeemInsideDealPage());
           dispatch(getLatestUnexpiredRedeem());
         } else if (!completed) {
           let timeName = "";
@@ -248,13 +226,17 @@ export function PopClubDeal() {
           <span className="mt-3">You can redeem after </span>
           <Countdown
             renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}
+            date={
+              new Date(
+                getLatestUnexpiredRedeemInsideDealPageState.next_avialable_redeem
+              )
+            }
           />
         </div>
       );
     } else if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.redeem_cooldown
+      getLatestUnexpiredRedeemInsideDealPageState.redeem_cooldown
     ) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -270,6 +252,7 @@ export function PopClubDeal() {
               })
             );
           }
+          dispatch(getLatestUnexpiredRedeemInsideDealPage());
           dispatch(getLatestUnexpiredRedeem());
         } else if (!completed) {
           let timeName = "";
@@ -315,7 +298,11 @@ export function PopClubDeal() {
           <span className="mt-3">Redeem cooldown: </span>
           <Countdown
             renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}
+            date={
+              new Date(
+                getLatestUnexpiredRedeemInsideDealPageState.redeem_cooldown
+              )
+            }
           />
 
           <button
@@ -382,8 +369,8 @@ export function PopClubDeal() {
       );
     } else if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.data?.deal_hash &&
-      getLatestUnexpiredRedeemState.data?.deal_hash !== hash
+      getLatestUnexpiredRedeemInsideDealPageState.data?.deal_hash &&
+      getLatestUnexpiredRedeemInsideDealPageState.data?.deal_hash !== hash
     ) {
       return (
         <>
@@ -481,12 +468,10 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                {getDealState.data.product_image ? (
-                  <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
-                    alt="Deals"
-                  />
-                ) : null}
+                <img
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
+                  alt="Deals"
+                />
                 <CountdownTimer></CountdownTimer>
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
                   <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">

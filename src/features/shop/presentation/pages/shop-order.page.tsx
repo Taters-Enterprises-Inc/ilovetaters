@@ -18,6 +18,7 @@ import {
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -47,6 +48,7 @@ export function ShopOrder() {
   }, [location]);
 
   useEffect(() => {
+    dispatch(getLatestUnexpiredRedeem());
     dispatch(getSession());
   }, [dispatch]);
 

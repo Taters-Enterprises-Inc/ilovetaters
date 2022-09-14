@@ -2,6 +2,7 @@ export interface RedeemDealModel {
   deal_id: string;
   deal_hash: string;
   date_redeemed: string;
+  remarks: string;
   expiration: string;
   redeem_code: string;
 
