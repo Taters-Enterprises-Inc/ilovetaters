@@ -6,7 +6,9 @@ export function AdminSettingStore() {
     <>
       {" "}
       <Head />
-      <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5">Orders</h1>
+      <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary">
+        Orders
+      </h1>
       <div className="font-['Bebas_Neue'] text-3xl ml-4 mr-4 mt-4">
         <AdminSettingStoreTable />
       </div>

@@ -40,25 +40,6 @@ import { Franchising } from "features/franchising/presentation/pages";
 import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
-<<<<<<< HEAD
-  Admin,
-  Banner,
-  Category,
-  Cater,
-  CaterAdd,
-  Faqs,
-  Instore,
-  Login,
-  Packages,
-  Popclub,
-  ProdAdd,
-  ProdAvail,
-  Products,
-  Snackshop,
-  Stores,
-  Users,
-  Vouchers,
-=======
   AdminShopOrder,
   AdminLogin,
   AdminCateringOrder,
@@ -77,7 +58,6 @@ import {
   AdminSettingUser,
   AdminSettingVoucher,
   AdminSettingStore,
->>>>>>> main
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -86,13 +66,11 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
-<<<<<<< HEAD
-import { Reports } from "features/admin/presentation/pages/admin-reports-page";
-import { OrderModal } from "features/admin/presentation/modals/orders-modal";
-=======
+
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
->>>>>>> main
+import { AdminOrderModal } from "features/admin/presentation/modals/admin-orders-modal";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -175,6 +153,9 @@ root.render(
                   <Route index element={<AdminLogin />} />
 
                   <Route element={<AdminSidebarWrapper />}>
+                    {/* sample for live server */}
+                    <Route path="modal/order" element={<AdminOrderModal />} />
+                    {/* sample for live server */}
                     <Route path="order" element={<AdminShopOrder />} />
                     <Route path="catering" element={<AdminCateringOrder />} />
                     <Route path="popclub" element={<AdminPopclub />} />
@@ -199,34 +180,6 @@ root.render(
                         path="product-add-on"
                         element={<AdminAvailabilityProductAddOn />}
                       />
-
-<<<<<<< HEAD
-                <Route
-                  path="admin/product-availability"
-                  element={<ProdAvail />}
-                ></Route>
-                <Route
-                  path="admin/banner-availability"
-                  element={<Banner />}
-                ></Route>
-                <Route path="admin/products" element={<Products />}></Route>
-                <Route path="admin/reports" element={<Reports />}></Route>
-                <Route
-                  path="admin/settings-category"
-                  element={<Category />}
-                ></Route>
-                <Route path="admin/settings-users" element={<Users />}></Route>
-                <Route
-                  path="admin/settings-vouchers"
-                  element={<Vouchers />}
-                ></Route>
-                <Route
-                  path="admin/settings-stores"
-                  element={<Stores />}
-                ></Route>
-                <Route path="admin/faqs" element={<Faqs />}></Route>
-                <Route path="orders/modal" element={<OrderModal />}></Route>
-=======
                       <Route
                         path="package"
                         element={<AdminAvailabilityPackage />}
@@ -252,7 +205,6 @@ root.render(
                     </Route>
                   </Route>
                 </Route>
->>>>>>> main
               </Route>
             </Route>
           </Routes>

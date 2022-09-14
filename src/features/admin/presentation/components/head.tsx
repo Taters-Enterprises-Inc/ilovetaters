@@ -14,7 +14,7 @@ export function Head() {
           }}
         />
       </div>
-      <div className="relative flex justify-end mt-2.5 mr-4 text-white ">
+      <div className="relative flex justify-end mt-2.5 mr-4 text-secondary ">
         <MdOutlineNotificationsNone className="mr-4 cursor-pointer" size={20} />
         <TbLogout className="cursor-pointer" size={20} />
       </div>

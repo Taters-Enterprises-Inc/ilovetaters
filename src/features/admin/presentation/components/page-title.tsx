@@ -10,16 +10,16 @@ interface PageTitleProps {
 
 export function PageTitle(props: PageTitleProps) {
   return (
-    <div className="text-white bg-secondary">
-      <div className="container flex flex-col items-center justify-between lg:flex-row bg-secondary lg:space-y-0">
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl leading-6 text-center"></h1>
+    <div className="text-secondary">
+      <div className="container flex flex-col items-center justify-between lg:flex-row lg:space-y-0">
+        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-2xl leading-6 text-center"></h1>
 
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li>
               <Link
                 to={props.home.url}
-                className="inline-flex items-center text-xs font-medium text-white lg:text-sm"
+                className="inline-flex items-center text-xs font-medium text-secondary lg:text-sm"
               >
                 <svg
                   className="w-4 h-4 mr-2"

@@ -25,14 +25,13 @@ body.active-modal {
 }
 .modal-content {
   position: absolute;
-  top: 40%;
+  /* top: 10%; */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
   line-height: 1.4;
   padding: 14px 28px;
   border-radius: 3px;
-  max-width: 600px;
-  min-width: 300px;
+  min-width: 800px;
 }
 
 .close-modal {
