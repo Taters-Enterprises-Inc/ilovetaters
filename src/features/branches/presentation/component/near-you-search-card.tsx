@@ -31,17 +31,17 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
       <div
-        className=" cursor-pointer	 md:text-[13px] text-[10px] md:h-auto h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px]"
+        className=" cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center"
       >
         {store.store_name}
       </div>
 
       <div
       
-        className="cursor-pointer	absolute flex flex-col items-stretch w-full md:mt-16 mt-10 space-y-2 bg-transparent"
+        className="absolute flex flex-col items-stretch w-full mt-10 space-y-2 bg-transparent cursor-pointer md:mt-16"
       >
         <div className="flex justify-end ">
-          <span className="bg-secondary px-2 text-sm ">
+          <span className="px-2 text-sm bg-secondary ">
             {distance_in_km} KM
           </span>
         </div>
@@ -54,15 +54,15 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
             : "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
         }
         alt=""
-        className="w-full sm::w-[250px] sm::h-[250px] object-fit cursor-pointer	"
+        className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
       />
 
       <div
 
-        className={`transition-all cursor-pointer md:flex md:px-0 px-2  container border-b border-[#7b7982] xl:h-[105px] lg:h-[130px] md:h-[160px]  ${ showText ? 'h-auto' : 'h-[90px]'} md:h-[105px] 	 relative py-2`}
+        className={`transition-all cursor-pointer md:flex md:px-0 px-2 container border-b border-[#7b7982] relative xl:h-[25%] lg:h-[30%] md:h-[35%] ${ showText ? 'h-auto' : 'h-[30%]'} pb-4`}
       >
         <span
-          className={`cursor-pointer	 p-4 md:relative md:top-0 md:left-0  absolute top-[-2px] left-[21px]`}
+          className={`cursor-pointer p-4 md:relative md:top-0 md:left-0 absolute top-[-2px] left-[21px]`}
         >
           <svg
             className="w-4 h-4 stroke-red-400"
@@ -87,12 +87,11 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         </span>
         <div
       
-          className="text-left pt
-          -2 block pr-1 leading-[20px] cursor-pointer	 "
+          className="text-left pt-2 block pr-1 leading-[20px] cursor-pointer"
         >
           <p
        
-            className={` text-[.8125rem] pb-1 pt-1 md:text-left text-center cursor-pointer	`}
+            className={` text-[.8125rem] pb-1 pt-1 md:text-left text-center cursor-pointer	text-[#bcd2d6]`}
           >
             Find us
           </p>
@@ -125,7 +124,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
             e.stopPropagation();
             window.location.href =`tel:${store.contactno}`;
         }}
-        className="cursor-pointer flex  border-b border-[#7b7982] w-full"
+        className="cursor-pointer flex border-b border-[#7b7982] w-full pb-2"
       >
         <span className="p-4">
           <svg
@@ -143,7 +142,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
             ></path>
           </svg>
         </span>
-        <div className="block text-left py-2 ">
+        <div className="block py-2 text-left ">
           <p className="text-[.7125rem] text-[#bcd2d6] pb-1 ">Call us</p>
           <p className="text-[#fff] md:text-[13px] text-[10px] font-normal ">
             {store.contactno}
@@ -152,7 +151,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       </div>
 
       <div
-        className="flex  lg:h-[85px] md:h-[98px] h-auto py-2 w-full pointer-cusor cursor-pointer	pr-4"
+        className="flex w-full h-auto pb-2 pr-4 cursor-pointer"
       >
         <span
           className="p-4"
@@ -174,7 +173,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         </span>
         <div
       
-          className="block text-left py-1 "
+          className="block py-1 text-left "
         >
           <p
           
