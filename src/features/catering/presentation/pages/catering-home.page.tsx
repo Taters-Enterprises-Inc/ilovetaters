@@ -236,6 +236,19 @@ export function CateringHome() {
                 return;
               }
 
+              if (
+                cateringHomePageState.eventStartDate >
+                cateringHomePageState.eventEndDate
+              ) {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Please select valid end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
               dispatch(
                 getStoresAvailableCatering({
                   address: cateringHomePageState.address,
