@@ -126,13 +126,9 @@ import {
   selectGetDealProductVariants,
 } from "features/popclub/presentation/slices/get-deal-product-variants.slice";
 import {
-  GetLatestUnexpiredRedeemState,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
-import {
-  GetLatestUnexpiredRedeemInsideDealPageState,
-  selectGetLatestUnexpiredRedeemInsideDealPage,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem-inside-deal-page.slice";
+  GetRedeemState,
+  selectGetRedeem,
+} from "features/popclub/presentation/slices/get-redeem.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -206,26 +202,24 @@ export function LoadingAndSnackbarWrapper() {
   const getDealProductVariantsState = useAppSelector(
     selectGetDealProductVariants
   );
-  const getLatestUnexpiredRedeemInsideDealPageState = useAppSelector(
-    selectGetLatestUnexpiredRedeemInsideDealPage
-  );
+  const getRedeemState = useAppSelector(selectGetRedeem);
 
   useEffect(() => {
-    switch (getLatestUnexpiredRedeemInsideDealPageState.status) {
-      case GetLatestUnexpiredRedeemInsideDealPageState.inProgress:
+    switch (getRedeemState.status) {
+      case GetRedeemState.inProgress:
         setOpenBackdropPopClubLoading(true);
         break;
-      case GetLatestUnexpiredRedeemInsideDealPageState.initial:
+      case GetRedeemState.initial:
         setOpenBackdropPopClubLoading(false);
         break;
-      case GetLatestUnexpiredRedeemInsideDealPageState.success:
+      case GetRedeemState.success:
         setOpenBackdropPopClubLoading(false);
         break;
-      case GetLatestUnexpiredRedeemInsideDealPageState.fail:
+      case GetRedeemState.fail:
         setOpenBackdropPopClubLoading(false);
         break;
     }
-  }, [getLatestUnexpiredRedeemInsideDealPageState, dispatch]);
+  }, [getRedeemState, dispatch]);
 
   useEffect(() => {
     switch (getDealProductVariantsState.status) {

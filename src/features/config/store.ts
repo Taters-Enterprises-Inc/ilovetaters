@@ -69,7 +69,6 @@ import changeForgotPasswordStatus from "../shared/presentation/slices/change-for
 import forgotPasswordGenerateOTP from "../shared/presentation/slices/forgot-password-generate-otp.slice";
 import forgotPasswordValidateOTP from "../shared/presentation/slices/forgot-password-validate-otp.slice";
 import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-password-new-password-otp.slice";
-import getLatestUnexpiredRedeemInsideDealPage from "../popclub/presentation/slices/get-latest-unexpired-redeem-inside-deal-page.slice";
 
 export const store = configureStore({
   reducer: {
@@ -147,8 +146,6 @@ export const store = configureStore({
     forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
     forgotPasswordValidateOTP: forgotPasswordValidateOTP,
     forgotPasswordNewPassword: forgotPasswordNewPassword,
-    getLatestUnexpiredRedeemInsideDealPage:
-      getLatestUnexpiredRedeemInsideDealPage,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
