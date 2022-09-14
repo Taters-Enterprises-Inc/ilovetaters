@@ -77,7 +77,8 @@ if (window.location.hash === "#_=_") {
     window.location.protocol +
       "//" +
       window.location.host +
-      window.location.pathname
+      window.location.pathname +
+      window.location.search
   );
 }
 

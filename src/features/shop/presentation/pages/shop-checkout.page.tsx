@@ -37,6 +37,7 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { PhoneInput } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
+import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -48,6 +49,9 @@ export function ShopCheckout() {
   const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
   const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+  const getLatestUnexpiredRedeemState = useAppSelector(
+    selectGetLatestUnexpiredRedeem
+  );
 
   useEffect(() => {
     if (
@@ -77,6 +81,8 @@ export function ShopCheckout() {
     formData.forEach(
       (value, property: string) => (responseBody[property] = value)
     );
+
+    responseBody["payops"] = 3;
 
     if (responseBody.phoneNumber.length === 11) {
       dispatch(checkoutOrders(responseBody));
@@ -118,7 +124,31 @@ export function ShopCheckout() {
   };
 
   const calculateDeliveryFee = () => {
-    if (getSessionState.data?.distance_rate_price) {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    if (getSessionState.data && getSessionState.data.distance_rate_price) {
+      if (
+        getLatestUnexpiredRedeemState.data &&
+        getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+      ) {
+        return <>₱ 0.00</>;
+      }
+
       return (
         <NumberFormat
           value={getSessionState.data.distance_rate_price.toFixed(2)}
@@ -158,6 +188,14 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.distance_rate_price) {
       calculatedPrice += getSessionState.data.distance_rate_price;
+
+      if (
+        getLatestUnexpiredRedeemState.data &&
+        getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+      ) {
+        calculatedPrice -= getSessionState.data.distance_rate_price;
+      }
     }
 
     return (
@@ -169,6 +207,7 @@ export function ShopCheckout() {
       />
     );
   };
+
   return (
     <main className="bg-paper">
       <PageTitleAndBreadCrumbs
@@ -298,6 +337,7 @@ export function ShopCheckout() {
                           className="w-full"
                           label="Contacts"
                           name="phoneNumber"
+                          defaultValue={getContactsState.data[0].contact}
                           required
                           autoComplete="off"
                         >
@@ -323,14 +363,24 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                <TextField
-                  aria-readonly
-                  value={getSessionState.data?.customer_address}
-                  variant="outlined"
-                  className="w-full"
-                  name="address"
-                  autoComplete="off"
-                />
+                {getSessionState.data?.customer_address ? (
+                  <TextField
+                    aria-readonly
+                    value={getSessionState.data?.customer_address}
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                ) : (
+                  <TextField
+                    required
+                    variant="outlined"
+                    className="w-full"
+                    name="address"
+                    autoComplete="off"
+                  />
+                )}
                 {getSessionState.data?.cache_data ? (
                   <>
                     <div className="mt-4 text-secondary lg:mt-0">

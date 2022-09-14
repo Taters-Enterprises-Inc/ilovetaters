@@ -324,7 +324,10 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
-        {getSessionState.data?.cache_data &&
+        {getSessionState.data &&
+        getSessionState.data.cache_data &&
+        getSessionState.data.customer_address &&
+        getSessionState.data.cache_data.store_name &&
         (props.activeUrl === "CATERING" || props.activeUrl === "SNACKSHOP") ? (
           <div className="w-full py-1 text-white bg-secondary">
             <div className="container flex">

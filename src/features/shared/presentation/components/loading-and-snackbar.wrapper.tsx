@@ -117,6 +117,22 @@ import {
   ForgotPasswordNewPasswordState,
   selectForgotPasswordNewPassword,
 } from "../slices/forgot-password-new-password-otp.slice";
+import {
+  GetDealState,
+  selectGetDeal,
+} from "features/popclub/presentation/slices/get-deal.slice";
+import {
+  GetDealProductVariantsState,
+  selectGetDealProductVariants,
+} from "features/popclub/presentation/slices/get-deal-product-variants.slice";
+import {
+  GetLatestUnexpiredRedeemState,
+  selectGetLatestUnexpiredRedeem,
+} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  GetLatestUnexpiredRedeemInsideDealPageState,
+  selectGetLatestUnexpiredRedeemInsideDealPage,
+} from "features/popclub/presentation/slices/get-latest-unexpired-redeem-inside-deal-page.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -186,6 +202,64 @@ export function LoadingAndSnackbarWrapper() {
   const forgotPasswordNewPasswordOTP = useAppSelector(
     selectForgotPasswordNewPassword
   );
+  const getDealState = useAppSelector(selectGetDeal);
+  const getDealProductVariantsState = useAppSelector(
+    selectGetDealProductVariants
+  );
+  const getLatestUnexpiredRedeemInsideDealPageState = useAppSelector(
+    selectGetLatestUnexpiredRedeemInsideDealPage
+  );
+
+  useEffect(() => {
+    switch (getLatestUnexpiredRedeemInsideDealPageState.status) {
+      case GetLatestUnexpiredRedeemInsideDealPageState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetLatestUnexpiredRedeemInsideDealPageState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetLatestUnexpiredRedeemInsideDealPageState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetLatestUnexpiredRedeemInsideDealPageState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getLatestUnexpiredRedeemInsideDealPageState, dispatch]);
+
+  useEffect(() => {
+    switch (getDealProductVariantsState.status) {
+      case GetDealProductVariantsState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealProductVariantsState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealProductVariantsState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealProductVariantsState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealProductVariantsState, dispatch]);
+
+  useEffect(() => {
+    switch (getDealState.status) {
+      case GetDealState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealState, dispatch]);
 
   useEffect(() => {
     switch (forgotPasswordNewPasswordOTP.status) {
@@ -273,14 +347,12 @@ export function LoadingAndSnackbarWrapper() {
         break;
       case RedeemDealState.success:
         setOpenBackdropPopClubLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
       case RedeemDealState.fail:
         setOpenBackdropPopClubLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
     }
-  }, [redeemDealState, dispatch]);
+  }, [redeemDealState]);
 
   useEffect(() => {
     switch (setStoreAndAddressPopClub.status) {
@@ -583,7 +655,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
       case FacebookLoginPointState.fail:
         setOpenBackdropLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
     }
   }, [facebookLoginPointState, dispatch]);
