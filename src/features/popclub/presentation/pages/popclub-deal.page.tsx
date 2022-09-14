@@ -16,7 +16,11 @@ import {
 } from "../slices/get-deal-product-variants.slice";
 import { VariantsChooserModal } from "../modals/variants-chooser.modal";
 import { CountdownTimer } from "../components";
-import { RedeemDealState, selectRedeemDeal } from "../slices/redeem-deal.slice";
+import {
+  redeemDeal,
+  RedeemDealState,
+  selectRedeemDeal,
+} from "../slices/redeem-deal.slice";
 import {
   getRedeem,
   GetRedeemState,
@@ -74,10 +78,23 @@ export function PopClubDeal() {
       getDealState.status === GetDealState.success &&
       getDealProductVariantsState.status === GetDealProductVariantsState.success
     ) {
-      setOpenVariantChooserModal(true);
+      if (getDealProductVariantsState.data?.length > 0) {
+        setOpenVariantChooserModal(true);
+      } else {
+        if (getDealState.data?.hash) {
+          dispatch(
+            redeemDeal({
+              hash: getDealState.data?.hash,
+            })
+          );
+          if (getDealState.data.minimum_purchase) {
+            navigate("/shop/products");
+          }
+        }
+      }
       dispatch(resetGetDealProductVariantsState());
     }
-  }, [getDealProductVariantsState, dispatch, getDealState]);
+  }, [getDealProductVariantsState, navigate, dispatch, getDealState]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());

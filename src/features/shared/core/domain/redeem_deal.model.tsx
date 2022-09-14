@@ -14,4 +14,5 @@ export interface RedeemDealModel {
 
   next_avialable_redeem?: string;
   redeem_cooldown?: string;
+  minimum_purchase?: number;
 }
