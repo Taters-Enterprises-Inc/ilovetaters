@@ -82,6 +82,8 @@ export function ShopCheckout() {
       (value, property: string) => (responseBody[property] = value)
     );
 
+    responseBody["payops"] = 3;
+
     if (responseBody.phoneNumber.length === 11) {
       dispatch(checkoutOrders(responseBody));
     } else {
@@ -429,7 +431,7 @@ export function ShopCheckout() {
                   </h2>
                   <PaymentMethod />
 
-                  <PaymentAccordion />
+                  {/* <PaymentAccordion /> */}
                 </div>
 
                 <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">

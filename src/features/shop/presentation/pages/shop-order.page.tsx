@@ -532,7 +532,7 @@ export function ShopOrder() {
 
               {getOrdersState.data?.order.clients_info.status === 1 ? (
                 <>
-                  <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                  {/* <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
                     Upload Proof of Payment
                   </h2>
 
@@ -607,7 +607,7 @@ export function ShopOrder() {
                         PNG and GIF. Maximum file size is 2MB.
                       </h4>
                     </div>
-                  </form>
+                  </form> */}
                 </>
               ) : getOrdersState.data?.order.clients_info.status === 2 ? (
                 <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
