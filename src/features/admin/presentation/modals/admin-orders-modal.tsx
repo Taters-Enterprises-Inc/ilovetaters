@@ -18,7 +18,7 @@ export function AdminOrderModal() {
             <MdClose size={20} />
           </div>
 
-          <div>
+          <div className="min-h-screen">
             <AdminOrderModalContainer activeTab="customerInfo" />
           </div>
         </div>
