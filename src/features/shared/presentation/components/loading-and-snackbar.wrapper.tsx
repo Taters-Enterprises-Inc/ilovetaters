@@ -73,9 +73,10 @@ import {
 } from "features/catering/presentation/slices/catering-upload-proof-of-payment.slice";
 import { BackdropLoadingPopClub } from "features/popclub/presentation/components";
 
-
-
-import { selectEditCartItem   ,EditCartItemState} from "features/shop/presentation/slices/edit-cart-item.slice";
+import {
+  selectEditCartItem,
+  EditCartItemState,
+} from "features/shop/presentation/slices/edit-cart-item.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -119,8 +120,10 @@ export function LoadingAndSnackbarWrapper() {
   const popSnackBarState = useAppSelector(selectPopSnackBar);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
   const editCartProduct = useAppSelector(selectEditCartItem);
-    const uploadContractState= useAppSelector(selectUploadContract)
-const cateringUploadProofOfPaymentState = useAppSelector(selectCateringUploadProofOfPayment)
+  const uploadContractState = useAppSelector(selectUploadContract);
+  const cateringUploadProofOfPaymentState = useAppSelector(
+    selectCateringUploadProofOfPayment
+  );
 
   useEffect(() => {
     switch (popSnackBarState.status) {
@@ -443,8 +446,6 @@ const cateringUploadProofOfPaymentState = useAppSelector(selectCateringUploadPro
         break;
     }
   }, [addToCartCateringState]);
-
-
 
   useEffect(() => {
     switch (editCartProduct.status) {
