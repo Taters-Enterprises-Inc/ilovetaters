@@ -158,8 +158,6 @@ export function ShopProduct() {
   function handleonClick() {
     if (isLongPress.current === true) {
       return;
-    } else {
-      console.log("click");
     }
     // } else {
     //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
