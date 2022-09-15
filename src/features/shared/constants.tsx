@@ -174,6 +174,29 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
   },
 ];
 
+export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
+  {
+    name: "Customer Information",
+    active: "customerInfo",
+    url: "customer-information",
+  },
+  {
+    name: "Order Details",
+    active: "orderDetails",
+    url: "order-details",
+  },
+  {
+    name: "Audit Logs",
+    active: "auditLogs",
+    url: "audit-logs",
+  },
+  {
+    name: "Remarks",
+    active: "remarks",
+    url: "remarks",
+  },
+];
+
 declare module "@mui/material/styles" {
   interface Palette {
     tertiary: Palette["primary"];

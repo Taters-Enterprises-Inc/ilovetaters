@@ -6,7 +6,7 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { CategoryBtn } from "../components/addcategorybtn";
+import { CategoryBtn } from "../components/add-category-btn";
 
 const columns: Array<Column> = [
   { id: "id", label: "id" },
@@ -22,7 +22,7 @@ const rows: Array<Row> = [];
 
 export function AdminSettingCategoryTable() {
   return (
-    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
+    <section className="max-h-screen rounded-md bg-paper lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>

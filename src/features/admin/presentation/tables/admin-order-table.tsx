@@ -6,7 +6,8 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { ExtractBtn } from "../components/extractbtn";
+import { ExtractBtn } from "../components/extract-btn";
+import OrderSelectStatus from "../components/admin-order-select-status";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -25,13 +26,14 @@ const rows: Array<Row> = [];
 
 export function AdminOrderTable() {
   return (
-    <section className="max-h-screen bg-white rounded-md shadow-lg lg:space-x-4">
+    <section className="max-h-screen rounded-md bg-paper lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>
           <div className="flex justify-between">
             <h1 className="pt-4 lg:-ml-12 text-secondary">List of Orders</h1>
-            <div className="lg:-mr-12">
+            <div className="flex lg:-mr-12">
+              <OrderSelectStatus />
               <ExtractBtn />
             </div>
           </div>
