@@ -64,10 +64,10 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You may book your event via the online reservation portal at
-            www.ilovetaters.com/shop. Once a reservation is placed, you will get
-            a confirmation email and call from our Taters Representative within
-            48H to finalize your details.
+            You may book your event via the online reservation portal at <a href="https://ilovetaters.com/shop/shop/store-lists"
+            className="hover:text-tertiary"> 
+            www.ilovetaters.com/shop</a>. Once a reservation is placed, you will get a confirmation email and 
+            call from our Taters Representative within 48H to finalize your details.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -131,7 +131,7 @@ export function CateringFaqs() {
         <AccordionDetails>
           <Typography>
             Apart from a 10% service fee, there are additional charges for
-            logistics (transpo, toll fee) and fees for on-site cooking*
+            logistics (transpo, toll fee) and fees for on-site cooking.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -160,7 +160,7 @@ export function CateringFaqs() {
         onChange={handleChange("panel7")}
       >
         <AccordionSummary aria-controls="panel7d-content" id="panel7d-header">
-          <Typography>What payment terms fo you accept?</Typography>
+          <Typography>What payment terms do you accept?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
@@ -168,9 +168,9 @@ export function CateringFaqs() {
             branch availability) payments on the following terms:
             <br />
             1) 50% down payment - 1 week before the event or earlier / 50%
-            balance payment - on the day of the event
+            balance payment - on the day of the event.
             <br />
-            2) 100% payment - 1 week before the event or earlier
+            2) 100% payment - 1 week before the event or earlier.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -187,8 +187,8 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You may email our catering team at catering@tatersgroup.com so that
-            they could assist you with your event inquiry
+            You may email our catering team at <a href="mailto:catering@tatersgroup.com" className="hover:text-tertiary"> 
+            catering@tatersgroup.com </a> so that they could assist you with your event inquiry.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -201,7 +201,7 @@ export function CateringFaqs() {
           <Typography>Are your rates VAT Inclusive? </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Yes! All rates are VAT Inclusive</Typography>
+          <Typography>Yes! All rates are VAT Inclusive. </Typography>
         </AccordionDetails>
       </Accordion>
 
@@ -217,8 +217,8 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You may email our catering team at catering@tatersgroup.com so that
-            they could further assist you with your event inquiry
+            You may email our catering team at <a href="mailto:catering@tatersgroup.com" className="hover:text-tertiary"> 
+            catering@tatersgroup.com </a> so that they could further assist you with your event inquiry.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -247,8 +247,8 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Taters can accomodate as much as 5000 guests. However, additional
-            staff will be required
+            Taters can accommodate as much as 5000 guests. However, additional
+            staff will be required.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -267,7 +267,7 @@ export function CateringFaqs() {
           <Typography>
             Aside from the package inclusion of 2 staffs and 1 cart set-up,
             additional manpower and cart could be availed with an additional fee
-            of P950 for the cart & P650 per staff
+            of P950 for the cart & P650 per staff.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -281,8 +281,8 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            All Taters employees are FULLY vaccinated and is well trained to
-            ocmply with the standard health protocols
+            All Taters employees are FULLY vaccinated and is well-trained to
+            comply with the standard health protocols.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -346,14 +346,14 @@ export function CateringFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Taters can also offer the ff inclusions but with an additional
+            Taters can also offer the following inclusions but with an additional
             charge and subjected to availability:
             <br />
-            Mr Poppy : Mascot appearance (no entertainement to be done) for 30
-            minutes - P1,000.00
+            Mr. Poppy: Mascot appearance (no entertainment to be done) for 30
+            minutes - P1,000.00.
             <br />
-            Party Accessories (balloons, generic cake) - Outsourced to our
-            partner suppliers. Charges vary upon client requirements
+            Party Accessories (balloons, generic cake): Outsourced to our
+            partner suppliers. Charges vary upon client requirements.
             <br />
           </Typography>
         </AccordionDetails>
@@ -373,7 +373,7 @@ export function CateringFaqs() {
             Our cart designs can't be changed but you may request for additional
             cart props (eg hanging photo print-outs, signboard, customized
             messages like banner, standees, table tops) but with an additional
-            charge and subject to availability
+            charge and subject to availability.
           </Typography>
         </AccordionDetails>
       </Accordion>

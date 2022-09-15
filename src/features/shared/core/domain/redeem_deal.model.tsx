@@ -2,6 +2,7 @@ export interface RedeemDealModel {
   deal_id: string;
   deal_hash: string;
   date_redeemed: string;
+  remarks: string;
   expiration: string;
   redeem_code: string;
 
@@ -13,4 +14,5 @@ export interface RedeemDealModel {
 
   next_avialable_redeem?: string;
   redeem_cooldown?: string;
+  minimum_purchase?: number;
 }

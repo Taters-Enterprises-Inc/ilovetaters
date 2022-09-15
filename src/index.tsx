@@ -68,6 +68,7 @@ import {
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
+import { AdminGuard } from "features/admin/presentation/guards/admin.guard";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -77,7 +78,8 @@ if (window.location.hash === "#_=_") {
     window.location.protocol +
       "//" +
       window.location.host +
-      window.location.pathname
+      window.location.pathname +
+      window.location.search
   );
 }
 
@@ -149,54 +151,62 @@ root.render(
                 <Route path="admin" element={<Admin />}>
                   <Route index element={<AdminLogin />} />
 
-                  <Route element={<AdminSidebarWrapper />}>
-                    <Route path="order" element={<AdminShopOrder />} />
-                    <Route path="catering" element={<AdminCateringOrder />} />
-                    <Route path="popclub" element={<AdminPopclub />} />
-                    <Route path="product" element={<AdminProduct />} />
-                    <Route path="report" element={<AdminReport />} />
-                    <Route path="faq" element={<AdminFaq />} />
+                  <Route element={<AdminGuard />}>
+                    <Route element={<AdminSidebarWrapper />}>
+                      <Route path="order" element={<AdminShopOrder />} />
+                      <Route path="catering" element={<AdminCateringOrder />} />
+                      <Route path="popclub" element={<AdminPopclub />} />
+                      <Route path="product" element={<AdminProduct />} />
+                      <Route path="report" element={<AdminReport />} />
+                      <Route path="faq" element={<AdminFaq />} />
 
-                    <Route path="raffle">
-                      <Route
-                        path="snackshop"
-                        element={<AdminRaffleSnackshop />}
-                      />
-                      <Route path="instore" element={<AdminRaffleInstore />} />
-                    </Route>
+                      <Route path="raffle">
+                        <Route
+                          path="snackshop"
+                          element={<AdminRaffleSnackshop />}
+                        />
+                        <Route
+                          path="instore"
+                          element={<AdminRaffleInstore />}
+                        />
+                      </Route>
 
-                    <Route path="availability">
-                      <Route
-                        path="catering-add-on"
-                        element={<AdminAvailabilityCateringAddOn />}
-                      />
-                      <Route
-                        path="product-add-on"
-                        element={<AdminAvailabilityProductAddOn />}
-                      />
+                      <Route path="availability">
+                        <Route
+                          path="catering-add-on"
+                          element={<AdminAvailabilityCateringAddOn />}
+                        />
+                        <Route
+                          path="product-add-on"
+                          element={<AdminAvailabilityProductAddOn />}
+                        />
 
-                      <Route
-                        path="package"
-                        element={<AdminAvailabilityPackage />}
-                      />
-                      <Route
-                        path="product"
-                        element={<AdminAvailabilityProduct />}
-                      />
-                      <Route
-                        path="banner"
-                        element={<AdminAvailabilityBanner />}
-                      />
-                    </Route>
+                        <Route
+                          path="package"
+                          element={<AdminAvailabilityPackage />}
+                        />
+                        <Route
+                          path="product"
+                          element={<AdminAvailabilityProduct />}
+                        />
+                        <Route
+                          path="banner"
+                          element={<AdminAvailabilityBanner />}
+                        />
+                      </Route>
 
-                    <Route path="setting">
-                      <Route
-                        path="category"
-                        element={<AdminSettingCategory />}
-                      />
-                      <Route path="user" element={<AdminSettingUser />} />
-                      <Route path="voucher" element={<AdminSettingVoucher />} />
-                      <Route path="store" element={<AdminSettingStore />} />
+                      <Route path="setting">
+                        <Route
+                          path="category"
+                          element={<AdminSettingCategory />}
+                        />
+                        <Route path="user" element={<AdminSettingUser />} />
+                        <Route
+                          path="voucher"
+                          element={<AdminSettingVoucher />}
+                        />
+                        <Route path="store" element={<AdminSettingStore />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
