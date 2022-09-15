@@ -237,7 +237,7 @@ export function CateringHome() {
               }
 
               if (
-                cateringHomePageState.eventStartDate >
+                cateringHomePageState.eventStartDate >=
                 cateringHomePageState.eventEndDate
               ) {
                 dispatch(
