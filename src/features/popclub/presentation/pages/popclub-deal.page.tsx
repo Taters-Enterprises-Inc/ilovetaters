@@ -44,6 +44,12 @@ import {
   selectGetLatestUnexpiredRedeem,
   getLatestUnexpiredRedeem,
 } from "../slices/get-latest-unexpired-redeem.slice";
+import {
+  forfeitRedeem,
+  ForfeitRedeemState,
+  selectForfeitRedeem,
+} from "../slices/forfeit-redeem.slice";
+import { MessageModal } from "features/shared/presentation/modals";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -56,6 +62,8 @@ export function PopClubDeal() {
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+  const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -64,6 +72,7 @@ export function PopClubDeal() {
   const getSessionState = useAppSelector(selectGetSession);
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
+  const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -104,6 +113,20 @@ export function PopClubDeal() {
     if (
       getDealState.status === GetDealState.success &&
       getDealState.data &&
+      forfeitRedeemState.status === ForfeitRedeemState.success
+    ) {
+      dispatch(
+        getRedeem({
+          deal_id: getDealState.data.id,
+        })
+      );
+    }
+  }, [dispatch, getDealState, forfeitRedeemState]);
+
+  useEffect(() => {
+    if (
+      getDealState.status === GetDealState.success &&
+      getDealState.data &&
       redeemDealState.status === RedeemDealState.success
     ) {
       dispatch(
@@ -112,7 +135,7 @@ export function PopClubDeal() {
         })
       );
     }
-  }, [redeemDealState, dispatch, getDealState]);
+  }, [redeemDealState, dispatch, getDealState, forfeitRedeemState]);
 
   useEffect(() => {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
@@ -358,6 +381,14 @@ export function PopClubDeal() {
                 </span>
               </div>
               <button
+                className="w-full py-3 mt-4 font-bold text-white uppercase bg-primary border border-white rounded-xl"
+                onClick={() => {
+                  setOpenForfeitModalMessage(true);
+                }}
+              >
+                Cancel Redeem
+              </button>
+              <button
                 className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
                 onClick={() => {
                   navigate(
@@ -505,6 +536,17 @@ export function PopClubDeal() {
         onClose={() => {
           setOpenLoginChooserModal(false);
         }}
+      />
+      <MessageModal
+        open={openForfeitModalMessage}
+        onClose={() => {
+          setOpenForfeitModalMessage(false);
+        }}
+        onYes={() => {
+          dispatch(forfeitRedeem());
+          setOpenForfeitModalMessage(false);
+        }}
+        message={"Are you sure you want to cancel the redeem?"}
       />
     </>
   );
