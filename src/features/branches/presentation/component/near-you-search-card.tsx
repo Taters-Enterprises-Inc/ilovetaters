@@ -41,7 +41,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         className="absolute flex flex-col items-stretch w-full mt-10 space-y-2 bg-transparent cursor-pointer md:mt-16"
       >
         <div className="flex justify-end ">
-          <span className="px-2 text-sm bg-secondary ">
+          <span className="px-2 text-sm bg-secondary">
             {distance_in_km} KM
           </span>
         </div>
@@ -59,10 +59,10 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
 
       <div
 
-        className={`transition-all cursor-pointer md:flex md:px-0 px-2 container border-b border-[#7b7982] relative xl:h-[25%] lg:h-[30%] md:h-[35%] ${ showText ? 'h-auto' : 'h-[30%]'} pb-4`}
+        className={`transition-all cursor-pointer flex border-b border-[#7b7982] w-full pb-2`}
       >
         <span
-          className={`cursor-pointer p-4 md:relative md:top-0 md:left-0 absolute top-[-2px] left-[21px]`}
+          className={`p-4`}
         >
           <svg
             className="w-4 h-4 stroke-red-400"
@@ -87,11 +87,10 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         </span>
         <div
       
-          className="text-left pt-2 block pr-1 leading-[20px] cursor-pointer"
+          className="text-left py-2 block leading-[20px] cursor-pointer"
         >
           <p
-       
-            className={` text-[.8125rem] pb-1 pt-1 md:text-left text-center cursor-pointer	text-[#bcd2d6]`}
+            className={`text-[.8125rem] cursor-pointer	text-[#bcd2d6] pb-1`}
           >
             Find us
           </p>
@@ -115,8 +114,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
               {showText ? "Show Less" : "Read more"}
             </button>
           )}
-          </div>
-         
+          </div>         
         </div>
       </div>
       <div
@@ -173,7 +171,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         </span>
         <div
       
-          className="block py-1 text-left "
+          className="block py-2 text-left"
         >
           <p
           
