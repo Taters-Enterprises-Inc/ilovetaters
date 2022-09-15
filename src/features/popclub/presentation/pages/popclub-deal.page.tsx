@@ -29,10 +29,6 @@ import {
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getLatestUnexpiredRedeemInsideDealPage,
-  selectGetLatestUnexpiredRedeemInsideDealPage,
-} from "../slices/get-latest-unexpired-redeem-inside-deal-page.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {
@@ -44,7 +40,10 @@ import {
   resetFacebookLogout,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { getLatestUnexpiredRedeem } from "../slices/get-latest-unexpired-redeem.slice";
+import {
+  selectGetLatestUnexpiredRedeem,
+  getLatestUnexpiredRedeem,
+} from "../slices/get-latest-unexpired-redeem.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -54,8 +53,8 @@ export function PopClubDeal() {
   );
   const redeemDealState = useAppSelector(selectRedeemDeal);
   const getRedeemState = useAppSelector(selectGetRedeem);
-  const getLatestUnexpiredRedeemInsideDealPageState = useAppSelector(
-    selectGetLatestUnexpiredRedeemInsideDealPage
+  const getLatestUnexpiredRedeemState = useAppSelector(
+    selectGetLatestUnexpiredRedeem
   );
   const navigate = useNavigate();
 
@@ -98,7 +97,6 @@ export function PopClubDeal() {
 
   useEffect(() => {
     dispatch(resetGetRedeem());
-    dispatch(getLatestUnexpiredRedeemInsideDealPage());
     dispatch(getLatestUnexpiredRedeem());
   }, [dispatch]);
 
@@ -127,7 +125,6 @@ export function PopClubDeal() {
   }, [facebookLogoutState, navigate, dispatch, getSessionState]);
 
   useEffect(() => {
-    dispatch(getLatestUnexpiredRedeemInsideDealPage());
     dispatch(getLatestUnexpiredRedeem());
 
     if (
@@ -171,7 +168,7 @@ export function PopClubDeal() {
   const redeemButton = () => {
     if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemInsideDealPageState.next_avialable_redeem
+      getLatestUnexpiredRedeemState.next_avialable_redeem
     ) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -187,7 +184,6 @@ export function PopClubDeal() {
               })
             );
           }
-          dispatch(getLatestUnexpiredRedeemInsideDealPage());
           dispatch(getLatestUnexpiredRedeem());
         } else if (!completed) {
           let timeName = "";
@@ -243,17 +239,13 @@ export function PopClubDeal() {
           <span className="mt-3">You can redeem after </span>
           <Countdown
             renderer={renderer}
-            date={
-              new Date(
-                getLatestUnexpiredRedeemInsideDealPageState.next_avialable_redeem
-              )
-            }
+            date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}
           />
         </div>
       );
     } else if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemInsideDealPageState.redeem_cooldown
+      getLatestUnexpiredRedeemState.redeem_cooldown
     ) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -269,7 +261,6 @@ export function PopClubDeal() {
               })
             );
           }
-          dispatch(getLatestUnexpiredRedeemInsideDealPage());
           dispatch(getLatestUnexpiredRedeem());
         } else if (!completed) {
           let timeName = "";
@@ -315,11 +306,7 @@ export function PopClubDeal() {
           <span className="mt-3">Redeem cooldown: </span>
           <Countdown
             renderer={renderer}
-            date={
-              new Date(
-                getLatestUnexpiredRedeemInsideDealPageState.redeem_cooldown
-              )
-            }
+            date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}
           />
 
           <button
@@ -386,8 +373,8 @@ export function PopClubDeal() {
       );
     } else if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemInsideDealPageState.data?.deal_hash &&
-      getLatestUnexpiredRedeemInsideDealPageState.data?.deal_hash !== hash
+      getLatestUnexpiredRedeemState.data?.deal_hash &&
+      getLatestUnexpiredRedeemState.data?.deal_hash !== hash
     ) {
       return (
         <>
@@ -489,7 +476,7 @@ export function PopClubDeal() {
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
                   alt="Deals"
                 />
-                <CountdownTimer></CountdownTimer>
+                <CountdownTimer />
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
                   <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                     {getDealState.data.name}
