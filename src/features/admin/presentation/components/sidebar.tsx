@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Navigation } from "react-minimal-side-navigation";
 import {
   FaBars,
@@ -321,7 +321,7 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
               <Navigation
                 // you can use your own router's api to get pathname
                 activeItemId="/admin/orders"
-                onSelect={({ itemId }) => {
+                onSelect={({ itemId }:any) => {
                   if (itemId) history(itemId);
                   // maybe push to the route
                 }}
