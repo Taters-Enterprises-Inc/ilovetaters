@@ -67,7 +67,7 @@ export function Home() {
           REACT_APP_DOMAIN_URL +
           "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.webp"
         }
-        className="hidden w-full lg:block"
+        className="hidden w-full sm:block"
         alt="The best pop corn in town"
       ></img>
       {/* <section

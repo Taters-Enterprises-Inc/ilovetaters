@@ -69,6 +69,9 @@ import changeForgotPasswordStatus from "../shared/presentation/slices/change-for
 import forgotPasswordGenerateOTP from "../shared/presentation/slices/forgot-password-generate-otp.slice";
 import forgotPasswordValidateOTP from "../shared/presentation/slices/forgot-password-validate-otp.slice";
 import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-password-new-password-otp.slice";
+import loginAdmin from "features/admin/presentation/slices/login-admin.slice";
+import getAdminSession from "features/admin/presentation/slices/get-admin-session.slice";
+import logoutAdmin from "features/admin/presentation/slices/logout-admin.slice";
 
 export const store = configureStore({
   reducer: {
@@ -146,6 +149,10 @@ export const store = configureStore({
     forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
     forgotPasswordValidateOTP: forgotPasswordValidateOTP,
     forgotPasswordNewPassword: forgotPasswordNewPassword,
+
+    loginAdmin: loginAdmin,
+    logoutAdmin: logoutAdmin,
+    getAdminSession: getAdminSession,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

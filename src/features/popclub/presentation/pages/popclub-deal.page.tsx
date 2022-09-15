@@ -2,7 +2,12 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getDeal, GetDealState, selectGetDeal } from "../slices/get-deal.slice";
+import {
+  getDeal,
+  GetDealState,
+  resetGetDeal,
+  selectGetDeal,
+} from "../slices/get-deal.slice";
 import {
   getDealProductVariants,
   GetDealProductVariantsState,
@@ -14,7 +19,6 @@ import { CountdownTimer } from "../components";
 import {
   redeemDeal,
   RedeemDealState,
-  resetRedeemDeal,
   selectRedeemDeal,
 } from "../slices/redeem-deal.slice";
 import {
@@ -25,15 +29,10 @@ import {
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "../slices/get-latest-unexpired-redeem.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {
   getSession,
-  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import {
@@ -41,7 +40,10 @@ import {
   resetFacebookLogout,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { selectGetRedeems } from "../slices/get-redeems.slice";
+import {
+  selectGetLatestUnexpiredRedeem,
+  getLatestUnexpiredRedeem,
+} from "../slices/get-latest-unexpired-redeem.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -65,25 +67,10 @@ export function PopClubDeal() {
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
-  const getRedeemsState = useAppSelector(selectGetRedeems);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
-
-  useEffect(() => {
-    if (
-      redeemDealState.status === RedeemDealState.success &&
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery" &&
-      redeemDealState.data
-    ) {
-      navigate("/shop/checkout");
-      dispatch(getSession());
-    }
-
-    dispatch(resetRedeemDeal());
-  }, [getSessionState, navigate, redeemDealState, getRedeemsState, dispatch]);
 
   useEffect(() => {
     if (
@@ -99,11 +86,14 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
+          if (getDealState.data.minimum_purchase) {
+            navigate("/shop/products");
+          }
         }
       }
       dispatch(resetGetDealProductVariantsState());
     }
-  }, [getDealProductVariantsState, dispatch, getDealState]);
+  }, [getDealProductVariantsState, navigate, dispatch, getDealState]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());
@@ -156,6 +146,7 @@ export function PopClubDeal() {
 
   useEffect(() => {
     if (hash) {
+      dispatch(resetGetDeal());
       dispatch(getDeal(hash));
     }
   }, [dispatch, hash]);
@@ -481,13 +472,11 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                {getDealState.data.product_image ? (
-                  <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
-                    alt="Deals"
-                  />
-                ) : null}
-                <CountdownTimer></CountdownTimer>
+                <img
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
+                  alt="Deals"
+                />
+                <CountdownTimer />
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
                   <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                     {getDealState.data.name}

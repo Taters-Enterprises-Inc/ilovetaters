@@ -9,7 +9,6 @@ import {
   resetGetLatestUnexpiredRedeem,
   selectGetLatestUnexpiredRedeem,
 } from "../slices/get-latest-unexpired-redeem.slice";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function CountdownTimerLatestRedeem() {
   const getLatestUnexpiredRedeemState = useAppSelector(
@@ -17,11 +16,7 @@ export function CountdownTimerLatestRedeem() {
   );
   const dispatch = useAppDispatch();
 
-  if (
-    getLatestUnexpiredRedeemState.status ===
-      GetLatestUnexpiredRedeemState.success &&
-    getLatestUnexpiredRedeemState.data
-  ) {
+  if (getLatestUnexpiredRedeemState.data) {
     var redeemDate: any = moment(
       getLatestUnexpiredRedeemState.data.date_redeemed
     );

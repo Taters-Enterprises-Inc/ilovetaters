@@ -13,23 +13,37 @@ import {
   RiContactsBookLine,
   RiFilePaper2Fill,
 } from "react-icons/ri";
+
 import { MdSell, MdStore } from "react-icons/md";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "features/config/hooks";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import { IconContext } from "react-icons/lib";
+import { useRef } from "react";
 
 type Anchor = "left";
 
-export default function MoreDrawer() {
+interface MoreDrawerProps {
+  isMoreActive: true | false;
+}
+
+export default function MoreDrawer(props: MoreDrawerProps) {
   const [state, setState] = React.useState({
     left: false,
   });
 
   const getSessionState = useAppSelector(selectGetSession);
+  const currentLocation = useLocation();
+  const isActiveUrl = useRef(false);
+  let active = false;
+
+  function getCurrentLocation() {
+    return currentLocation.pathname;
+  }
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -100,13 +114,26 @@ export default function MoreDrawer() {
                 <ListItemButton>
                   {icon && (
                     <Link to={path}>
-                      <ListItemIcon className="text-[25px] sm:text-4xl">
-                        {icon}
-                        <ListItemText
-                          className="ml-3 text-white"
-                          primary={text}
-                        />
-                      </ListItemIcon>
+                      {getCurrentLocation() === path
+                        ? (isActiveUrl.current = true)
+                        : (isActiveUrl.current = false)}
+                      <IconContext.Provider
+                        value={{
+                          color: `${isActiveUrl.current ? "#ffcd17" : "white"}`,
+                        }}
+                      >
+                        <ListItemIcon className="text-[25px] sm:text-4xl">
+                          {icon}
+                          <ListItemText
+                            className={`ml-3 ${
+                              isActiveUrl.current
+                                ? "text-tertiary"
+                                : "text-white"
+                            }`}
+                            primary={text}
+                          />
+                        </ListItemIcon>
+                      </IconContext.Provider>
                     </Link>
                   )}
                 </ListItemButton>
@@ -130,8 +157,19 @@ export default function MoreDrawer() {
                 : toggleDrawer(anchor, true)
             }
           >
-            <FiMoreHorizontal className="text-[25px] sm:text-4xl text-white"></FiMoreHorizontal>
-            <span className="text-[8px] sm:text-[14px] text-white capitalize">
+            {props.isMoreActive
+              ? (isActiveUrl.current = true)
+              : (isActiveUrl.current = false)}
+            <FiMoreHorizontal
+              className={`text-[25px] sm:text-4xl ${
+                isActiveUrl.current ? "text-tertiary" : "text-white"
+              }`}
+            />
+            <span
+              className={`text-[8px] sm:text-[14px] capitalize ${
+                isActiveUrl.current ? "text-tertiary" : "text-white"
+              }`}
+            >
               More
             </span>
           </button>

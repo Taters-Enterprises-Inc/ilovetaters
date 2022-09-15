@@ -10,15 +10,33 @@ interface SnackbarAlertProps {
 
 export function SnackbarAlert(props: SnackbarAlertProps) {
   return (
-    <Snackbar
-      open={props.open}
-      autoHideDuration={10000}
-      sx={{ zIndex: 2004 }}
-      className="lg:!mb-[0px] !mb-[7px] "
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      TransitionComponent={Slide}
-    >
-      <MuiAlert severity={props.severity}>{props.message}</MuiAlert>
-    </Snackbar>
+    <>
+      <div className="hidden lg:block">
+        <Snackbar
+          open={props.open}
+          autoHideDuration={10000}
+          sx={{ zIndex: 2004 }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          TransitionComponent={Slide}
+        >
+          <MuiAlert severity={props.severity} variant="filled">
+            {props.message}
+          </MuiAlert>
+        </Snackbar>
+      </div>
+      <div className="lg:hidden">
+        <Snackbar
+          open={props.open}
+          autoHideDuration={10000}
+          sx={{ zIndex: 2004, marginBottom: 7 }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          TransitionComponent={Slide}
+        >
+          <MuiAlert severity={props.severity} variant="filled">
+            {props.message}
+          </MuiAlert>
+        </Snackbar>
+      </div>
+    </>
   );
 }

@@ -62,8 +62,8 @@ export function CountdownTimer() {
         return (
           <>
             <ProgressBar percentage={percentage} />
-            <div className="text-white flex items-center text-xl px-4 ">
-              <AiOutlineFieldTime className="text-4xl mr-2" />
+            <div className="flex items-center px-4 text-xl text-white ">
+              <AiOutlineFieldTime className="mr-2 text-4xl" />
               <div className="font-['Bebas_Neue'] tracking-[4px]">
                 <span className="mr-2">
                   {pad(hours)}:{pad(minutes)}:{pad(seconds)}

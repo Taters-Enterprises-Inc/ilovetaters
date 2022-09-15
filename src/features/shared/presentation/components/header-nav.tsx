@@ -5,7 +5,7 @@ import {
 } from "features/shared/presentation/slices/get-session.slice";
 import { TABS } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsCart4 } from "react-icons/bs";
 import { ShopCartModal } from "../../../shop/presentation/modals";
@@ -53,6 +53,7 @@ export function HeaderNav(props: HeaderNavProps) {
     null
   );
   const navigate = useNavigate();
+  const currentLocation = useLocation();
 
   const getSessionState = useAppSelector(selectGetSession);
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -118,7 +119,13 @@ export function HeaderNav(props: HeaderNavProps) {
 
   const handleLogout = () => {
     setOpenProfileMenu(null);
-    dispatch(facebookLogout());
+
+    if (currentLocation.pathname === "/shop/profile") {
+      dispatch(facebookLogout());
+      navigate("/shop");
+    } else {
+      dispatch(facebookLogout());
+    }
   };
 
   useEffect(() => {
@@ -317,7 +324,10 @@ export function HeaderNav(props: HeaderNavProps) {
             </div>
           </nav>
         </div>
-        {getSessionState.data?.cache_data &&
+        {getSessionState.data &&
+        getSessionState.data.cache_data &&
+        getSessionState.data.customer_address &&
+        getSessionState.data.cache_data.store_name &&
         (props.activeUrl === "CATERING" || props.activeUrl === "SNACKSHOP") ? (
           <div className="w-full py-1 text-white bg-secondary">
             <div className="container flex">

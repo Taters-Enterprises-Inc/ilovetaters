@@ -29,6 +29,8 @@ export const getRedeem = createAsyncThunk(
   async (param: GetRedeemParam) => {
     const response: GetRedeemResponse = await GetRedeemRepository(param);
 
+    console.log(response.data);
+
     return response.data;
   }
 );
