@@ -38,13 +38,15 @@ export function Addon(props: AddonProps) {
     }
   }, [addToCartShopState, dispatch]);
 
-  function handleonClick(action: string) {
+  function handleonClick() {
     if (isLongPress.current === true) {
       return;
+    } else {
+      console.log("click");
     }
-    setTimeout(() => {
-      action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-    }, 200);
+    // } else {
+    //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    // }
   }
 
   function handleonMouseUp() {
@@ -54,7 +56,6 @@ export function Addon(props: AddonProps) {
 
   function handleonMouseDown(action: string) {
     isQuantityNull.current = false;
-
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -68,25 +69,34 @@ export function Addon(props: AddonProps) {
 
   function pressTimer(action: string) {
     isLongPress.current = false;
+
+    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+
     timerRef.current = window.setTimeout(() => {
-      let counter = quantity;
-      quantityId = setInterval(function () {
-        if (action === "add") counter += 1;
-        else counter -= 1;
-
-        setQuantity(counter);
-
-        if (counter >= 10) {
-          clearInterval(quantityId);
-          setQuantity(10);
-        } else if (counter <= 1) {
-          clearInterval(quantityId);
-          setQuantity(1);
-        }
-      }, 100);
-
+      handleOnLongPress(action);
       isLongPress.current = true;
-    }, 500);
+    }, 300);
+  }
+
+  function handleOnLongPress(action: string) {
+    let counter = quantity;
+
+    quantityId = setInterval(() => {
+      if (action === "add") counter += 1;
+      else counter -= 1;
+
+      if (counter >= 10) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(10);
+      } else if (counter <= 1) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(1);
+      } else {
+        setQuantity(counter);
+      }
+    }, 100);
   }
 
   const handleAddToCart = () => {
@@ -145,7 +155,7 @@ export function Addon(props: AddonProps) {
                   onClick={() =>
                     quantity <= 1 || isQuantityNull.current
                       ? setDisabled
-                      : handleonClick("minus")
+                      : handleonClick()
                   }
                   onMouseDown={() =>
                     quantity <= 1 || isQuantityNull.current
@@ -158,7 +168,10 @@ export function Addon(props: AddonProps) {
                       ? setDisabled
                       : handleonMouseDown("minus")
                   }
-                  onTouchEnd={handleonMouseUp}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleonMouseUp();
+                  }}
                   className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                     quantity <= 1 || isQuantityNull.current
                       ? "opacity-30 cursor-not-allowed"
@@ -207,7 +220,7 @@ export function Addon(props: AddonProps) {
 
                 <button
                   onClick={() =>
-                    quantity >= 10 ? setDisabled : handleonClick("add")
+                    quantity >= 10 ? setDisabled : handleonClick()
                   }
                   onMouseDown={() =>
                     quantity >= 10 ? setDisabled : handleonMouseDown("add")
@@ -216,7 +229,10 @@ export function Addon(props: AddonProps) {
                   onTouchStart={() =>
                     quantity >= 10 ? setDisabled : handleonMouseDown("add")
                   }
-                  onTouchEnd={handleonMouseUp}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleonMouseUp();
+                  }}
                   className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
                     quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
