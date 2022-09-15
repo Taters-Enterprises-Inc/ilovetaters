@@ -1,11 +1,8 @@
-import { Head } from "../components/head";
 import { AdminAvailabilityBannerTable } from "../tables/admin-availability-banner-table";
 
 export function AdminAvailabilityBanner() {
   return (
     <>
-      <Head />
-
       <div className="relative flex">
         <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary">
           Banner Availability

@@ -76,19 +76,11 @@ html {
   scroll-behavior: smooth;
 }
 input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: rgb(0, 0, 0) !important;
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
-
-input.autolog {
-  border: none;
-  background-color: transparent;
-  resize: none;
-  outline: none;
-  width: 345px;
+input[data-autocompleted] {
+  background-color: transparent !important;
 }
 
 .vid-container {

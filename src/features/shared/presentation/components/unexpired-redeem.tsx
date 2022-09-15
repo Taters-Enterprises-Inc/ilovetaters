@@ -35,7 +35,7 @@ export function UnExpiredRedeem() {
     <>
       {getLatestUnexpiredRedeemState.data ? (
         <div
-          className={`fixed z-10 bottom-[70px]  ${
+          className={`fixed z-10  sm:h-1 bottom-[70px]  ${
             getSessionState.data &&
             getSessionState.data.cache_data &&
             getSessionState.data.customer_address &&
