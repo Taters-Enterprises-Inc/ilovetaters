@@ -17,9 +17,11 @@ export enum CheckoutOrdersState {
 const initialState: {
   status: CheckoutOrdersState;
   data: CheckoutOrdersModel | undefined;
+  message: string;
 } = {
   status: CheckoutOrdersState.initial,
   data: undefined,
+  message: "",
 };
 
 export const checkoutOrders = createAsyncThunk(
@@ -40,6 +42,7 @@ export const checkoutOrdersSlice = createSlice({
     resetCheckoutOrders: (state) => {
       state.status = CheckoutOrdersState.initial;
       state.data = undefined;
+      state.message = "";
     },
   },
   extraReducers: (builder: any) => {
@@ -56,9 +59,10 @@ export const checkoutOrdersSlice = createSlice({
             data: CheckoutOrdersModel | undefined;
           }>
         ) => {
-          const data = action.payload.data;
+          const { data, message } = action.payload;
 
           state.data = data;
+          state.message = message;
           state.status = CheckoutOrdersState.success;
         }
       );

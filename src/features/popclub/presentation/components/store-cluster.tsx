@@ -4,15 +4,15 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
 import { selectGetStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
+import {
+  selectSetStoreAndAddressPopClub,
+  setStoreAndAddressPopClub,
+  SetStoreAndAddressPopClubState,
+} from "../slices/set-store-and-address-popclub.slice";
 
 interface StoreClusterProps {
   onClose: any;
@@ -23,7 +23,9 @@ export function StoreCluster(props: StoreClusterProps) {
   const getStoresAvailablePopClubState = useAppSelector(
     selectGetStoresAvailablePopClub
   );
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setStoreAndAddressPopClubState = useAppSelector(
+    selectSetStoreAndAddressPopClub
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let { platform } = useParams();
@@ -31,18 +33,21 @@ export function StoreCluster(props: StoreClusterProps) {
   const category = query.get("category");
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setStoreAndAddressPopClubState.status ===
+      SetStoreAndAddressPopClubState.success
+    ) {
       if (platform !== undefined && category !== null) {
         dispatch(
           getDeals({ platform_url_name: platform, category_url_name: category })
         );
       }
     }
-  }, [setStoreAndAddressState, dispatch, category, platform]);
+  }, [setStoreAndAddressPopClubState, dispatch, category, platform]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     dispatch(
-      setStoreAndAddress({
+      setStoreAndAddressPopClub({
         address: props.address,
         storeId,
         regionId,
@@ -54,7 +59,7 @@ export function StoreCluster(props: StoreClusterProps) {
 
     if (platform) {
       if (platform === "store-visit") {
-        navigate(`../popclub/online-delivery?category=all`);
+        navigate(`/popclub/online-delivery?category=all`);
       } else {
         navigate(`?category=all`);
       }
@@ -71,7 +76,7 @@ export function StoreCluster(props: StoreClusterProps) {
           <h1 className="pl-2 text-sm font-normal">
             {store_cluster.region_name}
           </h1>
-          <section className="flex flex-wrap pb-2 ">
+          <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 ">
             {store_cluster.stores.map((store, index) => {
               const distance_in_km = Math.ceil(
                 store.store_distance * 1.609344 +
@@ -89,15 +94,15 @@ export function StoreCluster(props: StoreClusterProps) {
                       : () =>
                           storeClicked(store.store_id, store.region_store_id)
                   }
-                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] max-w-[44.9%] m-[7px] flex-[0_0_44.9%] sm:max-w-[30%] sm:flex-[0_0_30%]  md:max-w-[22%] md:flex-[0_0_22%]  lg:max-w-[23%] lg:flex-[0_0_23%] lg:mb-4 relative ${
+                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative ${
                     store_availability && props.address != null
                       ? "store-not-available"
                       : ""
                   }`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 text-center not-within-reach-text ">
-                      Store not within reach
+                    <span className="p-1 text-center deal-not-available-text ">
+                      You can't redeem this deal
                     </span>
                   ) : null}
 

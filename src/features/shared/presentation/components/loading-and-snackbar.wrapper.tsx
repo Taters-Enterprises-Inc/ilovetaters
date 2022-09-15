@@ -63,9 +63,77 @@ import {
   AddToCartCateringState,
   selectAddToCartCatering,
 } from "features/catering/presentation/slices/add-to-cart-catering.slice";
+import {
+  CheckoutOrdersState,
+  selectCheckoutOrders,
+} from "features/shop/presentation/slices/checkout-orders.slice";
+import {
+  CateringCheckoutOrdersState,
+  selectCateringCheckoutOrders,
+} from "features/catering/presentation/slices/catering-checkout-orders.slice";
+import {
+  selectUploadContract,
+  UploadContractState,
+} from "features/catering/presentation/slices/upload-contract.slice";
+import {
+  CateringUploadProofOfPaymentState,
+  selectCateringUploadProofOfPayment,
+} from "features/catering/presentation/slices/catering-upload-proof-of-payment.slice";
+import {
+  selectSignInMobileUser,
+  SignInMobileUserState,
+} from "../slices/sign-in-mobile-user.slice";
+import { BackdropLoadingPopClub } from "features/popclub/presentation/components";
+import {
+  GetStoresAvailablePopClubState,
+  selectGetStoresAvailablePopClub,
+} from "features/popclub/presentation/slices/get-stores-available-popclub.slice";
+import {
+  GetDealsState,
+  selectGetDeals,
+} from "features/popclub/presentation/slices/get-deals.slice";
+import {
+  selectSetStoreAndAddressPopClub,
+  SetStoreAndAddressPopClubState,
+} from "features/popclub/presentation/slices/set-store-and-address-popclub.slice";
+import {
+  RedeemDealState,
+  selectRedeemDeal,
+} from "features/popclub/presentation/slices/redeem-deal.slice";
+import {
+  selectSignUpMobileUser,
+  signUpMobileUser,
+  SignUpMobileUserState,
+} from "../slices/sign-up-mobile-user.slice";
+import {
+  ForgotPasswordGenerateOTPState,
+  selectForgotPasswordGenerateOTP,
+} from "../slices/forgot-password-generate-otp.slice";
+import {
+  ForgotPasswordValidateOTPState,
+  selectForgotPasswordValidateOTP,
+} from "../slices/forgot-password-validate-otp.slice";
+import {
+  ForgotPasswordNewPasswordState,
+  selectForgotPasswordNewPassword,
+} from "../slices/forgot-password-new-password-otp.slice";
+import {
+  GetDealState,
+  selectGetDeal,
+} from "features/popclub/presentation/slices/get-deal.slice";
+import {
+  GetDealProductVariantsState,
+  selectGetDealProductVariants,
+} from "features/popclub/presentation/slices/get-deal-product-variants.slice";
+import {
+  GetRedeemState,
+  selectGetRedeem,
+} from "features/popclub/presentation/slices/get-redeem.slice";
 
 export function LoadingAndSnackbarWrapper() {
-  const [openBackdropLoading, setOpenBackdropLoading] = useState(true);
+  const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
+  const [openBackdropPopClubLoading, setOpenBackdropPopClubLoading] =
+    useState(false);
   const [successAlert, setSuccessAlert] = useState<{
     status: boolean;
     message?: string;
@@ -103,6 +171,292 @@ export function LoadingAndSnackbarWrapper() {
   );
   const popSnackBarState = useAppSelector(selectPopSnackBar);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
+  const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+  const cateringCheckoutOrdersState = useAppSelector(
+    selectCateringCheckoutOrders
+  );
+  const uploadContractState = useAppSelector(selectUploadContract);
+  const cateringUploadProofOfPaymentState = useAppSelector(
+    selectCateringUploadProofOfPayment
+  );
+  const signInMobileUserState = useAppSelector(selectSignInMobileUser);
+  const getStoresAvailablePopClubState = useAppSelector(
+    selectGetStoresAvailablePopClub
+  );
+  const getDealsState = useAppSelector(selectGetDeals);
+  const setStoreAndAddressPopClub = useAppSelector(
+    selectSetStoreAndAddressPopClub
+  );
+  const redeemDealState = useAppSelector(selectRedeemDeal);
+  const signUpMobileUserState = useAppSelector(selectSignUpMobileUser);
+  const forgotPasswordGenerateOTP = useAppSelector(
+    selectForgotPasswordGenerateOTP
+  );
+  const forgotPasswordValidateOTP = useAppSelector(
+    selectForgotPasswordValidateOTP
+  );
+  const forgotPasswordNewPasswordOTP = useAppSelector(
+    selectForgotPasswordNewPassword
+  );
+  const getDealState = useAppSelector(selectGetDeal);
+  const getDealProductVariantsState = useAppSelector(
+    selectGetDealProductVariants
+  );
+  const getRedeemState = useAppSelector(selectGetRedeem);
+
+  useEffect(() => {
+    switch (getRedeemState.status) {
+      case GetRedeemState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetRedeemState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetRedeemState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetRedeemState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getRedeemState, dispatch]);
+
+  useEffect(() => {
+    switch (getDealProductVariantsState.status) {
+      case GetDealProductVariantsState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealProductVariantsState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealProductVariantsState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealProductVariantsState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealProductVariantsState, dispatch]);
+
+  useEffect(() => {
+    switch (getDealState.status) {
+      case GetDealState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealState, dispatch]);
+
+  useEffect(() => {
+    switch (forgotPasswordNewPasswordOTP.status) {
+      case ForgotPasswordNewPasswordState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordNewPasswordState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordNewPasswordState.success:
+        showAlert(setSuccessAlert, forgotPasswordNewPasswordOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordNewPasswordState.fail:
+        showAlert(setFailsAlert, forgotPasswordNewPasswordOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordNewPasswordOTP]);
+
+  useEffect(() => {
+    switch (forgotPasswordValidateOTP.status) {
+      case ForgotPasswordValidateOTPState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordValidateOTPState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordValidateOTPState.success:
+        showAlert(setSuccessAlert, forgotPasswordValidateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordValidateOTPState.fail:
+        showAlert(setFailsAlert, forgotPasswordValidateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordValidateOTP]);
+
+  useEffect(() => {
+    switch (forgotPasswordGenerateOTP.status) {
+      case ForgotPasswordGenerateOTPState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ForgotPasswordGenerateOTPState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordGenerateOTPState.success:
+        showAlert(setSuccessAlert, forgotPasswordGenerateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ForgotPasswordGenerateOTPState.fail:
+        showAlert(setFailsAlert, forgotPasswordGenerateOTP.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [forgotPasswordGenerateOTP]);
+
+  useEffect(() => {
+    switch (signUpMobileUserState.status) {
+      case SignUpMobileUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SignUpMobileUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SignUpMobileUserState.success:
+        showAlert(setSuccessAlert, signUpMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SignUpMobileUserState.fail:
+        showAlert(setFailsAlert, signUpMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [signUpMobileUserState]);
+
+  useEffect(() => {
+    switch (redeemDealState.status) {
+      case RedeemDealState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case RedeemDealState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case RedeemDealState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case RedeemDealState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [redeemDealState]);
+
+  useEffect(() => {
+    switch (setStoreAndAddressPopClub.status) {
+      case SetStoreAndAddressPopClubState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case SetStoreAndAddressPopClubState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case SetStoreAndAddressPopClubState.success:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+      case SetStoreAndAddressPopClubState.fail:
+        setOpenBackdropPopClubLoading(false);
+        dispatch(resetStoreAndAddress());
+        break;
+    }
+  }, [setStoreAndAddressPopClub, dispatch]);
+
+  useEffect(() => {
+    switch (getDealsState.status) {
+      case GetDealsState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetDealsState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealsState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetDealsState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getDealsState]);
+
+  useEffect(() => {
+    switch (getStoresAvailablePopClubState.status) {
+      case GetStoresAvailablePopClubState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case GetStoresAvailablePopClubState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetStoresAvailablePopClubState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case GetStoresAvailablePopClubState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [getStoresAvailablePopClubState]);
+
+  useEffect(() => {
+    switch (signInMobileUserState.status) {
+      case SignInMobileUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SignInMobileUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SignInMobileUserState.success:
+        showAlert(setSuccessAlert, signInMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case SignInMobileUserState.fail:
+        showAlert(setFailsAlert, signInMobileUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [signInMobileUserState]);
+
+  useEffect(() => {
+    switch (cateringCheckoutOrdersState.status) {
+      case CateringCheckoutOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CateringCheckoutOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CateringCheckoutOrdersState.success:
+        showAlert(setSuccessAlert, cateringCheckoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CateringCheckoutOrdersState.fail:
+        showAlert(setFailsAlert, cateringCheckoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [cateringCheckoutOrdersState]);
+
+  useEffect(() => {
+    switch (checkoutOrdersState.status) {
+      case CheckoutOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CheckoutOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CheckoutOrdersState.success:
+        showAlert(setSuccessAlert, checkoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CheckoutOrdersState.fail:
+        showAlert(setFailsAlert, checkoutOrdersState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [checkoutOrdersState]);
 
   useEffect(() => {
     switch (popSnackBarState.status) {
@@ -213,6 +567,25 @@ export function LoadingAndSnackbarWrapper() {
   }, [addContactState, dispatch]);
 
   useEffect(() => {
+    switch (cateringUploadProofOfPaymentState.status) {
+      case CateringUploadProofOfPaymentState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CateringUploadProofOfPaymentState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CateringUploadProofOfPaymentState.success:
+        showAlert(setSuccessAlert, cateringUploadProofOfPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CateringUploadProofOfPaymentState.fail:
+        showAlert(setFailsAlert, cateringUploadProofOfPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [cateringUploadProofOfPaymentState, dispatch]);
+
+  useEffect(() => {
     switch (uploadProofOfPaymentState.status) {
       case UploadProofOfPaymentState.inProgress:
         setOpenBackdropLoading(true);
@@ -230,6 +603,25 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [uploadProofOfPaymentState, dispatch]);
+
+  useEffect(() => {
+    switch (uploadContractState.status) {
+      case UploadContractState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadContractState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.success:
+        showAlert(setSuccessAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractState.fail:
+        showAlert(setFailsAlert, uploadContractState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadContractState, dispatch]);
 
   useEffect(() => {
     switch (removeItemFromCartShopState.status) {
@@ -257,7 +649,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
       case FacebookLoginPointState.fail:
         setOpenBackdropLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
     }
   }, [facebookLoginPointState, dispatch]);
@@ -402,6 +793,7 @@ export function LoadingAndSnackbarWrapper() {
         message={failsAlert.message}
       />
       <BackdropLoading open={openBackdropLoading} />
+      <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
     </div>
   );
 }

@@ -17,13 +17,15 @@ export enum CateringCheckoutOrdersState {
 const initialState: {
   status: CateringCheckoutOrdersState;
   data: CheckoutOrdersModel | undefined;
+  message: string;
 } = {
   status: CateringCheckoutOrdersState.initial,
   data: undefined,
+  message: "",
 };
 
 export const cateringCheckoutOrders = createAsyncThunk(
-  "checkoutOrders",
+  "cateringCheckoutOrders",
   async (param: CateringCheckoutOrdersParam) => {
     const response: CateringCheckoutOrdersResponse =
       await CateringCheckoutOrdersRepository(param);
@@ -40,6 +42,7 @@ export const cateringCheckoutOrdersSlice = createSlice({
     resetCateringCheckoutOrders: (state) => {
       state.status = CateringCheckoutOrdersState.initial;
       state.data = undefined;
+      state.message = "";
     },
   },
   extraReducers: (builder: any) => {
@@ -56,9 +59,10 @@ export const cateringCheckoutOrdersSlice = createSlice({
             data: CheckoutOrdersModel | undefined;
           }>
         ) => {
-          const data = action.payload.data;
+          const { data, message } = action.payload;
 
           state.data = data;
+          state.message = message;
           state.status = CateringCheckoutOrdersState.success;
         }
       );

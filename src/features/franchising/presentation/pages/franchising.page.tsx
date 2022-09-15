@@ -1,36 +1,40 @@
+import { useAppDispatch } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {
-  FooterNav,
-  HomeHeaderNav,
-} from "features/shared/presentation/components";
-import { useEffect, useRef, useState } from "react";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import { useEffect } from "react";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
-  const [serviceReached, setServiceReached] = useState(false);
-  const servicesRef = useRef<any>(null);
-
-  const listenScrollEvent = (event: any) => {
-    if (window.scrollY < 203) {
-      return setServiceReached(false);
-    } else if (window.scrollY > 200) {
-      return setServiceReached(true);
-    }
-  };
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, []);
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
 
   return (
     <main className="bg-primary">
+
       <HomeHeaderNav
         serviceReached={serviceReached}
         active="FRANCHISING"
       ></HomeHeaderNav>
+      
+      {/* <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav> */}
 
+      <HeaderNav
+        activeUrl="FRANCHISING"
+        logoProps={{
+          src:
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-logo.webp",
+          alt: "Taters Logo",
+          className: "w-[150px] lg:w-[120px]",
+        }}
+      />
+      
       <img
         className="pt-6 lg:hidden"
         src={
@@ -74,7 +78,7 @@ export function Franchising() {
         ></iframe>
       </div>
 
-      <section ref={servicesRef} className="container min-h-min">
+      <section className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
 
         <h1 className='text-tertiary text-3xl font-["Bebas_Neue"] text-center py-6 '>

@@ -17,7 +17,6 @@ import {
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 
 interface HeaderNavProps {
-  serviceReached?: boolean;
   active: string;
   sticky?: boolean;
 }
@@ -47,13 +46,9 @@ export function HomeHeaderNav(props: HeaderNavProps) {
       <header
         className={`${props.sticky ? "sticky" : "fixed"} w-full top-0 z-20 `}
       >
-        <div
-          className={` w-full ${
-            props.serviceReached ? "bg-primary shadow-2xl" : ""
-          }`}
-        >
+        <div className={` w-full bg-primary shadow-2xl`}>
           <nav
-            className={`lg:flex hidden justify-between items-center container py-2`}
+            className={`lg:flex hidden justify-between items-center container py-2 h-[64px]`}
           >
             <img
               src={
@@ -61,8 +56,8 @@ export function HomeHeaderNav(props: HeaderNavProps) {
                 "api/assets/images/shared/logo/taters-logo.webp"
               }
               alt="Taters Logo"
-              className="w-[150px] lg:w-[160px]"
-            ></img>
+              className="w-[150px] lg:w-[120px]"
+            />
 
             <div className="flex items-center justify-center space-x-4">
               <ul className="flex text-white font-semibold items-stretch h-[40px] justify-center ">

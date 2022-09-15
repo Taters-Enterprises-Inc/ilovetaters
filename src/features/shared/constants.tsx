@@ -110,7 +110,7 @@ export const SERVICES_MOBILE = [
   },
 ];
 
-export const TABS = [
+export const TABS: Array<{ name: string; url: string }> = [
   {
     name: "HOME",
     url: "/",
@@ -206,6 +206,13 @@ declare module "@mui/material/CircularProgress" {
   }
 }
 
+// Update the Button's color prop options
+declare module "@mui/material/Tabs" {
+  interface TabsPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -222,33 +229,43 @@ export const theme = createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: {
-          color: "white",
+          color: "#22201A",
         },
       },
     },
     MuiRadio: {
       styleOverrides: {
         root: {
-          color: "white",
+          color: "#22201A",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          "& fieldset": {
+            borderColor: "#22201A",
+          },
+          "&:hover fieldset": {
+            borderColor: "#22201A",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#22201A",
+          },
+          ".Mui-error .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#22201A",
+          },
+          // "&.Mui-focused fieldset": {
+          //   borderColor: "blue !important",
+          // },
         },
       },
     },
     MuiInputBase: {
       styleOverrides: {
-        root: {
-          "& fieldset": {
-            borderColor: "white !important",
-          },
-          "&:hover fieldset": {
-            borderColor: "white !important",
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "white !important",
-          },
-        },
         input: {
-          color: "white",
-          "-webkit-text-fill-color": "white !important",
+          color: "#22201A",
+          "-webkit-text-fill-color": "#22201A !important",
         },
       },
     },
@@ -256,10 +273,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& label.Mui-focused": {
-            color: "white",
+            color: "#22201A",
           },
           "& label": {
-            color: "white !important",
+            color: "#22201A !important",
           },
         },
       },
@@ -267,7 +284,29 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         iconOutlined: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#ffcd17",
+          height: 3,
+        },
+        root: {
+          height: 60,
+          "& .MuiTab-root.Mui-selected": {
+            color: "#ffcd17",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
           color: "white",
+          height: 60,
         },
       },
     },
@@ -275,10 +314,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& label.Mui-focused": {
-            color: "white",
+            color: "#22201A",
           },
           "& label": {
-            color: "white !important",
+            color: "#22201A !important",
           },
         },
       },

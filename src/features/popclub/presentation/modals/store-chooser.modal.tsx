@@ -8,6 +8,10 @@ import {
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { getStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
+import {
+  selectStoreChooserModal,
+  setAddressStoreChooserModal,
+} from "../slices/store-chooser-modal.slice";
 
 interface StoreChooserModalProps {
   open: boolean;
@@ -16,18 +20,11 @@ interface StoreChooserModalProps {
 
 export function StoreChooserModal(props: StoreChooserModalProps) {
   const dispatch = useAppDispatch();
-  const [address, setAddress] = useState<any>("");
-  const getSessionState = useAppSelector(selectGetSession);
+  const storeChooserModalState = useAppSelector(selectStoreChooserModal);
 
   useEffect(() => {
     dispatch(getSession());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (getSessionState.data?.customer_address !== null) {
-      setAddress(getSessionState.data?.customer_address);
-    }
-  }, [getSessionState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -41,7 +38,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-[#a21013] px-[10px] py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
+      <div className="bg-primary px-3 py-[30px] round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
           className="absolute text-2xl text-white top-2 right-4"
           onClick={() => {
@@ -59,8 +56,16 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <div className="flex items-center justify-center mb-3">
           <label className="w-full pure-material-textfield-outlined">
             <SearchAddress
+              value={
+                storeChooserModalState.address
+                  ? storeChooserModalState.address
+                  : ""
+              }
+              onChange={(value: string) => {
+                dispatch(setAddressStoreChooserModal({ address: value }));
+              }}
               onPlaceSelected={(place: string) => {
-                setAddress(place);
+                dispatch(setAddressStoreChooserModal({ address: place }));
                 dispatch(
                   getStoresAvailablePopClub({
                     address: place,
@@ -72,7 +77,12 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
             <span>Search Address</span>
           </label>
         </div>
-        <StoreCluster onClose={props.onClose} address={address}></StoreCluster>
+        <StoreCluster
+          onClose={props.onClose}
+          address={
+            storeChooserModalState.address ? storeChooserModalState.address : ""
+          }
+        ></StoreCluster>
       </div>
     </div>
   );

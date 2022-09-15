@@ -1,4 +1,8 @@
-import { AiFillInfoCircle } from "react-icons/ai";
+import {
+  AiFillInfoCircle,
+  AiOutlineMinus,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -10,7 +14,7 @@ import {
   GetProductDetailsState,
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Addon } from "../../../shared/presentation/components/addon";
 import NumberFormat from "react-number-format";
 
@@ -34,16 +38,21 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import {
-  QuantityInput,
-  SnackbarAlert,
-} from "features/shared/presentation/components";
+import { QuantityInput } from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
   selectAddToCartShop,
 } from "../slices/add-to-cart-shop.slice";
+import {
+  addToCartCheckoutShop,
+  AddToCartCheckoutShopState,
+  resetAddToCartCheckout,
+  selectAddToCartCheckoutShop,
+} from "../slices/add-to-cart-checkout-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+
+let quantityId: any;
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -52,9 +61,16 @@ export function ShopProduct() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const addToCartCheckoutShopState = useAppSelector(
+    selectAddToCartCheckoutShop
+  );
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-
+  const [setDisabled] = useState(true);
   const [quantity, setQuantity] = useState(1);
+
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
 
   const [currentSize, setCurrentSize] = useState<number | undefined>();
   const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
@@ -129,26 +145,108 @@ export function ShopProduct() {
     }
   }, [addToCartShopState, dispatch]);
 
+  useEffect(() => {
+    if (
+      addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
+    ) {
+      dispatch(getSession());
+      navigate("/shop/checkout");
+      dispatch(resetAddToCartCheckout());
+    }
+  }, [addToCartCheckoutShopState, navigate, dispatch]);
+
+  function handleonClick() {
+    if (isLongPress.current === true) {
+      return;
+    } else {
+      console.log("click");
+    }
+    // } else {
+    //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    // }
+  }
+
+  function handleonMouseUp() {
+    clearTimeout(timerRef.current);
+    clearInterval(quantityId);
+
+    if (quantity > 1) {
+      if (
+        getProductDetailsState.data &&
+        getProductDetailsState.data?.product.num_flavor > 1
+      ) {
+        setCurrentMultiFlavors(undefined);
+        setTotalMultiFlavorsQuantity(0);
+        setResetMultiFlavors(true);
+      }
+    }
+  }
+
+  function handleonMouseDown(action: string) {
+    isQuantityNull.current = false;
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      pressTimer(action);
+    }
+  }
+
+  function pressTimer(action: string) {
+    isLongPress.current = false;
+
+    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+
+    timerRef.current = window.setTimeout(() => {
+      handleOnLongPress(action);
+      isLongPress.current = true;
+    }, 300);
+  }
+
+  function handleOnLongPress(action: string) {
+    let counter = quantity;
+
+    quantityId = setInterval(() => {
+      if (action === "add") counter += 1;
+      else counter -= 1;
+
+      if (counter >= 10) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(10);
+      } else if (counter <= 1) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(1);
+      } else {
+        setQuantity(counter);
+      }
+    }, 100);
+  }
+
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
     const multiFlavorsArray: Array<{
       name: string;
       quantity: number;
     }> = Object.values(currentMultiFlavors);
-    let result: string = "<br/>";
+    let result: string | undefined;
 
     for (let i = 0; i < multiFlavorsArray.length; i++) {
       if (multiFlavorsArray[i].quantity > 0)
         result =
           (result === undefined ? "" : result) +
-          `<span>(${multiFlavorsArray[i].quantity.toString()}) ${
+          `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
             multiFlavorsArray[i].name
-          }</span><br/>`;
+          }<br/>`;
     }
-    return result === "<br/>" ? undefined : result;
+    return result ? result : undefined;
   };
 
-  const dispatchAddToCart = (callBackSuccess?: () => void) => {
+  const handleAddToCartCheckout = () => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -177,7 +275,54 @@ export function ShopProduct() {
 
       let flavors_details = createFlavorDetails();
 
-      if (callBackSuccess) callBackSuccess();
+      dispatch(
+        addToCartCheckoutShop({
+          prod_id: getProductDetailsState.data.product.id,
+          prod_image_name: getProductDetailsState.data.product.product_image,
+          prod_name: getProductDetailsState.data.product.name,
+          prod_qty: quantity,
+          prod_flavor: currentFlavor,
+          prod_size: currentSize,
+          prod_price: getProductDetailsState.data.product.price,
+          prod_calc_amount:
+            getProductDetailsState.data.product.price * quantity,
+          prod_category: getProductDetailsState.data.product.category,
+          prod_with_drinks: -1,
+          flavors_details: flavors_details,
+          prod_sku_id: -1,
+          prod_sku: -1,
+        })
+      );
+    }
+  };
+  const handleAddToCart = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
+    if (
+      getProductDetailsState.status === GetProductDetailsState.success &&
+      getProductDetailsState.data
+    ) {
+      if (
+        getProductDetailsState.data.product.num_flavor > 1 &&
+        totalMultiFlavorsQuantity !==
+          getProductDetailsState.data.product.num_flavor * quantity
+      ) {
+        dispatch(
+          popUpSnackBar({
+            message: "Please meet the required number of flavors.",
+            severity: "error",
+          })
+        );
+        return;
+      }
+
+      let flavors_details = createFlavorDetails();
 
       dispatch(
         addToCartShop({
@@ -214,7 +359,7 @@ export function ShopProduct() {
     }
   };
   return (
-    <>
+    <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
@@ -228,8 +373,8 @@ export function ShopProduct() {
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
-        <div className="lg:-mt-[80px] lg:space-y-10 lg:container">
-          <div className="bg-primary pb-20 lg:shadow-lg w-full lg:rounded-[30px] mb-10 lg:p-10 space-y-10">
+        <div className="lg:space-y-10 lg:container">
+          <div className="bg-secondary pb-20 w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0 ">
               <div className="lg:flex-[0_0_55%] lg:max-w-[0_0_55%] lg:h-[600px]">
                 <Swiper
@@ -314,6 +459,7 @@ export function ShopProduct() {
                               <Radio
                                 id={size.id.toString()}
                                 color="tertiary"
+                                sx={{ color: "white" }}
                                 checked={size.id === currentSize}
                                 onChange={() => {
                                   setCurrentSize(size.id);
@@ -397,6 +543,7 @@ export function ShopProduct() {
                                     <Radio
                                       id={flavor.id.toString()}
                                       color="tertiary"
+                                      sx={{ color: "white" }}
                                       checked={flavor.id === currentFlavor}
                                       onChange={() => {
                                         setCurrentFlavor(flavor.id);
@@ -433,55 +580,68 @@ export function ShopProduct() {
                   <div className="h-[60px] w-full mt-2">
                     <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                       <button
-                        onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
-
-                          if (quantity > 1) {
-                            setQuantity(quantity - 1);
-
-                            if (
-                              getProductDetailsState.data &&
-                              getProductDetailsState.data?.product.num_flavor >
-                                1
-                            ) {
-                              setCurrentMultiFlavors(undefined);
-                              setTotalMultiFlavorsQuantity(0);
-                              setResetMultiFlavors(true);
-                            }
-                          }
+                        onClick={() =>
+                          quantity <= 1 || isQuantityNull.current
+                            ? setDisabled
+                            : handleonClick()
+                        }
+                        onMouseDown={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleonMouseDown("minus")
+                        }
+                        onMouseUp={handleonMouseUp}
+                        onTouchStart={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleonMouseDown("minus")
+                        }
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          handleonMouseUp();
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                          quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                          quantity <= 1 || isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          −
-                        </span>
+                        <AiOutlineMinus className="mx-8 text-3xl " />
                       </button>
 
                       <input
                         value={quantity}
-                        readOnly
-                        onChange={(event: any) => {
+                        type="number"
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          isQuantityNull.current = false;
+
                           if (
                             getSessionState.data?.userData == null ||
                             getSessionState.data?.userData === undefined
                           ) {
+                            clearInterval(quantityId);
                             setOpenLoginChooserModal(true);
-                            return;
-                          }
+                          } else {
+                            if (isNaN(parseInt(value))) {
+                              isQuantityNull.current = true;
+                            }
 
-                          const value = event.target.value;
-                          if (value >= 1 && value <= 10)
-                            setQuantity(Math.floor(event.target.value));
+                            setTimeout(() => {
+                              if (isQuantityNull.current) {
+                                setQuantity(0);
+                              }
+                            }, 1000);
+
+                            if (parseInt(value) >= 10) {
+                              setQuantity(10);
+                            } else if (parseInt(value) < 0) {
+                              setQuantity(1);
+                            } else {
+                              setQuantity(parseInt(value));
+                            }
+                          }
                         }}
-                        type="number"
                         min="1"
                         max="10"
                         className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
@@ -489,25 +649,30 @@ export function ShopProduct() {
                       />
 
                       <button
-                        onClick={() => {
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            setOpenLoginChooserModal(true);
-                            return;
-                          }
+                        onClick={() =>
+                          quantity >= 10 ? setDisabled : handleonClick()
+                        }
+                        onMouseDown={() =>
+                          quantity >= 10
+                            ? setDisabled
+                            : handleonMouseDown("add")
+                        }
+                        onMouseUp={handleonMouseUp}
+                        onTouchStart={() =>
+                          quantity >= 10
+                            ? setDisabled
+                            : handleonMouseDown("add")
+                        }
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
 
-                          if (quantity >= 1 && quantity < 10)
-                            setQuantity(quantity + 1);
+                          handleonMouseUp();
                         }}
                         className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                          quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                          quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                         }`}
                       >
-                        <span className="m-auto text-5xl font-thin leading-3 lg:leading-0">
-                          +
-                        </span>
+                        <AiOutlinePlus className="mx-8 text-3xl" />
                       </button>
                     </div>
                   </div>
@@ -528,12 +693,16 @@ export function ShopProduct() {
 
                 <div className="space-y-4">
                   <button
-                    onClick={() => {
-                      dispatchAddToCart(() => {
-                        navigate("/shop/checkout");
-                      });
-                    }}
-                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() =>
+                      isQuantityNull.current
+                        ? setDisabled
+                        : handleAddToCartCheckout()
+                    }
+                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                      isQuantityNull.current
+                        ? "opacity-30 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -542,10 +711,14 @@ export function ShopProduct() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      dispatchAddToCart();
-                    }}
-                    className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    onClick={() =>
+                      isQuantityNull.current ? setDisabled : handleAddToCart()
+                    }
+                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                      isQuantityNull.current
+                        ? "opacity-30 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -577,6 +750,6 @@ export function ShopProduct() {
           setOpenLoginChooserModal(false);
         }}
       />
-    </>
+    </main>
   );
 }

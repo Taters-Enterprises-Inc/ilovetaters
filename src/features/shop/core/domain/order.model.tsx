@@ -68,7 +68,13 @@ export interface OrderModel {
       addon_base_product: null;
       freebie_prod_name: null;
     }>;
-    deals_details: [];
+    deals_details: Array<{
+      name: string;
+      product_image: string;
+      quantity: number;
+      remarks: string | null;
+      price: number;
+    }>;
     personnel: {
       name: string;
       contact_number: string;

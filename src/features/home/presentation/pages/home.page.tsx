@@ -1,5 +1,6 @@
 import {
   FooterNav,
+  HeaderNav,
   HomeHeaderNav,
 } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
@@ -9,34 +10,38 @@ import {
   SERVICES_MOBILE,
 } from "features/shared/constants";
 import { Link, useLocation } from "react-router-dom";
+import { useAppDispatch } from "features/config/hooks";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function Home() {
-  const [serviceReached, setServiceReached] = useState(false);
-  const servicesRef = useRef<any>(null);
-
-  const listenScrollEvent = (event: any) => {
-    if (window.scrollY < 203) {
-      return setServiceReached(false);
-    } else if (window.scrollY > 200) {
-      return setServiceReached(true);
-    }
-  };
-
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getSession());
+    dispatch(storeReset());
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
-
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, []);
-
   return (
-    <main className="bg-primary">
-      <HomeHeaderNav serviceReached={serviceReached} active="HOME" />
+    <main className="min-h-screen bg-primary">
+      {/* <HomeHeaderNav active="HOME" sticky /> */}
+
+      <HeaderNav
+        activeUrl="HOME"
+        className="hidden lg:block"
+        logoProps={{
+          src:
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-logo.webp",
+          alt: "Taters Logo",
+          className: "w-[150px] lg:w-[120px]",
+        }}
+      />
 
       <section
         style={{
@@ -57,8 +62,15 @@ export function Home() {
           style={{ visibility: "hidden" }}
         ></img>
       </section>
-
-      <section
+      <img
+        src={
+          REACT_APP_DOMAIN_URL +
+          "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.webp"
+        }
+        className="hidden w-full sm:block"
+        alt="The best pop corn in town"
+      ></img>
+      {/* <section
         style={{
           backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp')`,
           backgroundSize: "contain",
@@ -75,16 +87,13 @@ export function Home() {
           alt="The best pop corn in town"
           style={{ visibility: "hidden" }}
         ></img>
-      </section>
+      </section> */}
 
-      <section
-        ref={servicesRef}
-        className="container hidden pb-[100px] grid-cols-3 gap-4 pt-4 sm:grid"
-      >
+      <section className="container lg:mx-auto pb-[100px] grid-cols-3 gap-4 pt-4 hidden sm:grid">
         {SERVICES_DESKTOP.map(function (service_desktop, i) {
           return (
             <div key={i}>
-              <div className=" h-[250px] sm:h-[300px] text-white">
+              <div className=" sm:h-[300px] lg:h-[500px] text-white">
                 <a href={service_desktop.url} key={i}>
                   <div
                     style={{
@@ -96,22 +105,20 @@ export function Home() {
                       backgroundSize: "cover",
                       position: "relative",
                     }}
-                    className=" h-full flex items-end bg-gray-400 cursor-pointer rounded-[1rem] lg:rounded-[1rem] shadow-md shadow-[#ffcd17]"
+                    className=" h-full flex items-end bg-gray-400 cursor-pointer rounded-[1rem] shadow-md shadow-[#ffcd17]"
                   >
                     <div
-                      className="w-full px-6 pt-14 pb-3 rounded-b-[1rem] lg:rounded-b-[1rem]"
+                      className="w-full px-6 pt-14 pb-3 rounded-b-[1rem]"
                       style={{
                         background: `linear-gradient(transparent 0%, ${service_desktop.color} 45%, ${service_desktop.color} 100%)`,
                         lineHeight: "14px",
                         color: service_desktop.textColor,
                       }}
                     >
-                      <h4 className="text-[16px] sm:text-lg lg:text-2xl font-['Bebas_Neue'] ">
+                      <h4 className="text-lg leading-3 font-['Bebas_Neue'] tracking-[1px] ">
                         {service_desktop.title}
                       </h4>
-                      <p className="text-[9px] sm:text-xs lg:text-xs">
-                        {service_desktop.subtitle}
-                      </p>
+                      <p className="text-xs">{service_desktop.subtitle}</p>
                     </div>
                   </div>
                 </a>
@@ -121,10 +128,7 @@ export function Home() {
         })}
       </section>
 
-      <section
-        ref={servicesRef}
-        className="container grid grid-cols-2 gap-4 pt-4 sm:hidden pb-[90px]"
-      >
+      <section className="container grid grid-cols-2 gap-4 pt-4 sm:hidden pb-[90px]">
         {SERVICES_MOBILE.map(function (service_mobile, i) {
           return (
             <div key={i}>
@@ -150,10 +154,10 @@ export function Home() {
                         color: service_mobile.textColor,
                       }}
                     >
-                      <h4 className="text-[20px] sm:text-lg lg:text-2xl font-['Bebas_Neue'] tracking-[1px]">
+                      <h4 className="text-[20px] font-['Bebas_Neue'] tracking-[1px]">
                         {service_mobile.title}
                       </h4>
-                      <p className="text-[10px] sm:text-xs lg:text-xs font-semibold">
+                      <p className="text-[10px] font-semibold">
                         {service_mobile.subtitle}
                       </p>
                     </div>

@@ -2,15 +2,23 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
-import { getSession, selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect, useState } from "react";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useState, useRef } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import NumberFormat from "react-number-format";
-import { addToCartShop, selectAddToCartShop ,AddToCartShopState } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
+import {
+  addToCartShop,
+  selectAddToCartShop,
+  AddToCartShopState,
+} from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
 }
 
+let quantityId: any;
 
 export function Addon(props: AddonProps) {
   const [quantity, setQuantity] = useState(1);
@@ -18,7 +26,11 @@ export function Addon(props: AddonProps) {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
   const addToCartShopState = useAppSelector(selectAddToCartShop);
+  const [setDisabled] = useState(true);
 
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
@@ -26,6 +38,66 @@ export function Addon(props: AddonProps) {
     }
   }, [addToCartShopState, dispatch]);
 
+  function handleonClick() {
+    if (isLongPress.current === true) {
+      return;
+    } else {
+      console.log("click");
+    }
+    // } else {
+    //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    // }
+  }
+
+  function handleonMouseUp() {
+    clearTimeout(timerRef.current);
+    clearInterval(quantityId);
+  }
+
+  function handleonMouseDown(action: string) {
+    isQuantityNull.current = false;
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      clearInterval(quantityId);
+      setOpenLoginChooserModal(true);
+    } else {
+      pressTimer(action);
+    }
+  }
+
+  function pressTimer(action: string) {
+    isLongPress.current = false;
+
+    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+
+    timerRef.current = window.setTimeout(() => {
+      handleOnLongPress(action);
+      isLongPress.current = true;
+    }, 300);
+  }
+
+  function handleOnLongPress(action: string) {
+    let counter = quantity;
+
+    quantityId = setInterval(() => {
+      if (action === "add") counter += 1;
+      else counter -= 1;
+
+      if (counter >= 10) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(10);
+      } else if (counter <= 1) {
+        clearTimeout(timerRef.current);
+        clearInterval(quantityId);
+        setQuantity(1);
+      } else {
+        setQuantity(counter);
+      }
+    }, 100);
+  }
 
   const handleAddToCart = () => {
     if (
@@ -80,20 +152,30 @@ export function Addon(props: AddonProps) {
             <div className="w-24 h-10">
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    if (quantity > 1 && quantity <= 10)
-                      setQuantity(quantity - 1);
+                  onClick={() =>
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonClick()
+                  }
+                  onMouseDown={() =>
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonMouseDown("minus")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleonMouseDown("minus")
+                  }
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleonMouseUp();
                   }}
-                  className={`w-20 h-full rounded-l outline-none cursor-pointer bg-primary ${
-                    quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+                  className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                    quantity <= 1 || isQuantityNull.current
+                      ? "opacity-30 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3">−</span>
@@ -101,40 +183,58 @@ export function Addon(props: AddonProps) {
 
                 <input
                   value={quantity}
-                  onChange={(event: any) => {
+                  type="number"
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    isQuantityNull.current = false;
+
                     if (
                       getSessionState.data?.userData == null ||
                       getSessionState.data?.userData === undefined
                     ) {
+                      clearInterval(quantityId);
                       setOpenLoginChooserModal(true);
-                      return;
-                    }
+                    } else {
+                      if (isNaN(parseInt(value))) {
+                        isQuantityNull.current = true;
+                      }
 
-                    const value = event.target.value;
-                    if (value >= 1 && value <= 10)
-                      setQuantity(Math.floor(event.target.value));
+                      setTimeout(() => {
+                        if (isQuantityNull.current) {
+                          setQuantity(0);
+                        }
+                      }, 1000);
+
+                      if (parseInt(value) >= 10) {
+                        setQuantity(10);
+                      } else if (parseInt(value) < 0) {
+                        setQuantity(1);
+                      } else {
+                        setQuantity(parseInt(value));
+                      }
+                    }
                   }}
-                  type="number"
-                  readOnly
                   className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                   name="custom-input-number"
                 />
 
                 <button
-                  onClick={() => {
-                    if (
-                      getSessionState.data?.userData == null ||
-                      getSessionState.data?.userData === undefined
-                    ) {
-                      setOpenLoginChooserModal(true);
-                      return;
-                    }
-
-                    if (quantity >= 1 && quantity < 10)
-                      setQuantity(quantity + 1);
+                  onClick={() =>
+                    quantity >= 10 ? setDisabled : handleonClick()
+                  }
+                  onMouseDown={() =>
+                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onMouseUp={handleonMouseUp}
+                  onTouchStart={() =>
+                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                  }
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleonMouseUp();
                   }}
-                  className={`w-20 h-full rounded-r cursor-pointer bg-primary ${
-                    quantity === 10 ? "opacity-30 cursor-not-allowed" : ""
+                  className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                    quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3 ">
@@ -146,8 +246,12 @@ export function Addon(props: AddonProps) {
           </div>
         </div>
         <button
-          onClick={handleAddToCart}
-          className="flex items-center justify-center w-full py-2 space-x-4 font-light bg-primary rounded-b-xl"
+          onClick={() =>
+            isQuantityNull.current ? setDisabled : handleAddToCart()
+          }
+          className={`flex items-center justify-center w-full py-2 space-x-4 font-light bg-primary rounded-b-xl ${
+            isQuantityNull.current ? "opacity-30 cursor-not-allowed" : ""
+          }`}
         >
           <BsFillCartPlusFill className="text-2xl" />
           <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
