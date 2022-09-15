@@ -18,6 +18,7 @@ import {
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -47,6 +48,7 @@ export function ShopOrder() {
   }, [location]);
 
   useEffect(() => {
+    dispatch(getLatestUnexpiredRedeem());
     dispatch(getSession());
   }, [dispatch]);
 
@@ -530,7 +532,7 @@ export function ShopOrder() {
 
               {getOrdersState.data?.order.clients_info.status === 1 ? (
                 <>
-                  <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                  {/* <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
                     Upload Proof of Payment
                   </h2>
 
@@ -605,7 +607,7 @@ export function ShopOrder() {
                         PNG and GIF. Maximum file size is 2MB.
                       </h4>
                     </div>
-                  </form>
+                  </form> */}
                 </>
               ) : getOrdersState.data?.order.clients_info.status === 2 ? (
                 <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">

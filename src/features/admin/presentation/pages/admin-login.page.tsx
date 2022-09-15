@@ -1,8 +1,50 @@
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FaRegEnvelope } from "react-icons/fa";
-import { MdLockOutline } from "react-icons/md";
+import { FormEvent } from "react";
+import { Navigate } from "react-router-dom";
+import { AdminEmailTextField, AdminPasswordTextField } from "../components";
+import {
+  getAdminSession,
+  GetAdminSessionState,
+  selectGetAdminSession,
+} from "../slices/get-admin-session.slice";
+import {
+  loginAdmin,
+  LoginAdminState,
+  selectLoginAdmin,
+} from "../slices/login-admin.slice";
+import { useEffect } from "react";
 
 export function AdminLogin() {
+  const dispatch = useAppDispatch();
+  const loginAdminState = useAppSelector(selectLoginAdmin);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  useEffect(() => {
+    if (loginAdminState.status === LoginAdminState.success) {
+      dispatch(getAdminSession());
+    }
+  }, [loginAdminState, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAdminSession());
+  }, [dispatch]);
+
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    dispatch(loginAdmin(formData));
+  };
+
+  if (
+    getAdminSessionState.data &&
+    getAdminSessionState.status === GetAdminSessionState.success
+  ) {
+    return <Navigate to={"/admin/order"} />;
+  }
+
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
       <div
@@ -12,41 +54,40 @@ export function AdminLogin() {
         <div className="flex items-center justify-center header_image">
           <img
             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shop/snackshop-logo-creamy-red.png`}
-            alt="taterslogo"
+            alt="Taters Logo"
             className="w-36"
           ></img>
         </div>
         <div className="pt-4 login-body">
-          <form>
-            <p className="text-white">
-              Please login with your email/username and password below.
-            </p>
-            <div className="flex items-center w-full mt-6 bg-gray-100 p2 rounded-2xl">
-              {/* <TextField required id="email" label="Email" variant="outlined"/> */}
-              <FaRegEnvelope className="m-2" />
-              <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                className="autolog"
-              ></input>
+          <form onSubmit={handleOnSubmit}>
+            {loginAdminState.message ? (
+              <span
+                className="text-white"
+                dangerouslySetInnerHTML={{
+                  __html: loginAdminState.message,
+                }}
+              />
+            ) : (
+              <p className="text-white">
+                Please login with your email/username and password below.
+              </p>
+            )}
+
+            <div className="pt-4 space-y-4">
+              <AdminEmailTextField />
+              <AdminPasswordTextField />
             </div>
-            <div className="flex items-center w-full mt-4 bg-gray-100 p2 rounded-2xl">
-              <MdLockOutline className="m-2" />
-              <input
-                type="password"
-                name="passw"
-                placeholder="Password"
-                className="autolog"
-              ></input>
-            </div>
+
             <div className="flex justify-between py-4 text-white">
               <p className="flex items-center">
                 <input className="mr-2" type="checkbox" /> Remember Me
               </p>
               <a href="#">Forgot Password?</a>
             </div>
-            <button className="w-full py-2 my-2 text-white shadow-md bg-button rounded-3xl">
+            <button
+              type="submit"
+              className="w-full py-2 my-2 text-white shadow-md bg-button rounded-3xl"
+            >
               LOG IN
             </button>
           </form>
