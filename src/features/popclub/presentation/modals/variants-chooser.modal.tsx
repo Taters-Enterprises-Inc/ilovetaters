@@ -94,6 +94,8 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         }
       }
 
+      // console.log(remarks);
+
       if (getDealState.data?.hash && remarks) {
         dispatch(resetGetDealProductVariantsState());
         dispatch(
@@ -161,7 +163,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         setOptionsSelected(data);
       }
     }
-  }, []);
+  }, [getDealProductVariantsState]);
 
   return (
     <div
@@ -201,7 +203,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
                           onChange={(e) =>
                             handleFormChange(e, dealProductVariant)
                           }
-                          value={productVariant.options[0].name}
+                          defaultValue={productVariant.options[0].name}
                         >
                           <h2 className="text-base uppercase">
                             PICK A {productVariant.name}
