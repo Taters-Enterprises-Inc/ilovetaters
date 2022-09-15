@@ -16,16 +16,9 @@ export function Franchising() {
 
   return (
     <main className="bg-primary">
-
-      <HomeHeaderNav
-        serviceReached={serviceReached}
-        active="FRANCHISING"
-      ></HomeHeaderNav>
-      
-      {/* <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav> */}
-
       <HeaderNav
         activeUrl="FRANCHISING"
+        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
@@ -34,7 +27,7 @@ export function Franchising() {
           className: "w-[150px] lg:w-[120px]",
         }}
       />
-      
+
       <img
         className="pt-6 lg:hidden"
         src={
@@ -57,9 +50,9 @@ export function Franchising() {
         ></iframe>
       </div>
 
-      <div className="relative hidden pt-10 m-auto lg:block ">
+      <div className="relative hidden m-auto lg:block ">
         <img
-          className="relative pt-10 m-auto lg:block"
+          className="relative m-auto lg:block"
           src={
             REACT_APP_DOMAIN_URL +
             "api/assets/images/popclub/hero/desktop/popclub.webp"

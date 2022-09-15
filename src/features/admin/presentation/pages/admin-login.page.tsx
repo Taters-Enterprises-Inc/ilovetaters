@@ -48,7 +48,7 @@ export function AdminLogin() {
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
       <div
-        className='bg-secondary max-w-[350px] mx-auto p-6 px-6 
+        className='bg-secondary w-[90%] sm:w-[400px] mx-auto p-6 px-6 
               font-["Roboto"] text-sm text-center rounded-3xl shadow-md'
       >
         <div className="flex items-center justify-center header_image">

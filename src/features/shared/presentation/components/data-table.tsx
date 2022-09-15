@@ -29,6 +29,7 @@ const StyledTablePagination = styled(TablePagination)(({ theme }) => ({
   color: "white",
   "& .MuiTablePagination-menuItem": {
     backgroundColor: "#22201A !important",
+    color: "white",
   },
   "& .MuiTablePagination-selectIcon": {
     color: "white !important",

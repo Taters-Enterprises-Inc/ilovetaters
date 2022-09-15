@@ -93,7 +93,7 @@ input[data-autocompleted] {
 .webview {
   position: absolute;
   left: 55%;
-  top: 25%;
+  top: 10%;
   max-width: 560;
   max-height: 315;
 }
