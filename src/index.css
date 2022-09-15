@@ -83,26 +83,29 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
-.vid-container {
+.mobview {
   position: relative;
   overflow: hidden;
-  width: 80%;
-  height: 40%;
-  left: 10%;
-  padding-top: 45%;
-  top: 20px;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
 }
 
-.responsive-iframe {
+.webview {
+  position: absolute;
+  left: 55%;
+  top: 25%;
+  max-width: 560;
+  max-height: 315;
+}
+
+.responsive {
   position: absolute;
   top: 0;
-  bottom: 20px;
-  padding-bottom: auto;
   left: 0;
+  bottom: 0;
+  right: 0;
   width: 100%;
   height: 100%;
-  border: 0;
-  padding-top: auto;
 }
 
 input::-webkit-outer-spin-button,
