@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import {
   changeForgotPasswordStatus,
   changeForgotPasswordStatusAddPhoneNumber,
@@ -27,6 +27,8 @@ interface ForgotPasswordFormElement extends HTMLFormElement {
 
 export function MobileForgotPasswordOtp() {
   const dispatch = useAppDispatch();
+  let getmobileNumber = "";
+  // const [mobileNumber, setMobileNumber] = useState("");
   const forgotPasswordGenerateOTPState = useAppSelector(
     selectForgotPasswordGenerateOTP
   );
@@ -50,6 +52,7 @@ export function MobileForgotPasswordOtp() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget as ForgotPasswordFormElement);
+    getmobileNumber = e.currentTarget.elements.phoneNumber.value;
 
     dispatch(forgotPasswordGenerateOTP(formData));
 
@@ -77,9 +80,9 @@ export function MobileForgotPasswordOtp() {
             Please Enter Your Mobile Number To Receive a OTP Code
           </p>
           <MobileLoginPhoneInput />
-
           <button
             type="submit"
+            // onClick={() => setMobileNumber(getmobileNumber)}
             className="w-full py-2 mt-3 mb-2 text-white shadow-md bg-button rounded-3xl"
           >
             Submit
