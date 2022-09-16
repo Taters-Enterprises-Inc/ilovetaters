@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { TbLogout } from "react-icons/tb";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -9,12 +9,15 @@ import {
   selectLogoutAdmin,
 } from "../slices/logout-admin.slice";
 import { getAdminSession } from "../slices/get-admin-session.slice";
-import { PageTitle } from "./page-title";
+import { AdminBreadCrumbs, AdminBreadCrumbsProps } from "./admin-breadcrumbs";
 
-export function AdminHead() {
+interface AdminHeadProps {
+  AdminBreadCrumbsProps: AdminBreadCrumbsProps;
+}
+
+export function AdminHead(props: AdminHeadProps) {
   const dispatch = useAppDispatch();
   const logoutAdminState = useAppSelector(selectLogoutAdmin);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (logoutAdminState.status === LogoutAdminState.success) {
@@ -24,15 +27,10 @@ export function AdminHead() {
   }, [logoutAdminState, dispatch]);
 
   return (
-    <div className="flex justify-between">
-      <PageTitle
-        home={{
-          title: "Home",
-          url: "#",
-        }}
-      />
+    <div className="flex justify-between p-4">
+      <AdminBreadCrumbs {...props.AdminBreadCrumbsProps} />
 
-      <div className="relative flex justify-end text-secondary ">
+      <div className="relative flex items-center justify-end text-secondary ">
         <MdOutlineNotificationsNone
           className="mr-4 cursor-pointer "
           size={20}

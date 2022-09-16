@@ -13,7 +13,7 @@ export default function OrderSelectStatus() {
   };
 
   return (
-    <Box className="mt-4 w-80 xl:-ml-12 md:w-60">
+    <Box className="mt-4 w-80">
       <FormControl fullWidth size="small">
         <InputLabel id="select-label">Select Status</InputLabel>
         <Select

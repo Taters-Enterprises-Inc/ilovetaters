@@ -74,6 +74,8 @@ import getAdminSession from "features/admin/presentation/slices/get-admin-sessio
 import logoutAdmin from "features/admin/presentation/slices/logout-admin.slice";
 import forfeitRedeem from "features/popclub/presentation/slices/forfeit-redeem.slice";
 
+import adminSideBar from "features/admin/presentation/slices/admin-sidebar.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform: getAllPlatform,
@@ -155,6 +157,8 @@ export const store = configureStore({
     loginAdmin: loginAdmin,
     logoutAdmin: logoutAdmin,
     getAdminSession: getAdminSession,
+
+    adminSideBar: adminSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
