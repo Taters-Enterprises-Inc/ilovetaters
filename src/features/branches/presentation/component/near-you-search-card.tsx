@@ -96,7 +96,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
           </p>
           <div
           
-            className={` text-[#fff] md:text-[12px] text-[10px] font-normal cursor-pointer	`}
+            className={` text-[#fff] md:text-[12px] text-[10px] font-normal cursor-pointer pr-2.5`}
           >
             {resize < 768 && store.address.length > textLenght && !showText
               ? sliceText + " . . . "
