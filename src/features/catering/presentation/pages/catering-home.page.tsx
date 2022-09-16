@@ -104,9 +104,10 @@ export function CateringHome() {
       </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
-          Thank you for considering Taters for your celebration.
+          Thank you for considering Taters for your celebration.{" "}
           <span className="block lg:inline">
-            Kindly key in your event details.
+            {" "}
+            Kindly key in your event details.{" "}
           </span>
         </h1>
 
@@ -208,6 +209,17 @@ export function CateringHome() {
 
           <button
             onClick={() => {
+              console.log(
+                cateringHomePageState.eventStartDate?.toDateStringzzzz
+              );
+
+              // if (
+              //   moment(cateringHomePageState.eventStartDate).add(3, "hours")
+              //     .toDate < moment(cateringHomePageState.eventEndDate).toDate
+              // ) {
+              //   console.log("trigger");
+              // }
+
               if (cateringHomePageState.address === null) {
                 dispatch(
                   popUpSnackBar({
@@ -241,23 +253,6 @@ export function CateringHome() {
               if (
                 cateringHomePageState.eventStartDate >=
                 cateringHomePageState.eventEndDate
-              ) {
-                dispatch(
-                  popUpSnackBar({
-                    message: "Please select valid end date",
-                    severity: "error",
-                  })
-                );
-                return;
-              }
-
-              if (
-                moment(cateringHomePageState.eventStartDate)
-                  .add(3, "hours")
-                  .format("YYYY-MM-DD hh:mm") >=
-                moment(cateringHomePageState.eventEndDate).format(
-                  "YYYY-MM-DD hh:mm"
-                )
               ) {
                 dispatch(
                   popUpSnackBar({
