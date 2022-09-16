@@ -1,8 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
+import { AddContactParam } from "features/shared/core/shared.params";
 import {
+  AddContactRepository,
+  AddContactResponse,
   ForgotPasswordGenerateOTPRepository,
   ForgotPasswordGenerateOTPResponse,
+  SignInMobileUserRepository,
+  SignInMobileUserResponse,
+  SignUpMobileUserRepository,
+  SignUpMobileUserResponse,
 } from "features/shared/data/repository/shared.repository";
 
 export enum ForgotPasswordGenerateOTPState {

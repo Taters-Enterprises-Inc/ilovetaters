@@ -112,12 +112,6 @@ export interface ForgotPasswordGenerateOTPResponse {
   };
 }
 
-export interface ForgotPasswordResendOTPResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface ForgotPasswordValidateOTPResponse {
   data: {
     message: string;
@@ -159,18 +153,6 @@ export function ForgotPasswordGenerateOTPRepository(
 ): Promise<ForgotPasswordGenerateOTPResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/mobile_generate_forgot_pass_code`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
-export function ForgotPasswordResendOTPRepository(
-  param: FormData
-): Promise<ForgotPasswordResendOTPResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/mobile_users/mobile_resend_forgot_pass_code`,
     param,
     {
       withCredentials: true,
