@@ -17,6 +17,8 @@ import { GiCardboardBoxClosed } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 import { MdOutlineSettings } from "react-icons/md";
 import "./react.css";
+import MediaQuery from "react-responsive";
+import { duration } from "moment";
 
 const Sidebar: FC = () => {
   const [open, setOpen] = useState(true);
@@ -280,57 +282,119 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
 
   return (
     <div className="flex ">
-      <div
-        className={`${
-          open ? "w-64" : "w-20"
-        } relative h-screen bg-secondary px-4 font-["Roboto"] duration-500 overflow-y-auto overflow-x-hidden`}
-      >
-        <div className="relative flex justify-end text-white top-5">
+      <MediaQuery minDeviceWidth={1224}>
+        <div
+          className={`${
+            open ? "w-64" : "w-20"
+          } relative h-screen bg-secondary px-4 font-["Roboto"] duration-500 
+        overflow-y-auto overflow-x-hidden`}
+        >
+          <div className="relative flex justify-end text-white top-5">
+            <FaBars
+              className={`cursor-pointer ${!open && "-translate-x-4"}`}
+              onClick={() => setOpen(!open)}
+            ></FaBars>
+          </div>
+
+          <div className="flex items-center pl-1 gap-x-4">
+            <img
+              src={require("assets/favicon.png")}
+              className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-primary -mt-2
+            ${!open && "translate-y-12"}`}
+              alt="taters admin logo"
+            />
+            <h1
+              className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
+                    ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
+            >
+              TEI Shop Admin
+            </h1>
+          </div>
+
+          <div
+            className={`whitespace-pre duration-300 mt-3 text-white 
+                ${!open && "opacity-0 translate-x-28 overflow-hidden "}`}
+          >
+            <h3 className="cursor-pointer">Administrator</h3>
+            <h4 className="text-xs cursor-pointer">Admin, Members</h4>
+          </div>
+
+          <div className="relative flex flex-col pb-4 mt-3 text-sm text-white">
+            <React.Fragment>
+              <>
+                <Navigation
+                  // you can use your own router's api to get pathname
+                  activeItemId="/admin/orders"
+                  onSelect={({ itemId }) => {
+                    if (itemId) history(itemId);
+                    // maybe push to the route
+                  }}
+                  items={SIDEBAR_ITEMS}
+                />
+              </>
+            </React.Fragment>
+          </div>
+        </div>
+      </MediaQuery>
+
+      {/* mobile view */}
+
+      <MediaQuery maxDeviceWidth={1224}>
+        <div
+          onClick={() => setOpen(false)}
+          className={`fixed inset-0 z-20 block transition-opacity bg-black opacity-50 lg:hidden ${
+            open ? "block" : "hidden"
+          }`}
+        />
+
+        <div className="pt-4 text-black min-h-fit bg-paper">
           <FaBars
-            className={`cursor-pointer ${!open && "-translate-x-4"}`}
+            className={`cursor-pointer relative flex left-4`}
             onClick={() => setOpen(!open)}
           ></FaBars>
         </div>
 
-        <div className="flex items-center pl-1 gap-x-4">
-          <img
-            src={require("assets/favicon.png")}
-            className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-primary -mt-2
-            ${!open && "translate-y-12"}`}
-            alt="taters admin logo"
-          />
-          <h1
-            className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
-                    ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
-          >
-            TEI Shop Admin
-          </h1>
-        </div>
-
         <div
-          className={`whitespace-pre duration-300 mt-3 text-white 
-                ${!open && "opacity-0 translate-x-28 overflow-hidden "}`}
+          className={`fixed inset-y-0 left-0 z-30 w-64 pt-4 pl-4 bg-secondary overflow-y-auto transition duration-300 ease-out transform
+           translate-x-0 lg:translate-x-0 lg:static lg:inset-0 ${
+             open ? "ease-out translate-x-0" : "ease-in -translate-x-full"
+           }`}
         >
-          <h3 className="cursor-pointer">Administrator</h3>
-          <h4 className="text-xs cursor-pointer">Admin, Members</h4>
-        </div>
+          <div className="flex items-center pl-1 gap-x-4">
+            <img
+              src={require("assets/favicon.png")}
+              className={`bg-white border-4 rounded-full cursor-pointer border-primary -mt-2`}
+              alt="taters admin logo"
+            />
+            <h1
+              className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2`}
+            >
+              TEI Shop Admin
+            </h1>
+          </div>
 
-        <div className="relative flex flex-col pb-4 mt-3 text-sm text-white">
-          <React.Fragment>
-            <>
-              <Navigation
-                // you can use your own router's api to get pathname
-                activeItemId="/admin/orders"
-                onSelect={({ itemId }:any) => {
-                  if (itemId) history(itemId);
-                  // maybe push to the route
-                }}
-                items={SIDEBAR_ITEMS}
-              />
-            </>
-          </React.Fragment>
+          <div className={`whitespace-pre duration-300 mt-3 text-white `}>
+            <h3 className="cursor-pointer">Administrator</h3>
+            <h4 className="text-xs cursor-pointer">Admin, Members</h4>
+          </div>
+
+          <div className="relative flex flex-col pb-4 mt-3 text-sm text-white">
+            <React.Fragment>
+              <>
+                <Navigation
+                  // you can use your own router's api to get pathname
+                  activeItemId="/admin/orders"
+                  onSelect={({ itemId }) => {
+                    if (itemId) history(itemId);
+                    // maybe push to the route
+                  }}
+                  items={SIDEBAR_ITEMS}
+                />
+              </>
+            </React.Fragment>
+          </div>
         </div>
-      </div>
+      </MediaQuery>
     </div>
   );
 };
