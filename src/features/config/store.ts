@@ -69,6 +69,12 @@ import changeForgotPasswordStatus from "../shared/presentation/slices/change-for
 import forgotPasswordGenerateOTP from "../shared/presentation/slices/forgot-password-generate-otp.slice";
 import forgotPasswordValidateOTP from "../shared/presentation/slices/forgot-password-validate-otp.slice";
 import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-password-new-password-otp.slice";
+import loginAdmin from "features/admin/presentation/slices/login-admin.slice";
+import getAdminSession from "features/admin/presentation/slices/get-admin-session.slice";
+import logoutAdmin from "features/admin/presentation/slices/logout-admin.slice";
+import forfeitRedeem from "features/popclub/presentation/slices/forfeit-redeem.slice";
+
+import adminSideBar from "features/admin/presentation/slices/admin-sidebar.slice";
 
 export const store = configureStore({
   reducer: {
@@ -146,6 +152,13 @@ export const store = configureStore({
     forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
     forgotPasswordValidateOTP: forgotPasswordValidateOTP,
     forgotPasswordNewPassword: forgotPasswordNewPassword,
+    forfeitRedeem: forfeitRedeem,
+
+    loginAdmin: loginAdmin,
+    logoutAdmin: logoutAdmin,
+    getAdminSession: getAdminSession,
+
+    adminSideBar: adminSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

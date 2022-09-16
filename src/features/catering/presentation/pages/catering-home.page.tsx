@@ -209,17 +209,6 @@ export function CateringHome() {
 
           <button
             onClick={() => {
-              console.log(
-                cateringHomePageState.eventStartDate?.toDateStringzzzz
-              );
-
-              // if (
-              //   moment(cateringHomePageState.eventStartDate).add(3, "hours")
-              //     .toDate < moment(cateringHomePageState.eventEndDate).toDate
-              // ) {
-              //   console.log("trigger");
-              // }
-
               if (cateringHomePageState.address === null) {
                 dispatch(
                   popUpSnackBar({
@@ -257,6 +246,24 @@ export function CateringHome() {
                 dispatch(
                   popUpSnackBar({
                     message: "Please select valid end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              if (
+                moment(cateringHomePageState.eventStartDate)
+                  .add(3, "hours")
+                  .format("YYYY-MM-DD hh:mm") >
+                moment(cateringHomePageState.eventEndDate).format(
+                  "YYYY-MM-DD hh:mm"
+                )
+              ) {
+                dispatch(
+                  popUpSnackBar({
+                    message:
+                      "Please select valid end date. Event must be 3 hours and beyond",
                     severity: "error",
                   })
                 );
