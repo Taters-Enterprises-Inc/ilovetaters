@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Navigation } from "react-minimal-side-navigation";
 import {
   FaBars,

@@ -106,6 +106,21 @@ export interface GetLatestUnexpiredRedeemResponse {
   };
 }
 
+export interface ForfeitRedeemResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function ForfeitRedeemRepository(): Promise<ForfeitRedeemResponse> {
+  return axios.delete(`${REACT_APP_DOMAIN_URL}api/popclub/redeem`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}
+
 export function GetLatestUnexpiredRedeemRepository(): Promise<GetLatestUnexpiredRedeemResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeem`, {
     headers: {

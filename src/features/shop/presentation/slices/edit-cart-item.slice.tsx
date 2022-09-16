@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
 
 import {
@@ -18,9 +17,11 @@ export enum EditCartItemState {
 const initialState: {
   status: EditCartItemState;
   data: GetEditCartItemResponse | undefined;
+  message:string
 } = {
   status: EditCartItemState.initial,
   data: undefined,
+  message:''
 };
 
 export const editCartItem = createAsyncThunk(
@@ -36,7 +37,7 @@ export const editCartItemSlice = createSlice({
   name: "editCartItem",
   initialState,
   reducers: {
-    resetCheckoutOrders: (state) => {
+    resetEditCartItem: (state) => {
       state.status = EditCartItemState.initial;
       state.data = undefined;
     },
@@ -56,8 +57,10 @@ export const editCartItemSlice = createSlice({
           }>
         ) => {
           const data = action.payload.data;
+      
 
           state.data = data;
+          state.message =  action.payload.message;
           state.status = EditCartItemState.success;
         }
       );
@@ -65,5 +68,7 @@ export const editCartItemSlice = createSlice({
 });
 
 export const selectEditCartItem = (state: RootState) => state.editCartItem;
+
+export const {resetEditCartItem} = editCartItemSlice.actions
 
 export default editCartItemSlice.reducer;

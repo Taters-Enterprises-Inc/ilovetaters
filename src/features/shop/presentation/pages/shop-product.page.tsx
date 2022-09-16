@@ -128,6 +128,9 @@ export function ShopProduct() {
     }
   }, [getProductDetailsState, currentFlavor, hash]);
 
+
+  
+
   useEffect(() => {
     if (
       getProductSkuState.status === GetProductSkuState.success &&
@@ -158,8 +161,6 @@ export function ShopProduct() {
   function handleonClick() {
     if (isLongPress.current === true) {
       return;
-    } else {
-      console.log("click");
     }
     // } else {
     //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
@@ -358,6 +359,8 @@ export function ShopProduct() {
       );
     }
   };
+
+  console.log(getProductDetailsState?.data);
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs

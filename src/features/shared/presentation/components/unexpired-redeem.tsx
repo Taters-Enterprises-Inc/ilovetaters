@@ -5,11 +5,17 @@ import {
   selectGetLatestUnexpiredRedeem,
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CountdownTimerLatestRedeem } from "features/popclub/presentation/components";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { selectFacebookLogout } from "../slices/facebook-logout.slice";
+import {
+  forfeitRedeem,
+  selectForfeitRedeem,
+} from "features/popclub/presentation/slices/forfeit-redeem.slice";
+import { IoMdClose } from "react-icons/io";
+import { MessageModal } from "../modals";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -18,6 +24,9 @@ export function UnExpiredRedeem() {
 
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const getSessionState = useAppSelector(selectGetSession);
+  const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+
+  const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
 
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
@@ -29,7 +38,7 @@ export function UnExpiredRedeem() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
-  }, [facebookLogoutState, dispatch]);
+  }, [facebookLogoutState, dispatch, forfeitRedeemState]);
 
   return (
     <>
@@ -50,14 +59,15 @@ export function UnExpiredRedeem() {
           }`}
         >
           <div className="container flex items-start justify-end h-full">
-            <Link
-              to={
-                "/popclub/deal/" + getLatestUnexpiredRedeemState.data.deal_hash
-              }
-              className="text-white block w-full sm:w-[400px]"
-            >
+            <div className="text-white block w-full sm:w-[400px]">
               <div className="flex items-start justify-start h-full">
-                <div className="flex flex-col items-stretch flex-1 max-h-[75px] sm:max-h-fit min-h-[75px]  rounded-l-xl shadow-lg bg-secondary">
+                <Link
+                  to={
+                    "/popclub/deal/" +
+                    getLatestUnexpiredRedeemState.data.deal_hash
+                  }
+                  className="flex flex-col items-stretch flex-1 max-h-[75px] sm:max-h-fit min-h-[75px]  rounded-l-xl shadow-lg bg-secondary"
+                >
                   <div className="flex-1 h-full px-4 py-2 overflow-auto text-xs sm:overflow-hidden">
                     {getLatestUnexpiredRedeemState.data.remarks ? (
                       <span
@@ -75,17 +85,46 @@ export function UnExpiredRedeem() {
                   <div>
                     <CountdownTimerLatestRedeem />
                   </div>
+                </Link>
+                <div className="relative">
+                  <button
+                    className="absolute text-sm  text-white right-0 top-0 p-1 z-20"
+                    onClick={() => {
+                      setOpenForfeitModalMessage(true);
+                    }}
+                  >
+                    <IoMdClose />
+                  </button>
+                  <Link
+                    to={
+                      "/popclub/deal/" +
+                      getLatestUnexpiredRedeemState.data.deal_hash
+                    }
+                  >
+                    <img
+                      className="object-contain rounded-r-xl h-[75px] w-[75px]"
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
+                      alt="Deals"
+                    />
+                  </Link>
                 </div>
-                <img
-                  className="object-contain rounded-r-xl h-[75px] w-[75px]"
-                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
-                  alt="Deals"
-                />
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       ) : null}
+
+      <MessageModal
+        open={openForfeitModalMessage}
+        onClose={() => {
+          setOpenForfeitModalMessage(false);
+        }}
+        onYes={() => {
+          dispatch(forfeitRedeem());
+          setOpenForfeitModalMessage(false);
+        }}
+        message={"Are you sure you want to cancel the redeem?"}
+      />
     </>
   );
 }

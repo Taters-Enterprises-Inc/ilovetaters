@@ -16,10 +16,9 @@ export function Franchising() {
 
   return (
     <main className="bg-primary">
-      {/* <HomeHeaderNav active="FRANCHISING"></HomeHeaderNav> */}
-
       <HeaderNav
         activeUrl="FRANCHISING"
+        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
@@ -28,8 +27,9 @@ export function Franchising() {
           className: "w-[150px] lg:w-[120px]",
         }}
       />
+
       <img
-        className="lg:hidden"
+        className="pt-6 lg:hidden"
         src={
           REACT_APP_DOMAIN_URL +
           "api/assets/images/popclub/hero/mobile/popclub.webp"
@@ -37,20 +37,35 @@ export function Franchising() {
         alt="The best pop corn in town"
       ></img>
 
-      <img
-        className="hidden lg:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/desktop/popclub.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-
-      <div className="vid-container">
+      <div className="lg:hidden mobview">
         <iframe
-          className="responsive-iframe"
-          src="https://www.youtube.com/embed/dvAGdCU6TTY?autoplay=1"
-          title="TATERS FRANCHISE"
+          className="responsive"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/dvAGdCU6TTY"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+
+      <div className="relative hidden m-auto lg:block ">
+        <img
+          className="relative m-auto lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/desktop/popclub.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <iframe
+          className=" webview"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/dvAGdCU6TTY"
+          title="YouTube video player"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>

@@ -72,6 +72,7 @@ import forgotPasswordNewPassword from "../shared/presentation/slices/forgot-pass
 import loginAdmin from "features/admin/presentation/slices/login-admin.slice";
 import getAdminSession from "features/admin/presentation/slices/get-admin-session.slice";
 import logoutAdmin from "features/admin/presentation/slices/logout-admin.slice";
+import forfeitRedeem from "features/popclub/presentation/slices/forfeit-redeem.slice";
 
 export const store = configureStore({
   reducer: {
@@ -149,6 +150,7 @@ export const store = configureStore({
     forgotPasswordGenerateOTP: forgotPasswordGenerateOTP,
     forgotPasswordValidateOTP: forgotPasswordValidateOTP,
     forgotPasswordNewPassword: forgotPasswordNewPassword,
+    forfeitRedeem: forfeitRedeem,
 
     loginAdmin: loginAdmin,
     logoutAdmin: logoutAdmin,
