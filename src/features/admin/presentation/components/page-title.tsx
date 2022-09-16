@@ -11,9 +11,7 @@ interface PageTitleProps {
 export function PageTitle(props: PageTitleProps) {
   return (
     <div className="text-secondary">
-      <div className="container flex flex-col items-center justify-between lg:flex-row lg:space-y-0">
-        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-2xl leading-6 text-center"></h1>
-
+      <div className="flex flex-col items-center justify-between lg:flex-row lg:space-y-0">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-3">
             <li>

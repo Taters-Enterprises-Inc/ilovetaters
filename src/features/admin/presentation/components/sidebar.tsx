@@ -17,11 +17,9 @@ import { GiCardboardBoxClosed } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 import { MdOutlineSettings } from "react-icons/md";
 import "./react.css";
-import MediaQuery from "react-responsive";
-import { duration } from "moment";
 
 const Sidebar: FC = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const history = useNavigate();
 
   const SIDEBAR_ITEMS: any = [
@@ -281,8 +279,8 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
   // const showSubnav = () => setSubnav(!subnav);
 
   return (
-    <div className="flex ">
-      <MediaQuery minDeviceWidth={1224}>
+    <>
+      <aside className="hidden lg:block">
         <div
           className={`${
             open ? "w-64" : "w-20"
@@ -335,11 +333,9 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
             </React.Fragment>
           </div>
         </div>
-      </MediaQuery>
+      </aside>
 
-      {/* mobile view */}
-
-      <MediaQuery maxDeviceWidth={1224}>
+      <aside className="lg:hidden">
         <div
           onClick={() => setOpen(false)}
           className={`fixed inset-0 z-20 block transition-opacity bg-black opacity-50 lg:hidden ${
@@ -347,9 +343,9 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           }`}
         />
 
-        <div className="pt-4 text-black min-h-fit bg-paper">
+        <div className="pt-4 text-black min-h-fit ">
           <FaBars
-            className={`cursor-pointer relative flex left-4`}
+            className={`cursor-pointer relative flex`}
             onClick={() => setOpen(!open)}
           ></FaBars>
         </div>
@@ -394,8 +390,8 @@ ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
             </React.Fragment>
           </div>
         </div>
-      </MediaQuery>
-    </div>
+      </aside>
+    </>
   );
 };
 

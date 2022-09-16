@@ -25,16 +25,14 @@ export function AdminHead() {
 
   return (
     <div className="flex justify-between">
-      <div className="mt-1.5 xl:mt-2 xl:-ml-16 sm:-ml-4 ">
-        <PageTitle
-          home={{
-            title: "Home",
-            url: "#",
-          }}
-        />
-      </div>
+      <PageTitle
+        home={{
+          title: "Home",
+          url: "#",
+        }}
+      />
 
-      <div className="relative flex justify-end mt-2.5 mr-4 text-secondary ">
+      <div className="relative flex justify-end text-secondary ">
         <MdOutlineNotificationsNone
           className="mr-4 cursor-pointer "
           size={20}
