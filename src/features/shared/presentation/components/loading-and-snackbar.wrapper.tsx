@@ -129,6 +129,10 @@ import {
   GetRedeemState,
   selectGetRedeem,
 } from "features/popclub/presentation/slices/get-redeem.slice";
+import {
+  EditCartItemState,
+  selectEditCartItem,
+} from "features/shop/presentation/slices/edit-cart-item.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -203,6 +207,8 @@ export function LoadingAndSnackbarWrapper() {
     selectGetDealProductVariants
   );
   const getRedeemState = useAppSelector(selectGetRedeem);
+
+  const editCartProduct = useAppSelector(selectEditCartItem);
 
   useEffect(() => {
     switch (getRedeemState.status) {
@@ -779,8 +785,27 @@ export function LoadingAndSnackbarWrapper() {
     }
   }, [addToCartCateringState]);
 
+  useEffect(() => {
+    switch (editCartProduct.status) {
+      case EditCartItemState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditCartItemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditCartItemState.success:
+        showAlert(setSuccessAlert, editCartProduct.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditCartItemState.fail:
+        showAlert(setFailsAlert, editCartProduct.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editCartProduct]);
+
   return (
-    <div>
+    <>
       <Outlet />
       <SnackbarAlert
         open={successAlert.status}
@@ -794,7 +819,7 @@ export function LoadingAndSnackbarWrapper() {
       />
       <BackdropLoading open={openBackdropLoading} />
       <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
-    </div>
+    </>
   );
 }
 

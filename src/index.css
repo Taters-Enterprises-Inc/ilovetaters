@@ -76,41 +76,36 @@ html {
   scroll-behavior: smooth;
 }
 input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: rgb(0, 0, 0) !important;
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
 }
 
-input.autolog {
-  border: none;
-  background-color: transparent;
-  resize: none;
-  outline: none;
-  width: 345px;
-}
-
-.vid-container {
+.mobview {
   position: relative;
   overflow: hidden;
-  width: 80%;
-  height: 40%;
-  left: 10%;
-  padding-top: 45%;
-  top: 20px;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
 }
 
-.responsive-iframe {
+.webview {
+  position: absolute;
+  left: 55%;
+  top: 10%;
+  max-width: 560;
+  max-height: 315;
+}
+
+.responsive {
   position: absolute;
   top: 0;
-  bottom: 20px;
-  padding-bottom: auto;
   left: 0;
+  bottom: 0;
+  right: 0;
   width: 100%;
   height: 100%;
-  border: 0;
-  padding-top: auto;
 }
 
 input::-webkit-outer-spin-button,

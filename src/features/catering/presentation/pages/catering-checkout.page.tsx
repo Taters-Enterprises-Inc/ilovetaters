@@ -39,6 +39,8 @@ import {
   resetCateringCheckoutOrders,
   selectCateringCheckoutOrders,
 } from "../slices/catering-checkout-orders.slice";
+import { PaymentMethod } from "features/shop/presentation/components";
+import { PhoneInput } from "features/shared/presentation/components";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -215,6 +217,8 @@ export function CateringCheckout() {
       (value, property: string) => (responseBody[property] = value)
     );
 
+    responseBody["payops"] = 3;
+
     if (
       (responseBody.phoneNumber.match(/63/) &&
         responseBody.phoneNumber.length === 15) ||
@@ -223,7 +227,6 @@ export function CateringCheckout() {
       (responseBody.phoneNumber.match(/09/) &&
         responseBody.phoneNumber.length === 11)
     ) {
-      console.log(responseBody);
       dispatch(cateringCheckoutOrders(responseBody));
     } else {
       const phoneNumber: any = phoneNumberRef.current;
@@ -375,6 +378,7 @@ export function CateringCheckout() {
                           label="Contacts"
                           name="phoneNumber"
                           required
+                          defaultValue={getContactsState.data[0].contact}
                           ref={phoneNumberRef}
                           autoComplete="off"
                         >
@@ -386,24 +390,7 @@ export function CateringCheckout() {
                         </Select>
                       </FormControl>
                     ) : (
-                      <></>
-                      // <PhoneInput
-                      //   country={"ph"}
-                      //   disableDropdown
-                      //   inputClass="!bg-transparent !text-white !py-[27px] !w-full"
-                      //   inputProps={{
-                      //     name: "phoneNumber",
-                      //     ref: phoneNumberRef,
-                      //     required: true,
-                      //   }}
-                      //   isValid={(value, country: any) => {
-                      //     if (value.match(/63/) || value.match(/09/)) {
-                      //       return true;
-                      //     } else {
-                      //       return "Please use +63 or 09";
-                      //     }
-                      //   }}
-                      // />
+                      <PhoneInput />
                     )}
                     <button
                       type="button"
@@ -597,7 +584,8 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <CateringPaymentAccordion />
+                  <PaymentMethod />
+                  {/* <CateringPaymentAccordion /> */}
                 </div>
 
                 <div className="mt-4 text-secondary lg:mt-0">

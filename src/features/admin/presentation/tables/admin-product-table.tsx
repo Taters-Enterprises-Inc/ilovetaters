@@ -6,7 +6,7 @@ import {
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { AddBtn } from "../components/addproductbtn";
+import { AddBtn } from "../components/add-product-btn";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -25,7 +25,7 @@ const rows: Array<Row> = [];
 
 export function AdminProductTable() {
   return (
-    <section className="max-h-screen rounded-md lg:space-x-4 bg-white">
+    <section className="max-h-screen bg-white rounded-md lg:space-x-4">
       <div className="lg:space-y-6 ">
         <div className="container">
           <div className="space-y-2"></div>

@@ -1,10 +1,7 @@
 import React from "react";
 import { SearchAddress } from "features/shared/presentation/components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  selectBranchesNearYouComponent,
-  setAddressBranchesNearYouComponent,
-} from "../slices/branches-near-you-component.slice";
+import { selectBranchesNearYouComponent ,setAddressBranchesNearYouComponent } from "../slices/branches-near-you-component.slice";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 import { NearyouSearchStore } from "./near-you-search-store";
 export const BranchComponent: React.FC = (): JSX.Element => {
