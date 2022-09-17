@@ -104,8 +104,11 @@ export function CateringHome() {
       </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
-          Thank you for considering Taters for your celebration. <span className='block lg:inline'> Kindly key in
-          your event details. </span>
+          Thank you for considering Taters for your celebration.{" "}
+          <span className="block lg:inline">
+            {" "}
+            Kindly key in your event details.{" "}
+          </span>
         </h1>
 
         <div className="space-y-4">
@@ -243,6 +246,24 @@ export function CateringHome() {
                 dispatch(
                   popUpSnackBar({
                     message: "Please select valid end date",
+                    severity: "error",
+                  })
+                );
+                return;
+              }
+
+              if (
+                moment(cateringHomePageState.eventStartDate)
+                  .add(3, "hours")
+                  .format("YYYY-MM-DD hh:mm") >
+                moment(cateringHomePageState.eventEndDate).format(
+                  "YYYY-MM-DD hh:mm"
+                )
+              ) {
+                dispatch(
+                  popUpSnackBar({
+                    message:
+                      "Please select valid end date. Event must be 3 hours and beyond",
                     severity: "error",
                   })
                 );
