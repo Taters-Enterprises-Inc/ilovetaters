@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "react-minimal-side-navigation";
 import {
@@ -17,15 +17,19 @@ import { GiCardboardBoxClosed } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 import { MdOutlineSettings } from "react-icons/md";
 import "./react.css";
-import { closeAdminSideBar, selectAdminSideBar, toggleAdminSideBar } from "../slices/admin-sidebar.slice";
+import {
+  closeAdminSideBar,
+  selectAdminSideBar,
+  toggleAdminSideBar,
+} from "../slices/admin-sidebar.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 
-const Sidebar: FC = () => {
+export function AdminSidebar() {
   const dispatch = useAppDispatch();
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const history = useNavigate();
 
-  const SIDEBAR_ITEMS: any = [
+  const ADMIN_SIDEBAR_ITEMS: any = [
     {
       title: (
         <h1
@@ -279,7 +283,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
 
   return (
     <>
-      <aside className="hidden lg:block">
+      <aside className="hidden lg:block ">
         <div
           className={`${
             adminSideBarState.status ? "w-64" : "w-20"
@@ -288,7 +292,9 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
         >
           <div className="relative flex justify-end text-white top-5">
             <FaBars
-              className={`cursor-pointer ${!adminSideBarState.status && "-translate-x-4"}`}
+              className={`cursor-pointer ${
+                !adminSideBarState.status && "-translate-x-4"
+              }`}
               onClick={() => dispatch(toggleAdminSideBar())}
             ></FaBars>
           </div>
@@ -302,7 +308,10 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
             />
             <h1
               className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
-                    ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+                    ${
+                      !adminSideBarState.status &&
+                      "opacity-0 translate-x-28 overflow-hidden"
+                    }`}
             >
               TEI Shop Admin
             </h1>
@@ -310,7 +319,10 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
 
           <div
             className={`whitespace-pre duration-300 mt-3 text-white 
-                ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden "}`}
+                ${
+                  !adminSideBarState.status &&
+                  "opacity-0 translate-x-28 overflow-hidden "
+                }`}
           >
             <h3 className="cursor-pointer">Administrator</h3>
             <h4 className="text-xs cursor-pointer">Admin, Members</h4>
@@ -324,7 +336,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
                   onSelect={({ itemId }) => {
                     if (itemId) history(itemId);
                   }}
-                  items={SIDEBAR_ITEMS}
+                  items={ADMIN_SIDEBAR_ITEMS}
                 />
               </>
             </React.Fragment>
@@ -342,7 +354,9 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
         <div
           className={`fixed inset-y-0 left-0 z-30 w-64 pt-4 pl-4 bg-secondary overflow-y-auto transition duration-300 ease-out transform
            translate-x-0 lg:translate-x-0 lg:static lg:inset-0 ${
-             adminSideBarState.status ? "ease-out translate-x-0" : "ease-in -translate-x-full"
+             adminSideBarState.status
+               ? "ease-out translate-x-0"
+               : "ease-in -translate-x-full"
            }`}
         >
           <div className="flex items-center pl-1 gap-x-4">
@@ -371,7 +385,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
                   onSelect={({ itemId }) => {
                     if (itemId) history(itemId);
                   }}
-                  items={SIDEBAR_ITEMS}
+                  items={ADMIN_SIDEBAR_ITEMS}
                 />
               </>
             </React.Fragment>
@@ -380,6 +394,4 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
       </aside>
     </>
   );
-};
-
-export default Sidebar;
+}

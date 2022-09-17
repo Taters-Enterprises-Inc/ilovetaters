@@ -27,7 +27,9 @@ export function AdminAvailabilityProductTable() {
           </h1>
 
           <div className="pb-6 mt-4 lg:-mr-12 lg:-ml-12">
-            <DataTable
+            {/* <DataTable
+              totalRows={0}
+              perPage={0}
               rowsOrder={[
                 {
                   rowKey: "dateadded",
@@ -67,7 +69,7 @@ export function AdminAvailabilityProductTable() {
               ]}
               columns={columns}
               rows={rows}
-            />
+            /> */}
           </div>
         </div>
       </div>
