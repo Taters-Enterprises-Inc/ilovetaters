@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GetAdminShopOrdersParam } from "features/admin/core/admin.params";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import {
   GetAdminShopOrdersRepository,
@@ -26,13 +25,10 @@ const initialState: {
 
 export const getAdminShopOrders = createAsyncThunk(
   "getAdminShopOrders",
-  async (
-    param: GetAdminShopOrdersParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (query: string, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: GetAdminShopOrdersResponse =
-        await GetAdminShopOrdersRepository(param);
+        await GetAdminShopOrdersRepository(query);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

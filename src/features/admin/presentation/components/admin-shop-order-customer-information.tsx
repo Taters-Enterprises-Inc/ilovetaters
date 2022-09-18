@@ -11,7 +11,7 @@ export function AdminShopOrderCustomerInformation() {
           <div>
             <strong>Tracking Number:</strong>{" "}
             <span className="font-semibold">
-              {getAdminShopOrderState.data?.tracking_no}
+              {getAdminShopOrderState.data?.tracking_no ?? "N/A"}
             </span>
           </div>
           <div>
@@ -29,15 +29,21 @@ export function AdminShopOrderCustomerInformation() {
         <div className="lg:grid grid-cols-3 gap-4">
           <div>
             <strong>Full Name:</strong>{" "}
-            <span className="font-semibold">Jenica Reyes</span>
+            <span className="font-semibold">
+              {getAdminShopOrderState.data?.client_name ?? "N/A"}
+            </span>
           </div>
           <div>
             <strong>Contact Number:</strong>{" "}
-            <span className="font-semibold">09950978407</span>
+            <span className="font-semibold">
+              {getAdminShopOrderState.data?.contact_number ?? "N/A"}
+            </span>
           </div>
           <div>
             <strong>Email:</strong>{" "}
-            <span className="font-semibold">jenicareyesf@gmail.com</span>
+            <span className="font-semibold">
+              {getAdminShopOrderState.data?.email ?? "N/A"}
+            </span>
           </div>
         </div>
 
@@ -50,7 +56,9 @@ export function AdminShopOrderCustomerInformation() {
           </div>
           <div>
             <strong>Invoice Number:</strong>{" "}
-            <span className="font-semibold">22-008556</span>
+            <span className="font-semibold">
+              {getAdminShopOrderState.data?.invoice_num ?? "N/A"}
+            </span>
           </div>
         </div>
       </div>
@@ -62,8 +70,7 @@ export function AdminShopOrderCustomerInformation() {
         <div className="mt-1">
           <strong>Address:</strong>{" "}
           <span className="font-semibold">
-            BLK13 L4 Mariano South Centerpoint Brgy Moonwalk Paranaque City
-            Metro Manila
+            {getAdminShopOrderState.data?.add_address ?? "N/A"}
           </span>
         </div>
         <div>

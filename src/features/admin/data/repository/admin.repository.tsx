@@ -1,5 +1,4 @@
 import axios from "axios";
-import { GetAdminShopOrdersParam } from "features/admin/core/admin.params";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
@@ -46,18 +45,11 @@ export function GetAdminShopOrderRepository(
 }
 
 export function GetAdminShopOrdersRepository(
-  param: GetAdminShopOrdersParam
+  query: string
 ): Promise<GetAdminShopOrdersResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/shop${
-      param.page_no ? `?page_no=${param.page_no}` : ""
-    }${param.per_page ? `&per_page=${param.per_page}` : ""}${
-      param.status ? `&status=${param.status}` : ""
-    }`,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop${query}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminSessionRepository(): Promise<GetAdminSessionResponse> {
