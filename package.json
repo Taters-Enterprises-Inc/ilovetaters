@@ -19,6 +19,7 @@
     "@types/react-helmet": "^6.1.5",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
+    "credit-card-type": "^9.1.0",
     "date-fns": "^2.29.2",
     "env-cmd": "^10.1.0",
     "moment": "^2.29.4",
