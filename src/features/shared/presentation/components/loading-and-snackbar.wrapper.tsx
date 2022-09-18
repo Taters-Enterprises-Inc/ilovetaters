@@ -133,6 +133,10 @@ import {
   EditCartItemState,
   selectEditCartItem,
 } from "features/shop/presentation/slices/edit-cart-item.slice";
+import {
+  GetAdminSnackshopOrdersState,
+  selectGetAdminSnackshopOrders,
+} from "features/admin/presentation/slices/get-admin-snackshop-orders.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -207,8 +211,27 @@ export function LoadingAndSnackbarWrapper() {
     selectGetDealProductVariants
   );
   const getRedeemState = useAppSelector(selectGetRedeem);
-
   const editCartProduct = useAppSelector(selectEditCartItem);
+  const getAdminSnackshopOrdersState = useAppSelector(
+    selectGetAdminSnackshopOrders
+  );
+
+  useEffect(() => {
+    switch (getAdminSnackshopOrdersState.status) {
+      case GetAdminSnackshopOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminSnackshopOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSnackshopOrdersState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSnackshopOrdersState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminSnackshopOrdersState, dispatch]);
 
   useEffect(() => {
     switch (getRedeemState.status) {

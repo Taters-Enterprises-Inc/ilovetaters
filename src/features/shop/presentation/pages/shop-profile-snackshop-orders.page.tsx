@@ -32,14 +32,14 @@ export function ShopProfileSnackshopOrders() {
     dispatch(getSnackShopOrderHistory());
   }, [dispatch]);
 
-  console.log(getSnackShopOrderHistoryState.data);
-
   return (
     <ShopProfileContainer title="Snack Shop Orders" activeTab="snackshop">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Snack Shop Orders
       </h1>
-      <DataTable
+      {/* <DataTable
+        totalRows={0}
+        perPage={0}
         rowsOrder={[
           {
             rowKey: "dateadded",
@@ -80,7 +80,7 @@ export function ShopProfileSnackshopOrders() {
         viewBaseUrl="/shop/order"
         columns={columns}
         rows={getSnackShopOrderHistoryState.data}
-      />
+      /> */}
     </ShopProfileContainer>
   );
 }

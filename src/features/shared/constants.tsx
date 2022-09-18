@@ -347,3 +347,27 @@ export const theme = createTheme({
     },
   },
 });
+
+export const ADMIN_SNACKSHOP_ORDER_STATUS = [
+  "Incomplete Transaction",
+  "New",
+  "Paid",
+  "Confirmed",
+  "Declined",
+  "Cancelled",
+  "Completed",
+  "Rejected",
+  "For Dispatch",
+  "Error Transaction",
+];
+
+export const ADMIN_SNACKSHOP_MOP_STATUS = [
+  "' - '",
+  "BPI",
+  "BDO",
+  "CASH",
+  "GCASH",
+  "PAYMAYA",
+  "ROBINSONS-BANK",
+  "CHINABANK",
+];

@@ -35,7 +35,9 @@ export function ShopProfileCateringBookings() {
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Catering Bookings
       </h1>
-      <DataTable
+      {/* <DataTable
+        totalRows={0}
+        perPage={0}
         rowsOrder={[
           {
             rowKey: "dateadded",
@@ -67,7 +69,7 @@ export function ShopProfileCateringBookings() {
         ]}
         columns={columns}
         rows={getCateringBookingHistoryState.data}
-      />
+      /> */}
     </ShopProfileContainer>
   );
 }
