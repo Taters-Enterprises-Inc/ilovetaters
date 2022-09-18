@@ -3,7 +3,6 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import {
   AiFillCheckCircle,
   AiOutlineCheckCircle,
-  AiOutlineCloudUpload,
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";

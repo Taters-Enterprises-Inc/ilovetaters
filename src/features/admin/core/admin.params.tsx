@@ -1,5 +1,5 @@
-export interface GetAdminSnackshopOrdersParam {
-  per_page: number;
-  page_no: number;
-  status: number | null;
+export interface GetAdminShopOrdersParam {
+  per_page: string | null;
+  page_no: string | null;
+  status: string | null;
 }

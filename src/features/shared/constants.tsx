@@ -314,13 +314,11 @@ export const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: "#ffcd17",
-          height: 3,
+          backgroundColor: "#22201A",
         },
         root: {
-          height: 60,
           "& .MuiTab-root.Mui-selected": {
-            color: "#ffcd17",
+            color: "#22201A",
           },
         },
       },
@@ -328,11 +326,32 @@ export const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          color: "white",
-          height: 60,
+          color: "#22201A",
         },
       },
     },
+    // MuiTabs: {
+    //   styleOverrides: {
+    //     indicator: {
+    //       backgroundColor: "#ffcd17",
+    //       height: 3,
+    //     },
+    //     root: {
+    //       height: 60,
+    //       "& .MuiTab-root.Mui-selected": {
+    //         color: "#ffcd17",
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiTab: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: "white",
+    //       height: 60,
+    //     },
+    //   },
+    // },
     MuiTextField: {
       styleOverrides: {
         root: {

@@ -14,9 +14,7 @@ export function AdminShopOrder() {
         }}
       />
 
-      <section className="hidden lg:block">
-        <AdminShopOrders />
-      </section>
+      <AdminShopOrders />
     </>
   );
 }

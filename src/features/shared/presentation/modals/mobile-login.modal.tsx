@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import Tabs, { TabsProps } from "@mui/material/Tabs";
+import Tab, { TabProps } from "@mui/material/Tab";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { AiFillUnlock } from "react-icons/ai";
@@ -17,6 +17,27 @@ import {
   selectSignUpMobileUser,
   SignUpMobileUserState,
 } from "../slices/sign-up-mobile-user.slice";
+import styled from "@mui/material/styles/styled";
+
+const StyledTabs = styled((props: TabsProps) => <Tabs {...props} />)(
+  ({ theme }) => ({
+    height: 60,
+    "& .MuiTabs-indicator": {
+      backgroundColor: "#ffcd17",
+      height: 3,
+    },
+    "& .MuiTab-root.Mui-selected": {
+      color: "#ffcd17",
+    },
+  })
+);
+
+const StyledTab = styled((props: TabProps) => <Tab {...props} />)(
+  ({ theme }) => ({
+    color: "white",
+    height: 60,
+  })
+);
 
 interface MobileLoginModalProps {
   open: boolean;
@@ -100,20 +121,20 @@ export function MobileLoginModal(props: MobileLoginModalProps) {
               <IoMdClose />
             </button>
 
-            <Tabs value={value} onChange={handleChange}>
-              <Tab
+            <StyledTabs value={value} onChange={handleChange}>
+              <StyledTab
                 icon={<AiFillUnlock />}
                 iconPosition="start"
                 label="Sign In"
                 {...a11yProps(0)}
               />
-              <Tab
+              <StyledTab
                 icon={<FaUser />}
                 iconPosition="start"
                 label="Sign Up"
                 {...a11yProps(1)}
               />
-            </Tabs>
+            </StyledTabs>
           </div>
 
           <TabPanel value={value} index={0}>

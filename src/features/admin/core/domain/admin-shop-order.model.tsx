@@ -1,4 +1,4 @@
-export interface AdminSnackshopOrderModel {
+export interface AdminShopOrderModel {
   id: number;
   status: number;
   dateadded: string;

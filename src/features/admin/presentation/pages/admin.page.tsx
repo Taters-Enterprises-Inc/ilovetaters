@@ -4,7 +4,7 @@ export function Admin() {
   return (
     <>
       <Helmet>
-        <title>Taters | Snackshop</title>
+        <title>Taters | Admin</title>
       </Helmet>
 
       <Outlet />

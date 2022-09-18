@@ -1,8 +1,8 @@
 import axios from "axios";
-import { GetAdminSnackshopOrdersParam } from "features/admin/core/admin.params";
+import { GetAdminShopOrdersParam } from "features/admin/core/admin.params";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
-import { AdminSnackshopOrderModel } from "features/admin/core/domain/admin-snackshop-order.model";
-import { GetAdminSnackshopOrdersModel } from "features/admin/core/domain/get-admin-snackshop-orders.model";
+import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
+import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginAdminResponse {
@@ -24,20 +24,36 @@ export interface LogoutAdminResponse {
   };
 }
 
-export interface GetAdminSnackshopOrdersResponse {
+export interface GetAdminShopOrdersResponse {
   data: {
     message: string;
-    data: GetAdminSnackshopOrdersModel;
+    data: GetAdminShopOrdersModel;
   };
 }
 
-export function GetAdminSnackshopOrdersRepository(
-  param: GetAdminSnackshopOrdersParam
-): Promise<GetAdminSnackshopOrdersResponse> {
+export interface GetAdminShopOrderResponse {
+  data: {
+    message: string;
+    data: AdminShopOrderModel;
+  };
+}
+export function GetAdminShopOrderRepository(
+  trackingNo: string
+): Promise<GetAdminShopOrderResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop/${trackingNo}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminShopOrdersRepository(
+  param: GetAdminShopOrdersParam
+): Promise<GetAdminShopOrdersResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/shop?page_no=${param.page_no}&per_page=${
-      param.per_page
-    }${param.status !== null ? `&status=${param.status}` : ""}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/shop${
+      param.page_no ? `?page_no=${param.page_no}` : ""
+    }${param.per_page ? `&per_page=${param.per_page}` : ""}${
+      param.status ? `&status=${param.status}` : ""
+    }`,
     {
       withCredentials: true,
     }

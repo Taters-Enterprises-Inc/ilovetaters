@@ -59,8 +59,8 @@ interface DataTableProps {
 export function DataTable(props: DataTableProps) {
   return (
     <>
-      <div className="flex">
-        <div className="flex flex-1 space-x-4">
+      <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+        <div className="flex  flex-1 space-x-4">
           <TextField
             required
             label="Search"
