@@ -5,12 +5,12 @@
   border-style: none;
   border-width: 0;
   box-sizing: border-box;
-}
+} */
 .side-navigation-panel ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-} */
+}
 .side-navigation-panel
   .side-navigation-panel-select
   .side-navigation-panel-select-wrap
@@ -23,6 +23,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0.85rem;
+  margin-top: 4px;
 }
 .side-navigation-panel
   .side-navigation-panel-select
@@ -42,6 +43,10 @@
   background-color: rgb(255, 255, 255, var(--tw-bg-opacity));
   border-color: white;
   color: #22201a;
+  width: 150%;
+  margin-left: -19px;
+  padding-left: 32px;
+  padding-right: 106px;
 }
 .side-navigation-panel
   .side-navigation-panel-select
@@ -83,10 +88,12 @@
   --tw-border-opacity: 1;
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
-  border-radius: 0.375rem;
   background-color: white;
-  border-color: rgba(255, 205, 23, var(--tw-border-opacity));
   color: rgba(31, 41, 55, var(--tw-text-opacity));
+  width: 150%;
+  margin-left: -19px;
+  padding-left: 32px;
+  padding-right: 106px;
 }
 
 /* sub nav text color */
@@ -102,6 +109,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.4rem 0.9rem;
+  margin-top: 4px;
 }
 
 /* sub nav items hover color */
@@ -110,13 +118,16 @@
   .side-navigation-panel-select-inner
   .side-navigation-panel-select-inner-wrap
   .side-navigation-panel-select-inner-option:hover {
-  --tw-border-opacity: 1;
-  --tw-bg-opacity: 1;
+  --tw-border-opacity: 0.6;
+  --tw-bg-opacity: 0.6;
   --tw-text-opacity: 1;
-  border-radius: 0.375rem;
-  background-color: white;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   border-color: white;
   color: #22201a;
+  width: 150%;
+  margin-left: -19px;
+  padding-left: 32px;
+  padding-right: 106px;
 }
 .side-navigation-panel
   .side-navigation-panel-select
@@ -150,10 +161,13 @@
   --tw-border-opacity: 1;
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
-  border-radius: 0.375rem;
   background-color: white;
   border-color: rgba(255, 205, 23, var(--tw-border-opacity));
   color: rgba(31, 41, 55, var(--tw-text-opacity));
+  width: 150%;
+  margin-left: -19px;
+  padding-left: 32px;
+  padding-right: 106px;
 }
 .table {
   display: table;
