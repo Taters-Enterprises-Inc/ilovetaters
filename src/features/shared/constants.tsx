@@ -314,13 +314,11 @@ export const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: "#ffcd17",
-          height: 3,
+          backgroundColor: "#22201A",
         },
         root: {
-          height: 60,
           "& .MuiTab-root.Mui-selected": {
-            color: "#ffcd17",
+            color: "#22201A",
           },
         },
       },
@@ -328,8 +326,23 @@ export const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          color: "white",
-          height: 60,
+          color: "#22201A",
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          color: "white !important",
+          "&:hover": {
+            color: "white !important",
+          },
+          "&$active": {
+            color: "white !important",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "white !important",
+          },
         },
       },
     },
@@ -347,3 +360,60 @@ export const theme = createTheme({
     },
   },
 });
+
+export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Incomplete Transaction",
+    color: "#a21013",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "Paid",
+    color: "#b32400",
+  },
+  {
+    name: "Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Cancelled",
+    color: "#a21013",
+  },
+  {
+    name: "Completed",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#004d00",
+  },
+  {
+    name: "For Dispatch",
+    color: "#400080",
+  },
+  {
+    name: "Error Transaction",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_SNACKSHOP_MOP_STATUS = [
+  "' - '",
+  "BPI",
+  "BDO",
+  "CASH",
+  "GCASH",
+  "PAYMAYA",
+  "ROBINSONS-BANK",
+  "CHINABANK",
+];

@@ -78,9 +78,88 @@ export function CateringHome() {
     dispatch(storeReset());
   }, [dispatch]);
 
-  function disableDates(date: Date) {
+  const disableDates = (date: Date) => {
     return moment(date) <= moment().add(13, "days");
-  }
+  };
+
+  const eventDateOnChangeValidations = (param: {
+    start: Date | null;
+    end: Date | null;
+    setCurrentCalendarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    validCallBack: () => void;
+  }) => {
+    if (param.start === null && param.end) {
+      dispatch(
+        setEventStartDateCateringHomePage({
+          eventStartDate: moment(param.end).subtract(3, "hours").toDate(),
+        })
+      );
+    }
+
+    if (param.start && param.end) {
+      const startDateTime = moment(param.start);
+      const endDateTime = moment(param.end);
+
+      const _3hoursBeforeTheStartDate = startDateTime.add(3, "hours");
+
+      if (_3hoursBeforeTheStartDate.isSameOrAfter(endDateTime)) {
+        dispatch(
+          popUpSnackBar({
+            message:
+              "Please select valid end date. Event must be 3 hours and beyond",
+            severity: "error",
+          })
+        );
+        param.setCurrentCalendarModalOpen(false);
+        return;
+      }
+    }
+
+    param.validCallBack();
+  };
+
+  const handleEventDateChange = (param: {
+    state: "start" | "end";
+    value: Date;
+  }) => {
+    switch (param.state) {
+      case "start":
+        eventDateOnChangeValidations({
+          start: param.value,
+          end: cateringHomePageState.eventEndDate,
+          setCurrentCalendarModalOpen: setOpenStartEventCalendar,
+          validCallBack: () => {
+            dispatch(
+              setEventStartDateCateringHomePage({
+                eventStartDate: param.value,
+              })
+            );
+
+            dispatch(
+              setEventEndDateCateringHomePage({
+                eventEndDate: moment(param.value).add(3, "hours").toDate(),
+              })
+            );
+          },
+        });
+        break;
+      case "end":
+        eventDateOnChangeValidations({
+          start: cateringHomePageState.eventStartDate,
+          end: param.value,
+          setCurrentCalendarModalOpen: setOpenEndEventCalendar,
+          validCallBack: () => {
+            dispatch(
+              setEventEndDateCateringHomePage({
+                eventEndDate: param.value,
+              })
+            );
+          },
+        });
+
+        break;
+    }
+  };
 
   return (
     <main className="min-h-screen bg-primary">
@@ -104,8 +183,11 @@ export function CateringHome() {
       </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
-          Thank you for considering Taters for your celebration. <span className='block lg:inline'> Kindly key in
-          your event details. </span>
+          Thank you for considering Taters for your celebration.{" "}
+          <span className="block lg:inline">
+            {" "}
+            Kindly key in your event details.{" "}
+          </span>
         </h1>
 
         <div className="space-y-4">
@@ -153,19 +235,9 @@ export function CateringHome() {
                   />
                 )}
                 value={cateringHomePageState.eventStartDate}
-                onChange={(newValue) => {
-                  if (newValue) {
-                    dispatch(
-                      setEventStartDateCateringHomePage({
-                        eventStartDate: newValue,
-                      })
-                    );
-                    dispatch(
-                      setEventEndDateCateringHomePage({
-                        eventEndDate: moment(newValue).add(3, "hours").toDate(),
-                      })
-                    );
-                  }
+                onChange={(val) => {
+                  if (val)
+                    handleEventDateChange({ state: "start", value: val });
                 }}
               />
 
@@ -191,14 +263,8 @@ export function CateringHome() {
                   />
                 )}
                 value={cateringHomePageState.eventEndDate}
-                onChange={(newValue) => {
-                  if (newValue) {
-                    dispatch(
-                      setEventEndDateCateringHomePage({
-                        eventEndDate: newValue,
-                      })
-                    );
-                  }
+                onChange={(val) => {
+                  if (val) handleEventDateChange({ state: "end", value: val });
                 }}
               />
             </div>
@@ -230,19 +296,6 @@ export function CateringHome() {
                 dispatch(
                   popUpSnackBar({
                     message: "Please select a event end date",
-                    severity: "error",
-                  })
-                );
-                return;
-              }
-
-              if (
-                cateringHomePageState.eventStartDate >=
-                cateringHomePageState.eventEndDate
-              ) {
-                dispatch(
-                  popUpSnackBar({
-                    message: "Please select valid end date",
                     severity: "error",
                   })
                 );

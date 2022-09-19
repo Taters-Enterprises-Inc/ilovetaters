@@ -129,7 +129,26 @@ import {
   GetRedeemState,
   selectGetRedeem,
 } from "features/popclub/presentation/slices/get-redeem.slice";
-import { EditCartItemState, selectEditCartItem } from "features/shop/presentation/slices/edit-cart-item.slice";
+import {
+  EditCartItemState,
+  selectEditCartItem,
+} from "features/shop/presentation/slices/edit-cart-item.slice";
+import {
+  GetAdminShopOrdersState,
+  selectGetAdminShopOrders,
+} from "features/admin/presentation/slices/get-admin-shop-orders.slice";
+import {
+  GetAdminShopOrderState,
+  selectGetAdminShopOrder,
+} from "features/admin/presentation/slices/get-admin-shop-order.slice";
+import {
+  LoginAdminState,
+  selectLoginAdmin,
+} from "features/admin/presentation/slices/login-admin.slice";
+import {
+  GetAdminSessionState,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -204,8 +223,79 @@ export function LoadingAndSnackbarWrapper() {
     selectGetDealProductVariants
   );
   const getRedeemState = useAppSelector(selectGetRedeem);
+  const editCartProduct = useAppSelector(selectEditCartItem);
+  const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
+  const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
+  const loginAdminState = useAppSelector(selectLoginAdmin);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
-  const editCartProduct = useAppSelector(selectEditCartItem)
+  useEffect(() => {
+    switch (getAdminSessionState.status) {
+      case GetAdminSessionState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminSessionState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSessionState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSessionState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminSessionState, dispatch]);
+
+  useEffect(() => {
+    switch (loginAdminState.status) {
+      case LoginAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case LoginAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case LoginAdminState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case LoginAdminState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [loginAdminState, dispatch]);
+
+  useEffect(() => {
+    switch (getAdminShopOrderState.status) {
+      case GetAdminShopOrderState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminShopOrderState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminShopOrderState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminShopOrderState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminShopOrderState, dispatch]);
+
+  useEffect(() => {
+    switch (getAdminShopOrdersState.status) {
+      case GetAdminShopOrdersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminShopOrdersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminShopOrdersState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminShopOrdersState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminShopOrdersState, dispatch]);
 
   useEffect(() => {
     switch (getRedeemState.status) {
@@ -802,7 +892,7 @@ export function LoadingAndSnackbarWrapper() {
   }, [editCartProduct]);
 
   return (
-    <div>
+    <>
       <Outlet />
       <SnackbarAlert
         open={successAlert.status}
@@ -816,7 +906,7 @@ export function LoadingAndSnackbarWrapper() {
       />
       <BackdropLoading open={openBackdropLoading} />
       <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
-    </div>
+    </>
   );
 }
 

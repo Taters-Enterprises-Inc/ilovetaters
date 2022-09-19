@@ -32,7 +32,9 @@ export function AdminPopclubTable() {
           <div className="space-y-2"></div>
 
           <div className="pt-6 pb-6 lg:-mr-12 lg:-ml-12">
-            <DataTable
+            {/* <DataTable
+              totalRows={0}
+              perPage={0}
               rowsOrder={[
                 {
                   rowKey: "dateadded",
@@ -72,7 +74,7 @@ export function AdminPopclubTable() {
               ]}
               columns={columns}
               rows={rows}
-            />
+            /> */}
           </div>
         </div>
       </div>

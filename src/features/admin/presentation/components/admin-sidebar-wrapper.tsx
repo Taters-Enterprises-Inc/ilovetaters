@@ -1,16 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { AdminHead } from "./admin-head";
-import Sidebar from "./sidebar";
+import { AdminSidebar } from "./admin-sidebar";
 
 export function AdminSidebarWrapper() {
   return (
-    <section className="flex min-h-screen ">
-      <Sidebar />
+    <main className="flex min-h-screen">
+      <AdminSidebar />
 
-      <div className="flex-1 min-h-screen p-2 overflow-y-hidden text-white bg-paper">
-        <AdminHead />
+      <section className="flex-1 h-screen overflow-y-auto bg-paper">
         <Outlet />
-      </div>
-    </section>
+      </section>
+    </main>
   );
 }

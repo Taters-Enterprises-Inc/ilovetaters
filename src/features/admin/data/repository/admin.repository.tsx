@@ -1,5 +1,7 @@
 import axios from "axios";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
+import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
+import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginAdminResponse {
@@ -14,10 +16,40 @@ export interface GetAdminSessionResponse {
     data: AdminSessionModel;
   };
 }
+
 export interface LogoutAdminResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminShopOrdersResponse {
+  data: {
+    message: string;
+    data: GetAdminShopOrdersModel;
+  };
+}
+
+export interface GetAdminShopOrderResponse {
+  data: {
+    message: string;
+    data: AdminShopOrderModel;
+  };
+}
+export function GetAdminShopOrderRepository(
+  trackingNo: string
+): Promise<GetAdminShopOrderResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop/${trackingNo}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminShopOrdersRepository(
+  query: string
+): Promise<GetAdminShopOrdersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop${query}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminSessionRepository(): Promise<GetAdminSessionResponse> {
