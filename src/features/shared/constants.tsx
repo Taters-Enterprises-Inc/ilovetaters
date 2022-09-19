@@ -367,11 +367,11 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
 }> = [
   {
     name: "Incomplete Transaction",
-    color: "red",
+    color: "#a21013",
   },
   {
     name: "New",
-    color: "yellow",
+    color: "#cca300",
   },
   {
     name: "Paid",
@@ -379,23 +379,23 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   },
   {
     name: "Confirmed",
-    color: "green",
+    color: "#004d00",
   },
   {
     name: "Declined",
-    color: "red",
+    color: "#a21013",
   },
   {
     name: "Cancelled",
-    color: "red",
+    color: "#a21013",
   },
   {
     name: "Completed",
-    color: "green",
+    color: "#004d00",
   },
   {
     name: "Rejected",
-    color: "green",
+    color: "#004d00",
   },
   {
     name: "For Dispatch",
@@ -403,7 +403,7 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   },
   {
     name: "Error Transaction",
-    color: "red",
+    color: "#a21013",
   },
 ];
 
