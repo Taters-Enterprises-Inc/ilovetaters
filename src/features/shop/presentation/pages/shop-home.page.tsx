@@ -30,7 +30,7 @@ export function ShopHome() {
           className="sm:hidden"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/mobile/snackshop_landing_page_banner.webp"
+            "api/assets/images/shop/hero/mobile/snackshop_delivered.webp"
           }
           alt="The best pop corn in town"
         ></img>
@@ -38,7 +38,15 @@ export function ShopHome() {
           className="hidden sm:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/desktop/snackshop_landing_page_banner.webp"
+            "api/assets/images/shop/hero/desktop/snackshop_delivered_black.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+        <img
+          className="hidden sm:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shop/instructions/snackshop_instructions.webp"
           }
           alt="The best pop corn in town"
         ></img>

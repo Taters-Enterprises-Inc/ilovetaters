@@ -407,6 +407,40 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   },
 ];
 
+export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Forfeited",
+    color: "#a21013",
+  },
+  {
+    name: "Completed",
+    color: "#004d00",
+  },
+];
+
 export const ADMIN_SNACKSHOP_MOP_STATUS = [
   "' - '",
   "BPI",

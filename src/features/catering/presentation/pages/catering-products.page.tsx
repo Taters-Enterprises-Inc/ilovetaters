@@ -67,14 +67,6 @@ export function CateringProducts() {
           }
           alt="The best pop corn in town"
         ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/instructions/catering_instructions.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
       </section>
       <section className="container space-y-10 pb-[90px]">
         {getCateringCategoryProductsState.data?.map((category, i) => (

@@ -168,7 +168,7 @@ export function CateringHome() {
           className="lg:hidden"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/mobile/catering_landing_page.webp"
+            "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
           }
           alt="The best pop corn in town"
         ></img>
@@ -176,7 +176,7 @@ export function CateringHome() {
           className="hidden lg:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/desktop/catering_landing_page.webp"
+            "api/assets/images/catering/hero/desktop/catering_munch_better_black.webp"
           }
           alt="The best pop corn in town"
         ></img>
