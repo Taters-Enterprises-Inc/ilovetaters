@@ -89,7 +89,7 @@ export function Franchising() {
             Ready to invest in the best Snacks in Town?
           </h1>
           <br />
-          <p className="text-lg">
+          <p className="pb-2 text-lg text-center">
             Kindly fill up our franchise application form and submit a letter of
             intent specifying your intended space and franchise location. Send
             your applications thru <strong>franchising@tatersgroup.com</strong>.
