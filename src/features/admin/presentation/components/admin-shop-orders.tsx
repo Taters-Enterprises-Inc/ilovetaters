@@ -35,7 +35,7 @@ import {
 import { DataList } from "features/shared/presentation/components";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status" },
+  { id: "status", label: "Status", minWidth: 200 },
   { id: "dateadded", label: "Order Date" },
   { id: "tracking_no", label: "Tracking No." },
   { id: "client_name", label: "Client Name" },
@@ -233,23 +233,25 @@ export function AdminShopOrders() {
                   className="flex flex-col border-b px-4 py-2"
                   key={i}
                 >
-                  <span className="text-xl">
-                    {row.client_name}{" "}
+                  <span className="text-xl flex space-x-1 items-center flex-wrap">
+                    <span>{row.client_name}</span>
                     <span className="text-gray-600 text-lg">
                       #{row.tracking_no}
                     </span>
+                    <span
+                      className=" text-xs rounded-full py-1 px-2"
+                      style={{
+                        color: "white",
+                        backgroundColor:
+                          ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
+                      }}
+                    >
+                      {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
+                    </span>
                   </span>
-                  <div className="flex space-x-2">
-                    <span className="text-xs">
-                      <strong>Status: </strong>
-                      <span>
-                        {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
-                      </span>
-                    </span>
-                    <span className="text-xs">
-                      <strong>Hub:</strong> {row.store_name}
-                    </span>
-                  </div>
+                  <span className="text-xs">
+                    <strong>Hub:</strong> {row.store_name}
+                  </span>
 
                   <div className="flex justify-between">
                     <span className="text-xs">09-18-22 / 01:23 PM</span>
@@ -364,9 +366,10 @@ export function AdminShopOrders() {
                     <DataTableRow key={i}>
                       <DataTableCell>
                         <span
-                          className="font-bold"
+                          className=" text-xs rounded-full py-1 px-2"
                           style={{
-                            color:
+                            color: "white",
+                            backgroundColor:
                               ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
                           }}
                         >

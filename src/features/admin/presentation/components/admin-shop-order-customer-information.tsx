@@ -1,5 +1,6 @@
 import { useAppSelector } from "features/config/hooks";
 import { selectGetAdminShopOrder } from "../slices/get-admin-shop-order.slice";
+import { ADMIN_SNACKSHOP_ORDER_STATUS } from "features/shared/constants";
 
 export function AdminShopOrderCustomerInformation() {
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
@@ -16,7 +17,24 @@ export function AdminShopOrderCustomerInformation() {
           </div>
           <div>
             <strong>Payment Status:</strong>{" "}
-            <span className="font-semibold">Paid</span>
+            {getAdminShopOrderState.data ? (
+              <span
+                className=" text-xs rounded-full py-1 px-2"
+                style={{
+                  color: "white",
+                  backgroundColor:
+                    ADMIN_SNACKSHOP_ORDER_STATUS[
+                      getAdminShopOrderState.data.status
+                    ].color,
+                }}
+              >
+                {
+                  ADMIN_SNACKSHOP_ORDER_STATUS[
+                    getAdminShopOrderState.data.status
+                  ].name
+                }
+              </span>
+            ) : null}
           </div>
           <div>
             <strong>Mode of Payment:</strong>{" "}
