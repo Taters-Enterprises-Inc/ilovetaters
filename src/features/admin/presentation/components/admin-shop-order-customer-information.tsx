@@ -85,9 +85,10 @@ export function AdminShopOrderCustomerInformation() {
 
       <hr />
 
-      <div className=" pt-2 space-y-3">
+      <div className="pt-2 ">
         <span className="text-xl font-bold">Order Details</span>
-        <table className="w-full text-sm text-left rounded-lg">
+
+        <table className="w-full text-sm text-left rounded-lg hidden lg:block mt-3">
           <thead className="text-xs text-white uppercase bg-secondary ">
             <tr>
               <th scope="col" className="py-3 px-6">
@@ -179,8 +180,64 @@ export function AdminShopOrderCustomerInformation() {
           </tbody>
         </table>
 
-        <div className="py-3 flex items-center justify-between">
-          <div className="space-x-2">
+        <div className="lg:hidden">
+          <div className="border-b py-2">
+            <p className="text-xs leading-1 mb-2 text-semibold">
+              Family Superpop Ziplock Bags , US Kernels popped and flavored into
+              perfection • 140g(per pack), 2 to 3 servings per Family Pack •
+              280g(per pack), 4 to 6 servings per Party Pack Additional Melted
+              Butter suggestions: • Family Pack: 4 Laddles • Party Pack: 6
+              Laddles
+            </p>
+            <div className="flex justify-between">
+              <span className="text-xs font-bold">Remarks:</span>
+              <span className="text-xs">Sour Cream</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-xs font-bold">Quantity:</span>
+              <span className="text-xs">1</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-xs font-bold">Price:</span>
+              <span className="text-xs">₱375.00</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-xs font-bold">Total:</span>
+              <span className="text-xs">₱375.00</span>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="font-bold text-sm">Total: </span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">Code[ ] Voucher Discount:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">Gift Card No.[ 0 ]:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">Subtotal:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">Delivery Fee:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">COD Additional Charges:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-bold text-sm">Grand Total:</span>
+            <span className="text-end text-sm">₱375.00</span>
+          </div>
+        </div>
+
+        <div className="py-3 flex flex-col lg:flex-row items-start justify-between">
+          <div className="space-x-2 order-2 lg:order-1">
             <button className="bg-blue-700 text-white text-base py-1 px-3 rounded-md shadow-md">
               Print
             </button>
@@ -188,7 +245,7 @@ export function AdminShopOrderCustomerInformation() {
               Download Document
             </button>
           </div>
-          <button className="bg-green-700 text-white text-base py-1 px-3 rounded-md shadow-md">
+          <button className="bg-green-700 text-white text-base py-1 px-3 rounded-md shadow-md order-1 lg:order-2 mb-2 lg:mb-0">
             Prepare
           </button>
         </div>

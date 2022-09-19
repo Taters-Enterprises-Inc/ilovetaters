@@ -54,7 +54,7 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="w-[90%] lg:w-[900px] my-10 rounded-[10px]">
+      <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
           <span className="text-white text-2xl">Order Summary</span>
           <button
@@ -72,6 +72,7 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
           <Tabs
             value={value}
             onChange={handleChange}
+            variant="scrollable"
             aria-label="basic tabs example"
           >
             <Tab label="Customer Information" {...a11yProps(0)} />

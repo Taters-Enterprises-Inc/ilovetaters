@@ -330,28 +330,22 @@ export const theme = createTheme({
         },
       },
     },
-    // MuiTabs: {
-    //   styleOverrides: {
-    //     indicator: {
-    //       backgroundColor: "#ffcd17",
-    //       height: 3,
-    //     },
-    //     root: {
-    //       height: 60,
-    //       "& .MuiTab-root.Mui-selected": {
-    //         color: "#ffcd17",
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiTab: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: "white",
-    //       height: 60,
-    //     },
-    //   },
-    // },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          color: "white !important",
+          "&:hover": {
+            color: "white !important",
+          },
+          "&$active": {
+            color: "white !important",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "white !important",
+          },
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
@@ -367,17 +361,50 @@ export const theme = createTheme({
   },
 });
 
-export const ADMIN_SNACKSHOP_ORDER_STATUS = [
-  "Incomplete Transaction",
-  "New",
-  "Paid",
-  "Confirmed",
-  "Declined",
-  "Cancelled",
-  "Completed",
-  "Rejected",
-  "For Dispatch",
-  "Error Transaction",
+export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Incomplete Transaction",
+    color: "red",
+  },
+  {
+    name: "New",
+    color: "yellow",
+  },
+  {
+    name: "Paid",
+    color: "#b32400",
+  },
+  {
+    name: "Confirmed",
+    color: "green",
+  },
+  {
+    name: "Declined",
+    color: "red",
+  },
+  {
+    name: "Cancelled",
+    color: "red",
+  },
+  {
+    name: "Completed",
+    color: "green",
+  },
+  {
+    name: "Rejected",
+    color: "green",
+  },
+  {
+    name: "For Dispatch",
+    color: "#400080",
+  },
+  {
+    name: "Error Transaction",
+    color: "red",
+  },
 ];
 
 export const ADMIN_SNACKSHOP_MOP_STATUS = [

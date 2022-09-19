@@ -8,19 +8,22 @@ import Pagination from "@mui/material/Pagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
-import "moment-timezone";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
+import { visuallyHidden } from "@mui/utils";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Box from "@mui/material/Box";
 
 export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
+    fontSize: 12,
     backgroundColor: "#22201A",
     color: "white",
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 12,
     backgroundColor: "#f8f8f8",
     color: "#22201A",
   },
@@ -49,8 +52,13 @@ export interface Row {
 interface DataTableProps {
   columns: Array<Column>;
   page: number;
+  order: "asc" | "desc";
+  orderBy: string;
   children: ReactNode;
   onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+  onRequestSort: (property: string) => void;
+  onSearch: (value: string) => void;
+  search: string;
   totalRows: number;
   perPage: number;
   onRowsPerPageChange: (event: SelectChangeEvent) => void;
@@ -58,15 +66,18 @@ interface DataTableProps {
 
 export function DataTable(props: DataTableProps) {
   return (
-    <>
+    <div className="space-y-4">
       <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
         <div className="flex  flex-1 space-x-4">
           <TextField
             required
             label="Search"
             variant="outlined"
-            name="search"
             size="small"
+            defaultValue={props.search}
+            onChange={(e) => {
+              props.onSearch(e.target.value);
+            }}
           />
           <Select
             size="small"
@@ -97,8 +108,28 @@ export function DataTable(props: DataTableProps) {
                   key={i}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  sortDirection={
+                    props.orderBy === column.id ? props.order : false
+                  }
                 >
-                  {column.label}
+                  <TableSortLabel
+                    active={props.orderBy === column.id}
+                    direction={
+                      props.orderBy === column.id ? props.order : "asc"
+                    }
+                    onClick={() => {
+                      props.onRequestSort(column.id);
+                    }}
+                  >
+                    {column.label}
+                    {props.orderBy === column.id ? (
+                      <Box component="span" sx={visuallyHidden}>
+                        {props.order === "desc"
+                          ? "sorted descending"
+                          : "sorted ascending"}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
                 </DataTableCell>
               ))}
             </DataTableRow>
@@ -107,6 +138,6 @@ export function DataTable(props: DataTableProps) {
           <TableBody>{props.children}</TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }

@@ -141,6 +141,14 @@ import {
   GetAdminShopOrderState,
   selectGetAdminShopOrder,
 } from "features/admin/presentation/slices/get-admin-shop-order.slice";
+import {
+  LoginAdminState,
+  selectLoginAdmin,
+} from "features/admin/presentation/slices/login-admin.slice";
+import {
+  GetAdminSessionState,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -218,6 +226,42 @@ export function LoadingAndSnackbarWrapper() {
   const editCartProduct = useAppSelector(selectEditCartItem);
   const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
+  const loginAdminState = useAppSelector(selectLoginAdmin);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  useEffect(() => {
+    switch (getAdminSessionState.status) {
+      case GetAdminSessionState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminSessionState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSessionState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSessionState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminSessionState, dispatch]);
+
+  useEffect(() => {
+    switch (loginAdminState.status) {
+      case LoginAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case LoginAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case LoginAdminState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case LoginAdminState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [loginAdminState, dispatch]);
 
   useEffect(() => {
     switch (getAdminShopOrderState.status) {
