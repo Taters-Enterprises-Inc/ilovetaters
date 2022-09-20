@@ -43,10 +43,10 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
     }
   });
 
-  const limiter = (e: { target: { value: string } }) => {
+  const limiter = (e: { target: { value: string } }, size: number) => {
     e.target.value = Math.max(0, parseInt(e.target.value))
       .toString()
-      .slice(0, cardCodeSize);
+      .slice(0, size);
   };
 
   const formatAndSetCcNumber = (e: { target: { value: string } }) => {
@@ -71,6 +71,10 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
     setCardNumber(spacedNumber);
   };
 
+  const handleOnSubmit = () => {
+    //HANDLE SUBMIT HERE
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -90,96 +94,99 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
         >
           <IoMdClose />
         </button>
-
-        <div className="space-y-2">
-          <div className="flex flex-col space-y-3 lg:items-center lg:justify-between lg:flex-row lg:space-y-0">
-            <h1 className="text-2xl font-bold">Card Details</h1>
-            <div className="flex items-center justify-end space-x-2">
-              <img
-                className={`w-[30px] h-[24px] ${
-                  cardType === "visa" || cardNumber === "" ? "" : "grayscale"
-                } `}
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/visa.png`}
+        <form onSubmit={handleOnSubmit}>
+          <div className="space-y-2">
+            <div className="flex flex-col space-y-3 lg:items-center lg:justify-between lg:flex-row lg:space-y-0">
+              <h1 className="text-2xl font-bold">Card Details</h1>
+              <div className="flex items-center justify-end space-x-2">
+                <img
+                  className={`w-[30px] h-[24px] ${
+                    cardType === "visa" || cardNumber === "" ? "" : "grayscale"
+                  } `}
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/visa.png`}
+                />
+                <img
+                  className={`w-[30px] h-[24px] ${
+                    cardType === "mastercard" || cardNumber === ""
+                      ? ""
+                      : "grayscale"
+                  } `}
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/master.png`}
+                />
+                <img
+                  className={`w-[30px] h-[24px] ${
+                    cardType === "jcb" || cardNumber === "" ? "" : "grayscale"
+                  } `}
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/jcb.png`}
+                />
+                <img
+                  className={`w-[30px] h-[24px] ${
+                    cardType === "american-express" || cardNumber === ""
+                      ? ""
+                      : "grayscale"
+                  } `}
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/american-express.png`}
+                />
+              </div>
+            </div>
+            <TextField
+              value={cardNumber}
+              onChange={formatAndSetCcNumber}
+              type="text"
+              autoComplete="off"
+              variant="outlined"
+              label="Card Number"
+              fullWidth
+              required
+            />
+            <div className="flex space-x-2">
+              <TextField
+                variant="outlined"
+                label="Expiry Date (MM/YY)"
+                className="flex-[0_0_70%] max-w-[70%]"
+                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  limiter(e, 4);
+                }}
+                type="number"
+                required
               />
-              <img
-                className={`w-[30px] h-[24px] ${
-                  cardType === "mastercard" || cardNumber === ""
-                    ? ""
-                    : "grayscale"
-                } `}
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/master.png`}
-              />
-              <img
-                className={`w-[30px] h-[24px] ${
-                  cardType === "jcb" || cardNumber === "" ? "" : "grayscale"
-                } `}
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/jcb.png`}
-              />
-              <img
-                className={`w-[30px] h-[24px] ${
-                  cardType === "american-express" || cardNumber === ""
-                    ? ""
-                    : "grayscale"
-                } `}
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/cards/american-express.png`}
+              <TextField
+                variant="outlined"
+                type="number"
+                onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  limiter(e, cardCodeSize);
+                }}
+                label={cardCodeName}
+                fullWidth
+                required
               />
             </div>
-          </div>
-          <TextField
-            value={cardNumber}
-            onChange={formatAndSetCcNumber}
-            type="text"
-            autoComplete="off"
-            variant="outlined"
-            label="Card Number"
-            fullWidth
-          />
-          <div className="flex space-x-2">
             <TextField
+              type="text"
               variant="outlined"
-              label="Expiry Date (MM/YY)"
-              className="flex-[0_0_70%] max-w-[70%]"
-              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                limiter(e);
-              }}
-              type="number"
-            />
-            <TextField
-              variant="outlined"
-              type="number"
-              onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                limiter(e);
-              }}
-              label={cardCodeName}
+              label="Card holder's name"
+              inputProps={{ maxlength: 32 }}
               fullWidth
+              required
             />
+            <div className="flex items-center justify-end space-x-4">
+              <button
+                className="font-bold"
+                onClick={() => {
+                  props.onClose();
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-1 text-white rounded-full bg-button"
+              >
+                Submit
+              </button>
+            </div>
           </div>
-          <TextField
-            type="text"
-            variant="outlined"
-            label="Card holder's name"
-            inputProps={{ maxlength: 32 }}
-            fullWidth
-          />
-          <div className="flex items-center justify-end space-x-4">
-            <button
-              className="font-bold"
-              onClick={() => {
-                props.onClose();
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                props.onClose();
-              }}
-              className="px-4 py-1 text-white rounded-full bg-button"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   );
