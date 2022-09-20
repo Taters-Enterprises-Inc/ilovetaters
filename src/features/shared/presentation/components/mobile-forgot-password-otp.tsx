@@ -30,8 +30,6 @@ interface MobileForgotPasswordOtp {
   mobileNumber: any;
 }
 
-let pnum = "";
-
 export function MobileForgotPasswordOtp(props: { setMobilerNumber: any }) {
   const dispatch = useAppDispatch();
   const [getPhoneNumber, setPhoneNumber] = useState("");

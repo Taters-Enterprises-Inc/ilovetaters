@@ -61,7 +61,7 @@ export function MobileForgotPasswordOtpAuthentication(
     ) {
       dispatch(
         changeForgotPasswordStatus({
-          status: ChangeForgotPasswordStatusState.sendOtp,
+          status: ChangeForgotPasswordStatusState.mobileOtpAuthentication,
         })
       );
 
@@ -77,8 +77,7 @@ export function MobileForgotPasswordOtpAuthentication(
     dispatch(forgotPasswordValidateOTP(formData));
   };
 
-  const handleOnResend = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleOnResend = () => {
     dispatch(forgotPasswordResendOTP(props.phoneNumber));
   };
 
@@ -126,9 +125,13 @@ export function MobileForgotPasswordOtpAuthentication(
             Submit
           </button>
         </form>
-        <form onSubmit={handleOnResend}>
-          <button className="w-full py-2 mt-3 mb-2 text-white ">resend</button>
-        </form>
+
+        <button
+          onClick={handleOnResend}
+          className="w-full py-2 mt-3 mb-2 text-white "
+        >
+          resend
+        </button>
       </div>
     </>
   );
