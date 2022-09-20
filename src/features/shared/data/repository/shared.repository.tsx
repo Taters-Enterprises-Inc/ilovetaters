@@ -299,7 +299,9 @@ export function GetStoresAvailableRepository(
   param: GetStoresAvailableParam
 ): Promise<GetStoresAvailableResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/store?address=${param.address}&service=${param.service}`,
+    `${REACT_APP_DOMAIN_URL}api/store?${
+      param.address ? `address=${param.address}` : ""
+    }&service=${param.service}`,
     {
       headers: {
         "Content-Type": "application/json",

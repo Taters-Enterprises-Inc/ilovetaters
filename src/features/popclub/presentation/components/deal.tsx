@@ -31,26 +31,6 @@ const renderer = ({ hours, minutes, seconds, completed }: any) => {
   } else {
     let timeName = "";
 
-    if (hours > 0) {
-      if (hours === 1) {
-        timeName = "hour";
-      } else {
-        timeName = "hours";
-      }
-    } else if (minutes > 0) {
-      if (minutes === 1) {
-        timeName = "minute";
-      } else {
-        timeName = "minutes";
-      }
-    } else if (seconds > 0) {
-      if (seconds === 1) {
-        timeName = "second";
-      } else {
-        timeName = "seconds";
-      }
-    }
-
     return (
       <span>
         <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
@@ -58,7 +38,6 @@ const renderer = ({ hours, minutes, seconds, completed }: any) => {
             <span className="mr-2">
               {pad(hours)}:{pad(minutes)}:{pad(seconds)}
             </span>
-            <span className="text-xs lg:text-sm">{timeName}</span>
           </div>
         </div>
       </span>
@@ -126,11 +105,11 @@ export function Deal(props: DealProps) {
     <button onClick={handleOnDealClick}>
       <div
         className={`${
-          isDealAvailable ? "" : "deal-not-available cursor-not-allowed"
+          isDealAvailable ? "" : "cursor-not-allowed"
         } relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full`}
       >
         {isDealAvailable ? null : (
-          <div className="p-1 text-center deal-not-available-text">
+          <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
             {availableStartTimeInDate ? (
               <>
                 <span className="text-xs font-bold lg:text-base">
@@ -189,9 +168,11 @@ export function Deal(props: DealProps) {
           <hr />
           {props.deal.available_days ? (
             <>
-              <div className="flex items-center pt-2 space-x-2">
+              <div className="flex items-end pt-2 space-x-2">
                 <BsFillCalendar2WeekFill className="text-base text-white" />
-                <span className="text-xs text-white">Weekdays</span>
+                <span className="text-[9px] lg:text-xs text-white">
+                  Available on Weekdays
+                </span>
               </div>
             </>
           ) : null}

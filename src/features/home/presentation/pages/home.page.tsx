@@ -70,25 +70,6 @@ export function Home() {
         className="hidden w-full sm:block"
         alt="The best pop corn in town"
       ></img>
-      {/* <section
-        style={{
-          backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp')`,
-          backgroundSize: "contain",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-        }}
-        className="relative items-end justify-center hidden sm:flex "
-      >
-        <img
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/home/hero/desktop/taters_entertainment_snacks.webp"
-          }
-          alt="The best pop corn in town"
-          style={{ visibility: "hidden" }}
-        ></img>
-      </section> */}
-
       <section className="container lg:mx-auto pb-[100px] grid-cols-3 gap-4 pt-4 hidden sm:grid">
         {SERVICES_DESKTOP.map(function (service_desktop, i) {
           return (
@@ -100,7 +81,7 @@ export function Home() {
                       backgroundImage: `url("${
                         REACT_APP_DOMAIN_URL + service_desktop.image
                       }")`,
-                      backgroundPosition: "center",
+                      backgroundPosition: service_desktop.backgroundPosition,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       position: "relative",
@@ -139,7 +120,7 @@ export function Home() {
                       backgroundImage: `url("${
                         REACT_APP_DOMAIN_URL + service_mobile.image
                       }")`,
-                      backgroundPosition: "center",
+                      backgroundPosition: service_mobile.backgroundPosition,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       position: "relative",

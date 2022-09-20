@@ -50,7 +50,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         </button>
 
         <h1 className="pt-1 pb-2 text-sm font-bold text-center text-white">
-          Which store do you want for online delivery?
+          Which store do you want to have your snacks delivered?
         </h1>
 
         <div className="flex items-center justify-center mb-3">

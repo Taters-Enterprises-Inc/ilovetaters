@@ -82,6 +82,8 @@ import getAdminPopclubRedeems from "features/admin/presentation/slices/get-admin
 import getAdminPopclubRedeem from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
 
 import adminCompleteRedeem from "features/admin/presentation/slices/admin-complete-redeem.slice";
+import storeVisitStoreChooserModal from "features/popclub/presentation/slices/store-visit-store-chooser-modal.slice";
+import getStoresAvailablePopClubStoreVisit from "features/popclub/presentation/slices/get-stores-available-popclub-store-visit.slice";
 
 export const store = configureStore({
   reducer: {
@@ -156,6 +158,8 @@ export const store = configureStore({
     getAdminPopclubRedeems,
     getAdminPopclubRedeem,
     adminCompleteRedeem,
+    storeVisitStoreChooserModal,
+    getStoresAvailablePopClubStoreVisit,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
