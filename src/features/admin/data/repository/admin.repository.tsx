@@ -4,6 +4,7 @@ import { AdminSessionModel } from "features/admin/core/domain/admin-session.mode
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
+import { UserModel } from "features/admin/core/domain/user-model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginAdminResponse {
@@ -59,6 +60,19 @@ export interface AdminCompleteRedeemResponse {
   };
 }
 
+export interface GetAdminUsersResponse {
+  data: {
+    message: string;
+    data: UserModel;
+  };
+}
+export function GetAdminUsersRepository(
+  query: string
+): Promise<GetAdminUsersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/users${query}`, {
+    withCredentials: true,
+  });
+}
 export function AdminCompleteRedeemRepository(
   redeemCode: string
 ): Promise<AdminCompleteRedeemResponse> {

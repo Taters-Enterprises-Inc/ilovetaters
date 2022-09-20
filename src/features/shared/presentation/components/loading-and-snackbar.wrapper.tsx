@@ -153,6 +153,10 @@ import {
   GetAdminPopclubRedeemState,
   selectGetAdminPopclubRedeem,
 } from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
+import {
+  GetAdminUsersState,
+  selectGetAdminUsers,
+} from "features/admin/presentation/slices/get-admin-users.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -235,6 +239,25 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminPopclubRedeemState = useAppSelector(
     selectGetAdminPopclubRedeem
   );
+
+  const getAdminUsersState = useAppSelector(selectGetAdminUsers);
+
+  useEffect(() => {
+    switch (getAdminUsersState.status) {
+      case GetAdminUsersState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminUsersState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminUsersState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminUsersState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminUsersState, dispatch]);
 
   useEffect(() => {
     switch (getAdminPopclubRedeemState.status) {
