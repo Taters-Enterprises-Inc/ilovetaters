@@ -63,14 +63,10 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                       : () =>
                           storeClicked(store.store_id, store.region_store_id)
                   }
-                  className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative ${
-                    store_availability && props.address != null
-                      ? "store-not-available"
-                      : ""
-                  }`}
+                  className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 text-center not-within-reach-text ">
+                    <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
                   ) : null}

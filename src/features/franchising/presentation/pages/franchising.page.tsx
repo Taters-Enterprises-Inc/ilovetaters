@@ -32,12 +32,12 @@ export function Franchising() {
         className="pt-6 lg:hidden"
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/popclub/hero/mobile/popclub.webp"
+          "api/assets/images/franchising/hero/mobile/franchising.webp"
         }
         alt="The best pop corn in town"
       ></img>
 
-      <div className="lg:hidden mobview">
+      <div className="lg:hidden mobview mt-[-310px] mb-[90px]">
         <iframe
           className="responsive"
           width="560"
@@ -55,7 +55,7 @@ export function Franchising() {
           className="relative m-auto lg:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/desktop/popclub.webp"
+            "api/assets/images/franchising/hero/desktop/franchising.webp"
           }
           alt="The best pop corn in town"
         ></img>

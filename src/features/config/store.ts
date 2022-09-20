@@ -79,6 +79,13 @@ import getAdminShopOrders from "features/admin/presentation/slices/get-admin-sho
 import getAdminShopOrder from "features/admin/presentation/slices/get-admin-shop-order.slice";
 import forgotPasswordResendOTP from "features/shared/presentation/slices/forgot-password-resend-otp.slice";
 
+import getAdminPopclubRedeems from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
+import getAdminPopclubRedeem from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
+
+import adminCompleteRedeem from "features/admin/presentation/slices/admin-complete-redeem.slice";
+import storeVisitStoreChooserModal from "features/popclub/presentation/slices/store-visit-store-chooser-modal.slice";
+import getStoresAvailablePopClubStoreVisit from "features/popclub/presentation/slices/get-stores-available-popclub-store-visit.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform,
@@ -150,6 +157,11 @@ export const store = configureStore({
     adminSideBar,
     getAdminShopOrders,
     getAdminShopOrder,
+    getAdminPopclubRedeems,
+    getAdminPopclubRedeem,
+    adminCompleteRedeem,
+    storeVisitStoreChooserModal,
+    getStoresAvailablePopClubStoreVisit,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

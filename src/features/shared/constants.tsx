@@ -14,6 +14,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Online delivery snacks",
     color: "#1d1115",
     textColor: "white",
+    backgroundPosition: "100% 100%",
     url: "shop",
     image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
@@ -22,6 +23,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Investment opportunities",
     color: "#1b1915",
     textColor: "white",
+    backgroundPosition: "100% 100%",
     url: "franchising",
     image: "api/assets/images/home/cards/taters_franchising.webp",
   },
@@ -30,6 +32,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Best deals in town",
     color: "#22201A",
     textColor: "white",
+    backgroundPosition: "center center",
     url: "popclub",
     image: "api/assets/images/home/cards/taters_popclub.webp",
   },
@@ -38,6 +41,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Celebration Snacks",
     color: "#858173",
     textColor: "black",
+    backgroundPosition: "100% 100%",
     url: "catering",
     image: "api/assets/images/home/cards/taters_catering.webp",
   },
@@ -46,6 +50,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Community selling",
     color: "#c7b7ad",
     textColor: "black",
+    backgroundPosition: "center center",
     url: "reseller",
     image: "api/assets/images/home/cards/taters_reseller.webp",
   },
@@ -54,6 +59,7 @@ export const SERVICES_DESKTOP = [
     subtitle: "Nationwide Locations",
     color: "#d7cdb7",
     textColor: "black",
+    backgroundPosition: "100% 100%",
     url: "branches",
     image: "api/assets/images/home/cards/taters_branches.webp",
   },
@@ -65,6 +71,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Online delivery snacks",
     color: "#1d1115",
     textColor: "white",
+    backgroundPosition: "100% 100%",
     url: "shop",
     image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
@@ -73,6 +80,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Celebration Snacks",
     color: "#858173",
     textColor: "black",
+    backgroundPosition: "100% 100%",
     url: "catering",
     image: "api/assets/images/home/cards/taters_catering.webp",
   },
@@ -81,6 +89,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Investment opportunities",
     color: "#1b1915",
     textColor: "white",
+    backgroundPosition: "90% 100%",
     url: "franchising",
     image: "api/assets/images/home/cards/taters_franchising.webp",
   },
@@ -89,6 +98,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Community selling",
     color: "#c7b7ad",
     textColor: "black",
+    backgroundPosition: "center center",
     url: "reseller",
     image: "api/assets/images/home/cards/taters_reseller.webp",
   },
@@ -97,6 +107,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Best deals in town",
     color: "#22201A",
     textColor: "white",
+    backgroundPosition: "center center",
     url: "popclub",
     image: "api/assets/images/home/cards/taters_popclub.webp",
   },
@@ -105,6 +116,7 @@ export const SERVICES_MOBILE = [
     subtitle: "Nationwide Locations",
     color: "#d7cdb7",
     textColor: "black",
+    backgroundPosition: "100% 100%",
     url: "branches",
     image: "api/assets/images/home/cards/taters_branches.webp",
   },
@@ -404,6 +416,40 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   {
     name: "Error Transaction",
     color: "#a21013",
+  },
+];
+
+export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Forfeited",
+    color: "#a21013",
+  },
+  {
+    name: "Completed",
+    color: "#004d00",
   },
 ];
 

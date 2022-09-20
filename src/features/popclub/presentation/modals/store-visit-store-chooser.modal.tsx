@@ -1,8 +1,14 @@
 import * as React from "react";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAllAvailableStores } from "../slices/get-all-available-stores.slice";
 import { StoreClusterStoreVisit } from "../components";
 import { IoMdClose } from "react-icons/io";
+import { SearchAddress } from "features/shared/presentation/components";
+import {
+  selectStoreVisitStoreChooserModal,
+  setAddressStoreVisitStoreChooserModal,
+} from "../slices/store-visit-store-chooser-modal.slice";
+import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
 
 interface StoreVisitStoreChooserModalProps {
   open: boolean;
@@ -13,9 +19,17 @@ export function StoreVisitStoreChooserModal(
   props: StoreVisitStoreChooserModalProps
 ) {
   const dispatch = useAppDispatch();
+  const storeVisitStoreChooserModalState = useAppSelector(
+    selectStoreVisitStoreChooserModal
+  );
 
   React.useEffect(() => {
-    dispatch(getAllAvailableStores({ address: null }));
+    dispatch(
+      getStoresAvailablePopClubStoreVisit({
+        address: null,
+        service: "SNACKSHOP",
+      })
+    );
   }, [dispatch]);
 
   if (props.open) {
@@ -43,9 +57,42 @@ export function StoreVisitStoreChooserModal(
         <h1 className="pt-4 pb-2 text-sm font-bold text-center text-white">
           Which store are you visiting?
         </h1>
+
+        <div className="flex items-center justify-center mb-3">
+          <label className="w-full pure-material-textfield-outlined">
+            <SearchAddress
+              value={
+                storeVisitStoreChooserModalState.address
+                  ? storeVisitStoreChooserModalState.address
+                  : ""
+              }
+              onChange={(value: string) => {
+                dispatch(
+                  setAddressStoreVisitStoreChooserModal({ address: value })
+                );
+              }}
+              onPlaceSelected={(place: string) => {
+                dispatch(
+                  setAddressStoreVisitStoreChooserModal({ address: place })
+                );
+                dispatch(
+                  getStoresAvailablePopClubStoreVisit({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
+            />
+            <span>Search Address</span>
+          </label>
+        </div>
         <StoreClusterStoreVisit
           onClose={props.onClose}
-          address={null}
+          address={
+            storeVisitStoreChooserModalState.address
+              ? storeVisitStoreChooserModalState.address
+              : ""
+          }
         ></StoreClusterStoreVisit>
       </div>
     </div>

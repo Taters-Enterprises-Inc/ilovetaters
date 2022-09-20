@@ -165,39 +165,17 @@ input[type="number"] {
   z-index: 5;
 }
 
-.not-within-reach-text {
+.not-available-overlay {
+  line-height: 19px;
   position: absolute;
-  top: 50%;
-  left: 1rem;
-  right: 1rem;
-  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   z-index: 5;
-}
-
-.deal-not-available::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  position: absolute;
+  color: white;
   background: rgba(24, 24, 24, 0.809);
-  z-index: 4;
-  border-radius: 10px;
-}
-
-.store-not-available::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  position: absolute;
-  background: rgba(128, 128, 128, 0.7);
-  z-index: 4;
-  border-radius: 10px;
 }
 
 .pure-material-textfield-outlined {

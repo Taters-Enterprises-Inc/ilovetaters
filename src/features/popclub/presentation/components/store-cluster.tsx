@@ -94,15 +94,11 @@ export function StoreCluster(props: StoreClusterProps) {
                       : () =>
                           storeClicked(store.store_id, store.region_store_id)
                   }
-                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative ${
-                    store_availability && props.address != null
-                      ? "store-not-available"
-                      : ""
-                  }`}
+                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                 >
                   {store_availability && props.address != null ? (
-                    <span className="p-1 text-center deal-not-available-text ">
-                      You can't redeem this deal
+                    <span className="p-1 text-center not-available-overlay rounded-[10px]">
+                      Store not within reach
                     </span>
                   ) : null}
 
