@@ -77,13 +77,13 @@ export function FooterNav(props: FooterNavProps) {
   return (
     <>
       <section className="fixed bottom-0 z-[2003]  w-full">
-        <footer className="w-full shadow-l-2xl lg:hidden bg-secondary">
-          <nav className="mx-auto ">
-            <ul className="flex items-stretch h-full py-1 text-white md:px-10">
+        <footer className="w-full shadow-l-2xl bg-secondary">
+          <nav className="mx-auto lg:px-[200px] xl:px-[400px]">
+            <ul className="flex h-full py-1 text-white item-stretch md:px-10">
               <li className="flex-1">
                 <div
                   onClick={() => handleSwitchTab({ url: "/", tabName: "home" })}
-                  className="flex flex-col items-center justify-center h-full pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-1 cursor-pointer"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
@@ -91,11 +91,11 @@ export function FooterNav(props: FooterNavProps) {
                         ? "-active"
                         : ""
                     }.webp`}
-                    className="w-[28px] sm:w-[40px]"
+                    className="w-[28px] sm:w-[40px] lg:w-[30px]"
                     alt="Tater home icon"
                   />
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
+                    className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "HOME" && !isMoreActive()
                         ? "text-tertiary"
                         : "text-white"
@@ -121,11 +121,11 @@ export function FooterNav(props: FooterNavProps) {
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.webp`}
-                    className="w-[20px] sm:w-[24px]"
+                    className="w-[20px] sm:w-[24px] lg:w-[22.69px]"
                     alt="Tater home icon"
                   />
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
+                    className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "POPCLUB"
                         ? "text-tertiary"
                         : "text-white"
@@ -140,7 +140,7 @@ export function FooterNav(props: FooterNavProps) {
                   onClick={() =>
                     handleSwitchTab({ url: "/shop", tabName: "snackshop" })
                   }
-                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
@@ -148,11 +148,11 @@ export function FooterNav(props: FooterNavProps) {
                         ? "-active"
                         : ""
                     }.webp`}
-                    className="w-[24px] sm:w-[30px]"
+                    className="w-[24px] sm:w-[30px] lg:w-[23px]"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
+                    className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "SNACKSHOP" && !isMoreActive()
                         ? "text-tertiary"
                         : "text-white"
@@ -167,17 +167,17 @@ export function FooterNav(props: FooterNavProps) {
                   onClick={() =>
                     handleSwitchTab({ url: "/catering", tabName: "catering" })
                   }
-                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering${
                       props.activeUrl === "CATERING" ? "-active" : ""
                     }.webp`}
-                    className="w-[24px] sm:w-[30px]"
+                    className="w-[24px] sm:w-[30px] lg:w-[24px]"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
+                    className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "CATERING"
                         ? "text-tertiary"
                         : "text-white"
@@ -192,17 +192,17 @@ export function FooterNav(props: FooterNavProps) {
                   onClick={() =>
                     handleSwitchTab({ url: "/branches", tabName: "branches" })
                   }
-                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-1"
+                  className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-1 cursor-pointer"
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/branches${
                       props.activeUrl === "BRANCHES" ? "-active" : ""
                     }.webp`}
-                    className="w-[18px] sm:w-[25px]"
+                    className="w-[18px] sm:w-[25px] lg:w-[21px]"
                     alt="Tater home icon"
                   ></img>
                   <span
-                    className={`text-[8px] sm:text-[14px] pt-[3px] pb-[5px] ${
+                    className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
                       props.activeUrl === "BRANCHES"
                         ? "text-tertiary"
                         : "text-white"

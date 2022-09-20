@@ -128,9 +128,6 @@ export function ShopProduct() {
     }
   }, [getProductDetailsState, currentFlavor, hash]);
 
-
-  
-
   useEffect(() => {
     if (
       getProductSkuState.status === GetProductSkuState.success &&
@@ -162,9 +159,6 @@ export function ShopProduct() {
     if (isLongPress.current === true) {
       return;
     }
-    // } else {
-    //    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
-    // }
   }
 
   function handleonMouseUp() {
@@ -432,21 +426,6 @@ export function ShopProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getProductDetailsState.data?.addons ? (
-                  <ProductDetailsAccordion
-                    title={{
-                      name: "Product Add-ons",
-                      prefixIcon: <MdFastfood className="text-3xl" />,
-                    }}
-                  >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getProductDetailsState.data?.addons.map((product, i) => (
-                        <Addon key={i} product={product} />
-                      ))}
-                    </div>
-                  </ProductDetailsAccordion>
-                ) : null}
-
                 {getProductDetailsState.data?.product_size &&
                 getProductDetailsState.data?.product_size.length > 0 ? (
                   <div>
@@ -692,6 +671,21 @@ export function ShopProduct() {
                       prefix={"₱"}
                     />
                   </h2>
+                ) : null}
+
+                {getProductDetailsState.data?.addons ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Product Add-ons",
+                      prefixIcon: <MdFastfood className="text-3xl" />,
+                    }}
+                  >
+                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getProductDetailsState.data?.addons.map((product, i) => (
+                        <Addon key={i} product={product} />
+                      ))}
+                    </div>
+                  </ProductDetailsAccordion>
                 ) : null}
 
                 <div className="space-y-4">

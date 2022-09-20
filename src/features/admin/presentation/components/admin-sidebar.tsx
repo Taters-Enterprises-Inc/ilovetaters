@@ -384,6 +384,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
                   activeItemId="/admin/orders"
                   onSelect={({ itemId }) => {
                     if (itemId) history(itemId);
+                    dispatch(toggleAdminSideBar());
                   }}
                   items={ADMIN_SIDEBAR_ITEMS}
                 />

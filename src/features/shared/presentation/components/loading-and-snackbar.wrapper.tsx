@@ -149,6 +149,10 @@ import {
   GetAdminSessionState,
   selectGetAdminSession,
 } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  GetAdminPopclubRedeemState,
+  selectGetAdminPopclubRedeem,
+} from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -228,6 +232,26 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
   const loginAdminState = useAppSelector(selectLoginAdmin);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getAdminPopclubRedeemState = useAppSelector(
+    selectGetAdminPopclubRedeem
+  );
+
+  useEffect(() => {
+    switch (getAdminPopclubRedeemState.status) {
+      case GetAdminPopclubRedeemState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminPopclubRedeemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminPopclubRedeemState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminPopclubRedeemState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminPopclubRedeemState, dispatch]);
 
   useEffect(() => {
     switch (getAdminSessionState.status) {

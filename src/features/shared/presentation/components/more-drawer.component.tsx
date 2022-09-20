@@ -146,7 +146,7 @@ export default function MoreDrawer(props: MoreDrawerProps) {
   );
 
   return (
-    <div className="flex justify-center items-center pr-[8px] sm:pt-[4px]">
+    <div className="flex justify-center items-center pr-[8px] sm:pt-[4px] lg:pt-[0px]">
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           <button
@@ -161,12 +161,12 @@ export default function MoreDrawer(props: MoreDrawerProps) {
               ? (isActiveUrl.current = true)
               : (isActiveUrl.current = false)}
             <FiMoreHorizontal
-              className={`text-[25px] sm:text-4xl ${
+              className={`text-[25px] sm:text-4xl lg:w-[24px] ${
                 isActiveUrl.current ? "text-tertiary" : "text-white"
               }`}
             />
             <span
-              className={`text-[8px] sm:text-[14px] capitalize ${
+              className={`text-[8px] sm:text-[14px] lg:text-[11px] capitalize ${
                 isActiveUrl.current ? "text-tertiary" : "text-white"
               }`}
             >

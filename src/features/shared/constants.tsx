@@ -124,10 +124,6 @@ export const SERVICES_MOBILE = [
 
 export const TABS: Array<{ name: string; url: string }> = [
   {
-    name: "HOME",
-    url: "/",
-  },
-  {
     name: "POPCLUB",
     url: "/popclub",
   },
@@ -142,6 +138,10 @@ export const TABS: Array<{ name: string; url: string }> = [
   {
     name: "BRANCHES",
     url: "/branches",
+  },
+  {
+    name: "FRANCHISING",
+    url: "/franchising",
   },
 ];
 
