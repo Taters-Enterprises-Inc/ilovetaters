@@ -20,7 +20,13 @@ import {
   selectForgotPasswordValidateOTP,
 } from "../slices/forgot-password-validate-otp.slice";
 
-export function MobileForgotPasswordOtpAuthentication() {
+interface MobileForgotPasswordOtpAuthentication {
+  phoneNumber: any;
+}
+
+export function MobileForgotPasswordOtpAuthentication(
+  props: MobileForgotPasswordOtpAuthentication
+) {
   const dispatch = useAppDispatch();
   const changeForgotPasswordStatusState = useAppSelector(
     selectChangeForgotPasswordStatus
@@ -73,9 +79,7 @@ export function MobileForgotPasswordOtpAuthentication() {
 
   const handleOnResend = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(forgotPasswordResendOTP(formData));
+    dispatch(forgotPasswordResendOTP(props.phoneNumber));
   };
 
   return (
@@ -89,7 +93,7 @@ export function MobileForgotPasswordOtpAuthentication() {
       </div>
 
       <div className="pt-4 login-body">
-        <form onSubmit={handleOnResend}>
+        <form onSubmit={handleOnSubmit}>
           <h1 className="mb-2 text-xl font-bold text-white">
             OTP authentication
           </h1>
@@ -122,9 +126,9 @@ export function MobileForgotPasswordOtpAuthentication() {
             Submit
           </button>
         </form>
-        {/* <form onSubmit={handleOnResend}>
+        <form onSubmit={handleOnResend}>
           <button className="w-full py-2 mt-3 mb-2 text-white ">resend</button>
-        </form> */}
+        </form>
       </div>
     </>
   );

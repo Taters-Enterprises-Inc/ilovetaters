@@ -30,9 +30,11 @@ interface MobileForgotPasswordOtp {
   mobileNumber: any;
 }
 
+let pnum = "";
+
 export function MobileForgotPasswordOtp(props: { setMobilerNumber: any }) {
   const dispatch = useAppDispatch();
-  // const [getMobileNumber, setMobilerNumber] = useState("");
+  const [getPhoneNumber, setPhoneNumber] = useState("");
   const forgotPasswordGenerateOTPState = useAppSelector(
     selectForgotPasswordGenerateOTP
   );
@@ -54,10 +56,9 @@ export function MobileForgotPasswordOtp(props: { setMobilerNumber: any }) {
 
   const handleOnSubmit = (e: FormEvent<ForgotPasswordFormElement>) => {
     e.preventDefault();
-
-    props.setMobilerNumber(e.currentTarget.elements.phoneNumber.value);
-    // props.mobileNumber = getMobileNumber;
     const formData = new FormData(e.currentTarget as ForgotPasswordFormElement);
+
+    props.setMobilerNumber(formData);
 
     dispatch(forgotPasswordGenerateOTP(formData));
 
@@ -88,7 +89,6 @@ export function MobileForgotPasswordOtp(props: { setMobilerNumber: any }) {
 
           <button
             type="submit"
-            onClick={() => props.setMobilerNumber("656565655")}
             className="w-full py-2 mt-3 mb-2 text-white shadow-md bg-button rounded-3xl"
           >
             Submit

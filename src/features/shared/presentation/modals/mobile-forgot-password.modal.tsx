@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { AiOutlineYuque } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -20,7 +20,7 @@ interface MobileLoginModalProps {
 
 export function MobileForgotPasswordModal(props: MobileLoginModalProps) {
   const dispatch = useAppDispatch();
-  const [getMobileNumber, setMobilerNumber] = useState<void>();
+  const [getMobileNumber, setMobilerNumber] = useState<FormData>();
   const changeForgotPasswordStatusState = useAppSelector(
     selectChangeForgotPasswordStatus
   );
@@ -42,8 +42,6 @@ export function MobileForgotPasswordModal(props: MobileLoginModalProps) {
     return null;
   }
 
-  console.log(getMobileNumber);
-
   return (
     <>
       <div
@@ -61,11 +59,15 @@ export function MobileForgotPasswordModal(props: MobileLoginModalProps) {
             {changeForgotPasswordStatusState.status ===
             ChangeForgotPasswordStatusState.sendOtp ? (
               <MobileForgotPasswordOtp
-                setMobilerNumber={() => setMobilerNumber(setMobilerNumber)}
+                setMobilerNumber={(getMobileNumber: any) =>
+                  setMobilerNumber(getMobileNumber)
+                }
               />
             ) : changeForgotPasswordStatusState.status ===
               ChangeForgotPasswordStatusState.mobileOtpAuthentication ? (
-              <MobileForgotPasswordOtpAuthentication />
+              <MobileForgotPasswordOtpAuthentication
+                phoneNumber={getMobileNumber}
+              />
             ) : changeForgotPasswordStatusState.status ===
               ChangeForgotPasswordStatusState.newPassword ? (
               <MobileForgotPasswordNewPassword />
