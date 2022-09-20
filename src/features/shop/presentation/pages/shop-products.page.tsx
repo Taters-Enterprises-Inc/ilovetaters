@@ -73,7 +73,7 @@ export function ShopProducts() {
         ></img>
       </section>
       <section className="space-y-10 pb-36 lg:pb-10">
-        {getCategoryProductsState.data?.map((category, i) => {
+        {getCategoryProductsState.data?.map((category:any, i:number) => {
           return (
             <section
               key={i}
