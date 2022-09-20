@@ -77,6 +77,7 @@ import forfeitRedeem from "features/popclub/presentation/slices/forfeit-redeem.s
 import adminSideBar from "features/admin/presentation/slices/admin-sidebar.slice";
 import getAdminShopOrders from "features/admin/presentation/slices/get-admin-shop-orders.slice";
 import getAdminShopOrder from "features/admin/presentation/slices/get-admin-shop-order.slice";
+import forgotPasswordResendOTP from "features/shared/presentation/slices/forgot-password-resend-otp.slice";
 
 export const store = configureStore({
   reducer: {
@@ -139,6 +140,7 @@ export const store = configureStore({
     signUpMobileUser,
     changeForgotPasswordStatus,
     forgotPasswordGenerateOTP,
+    forgotPasswordResendOTP,
     forgotPasswordValidateOTP,
     forgotPasswordNewPassword,
     forfeitRedeem,

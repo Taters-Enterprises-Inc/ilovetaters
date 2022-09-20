@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import {
   changeForgotPasswordStatus,
   changeForgotPasswordStatusAddPhoneNumber,
@@ -16,6 +16,7 @@ import {
 import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 
 import { useEffect } from "react";
+import { AnyMap } from "immer/dist/internal";
 
 interface ForgotPasswordFormElements extends HTMLFormControlsCollection {
   phoneNumber: HTMLInputElement;
@@ -25,8 +26,13 @@ interface ForgotPasswordFormElement extends HTMLFormElement {
   readonly elements: ForgotPasswordFormElements;
 }
 
-export function MobileForgotPasswordOtp() {
+interface MobileForgotPasswordOtp {
+  mobileNumber: any;
+}
+
+export function MobileForgotPasswordOtp(props: { setMobilerNumber: any }) {
   const dispatch = useAppDispatch();
+  // const [getMobileNumber, setMobilerNumber] = useState("");
   const forgotPasswordGenerateOTPState = useAppSelector(
     selectForgotPasswordGenerateOTP
   );
@@ -49,6 +55,8 @@ export function MobileForgotPasswordOtp() {
   const handleOnSubmit = (e: FormEvent<ForgotPasswordFormElement>) => {
     e.preventDefault();
 
+    props.setMobilerNumber(e.currentTarget.elements.phoneNumber.value);
+    // props.mobileNumber = getMobileNumber;
     const formData = new FormData(e.currentTarget as ForgotPasswordFormElement);
 
     dispatch(forgotPasswordGenerateOTP(formData));
@@ -80,6 +88,7 @@ export function MobileForgotPasswordOtp() {
 
           <button
             type="submit"
+            onClick={() => props.setMobilerNumber("656565655")}
             className="w-full py-2 mt-3 mb-2 text-white shadow-md bg-button rounded-3xl"
           >
             Submit

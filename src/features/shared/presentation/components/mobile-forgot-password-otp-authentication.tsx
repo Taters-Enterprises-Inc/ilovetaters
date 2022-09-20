@@ -8,6 +8,12 @@ import {
   selectChangeForgotPasswordStatus,
 } from "../slices/change-forgot-password-status.slice";
 import {
+  forgotPasswordResendOTP,
+  ForgotPasswordResendOTPState,
+  resetForgotPasswordResendOTP,
+  selectForgotPasswordResendOTP,
+} from "../slices/forgot-password-resend-otp.slice";
+import {
   forgotPasswordValidateOTP,
   ForgotPasswordValidateOTPState,
   resetForgotPasswordValidateOTP,
@@ -21,6 +27,10 @@ export function MobileForgotPasswordOtpAuthentication() {
   );
   const forgotPasswordValidateOTPState = useAppSelector(
     selectForgotPasswordValidateOTP
+  );
+
+  const forgotPasswordResendOTPState = useAppSelector(
+    selectForgotPasswordResendOTP
   );
 
   useEffect(() => {
@@ -38,6 +48,21 @@ export function MobileForgotPasswordOtpAuthentication() {
     }
   }, [forgotPasswordValidateOTPState, dispatch]);
 
+  useEffect(() => {
+    if (
+      forgotPasswordResendOTPState.status ===
+      ForgotPasswordResendOTPState.success
+    ) {
+      dispatch(
+        changeForgotPasswordStatus({
+          status: ChangeForgotPasswordStatusState.sendOtp,
+        })
+      );
+
+      dispatch(resetForgotPasswordResendOTP());
+    }
+  }, [forgotPasswordResendOTPState, dispatch]);
+
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -45,6 +70,14 @@ export function MobileForgotPasswordOtpAuthentication() {
 
     dispatch(forgotPasswordValidateOTP(formData));
   };
+
+  const handleOnResend = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    dispatch(forgotPasswordResendOTP(formData));
+  };
+
   return (
     <>
       <div className="flex items-center justify-center header_image">
@@ -56,7 +89,7 @@ export function MobileForgotPasswordOtpAuthentication() {
       </div>
 
       <div className="pt-4 login-body">
-        <form onSubmit={handleOnSubmit}>
+        <form onSubmit={handleOnResend}>
           <h1 className="mb-2 text-xl font-bold text-white">
             OTP authentication
           </h1>
@@ -89,6 +122,9 @@ export function MobileForgotPasswordOtpAuthentication() {
             Submit
           </button>
         </form>
+        {/* <form onSubmit={handleOnResend}>
+          <button className="w-full py-2 mt-3 mb-2 text-white ">resend</button>
+        </form> */}
       </div>
     </>
   );
