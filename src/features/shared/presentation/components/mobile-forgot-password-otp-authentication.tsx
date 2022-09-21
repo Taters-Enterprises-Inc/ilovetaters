@@ -126,12 +126,15 @@ export function MobileForgotPasswordOtpAuthentication(
           </button>
         </form>
 
-        <button
-          onClick={handleOnResend}
-          className="w-full py-2 mt-3 mb-2 text-white "
-        >
-          resend
-        </button>
+        <div className="flex justify-center py-2 mt-3 mb-2 text-white ">
+          <p className="flex-initial">Did not recieve email? </p>{" "}
+          <button
+            className="flex-initial ml-2 text-blue-500 underline-offset-1"
+            onClick={handleOnResend}
+          >
+            resend
+          </button>
+        </div>
       </div>
     </>
   );
