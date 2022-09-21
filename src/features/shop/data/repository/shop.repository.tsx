@@ -8,6 +8,7 @@ import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
   GetCategoryProductsParam,
@@ -73,6 +74,13 @@ export interface AddToCartShopResponse {
 export interface RemoveItemFromCartShopResponse {
   data: {
     message: string;
+  };
+}
+
+export interface GetUserSessionResponse {
+  data: {
+    message: string;
+    data: UserSessionModel;
   };
 }
 
@@ -219,6 +227,12 @@ export function GetEditCartItemRepository(
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
+  });
+}
+
+export function GetUserSessionRepository(): Promise<GetUserSessionResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/session`, {
     withCredentials: true,
   });
 }
