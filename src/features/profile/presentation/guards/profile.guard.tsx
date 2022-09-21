@@ -7,7 +7,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 
-export function UserGuard() {
+export function ProfileGuard() {
   const dispatch = useAppDispatch();
 
   const getSessionState = useAppSelector(selectGetSession);

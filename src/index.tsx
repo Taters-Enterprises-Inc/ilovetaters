@@ -66,7 +66,7 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
-import { UserGuard } from "features/shop/presentation/guards";
+import { ProfileGuard } from "features/profile/presentation/guards";
 
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
@@ -105,7 +105,7 @@ root.render(
                 <Route path="franchising" element={<Franchising />} />
 
                 <Route path="profile" element={<Profile />}>
-                  <Route element={<UserGuard />}>
+                  <Route element={<ProfileGuard />}>
                     <Route index element={<ProfileHome />} />
                     <Route
                       path="snackshop-orders"
