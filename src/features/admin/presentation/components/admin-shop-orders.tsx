@@ -27,12 +27,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { AdminShopOrderModal } from "../modals";
-import {
-  getAdminShopOrder,
-  GetAdminShopOrderState,
-  selectGetAdminShopOrder,
-} from "../slices/get-admin-shop-order.slice";
+import { getAdminShopOrder } from "../slices/get-admin-shop-order.slice";
 import { DataList } from "features/shared/presentation/components";
+import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -95,9 +92,46 @@ export function AdminShopOrders() {
     dispatch(getAdminShopOrders(query));
   }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
 
+  const calculateGrandTotal = (row: AdminShopOrderModel) => {
+    let calculatedPrice = 0;
+
+    if (row.purchase_amount) {
+      calculatedPrice += parseInt(row.purchase_amount);
+    }
+
+    if (row.distance_price) {
+      calculatedPrice += parseInt(row.distance_price);
+    }
+
+    if (row.cod_fee) {
+      calculatedPrice += parseInt(row.cod_fee);
+    }
+
+    if (row.discount) {
+      calculatedPrice -= parseInt(row.discount);
+    }
+
+    if (row.giftcard_discount) {
+      calculatedPrice -= parseInt(row.giftcard_discount);
+    }
+
+    if (row.reseller_discount) {
+      calculatedPrice -= parseInt(row.reseller_discount);
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
+  };
+
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-end px-4">
+      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Orders
         </span>
@@ -142,7 +176,7 @@ export function AdminShopOrders() {
 
       {getAdminShopOrdersState.data?.orders ? (
         <>
-          <div className="lg:hidden py-4">
+          <div className="py-4 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {
@@ -225,16 +259,16 @@ export function AdminShopOrders() {
                       search: queryParams,
                     });
                   }}
-                  className="flex flex-col border-b px-4 py-2"
+                  className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
-                  <span className="text-xl flex space-x-1 items-center flex-wrap">
+                  <span className="flex flex-wrap items-center space-x-1 text-xl">
                     <span>{row.client_name}</span>
-                    <span className="text-gray-600 text-lg">
+                    <span className="text-lg text-gray-600">
                       #{row.tracking_no}
                     </span>
                     <span
-                      className=" text-xs rounded-full py-1 px-2"
+                      className="px-2 py-1 text-xs rounded-full "
                       style={{
                         color: "white",
                         backgroundColor:
@@ -253,22 +287,14 @@ export function AdminShopOrders() {
                       <Moment format="LLL">{row.dateadded}</Moment>
                     </span>
                     <span className="text-lg font-semibold">
-                      <NumberFormat
-                        value={(
-                          parseInt(row.purchase_amount) +
-                          parseInt(row.distance_price)
-                        ).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
+                      {calculateGrandTotal(row)}
                     </span>
                   </div>
                 </div>
               ))}
             </DataList>
           </div>
-          <div className="hidden lg:block p-4">
+          <div className="hidden p-4 lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
@@ -366,7 +392,7 @@ export function AdminShopOrders() {
                     <DataTableRow key={i}>
                       <DataTableCell>
                         <span
-                          className=" text-xs rounded-full py-1 px-2"
+                          className="px-2 py-1 text-xs rounded-full "
                           style={{
                             color: "white",
                             backgroundColor:
@@ -381,17 +407,7 @@ export function AdminShopOrders() {
                       </DataTableCell>
                       <DataTableCell>{row.tracking_no}</DataTableCell>
                       <DataTableCell>{row.client_name}</DataTableCell>
-                      <DataTableCell>
-                        <NumberFormat
-                          value={(
-                            parseInt(row.purchase_amount) +
-                            parseInt(row.distance_price)
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </DataTableCell>
+                      <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
                       <DataTableCell>{row.store_name}</DataTableCell>
                       <DataTableCell>
                         <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.status]}</span>

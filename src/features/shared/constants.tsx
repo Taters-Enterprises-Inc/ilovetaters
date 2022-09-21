@@ -463,3 +463,49 @@ export const ADMIN_SNACKSHOP_MOP_STATUS = [
   "ROBINSONS-BANK",
   "CHINABANK",
 ];
+
+export const ORDER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Not Applicable",
+    color: "#a21013",
+  },
+  {
+    name: "Order Placed in System",
+    color: "#004d00",
+  },
+  {
+    name: "Payment under Verification",
+    color: "#cca300",
+  },
+  {
+    name: "Payment Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Order Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Order Cancelled",
+    color: "#a21013",
+  },
+  {
+    name: "Product Received by Customer",
+    color: "#004d00",
+  },
+  {
+    name: "Order Rejected due to Incorrect/Incomplete Payment",
+    color: "#004d00",
+  },
+  {
+    name: "Product currently being prepared",
+    color: "#004d00",
+  },
+  {
+    name: "Product en route to Customer",
+    color: "#004d00",
+  },
+];
