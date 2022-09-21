@@ -170,12 +170,12 @@ export const ADMIN_FAQ: Array<TabModel> = [
   {
     name: "Store",
     active: "store",
-    url: "store",
+    url: "/admin/faq/store",
   },
   {
     name: "Customer",
-    active: "/admin/faq/customer",
-    url: "customer",
+    active: "customer",
+    url: "/admin/faq/customer",
   },
 ];
 
