@@ -69,6 +69,31 @@ export function MobileForgotPasswordOtpAuthentication(
     }
   }, [forgotPasswordResendOTPState, dispatch]);
 
+  useEffect(() => {
+    if (
+      forgotPasswordResendOTPState.status ===
+        ForgotPasswordResendOTPState.fail ||
+      forgotPasswordValidateOTPState.status ===
+        ForgotPasswordValidateOTPState.fail
+    ) {
+      dispatch(
+        changeForgotPasswordStatus({
+          status: ChangeForgotPasswordStatusState.sendOtp,
+        })
+      );
+    }
+  });
+
+  useEffect(() => {
+    if (mobileNumber === "") {
+      dispatch(
+        changeForgotPasswordStatus({
+          status: ChangeForgotPasswordStatusState.sendOtp,
+        })
+      );
+    }
+  });
+
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -130,6 +155,7 @@ export function MobileForgotPasswordOtpAuthentication(
             <input
               type="text"
               name="otpCode"
+              maxLength={8}
               placeholder="Enter OTP code"
               required
               className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
