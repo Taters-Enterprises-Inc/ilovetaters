@@ -27,6 +27,7 @@ interface MobileForgotPasswordOtpAuthentication {
 export function MobileForgotPasswordOtpAuthentication(
   props: MobileForgotPasswordOtpAuthentication
 ) {
+  const mobileNumber = new URLSearchParams(props.phoneNumber).toString();
   const dispatch = useAppDispatch();
   const changeForgotPasswordStatusState = useAppSelector(
     selectChangeForgotPasswordStatus
@@ -34,7 +35,6 @@ export function MobileForgotPasswordOtpAuthentication(
   const forgotPasswordValidateOTPState = useAppSelector(
     selectForgotPasswordValidateOTP
   );
-
   const forgotPasswordResendOTPState = useAppSelector(
     selectForgotPasswordResendOTP
   );
@@ -77,6 +77,14 @@ export function MobileForgotPasswordOtpAuthentication(
     dispatch(forgotPasswordValidateOTP(formData));
   };
 
+  const handleOnChangePhoneNumber = () => {
+    dispatch(
+      changeForgotPasswordStatus({
+        status: ChangeForgotPasswordStatusState.sendOtp,
+      })
+    );
+  };
+
   const handleOnResend = () => {
     dispatch(forgotPasswordResendOTP(props.phoneNumber));
   };
@@ -96,8 +104,18 @@ export function MobileForgotPasswordOtpAuthentication(
           <h1 className="mb-2 text-xl font-bold text-white">
             OTP authentication
           </h1>
-          <p className="text-white">
-            Note: The OTP will expire after 15 minutes
+          <p className="mt-2 text-white">
+            The OTP has been sent to your mobile number
+            {mobileNumber.replace("phoneNumber=", " ")}
+            <button onClick={handleOnChangePhoneNumber} className="ml-1">
+              [
+              <span className="text-orange-500 underline-offset-1">
+                {" "}
+                change{" "}
+              </span>
+              ]
+            </button>
+            .
           </p>
 
           <input
@@ -126,14 +144,19 @@ export function MobileForgotPasswordOtpAuthentication(
           </button>
         </form>
 
-        <div className="flex justify-center py-2 mt-3 mb-2 text-white ">
-          <p className="flex-initial">Did not recieve email? </p>{" "}
-          <button
-            className="flex-initial ml-2 text-blue-500 underline-offset-1"
-            onClick={handleOnResend}
-          >
-            resend
-          </button>
+        <div className="justify-center py-2 mt-3 mb-2 text-white ">
+          <p className="w-full">The OTP will expire after 15 minutes</p>
+          <div className="flex justify-center my-1">
+            <p className="flex-initial">Did not recieve email? </p>{" "}
+            <button className="flex-initial ml-2 " onClick={handleOnResend}>
+              [
+              <span className="text-orange-500 underline-offset-1">
+                {" "}
+                resend{" "}
+              </span>
+              ]
+            </button>
+          </div>
         </div>
       </div>
     </>
