@@ -85,6 +85,15 @@ import adminCompleteRedeem from "features/admin/presentation/slices/admin-comple
 import storeVisitStoreChooserModal from "features/popclub/presentation/slices/store-visit-store-chooser-modal.slice";
 import getStoresAvailablePopClubStoreVisit from "features/popclub/presentation/slices/get-stores-available-popclub-store-visit.slice";
 import getAdminUsers from "features/admin/presentation/slices/get-admin-users.slice";
+import createAdminUser from "features/admin/presentation/slices/create-admin-user.slice";
+import getAdminUser from "features/admin/presentation/slices/get-admin-user.slice";
+import getAdminGroups from "features/admin/presentation/slices/get-admin-groups.slice";
+import editAdminUser from "features/admin/presentation/slices/edit-admin-user.slice";
+import getAdminUserStores from "features/admin/presentation/slices/get-admin-user-stores.slice";
+import getAdminStores from "features/admin/presentation/slices/get-admin-stores.slice";
+import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
+import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform,
@@ -161,6 +170,14 @@ export const store = configureStore({
     storeVisitStoreChooserModal,
     getStoresAvailablePopClubStoreVisit,
     getAdminUsers,
+    createAdminUser,
+    getAdminUser,
+    getAdminGroups,
+    editAdminUser,
+    getAdminUserStores,
+    getAdminStores,
+    updateAdminUserStores,
+    createAdminGroup,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

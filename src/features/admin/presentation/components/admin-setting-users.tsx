@@ -4,31 +4,29 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { useNavigate } from "react-router-dom";
-import NumberFormat from "react-number-format";
-import {
-  ADMIN_SNACKSHOP_MOP_STATUS,
-  ADMIN_SNACKSHOP_ORDER_STATUS,
-} from "features/shared/constants";
-import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { FaEye } from "react-icons/fa";
-import { AdminShopOrderModal } from "../modals";
+import { Link, useNavigate } from "react-router-dom";
 import { DataList } from "features/shared/presentation/components";
-import { UserBtn } from "./create-user-btn";
-import { GrpBtn } from "./create-grp-btn";
+import { MdOutlineGroupAdd } from "react-icons/md";
 import {
   getAdminUsers,
   resetGetAdminUsersStatus,
   selectGetAdminUsers,
 } from "../slices/get-admin-users.slice";
+import { MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { AdminSelectStoreModal } from "../modals";
+import {
+  getAdminUserStores,
+  GetAdminUserStoresState,
+  selectGetAdminUserStores,
+} from "../slices/get-admin-user-stores.slice";
+import { getAdminStores } from "../slices/get-admin-stores.slice";
+import { getAdminUser } from "../slices/get-admin-user.slice";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -63,10 +61,16 @@ export function AdminSettingUsers() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const userId = query.get("user_id");
+
+  const [openAdminSelectStoreModal, setOpenAdminSelectStoreModal] =
+    useState(false);
 
   const getAdminUsersState = useAppSelector(selectGetAdminUsers);
 
   useEffect(() => {
+    dispatch(getAdminStores());
+
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
@@ -75,7 +79,13 @@ export function AdminSettingUsers() {
       search: search,
     });
     dispatch(getAdminUsers(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+    if (userId) {
+      dispatch(getAdminUser(userId));
+      dispatch(getAdminUserStores(userId)).then(() => {
+        setOpenAdminSelectStoreModal(true);
+      });
+    }
+  }, [dispatch, pageNo, perPage, orderBy, order, search, userId]);
 
   return (
     <>
@@ -83,9 +93,25 @@ export function AdminSettingUsers() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Users
         </span>
-        <div className="flex px-4">
-          <UserBtn />
-          <GrpBtn />
+        <div className="flex flex-col lg:flex-row px-4 lg:space-x-4 ">
+          <div>
+            <Link
+              to="create-user"
+              className="inline-flex items-center px-4 tracking-wide py-1 bg-button text-white font-['Roboto']  text-sm rounded-md font-700"
+            >
+              <MdOutlinePersonAddAlt1 size={20} />
+              <span>&nbsp;&nbsp;Create a new user</span>
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="create-group"
+              className="inline-flex items-center px-4 tracking-wide bg-button text-white py-1 font-['Roboto']  text-sm rounded-md font-700"
+            >
+              <MdOutlineGroupAdd size={20} />
+              <span>&nbsp;&nbsp;Create a new group</span>
+            </Link>
+          </div>
         </div>
       </div>
       {getAdminUsersState.data ? (
@@ -95,7 +121,7 @@ export function AdminSettingUsers() {
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
-                  page_no: pageNo,
+                  page_no: null,
                   per_page: perPage,
                   order_by: orderBy,
                   order: order,
@@ -184,7 +210,7 @@ export function AdminSettingUsers() {
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
-                  page_no: pageNo,
+                  page_no: null,
                   per_page: perPage,
                   order_by: orderBy,
                   order: order,
@@ -268,10 +294,56 @@ export function AdminSettingUsers() {
                       <DataTableCell>{row.first_name}</DataTableCell>
                       <DataTableCell>{row.last_name}</DataTableCell>
                       <DataTableCell>{row.email}</DataTableCell>
-                      <DataTableCell></DataTableCell>
-                      <DataTableCell></DataTableCell>
-                      <DataTableCell></DataTableCell>
-                      <DataTableCell></DataTableCell>
+                      <DataTableCell>
+                        {row.groups.map((group) => (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: group.name,
+                            }}
+                          />
+                        ))}
+                      </DataTableCell>
+                      <DataTableCell>
+                        {row.active === 1 ? (
+                          <span className=" text-xs rounded-full py-1 px-2 bg-green-700 text-white">
+                            Active
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Link
+                          to={`/admin/setting/user/edit-user/${row.id}`}
+                          className="border rounded-lg border-secondary py-1 px-3"
+                        >
+                          Edit
+                        </Link>
+                      </DataTableCell>
+                      <DataTableCell>
+                        <button
+                          onClick={() => {
+                            const params = {
+                              page_no: pageNo,
+                              per_page: perPage,
+                              order_by: orderBy,
+                              order: order,
+                              search: search,
+                              user_id: row.id,
+                            };
+
+                            const queryParams = createQueryParams(params);
+
+                            navigate({
+                              pathname: "",
+                              search: queryParams,
+                            });
+                          }}
+                          className="border rounded-lg border-secondary py-1 px-3"
+                        >
+                          Choose
+                        </button>
+                      </DataTableCell>
                     </DataTableRow>
                   ))}
                 </>
@@ -280,6 +352,28 @@ export function AdminSettingUsers() {
           </div>
         </>
       ) : null}
+
+      <AdminSelectStoreModal
+        open={openAdminSelectStoreModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            order_by: orderBy,
+            order: order,
+            search: search,
+            user_id: null,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+          setOpenAdminSelectStoreModal(false);
+        }}
+      />
     </>
   );
 }

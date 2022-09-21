@@ -74,17 +74,12 @@ export function AdminShopOrders() {
 
   const [openAdminShopOrderModal, setOpenAdminShopOrderModal] = useState(false);
   const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
-  const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
-
-  useEffect(() => {
-    if (getAdminShopOrderState.status === GetAdminShopOrderState.success) {
-      setOpenAdminShopOrderModal(true);
-    }
-  }, [getAdminShopOrderState]);
 
   useEffect(() => {
     if (trackingNo) {
-      dispatch(getAdminShopOrder(trackingNo));
+      dispatch(getAdminShopOrder(trackingNo)).then(() => {
+        setOpenAdminShopOrderModal(true);
+      });
     }
   }, [dispatch, trackingNo]);
 
@@ -152,7 +147,7 @@ export function AdminShopOrders() {
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
-                  page_no: pageNo,
+                  page_no: null,
                   per_page: perPage,
                   status: status,
                   tracking_no: trackingNo,
@@ -275,7 +270,7 @@ export function AdminShopOrders() {
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
-                  page_no: pageNo,
+                  page_no: null,
                   per_page: perPage,
                   status: status,
                   tracking_no: trackingNo,

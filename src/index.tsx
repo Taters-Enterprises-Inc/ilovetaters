@@ -58,6 +58,9 @@ import {
   AdminSettingUser,
   AdminSettingVoucher,
   AdminSettingStore,
+  AdminSettingCreateUser,
+  AdminSettingCreateGroup,
+  AdminSettingEditUser,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -198,7 +201,21 @@ root.render(
                         path="category"
                         element={<AdminSettingCategory />}
                       />
-                      <Route path="user" element={<AdminSettingUser />} />
+                      <Route path="user">
+                        <Route index element={<AdminSettingUser />} />
+                        <Route
+                          path="create-user"
+                          element={<AdminSettingCreateUser />}
+                        />
+                        <Route
+                          path="edit-user/:id"
+                          element={<AdminSettingEditUser />}
+                        />
+                        <Route
+                          path="create-group"
+                          element={<AdminSettingCreateGroup />}
+                        />
+                      </Route>
                       <Route path="voucher" element={<AdminSettingVoucher />} />
                       <Route path="store" element={<AdminSettingStore />} />
                     </Route>
