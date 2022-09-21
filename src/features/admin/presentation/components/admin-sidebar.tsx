@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Navigation } from "react-minimal-side-navigation";
 import {
   FaBars,
@@ -332,7 +332,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
             <React.Fragment>
               <>
                 <Navigation
-                  activeItemId="/admin/orders"
+                  activeItemId={window.location.pathname}
                   onSelect={({ itemId }) => {
                     if (itemId) history(itemId);
                   }}
@@ -381,7 +381,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
             <React.Fragment>
               <>
                 <Navigation
-                  activeItemId="/admin/orders"
+                  activeItemId={window.location.pathname}
                   onSelect={({ itemId }) => {
                     if (itemId) history(itemId);
                     dispatch(toggleAdminSideBar());
