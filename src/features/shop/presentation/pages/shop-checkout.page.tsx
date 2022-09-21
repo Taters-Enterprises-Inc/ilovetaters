@@ -270,7 +270,7 @@ export function ShopCheckout() {
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data.userData.first_name}
                     variant="outlined"
                     className="w-full"
@@ -288,7 +288,7 @@ export function ShopCheckout() {
 
                 {getSessionState.data?.userData.last_name ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data.userData.last_name}
                     variant="outlined"
                     className="w-full"
@@ -309,7 +309,7 @@ export function ShopCheckout() {
                     {getSessionState.data?.userData.email ? (
                       <TextField
                         autoComplete="off"
-                        aria-readonly
+                        required
                         value={getSessionState.data.userData.email}
                         variant="outlined"
                         className="w-full"
@@ -317,8 +317,8 @@ export function ShopCheckout() {
                       />
                     ) : (
                       <TextField
-                        required
                         autoComplete="off"
+                        required
                         label="E-mail Address"
                         variant="outlined"
                         className="w-full"
@@ -365,7 +365,7 @@ export function ShopCheckout() {
 
                 {getSessionState.data?.customer_address ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data?.customer_address}
                     variant="outlined"
                     className="w-full"
@@ -381,6 +381,15 @@ export function ShopCheckout() {
                     autoComplete="off"
                   />
                 )}
+
+                <TextField
+                  required
+                  label="Delivery Address"
+                  variant="outlined"
+                  className="w-full"
+                  name="Delivery Address"
+                />
+                  
                 {getSessionState.data?.cache_data ? (
                   <>
                     <div className="mt-4 text-secondary lg:mt-0">
@@ -413,14 +422,17 @@ export function ShopCheckout() {
                       <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                         Note:
                       </h2>
-                      <ul
-                        className="mt-2 space-y-2 text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: getSessionState.data.cache_data?.moh_notes
-                            ? getSessionState.data.cache_data.moh_notes
-                            : "",
-                        }}
-                      />
+
+                      {
+                        <ul
+                          className="mt-2 space-y-2 text-sm notes"
+                          dangerouslySetInnerHTML={{
+                            __html: getSessionState.data.cache_data?.moh_notes
+                              ? getSessionState.data.cache_data.moh_notes
+                              : "",
+                          }}
+                        />
+                      }
                     </div>
                   </>
                 ) : null}

@@ -93,6 +93,7 @@ import getAdminUserStores from "features/admin/presentation/slices/get-admin-use
 import getAdminStores from "features/admin/presentation/slices/get-admin-stores.slice";
 import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
 import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
+import getUserSession from "features/shop/presentation/slices/get-user-session.slice";
 
 export const store = configureStore({
   reducer: {
@@ -178,6 +179,7 @@ export const store = configureStore({
     getAdminStores,
     updateAdminUserStores,
     createAdminGroup,
+    getUserSession,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

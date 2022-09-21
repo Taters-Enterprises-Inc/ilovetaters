@@ -69,6 +69,7 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import { UserGuard } from "features/shop/presentation/guards";
 
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
@@ -131,15 +132,17 @@ root.render(
                   <Route path="return-policy" element={<ShopReturnPolicy />} />
 
                   <Route path="profile">
-                    <Route index element={<ShopProfile />} />
-                    <Route
-                      path="snackshop-orders"
-                      element={<ShopProfileSnackshopOrders />}
-                    />
-                    <Route
-                      path="catering-bookings"
-                      element={<ShopProfileCateringBookings />}
-                    />
+                    <Route element={<UserGuard />}>
+                      <Route index element={<ShopProfile />} />
+                      <Route
+                        path="snackshop-orders"
+                        element={<ShopProfileSnackshopOrders />}
+                      />
+                      <Route
+                        path="catering-bookings"
+                        element={<ShopProfileCateringBookings />}
+                      />
+                    </Route>
                   </Route>
                 </Route>
 
