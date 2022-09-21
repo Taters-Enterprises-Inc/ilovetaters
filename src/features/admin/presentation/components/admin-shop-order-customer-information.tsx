@@ -1,6 +1,7 @@
 import { useAppSelector } from "features/config/hooks";
 import { selectGetAdminShopOrder } from "../slices/get-admin-shop-order.slice";
 import { ADMIN_SNACKSHOP_ORDER_STATUS } from "features/shared/constants";
+import NumberFormat from "react-number-format";
 
 export function AdminShopOrderCustomerInformation() {
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
@@ -106,153 +107,175 @@ export function AdminShopOrderCustomerInformation() {
       <div className="pt-2 ">
         <span className="text-xl font-bold">Order Details</span>
 
-        <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:block">
-          <thead className="text-xs text-white uppercase bg-secondary ">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Product
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Remarks
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Quantity
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Price
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-white">
-              <th scope="row" className="px-6 py-4 font-medium text-secondary">
-                Family Superpop Ziplock Bags , US Kernels popped and flavored
-                into perfection • 140g(per pack), 2 to 3 servings per Family
-                Pack • 280g(per pack), 4 to 6 servings per Party Pack Additional
-                Melted Butter suggestions: • Family Pack: 4 Laddles • Party
-                Pack: 6 Laddles
-              </th>
-              <td className="px-6 py-4">Sour Cream</td>
-              <td className="px-6 py-4">3</td>
-              <td className="px-6 py-4">₱125.00</td>
-              <td className="px-6 py-4">₱375.00</td>
-            </tr>
-            <tr className="bg-gray-300">
-              <th scope="row" className="px-6 py-4 font-medium text-secondary">
-                Family Superpop Ziplock Bags , US Kernels popped and flavored
-                into perfection • 140g(per pack), 2 to 3 servings per Family
-                Pack • 280g(per pack), 4 to 6 servings per Party Pack Additional
-                Melted Butter suggestions: • Family Pack: 4 Laddles • Party
-                Pack: 6 Laddles
-              </th>
-              <td className="px-6 py-4">Texan Barbecue</td>
-              <td className="px-6 py-4">3</td>
-              <td className="px-6 py-4">₱125.00</td>
-              <td className="px-6 py-4">₱375.00</td>
-            </tr>
-            <tr className="bg-white">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Total:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-gray-300">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Code[ ] Voucher Discount:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-white">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Gift Card No.[ 0 ]:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-gray-300">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Subtotal:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-white">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Delivery Fee:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-gray-300">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                COD Additional Charges:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-            <tr className="bg-white">
-              <td colSpan={4} className="px-6 py-2 font-bold text-end">
-                Grand Total:
-              </td>
-              <td className="px-6 py-2">₱375.00</td>
-            </tr>
-          </tbody>
-        </table>
+        {getAdminShopOrderState.data ? (
+          <>
+            <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:block">
+              <thead className="text-xs text-white uppercase bg-secondary ">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Product
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Remarks
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Quantity
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Price
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Total
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {getAdminShopOrderState.data.items.map((item, i) => (
+                  <tr className="bg-white" key={i}>
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-secondary"
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: item.name + " , " + item.description,
+                        }}
+                      />
+                    </th>
+                    <td className="px-6 py-4">
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: item.remarks,
+                        }}
+                      />
+                    </td>
+                    <td className="px-6 py-4">{item.quantity}</td>
+                    <td className="px-6 py-4">
+                      <NumberFormat
+                        value={parseInt(item.price).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </td>
+                    <td className="px-6 py-4">
+                      <NumberFormat
+                        value={(parseInt(item.price) * item.quantity).toFixed(
+                          2
+                        )}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </td>
+                  </tr>
+                ))}
+                <tr className="bg-white">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Total:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-gray-300">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Code[ ] Voucher Discount:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-white">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Gift Card No.[ 0 ]:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-gray-300">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Subtotal:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-white">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Delivery Fee:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-gray-300">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    COD Additional Charges:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+                <tr className="bg-white">
+                  <td colSpan={4} className="px-6 py-2 font-bold text-end">
+                    Grand Total:
+                  </td>
+                  <td className="px-6 py-2">₱375.00</td>
+                </tr>
+              </tbody>
+            </table>
 
-        <div className="lg:hidden">
-          <div className="py-2 border-b">
-            <p className="mb-2 text-xs leading-1 text-semibold">
-              Family Superpop Ziplock Bags , US Kernels popped and flavored into
-              perfection • 140g(per pack), 2 to 3 servings per Family Pack •
-              280g(per pack), 4 to 6 servings per Party Pack Additional Melted
-              Butter suggestions: • Family Pack: 4 Laddles • Party Pack: 6
-              Laddles
-            </p>
-            <div className="flex justify-between">
-              <span className="text-xs font-bold">Remarks:</span>
-              <span className="text-xs">Sour Cream</span>
+            <div className="lg:hidden">
+              <div className="py-2 border-b">
+                <p className="mb-2 text-xs leading-1 text-semibold">
+                  Family Superpop Ziplock Bags , US Kernels popped and flavored
+                  into perfection • 140g(per pack), 2 to 3 servings per Family
+                  Pack • 280g(per pack), 4 to 6 servings per Party Pack
+                  Additional Melted Butter suggestions: • Family Pack: 4 Laddles
+                  • Party Pack: 6 Laddles
+                </p>
+                <div className="flex justify-between">
+                  <span className="text-xs font-bold">Remarks:</span>
+                  <span className="text-xs">Sour Cream</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs font-bold">Quantity:</span>
+                  <span className="text-xs">1</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs font-bold">Price:</span>
+                  <span className="text-xs">₱375.00</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs font-bold">Total:</span>
+                  <span className="text-xs">₱375.00</span>
+                </div>
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="text-sm font-bold">Total: </span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">
+                  Code[ ] Voucher Discount:
+                </span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">Subtotal:</span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">Delivery Fee:</span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">
+                  COD Additional Charges:
+                </span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm font-bold">Grand Total:</span>
+                <span className="text-sm text-end">₱375.00</span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-xs font-bold">Quantity:</span>
-              <span className="text-xs">1</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-xs font-bold">Price:</span>
-              <span className="text-xs">₱375.00</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-xs font-bold">Total:</span>
-              <span className="text-xs">₱375.00</span>
-            </div>
-          </div>
-          <div className="flex justify-between mt-2">
-            <span className="text-sm font-bold">Total: </span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">Code[ ] Voucher Discount:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">Subtotal:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">Delivery Fee:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">COD Additional Charges:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm font-bold">Grand Total:</span>
-            <span className="text-sm text-end">₱375.00</span>
-          </div>
-        </div>
+          </>
+        ) : null}
 
         <div className="flex flex-col items-start justify-between py-3 lg:flex-row">
           <div className="order-2 space-x-2 lg:order-1">

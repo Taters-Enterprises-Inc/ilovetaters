@@ -4,6 +4,7 @@ export interface AdminShopOrderModel {
   dateadded: string;
   tracking_no: string;
   purchase_amount: string;
+  distance_price: string;
   invoice_num: string;
   client_name: string;
   payops: 2;
@@ -12,4 +13,11 @@ export interface AdminShopOrderModel {
   address: string;
   add_address: string;
   store_name: string;
+  items: Array<{
+    price: string;
+    quantity: number;
+    remarks: string;
+    name: string;
+    description: string;
+  }>;
 }

@@ -249,10 +249,15 @@ export function AdminShopOrders() {
                   </span>
 
                   <div className="flex justify-between">
-                    <span className="text-xs">09-18-22 / 01:23 PM</span>
+                    <span className="text-xs">
+                      <Moment format="LLL">{row.dateadded}</Moment>
+                    </span>
                     <span className="text-lg font-semibold">
                       <NumberFormat
-                        value={parseInt(row.purchase_amount).toFixed(2)}
+                        value={(
+                          parseInt(row.purchase_amount) +
+                          parseInt(row.distance_price)
+                        ).toFixed(2)}
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={"₱"}
@@ -378,7 +383,10 @@ export function AdminShopOrders() {
                       <DataTableCell>{row.client_name}</DataTableCell>
                       <DataTableCell>
                         <NumberFormat
-                          value={parseInt(row.purchase_amount).toFixed(2)}
+                          value={(
+                            parseInt(row.purchase_amount) +
+                            parseInt(row.distance_price)
+                          ).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
