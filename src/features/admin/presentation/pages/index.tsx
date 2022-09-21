@@ -5,6 +5,7 @@ export { AdminPopclub } from "./admin-popclub.page";
 export { AdminProduct } from "./admin-product.page";
 export { AdminReport } from "./admin-report.page";
 export { AdminFaq } from "./admin-faqs.page";
+export { AdminCFaq } from "./admin-cfaqs.page";
 
 export { AdminRaffleSnackshop } from "./admin-raffle-snackshop.page";
 export { AdminRaffleInstore } from "./admin-raffle-instore-page";

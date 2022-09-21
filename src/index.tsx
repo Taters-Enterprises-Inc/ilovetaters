@@ -45,6 +45,7 @@ import {
   AdminRaffleSnackshop,
   AdminReport,
   AdminFaq,
+  AdminCFaq,
   AdminAvailabilityCateringAddOn,
   AdminAvailabilityProductAddOn,
   AdminAvailabilityPackage,
@@ -168,7 +169,10 @@ root.render(
                     <Route path="popclub" element={<AdminPopclub />} />
                     <Route path="product" element={<AdminProduct />} />
                     <Route path="report" element={<AdminReport />} />
-                    <Route path="faq" element={<AdminFaq />} />
+                    <Route path="faq" element={<AdminFaq />}>
+                      <Route path="customer" element={<AdminCFaq />} />
+                      <Route path="store" element={<AdminFaq />} />
+                    </Route>
 
                     <Route path="raffle">
                       <Route
