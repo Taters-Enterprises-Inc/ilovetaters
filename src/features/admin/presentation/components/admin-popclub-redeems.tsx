@@ -77,21 +77,12 @@ export function AdminPopClubRedeems() {
   const getAdminPopclubRedeemsState = useAppSelector(
     selectGetAdminPopclubRedeems
   );
-  const getAdminPopclubRedeemState = useAppSelector(
-    selectGetAdminPopclubRedeem
-  );
-
-  useEffect(() => {
-    if (
-      getAdminPopclubRedeemState.status === GetAdminPopclubRedeemState.success
-    ) {
-      setOpenAdminPopclubRedeemModal(true);
-    }
-  }, [getAdminPopclubRedeemState]);
 
   useEffect(() => {
     if (redeemCode) {
-      dispatch(getAdminPopclubRedeem(redeemCode));
+      dispatch(getAdminPopclubRedeem(redeemCode)).then(() => {
+        setOpenAdminPopclubRedeemModal(true);
+      });
     }
   }, [dispatch, redeemCode]);
 
@@ -168,7 +159,7 @@ export function AdminPopClubRedeems() {
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
-                  page_no: pageNo,
+                  page_no: null,
                   per_page: perPage,
                   status: status,
                   redeem_code: redeemCode,
@@ -283,7 +274,9 @@ export function AdminPopClubRedeems() {
                   </span>
 
                   <div className="flex justify-between">
-                    <span className="text-xs">09-18-22 / 01:23 PM</span>
+                    <span className="text-xs">
+                      <Moment format="LLL">{row.dateadded}</Moment>
+                    </span>
                     <span className="text-lg font-semibold">
                       <NumberFormat
                         value={parseInt(row.purchase_amount).toFixed(2)}

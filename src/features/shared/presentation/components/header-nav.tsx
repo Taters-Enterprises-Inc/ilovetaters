@@ -4,7 +4,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { TABS } from "features/shared/constants";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { BsCart4 } from "react-icons/bs";
@@ -28,6 +28,12 @@ import { CateringCartModal } from "features/catering/presentation/components/cat
 import { MdLocationPin } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { MessageModal } from "../modals";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuList from "@mui/material/MenuList";
+import Stack from "@mui/material/Stack";
 
 interface HeaderNavProps {
   className?: string;
@@ -67,6 +73,9 @@ export function HeaderNav(props: HeaderNavProps) {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     dispatch(getAllPlatform());
   }, [dispatch]);
@@ -89,6 +98,8 @@ export function HeaderNav(props: HeaderNavProps) {
     tabName: string;
     onYes?: () => void;
   }) => {
+    setOpen(false);
+
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
@@ -187,6 +198,29 @@ export function HeaderNav(props: HeaderNavProps) {
     );
   };
 
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === "Escape") {
+      setOpen(false);
+    }
+  }
+
+  const prevOpen = useRef(open);
+
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   return (
     <>
       <header className={`sticky w-full top-0 z-20 ${props.className}`}>
@@ -200,6 +234,113 @@ export function HeaderNav(props: HeaderNavProps) {
 
             <div className="flex items-center justify-center space-x-4">
               <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
+                <li
+                  className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-light ${
+                    "HOME" === props.activeUrl ? "text-tertiary" : "text-white"
+                  }`}
+                >
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      handleSwitchTab({
+                        url: "/",
+                        tabName: "HOME",
+                      });
+                    }}
+                  >
+                    Home
+                  </div>
+                </li>
+
+                <li className="flex items-center justify-center px-4 pb-1">
+                  <button
+                    ref={anchorRef}
+                    aria-controls={open ? "composition-menu" : undefined}
+                    aria-expanded={open ? "true" : undefined}
+                    aria-haspopup="true"
+                    className={`font-['Bebas_Neue'] tracking-[4px] ${
+                      "HOME" !== props.activeUrl
+                        ? "text-tertiary"
+                        : "text-white"
+                    } text-lg font-light`}
+                    onMouseEnter={handleToggle}
+                    onMouseLeave={handleToggle}
+                    onClick={handleToggle}
+                  >
+                    Services
+                  </button>
+                  <Popper
+                    open={open}
+                    onMouseEnter={handleToggle}
+                    onMouseLeave={handleToggle}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    placement="bottom-start"
+                    transition
+                    disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-start"
+                              ? "left top"
+                              : "left bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener
+                            onClickAway={() => {
+                              setOpen(false);
+                            }}
+                          >
+                            <MenuList
+                              autoFocusItem={open}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              {TABS.map((tab, i) => {
+                                return (
+                                  <>
+                                    {tab.name === "POPCLUB" ? (
+                                      <MenuItem
+                                        onClick={() => {
+                                          handleSwitchTab({
+                                            onYes: () => {
+                                              setOpenPlatformChooserModal(true);
+                                            },
+                                            tabName: "popclub",
+                                          });
+                                        }}
+                                      >
+                                        {tab.name}
+                                      </MenuItem>
+                                    ) : (
+                                      <MenuItem
+                                        onClick={() => {
+                                          handleSwitchTab({
+                                            url: tab.url,
+                                            tabName: tab.name.toLowerCase(),
+                                          });
+                                        }}
+                                      >
+                                        {tab.name}
+                                      </MenuItem>
+                                    )}
+                                  </>
+                                );
+                              })}
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </li>
+              </ul>
+              {/* <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
                 {TABS.map((tab, i) => {
                   return (
                     <li
@@ -240,7 +381,7 @@ export function HeaderNav(props: HeaderNavProps) {
                     </li>
                   );
                 })}
-              </ul>
+              </ul> */}
               <div className="flex items-center justify-center space-x-3 lg:space-x-6">
                 {getSessionState.data?.userData ? (
                   <div>

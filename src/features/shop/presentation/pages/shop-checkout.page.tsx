@@ -74,9 +74,9 @@ export function ShopCheckout() {
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const responseBody: any = {};
-
     const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    const responseBody: any = {};
 
     formData.forEach(
       (value, property: string) => (responseBody[property] = value)
@@ -413,14 +413,17 @@ export function ShopCheckout() {
                       <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                         Note:
                       </h2>
-                      <ul
-                        className="mt-2 space-y-2 text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: getSessionState.data.cache_data?.moh_notes
-                            ? getSessionState.data.cache_data.moh_notes
-                            : "",
-                        }}
-                      />
+
+                      {
+                        <ul
+                          className="mt-2 space-y-2 text-sm notes"
+                          dangerouslySetInnerHTML={{
+                            __html: getSessionState.data.cache_data?.moh_notes
+                              ? getSessionState.data.cache_data.moh_notes
+                              : "",
+                          }}
+                        />
+                      }
                     </div>
                   </>
                 ) : null}

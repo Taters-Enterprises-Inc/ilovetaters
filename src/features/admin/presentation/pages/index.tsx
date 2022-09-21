@@ -19,3 +19,6 @@ export { AdminSettingCategory } from "./admin-setting-category-page";
 export { AdminSettingUser } from "./admin-setting-user.page";
 export { AdminSettingVoucher } from "./admin-setting-voucher.page";
 export { AdminSettingStore } from "./admin-setting-store.page";
+export { AdminSettingCreateUser } from "./admin-setting-create-user.page";
+export { AdminSettingCreateGroup } from "./admin-setting-create-group.page";
+export { AdminSettingEditUser } from "./admin-setting-edit-user.page";

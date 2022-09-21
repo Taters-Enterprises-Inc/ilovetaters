@@ -4,7 +4,7 @@ import { RootState } from "features/config/store";
 const initialState: {
   status: boolean;
 } = {
-  status: false,
+  status: true,
 };
 
 export const adminSideBarSlice = createSlice({

@@ -6,3 +6,6 @@ export { AdminSidebar } from "./admin-sidebar";
 export { AdminShopOrderCustomerInformation } from "./admin-shop-order-customer-information";
 export { AdminPopClubRedeems } from "./admin-popclub-redeems";
 export { AdminPopclubRedeemCustomerInformation } from "./admin-popclub-redeem-customer-information";
+export { AdminSettingUsers } from "./admin-setting-users";
+export { AdminCreateUserPasswordTextField } from "./admin-create-user-password-text-field";
+export { AdminPhoneInput } from "./admin-phone-input";

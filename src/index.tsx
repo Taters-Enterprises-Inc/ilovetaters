@@ -58,6 +58,9 @@ import {
   AdminSettingUser,
   AdminSettingVoucher,
   AdminSettingStore,
+  AdminSettingCreateUser,
+  AdminSettingCreateGroup,
+  AdminSettingEditUser,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -148,66 +151,73 @@ root.render(
                   <Route path="products" element={<CateringProducts />} />
                   <Route path="checkout" element={<CateringCheckout />} />
                 </Route>
+              </Route>
+              <Route path="admin" element={<Admin />}>
+                <Route index element={<AdminLogin />} />
 
-                <Route path="admin" element={<Admin />}>
-                  <Route index element={<AdminLogin />} />
+                <Route element={<AdminGuard />}>
+                  <Route element={<AdminSidebarWrapper />}>
+                    <Route path="order" element={<AdminShopOrder />} />
+                    <Route path="catering" element={<AdminCateringOrder />} />
+                    <Route path="popclub" element={<AdminPopclub />} />
+                    <Route path="product" element={<AdminProduct />} />
+                    <Route path="report" element={<AdminReport />} />
+                    <Route path="faq" element={<AdminFaq />} />
 
-                  <Route element={<AdminGuard />}>
-                    <Route element={<AdminSidebarWrapper />}>
-                      <Route path="order" element={<AdminShopOrder />} />
-                      <Route path="catering" element={<AdminCateringOrder />} />
-                      <Route path="popclub" element={<AdminPopclub />} />
-                      <Route path="product" element={<AdminProduct />} />
-                      <Route path="report" element={<AdminReport />} />
-                      <Route path="faq" element={<AdminFaq />} />
+                    <Route path="raffle">
+                      <Route
+                        path="snackshop"
+                        element={<AdminRaffleSnackshop />}
+                      />
+                      <Route path="instore" element={<AdminRaffleInstore />} />
+                    </Route>
 
-                      <Route path="raffle">
+                    <Route path="availability">
+                      <Route
+                        path="catering-add-on"
+                        element={<AdminAvailabilityCateringAddOn />}
+                      />
+                      <Route
+                        path="product-add-on"
+                        element={<AdminAvailabilityProductAddOn />}
+                      />
+
+                      <Route
+                        path="package"
+                        element={<AdminAvailabilityPackage />}
+                      />
+                      <Route
+                        path="product"
+                        element={<AdminAvailabilityProduct />}
+                      />
+                      <Route
+                        path="banner"
+                        element={<AdminAvailabilityBanner />}
+                      />
+                    </Route>
+
+                    <Route path="setting">
+                      <Route
+                        path="category"
+                        element={<AdminSettingCategory />}
+                      />
+                      <Route path="user">
+                        <Route index element={<AdminSettingUser />} />
                         <Route
-                          path="snackshop"
-                          element={<AdminRaffleSnackshop />}
+                          path="create-user"
+                          element={<AdminSettingCreateUser />}
                         />
                         <Route
-                          path="instore"
-                          element={<AdminRaffleInstore />}
+                          path="edit-user/:id"
+                          element={<AdminSettingEditUser />}
+                        />
+                        <Route
+                          path="create-group"
+                          element={<AdminSettingCreateGroup />}
                         />
                       </Route>
-
-                      <Route path="availability">
-                        <Route
-                          path="catering-add-on"
-                          element={<AdminAvailabilityCateringAddOn />}
-                        />
-                        <Route
-                          path="product-add-on"
-                          element={<AdminAvailabilityProductAddOn />}
-                        />
-
-                        <Route
-                          path="package"
-                          element={<AdminAvailabilityPackage />}
-                        />
-                        <Route
-                          path="product"
-                          element={<AdminAvailabilityProduct />}
-                        />
-                        <Route
-                          path="banner"
-                          element={<AdminAvailabilityBanner />}
-                        />
-                      </Route>
-
-                      <Route path="setting">
-                        <Route
-                          path="category"
-                          element={<AdminSettingCategory />}
-                        />
-                        <Route path="user" element={<AdminSettingUser />} />
-                        <Route
-                          path="voucher"
-                          element={<AdminSettingVoucher />}
-                        />
-                        <Route path="store" element={<AdminSettingStore />} />
-                      </Route>
+                      <Route path="voucher" element={<AdminSettingVoucher />} />
+                      <Route path="store" element={<AdminSettingStore />} />
                     </Route>
                   </Route>
                 </Route>

@@ -19,7 +19,7 @@ function secondsToHms(d: any) {
   var s = Math.floor((d % 3600) % 60);
 
   var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
-  var mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes ") : "";
+  var mDisplay = m > 0 ? m + (m === 1 ? " min " : " mins ") : "";
   var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
   return hDisplay + mDisplay + sDisplay;
 }
@@ -171,7 +171,7 @@ export function Deal(props: DealProps) {
               <div className="flex items-end pt-2 space-x-2">
                 <BsFillCalendar2WeekFill className="text-base text-white" />
                 <span className="text-[9px] lg:text-xs text-white">
-                  Available on Weekdays
+                  Valid Weekdays
                 </span>
               </div>
             </>
@@ -190,8 +190,8 @@ export function Deal(props: DealProps) {
 
           <div className="flex items-center pt-2 space-x-1">
             <RiTimerFlashFill className="text-base text-white" />
-            <span className="text-[10px] sm:text-xs text-white">
-              {secondsToHms(props.deal.seconds_before_expiration)}
+            <span className="text-[9px] lg:text-xs text-white">
+              {secondsToHms(props.deal.seconds_before_expiration)} claim time
             </span>
           </div>
         </div>
