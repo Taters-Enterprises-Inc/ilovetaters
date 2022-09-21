@@ -24,7 +24,7 @@ export function FooterNav(props: FooterNavProps) {
     const loc = currentLocation.pathname;
     if (
       loc === "/franchising" ||
-      loc === "/shop/profile" ||
+      loc === "/profile" ||
       loc === "/shop/terms-and-conditions"
     ) {
       return true;

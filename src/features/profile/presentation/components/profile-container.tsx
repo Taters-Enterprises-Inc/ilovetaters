@@ -2,14 +2,14 @@ import { SNACKSHOP_PROFILE_TABS } from "features/shared/constants";
 import { Tab } from "features/shared/presentation/components";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { ReactNode } from "react";
-import { ShopProfileTabsProps } from "../components/shop-profile-tabs";
+import { ShopProfileTabsProps } from "../../../shop/presentation/components/shop-profile-tabs";
 
-interface ShopProfileContainerProps extends ShopProfileTabsProps {
+interface ProfileContainerProps extends ShopProfileTabsProps {
   title: string;
   children: ReactNode;
 }
 
-export function ShopProfileContainer(props: ShopProfileContainerProps) {
+export function ProfileContainer(props: ProfileContainerProps) {
   return (
     <main className="bg-paper">
       <PageTitleAndBreadCrumbs

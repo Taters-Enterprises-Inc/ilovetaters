@@ -1,6 +1,7 @@
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { ContactModel } from "features/shared/core/domain/contact.model";
+import { AddContactModal } from "features/shared/presentation/modals";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 import {
   deleteContact,
@@ -15,15 +16,15 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { selectUpdateContact } from "features/shared/presentation/slices/update-contact.slice";
+import { UpdateContactModal } from "features/shop/presentation/modals";
 import { useEffect, useState } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { useLocation } from "react-router-dom";
-import { ShopProfileContainer } from "../components/shop-profile-container";
-import { AddContactModal, UpdateContactModal } from "../modals";
+import { ProfileContainer } from "../components/profile-container";
 
-export function ShopProfile() {
+export function ProfileHome() {
   const getSessionState = useAppSelector(selectGetSession);
   const addContactState = useAppSelector(selectAddContact);
   const deleteContactState = useAppSelector(selectDeleteContact);
@@ -53,7 +54,7 @@ export function ShopProfile() {
 
   return (
     <>
-      <ShopProfileContainer title="My Profile" activeTab="profile">
+      <ProfileContainer title="My Profile" activeTab="profile">
         <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
           Personal Information
         </h1>
@@ -170,7 +171,7 @@ export function ShopProfile() {
             ))}
           </div>
         </div>
-      </ShopProfileContainer>
+      </ProfileContainer>
       <AddContactModal
         open={openAddContactModal}
         onClose={() => {

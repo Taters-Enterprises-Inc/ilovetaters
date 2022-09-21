@@ -37,7 +37,7 @@ export function ShopProfileTabs(props: ShopProfileTabsProps) {
           style={{ borderTopLeftRadius: "0.4375rem" }}
         >
           <Link
-            to={`/shop/profile/${tab.url}`}
+            to={`/profile/${tab.url}`}
             className={`${
               props.activeTab === tab.active
                 ? "profile-tab-active lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] text-tertiary lg:text-white"

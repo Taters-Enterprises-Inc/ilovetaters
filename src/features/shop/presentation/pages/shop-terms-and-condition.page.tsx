@@ -60,7 +60,7 @@ export function ShopTermsAndConditions() {
               8. Once payment has been made, upload the{" "}
               <strong>payment screenshot</strong> on the link provided in the
               order confirmation email or go to{" "}
-              <strong>www.ilovetaters.com/shop/profile</strong>.
+              <strong>www.ilovetaters.com/profile</strong>.
             </p>
             <p>
               9. Once a payment has been verified, customer will receive a

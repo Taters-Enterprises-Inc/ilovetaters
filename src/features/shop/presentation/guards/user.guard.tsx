@@ -2,37 +2,27 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect } from "react";
 import {
-  getUserSession,
-  GetUserSessionState,
-  selectGetUserSession,
-} from "../slices/get-user-session.slice";
+  getSession,
+  GetSessionState,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 
 export function UserGuard() {
   const dispatch = useAppDispatch();
 
-  const getUserSessionState = useAppSelector(selectGetUserSession);
+  const getSessionState = useAppSelector(selectGetSession);
 
   useEffect(() => {
-    dispatch(getUserSession());
+    dispatch(getSession());
   }, [dispatch]);
 
   if (
-    getUserSessionState.data &&
-    getUserSessionState.status === GetUserSessionState.success
+    getSessionState.status === GetSessionState.fail ||
+    getSessionState.data === null ||
+    getSessionState.data?.userData === null
   ) {
-    return (
-      <>
-        <Outlet />
-      </>
-    );
+    return <Navigate to={"/"} />;
   }
 
-  if (
-    getUserSessionState.status === GetUserSessionState.fail &&
-    getUserSessionState.data === null
-  ) {
-    return <Navigate to={"/shop"} />;
-  }
-
-  return null;
+  return <Outlet />;
 }

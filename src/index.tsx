@@ -21,9 +21,6 @@ import {
   ShopPrivacyPolicy,
   ShopProduct,
   ShopProducts,
-  ShopProfile,
-  ShopProfileCateringBookings,
-  ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
   ShopEditCartItem,
@@ -74,6 +71,12 @@ import { UserGuard } from "features/shop/presentation/guards";
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 import { AdminGuard } from "features/admin/presentation/guards/admin.guard";
+import {
+  Profile,
+  ProfileCateringBookings,
+  ProfileHome,
+  ProfileSnackshopOrders,
+} from "features/profile/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -100,6 +103,20 @@ root.render(
                 <Route path="reseller" element={<Reseller />} />
                 <Route path="branches" element={<Branches />} />
                 <Route path="franchising" element={<Franchising />} />
+
+                <Route path="profile" element={<Profile />}>
+                  <Route element={<UserGuard />}>
+                    <Route index element={<ProfileHome />} />
+                    <Route
+                      path="snackshop-orders"
+                      element={<ProfileSnackshopOrders />}
+                    />
+                    <Route
+                      path="catering-bookings"
+                      element={<ProfileCateringBookings />}
+                    />
+                  </Route>
+                </Route>
 
                 <Route path="popclub" element={<PopClub />}>
                   <Route index element={<PopClubIndexPage />} />
@@ -130,20 +147,6 @@ root.render(
                     element={<ShopPrivacyPolicy />}
                   />
                   <Route path="return-policy" element={<ShopReturnPolicy />} />
-
-                  <Route path="profile">
-                    <Route element={<UserGuard />}>
-                      <Route index element={<ShopProfile />} />
-                      <Route
-                        path="snackshop-orders"
-                        element={<ShopProfileSnackshopOrders />}
-                      />
-                      <Route
-                        path="catering-bookings"
-                        element={<ShopProfileCateringBookings />}
-                      />
-                    </Route>
-                  </Route>
                 </Route>
 
                 <Route path="catering" element={<Catering />}>

@@ -71,7 +71,7 @@ export default function MoreDrawer(props: MoreDrawerProps) {
           {
             text: "My Account",
             icon: <RiAccountBoxFill className="text-white" />,
-            path: "/shop/profile",
+            path: "/profile",
           },
           {
             text: "Franchising",

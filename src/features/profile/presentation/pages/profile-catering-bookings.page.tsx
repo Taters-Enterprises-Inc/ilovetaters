@@ -1,41 +1,37 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect } from "react";
-import { ShopProfileContainer } from "../components/shop-profile-container";
+
 import {
-  Column,
-  DataTable,
-} from "../../../shared/presentation/components/data-table";
-import {
-  getSnackShopOrderHistory,
-  selectGetSnackShopOrderHistory,
-} from "../slices/get-snackshop-order-history.slice";
+  getCateringBookingHistory,
+  selectGetCateringBookingHistory,
+} from "../../../shop/presentation/slices/get-catering-booking-history.slice";
+import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { ProfileContainer } from "../components";
+import { Column } from "features/shared/presentation/components/data-table";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
   { id: "trackingNo", label: "Tracking No." },
   { id: "purchaseAmount", label: "Purchase Amount" },
-  { id: "raffleCode", label: "Raffle Code" },
-  { id: "raffleStatus", label: "Raffle Status" },
+  { id: "bookingStatus", label: "Booking Status" },
 ];
 
-export function ShopProfileSnackshopOrders() {
-  const getSnackShopOrderHistoryState = useAppSelector(
-    selectGetSnackShopOrderHistory
+export function ProfileCateringBookings() {
+  const getCateringBookingHistoryState = useAppSelector(
+    selectGetCateringBookingHistory
   );
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSnackShopOrderHistory());
+    dispatch(getCateringBookingHistory());
   }, [dispatch]);
 
   return (
-    <ShopProfileContainer title="Snack Shop Orders" activeTab="snackshop">
+    <ProfileContainer title="Catering Bookings" activeTab="catering">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
-        Snack Shop Orders
+        Catering Bookings
       </h1>
       {/* <DataTable
         totalRows={0}
@@ -57,11 +53,7 @@ export function ShopProfileSnackshopOrders() {
             align: "left",
             rowComponent: (row: SnackShopOrderModel) => (
               <NumberFormat
-                value={(
-                  parseInt(row.purchase_amount) +
-                  parseInt(row.distance_price) +
-                  parseInt(row.cod_fee)
-                ).toFixed(2)}
+                value={parseInt(row.purchase_amount).toFixed(2)}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={"₱"}
@@ -69,18 +61,13 @@ export function ShopProfileSnackshopOrders() {
             ),
           },
           {
-            rowKey: "generated_raffle_code",
-            align: "left",
-          },
-          {
-            rowKey: "application_status",
+            rowKey: "status",
             align: "left",
           },
         ]}
-        viewBaseUrl="/shop/order"
         columns={columns}
-        rows={getSnackShopOrderHistoryState.data}
+        rows={getCateringBookingHistoryState.data}
       /> */}
-    </ShopProfileContainer>
+    </ProfileContainer>
   );
 }

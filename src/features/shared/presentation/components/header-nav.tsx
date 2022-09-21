@@ -38,6 +38,7 @@ import Stack from "@mui/material/Stack";
 interface HeaderNavProps {
   className?: string;
   activeUrl:
+    | "PROFILE"
     | "SNACKSHOP"
     | "CATERING"
     | "POPCLUB"
@@ -125,15 +126,15 @@ export function HeaderNav(props: HeaderNavProps) {
 
   const handleMyProfile = () => {
     setOpenProfileMenu(null);
-    navigate("/shop/profile");
+    navigate("/profile");
   };
 
   const handleLogout = () => {
     setOpenProfileMenu(null);
 
-    if (currentLocation.pathname === "/shop/profile") {
+    if (currentLocation.pathname === "/profile") {
       dispatch(facebookLogout());
-      navigate("/shop");
+      navigate("/");
     } else {
       dispatch(facebookLogout());
     }
@@ -149,6 +150,9 @@ export function HeaderNav(props: HeaderNavProps) {
         setOpenShopCartModal(true);
         break;
       case "POPCLUB":
+        setOpenShopCartModal(true);
+        break;
+      case "PROFILE":
         setOpenShopCartModal(true);
         break;
       case "CATERING":

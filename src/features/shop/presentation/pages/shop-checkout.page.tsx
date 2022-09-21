@@ -82,8 +82,6 @@ export function ShopCheckout() {
       (value, property: string) => (responseBody[property] = value)
     );
 
-    responseBody["payops"] = 3;
-
     if (responseBody.phoneNumber.length === 11) {
       dispatch(checkoutOrders(responseBody));
     } else {
@@ -382,14 +380,16 @@ export function ShopCheckout() {
                   />
                 )}
 
-                <TextField
+                {/* Need more clarification on marketing */}
+
+                {/* <TextField
                   required
                   label="Delivery Address"
                   variant="outlined"
                   className="w-full"
                   name="Delivery Address"
-                />
-                  
+                /> */}
+
                 {getSessionState.data?.cache_data ? (
                   <>
                     <div className="mt-4 text-secondary lg:mt-0">

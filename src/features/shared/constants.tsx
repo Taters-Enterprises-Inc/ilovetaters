@@ -170,19 +170,19 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     name: "My Profile",
     active: "profile",
     icon: <FaUserAlt />,
-    url: "/shop/profile",
+    url: "/profile",
   },
   {
     name: "Snack Shop Orders",
     active: "snackshop",
     icon: <FaShoppingBag />,
-    url: "/shop/profile/snackshop-orders",
+    url: "/profile/snackshop-orders",
   },
   {
     name: "Catering Bookings",
     active: "catering",
     icon: <RiShoppingBag3Fill />,
-    url: "/shop/profile/catering-bookings",
+    url: "/profile/catering-bookings",
   },
 ];
 
