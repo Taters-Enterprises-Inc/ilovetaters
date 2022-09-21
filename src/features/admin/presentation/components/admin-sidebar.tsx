@@ -276,7 +276,7 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
           FAQ's
         </h1>
       ),
-      itemId: "/admin/faq",
+      itemId: "/admin/faq" && "/admin/faq/store",
       elemBefore: () => <FaQuestionCircle size={20} />,
     },
   ];
