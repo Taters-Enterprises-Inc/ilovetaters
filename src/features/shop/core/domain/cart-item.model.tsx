@@ -31,6 +31,9 @@ export interface CartItemModel {
     addon_butter: string;
     addon_base_product: null;
     freebie_prod_name: null;
+    prod_size_id:number
+    prod_flavor_id:number
+    prod_multiflavors:string
   };
   product_images: Array<string>;
   product_addson: Array<{

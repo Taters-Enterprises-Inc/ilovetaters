@@ -9,18 +9,27 @@ export interface QuantityInputProps {
   disableAdd: boolean;
   reset?: boolean;
   onChange: (quantity: number, action: "minus" | "plus") => void;
+  defaultValue?:any,
+  flavor?:any
 }
 
-export function QuantityInput(props: QuantityInputProps) {
+export function QuantityInput(props: QuantityInputProps ) {
   const [quantity, setQuantity] = useState(props.min);
   const getSessionState = useAppSelector(selectGetSession);
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-
   useEffect(() => {
     if (props.reset && quantity !== 0) {
       setQuantity(0);
     }
+   
   }, [quantity, props]);
+
+  useEffect(()=>{
+    if(props.defaultValue !== undefined && props.flavor !== undefined){
+      const index:number = props.flavor?.id
+      setQuantity(()=> props.defaultValue[index] !== undefined ? props.defaultValue[index].quantity : 0 )
+    }
+  },[props])
 
   return (
     <>
@@ -35,7 +44,7 @@ export function QuantityInput(props: QuantityInputProps) {
                 setOpenLoginChooserModal(true);
                 return;
               }
-
+              
               if (quantity > props.min) {
                 if (props.max) {
                   if (quantity <= props.max) {
@@ -56,7 +65,7 @@ export function QuantityInput(props: QuantityInputProps) {
           </button>
 
           <input
-            value={quantity}
+            value={quantity }
             type="number"
             readOnly
             className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
@@ -71,9 +80,9 @@ export function QuantityInput(props: QuantityInputProps) {
                 setOpenLoginChooserModal(true);
                 return;
               }
-              if (quantity >= props.min && props.disableAdd === false) {
+              if (quantity >= props.min  && props.disableAdd === false) {
                 if (props.max) {
-                  if (quantity < props.max) {
+                  if (quantity < props.max ) {
                     props.onChange(quantity + 1, "plus");
                     setQuantity(quantity + 1);
                   }
