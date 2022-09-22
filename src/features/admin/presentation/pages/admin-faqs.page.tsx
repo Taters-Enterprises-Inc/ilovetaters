@@ -1,5 +1,5 @@
 import { ADMIN_FAQ } from "features/shared/constants";
-import { Tab } from "features/shared/presentation/components";
+import { TabFaq } from "../components/tabfaq";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CustomizedAccordionsSFAQ from "../components/faq-store";
@@ -18,11 +18,11 @@ export function AdminFaq() {
         <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary max-h-screen">
           Frequently Asked Questions
         </h1>
-        <main className="container block pb-4 min-h-min">
-          <section className="container py-6">
-            <Tab tabs={ADMIN_FAQ} activeTab="store">
+        <main className="">
+          <section className="px-4 pt-6 ">
+            <TabFaq tabs={ADMIN_FAQ} activeTab="store">
               <CustomizedAccordionsSFAQ></CustomizedAccordionsSFAQ>
-            </Tab>
+            </TabFaq>
           </section>
         </main>
       </div>

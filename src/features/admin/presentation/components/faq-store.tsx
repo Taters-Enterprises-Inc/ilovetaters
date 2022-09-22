@@ -102,7 +102,7 @@ export default function CustomizedAccordionsSFAQ() {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography></Typography>
+          <Typography>N/A</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
