@@ -96,7 +96,7 @@ export default function MoreDrawer(props: MoreDrawerProps) {
           {
             text: "Terms & Conditions",
             icon: <RiFilePaper2Fill className="text-white" />,
-            path: "/shop/terms-and-conditions",
+            path: "/delivery/terms-and-conditions",
           },
         ].map((item, index) => {
           const { text, icon, path } = item;

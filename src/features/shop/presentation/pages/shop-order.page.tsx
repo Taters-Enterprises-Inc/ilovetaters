@@ -160,12 +160,12 @@ export function ShopOrder() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         title="Order View"
         className="lg:h-[200px]"
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: "Order View" },
         ]}
       />

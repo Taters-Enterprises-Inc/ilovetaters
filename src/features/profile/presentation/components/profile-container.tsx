@@ -15,12 +15,12 @@ export function ProfileContainer(props: ProfileContainerProps) {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         className="lg:h-[200px]"
         title={props.title}
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: props.title },
         ]}
       />

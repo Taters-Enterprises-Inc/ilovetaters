@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Autoplay, Navigation } from "swiper";
@@ -98,7 +93,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   }, [editCartProductState, dispatch]);
 
   const multi_flavor = useMemo(() => {
-    let count = 0
+    let count = 0;
     const item: Array<{ quantity: number; name: string; id: number }> = [];
     const defaultMultyflavor =
       getEditCartProduct?.data?.order_item?.prod_multiflavors
@@ -133,12 +128,12 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
     let result: any = {};
 
     for (var i = 0; i < item.length; ++i) {
-      count = count + item[i].quantity
+      count = count + item[i].quantity;
       let id = item[i].id;
       result[id] = { name: item[i].name, quantity: item[i].quantity };
     }
 
-    return {result ,count};
+    return { result, count };
   }, [getEditCartProduct?.data]);
 
   const handleSizeAndFlavorChange = (
@@ -157,8 +152,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           ? getEditCartProduct.data.product_size[0]
             ? getEditCartProduct.data.product_size[0].id
             : -1
-            : size;
-            
+          : size;
+
       dispatch(
         getProductSku({
           prod_flavor: flavor,
@@ -177,7 +172,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         }
       });
     }
-    
+
     dispatch(
       editCartItem({
         product_id: cart_id,
@@ -187,27 +182,27 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         sizeName,
         flavorName,
         total_amount:
-        getEditCartProduct.data?.product.price &&
-        getEditCartProduct.data?.product.price * quantity,
+          getEditCartProduct.data?.product.price &&
+          getEditCartProduct.data?.product.price * quantity,
         prod_multiflavors: toString_prod_multiflavors,
       })
-      );
-    };
-    
-    return (
-      <section className="bg-secondary text-white">
+    );
+  };
+
+  return (
+    <section className="text-white bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         title={getEditCartProduct.data?.product.name}
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: getEditCartProduct.data?.product.name, url: "" },
         ]}
-        />
-      <section className="  min-h-screen lg:space-x-4 pb-36 ">
+      />
+      <section className="min-h-screen  lg:space-x-4 pb-36">
         <div className="lg:space-y-10 lg:container">
           <div className="bg-secondary  pb-20 w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0">
@@ -519,7 +514,6 @@ const RadioFlavorComponent: React.FC<{
   return (
     <React.Fragment>
       {getEditCartProduct.product_flavor.map((flavor: any, i: number) => {
-      
         if (getEditCartProduct) {
           return (
             <EditMultiFlavorComponent
@@ -556,7 +550,7 @@ const EditMultiFlavorComponent: React.FC<{
   currentMultiFlavors: any;
   setTotalMultiFlavorsQuantity: React.Dispatch<React.SetStateAction<number>>;
   flavorCallBack: (value: string) => void;
-  currentSize:  number | undefined;
+  currentSize: number | undefined;
   currentFlavor: number | undefined;
   setCurrentFlavor: React.Dispatch<React.SetStateAction<number | undefined>>;
   handleSizeAndFlavorChange: (size: number | undefined, flavor: number) => void;
@@ -578,11 +572,10 @@ const EditMultiFlavorComponent: React.FC<{
   setCon,
   defaultMultiFlavor,
 }) => {
-
   useEffect(() => {
     setCon(defaultMultiFlavor.result);
   }, [defaultMultiFlavor, setCon]);
-  
+
   return (
     <React.Fragment>
       {getEditCartProduct.product.num_flavor > 1 ? (
@@ -595,7 +588,8 @@ const EditMultiFlavorComponent: React.FC<{
             min={0}
             disableAdd={
               getEditCartProduct.product.num_flavor * quantity -
-                totalMultiFlavorsQuantity === (0  + defaultMultiFlavor.count)
+                totalMultiFlavorsQuantity ===
+              0 + defaultMultiFlavor.count
             }
             onChange={(val, action) => {
               if (currentMultiFlavors) {

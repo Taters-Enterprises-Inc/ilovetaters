@@ -15,7 +15,7 @@ export const SERVICES_DESKTOP = [
     color: "#1d1115",
     textColor: "white",
     backgroundPosition: "100% 100%",
-    url: "shop",
+    url: "delivery",
     image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
   {
@@ -42,7 +42,7 @@ export const SERVICES_DESKTOP = [
     color: "#858173",
     textColor: "black",
     backgroundPosition: "100% 100%",
-    url: "catering",
+    url: "shop",
     image: "api/assets/images/home/cards/taters_catering.webp",
   },
   {
@@ -129,11 +129,11 @@ export const TABS: Array<{ name: string; url: string }> = [
   },
   {
     name: "SNACKSHOP",
-    url: "/shop",
+    url: "/delivery",
   },
   {
     name: "CATERING",
-    url: "/catering",
+    url: "/shop",
   },
   {
     name: "BRANCHES",
@@ -149,19 +149,19 @@ export const SNACKSHOP_TERMS_AND_CONDITIONS_TABS: Array<TabModel> = [
   {
     name: "Terms And Conditions",
     active: "terms-and-conditions",
-    url: "/shop/terms-and-conditions",
+    url: "/delivery/terms-and-conditions",
     icon: <MdRule />,
   },
   {
     name: "Privacy Policy",
     active: "privacy-policy",
-    url: "/shop/privacy-policy",
+    url: "/delivery/privacy-policy",
     icon: <MdPolicy />,
   },
   {
     name: "Return Policy",
     active: "return-policy",
-    url: "/shop/return-policy",
+    url: "/delivery/return-policy",
     icon: <GoLaw />,
   },
 ];
@@ -182,7 +182,7 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     name: "Catering Bookings",
     active: "catering",
     icon: <RiShoppingBag3Fill />,
-    url: "/profile/catering-bookings",
+    url: "/profile/shop-bookings",
   },
 ];
 

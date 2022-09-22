@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { Home } from "features/home/presentation/pages";
@@ -124,19 +124,19 @@ root.render(
                   <Route path="deal/:hash" element={<PopClubDeal />} />
                 </Route>
 
-                <Route path="shop" element={<Shop />}>
+                <Route path="delivery" element={<Shop />}>
                   <Route index element={<ShopHome />} />
+                  <Route
+                    path="products/cart/:cart_id"
+                    element={<ShopEditCartItem />}
+                  />
                   <Route path="products/:hash" element={<ShopProduct />} />
                   <Route path="order/:hash" element={<ShopOrder />} />
+
                   <Route path="products" element={<ShopProducts />} />
                   <Route element={<ShopCheckoutGuard />}>
                     <Route path="checkout" element={<ShopCheckout />} />
                   </Route>
-                  <Route
-                    path="/shop/products/cart/:cart_id"
-                    element={<ShopEditCartItem />}
-                  />
-
                   <Route
                     path="terms-and-conditions"
                     element={<ShopTermsAndConditions />}
@@ -149,7 +149,11 @@ root.render(
                   <Route path="return-policy" element={<ShopReturnPolicy />} />
                 </Route>
 
-                <Route path="catering" element={<Catering />}>
+                <Route
+                  path="catering"
+                  element={<Navigate to={"/delivery"} />}
+                />
+                <Route path="shop" element={<Catering />}>
                   <Route index element={<CateringHome />} />
                   <Route path="products/:hash" element={<CateringProduct />} />
                   <Route path="contract/:hash" element={<CateringContract />} />
