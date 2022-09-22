@@ -182,7 +182,7 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     name: "Catering Bookings",
     active: "catering",
     icon: <RiShoppingBag3Fill />,
-    url: "/profile/shop-bookings",
+    url: "/profile/catering-bookings",
   },
 ];
 

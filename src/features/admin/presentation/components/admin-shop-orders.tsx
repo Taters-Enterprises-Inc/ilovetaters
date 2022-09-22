@@ -315,6 +315,7 @@ export function AdminShopOrders() {
               ))}
             </DataList>
           </div>
+
           <div className="hidden p-4 lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}

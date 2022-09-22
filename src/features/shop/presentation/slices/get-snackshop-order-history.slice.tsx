@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { GetSnackShopOrderHistoryModel } from "features/shop/core/domain/get-snackshop-order-history.model";
 import {
   GetSnackShopOrderHistoryRepository,
   GetSnackShopOrderHistoryResponse,
@@ -15,18 +15,24 @@ export enum GetSnackshopOrderHistoryState {
 
 const initialState: {
   status: GetSnackshopOrderHistoryState;
-  data: Array<SnackShopOrderModel> | undefined;
+  message: string | undefined;
+  data: GetSnackShopOrderHistoryModel | undefined;
 } = {
   status: GetSnackshopOrderHistoryState.initial,
+  message: "",
   data: undefined,
 };
 
-export const getSnackShopOrderHistory = createAsyncThunk(
-  "getSnackShopOrderHistory",
-  async () => {
-    const response: GetSnackShopOrderHistoryResponse =
-      await GetSnackShopOrderHistoryRepository();
-    return response.data;
+export const getSnackshopOrderHistory = createAsyncThunk(
+  "getSnackshopOrderHistory",
+  async (query: string, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: GetSnackShopOrderHistoryResponse =
+        await GetSnackShopOrderHistoryRepository(query);
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 
@@ -34,25 +40,39 @@ export const getSnackShopOrderHistory = createAsyncThunk(
 export const getSnackShopOrderHistorySlice = createSlice({
   name: "getSnackShopOrderHistory",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetSnackShopOrderHistoryStatus: (state) => {
+      state.status = GetSnackshopOrderHistoryState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
-      .addCase(getSnackShopOrderHistory.pending, (state: any) => {
+      .addCase(getSnackshopOrderHistory.pending, (state: any) => {
         state.status = GetSnackshopOrderHistoryState.inProgress;
       })
       .addCase(
-        getSnackShopOrderHistory.fulfilled,
+        getSnackshopOrderHistory.fulfilled,
         (
           state: any,
           action: PayloadAction<{
             message: string;
-            data: Array<SnackShopOrderModel> | null;
+            data: GetSnackShopOrderHistoryModel | null;
           }>
         ) => {
-          const data = action.payload.data;
-
-          state.data = data;
+          const { message, data } = action.payload;
           state.status = GetSnackshopOrderHistoryState.success;
+          state.message = message;
+          state.data = data;
+        }
+      )
+      .addCase(
+        getSnackshopOrderHistory.rejected,
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          const { message } = action.payload;
+
+          state.status = GetSnackshopOrderHistoryState.fail;
+          state.message = message;
+          state.data = null;
         }
       );
   },
@@ -60,5 +80,8 @@ export const getSnackShopOrderHistorySlice = createSlice({
 
 export const selectGetSnackShopOrderHistory = (state: RootState) =>
   state.getSnackShopOrderHistory;
+
+export const { resetGetSnackShopOrderHistoryStatus } =
+  getSnackShopOrderHistorySlice.actions;
 
 export default getSnackShopOrderHistorySlice.reducer;
