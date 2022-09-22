@@ -95,9 +95,19 @@ input[data-autocompleted] {
   left: 55%;
   top: 10%;
   max-width: 560;
-  max-height: 315;
+  max-height: 375;
 }
 
+.player-wrapper {
+  position: absolute;
+  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+}
+
+.react-player {
+  position: absolute;
+  top: -51%;
+  left: 780px;
+}
 .responsive {
   position: absolute;
   top: 0;

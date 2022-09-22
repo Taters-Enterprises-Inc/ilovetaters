@@ -4,6 +4,7 @@ import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
+import ReactPlayer from "react-player";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
@@ -37,10 +38,10 @@ export function Franchising() {
         alt="The best pop corn in town"
       ></img>
 
-      <div className="lg:hidden mobview mt-[-310px] mb-[90px]">
+      <div className="lg:hidden mobview -mt-20 mb-[90px]">
         <iframe
           className="responsive"
-          width="560"
+          width="500"
           height="315"
           src="https://www.youtube.com/embed/dvAGdCU6TTY"
           title="YouTube video player"
@@ -50,9 +51,9 @@ export function Franchising() {
         ></iframe>
       </div>
 
-      <div className="relative hidden m-auto lg:block ">
+      <div className="relative">
         <img
-          className="relative m-auto lg:block"
+          className="min-w-full md:hidden"
           src={
             REACT_APP_DOMAIN_URL +
             "api/assets/images/franchising/hero/desktop/franchising.webp"
@@ -60,9 +61,9 @@ export function Franchising() {
           alt="The best pop corn in town"
         ></img>
         <iframe
-          className=" webview"
+          className="webview"
           width="560"
-          height="315"
+          height="375"
           src="https://www.youtube.com/embed/dvAGdCU6TTY"
           title="YouTube video player"
           frameBorder="0"
