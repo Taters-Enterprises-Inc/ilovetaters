@@ -134,9 +134,8 @@ export function MobileForgotPasswordOtpAuthentication(
             {mobileNumber.replace("phoneNumber=", " ")}
             <button onClick={handleOnChangePhoneNumber} className="ml-1">
               [
-              <span className="text-orange-500 underline-offset-1">
-                {" "}
-                change{" "}
+              <span className="mx-2 text-orange-500 underline-offset-1">
+                change
               </span>
               ]
             </button>
@@ -173,12 +172,11 @@ export function MobileForgotPasswordOtpAuthentication(
         <div className="justify-center py-2 mt-3 mb-2 text-white ">
           <p className="w-full">The OTP will expire after 15 minutes</p>
           <div className="flex justify-center my-1">
-            <p className="flex-initial">Did not recieve email? </p>{" "}
+            <p className="flex-initial">Did not recieve sms? </p>
             <button className="flex-initial ml-2 " onClick={handleOnResend}>
               [
-              <span className="text-orange-500 underline-offset-1">
-                {" "}
-                resend{" "}
+              <span className="mx-2 text-orange-500 underline-offset-1">
+                resend
               </span>
               ]
             </button>
