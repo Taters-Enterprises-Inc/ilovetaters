@@ -15,7 +15,10 @@ import {
   selectGetCateringOrders,
 } from "../slices/get-catering-orders.slice";
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  CATERING_BOOKING_STATUS,
+  REACT_APP_DOMAIN_URL,
+} from "features/shared/constants";
 import { useDropzone } from "react-dropzone";
 import {
   cateringUploadProofOfPayment,
@@ -65,68 +68,6 @@ export function CateringOrder() {
       const formData = new FormData(e.currentTarget as HTMLFormElement);
       formData.append("uploaded_file", uploadedFile);
       dispatch(cateringUploadProofOfPayment({ formData }));
-    }
-  };
-
-  const getStatus = (
-    status: number | undefined,
-    payops: number | undefined
-  ) => {
-    switch (status) {
-      case 0:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Incomplete Transaction
-          </span>
-        );
-      case 4:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Order Placed In System
-          </span>
-        );
-      case 5:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment under Verification
-          </span>
-        );
-      case 6:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment Verified
-          </span>
-        );
-      case 7:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment under Verification
-          </span>
-        );
-      case 8:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment Verified
-          </span>
-        );
-      case 22:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment Verified Denied
-          </span>
-        );
-      case 23:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment Verified Denied
-          </span>
-        );
-      default:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Error Transaction
-          </span>
-        );
     }
   };
 
@@ -330,13 +271,28 @@ export function CateringOrder() {
                         .tracking_no
                     }
                   </div>
-                  <div className="space-x-2 text-xs">
-                    <strong>Status:</strong>{" "}
-                    {getStatus(
-                      getCateringOrdersState.data?.order.clients_info.status,
-                      getCateringOrdersState.data?.order.clients_info.payops
-                    )}
-                  </div>
+                  {getCateringOrdersState.data ? (
+                    <div className="space-x-2 text-xs">
+                      <strong>Status:</strong>{" "}
+                      <span
+                        style={{
+                          backgroundColor:
+                            CATERING_BOOKING_STATUS[
+                              getCateringOrdersState.data.order.clients_info
+                                .status
+                            ].color,
+                        }}
+                        className="rounded-full text-white px-2 py-1 text-[10px]"
+                      >
+                        {
+                          CATERING_BOOKING_STATUS[
+                            getCateringOrdersState.data.order.clients_info
+                              .status
+                          ].name
+                        }
+                      </span>
+                    </div>
+                  ) : null}
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
                   </div>

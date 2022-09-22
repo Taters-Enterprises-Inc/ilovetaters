@@ -4,6 +4,7 @@ import { MdPolicy, MdRule } from "react-icons/md";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
+import { GiPopcorn } from "react-icons/gi";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
@@ -183,6 +184,12 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     active: "catering",
     icon: <RiShoppingBag3Fill />,
     url: "/profile/catering-bookings",
+  },
+  {
+    name: "Popclub Redeems",
+    active: "popclub",
+    icon: <GiPopcorn />,
+    url: "/profile/popclub-redeems",
   },
 ];
 
@@ -454,6 +461,150 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   {
     name: "Completed",
     color: "#004d00",
+  },
+];
+
+export const CATERING_BOOKING_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Waiting for booking confirmation",
+    color: "#004d00",
+  },
+  {
+    name: "Upload Signed Contract",
+    color: "#004d00",
+  },
+  {
+    name: "Contract under verification",
+    color: "#004d00",
+  },
+  {
+    name: "Upload Initial proof of payment",
+    color: "#004d00",
+  },
+  {
+    name: "Initial proof of payment under verification",
+    color: "#004d00",
+  },
+  {
+    name: "Upload Final proof of payment",
+    color: "#004d00",
+  },
+  {
+    name: "Final proof of payment under verification",
+    color: "#004d00",
+  },
+  {
+    name: "Payment Verified",
+    color: "#004d00",
+  },
+];
+
+export const ADMIN_CATERING_BOOKING_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Waiting for booking confirmation",
+    color: "#004d00",
+  },
+  {
+    name: "Booking Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Contract Uploaded",
+    color: "#004d00",
+  },
+  {
+    name: "Contract Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Initial Payment Uploaded",
+    color: "#004d00",
+  },
+  {
+    name: "Initial Payment Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Final Payment Uploaded",
+    color: "#004d00",
+  },
+  {
+    name: "Final payment verified",
+    color: "#004d00",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Booking denied",
+    color: "#a21013",
+  },
+  {
+    name: "Contract denied",
+    color: "#a21013",
+  },
+  {
+    name: "Initial Payment denied",
+    color: "#a21013",
+  },
+  {
+    name: "Final Payment denied",
+    color: "#a21013",
   },
 ];
 

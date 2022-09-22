@@ -1,6 +1,6 @@
 import { AdminHead, AdminCateringBookings } from "../components";
 
-export function AdminCateringOrder() {
+export function AdminCateringBooking() {
   return (
     <>
       <AdminHead

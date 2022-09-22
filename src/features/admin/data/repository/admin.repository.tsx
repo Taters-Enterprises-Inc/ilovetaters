@@ -4,6 +4,7 @@ import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclu
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
@@ -143,6 +144,21 @@ export interface AdminPrivilegeResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminCateringBookingsResponse {
+  data: {
+    message: string;
+    data: GetAdminCateringBookingsModel;
+  };
+}
+
+export function GetAdminCateringBookingsRepository(
+  query: string
+): Promise<GetAdminCateringBookingsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
+    withCredentials: true,
+  });
 }
 
 export function AdminPrivilegeRepository(

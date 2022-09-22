@@ -109,9 +109,9 @@ export function AdminPopClubRedeems() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-end px-4">
+      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          List of Redeems
+          Popclub Redemptions
         </span>
         <div className="flex">
           <Select
@@ -154,7 +154,7 @@ export function AdminPopClubRedeems() {
 
       {getAdminPopclubRedeemsState.data?.orders ? (
         <>
-          <div className="lg:hidden py-4">
+          <div className="py-4 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {
@@ -237,18 +237,18 @@ export function AdminPopClubRedeems() {
                       search: queryParams,
                     });
                   }}
-                  className="flex flex-col border-b px-4 py-2"
+                  className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
-                  <span className="text-xl flex space-x-1 items-center flex-wrap">
+                  <span className="flex flex-wrap items-center space-x-1 text-xl">
                     <span>{row.client_name}</span>
-                    <span className="text-gray-600 text-lg">
+                    <span className="text-lg text-gray-600">
                       #{row.redeem_code}
                     </span>
                     {row.status === 1 &&
                     moment(row.expiration).isBefore(moment()) ? (
                       <span
-                        className=" text-xs rounded-full py-1 px-2"
+                        className="px-2 py-1 text-xs rounded-full "
                         style={{
                           color: "white",
                           backgroundColor: "#a21013",
@@ -258,7 +258,7 @@ export function AdminPopClubRedeems() {
                       </span>
                     ) : (
                       <span
-                        className=" text-xs rounded-full py-1 px-2"
+                        className="px-2 py-1 text-xs rounded-full "
                         style={{
                           color: "white",
                           backgroundColor:
@@ -290,7 +290,7 @@ export function AdminPopClubRedeems() {
               ))}
             </DataList>
           </div>
-          <div className="hidden lg:block p-4">
+          <div className="hidden p-4 lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
@@ -390,7 +390,7 @@ export function AdminPopClubRedeems() {
                         {row.status === 1 &&
                         moment(row.expiration).isBefore(moment()) ? (
                           <span
-                            className=" text-xs rounded-full py-1 px-2"
+                            className="px-2 py-1 text-xs rounded-full "
                             style={{
                               color: "white",
                               backgroundColor: "#a21013",
@@ -400,7 +400,7 @@ export function AdminPopClubRedeems() {
                           </span>
                         ) : (
                           <span
-                            className=" text-xs rounded-full py-1 px-2"
+                            className="px-2 py-1 text-xs rounded-full "
                             style={{
                               color: "white",
                               backgroundColor:

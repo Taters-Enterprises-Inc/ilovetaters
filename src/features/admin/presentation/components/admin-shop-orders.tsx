@@ -40,7 +40,7 @@ const columns: Array<Column> = [
   { id: "tracking_no", label: "Tracking No." },
   { id: "client_name", label: "Client Name" },
   { id: "purchase_amount", label: "Amount" },
-  { id: "store_name", label: "Hub" },
+  { id: "store_name", label: "Store" },
   { id: "payops", label: "Mode of Payment" },
   { id: "invoice_num", label: "Invoice Number" },
   { id: "action", label: "Action" },
@@ -154,7 +154,7 @@ export function AdminShopOrders() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          List of Orders
+          Snackshop Orders
         </span>
         <div className="flex">
           <Select
@@ -300,7 +300,7 @@ export function AdminShopOrders() {
                     </span>
                   </span>
                   <span className="text-xs">
-                    <strong>Hub:</strong> {row.store_name}
+                    <strong>Store:</strong> {row.store_name}
                   </span>
 
                   <div className="flex justify-between">

@@ -39,7 +39,7 @@ import { Branches } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
   AdminLogin,
-  AdminCateringOrder,
+  AdminCateringBooking,
   AdminPopclub,
   AdminRaffleInstore,
   AdminRaffleSnackshop,
@@ -76,6 +76,7 @@ import {
   ProfileCateringBookings,
   ProfileHome,
   ProfileSnackshopOrders,
+  ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -114,6 +115,10 @@ root.render(
                     <Route
                       path="catering-bookings"
                       element={<ProfileCateringBookings />}
+                    />
+                    <Route
+                      path="popclub-redeems"
+                      element={<ProfilePopclubRedeems />}
                     />
                   </Route>
                 </Route>
@@ -168,7 +173,7 @@ root.render(
                 <Route element={<AdminGuard />}>
                   <Route element={<AdminSidebarWrapper />}>
                     <Route path="order" element={<AdminShopOrder />} />
-                    <Route path="catering" element={<AdminCateringOrder />} />
+                    <Route path="catering" element={<AdminCateringBooking />} />
                     <Route path="popclub" element={<AdminPopclub />} />
                     <Route path="product" element={<AdminProduct />} />
                     <Route path="report" element={<AdminReport />} />

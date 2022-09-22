@@ -1,7 +1,14 @@
 export interface CateringBookingModel {
   dateadded: string;
   tracking_no: string;
+
   purchase_amount: string;
-  status: boolean;
+  service_fee: number;
+  night_diff_fee: number;
+  additional_hour_charge: number;
+  cod_fee: string;
+  distance_price: string;
+
+  status: number;
   hash_key: string;
 }

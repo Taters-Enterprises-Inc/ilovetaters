@@ -99,6 +99,8 @@ import validateReferenceNumberAdmin from "features/admin/presentation/slices/val
 import adminShopOrderUpdateStatus from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
 import adminPrivilege from "features/admin/presentation/slices/admin-privilege.slice";
 
+import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform,
@@ -187,6 +189,7 @@ export const store = configureStore({
     validateReferenceNumberAdmin,
     adminShopOrderUpdateStatus,
     adminPrivilege,
+    getAdminCateringBookings,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

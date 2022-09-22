@@ -71,44 +71,44 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
       // icon: FaCartArrowDown,
       elemBefore: () => <FaCartArrowDown size={20} />,
     },
-    {
-      title: (
-        <h1
-          className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-        >
-          Raffles
-        </h1>
-      ),
-      itemId: "#",
-      elemBefore: () => <FaTicketAlt size={20} />,
-      subNav: [
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Snackshop
-            </h1>
-          ),
-          itemId: "/admin/raffle/snackshop",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              In-store
-            </h1>
-          ),
-          itemId: "/admin/raffle/instore",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-      ],
-    },
+    //     {
+    //       title: (
+    //         <h1
+    //           className={`whitespace-pre duration-300
+    // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //         >
+    //           Raffles
+    //         </h1>
+    //       ),
+    //       itemId: "#",
+    //       elemBefore: () => <FaTicketAlt size={20} />,
+    //       subNav: [
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Snackshop
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/raffle/snackshop",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               In-store
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/raffle/instore",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //       ],
+    //     },
     {
       title: (
         <h1

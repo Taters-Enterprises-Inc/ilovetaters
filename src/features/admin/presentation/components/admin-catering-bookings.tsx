@@ -12,15 +12,15 @@ import {
   useQuery,
 } from "features/config/hooks";
 import {
-  getAdminShopOrders,
-  resetGetAdminShopOrdersStatus,
-  selectGetAdminShopOrders,
-} from "../slices/get-admin-shop-orders.slice";
+  getAdminCateringBookings,
+  resetGetAdminCateringBookingsStatus,
+  selectGetAdminCateringBookings,
+} from "../slices/get-admin-catering-bookings.slice";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import {
   ADMIN_SNACKSHOP_MOP_STATUS,
-  ADMIN_SNACKSHOP_ORDER_STATUS,
+  ADMIN_CATERING_BOOKING_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
 import Select from "@mui/material/Select";
@@ -33,16 +33,18 @@ import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order
 import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
+import { AdminCateringBookingsModel } from "features/admin/core/domain/admin-catering-bookings.model";
+import moment from "moment";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status", minWidth: 200 },
+  { id: "status", label: "Status", minWidth: 300 },
   { id: "dateadded", label: "Order Date" },
+  { id: "serving_time", label: "Event Date" },
   { id: "tracking_no", label: "Tracking No." },
   { id: "client_name", label: "Client Name" },
   { id: "purchase_amount", label: "Amount" },
-  { id: "store_name", label: "Hub" },
+  { id: "store_name", label: "Store" },
   { id: "payops", label: "Mode of Payment" },
-  { id: "invoice_num", label: "Invoice Number" },
   { id: "action", label: "Action" },
 ];
 
@@ -73,7 +75,9 @@ export function AdminCateringBookings() {
   const search = query.get("search");
 
   const [openAdminShopOrderModal, setOpenAdminShopOrderModal] = useState(false);
-  const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
+  const getAdminCateringBookingsState = useAppSelector(
+    selectGetAdminCateringBookings
+  );
   const uploadProofOfPaymentAdminState = useAppSelector(
     selectUploadProofOfPaymentAdmin
   );
@@ -99,7 +103,7 @@ export function AdminCateringBookings() {
       order: order,
       search: search,
     });
-    dispatch(getAdminShopOrders(query));
+    dispatch(getAdminCateringBookings(query));
   }, [
     dispatch,
     pageNo,
@@ -113,31 +117,30 @@ export function AdminCateringBookings() {
     adminPrivilegeState,
   ]);
 
-  const calculateGrandTotal = (row: AdminShopOrderModel) => {
+  const calculateGrandTotal = (row: AdminCateringBookingsModel) => {
     let calculatedPrice = 0;
 
     if (row.purchase_amount) {
       calculatedPrice += parseInt(row.purchase_amount);
     }
 
-    if (row.distance_price) {
-      calculatedPrice += parseInt(row.distance_price);
+    if (row.service_fee) {
+      calculatedPrice += row.service_fee;
+    }
+
+    if (row.night_diff_fee) {
+      calculatedPrice += row.night_diff_fee;
+    }
+
+    if (row.additional_hour_charge) {
+      calculatedPrice += row.additional_hour_charge;
     }
 
     if (row.cod_fee) {
       calculatedPrice += parseInt(row.cod_fee);
     }
-
-    if (row.discount) {
-      calculatedPrice -= parseInt(row.discount);
-    }
-
-    if (row.giftcard_discount) {
-      calculatedPrice -= parseInt(row.giftcard_discount);
-    }
-
-    if (row.reseller_discount) {
-      calculatedPrice -= parseInt(row.reseller_discount);
+    if (row.distance_price) {
+      calculatedPrice += parseInt(row.distance_price);
     }
 
     return (
@@ -154,7 +157,7 @@ export function AdminCateringBookings() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          List of Orders
+          Catering Orders
         </span>
         <div className="flex">
           <Select
@@ -172,7 +175,7 @@ export function AdminCateringBookings() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminShopOrdersStatus());
+                dispatch(resetGetAdminCateringBookingsStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -181,7 +184,7 @@ export function AdminCateringBookings() {
             }}
           >
             <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_SNACKSHOP_ORDER_STATUS.map((value, index) => {
+            {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
               if (index === 0) {
                 return null;
               }
@@ -195,7 +198,7 @@ export function AdminCateringBookings() {
         </div>
       </div>
 
-      {getAdminShopOrdersState.data?.orders ? (
+      {getAdminCateringBookingsState.data?.bookings ? (
         <>
           <div className="py-4 lg:hidden">
             <DataList
@@ -230,7 +233,7 @@ export function AdminCateringBookings() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminShopOrdersStatus());
+                  dispatch(resetGetAdminCateringBookingsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -250,19 +253,21 @@ export function AdminCateringBookings() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminShopOrdersStatus());
+                  dispatch(resetGetAdminCateringBookingsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminShopOrdersState.data.pagination.total_rows}
-              perPage={getAdminShopOrdersState.data.pagination.per_page}
+              totalRows={
+                getAdminCateringBookingsState.data.pagination.total_rows
+              }
+              perPage={getAdminCateringBookingsState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminShopOrdersState.data.orders.map((row, i) => (
+              {getAdminCateringBookingsState.data.bookings.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -293,10 +298,10 @@ export function AdminCateringBookings() {
                       style={{
                         color: "white",
                         backgroundColor:
-                          ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
+                          ADMIN_CATERING_BOOKING_STATUS[row.status].color,
                       }}
                     >
-                      {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
+                      {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
                     </span>
                   </span>
                   <span className="text-xs">
@@ -353,7 +358,7 @@ export function AdminCateringBookings() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminShopOrdersStatus());
+                dispatch(resetGetAdminCateringBookingsStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -374,7 +379,7 @@ export function AdminCateringBookings() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminShopOrdersStatus());
+                  dispatch(resetGetAdminCateringBookingsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -396,20 +401,22 @@ export function AdminCateringBookings() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminShopOrdersStatus());
+                  dispatch(resetGetAdminCateringBookingsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminShopOrdersState.data.pagination.total_rows}
-              perPage={getAdminShopOrdersState.data.pagination.per_page}
+              totalRows={
+                getAdminCateringBookingsState.data.pagination.total_rows
+              }
+              perPage={getAdminCateringBookingsState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminShopOrdersState.data.orders !== undefined ? (
+              {getAdminCateringBookingsState.data.bookings !== undefined ? (
                 <>
-                  {getAdminShopOrdersState.data.orders.map((row, i) => (
+                  {getAdminCateringBookingsState.data.bookings.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>
                         <span
@@ -417,14 +424,19 @@ export function AdminCateringBookings() {
                           style={{
                             color: "white",
                             backgroundColor:
-                              ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
+                              ADMIN_CATERING_BOOKING_STATUS[row.status].color,
                           }}
                         >
-                          {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
+                          {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
                         </span>
                       </DataTableCell>
                       <DataTableCell>
                         <Moment format="LLL">{row.dateadded}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Moment format="LLL">
+                          {moment.unix(parseInt(row.serving_time))}
+                        </Moment>
                       </DataTableCell>
                       <DataTableCell>{row.tracking_no}</DataTableCell>
                       <DataTableCell>{row.client_name}</DataTableCell>
@@ -433,7 +445,6 @@ export function AdminCateringBookings() {
                       <DataTableCell>
                         <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
                       </DataTableCell>
-                      <DataTableCell>{row.invoice_num}</DataTableCell>
                       <DataTableCell align="left">
                         <button
                           onClick={() => {

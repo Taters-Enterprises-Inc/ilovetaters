@@ -46,7 +46,7 @@ const createQueryParams = (params: object): string => {
   return result;
 };
 
-export function ProfileCateringBookings() {
+export function ProfilePopclubRedeems() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -107,9 +107,9 @@ export function ProfileCateringBookings() {
   };
   console.log(getCateringBookingHistoryState.data);
   return (
-    <ProfileContainer title="Catering Bookings" activeTab="catering">
+    <ProfileContainer title="Popclub Redeems" activeTab="popclub">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
-        Catering Bookings
+        Popclub Redeems
       </h1>
       {getCateringBookingHistoryState.data?.bookings ? (
         <>
