@@ -410,6 +410,10 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
     color: "#004d00",
   },
   {
+    name: "Preparing",
+    color: "#004d00",
+  },
+  {
     name: "For Dispatch",
     color: "#400080",
   },

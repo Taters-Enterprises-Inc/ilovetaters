@@ -23,10 +23,12 @@ import {
   toggleAdminSideBar,
 } from "../slices/admin-sidebar.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 export function AdminSidebar() {
   const dispatch = useAppDispatch();
   const adminSideBarState = useAppSelector(selectAdminSideBar);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const history = useNavigate();
 
   const ADMIN_SIDEBAR_ITEMS: any = [
@@ -324,8 +326,29 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
                   "opacity-0 translate-x-28 overflow-hidden "
                 }`}
           >
-            <h3 className="cursor-pointer">Administrator</h3>
-            <h4 className="text-xs cursor-pointer">Admin, Members</h4>
+            {getAdminSessionState.data ? (
+              <>
+                <h3 className="cursor-pointer">
+                  {getAdminSessionState.data.user_details.first_name}{" "}
+                  {getAdminSessionState.data.user_details.last_name}
+                </h3>
+
+                <h4 className="text-xs cursor-pointer">
+                  {getAdminSessionState.data.user_details.groups.map(
+                    (group, i) => (
+                      <>
+                        {getAdminSessionState.data &&
+                        i !==
+                          getAdminSessionState.data.user_details.groups.length -
+                            1
+                          ? group.name + ", "
+                          : group.name}
+                      </>
+                    )
+                  )}
+                </h4>
+              </>
+            ) : null}
           </div>
 
           <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">

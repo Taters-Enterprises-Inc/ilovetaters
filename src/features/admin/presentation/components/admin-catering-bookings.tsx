@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "../components/extract-btn";
+import { ExtractBtn } from "./extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -60,7 +60,7 @@ const createQueryParams = (params: object): string => {
   return result;
 };
 
-export function AdminShopOrders() {
+export function AdminCateringBookings() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();

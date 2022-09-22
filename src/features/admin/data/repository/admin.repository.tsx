@@ -121,6 +121,77 @@ export interface CreateAdminGroupResponse {
     message: string;
   };
 }
+
+export interface UploadProofOfPaymentAdminResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface ValidateReferenceNumberAdminResponse {
+  data: {
+    message: string;
+  };
+}
+export interface AdminShopOrderUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminPrivilegeResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AdminPrivilegeRepository(
+  formData: FormData
+): Promise<AdminPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminShopOrderUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminShopOrderUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function ValidateReferenceNumberAdminRepository(
+  formData: FormData
+): Promise<ValidateReferenceNumberAdminResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UploadProofOfPaymentAdminRepository(
+  formData: FormData
+): Promise<UploadProofOfPaymentAdminResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/payment/`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
 export function CreateAdminGroupRepository(
   formData: FormData
 ): Promise<CreateAdminGroupResponse> {

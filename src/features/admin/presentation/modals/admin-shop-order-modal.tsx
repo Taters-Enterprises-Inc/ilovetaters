@@ -53,10 +53,13 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
+    <div
+      id="shop-order-modal"
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+    >
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-white text-2xl">Order Summary</span>
+          <span className="text-2xl text-white">Order Summary</span>
           <button
             className="text-2xl text-white"
             onClick={() => {
@@ -68,7 +71,7 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
           </button>
         </div>
 
-        <div className="bg-white border-l-2 border-b-2 border-secondary border-r-2 px-4 ">
+        <div className="px-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
           <Tabs
             value={value}
             onChange={handleChange}

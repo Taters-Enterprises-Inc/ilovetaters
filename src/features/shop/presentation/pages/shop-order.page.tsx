@@ -532,7 +532,8 @@ export function ShopOrder() {
 
               {/* Upload proof of payment will be deprecated once the payment gate away finished */}
 
-              {getOrdersState.data?.order.clients_info.status === 1 ? (
+              {getOrdersState.data?.order.clients_info.status === 1 &&
+              getOrdersState.data?.order.clients_info.payops !== 3 ? (
                 <>
                   <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
                     Upload Proof of Payment
