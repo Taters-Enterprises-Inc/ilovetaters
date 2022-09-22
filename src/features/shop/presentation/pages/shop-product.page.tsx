@@ -354,7 +354,8 @@ export function ShopProduct() {
     }
   };
 
-  console.log(getProductDetailsState?.data);
+  console.log(currentFlavor)
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
