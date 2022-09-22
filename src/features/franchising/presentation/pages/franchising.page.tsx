@@ -29,31 +29,65 @@ export function Franchising() {
         }}
       />
 
-      <img
-        className="pt-6 lg:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/franchising/hero/mobile/franchising.webp"
-        }
-        alt="The best pop corn in town"
-      ></img>
-
-      <div className="lg:hidden mobview -mt-20 mb-[90px]">
-        <iframe
-          className="responsive"
-          width="500"
-          height="315"
-          src="https://www.youtube.com/embed/dvAGdCU6TTY"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-
       <div className="relative">
         <img
-          className="min-w-full md:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/franchising/hero/desktop/franchising.webp"
+          }
+          alt="The best pop corn in town"
+          className="hidden object-contain object-center w-full lg:block"
+        />
+        <img
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/franchising/hero/mobile/franchising.webp"
+          }
+          alt="The best pop corn in town"
+          className="block object-contain object-center w-full lg:hidden"
+        />
+        <div className="absolute top-0 w-full h-full ">
+          <div className="container flex flex-col h-full mx-auto lg:flex-row">
+            <div className="lg:flex-1"></div>
+            <div className="flex items-center justify-end flex-1">
+              <iframe
+                className="lg:w-[90%] lg:h-[75%] w-[100%] h-[40%] lg:px-0 px-4"
+                src="https://www.youtube.com/embed/dvAGdCU6TTY"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="lg:hidden">
+        <img
+          className="pt-6"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/franchising/hero/mobile/franchising.webp"
+          }
+          alt="The best pop corn in town"
+        ></img>
+
+        <div className="mobview">
+          <iframe
+            className="responsive"
+            width="500"
+            height="315"
+            src="https://www.youtube.com/embed/dvAGdCU6TTY"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
+      <div className="relative player-wrapper">
+        <img
+          className="min-w-full"
           src={
             REACT_APP_DOMAIN_URL +
             "api/assets/images/franchising/hero/desktop/franchising.webp"
@@ -70,7 +104,7 @@ export function Franchising() {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
-      </div>
+      </div> */}
 
       <section className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
