@@ -197,7 +197,7 @@ export function AdminShopOrders() {
 
       {getAdminShopOrdersState.data?.orders ? (
         <>
-          <div className="py-4 lg:hidden">
+          <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {

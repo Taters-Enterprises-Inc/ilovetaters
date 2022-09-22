@@ -1,5 +1,6 @@
 import axios from "axios";
 import { EditAdminUserParam } from "features/admin/core/admin.params";
+import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
@@ -153,6 +154,20 @@ export interface GetAdminCateringBookingsResponse {
   };
 }
 
+export interface GetAdminCateringBookingResponse {
+  data: {
+    message: string;
+    data: AdminCateringBookingModel;
+  };
+}
+
+export function GetAdminCateringBookingRepository(
+  trackingNo: string
+): Promise<GetAdminCateringBookingResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering/${trackingNo}`, {
+    withCredentials: true,
+  });
+}
 export function GetAdminCateringBookingsRepository(
   query: string
 ): Promise<GetAdminCateringBookingsResponse> {

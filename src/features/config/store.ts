@@ -100,6 +100,7 @@ import adminShopOrderUpdateStatus from "features/admin/presentation/slices/admin
 import adminPrivilege from "features/admin/presentation/slices/admin-privilege.slice";
 
 import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
+import getAdminCateringBooking from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 
 export const store = configureStore({
   reducer: {
@@ -190,6 +191,7 @@ export const store = configureStore({
     adminShopOrderUpdateStatus,
     adminPrivilege,
     getAdminCateringBookings,
+    getAdminCateringBooking,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

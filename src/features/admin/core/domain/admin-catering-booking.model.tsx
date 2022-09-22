@@ -1,4 +1,4 @@
-export interface AdminCateringBookingsModel {
+export interface AdminCateringBookingModel {
   id: number;
   status: number;
   dateadded: string;
@@ -6,10 +6,22 @@ export interface AdminCateringBookingsModel {
   tracking_no: string;
   invoice_num: string;
   purchase_amount: string;
+
   service_fee: number;
   night_diff_fee: number;
   additional_hour_charge: number;
   cod_fee: string;
+
+  initial_payment: number;
+  initial_payment_proof: string;
+
+  final_payment: number;
+  final_payment_proof: string;
+
+  email: string;
+  contact_number: string;
+  add_address: string;
+
   distance_price: string;
   reference_num: string;
   store: number;

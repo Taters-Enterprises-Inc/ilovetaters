@@ -26,15 +26,14 @@ import Moment from "react-moment";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
-import { AdminShopOrderModal } from "../modals";
-import { getAdminShopOrder } from "../slices/get-admin-shop-order.slice";
 import { DataList } from "features/shared/presentation/components";
-import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
-import { AdminCateringBookingsModel } from "features/admin/core/domain/admin-catering-bookings.model";
+import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import moment from "moment";
+import { AdminCateringBookingModal } from "../modals";
+import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 300 },
@@ -74,7 +73,8 @@ export function AdminCateringBookings() {
   const order = query.get("order");
   const search = query.get("search");
 
-  const [openAdminShopOrderModal, setOpenAdminShopOrderModal] = useState(false);
+  const [openAdminCateringBookingModal, setOpenAdminCateringBookingModal] =
+    useState(false);
   const getAdminCateringBookingsState = useAppSelector(
     selectGetAdminCateringBookings
   );
@@ -88,8 +88,8 @@ export function AdminCateringBookings() {
 
   useEffect(() => {
     if (trackingNo) {
-      dispatch(getAdminShopOrder(trackingNo)).then(() => {
-        setOpenAdminShopOrderModal(true);
+      dispatch(getAdminCateringBooking(trackingNo)).then(() => {
+        setOpenAdminCateringBookingModal(true);
       });
     }
   }, [dispatch, trackingNo]);
@@ -117,7 +117,7 @@ export function AdminCateringBookings() {
     adminPrivilegeState,
   ]);
 
-  const calculateGrandTotal = (row: AdminCateringBookingsModel) => {
+  const calculateGrandTotal = (row: AdminCateringBookingModel) => {
     let calculatedPrice = 0;
 
     if (row.purchase_amount) {
@@ -200,7 +200,7 @@ export function AdminCateringBookings() {
 
       {getAdminCateringBookingsState.data?.bookings ? (
         <>
-          <div className="py-4 lg:hidden">
+          <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {
@@ -478,8 +478,8 @@ export function AdminCateringBookings() {
         </>
       ) : null}
 
-      <AdminShopOrderModal
-        open={openAdminShopOrderModal}
+      <AdminCateringBookingModal
+        open={openAdminCateringBookingModal}
         onClose={() => {
           const params = {
             page_no: pageNo,
@@ -497,7 +497,7 @@ export function AdminCateringBookings() {
             pathname: "",
             search: queryParams,
           });
-          setOpenAdminShopOrderModal(false);
+          setOpenAdminCateringBookingModal(false);
         }}
       />
     </>

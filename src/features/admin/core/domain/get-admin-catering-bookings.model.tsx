@@ -1,9 +1,9 @@
-import { AdminCateringBookingsModel } from "./admin-catering-bookings.model";
+import { AdminCateringBookingModel } from "./admin-catering-booking.model";
 
 export interface GetAdminCateringBookingsModel {
   pagination: {
     total_rows: number;
     per_page: number;
   };
-  bookings: Array<AdminCateringBookingsModel>;
+  bookings: Array<AdminCateringBookingModel>;
 }

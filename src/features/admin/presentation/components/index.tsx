@@ -12,3 +12,5 @@ export { AdminPhoneInput } from "./admin-phone-input";
 export { AdminShopOrderCustomerInformationButtons } from "./admin-shop-order-customer-information-buttons";
 export { AdminPasswordTextFieldSecondaryColor } from "./admin-password-text-field-secondary-color";
 export { AdminCateringBookings } from "./admin-catering-bookings";
+export { AdminCateringBookingCustomerInformation } from "./admin-catering-booking-customer-information";
+export { AdminCateringBookingCustomerInformationButtons } from "./admin-catering-booking-customer-information-buttons";
