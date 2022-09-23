@@ -1,11 +1,7 @@
 import {
   Column,
   Row,
-  DataTable,
 } from "../../../shared/presentation/components/data-table";
-import Moment from "react-moment";
-import NumberFormat from "react-number-format";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
 
 const columns: Array<Column> = [
   { id: "bannerName", label: "Banner Name" },

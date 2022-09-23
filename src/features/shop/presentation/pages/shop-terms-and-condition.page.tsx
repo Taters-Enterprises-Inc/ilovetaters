@@ -22,7 +22,7 @@ export function ShopTermsAndConditions() {
           </h1>
           <hr className="mt-2 mb-4 border-secondary" />
           <div className="space-y-4 text-secondary">
-            <p>1. Customers can order through www.ilovetaters.com/shop.</p>
+            <p>1. Customers can order through www.ilovetaters.com/delivery.</p>
             <p>
               2. Delivery and/or pick up of items is from Mondays to Saturdays
               between 10:00am to 5:00pm only.

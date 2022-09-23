@@ -12,18 +12,7 @@ interface ProfileContainerProps extends ShopProfileTabsProps {
 export function ProfileContainer(props: ProfileContainerProps) {
   return (
     <main className="bg-paper">
-      <PageTitleAndBreadCrumbs
-        home={{
-          title: "Snackshop",
-          url: "/shop",
-        }}
-        className="lg:h-[200px]"
-        title={props.title}
-        pageTitles={[
-          { name: "Products", url: "/shop/products" },
-          { name: props.title },
-        ]}
-      />
+      <PageTitleAndBreadCrumbs className="lg:h-[200px]" title={props.title} />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
         <div className="lg:-mt-[80px] lg:space-y-8">

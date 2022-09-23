@@ -244,7 +244,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
               <button
                 onClick={() => {
                   props.onClose();
-                  navigate("/shop/checkout");
+                  navigate("/delivery/checkout");
                 }}
                 className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
               >

@@ -86,31 +86,6 @@ input[data-autocompleted] {
   background-color: transparent !important;
 }
 
-.mobview {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
-}
-
-.webview {
-  position: absolute;
-  left: 55%;
-  top: 10%;
-  max-width: 560;
-  max-height: 315;
-}
-
-.responsive {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .notes {
   color: #a21013;
 }

@@ -58,7 +58,7 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
-      navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
+      navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
     }
   }, [checkoutOrdersState, dispatch, navigate]);
@@ -211,12 +211,12 @@ export function ShopCheckout() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         className="lg:h-[200px]"
         title="Checkout"
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: "Checkout" },
         ]}
       />
@@ -450,7 +450,7 @@ export function ShopCheckout() {
                   <Checkbox color="primary" required />
                   <span>I agree with the </span>
                   <Link
-                    to="/shop/terms-and-conditions"
+                    to="/delivery/terms-and-conditions"
                     className="text-primary"
                   >
                     Terms & Conditions

@@ -1,9 +1,11 @@
 import axios from "axios";
 import { EditAdminUserParam } from "features/admin/core/admin.params";
+import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
@@ -121,6 +123,124 @@ export interface CreateAdminGroupResponse {
     message: string;
   };
 }
+
+export interface UploadProofOfPaymentAdminResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface ValidateReferenceNumberAdminResponse {
+  data: {
+    message: string;
+  };
+}
+export interface AdminShopOrderUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminPrivilegeResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminCateringBookingsResponse {
+  data: {
+    message: string;
+    data: GetAdminCateringBookingsModel;
+  };
+}
+
+export interface GetAdminCateringBookingResponse {
+  data: {
+    message: string;
+    data: AdminCateringBookingModel;
+  };
+}
+
+export interface AdminCateringBookingUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AdminCateringBookingUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminCateringBookingUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminCateringBookingRepository(
+  trackingNo: string
+): Promise<GetAdminCateringBookingResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering/${trackingNo}`, {
+    withCredentials: true,
+  });
+}
+export function GetAdminCateringBookingsRepository(
+  query: string
+): Promise<GetAdminCateringBookingsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function AdminPrivilegeRepository(
+  formData: FormData
+): Promise<AdminPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminShopOrderUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminShopOrderUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function ValidateReferenceNumberAdminRepository(
+  formData: FormData
+): Promise<ValidateReferenceNumberAdminResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UploadProofOfPaymentAdminRepository(
+  formData: FormData
+): Promise<UploadProofOfPaymentAdminResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/payment/`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
 export function CreateAdminGroupRepository(
   formData: FormData
 ): Promise<CreateAdminGroupResponse> {

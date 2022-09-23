@@ -1,6 +1,6 @@
 export { AdminLogin } from "./admin-login.page";
 export { AdminShopOrder } from "./admin-shop-order.page";
-export { AdminCateringOrder } from "./admin-catering-order.page";
+export { AdminCateringBooking } from "./admin-catering-booking.page";
 export { AdminPopclub } from "./admin-popclub.page";
 export { AdminProduct } from "./admin-product.page";
 export { AdminReport } from "./admin-report.page";

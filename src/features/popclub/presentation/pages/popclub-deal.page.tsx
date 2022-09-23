@@ -96,7 +96,7 @@ export function PopClubDeal() {
             })
           );
           if (getDealState.data.minimum_purchase) {
-            navigate("/shop/products");
+            navigate("/delivery/products");
           }
         }
       }
@@ -355,7 +355,7 @@ export function PopClubDeal() {
             <>
               <button
                 onClick={() => {
-                  navigate("/shop/checkout");
+                  navigate("/delivery/checkout");
                 }}
                 className="w-full py-3 text-white uppercase border border-white bg-button rounded-xl"
               >
@@ -381,7 +381,7 @@ export function PopClubDeal() {
                 </span>
               </div>
               <button
-                className="w-full py-3 mt-4 font-bold text-white uppercase bg-primary border border-white rounded-xl"
+                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
                   setOpenForfeitModalMessage(true);
                 }}

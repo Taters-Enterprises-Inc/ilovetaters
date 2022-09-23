@@ -1,86 +1,316 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import {
+  selectGetSnackShopOrderHistory,
+  resetGetSnackShopOrderHistoryStatus,
+  getSnackshopOrderHistory,
+} from "features/shop/presentation/slices/get-snackshop-order-history.slice";
+import { FaEye } from "react-icons/fa";
+import Moment from "react-moment";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Column,
   DataTable,
+  DataTableCell,
+  DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import Moment from "react-moment";
+import { useEffect } from "react";
+import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
-import { ProfileContainer } from "../components";
-import {
-  getSnackShopOrderHistory,
-  selectGetSnackShopOrderHistory,
-} from "features/shop/presentation/slices/get-snackshop-order-history.slice";
+import { DataList } from "features/shared/presentation/components";
 
 const columns: Array<Column> = [
-  { id: "date", label: "Date" },
-  { id: "trackingNo", label: "Tracking No." },
-  { id: "purchaseAmount", label: "Purchase Amount" },
-  { id: "raffleCode", label: "Raffle Code" },
-  { id: "raffleStatus", label: "Raffle Status" },
+  { id: "dateadded", label: "Order Date" },
+  { id: "tracking_no", label: "Tracking No." },
+  { id: "purchase_amount", label: "Purchase Amount" },
+  { id: "raffle_code", label: "Raffle Code" },
+  { id: "raffle_status", label: "Raffle Status" },
+  { id: "view", label: "View" },
 ];
 
+const createQueryParams = (params: object): string => {
+  let result = "?";
+  const paramsEntries = Object.entries(params);
+
+  for (let [key, value] of paramsEntries) {
+    if (value !== null) {
+      result += `${key}=${value}&`;
+    }
+  }
+  result = result.slice(0, -1);
+
+  return result;
+};
+
 export function ProfileSnackshopOrders() {
-  const getSnackShopOrderHistoryState = useAppSelector(
+  const dispatch = useAppDispatch();
+  const query = useQuery();
+  const navigate = useNavigate();
+  const getSnackshopOrderHistoryState = useAppSelector(
     selectGetSnackShopOrderHistory
   );
-
-  const dispatch = useAppDispatch();
+  const pageNo = query.get("page_no");
+  const perPage = query.get("per_page");
+  const orderBy = query.get("order_by");
+  const order = query.get("order");
+  const search = query.get("search");
 
   useEffect(() => {
-    dispatch(getSnackShopOrderHistory());
-  }, [dispatch]);
+    const query = createQueryParams({
+      page_no: pageNo,
+      per_page: perPage,
+      order_by: orderBy,
+      order: order,
+      search: search,
+    });
+    dispatch(getSnackshopOrderHistory(query));
+  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+
+  const calculatePurchaseAmount = (row: SnackShopOrderModel) => {
+    let calculatedPrice = 0;
+
+    if (row.purchase_amount) {
+      calculatedPrice += parseInt(row.purchase_amount);
+    }
+
+    if (row.cod_fee) {
+      calculatedPrice += parseInt(row.cod_fee);
+    }
+    if (row.distance_price) {
+      calculatedPrice += parseInt(row.distance_price);
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
+  };
 
   return (
     <ProfileContainer title="Snack Shop Orders" activeTab="snackshop">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Snack Shop Orders
       </h1>
-      {/* <DataTable
-        totalRows={0}
-        perPage={0}
-        rowsOrder={[
-          {
-            rowKey: "dateadded",
-            align: "left",
-            rowComponent: (row: SnackShopOrderModel) => (
-              <Moment format="LLL">{row.dateadded}</Moment>
-            ),
-          },
-          {
-            rowKey: "tracking_no",
-            align: "left",
-          },
-          {
-            rowKey: "purchase_amount",
-            align: "left",
-            rowComponent: (row: SnackShopOrderModel) => (
-              <NumberFormat
-                value={(
-                  parseInt(row.purchase_amount) +
-                  parseInt(row.distance_price) +
-                  parseInt(row.cod_fee)
-                ).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            ),
-          },
-          {
-            rowKey: "generated_raffle_code",
-            align: "left",
-          },
-          {
-            rowKey: "application_status",
-            align: "left",
-          },
-        ]}
-        viewBaseUrl="/shop/order"
-        columns={columns}
-        rows={getSnackShopOrderHistoryState.data}
-      /> */}
+
+      {getSnackshopOrderHistoryState.data?.orders ? (
+        <>
+          <div className="py-4 lg:hidden">
+            <DataList
+              search={search ?? ""}
+              onSearch={(val) => {
+                const params = {
+                  page_no: null,
+                  per_page: perPage,
+                  order_by: orderBy,
+                  order: order,
+                  search: val === "" ? null : val,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }}
+              onRowsPerPageChange={(event) => {
+                if (perPage !== event.target.value) {
+                  const params = {
+                    page_no: pageNo,
+                    per_page: event.target.value,
+                    search: search,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
+              }}
+              onPageChange={(event, newPage) => {
+                const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                if (newPage !== pageNoInt) {
+                  const params = {
+                    page_no: newPage,
+                    per_page: perPage,
+                    search: search,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
+              }}
+              totalRows={
+                getSnackshopOrderHistoryState.data.pagination.total_rows
+              }
+              perPage={getSnackshopOrderHistoryState.data.pagination.per_page}
+              page={pageNo ? parseInt(pageNo) : 1}
+            >
+              <hr className="mt-4" />
+              {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
+                <div
+                  onClick={() => {
+                    const params = {
+                      page_no: pageNo,
+                      per_page: perPage,
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }}
+                  className="flex flex-col px-4 py-2 border-b"
+                  key={i}
+                >
+                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                    <span className="text-lg text-gray-600">
+                      #{row.tracking_no}
+                    </span>
+                  </span>
+                  <div className="flex justify-between">
+                    <span className="text-xs">
+                      <Moment format="LLL">{row.dateadded}</Moment>
+                    </span>
+                    <span className="text-lg font-semibold">
+                      {calculatePurchaseAmount(row)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </DataList>
+          </div>
+          <div className="hidden lg:block">
+            <DataTable
+              order={order === "asc" ? "asc" : "desc"}
+              orderBy={orderBy ?? "dateadded"}
+              search={search ?? ""}
+              onSearch={(val) => {
+                const params = {
+                  page_no: null,
+                  per_page: perPage,
+                  order_by: orderBy,
+                  order: order,
+                  search: val === "" ? null : val,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }}
+              onRequestSort={(column_selected) => {
+                const isAsc = orderBy === column_selected && order === "asc";
+
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  order_by: column_selected,
+                  order: isAsc ? "desc" : "asc",
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                dispatch(resetGetSnackShopOrderHistoryStatus());
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }}
+              columns={columns}
+              onRowsPerPageChange={(event) => {
+                if (perPage !== event.target.value) {
+                  const params = {
+                    page_no: pageNo,
+                    per_page: event.target.value,
+                    order_by: orderBy,
+                    order: order,
+                    search: search,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
+              }}
+              onPageChange={(event, newPage) => {
+                const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                if (newPage !== pageNoInt) {
+                  const params = {
+                    page_no: newPage,
+                    per_page: perPage,
+                    order_by: orderBy,
+                    order: order,
+                    search: search,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
+              }}
+              totalRows={
+                getSnackshopOrderHistoryState.data.pagination.total_rows
+              }
+              perPage={getSnackshopOrderHistoryState.data.pagination.per_page}
+              page={pageNo ? parseInt(pageNo) : 1}
+            >
+              {getSnackshopOrderHistoryState.data.orders !== undefined ? (
+                <>
+                  {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
+                    <DataTableRow key={i}>
+                      <DataTableCell>
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>{row.tracking_no}</DataTableCell>
+                      <DataTableCell>
+                        {calculatePurchaseAmount(row)}
+                      </DataTableCell>
+                      <DataTableCell>N/A</DataTableCell>
+                      <DataTableCell>N/A</DataTableCell>
+                      <DataTableCell align="left">
+                        <Link to={`/delivery/order/${row.hash_key}`}>
+                          <FaEye className="text-lg" />
+                        </Link>
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
+                </>
+              ) : null}
+            </DataTable>
+          </div>
+        </>
+      ) : null}
     </ProfileContainer>
   );
 }

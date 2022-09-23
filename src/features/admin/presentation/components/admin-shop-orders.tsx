@@ -30,6 +30,9 @@ import { AdminShopOrderModal } from "../modals";
 import { getAdminShopOrder } from "../slices/get-admin-shop-order.slice";
 import { DataList } from "features/shared/presentation/components";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
+import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
+import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
+import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -37,7 +40,7 @@ const columns: Array<Column> = [
   { id: "tracking_no", label: "Tracking No." },
   { id: "client_name", label: "Client Name" },
   { id: "purchase_amount", label: "Amount" },
-  { id: "store_name", label: "Hub" },
+  { id: "store_name", label: "Store" },
   { id: "payops", label: "Mode of Payment" },
   { id: "invoice_num", label: "Invoice Number" },
   { id: "action", label: "Action" },
@@ -71,6 +74,13 @@ export function AdminShopOrders() {
 
   const [openAdminShopOrderModal, setOpenAdminShopOrderModal] = useState(false);
   const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
+  const uploadProofOfPaymentAdminState = useAppSelector(
+    selectUploadProofOfPaymentAdmin
+  );
+  const adminShopOrderUpdateStatusState = useAppSelector(
+    selectAdminShopOrderUpdateStatus
+  );
+  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
 
   useEffect(() => {
     if (trackingNo) {
@@ -90,7 +100,18 @@ export function AdminShopOrders() {
       search: search,
     });
     dispatch(getAdminShopOrders(query));
-  }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
+  }, [
+    dispatch,
+    pageNo,
+    status,
+    perPage,
+    orderBy,
+    order,
+    search,
+    uploadProofOfPaymentAdminState,
+    adminShopOrderUpdateStatusState,
+    adminPrivilegeState,
+  ]);
 
   const calculateGrandTotal = (row: AdminShopOrderModel) => {
     let calculatedPrice = 0;
@@ -133,7 +154,7 @@ export function AdminShopOrders() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          List of Orders
+          Snackshop Orders
         </span>
         <div className="flex">
           <Select
@@ -176,7 +197,7 @@ export function AdminShopOrders() {
 
       {getAdminShopOrdersState.data?.orders ? (
         <>
-          <div className="py-4 lg:hidden">
+          <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {
@@ -279,7 +300,7 @@ export function AdminShopOrders() {
                     </span>
                   </span>
                   <span className="text-xs">
-                    <strong>Hub:</strong> {row.store_name}
+                    <strong>Store:</strong> {row.store_name}
                   </span>
 
                   <div className="flex justify-between">
@@ -294,6 +315,7 @@ export function AdminShopOrders() {
               ))}
             </DataList>
           </div>
+
           <div className="hidden p-4 lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
@@ -410,7 +432,7 @@ export function AdminShopOrders() {
                       <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
                       <DataTableCell>{row.store_name}</DataTableCell>
                       <DataTableCell>
-                        <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.status]}</span>
+                        <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
                       </DataTableCell>
                       <DataTableCell>{row.invoice_num}</DataTableCell>
                       <DataTableCell align="left">

@@ -14,10 +14,10 @@ export enum LoginAdminState {
 
 const initialState: {
   status: LoginAdminState;
-  message: string | undefined;
+  message: string;
 } = {
   status: LoginAdminState.initial,
-  message: undefined,
+  message: "",
 };
 
 export const loginAdmin = createAsyncThunk(

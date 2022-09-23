@@ -232,7 +232,7 @@ export function HeaderNav(props: HeaderNavProps) {
           <nav
             className={`flex justify-between items-center container py-2 h-[64px]`}
           >
-            <Link to={"/shop"}>
+            <Link to={"/"}>
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
 
@@ -489,7 +489,7 @@ export function HeaderNav(props: HeaderNavProps) {
                 {" "}
                 <MdLocationPin className="text-lg" />
                 <Link
-                  to={props.activeUrl === "CATERING" ? "/catering" : "/shop"}
+                  to={props.activeUrl === "CATERING" ? "/shop" : "/delivery"}
                 >
                   <strong> Store: </strong>{" "}
                   {getSessionState.data.cache_data?.store_name}

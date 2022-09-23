@@ -21,7 +21,7 @@ export function MobileLoginSignUp() {
     <>
       <div className="flex items-center justify-center header_image">
         <img
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shop/snackshop-logo-creamy-red.png`}
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/snackshop-logo-creamy-red.png`}
           alt="Taters Logo"
           className="w-36"
         ></img>

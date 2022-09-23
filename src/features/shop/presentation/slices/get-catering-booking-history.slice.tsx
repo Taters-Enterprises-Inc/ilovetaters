@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { CateringBookingModel } from "features/shop/core/domain/catering-booking.model";
+import { GetCateringBookingHistoryModel } from "features/shop/core/domain/get-catering-booking-history.model";
 import {
   GetCateringBookingHistoryRepository,
   GetCateringBookingHistoryResponse,
 } from "features/shop/data/repository/shop.repository";
 
-export enum GetCateringBookingHistory {
+export enum GetCateringBookingHistoryState {
   initial,
   inProgress,
   success,
@@ -14,18 +15,18 @@ export enum GetCateringBookingHistory {
 }
 
 const initialState: {
-  status: GetCateringBookingHistory;
-  data: Array<CateringBookingModel> | undefined;
+  status: GetCateringBookingHistoryState;
+  data: GetCateringBookingHistoryModel | undefined;
 } = {
-  status: GetCateringBookingHistory.initial,
+  status: GetCateringBookingHistoryState.initial,
   data: undefined,
 };
 
 export const getCateringBookingHistory = createAsyncThunk(
   "getCateringBookingHistory",
-  async () => {
+  async (query: string) => {
     const response: GetCateringBookingHistoryResponse =
-      await GetCateringBookingHistoryRepository();
+      await GetCateringBookingHistoryRepository(query);
     return response.data;
   }
 );
@@ -34,11 +35,15 @@ export const getCateringBookingHistory = createAsyncThunk(
 export const getCateringBookingHistorySlice = createSlice({
   name: "getCateringBookingHistory",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetCateringBookingHistoryStatus: (state) => {
+      state.status = GetCateringBookingHistoryState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(getCateringBookingHistory.pending, (state: any) => {
-        state.status = GetCateringBookingHistory.inProgress;
+        state.status = GetCateringBookingHistoryState.inProgress;
       })
       .addCase(
         getCateringBookingHistory.fulfilled,
@@ -46,13 +51,23 @@ export const getCateringBookingHistorySlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: Array<CateringBookingModel> | null;
+            data: GetCateringBookingHistoryModel | null;
           }>
         ) => {
-          const data = action.payload.data;
-
+          const { message, data } = action.payload;
+          state.status = GetCateringBookingHistoryState.success;
+          state.message = message;
           state.data = data;
-          state.status = GetCateringBookingHistory.success;
+        }
+      )
+      .addCase(
+        getCateringBookingHistory.rejected,
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          const { message } = action.payload;
+
+          state.status = GetCateringBookingHistoryState.fail;
+          state.message = message;
+          state.data = null;
         }
       );
   },
@@ -60,5 +75,8 @@ export const getCateringBookingHistorySlice = createSlice({
 
 export const selectGetCateringBookingHistory = (state: RootState) =>
   state.getCateringBookingHistory;
+
+export const { resetGetCateringBookingHistoryStatus } =
+  getCateringBookingHistorySlice.actions;
 
 export default getCateringBookingHistorySlice.reducer;

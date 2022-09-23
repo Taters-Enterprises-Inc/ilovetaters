@@ -94,6 +94,15 @@ import getAdminStores from "features/admin/presentation/slices/get-admin-stores.
 import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
 import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
 
+import uploadProofOfPaymentAdmin from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
+import validateReferenceNumberAdmin from "features/admin/presentation/slices/validate-reference-number.slice";
+import adminShopOrderUpdateStatus from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
+import adminPrivilege from "features/admin/presentation/slices/admin-privilege.slice";
+
+import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
+import getAdminCateringBooking from "features/admin/presentation/slices/get-admin-catering-booking.slice";
+import adminCateringBookingUpdateStatus from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform,
@@ -178,12 +187,20 @@ export const store = configureStore({
     getAdminStores,
     updateAdminUserStores,
     createAdminGroup,
+    uploadProofOfPaymentAdmin,
+    validateReferenceNumberAdmin,
+    adminShopOrderUpdateStatus,
+    adminPrivilege,
+    getAdminCateringBookings,
+    getAdminCateringBooking,
+    adminCateringBookingUpdateStatus,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
