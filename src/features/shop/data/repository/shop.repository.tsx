@@ -4,10 +4,13 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { CartItemModel } from "features/shop/core/domain/cart-item.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
+import { GetCateringBookingHistoryModel } from "features/shop/core/domain/get-catering-booking-history.model";
+import { GetSnackShopOrderHistoryModel } from "features/shop/core/domain/get-snackshop-order-history.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
 import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
   GetCategoryProductsParam,
@@ -44,20 +47,6 @@ export interface GetOrdersResponse {
   };
 }
 
-export interface GetSnackShopOrderHistoryResponse {
-  data: {
-    message: string;
-    data: Array<SnackShopOrderModel>;
-  };
-}
-
-export interface GetCateringBookingHistoryResponse {
-  data: {
-    message: string;
-    data: Array<SnackShopOrderModel>;
-  };
-}
-
 export interface GetProductSkuResponse {
   data: {
     message: string;
@@ -76,6 +65,59 @@ export interface RemoveItemFromCartShopResponse {
   };
 }
 
+export interface GetUserSessionResponse {
+  data: {
+    message: string;
+    data: UserSessionModel;
+  };
+}
+export interface GetCartItemResponse {
+  data: {
+    message: string;
+    data: CartItemModel;
+  };
+}
+export interface GetEditCartItemResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetSnackShopOrderHistoryResponse {
+  data: {
+    message: string;
+    data: GetSnackShopOrderHistoryModel;
+  };
+}
+
+export interface GetCateringBookingHistoryResponse {
+  data: {
+    message: string;
+    data: GetCateringBookingHistoryModel;
+  };
+}
+
+export function GetCateringBookingHistoryRepository(
+  query: string
+): Promise<GetCateringBookingHistoryResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/profile/catering-bookings${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetSnackShopOrderHistoryRepository(
+  query: string
+): Promise<GetSnackShopOrderHistoryResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/profile/snackshop-orders${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
 export function RemoveItemFromCartShopRepository(
   param: number
 ): Promise<RemoveItemFromCartShopResponse> {
@@ -101,40 +143,10 @@ export function AddToCartShopRepository(
   });
 }
 
-export interface GetCartItemResponse {
-  data: {
-    message: string;
-    data: CartItemModel;
-  };
-}
-export interface GetEditCartItemResponse {
-  data: {
-    message: string;
-  };
-}
-
 export function GetProductSkuRepository(
   param: GetProductSkuParam
 ): Promise<GetProductSkuResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/shop/get_product_sku`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
-export function GetCateringBookingHistoryRepository(): Promise<GetCateringBookingHistoryResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/catering-bookings`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
-export function GetSnackShopOrderHistoryRepository(): Promise<GetSnackShopOrderHistoryResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/snackshop-orders`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -219,6 +231,12 @@ export function GetEditCartItemRepository(
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
+  });
+}
+
+export function GetUserSessionRepository(): Promise<GetUserSessionResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/session`, {
     withCredentials: true,
   });
 }

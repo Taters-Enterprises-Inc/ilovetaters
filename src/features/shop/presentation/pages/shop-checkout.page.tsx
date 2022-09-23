@@ -58,7 +58,7 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
-      navigate(`/shop/order/${checkoutOrdersState.data.hash}`);
+      navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
     }
   }, [checkoutOrdersState, dispatch, navigate]);
@@ -81,8 +81,6 @@ export function ShopCheckout() {
     formData.forEach(
       (value, property: string) => (responseBody[property] = value)
     );
-
-    responseBody["payops"] = 3;
 
     if (responseBody.phoneNumber.length === 11) {
       dispatch(checkoutOrders(responseBody));
@@ -213,12 +211,12 @@ export function ShopCheckout() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         className="lg:h-[200px]"
         title="Checkout"
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: "Checkout" },
         ]}
       />
@@ -270,7 +268,7 @@ export function ShopCheckout() {
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data.userData.first_name}
                     variant="outlined"
                     className="w-full"
@@ -288,7 +286,7 @@ export function ShopCheckout() {
 
                 {getSessionState.data?.userData.last_name ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data.userData.last_name}
                     variant="outlined"
                     className="w-full"
@@ -309,7 +307,7 @@ export function ShopCheckout() {
                     {getSessionState.data?.userData.email ? (
                       <TextField
                         autoComplete="off"
-                        aria-readonly
+                        required
                         value={getSessionState.data.userData.email}
                         variant="outlined"
                         className="w-full"
@@ -317,8 +315,8 @@ export function ShopCheckout() {
                       />
                     ) : (
                       <TextField
-                        required
                         autoComplete="off"
+                        required
                         label="E-mail Address"
                         variant="outlined"
                         className="w-full"
@@ -365,7 +363,7 @@ export function ShopCheckout() {
 
                 {getSessionState.data?.customer_address ? (
                   <TextField
-                    aria-readonly
+                    required
                     value={getSessionState.data?.customer_address}
                     variant="outlined"
                     className="w-full"
@@ -381,6 +379,17 @@ export function ShopCheckout() {
                     autoComplete="off"
                   />
                 )}
+
+                {/* Need more clarification on marketing */}
+
+                {/* <TextField
+                  required
+                  label="Delivery Address"
+                  variant="outlined"
+                  className="w-full"
+                  name="Delivery Address"
+                /> */}
+
                 {getSessionState.data?.cache_data ? (
                   <>
                     <div className="mt-4 text-secondary lg:mt-0">
@@ -441,7 +450,7 @@ export function ShopCheckout() {
                   <Checkbox color="primary" required />
                   <span>I agree with the </span>
                   <Link
-                    to="/shop/terms-and-conditions"
+                    to="/delivery/terms-and-conditions"
                     className="text-primary"
                   >
                     Terms & Conditions

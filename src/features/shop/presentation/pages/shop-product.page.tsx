@@ -150,7 +150,7 @@ export function ShopProduct() {
       addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
     ) {
       dispatch(getSession());
-      navigate("/shop/checkout");
+      navigate("/delivery/checkout");
       dispatch(resetAddToCartCheckout());
     }
   }, [addToCartCheckoutShopState, navigate, dispatch]);
@@ -354,17 +354,18 @@ export function ShopProduct() {
     }
   };
 
-  console.log(getProductDetailsState?.data);
+  console.log(currentFlavor);
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         title={getProductDetailsState.data?.product.name}
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: getProductDetailsState.data?.product.name, url: "" },
         ]}
       />

@@ -68,7 +68,7 @@ export function CateringSignedContractVerified() {
           </div>
 
           <Link
-            to={`/catering/order/${hash}`}
+            to={`/shop/order/${hash}`}
             className="px-4 py-2 mt-2 text-sm text-center text-white border rounded-lg bg-button border-secondary lg:mt-0"
           >
             Proceed to payment

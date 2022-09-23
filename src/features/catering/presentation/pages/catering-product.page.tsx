@@ -295,11 +295,11 @@ export function CateringProduct() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
-          url: "/catering",
+          url: "/shop",
         }}
         title={getCateringProductDetailsState.data?.product.name}
         pageTitles={[
-          { name: "Products", url: "/catering/products" },
+          { name: "Products", url: "/shop/products" },
           { name: getCateringProductDetailsState.data?.product.name },
         ]}
       />
@@ -460,7 +460,7 @@ export function CateringProduct() {
                   <button
                     onClick={() => {
                       dispatchAddToCartCatering(() => {
-                        navigate("/catering/checkout");
+                        navigate("/shop/checkout");
                       });
                     }}
                     className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"

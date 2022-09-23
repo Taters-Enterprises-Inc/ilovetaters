@@ -3,6 +3,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import {
   AiFillCheckCircle,
   AiOutlineCheckCircle,
+  AiOutlineCloudUpload,
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
@@ -159,12 +160,12 @@ export function ShopOrder() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Snackshop",
-          url: "/shop",
+          url: "/delivery",
         }}
         title="Order View"
         className="lg:h-[200px]"
         pageTitles={[
-          { name: "Products", url: "/shop/products" },
+          { name: "Products", url: "/delivery/products" },
           { name: "Order View" },
         ]}
       />
@@ -529,9 +530,12 @@ export function ShopOrder() {
                 />
               </h1>
 
-              {getOrdersState.data?.order.clients_info.status === 1 ? (
+              {/* Upload proof of payment will be deprecated once the payment gate away finished */}
+
+              {getOrdersState.data?.order.clients_info.status === 1 &&
+              getOrdersState.data?.order.clients_info.payops !== 3 ? (
                 <>
-                  {/* <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                  <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
                     Upload Proof of Payment
                   </h2>
 
@@ -606,7 +610,7 @@ export function ShopOrder() {
                         PNG and GIF. Maximum file size is 2MB.
                       </h4>
                     </div>
-                  </form> */}
+                  </form>
                 </>
               ) : getOrdersState.data?.order.clients_info.status === 2 ? (
                 <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">

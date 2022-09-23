@@ -189,6 +189,22 @@ import {
   CreateAdminGroupState,
   selectCreateAdminGroup,
 } from "features/admin/presentation/slices/create-admin-group.slice";
+import {
+  selectUploadProofOfPaymentAdmin,
+  UploadProofOfPaymentAdminState,
+} from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
+import {
+  selectValidateReferenceNumberAdmin,
+  ValidateReferenceNumberAdminState,
+} from "features/admin/presentation/slices/validate-reference-number.slice";
+import {
+  AdminShopOrderUpdateStatusState,
+  selectAdminShopOrderUpdateStatus,
+} from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
+import {
+  AdminPrivilegeState,
+  selectAdminPrivilege,
+} from "features/admin/presentation/slices/admin-privilege.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -281,6 +297,91 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminStores = useAppSelector(selectGetAdminStores);
   const updateAdminUserStores = useAppSelector(selectUpdateAdminUserStores);
   const createAdminGroupState = useAppSelector(selectCreateAdminGroup);
+  const uploadProofOfPaymentAdminState = useAppSelector(
+    selectUploadProofOfPaymentAdmin
+  );
+  const validateReferenceNumberAdminState = useAppSelector(
+    selectValidateReferenceNumberAdmin
+  );
+  const adminShopOrderUpdateStatusState = useAppSelector(
+    selectAdminShopOrderUpdateStatus
+  );
+  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+  useEffect(() => {
+    switch (adminPrivilegeState.status) {
+      case AdminPrivilegeState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminPrivilegeState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminPrivilegeState.success:
+        showAlert(setSuccessAlert, adminPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminPrivilegeState.fail:
+        showAlert(setFailsAlert, adminPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminPrivilegeState, dispatch]);
+
+  useEffect(() => {
+    switch (adminShopOrderUpdateStatusState.status) {
+      case AdminShopOrderUpdateStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminShopOrderUpdateStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminShopOrderUpdateStatusState.success:
+        showAlert(setSuccessAlert, adminShopOrderUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminShopOrderUpdateStatusState.fail:
+        showAlert(setFailsAlert, adminShopOrderUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminShopOrderUpdateStatusState, dispatch]);
+
+  useEffect(() => {
+    switch (validateReferenceNumberAdminState.status) {
+      case ValidateReferenceNumberAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ValidateReferenceNumberAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ValidateReferenceNumberAdminState.success:
+        showAlert(setSuccessAlert, validateReferenceNumberAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ValidateReferenceNumberAdminState.fail:
+        showAlert(setFailsAlert, validateReferenceNumberAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [validateReferenceNumberAdminState, dispatch]);
+
+  useEffect(() => {
+    switch (uploadProofOfPaymentAdminState.status) {
+      case UploadProofOfPaymentAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadProofOfPaymentAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadProofOfPaymentAdminState.success:
+        showAlert(setSuccessAlert, uploadProofOfPaymentAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadProofOfPaymentAdminState.fail:
+        showAlert(setFailsAlert, uploadProofOfPaymentAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadProofOfPaymentAdminState, dispatch]);
 
   useEffect(() => {
     switch (createAdminGroupState.status) {

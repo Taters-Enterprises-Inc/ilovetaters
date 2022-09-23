@@ -24,8 +24,8 @@ export function FooterNav(props: FooterNavProps) {
     const loc = currentLocation.pathname;
     if (
       loc === "/franchising" ||
-      loc === "/shop/profile" ||
-      loc === "/shop/terms-and-conditions"
+      loc === "/profile" ||
+      loc === "/delivery/terms-and-conditions"
     ) {
       return true;
     }
@@ -138,7 +138,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <div
                   onClick={() =>
-                    handleSwitchTab({ url: "/shop", tabName: "snackshop" })
+                    handleSwitchTab({ url: "/delivery", tabName: "snackshop" })
                   }
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
@@ -165,7 +165,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <div
                   onClick={() =>
-                    handleSwitchTab({ url: "/catering", tabName: "catering" })
+                    handleSwitchTab({ url: "/shop", tabName: "catering" })
                   }
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >

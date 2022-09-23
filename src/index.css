@@ -18,6 +18,9 @@
   /*You just need this if you are only concerned with android and not desktop browsers.*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+.customer-information-table tr:nth-child(even) {
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
 .payment-method-active > .icon-tick-bold {
   position: absolute;
   right: 0;

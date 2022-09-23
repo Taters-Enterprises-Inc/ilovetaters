@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { Home } from "features/home/presentation/pages";
@@ -21,9 +21,6 @@ import {
   ShopPrivacyPolicy,
   ShopProduct,
   ShopProducts,
-  ShopProfile,
-  ShopProfileCateringBookings,
-  ShopProfileSnackshopOrders,
   ShopReturnPolicy,
   ShopTermsAndConditions,
   ShopEditCartItem,
@@ -42,7 +39,7 @@ import { Branches } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
   AdminLogin,
-  AdminCateringOrder,
+  AdminCateringBooking,
   AdminPopclub,
   AdminRaffleInstore,
   AdminRaffleSnackshop,
@@ -69,10 +66,18 @@ import {
   NotificationWrapper,
 } from "features/shared/presentation/components";
 import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import { ProfileGuard } from "features/profile/presentation/guards";
 
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 import { AdminGuard } from "features/admin/presentation/guards/admin.guard";
+import {
+  Profile,
+  ProfileCateringBookings,
+  ProfileHome,
+  ProfileSnackshopOrders,
+  ProfilePopclubRedeems,
+} from "features/profile/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -100,25 +105,43 @@ root.render(
                 <Route path="branches" element={<Branches />} />
                 <Route path="franchising" element={<Franchising />} />
 
+                <Route path="profile" element={<Profile />}>
+                  <Route element={<ProfileGuard />}>
+                    <Route index element={<ProfileHome />} />
+                    <Route
+                      path="snackshop-orders"
+                      element={<ProfileSnackshopOrders />}
+                    />
+                    <Route
+                      path="catering-bookings"
+                      element={<ProfileCateringBookings />}
+                    />
+                    <Route
+                      path="popclub-redeems"
+                      element={<ProfilePopclubRedeems />}
+                    />
+                  </Route>
+                </Route>
+
                 <Route path="popclub" element={<PopClub />}>
                   <Route index element={<PopClubIndexPage />} />
                   <Route path=":platform" element={<PopClubHome />} />
                   <Route path="deal/:hash" element={<PopClubDeal />} />
                 </Route>
 
-                <Route path="shop" element={<Shop />}>
+                <Route path="delivery" element={<Shop />}>
                   <Route index element={<ShopHome />} />
+                  <Route
+                    path="products/cart/:cart_id"
+                    element={<ShopEditCartItem />}
+                  />
                   <Route path="products/:hash" element={<ShopProduct />} />
                   <Route path="order/:hash" element={<ShopOrder />} />
+
                   <Route path="products" element={<ShopProducts />} />
                   <Route element={<ShopCheckoutGuard />}>
                     <Route path="checkout" element={<ShopCheckout />} />
                   </Route>
-                  <Route
-                    path="/shop/products/cart/:cart_id"
-                    element={<ShopEditCartItem />}
-                  />
-
                   <Route
                     path="terms-and-conditions"
                     element={<ShopTermsAndConditions />}
@@ -129,21 +152,13 @@ root.render(
                     element={<ShopPrivacyPolicy />}
                   />
                   <Route path="return-policy" element={<ShopReturnPolicy />} />
-
-                  <Route path="profile">
-                    <Route index element={<ShopProfile />} />
-                    <Route
-                      path="snackshop-orders"
-                      element={<ShopProfileSnackshopOrders />}
-                    />
-                    <Route
-                      path="catering-bookings"
-                      element={<ShopProfileCateringBookings />}
-                    />
-                  </Route>
                 </Route>
 
-                <Route path="catering" element={<Catering />}>
+                <Route
+                  path="catering"
+                  element={<Navigate to={"/delivery"} />}
+                />
+                <Route path="shop" element={<Catering />}>
                   <Route index element={<CateringHome />} />
                   <Route path="products/:hash" element={<CateringProduct />} />
                   <Route path="contract/:hash" element={<CateringContract />} />
@@ -158,7 +173,7 @@ root.render(
                 <Route element={<AdminGuard />}>
                   <Route element={<AdminSidebarWrapper />}>
                     <Route path="order" element={<AdminShopOrder />} />
-                    <Route path="catering" element={<AdminCateringOrder />} />
+                    <Route path="catering" element={<AdminCateringBooking />} />
                     <Route path="popclub" element={<AdminPopclub />} />
                     <Route path="product" element={<AdminProduct />} />
                     <Route path="report" element={<AdminReport />} />

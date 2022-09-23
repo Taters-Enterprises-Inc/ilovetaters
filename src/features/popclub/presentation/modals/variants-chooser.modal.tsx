@@ -53,7 +53,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       getSessionState.data?.popclub_data.platform === "online-delivery" &&
       redeemDealState.data
     ) {
-      navigate("/shop/checkout");
+      navigate("/delivery/checkout");
       dispatch(getSession());
       dispatch(resetRedeemDeal());
     } else if (
