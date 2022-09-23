@@ -205,6 +205,10 @@ import {
   AdminPrivilegeState,
   selectAdminPrivilege,
 } from "features/admin/presentation/slices/admin-privilege.slice";
+import {
+  AdminCateringBookingUpdateStatusState,
+  selectAdminCateringBookingUpdateStatus,
+} from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -307,6 +311,33 @@ export function LoadingAndSnackbarWrapper() {
     selectAdminShopOrderUpdateStatus
   );
   const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+
+  const adminCateringBookingUpdateStatusState = useAppSelector(
+    selectAdminCateringBookingUpdateStatus
+  );
+
+  useEffect(() => {
+    switch (adminCateringBookingUpdateStatusState.status) {
+      case AdminCateringBookingUpdateStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringBookingUpdateStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingUpdateStatusState.success:
+        showAlert(
+          setSuccessAlert,
+          adminCateringBookingUpdateStatusState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingUpdateStatusState.fail:
+        showAlert(setFailsAlert, adminCateringBookingUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringBookingUpdateStatusState, dispatch]);
+
   useEffect(() => {
     switch (adminPrivilegeState.status) {
       case AdminPrivilegeState.inProgress:
@@ -587,9 +618,11 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case LoginAdminState.success:
+        showAlert(setSuccessAlert, loginAdminState.message);
         setOpenBackdropLoading(false);
         break;
       case LoginAdminState.fail:
+        showAlert(setFailsAlert, loginAdminState.message);
         setOpenBackdropLoading(false);
         break;
     }

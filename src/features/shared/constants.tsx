@@ -504,6 +504,66 @@ export const CATERING_BOOKING_STATUS: Array<{
     name: "Payment Verified",
     color: "#004d00",
   },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Booking denied",
+    color: "#a21013",
+  },
+  {
+    name: "Contract denied",
+    color: "#a21013",
+  },
+  {
+    name: "Initial Payment denied",
+    color: "#a21013",
+  },
+  {
+    name: "Final Payment denied",
+    color: "#a21013",
+  },
 ];
 
 export const ADMIN_CATERING_BOOKING_STATUS: Array<{

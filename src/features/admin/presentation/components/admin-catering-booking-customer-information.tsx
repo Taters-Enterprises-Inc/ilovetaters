@@ -7,6 +7,7 @@ import {
   ADMIN_SNACKSHOP_MOP_STATUS,
   ADMIN_CATERING_BOOKING_STATUS,
   CATERING_BOOKING_STATUS,
+  REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import NumberFormat from "react-number-format";
 import TextField from "@mui/material/TextField";
@@ -17,14 +18,6 @@ import {
   selectGetAdminStores,
   getAdminStores,
 } from "../slices/get-admin-stores.slice";
-import {
-  selectUploadProofOfPaymentAdmin,
-  uploadProofOfPaymentAdmin,
-} from "../slices/upload-proof-of-payment-admin.slice";
-import {
-  selectValidateReferenceNumberAdmin,
-  validateReferenceNumberAdmin,
-} from "../slices/validate-reference-number.slice";
 import { AdminPasswordModal } from "../modals";
 import {
   adminPrivilege,
@@ -37,6 +30,8 @@ import {
   getAdminCateringBooking,
   selectGetAdminCateringBooking,
 } from "../slices/get-admin-catering-booking.slice";
+import Moment from "react-moment";
+import moment from "moment";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -55,13 +50,6 @@ export function AdminCateringBookingCustomerInformation() {
   );
   const getAdminStoresState = useAppSelector(selectGetAdminStores);
 
-  const uploadProofOfPaymentAdminState = useAppSelector(
-    selectUploadProofOfPaymentAdmin
-  );
-  const validateReferenceNumberAdminState = useAppSelector(
-    selectValidateReferenceNumberAdmin
-  );
-
   const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
 
   useEffect(() => {
@@ -75,23 +63,17 @@ export function AdminCateringBookingCustomerInformation() {
     if (trackingNo) {
       dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [
-    dispatch,
-    trackingNo,
-    uploadProofOfPaymentAdminState,
-    validateReferenceNumberAdminState,
-    adminPrivilegeState,
-  ]);
+  }, [dispatch, trackingNo, adminPrivilegeState]);
 
   useEffect(() => {
     dispatch(getAdminStores());
   }, [dispatch]);
 
-  const calculateWithZeroIfNoValue = (value: string) => {
+  const calculateWithZeroIfNoValue = (value: number) => {
     if (value)
       return (
         <NumberFormat
-          value={parseInt(value).toFixed(2)}
+          value={value.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -157,16 +139,23 @@ export function AdminCateringBookingCustomerInformation() {
       }
     }
 
+    if (getAdminCateringBookingState.data?.service_fee) {
+      calculatedPrice += getAdminCateringBookingState.data?.service_fee;
+    }
     if (getAdminCateringBookingState.data?.distance_price) {
       calculatedPrice += parseInt(
         getAdminCateringBookingState.data?.distance_price
       );
     }
 
-    if (getAdminCateringBookingState.data?.cod_fee) {
-      calculatedPrice += parseInt(getAdminCateringBookingState.data?.cod_fee);
+    if (getAdminCateringBookingState.data?.additional_hour_charge) {
+      calculatedPrice +=
+        getAdminCateringBookingState.data?.additional_hour_charge;
     }
 
+    if (getAdminCateringBookingState.data?.night_diff_fee) {
+      calculatedPrice += getAdminCateringBookingState.data?.night_diff_fee;
+    }
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -175,20 +164,6 @@ export function AdminCateringBookingCustomerInformation() {
         prefix={"₱"}
       />
     );
-  };
-
-  const handleOnSubmitPayment = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(uploadProofOfPaymentAdmin(formData));
-  };
-
-  const handleOnSubmitValidateReferenceNumber = (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(validateReferenceNumberAdmin(formData));
   };
 
   const handleOnSubmitAdminPrivilege = (e: FormEvent<HTMLFormElement>) => {
@@ -211,30 +186,9 @@ export function AdminCateringBookingCustomerInformation() {
                 {getAdminCateringBookingState.data?.tracking_no ?? "N/A"}
               </span>
             </div>
-            <div>
-              <strong>Payment Status:</strong>{" "}
-              {getAdminCateringBookingState.data ? (
-                <span
-                  className="px-2 py-1 text-xs rounded-full "
-                  style={{
-                    color: "white",
-                    backgroundColor:
-                      ADMIN_CATERING_BOOKING_STATUS[
-                        getAdminCateringBookingState.data.status
-                      ].color,
-                  }}
-                >
-                  {
-                    ADMIN_CATERING_BOOKING_STATUS[
-                      getAdminCateringBookingState.data.status
-                    ].name
-                  }
-                </span>
-              ) : null}
-            </div>
             {getAdminCateringBookingState.data ? (
               <div>
-                <strong>Mode of Payment:</strong>
+                <strong>Mode of Payment: </strong>
                 <span className="font-semibold">
                   {
                     ADMIN_SNACKSHOP_MOP_STATUS[
@@ -252,7 +206,7 @@ export function AdminCateringBookingCustomerInformation() {
             <div>
               <strong>Full Name:</strong>{" "}
               <span className="font-semibold">
-                {getAdminCateringBookingState.data?.client_name ?? "N/A"}
+                {getAdminCateringBookingState.data?.account_name ?? "N/A"}
               </span>
             </div>
             <div>
@@ -264,7 +218,7 @@ export function AdminCateringBookingCustomerInformation() {
             <div>
               <strong>Email:</strong>{" "}
               <span className="font-semibold">
-                {getAdminCateringBookingState.data?.email ?? "N/A"}
+                {getAdminCateringBookingState.data?.account_email ?? "N/A"}
               </span>
             </div>
           </div>
@@ -311,93 +265,9 @@ export function AdminCateringBookingCustomerInformation() {
             </div>
           </div>
 
-          {/* {getAdminCateringBookingState.data?.payops !== 3 ? (
-            <>
-              <hr />
-              {getAdminCateringBookingState.data?.payment_proof === "" ? (
-                <form
-                  onSubmit={handleOnSubmitPayment}
-                  className="flex flex-col items-center justify-center space-x-2 space-y-2 lg:justify-start lg:space-y-0 lg:flex-row"
-                >
-                  <strong>Upload Payment:</strong>{" "}
-                  <input type="file" name="payment_file" id="payment_file" />
-                  <input
-                    readOnly
-                    hidden
-                    name="trans_id"
-                    value={getAdminCateringBookingState.data?.id}
-                  />
-                  <button
-                    type="submit"
-                    className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
-                  >
-                    Upload
-                  </button>
-                  <span>(You can only upload .jpg and .png)</span>
-                </form>
-              ) : (
-                <div className="flex flex-col space-x-2 lg:flex-row">
-                  <strong>Attached Payment File:</strong>
-                  <a
-                    className="text-blue-600 underline"
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`${REACT_APP_DOMAIN_URL}api/load-image/${getAdminCateringBookingState.data?.payment_proof}`}
-                  >
-                    Click to view
-                  </a>
-                </div>
-              )}
-            </>
-          ) : null} */}
-
           <hr />
 
           <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
-            {getAdminCateringBookingState.data?.payops !== 3 ? (
-              <>
-                {getAdminCateringBookingState.data?.reference_num === "" ? (
-                  <form
-                    onSubmit={handleOnSubmitValidateReferenceNumber}
-                    className="flex flex-col flex-1 lg:flex-row"
-                  >
-                    <TextField
-                      size="small"
-                      label="Payment Ref. No"
-                      name="ref_num"
-                    />
-                    <input
-                      readOnly
-                      hidden
-                      name="trans_id"
-                      value={getAdminCateringBookingState.data?.id}
-                    />
-                    <button
-                      type="submit"
-                      className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
-                    >
-                      Validate
-                    </button>
-                  </form>
-                ) : (
-                  <div className="flex items-start justify-start flex-1 space-x-2">
-                    <strong>Payment Ref. No: </strong>
-                    <span>
-                      {getAdminCateringBookingState.data?.reference_num}
-                    </span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full"
-                      style={{
-                        color: "white",
-                        backgroundColor: "#004d00",
-                      }}
-                    >
-                      Validated
-                    </span>
-                  </div>
-                )}
-              </>
-            ) : null}
             <form
               onSubmit={handleOnSubmitAdminPrivilege}
               className="flex flex-col flex-1 lg:flex-row"
@@ -468,7 +338,7 @@ export function AdminCateringBookingCustomerInformation() {
         <hr className="mt-1" />
 
         <div className="pt-2 pb-3">
-          <span className="text-xl font-bold">Delivery Information</span>
+          <span className="text-xl font-bold">Catering Information</span>
           <div className="mt-1">
             <strong>Address:</strong>{" "}
             <span className="font-semibold">
@@ -477,13 +347,149 @@ export function AdminCateringBookingCustomerInformation() {
           </div>
           <div>
             <strong>Contact Person:</strong>{" "}
-            <span className="font-semibold">Rej Benipayo</span>
+            <span className="font-semibold">
+              {getAdminCateringBookingState.data?.client_name ?? "N/A"}
+            </span>
           </div>
           <div>
             <strong>Contact Number:</strong>{" "}
-            <span className="font-semibold">09158642720</span>
+            <span className="font-semibold">
+              {getAdminCateringBookingState.data?.add_contact ?? "N/A"}
+            </span>
+          </div>
+          <div>
+            <strong>Payment Terms:</strong>{" "}
+            <span className="font-semibold">
+              {getAdminCateringBookingState.data?.payment_plan === "half"
+                ? "Partial Payment (50% / 50%)"
+                : getAdminCateringBookingState.data?.payment_plan === "full"
+                ? "Full Payment (100%)"
+                : "N/A"}
+            </span>
           </div>
         </div>
+
+        <hr className="mt-1" />
+
+        {getAdminCateringBookingState.data ? (
+          <div className="pt-2 pb-3">
+            <span className="text-xl font-bold">Catering Details</span>
+            <div className="lg:grid grid-cols-2 gap-4">
+              <div>
+                <div className="mt-1">
+                  <strong>Event Date:</strong>{" "}
+                  <span className="font-semibold">
+                    <Moment format="LL">
+                      {moment.unix(
+                        parseInt(getAdminCateringBookingState.data.serving_time)
+                      )}
+                    </Moment>
+                  </span>
+                </div>
+                <div>
+                  <strong>Event Time:</strong>{" "}
+                  <span className="font-semibold">
+                    <Moment format="LT">
+                      {moment.unix(
+                        parseInt(
+                          getAdminCateringBookingState.data.start_datetime
+                        )
+                      )}
+                    </Moment>{" "}
+                    -{" "}
+                    <Moment format="LT">
+                      {moment.unix(
+                        parseInt(getAdminCateringBookingState.data.end_datetime)
+                      )}
+                    </Moment>
+                  </span>
+                </div>
+                <div>
+                  <strong>Serving Time:</strong>{" "}
+                  <span className="font-semibold">
+                    <Moment format="LT">
+                      {moment.unix(
+                        parseInt(getAdminCateringBookingState.data.serving_time)
+                      )}
+                    </Moment>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div className="mt-1">
+                  <strong>Type of Function: </strong>
+                  <span className="font-semibold">
+                    {getAdminCateringBookingState.data?.event_class ?? "N/A"}
+                  </span>
+                </div>
+                <div className="mt-1">
+                  <strong>Company Name: </strong>
+                  <span className="font-semibold">
+                    {getAdminCateringBookingState.data?.company_name ?? "N/A"}
+                  </span>
+                </div>
+                <div className="mt-1">
+                  <strong>Special Arrangements: </strong>
+                  <span className="font-semibold">
+                    {getAdminCateringBookingState.data?.message ?? "N/A"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <hr />
+
+        {getAdminCateringBookingState.data &&
+        getAdminCateringBookingState.data.uploaded_contract ? (
+          <div className="pt-2 pb-3">
+            <span className="text-xl font-bold">Attached Documents</span>
+            <div className="mt-1">
+              <strong>Uploaded Contract:</strong>{" "}
+              <span className="font-semibold">
+                <a
+                  className="text-blue-600 underline"
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${REACT_APP_DOMAIN_URL}api/load-image-catering-contract/${getAdminCateringBookingState.data?.uploaded_contract}`}
+                >
+                  Click to view
+                </a>
+              </span>
+            </div>
+            {getAdminCateringBookingState.data.initial_payment_proof ? (
+              <div>
+                <strong>Proof of initial payment:</strong>{" "}
+                <span className="font-semibold">
+                  <a
+                    className="text-blue-600 underline"
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`${REACT_APP_DOMAIN_URL}api/load-image-catering/${getAdminCateringBookingState.data.initial_payment_proof}`}
+                  >
+                    Click to view
+                  </a>
+                </span>
+              </div>
+            ) : null}
+            {getAdminCateringBookingState.data.final_payment_proof ? (
+              <div>
+                <strong>Proof of final payment:</strong>{" "}
+                <span className="font-semibold">
+                  <a
+                    className="text-blue-600 underline"
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`${REACT_APP_DOMAIN_URL}api/load-image-catering/${getAdminCateringBookingState.data.final_payment_proof}`}
+                  >
+                    Click to view
+                  </a>
+                </span>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <hr />
 
@@ -525,8 +531,9 @@ export function AdminCateringBookingCustomerInformation() {
                               item.product_label +
                               " " +
                               item.name +
-                              " , " +
-                              item.add_details,
+                              (item.add_details
+                                ? " , " + item.add_details
+                                : ""),
                           }}
                         />
                       </th>
@@ -564,26 +571,6 @@ export function AdminCateringBookingCustomerInformation() {
                     </td>
                     <td className="px-6 py-2">{calculateOrderTotal()}</td>
                   </tr>
-                  {/* <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold ">
-                      Code[ ] Voucher Discount:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.discount
-                      )}
-                    </td>
-                  </tr> */}
-                  {/* <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
-                      Gift Card No.[ 0 ]:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.giftcard_discount
-                      )}
-                    </td>
-                  </tr> */}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
@@ -592,21 +579,43 @@ export function AdminCateringBookingCustomerInformation() {
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
-                      Delivery Fee:
+                      Service Fee:
                     </td>
                     <td className="px-6 py-2">
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.distance_price
+                        getAdminCateringBookingState.data.service_fee
                       )}
                     </td>
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
-                      COD Additional Charges:
+                      Transportation Fee:
                     </td>
                     <td className="px-6 py-2">
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.cod_fee
+                        parseInt(
+                          getAdminCateringBookingState.data.distance_price
+                        )
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="text-end">
+                    <td colSpan={4} className="px-6 py-2 font-bold">
+                      Additional Hour Charges:
+                    </td>
+                    <td className="px-6 py-2">
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.additional_hour_charge
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="text-end">
+                    <td colSpan={4} className="px-6 py-2 font-bold">
+                      Night differential Charge:
+                    </td>
+                    <td className="px-6 py-2">
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.night_diff_fee
                       )}
                     </td>
                   </tr>
@@ -629,8 +638,7 @@ export function AdminCateringBookingCustomerInformation() {
                             item.product_label +
                             " " +
                             item.name +
-                            " , " +
-                            item.add_details,
+                            (item.add_details ? " , " + item.add_details : ""),
                         }}
                       />
                     </p>
@@ -680,24 +688,6 @@ export function AdminCateringBookingCustomerInformation() {
                     {calculateOrderTotal()}
                   </span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span className="text-sm font-bold">
-                    Code[ ] Voucher Discount:
-                  </span>
-                  <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.discount
-                    )}
-                  </span>
-                </div> */}
-                {/* <div className="flex justify-between">
-                  <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
-                  <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.discount
-                    )}
-                  </span>
-                </div> */}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
@@ -705,20 +695,38 @@ export function AdminCateringBookingCustomerInformation() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm font-bold">Delivery Fee:</span>
+                  <span className="text-sm font-bold">Service Fee:</span>
                   <span className="text-sm text-end">
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.distance_price
+                      getAdminCateringBookingState.data.service_fee
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm font-bold">Transportation Fee:</span>
+                  <span className="text-sm text-end">
+                    {calculateWithZeroIfNoValue(
+                      parseInt(getAdminCateringBookingState.data.distance_price)
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">
-                    COD Additional Charges:
+                    Additional Hour Charge:
                   </span>
                   <span className="text-sm text-end">
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.cod_fee
+                      getAdminCateringBookingState.data.additional_hour_charge
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm font-bold">
+                    Night differential Charge:
+                  </span>
+                  <span className="text-sm text-end">
+                    {calculateWithZeroIfNoValue(
+                      getAdminCateringBookingState.data.night_diff_fee
                     )}
                   </span>
                 </div>

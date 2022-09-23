@@ -6,11 +6,20 @@ export interface AdminCateringBookingModel {
   tracking_no: string;
   invoice_num: string;
   purchase_amount: string;
+  start_datetime: string;
+  end_datetime: string;
+  message: string;
+  event_class: string;
+  company_name: string;
 
   service_fee: number;
   night_diff_fee: number;
   additional_hour_charge: number;
   cod_fee: string;
+
+  payment_plan: string;
+
+  uploaded_contract: string;
 
   initial_payment: number;
   initial_payment_proof: string;
@@ -18,14 +27,18 @@ export interface AdminCateringBookingModel {
   final_payment: number;
   final_payment_proof: string;
 
+  client_name: string;
   email: string;
   contact_number: string;
   add_address: string;
+  add_contact: string;
+
+  account_name: string;
+  account_email: string;
 
   distance_price: string;
   reference_num: string;
   store: number;
-  client_name: string;
   payops: number;
   store_name: string;
   items: Array<{

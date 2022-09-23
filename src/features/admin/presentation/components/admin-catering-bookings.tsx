@@ -4,7 +4,6 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -27,13 +26,12 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
-import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
-import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
+import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 300 },
@@ -78,12 +76,10 @@ export function AdminCateringBookings() {
   const getAdminCateringBookingsState = useAppSelector(
     selectGetAdminCateringBookings
   );
-  const uploadProofOfPaymentAdminState = useAppSelector(
-    selectUploadProofOfPaymentAdmin
+  const adminCateringBookingUpdateStatusState = useAppSelector(
+    selectAdminCateringBookingUpdateStatus
   );
-  const adminShopOrderUpdateStatusState = useAppSelector(
-    selectAdminShopOrderUpdateStatus
-  );
+
   const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
 
   useEffect(() => {
@@ -112,9 +108,8 @@ export function AdminCateringBookings() {
     orderBy,
     order,
     search,
-    uploadProofOfPaymentAdminState,
-    adminShopOrderUpdateStatusState,
     adminPrivilegeState,
+    adminCateringBookingUpdateStatusState,
   ]);
 
   const calculateGrandTotal = (row: AdminCateringBookingModel) => {

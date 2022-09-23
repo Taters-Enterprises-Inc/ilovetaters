@@ -1,20 +1,13 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Navigation } from "react-minimal-side-navigation";
 import {
   FaBars,
   FaRegListAlt,
   FaCartArrowDown,
-  FaTicketAlt,
   FaQuestionCircle,
 } from "react-icons/fa";
-import {
-  MdProductionQuantityLimits,
-  MdFoodBank,
-  MdKeyboardArrowRight,
-} from "react-icons/md";
-import { GiCardboardBoxClosed } from "react-icons/gi";
-import { TbReport } from "react-icons/tb";
+import { MdFoodBank, MdKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineSettings } from "react-icons/md";
 import "./react.css";
 import {
@@ -109,108 +102,108 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
     //         },
     //       ],
     //     },
+    //     {
+    //       title: (
+    //         <h1
+    //           className={`whitespace-pre duration-300
+    // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //         >
+    //           Availability
+    //         </h1>
+    //       ),
+    //       itemId: "##",
+    //       elemBefore: () => <MdProductionQuantityLimits size={20} />,
+    //       subNav: [
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Product Availability
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/availability/product",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Product Add-on Availability
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/availability/product-add-on",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Packages Availability
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/availability/package",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Catering Add-on Availability
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/availability/catering-add-on",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //         {
+    //           title: (
+    //             <h1
+    //               className={`whitespace-pre duration-300
+    //   ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //             >
+    //               Banner Availability
+    //             </h1>
+    //           ),
+    //           itemId: "/admin/availability/banner",
+    //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       title: (
+    //         <h1
+    //           className={`whitespace-pre duration-300
+    // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //         >
+    //           Products
+    //         </h1>
+    //       ),
+    //       itemId: "/admin/product",
+    //       elemBefore: () => <GiCardboardBoxClosed size={20} />,
+    //     },
+    //     {
+    //       title: (
+    //         <h1
+    //           className={`whitespace-pre duration-300
+    // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+    //         >
+    //           Reports
+    //         </h1>
+    //       ),
+    //       itemId: "/admin/report",
+    //       elemBefore: () => <TbReport size={20} />,
+    //     },
     {
       title: (
         <h1
-          className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-        >
-          Availability
-        </h1>
-      ),
-      itemId: "##",
-      elemBefore: () => <MdProductionQuantityLimits size={20} />,
-      subNav: [
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Product Availability
-            </h1>
-          ),
-          itemId: "/admin/availability/product",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Product Add-on Availability
-            </h1>
-          ),
-          itemId: "/admin/availability/product-add-on",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Packages Availability
-            </h1>
-          ),
-          itemId: "/admin/availability/package",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Catering Add-on Availability
-            </h1>
-          ),
-          itemId: "/admin/availability/catering-add-on",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-  ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Banner Availability
-            </h1>
-          ),
-          itemId: "/admin/availability/banner",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-      ],
-    },
-    {
-      title: (
-        <h1
-          className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-        >
-          Products
-        </h1>
-      ),
-      itemId: "/admin/product",
-      elemBefore: () => <GiCardboardBoxClosed size={20} />,
-    },
-    {
-      title: (
-        <h1
-          className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-        >
-          Reports
-        </h1>
-      ),
-      itemId: "/admin/report",
-      elemBefore: () => <TbReport size={20} />,
-    },
-    {
-      title: (
-        <h1
-          className={`whitespace-pre duration-300 
+          className={`whitespace-pre duration-300
 ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
         >
           Settings
@@ -219,18 +212,18 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
       itemId: "###",
       elemBefore: () => <MdOutlineSettings size={20} />,
       subNav: [
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Category
-            </h1>
-          ),
-          itemId: "/admin/setting/category",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
+        //         {
+        //           title: (
+        //             <h1
+        //               className={`whitespace-pre duration-300
+        // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+        //             >
+        //               Category
+        //             </h1>
+        //           ),
+        //           itemId: "/admin/setting/category",
+        //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        //         },
         {
           title: (
             <h1
@@ -243,30 +236,30 @@ ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
           itemId: "/admin/setting/user",
           elemBefore: () => <MdKeyboardArrowRight size={20} />,
         },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Vouchers
-            </h1>
-          ),
-          itemId: "/admin/setting/voucher",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
-        {
-          title: (
-            <h1
-              className={`whitespace-pre duration-300 
-${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
-            >
-              Stores
-            </h1>
-          ),
-          itemId: "/admin/setting/store",
-          elemBefore: () => <MdKeyboardArrowRight size={20} />,
-        },
+        //         {
+        //           title: (
+        //             <h1
+        //               className={`whitespace-pre duration-300
+        // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+        //             >
+        //               Vouchers
+        //             </h1>
+        //           ),
+        //           itemId: "/admin/setting/voucher",
+        //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        //         },
+        //         {
+        //           title: (
+        //             <h1
+        //               className={`whitespace-pre duration-300
+        // ${!adminSideBarState.status && "opacity-0 translate-x-28 overflow-hidden"}`}
+        //             >
+        //               Stores
+        //             </h1>
+        //           ),
+        //           itemId: "/admin/setting/store",
+        //           elemBefore: () => <MdKeyboardArrowRight size={20} />,
+        //         },
       ],
     },
     {

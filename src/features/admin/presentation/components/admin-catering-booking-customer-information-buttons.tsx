@@ -3,20 +3,23 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import {
-  adminShopOrderUpdateStatus,
-  selectAdminShopOrderUpdateStatus,
-} from "../slices/admin-shop-order-update-status.slice";
-import {
-  getAdminShopOrder,
-  selectGetAdminShopOrder,
-} from "../slices/get-admin-shop-order.slice";
+
 import { useEffect } from "react";
+import {
+  selectGetAdminCateringBooking,
+  getAdminCateringBooking,
+} from "../slices/get-admin-catering-booking.slice";
+import {
+  adminCateringBookingUpdateStatus,
+  selectAdminCateringBookingUpdateStatus,
+} from "../slices/admin-catering-booking-update-status.slice";
 
 export function AdminCateringBookingCustomerInformationButtons() {
-  const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
-  const adminShopOrderUpdateStatusState = useAppSelector(
-    selectAdminShopOrderUpdateStatus
+  const getAdminCateringBookingState = useAppSelector(
+    selectGetAdminCateringBooking
+  );
+  const adminCateringBookingUpdateStatusState = useAppSelector(
+    selectAdminCateringBookingUpdateStatus
   );
   const query = useQuery();
   const dispatch = useAppDispatch();
@@ -24,145 +27,154 @@ export function AdminCateringBookingCustomerInformationButtons() {
 
   useEffect(() => {
     if (trackingNo) {
-      dispatch(getAdminShopOrder(trackingNo));
+      dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [dispatch, trackingNo, adminShopOrderUpdateStatusState]);
+  }, [dispatch, trackingNo, adminCateringBookingUpdateStatusState]);
 
   const handleUpdateStatus = (status: string) => {
-    if (getAdminShopOrderState.data) {
+    if (getAdminCateringBookingState.data) {
       const formData = new FormData();
-      formData.append("trans_id", getAdminShopOrderState.data.id.toString());
+      formData.append(
+        "trans_id",
+        getAdminCateringBookingState.data.id.toString()
+      );
       formData.append("status", status);
-      dispatch(adminShopOrderUpdateStatus(formData));
+      dispatch(adminCateringBookingUpdateStatus(formData));
     }
   };
 
-  if (getAdminShopOrderState.data) {
-    if (
-      (getAdminShopOrderState.data.status === 2 &&
-        getAdminShopOrderState.data.payment_proof !== "" &&
-        getAdminShopOrderState.data.reference_num !== "") ||
-      (getAdminShopOrderState.data.status === 1 &&
-        getAdminShopOrderState.data.payops === 3) ||
-      getAdminShopOrderState.data.status === 7
-    ) {
+  if (getAdminCateringBookingState.data) {
+    if (getAdminCateringBookingState.data.status === 1) {
       return (
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("7");
+              handleUpdateStatus("20");
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
-            Reject
+            Decline Booking
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
-            }}
-            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
-          >
-            Decline
-          </button>
-          <button
-            onClick={() => {
-              handleUpdateStatus("3");
+              handleUpdateStatus("2");
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
-            Confirm
+            Confirm Booking
           </button>
         </>
       );
+    } else if (getAdminCateringBookingState.data.status === 2) {
+      return (
+        <button
+          disabled
+          style={{ opacity: 0.65 }}
+          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
+        >
+          Booking Confirmed
+        </button>
+      );
     } else if (
-      (getAdminShopOrderState.data.status === 1 &&
-        getAdminShopOrderState.data.payment_proof === "") ||
-      (getAdminShopOrderState.data.status === 2 &&
-        getAdminShopOrderState.data.payment_proof !== "" &&
-        getAdminShopOrderState.data.reference_num === "")
+      getAdminCateringBookingState.data.status === 3 ||
+      getAdminCateringBookingState.data.status === 21
     ) {
       return (
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("7");
+              handleUpdateStatus("21");
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
-            Reject
+            Decline Contract
           </button>
           <button
             onClick={() => {
               handleUpdateStatus("4");
             }}
-            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
-            Decline
-          </button>
-          <button
-            disabled
-            onClick={() => {
-              handleUpdateStatus("3");
-            }}
-            style={{ opacity: 0.65 }}
-            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
-          >
-            Confirm
+            Verify Contract
           </button>
         </>
       );
-    } else if (
-      (getAdminShopOrderState.data.status === 3 &&
-        getAdminShopOrderState.data.payment_proof === "" &&
-        getAdminShopOrderState.data.payops === 3) ||
-      (getAdminShopOrderState.data.status === 3 &&
-        getAdminShopOrderState.data.payment_proof !== "" &&
-        getAdminShopOrderState.data.payops !== 3)
-    ) {
+    } else if (getAdminCateringBookingState.data.status === 4) {
       return (
         <button
-          onClick={() => {
-            handleUpdateStatus("8");
-          }}
-          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          disabled
+          style={{ opacity: 0.65 }}
+          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
         >
-          Prepare
+          Booking Confirmed
         </button>
       );
     } else if (
-      (getAdminShopOrderState.data.status === 8 &&
-        getAdminShopOrderState.data.payment_proof === "" &&
-        getAdminShopOrderState.data.payops === 3) ||
-      (getAdminShopOrderState.data.status === 8 &&
-        getAdminShopOrderState.data.payment_proof !== "" &&
-        getAdminShopOrderState.data.payops !== 3)
+      getAdminCateringBookingState.data.status === 5 ||
+      getAdminCateringBookingState.data.status === 22
     ) {
       return (
+        <>
+          <button
+            onClick={() => {
+              handleUpdateStatus("22");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Initial Payment
+          </button>
+          <button
+            onClick={() => {
+              handleUpdateStatus("6");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Verify Initial Payment
+          </button>
+        </>
+      );
+    } else if (getAdminCateringBookingState.data.status === 6) {
+      return (
         <button
-          onClick={() => {
-            handleUpdateStatus("9");
-          }}
-          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          disabled
+          style={{ opacity: 0.65 }}
+          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
         >
-          Dispatch
+          Initial Payment Verified
         </button>
       );
     } else if (
-      (getAdminShopOrderState.data.status === 9 &&
-        getAdminShopOrderState.data.payment_proof === "" &&
-        getAdminShopOrderState.data.payops === 3) ||
-      (getAdminShopOrderState.data.status === 9 &&
-        getAdminShopOrderState.data.payment_proof !== "" &&
-        getAdminShopOrderState.data.payops !== 3)
+      getAdminCateringBookingState.data.status === 7 ||
+      getAdminCateringBookingState.data.status === 23
     ) {
       return (
+        <>
+          <button
+            onClick={() => {
+              handleUpdateStatus("23");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Final Payment
+          </button>
+          <button
+            onClick={() => {
+              handleUpdateStatus("8");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Verify Final Payment
+          </button>
+        </>
+      );
+    } else if (getAdminCateringBookingState.data.status === 6) {
+      return (
         <button
-          onClick={() => {
-            handleUpdateStatus("6");
-          }}
-          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          disabled
+          style={{ opacity: 0.65 }}
+          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
         >
-          Complete
+          Final Payment Verified
         </button>
       );
     }

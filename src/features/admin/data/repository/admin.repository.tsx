@@ -161,6 +161,24 @@ export interface GetAdminCateringBookingResponse {
   };
 }
 
+export interface AdminCateringBookingUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AdminCateringBookingUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminCateringBookingUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminCateringBookingRepository(
   trackingNo: string
 ): Promise<GetAdminCateringBookingResponse> {

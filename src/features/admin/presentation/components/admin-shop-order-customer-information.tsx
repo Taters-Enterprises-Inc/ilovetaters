@@ -256,7 +256,7 @@ export function AdminShopOrderCustomerInformation() {
             </div>
             {getAdminShopOrderState.data ? (
               <div>
-                <strong>Mode of Payment:</strong>
+                <strong>Mode of Payment: </strong>
                 <span className="font-semibold">
                   {
                     ADMIN_SNACKSHOP_MOP_STATUS[
@@ -539,8 +539,9 @@ export function AdminShopOrderCustomerInformation() {
                               item.product_label +
                               " " +
                               item.name +
-                              " , " +
-                              item.add_details,
+                              (item.add_details
+                                ? " , " + item.add_details
+                                : ""),
                           }}
                         />
                       </th>
@@ -643,8 +644,7 @@ export function AdminShopOrderCustomerInformation() {
                             item.product_label +
                             " " +
                             item.name +
-                            " , " +
-                            item.add_details,
+                            (item.add_details ? " , " + item.add_details : ""),
                         }}
                       />
                     </p>
