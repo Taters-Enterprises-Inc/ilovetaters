@@ -11,8 +11,8 @@ import Typography from "@mui/material/Typography";
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={5} square={false} {...props} />
 ))(({ theme }) => ({
-  backgroundColor: "#FFFF",
-  color: "black",
+  backgroundColor: "#22201A",
+  color: "white",
   border: "",
 
   "&:not(:last-child)": {
@@ -26,7 +26,7 @@ const Accordion = styled((props: AccordionProps) => (
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
     expandIcon={
-      <ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem", color: "black" }} />
+      <ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem", color: "white" }} />
     }
     {...props}
   />
@@ -34,7 +34,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   backgroundColor:
     theme.palette.mode === "dark"
       ? "rgba(255, 255, 255, .05)"
-      : "rgba(0, 0, 0, .03) ",
+      : "rgba(0, 0, 0, .03)",
   flexDirection: "row-reverse",
   "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
     transform: "rotate(90deg)",
@@ -47,6 +47,11 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
   borderTop: "1px solid rgba(255,255,255, 0.9)",
+
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? "rgba(255, 255, 255, .05)"
+      : "rgba(0, 0, 0, .03)",
 }));
 
 export default function CustomizedAccordionsSFAQ() {

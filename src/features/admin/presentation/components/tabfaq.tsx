@@ -30,7 +30,7 @@ export function TabFaq(props: TabProps) {
                 props.activeTab === tab.active
                   ? "profile-tab-active bg-secondary  text-primary lg:text-white"
                   : "text-secondary"
-              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper border-x-4 border-t-4 border-secondary`}
+              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
               {tab.icon} <span>{tab.name}</span>
             </Link>
@@ -38,9 +38,11 @@ export function TabFaq(props: TabProps) {
         ))}
       </ul>
 
-      <div className="w-full py-6 mb-10 bg-secondary profile-tab-content lg:shadow- lg:p-6">
+      <div className="w-full py-6 mb-10 border-2 bg-paper profile-tab-content lg:p-6 border-secondary ">
         {props.children}
       </div>
     </div>
   );
 }
+
+// border-x-2 border-secondary
