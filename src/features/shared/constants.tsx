@@ -166,6 +166,20 @@ export const SNACKSHOP_TERMS_AND_CONDITIONS_TABS: Array<TabModel> = [
     icon: <GoLaw />,
   },
 ];
+
+export const ADMIN_FAQ: Array<TabModel> = [
+  {
+    name: "Store",
+    active: "store",
+    url: "/admin/faq/store",
+  },
+  {
+    name: "Customer",
+    active: "customer",
+    url: "/admin/faq/customer",
+  },
+];
+
 export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
   {
     name: "My Profile",

@@ -1,16 +1,8 @@
 import { ADMIN_FAQ } from "features/shared/constants";
 import { TabFaq } from "../components/tabfaq";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import CustomizedAccordionsSFAQ from "../components/faq-store";
+import CustomizedAccordionsCFAQ from "../components/faq-customers";
 
-export function AdminFaq() {
-  const location = useLocation();
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
-
+export function AdminCFaq() {
   return (
     <>
       {/* change page info here */}
@@ -19,9 +11,9 @@ export function AdminFaq() {
           Frequently Asked Questions
         </h1>
         <main className="">
-          <section className="px-4 pt-6 ">
-            <TabFaq tabs={ADMIN_FAQ} activeTab="store">
-              <CustomizedAccordionsSFAQ></CustomizedAccordionsSFAQ>
+          <section className="px-4 pt-6">
+            <TabFaq tabs={ADMIN_FAQ} activeTab="customer">
+              <CustomizedAccordionsCFAQ></CustomizedAccordionsCFAQ>
             </TabFaq>
           </section>
         </main>
