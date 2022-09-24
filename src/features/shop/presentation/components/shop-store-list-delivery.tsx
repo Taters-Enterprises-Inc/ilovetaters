@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   selectSetStoreAndAddress,
   setStoreAndAddress,
@@ -10,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { selectGetStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
 
 interface StoreListDeliveryProps {
-  address: string;
+  address: string | null;
 }
 
 export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
@@ -30,14 +31,23 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
   }, [setStoreAndAddressState, navigate]);
 
   const storeClicked = (storeId: number, regionId: number) => {
-    dispatch(
-      setStoreAndAddress({
-        address: props.address,
-        storeId,
-        regionId,
-        service: "SNACKSHOP",
-      })
-    );
+    if (props.address) {
+      dispatch(
+        setStoreAndAddress({
+          address: props.address,
+          storeId,
+          regionId,
+          service: "SNACKSHOP",
+        })
+      );
+    } else {
+      dispatch(
+        popUpSnackBar({
+          message: "Search address is required",
+          severity: "error",
+        })
+      );
+    }
   };
 
   return (
@@ -65,7 +75,9 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                   }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
-                  {store_availability && props.address != null ? (
+                  {store_availability &&
+                  props.address != null &&
+                  props.address !== "" ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
@@ -74,13 +86,15 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     {store.menu_name}
                   </div>
 
-                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                    <div className="flex justify-end">
-                      <span className="px-2 text-sm bg-secondary">
-                        {distance_in_km} KM
-                      </span>
+                  {props.address ? (
+                    <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
+                      <div className="flex justify-end">
+                        <span className="px-2 text-sm bg-secondary">
+                          {distance_in_km} KM
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}

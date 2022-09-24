@@ -196,7 +196,7 @@ export function AdminDrawerTabs() {
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    PopClub
+                    FAQ
                   </span>
                 </span>
               </span>

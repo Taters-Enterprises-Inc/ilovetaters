@@ -76,6 +76,12 @@ export function CateringHome() {
   useEffect(() => {
     dispatch(getSession());
     dispatch(storeReset());
+    dispatch(
+      getStoresAvailableCatering({
+        address: null,
+        service: "CATERING",
+      })
+    );
   }, [dispatch]);
 
   const disableDates = (date: Date) => {
@@ -199,6 +205,9 @@ export function CateringHome() {
                     ? cateringHomePageState.address
                     : ""
                 }
+                onLocateCurrentAddress={(place: string) => {
+                  dispatch(setAddressCateringHomePage({ address: place }));
+                }}
                 onChange={(value: string) => {
                   dispatch(setAddressCateringHomePage({ address: value }));
                 }}
@@ -315,29 +324,27 @@ export function CateringHome() {
             <span>Check Availability</span>
           </button>
 
-          {cateringHomePageState.address ? (
-            <CateringStoreList
-              onClickStore={(storeId: number, regionId: number) => {
-                if (
-                  cateringHomePageState &&
-                  cateringHomePageState.address &&
-                  cateringHomePageState.eventStartDate &&
-                  cateringHomePageState.eventEndDate
-                )
-                  dispatch(
-                    setStoreAndAddress({
-                      address: cateringHomePageState.address,
-                      storeId,
-                      regionId,
-                      cateringEndDate: cateringHomePageState.eventEndDate,
-                      cateringStartDate: cateringHomePageState.eventStartDate,
-                      service: "CATERING",
-                    })
-                  );
-              }}
-              address={cateringHomePageState.address}
-            />
-          ) : null}
+          <CateringStoreList
+            onClickStore={(storeId: number, regionId: number) => {
+              if (
+                cateringHomePageState &&
+                cateringHomePageState.address &&
+                cateringHomePageState.eventStartDate &&
+                cateringHomePageState.eventEndDate
+              )
+                dispatch(
+                  setStoreAndAddress({
+                    address: cateringHomePageState.address,
+                    storeId,
+                    regionId,
+                    cateringEndDate: cateringHomePageState.eventEndDate,
+                    cateringStartDate: cateringHomePageState.eventStartDate,
+                    service: "CATERING",
+                  })
+                );
+            }}
+            address={cateringHomePageState.address}
+          />
         </div>
       </section>
     </main>

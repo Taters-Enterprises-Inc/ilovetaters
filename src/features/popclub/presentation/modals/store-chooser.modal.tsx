@@ -24,6 +24,12 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
 
   useEffect(() => {
     dispatch(getSession());
+    dispatch(
+      getStoresAvailablePopClub({
+        address: null,
+        service: "SNACKSHOP",
+      })
+    );
   }, [dispatch]);
 
   if (props.open) {
@@ -61,6 +67,15 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                   ? storeChooserModalState.address
                   : ""
               }
+              onLocateCurrentAddress={(place: string) => {
+                dispatch(setAddressStoreChooserModal({ address: place }));
+                dispatch(
+                  getStoresAvailablePopClub({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
               onChange={(value: string) => {
                 dispatch(setAddressStoreChooserModal({ address: value }));
               }}
@@ -79,10 +94,8 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         </div>
         <StoreCluster
           onClose={props.onClose}
-          address={
-            storeChooserModalState.address ? storeChooserModalState.address : ""
-          }
-        ></StoreCluster>
+          address={storeChooserModalState.address}
+        />
       </div>
     </div>
   );

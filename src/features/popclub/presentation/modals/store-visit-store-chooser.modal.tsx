@@ -66,6 +66,17 @@ export function StoreVisitStoreChooserModal(
                   ? storeVisitStoreChooserModalState.address
                   : ""
               }
+              onLocateCurrentAddress={(place: string) => {
+                dispatch(
+                  setAddressStoreVisitStoreChooserModal({ address: place })
+                );
+                dispatch(
+                  getStoresAvailablePopClubStoreVisit({
+                    address: place,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
               onChange={(value: string) => {
                 dispatch(
                   setAddressStoreVisitStoreChooserModal({ address: value })

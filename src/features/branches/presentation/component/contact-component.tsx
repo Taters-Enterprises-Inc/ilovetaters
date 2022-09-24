@@ -119,6 +119,14 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                     ? branchesNearYouComponentSlice.address
                     : ""
                 }
+                onLocateCurrentAddress={(place: string) => {
+                  dispatch(
+                    getStoresAvailableBranches({
+                      address: place,
+                      service: "SNACKSHOP",
+                    })
+                  );
+                }}
                 onChange={(value: string) => {
                   dispatch(
                     setAddressBranchesNearYouComponent({ address: value })

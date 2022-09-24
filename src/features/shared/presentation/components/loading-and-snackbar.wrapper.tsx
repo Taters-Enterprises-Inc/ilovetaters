@@ -1153,11 +1153,9 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableSnackshopState.success:
-        showAlert(setSuccessAlert, getStoresAvailableSnackshopState.message);
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableSnackshopState.fail:
-        showAlert(setFailsAlert, getStoresAvailableSnackshopState.message);
         setOpenBackdropLoading(false);
         break;
     }
@@ -1270,7 +1268,7 @@ export function LoadingAndSnackbarWrapper() {
         message={failsAlert.message}
       />
       <BackdropLoading open={openBackdropLoading} />
-      <BackdropLoadingPopClub open={true} />
+      <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
     </>
   );
 }

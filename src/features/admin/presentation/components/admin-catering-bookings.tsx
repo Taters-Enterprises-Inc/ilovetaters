@@ -152,7 +152,7 @@ export function AdminCateringBookings() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Catering Orders
+          Catering Bookings
         </span>
         <div className="flex">
           <Select

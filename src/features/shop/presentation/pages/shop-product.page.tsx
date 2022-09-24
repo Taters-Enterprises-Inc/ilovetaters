@@ -6,7 +6,7 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BsFillCartPlusFill } from "react-icons/bs";
+import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -51,6 +51,8 @@ import {
   selectAddToCartCheckoutShop,
 } from "../slices/add-to-cart-checkout-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { removeItemFromCartShop } from "../slices/remove-item-from-cart-shop.slice";
+import { IoMdClose } from "react-icons/io";
 
 let quantityId: any;
 
@@ -154,6 +156,33 @@ export function ShopProduct() {
       dispatch(resetAddToCartCheckout());
     }
   }, [addToCartCheckoutShopState, navigate, dispatch]);
+
+  const calculateOrdersPrice = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
+  };
 
   function handleonClick() {
     if (isLongPress.current === true) {
@@ -427,6 +456,87 @@ export function ShopProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
+                {getSessionState.data?.orders !== undefined &&
+                getSessionState.data?.orders !== null &&
+                getSessionState.data?.orders.length > 0 ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Cart Summary",
+                      prefixIcon: <BsCartX className="text-3xl" />,
+                    }}
+                  >
+                    <div className="space-y-6 overflow-y-auto max-h-[400px] px-[14px] py-[10px]">
+                      {getSessionState.data.orders.map((order, i) => (
+                        <div key={i} className="relative flex">
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {order.prod_size} {order.prod_name}
+                            </h3>
+                            <h3 className="text-xs">
+                              Quantity:{" "}
+                              <span className="text-tertiary">
+                                {order.prod_qty}
+                              </span>
+                            </h3>
+                            {order.prod_flavor ? (
+                              <h3 className="text-xs">
+                                Flavor:{" "}
+                                <span className="text-tertiary">
+                                  {order.prod_flavor}
+                                </span>
+                              </h3>
+                            ) : null}
+
+                            {order.prod_multiflavors ? (
+                              <h3 className="text-xs">
+                                Flavor:
+                                <br />
+                                <span
+                                  className="text-tertiary"
+                                  dangerouslySetInnerHTML={{
+                                    __html: order.prod_multiflavors,
+                                  }}
+                                />
+                              </h3>
+                            ) : null}
+
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          </div>
+                          <button
+                            className="absolute text-white top-2 right-4 "
+                            onClick={() => {
+                              dispatch(removeItemFromCartShop(i));
+                            }}
+                          >
+                            <IoMdClose />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="px-4 py-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-lg text-white">Total:</span>
+                        <span className="text-lg font-bold text-white">
+                          {calculateOrdersPrice()}
+                        </span>
+                      </div>
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
+
                 {getProductDetailsState.data?.product_size &&
                 getProductDetailsState.data?.product_size.length > 0 ? (
                   <div>
@@ -674,21 +784,6 @@ export function ShopProduct() {
                   </h2>
                 ) : null}
 
-                {getProductDetailsState.data?.addons ? (
-                  <ProductDetailsAccordion
-                    title={{
-                      name: "Product Add-ons",
-                      prefixIcon: <MdFastfood className="text-3xl" />,
-                    }}
-                  >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getProductDetailsState.data?.addons.map((product, i) => (
-                        <Addon key={i} product={product} />
-                      ))}
-                    </div>
-                  </ProductDetailsAccordion>
-                ) : null}
-
                 <div className="space-y-4">
                   <button
                     onClick={() =>
@@ -724,6 +819,21 @@ export function ShopProduct() {
                     </span>
                   </button>
                 </div>
+
+                {getProductDetailsState.data?.addons ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Product Add-ons",
+                      prefixIcon: <MdFastfood className="text-3xl" />,
+                    }}
+                  >
+                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getProductDetailsState.data?.addons.map((product, i) => (
+                        <Addon key={i} product={product} />
+                      ))}
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
               </div>
             </div>
 

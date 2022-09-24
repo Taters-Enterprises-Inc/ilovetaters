@@ -22,7 +22,11 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import NumberFormat from "react-number-format";
-import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
+import {
+  BsCartX,
+  BsFillBagCheckFill,
+  BsFillCartPlusFill,
+} from "react-icons/bs";
 import { MdFastfood } from "react-icons/md";
 import {
   CateringAddon,
@@ -43,6 +47,8 @@ import {
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
+import { IoMdClose } from "react-icons/io";
+import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -290,6 +296,33 @@ export function CateringProduct() {
     }
   };
 
+  const calculateOrdersPrice = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
+  };
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
@@ -355,6 +388,87 @@ export function CateringProduct() {
                               .add_details,
                         }}
                       />
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
+
+                {getSessionState.data?.orders !== undefined &&
+                getSessionState.data?.orders !== null &&
+                getSessionState.data?.orders.length > 0 ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Cart Summary",
+                      prefixIcon: <BsCartX className="text-3xl" />,
+                    }}
+                  >
+                    <div className="space-y-6 overflow-y-auto max-h-[400px] px-[14px] py-[10px]">
+                      {getSessionState.data.orders.map((order, i) => (
+                        <div key={i} className="relative flex">
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {order.prod_size} {order.prod_name}
+                            </h3>
+                            <h3 className="text-xs">
+                              Quantity:{" "}
+                              <span className="text-tertiary">
+                                {order.prod_qty}
+                              </span>
+                            </h3>
+                            {order.prod_flavor ? (
+                              <h3 className="text-xs">
+                                Flavor:{" "}
+                                <span className="text-tertiary">
+                                  {order.prod_flavor}
+                                </span>
+                              </h3>
+                            ) : null}
+
+                            {order.prod_multiflavors ? (
+                              <h3 className="text-xs">
+                                Flavor:
+                                <br />
+                                <span
+                                  className="text-tertiary"
+                                  dangerouslySetInnerHTML={{
+                                    __html: order.prod_multiflavors,
+                                  }}
+                                />
+                              </h3>
+                            ) : null}
+
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          </div>
+                          <button
+                            className="absolute text-white top-2 right-4 "
+                            onClick={() => {
+                              dispatch(removeItemFromCartShop(i));
+                            }}
+                          >
+                            <IoMdClose />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="px-4 py-2 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-lg text-white">Total:</span>
+                        <span className="text-lg font-bold text-white">
+                          {calculateOrdersPrice()}
+                        </span>
+                      </div>
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
