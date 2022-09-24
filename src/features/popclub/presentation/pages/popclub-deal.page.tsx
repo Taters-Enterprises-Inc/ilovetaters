@@ -547,7 +547,7 @@ export function PopClubDeal() {
           dispatch(forfeitRedeem());
           setOpenForfeitModalMessage(false);
         }}
-        message={"Are you sure you want to cancel the redeem?"}
+        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

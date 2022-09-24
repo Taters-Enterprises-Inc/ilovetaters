@@ -88,7 +88,7 @@ export function UnExpiredRedeem() {
                 </Link>
                 <div className="relative">
                   <button
-                    className="absolute text-sm  text-white right-0 top-0 p-1 z-20"
+                    className="absolute top-0 right-0 z-20 p-1 text-sm text-white"
                     onClick={() => {
                       setOpenForfeitModalMessage(true);
                     }}
@@ -123,7 +123,7 @@ export function UnExpiredRedeem() {
           dispatch(forfeitRedeem());
           setOpenForfeitModalMessage(false);
         }}
-        message={"Are you sure you want to cancel the redeem?"}
+        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

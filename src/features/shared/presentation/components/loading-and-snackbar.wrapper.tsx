@@ -1270,7 +1270,7 @@ export function LoadingAndSnackbarWrapper() {
         message={failsAlert.message}
       />
       <BackdropLoading open={openBackdropLoading} />
-      <BackdropLoadingPopClub open={openBackdropPopClubLoading} />
+      <BackdropLoadingPopClub open={true} />
     </>
   );
 }
