@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { GetSnackShopOrderHistoryModel } from "features/shop/core/domain/get-snackshop-order-history.model";
+import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
 import {
   GetSnackShopOrderHistoryRepository,
   GetSnackShopOrderHistoryResponse,
-} from "features/shop/data/repository/shop.repository";
+} from "features/profile/data/repository/profile.repository";
 
 export enum GetSnackshopOrderHistoryState {
   initial,

@@ -22,8 +22,8 @@ import getBranchesStore from "../branches/presentation/slices/get-branches-store
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
 
-import getSnackShopOrderHistory from "../shop/presentation/slices/get-snackshop-order-history.slice";
-import getCateringBookingHistory from "../shop/presentation/slices/get-catering-booking-history.slice";
+import getSnackShopOrderHistory from "../profile/presentation/slices/get-snackshop-order-history.slice";
+import getCateringBookingHistory from "../profile/presentation/slices/get-catering-booking-history.slice";
 import facebookLogin from "../shared/presentation/slices/facebook-login.slice";
 import facebookLoginPoint from "../shared/presentation/slices/facebook-login-point.slice";
 import facebookLogout from "../shared/presentation/slices/facebook-logout.slice";
@@ -102,6 +102,7 @@ import adminPrivilege from "features/admin/presentation/slices/admin-privilege.s
 import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import getAdminCateringBooking from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import adminCateringBookingUpdateStatus from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
+import getPopclubRedeemsHistory from "features/profile/presentation/slices/get-popclub-redeems-history.slice";
 
 export const store = configureStore({
   reducer: {
@@ -194,6 +195,7 @@ export const store = configureStore({
     getAdminCateringBookings,
     getAdminCateringBooking,
     adminCateringBookingUpdateStatus,
+    getPopclubRedeemsHistory,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

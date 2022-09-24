@@ -16,20 +16,21 @@ import { useEffect } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { DataList } from "features/shared/presentation/components";
+import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
+import { ADMIN_POPCLUB_REDEEM_STATUS } from "features/shared/constants";
 import {
-  getCateringBookingHistory,
-  resetGetCateringBookingHistoryStatus,
-  selectGetCateringBookingHistory,
-} from "features/shop/presentation/slices/get-catering-booking-history.slice";
-import { CateringBookingModel } from "features/shop/core/domain/catering-booking.model";
-import { CATERING_BOOKING_STATUS } from "features/shared/constants";
+  getPopclubRedeemsHistory,
+  resetGetPopclubRedeemsHistoryStatus,
+  selectGetPopclubRedeemsHistory,
+} from "../slices/get-popclub-redeems-history.slice";
+import { PopclubRedeemModel } from "features/profile/core/domain/popclub-redeem.model";
 
 const columns: Array<Column> = [
-  { id: "date", label: "Date" },
-  { id: "trackingNo", label: "Tracking No." },
-  { id: "purchaseAmount", label: "Purchase Amount" },
-  { id: "bookingStatus", label: "Booking Status" },
-  { id: "view", label: "View" },
+  { id: "dateadded", label: "Order Date" },
+  { id: "expiration", label: "Valid Until" },
+  { id: "redeem_code", label: "Redeem Code" },
+  { id: "purchase_amount", label: "Purchase Amount" },
+  { id: "status", label: "Redeem Status" },
 ];
 
 const createQueryParams = (params: object): string => {
@@ -50,8 +51,8 @@ export function ProfilePopclubRedeems() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
-  const getCateringBookingHistoryState = useAppSelector(
-    selectGetCateringBookingHistory
+  const getPopclubRedeemsHistoryState = useAppSelector(
+    selectGetPopclubRedeemsHistory
   );
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
@@ -67,33 +68,14 @@ export function ProfilePopclubRedeems() {
       order: order,
       search: search,
     });
-    dispatch(getCateringBookingHistory(query));
+    dispatch(getPopclubRedeemsHistory(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
-  const calculateGrandTotal = (row: CateringBookingModel) => {
+  const calculateGrandTotal = (row: PopclubRedeemModel) => {
     let calculatedPrice = 0;
 
     if (row.purchase_amount) {
       calculatedPrice += parseInt(row.purchase_amount);
-    }
-
-    if (row.service_fee) {
-      calculatedPrice += row.service_fee;
-    }
-
-    if (row.night_diff_fee) {
-      calculatedPrice += row.night_diff_fee;
-    }
-
-    if (row.additional_hour_charge) {
-      calculatedPrice += row.additional_hour_charge;
-    }
-
-    if (row.cod_fee) {
-      calculatedPrice += parseInt(row.cod_fee);
-    }
-    if (row.distance_price) {
-      calculatedPrice += parseInt(row.distance_price);
     }
 
     return (
@@ -105,13 +87,13 @@ export function ProfilePopclubRedeems() {
       />
     );
   };
-  console.log(getCateringBookingHistoryState.data);
+
   return (
     <ProfileContainer title="Popclub Redeems" activeTab="popclub">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
         Popclub Redeems
       </h1>
-      {getCateringBookingHistoryState.data?.bookings ? (
+      {getPopclubRedeemsHistoryState.data?.redeems ? (
         <>
           <div className="py-4 lg:hidden">
             <DataList
@@ -142,7 +124,7 @@ export function ProfilePopclubRedeems() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetCateringBookingHistoryStatus());
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -160,7 +142,7 @@ export function ProfilePopclubRedeems() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetCateringBookingHistoryStatus());
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -168,44 +150,27 @@ export function ProfilePopclubRedeems() {
                 }
               }}
               totalRows={
-                getCateringBookingHistoryState.data.pagination.total_rows
+                getPopclubRedeemsHistoryState.data.pagination.total_rows
               }
-              perPage={getCateringBookingHistoryState.data.pagination.per_page}
+              perPage={getPopclubRedeemsHistoryState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getCateringBookingHistoryState.data.bookings.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
+              {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => (
+                <div className="flex flex-col px-4 py-2 border-b" key={i}>
                   <span className="flex flex-wrap items-center space-x-1 text-xl">
                     <span className="text-lg text-gray-600">
-                      #{row.tracking_no}
+                      {row.redeem_code}
                     </span>
                     <span
                       className="px-2 py-1 text-xs rounded-full "
                       style={{
                         color: "white",
                         backgroundColor:
-                          CATERING_BOOKING_STATUS[row.status].color,
+                          ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
                       }}
                     >
-                      {CATERING_BOOKING_STATUS[row.status].name}
+                      {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
                     </span>
                   </span>
                   <div className="flex justify-between">
@@ -254,7 +219,7 @@ export function ProfilePopclubRedeems() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetCateringBookingHistoryStatus());
+                dispatch(resetGetPopclubRedeemsHistoryStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -273,7 +238,7 @@ export function ProfilePopclubRedeems() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetCateringBookingHistoryStatus());
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -293,7 +258,7 @@ export function ProfilePopclubRedeems() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetCateringBookingHistoryStatus());
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -301,47 +266,37 @@ export function ProfilePopclubRedeems() {
                 }
               }}
               totalRows={
-                getCateringBookingHistoryState.data.pagination.total_rows
+                getPopclubRedeemsHistoryState.data.pagination.total_rows
               }
-              perPage={getCateringBookingHistoryState.data.pagination.per_page}
+              perPage={getPopclubRedeemsHistoryState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getCateringBookingHistoryState.data.bookings !== undefined ? (
+              {getPopclubRedeemsHistoryState.data.redeems !== undefined ? (
                 <>
-                  {getCateringBookingHistoryState.data.bookings.map(
-                    (row, i) => (
-                      <DataTableRow key={i}>
-                        <DataTableCell>
-                          <Moment format="LLL">{row.dateadded}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>{row.tracking_no}</DataTableCell>
-                        <DataTableCell>
-                          {calculateGrandTotal(row)}
-                        </DataTableCell>
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                CATERING_BOOKING_STATUS[row.status].color,
-                            }}
-                          >
-                            {CATERING_BOOKING_STATUS[row.status].name}
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell align="left">
-                          <Link
-                            to={`/shop/${
-                              row.status <= 3 ? "contract" : "order"
-                            }/${row.hash_key}`}
-                          >
-                            <FaEye className="text-lg" />
-                          </Link>
-                        </DataTableCell>
-                      </DataTableRow>
-                    )
-                  )}
+                  {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => (
+                    <DataTableRow key={i}>
+                      <DataTableCell>
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Moment format="LLL">{row.expiration}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>{row.redeem_code}</DataTableCell>
+                      <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
+                      <DataTableCell>
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                          }}
+                        >
+                          {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                        </span>
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
                 </>
               ) : null}
             </DataTable>

@@ -7,7 +7,7 @@ import {
   selectGetSnackShopOrderHistory,
   resetGetSnackShopOrderHistoryStatus,
   getSnackshopOrderHistory,
-} from "features/shop/presentation/slices/get-snackshop-order-history.slice";
+} from "features/profile/presentation/slices/get-snackshop-order-history.slice";
 import { FaEye } from "react-icons/fa";
 import Moment from "react-moment";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ import {
 import { useEffect } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { DataList } from "features/shared/presentation/components";
 
 const columns: Array<Column> = [
@@ -164,21 +164,8 @@ export function ProfileSnackshopOrders() {
             >
               <hr className="mt-4" />
               {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
+                <Link
+                  to={`/delivery/order/${row.hash_key}`}
                   className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
@@ -195,7 +182,7 @@ export function ProfileSnackshopOrders() {
                       {calculatePurchaseAmount(row)}
                     </span>
                   </div>
-                </div>
+                </Link>
               ))}
             </DataList>
           </div>

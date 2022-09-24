@@ -4,12 +4,10 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { CartItemModel } from "features/shop/core/domain/cart-item.model";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
-import { GetCateringBookingHistoryModel } from "features/shop/core/domain/get-catering-booking-history.model";
-import { GetSnackShopOrderHistoryModel } from "features/shop/core/domain/get-snackshop-order-history.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
@@ -83,41 +81,6 @@ export interface GetEditCartItemResponse {
   };
 }
 
-export interface GetSnackShopOrderHistoryResponse {
-  data: {
-    message: string;
-    data: GetSnackShopOrderHistoryModel;
-  };
-}
-
-export interface GetCateringBookingHistoryResponse {
-  data: {
-    message: string;
-    data: GetCateringBookingHistoryModel;
-  };
-}
-
-export function GetCateringBookingHistoryRepository(
-  query: string
-): Promise<GetCateringBookingHistoryResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/profile/catering-bookings${query}`,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
-export function GetSnackShopOrderHistoryRepository(
-  query: string
-): Promise<GetSnackShopOrderHistoryResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/profile/snackshop-orders${query}`,
-    {
-      withCredentials: true,
-    }
-  );
-}
 export function RemoveItemFromCartShopRepository(
   param: number
 ): Promise<RemoveItemFromCartShopResponse> {

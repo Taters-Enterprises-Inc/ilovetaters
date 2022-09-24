@@ -20,8 +20,8 @@ import {
   getCateringBookingHistory,
   resetGetCateringBookingHistoryStatus,
   selectGetCateringBookingHistory,
-} from "features/shop/presentation/slices/get-catering-booking-history.slice";
-import { CateringBookingModel } from "features/shop/core/domain/catering-booking.model";
+} from "features/profile/presentation/slices/get-catering-booking-history.slice";
+import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { CATERING_BOOKING_STATUS } from "features/shared/constants";
 
 const columns: Array<Column> = [
@@ -175,21 +175,10 @@ export function ProfileCateringBookings() {
             >
               <hr className="mt-4" />
               {getCateringBookingHistoryState.data.bookings.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
+                <Link
+                  to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
+                    row.hash_key
+                  }`}
                   className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
@@ -216,7 +205,7 @@ export function ProfileCateringBookings() {
                       {calculateGrandTotal(row)}
                     </span>
                   </div>
-                </div>
+                </Link>
               ))}
             </DataList>
           </div>

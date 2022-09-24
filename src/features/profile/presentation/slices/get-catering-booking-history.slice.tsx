@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { CateringBookingModel } from "features/shop/core/domain/catering-booking.model";
-import { GetCateringBookingHistoryModel } from "features/shop/core/domain/get-catering-booking-history.model";
+import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
+import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import {
   GetCateringBookingHistoryRepository,
   GetCateringBookingHistoryResponse,
-} from "features/shop/data/repository/shop.repository";
+} from "features/profile/data/repository/profile.repository";
 
 export enum GetCateringBookingHistoryState {
   initial,
