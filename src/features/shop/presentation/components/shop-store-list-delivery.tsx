@@ -70,7 +70,9 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                       Store not within reach
                     </span>
                   ) : null}
-                  <div className="py-1 text-sm uppercase">FULL MENU</div>
+                  <div className="py-1 text-sm uppercase">
+                    {store.menu_name}
+                  </div>
 
                   <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                     <div className="flex justify-end">

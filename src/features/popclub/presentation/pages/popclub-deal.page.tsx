@@ -86,6 +86,7 @@ export function PopClubDeal() {
       getDealState.status === GetDealState.success &&
       getDealProductVariantsState.status === GetDealProductVariantsState.success
     ) {
+      console.log(getDealProductVariantsState.data);
       if (getDealProductVariantsState.data?.length > 0) {
         setOpenVariantChooserModal(true);
       } else {
