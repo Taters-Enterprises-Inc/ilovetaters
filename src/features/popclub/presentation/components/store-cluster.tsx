@@ -114,7 +114,7 @@ export function StoreCluster(props: StoreClusterProps) {
                     </span>
                   ) : null}
 
-                  <div className="text-sm uppercase ">FULL MENU</div>
+                  <div className="text-sm uppercase ">{store.menu_name}</div>
                   {props.address ? (
                     <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                       <div className="flex justify-end">

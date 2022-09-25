@@ -82,7 +82,7 @@ export const SERVICES_MOBILE = [
     color: "#858173",
     textColor: "black",
     backgroundPosition: "100% 100%",
-    url: "catering",
+    url: "shop",
     image: "api/assets/images/home/cards/taters_catering.webp",
   },
   {
