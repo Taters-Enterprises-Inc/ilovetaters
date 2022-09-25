@@ -209,6 +209,10 @@ import {
   AdminCateringBookingUpdateStatusState,
   selectAdminCateringBookingUpdateStatus,
 } from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
+import {
+  selectUpdateStoreDeal,
+  UpdateStoreDealState,
+} from "features/admin/presentation/slices/update-store-deal.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -315,6 +319,26 @@ export function LoadingAndSnackbarWrapper() {
   const adminCateringBookingUpdateStatusState = useAppSelector(
     selectAdminCateringBookingUpdateStatus
   );
+
+  const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
+  useEffect(() => {
+    switch (updateStoreDealState.status) {
+      case UpdateStoreDealState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreDealState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreDealState.success:
+        showAlert(setSuccessAlert, updateStoreDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreDealState.fail:
+        showAlert(setFailsAlert, updateStoreDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreDealState, dispatch]);
 
   useEffect(() => {
     switch (adminCateringBookingUpdateStatusState.status) {

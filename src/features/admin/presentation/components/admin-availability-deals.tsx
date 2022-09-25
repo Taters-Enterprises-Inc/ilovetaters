@@ -186,7 +186,7 @@ export function AdminAvailabilityDeals() {
               >
                 {getAdminStoresState.data?.map((store, index) => (
                   <MenuItem key={index} value={store.store_id}>
-                    {store.name}
+                    {store.name} ( {store.menu_name} )
                   </MenuItem>
                 ))}
               </Select>

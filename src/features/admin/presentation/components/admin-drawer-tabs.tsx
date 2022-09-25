@@ -111,28 +111,32 @@ export function AdminDrawerTabs() {
             </NavLink>
           </li>
 
-          <li>
-            <NavLink
-              to="/admin/catering"
-              className={(navData) =>
-                navData.isActive ? "flex bg-white text-secondary" : "flex"
-              }
-            >
-              <span className="flex items-center px-4 ">
-                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <MdFoodBank size={20} />
+          {getAdminSessionState.data?.is_admin ||
+          getAdminSessionState.data?.is_catering_admin ||
+          getAdminSessionState.data?.is_csr ? (
+            <li>
+              <NavLink
+                to="/admin/catering"
+                className={(navData) =>
+                  navData.isActive ? "flex bg-white text-secondary" : "flex"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    <MdFoodBank size={20} />
 
-                  <span
-                    className={`whitespace-pre duration-300 ${
-                      !adminSideBarState.status && "opacity-0 overflow-hidden"
-                    }`}
-                  >
-                    Catering
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      Catering
+                    </span>
                   </span>
                 </span>
-              </span>
-            </NavLink>
-          </li>
+              </NavLink>
+            </li>
+          ) : null}
 
           <li>
             <NavLink
@@ -156,7 +160,8 @@ export function AdminDrawerTabs() {
               </span>
             </NavLink>
           </li>
-          {getAdminSessionState.data?.is_admin ? (
+          {getAdminSessionState.data?.is_admin ||
+          getAdminSessionState.data?.is_csr ? (
             <li>
               <div className="flex px-4">
                 <div className="flex-1">

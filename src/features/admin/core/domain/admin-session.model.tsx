@@ -7,6 +7,7 @@ export interface AdminSessionModel {
 
   is_admin: boolean;
   is_catering_admin: boolean;
+  is_csr: boolean;
 
   user_details: {
     id: number;

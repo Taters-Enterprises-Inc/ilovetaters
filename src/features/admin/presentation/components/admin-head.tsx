@@ -10,6 +10,7 @@ import {
 } from "../slices/logout-admin.slice";
 import { getAdminSession } from "../slices/get-admin-session.slice";
 import { AdminBreadCrumbs, AdminBreadCrumbsProps } from "./admin-breadcrumbs";
+import { useNavigate } from "react-router-dom";
 
 interface AdminHeadProps {
   AdminBreadCrumbsProps: AdminBreadCrumbsProps;
@@ -18,11 +19,13 @@ interface AdminHeadProps {
 export function AdminHead(props: AdminHeadProps) {
   const dispatch = useAppDispatch();
   const logoutAdminState = useAppSelector(selectLogoutAdmin);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (logoutAdminState.status === LogoutAdminState.success) {
       dispatch(getAdminSession());
       dispatch(resetLogoutAdmin());
+      navigate("/admin");
     }
   }, [logoutAdminState, dispatch]);
 
