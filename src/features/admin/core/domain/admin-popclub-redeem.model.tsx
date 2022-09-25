@@ -18,5 +18,6 @@ export interface AdminPopclubRedeemModel {
     price: number;
     quantity: number;
     remarks: string;
+    alias: string;
   }>;
 }

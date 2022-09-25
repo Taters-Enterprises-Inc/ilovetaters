@@ -83,6 +83,7 @@ export function CateringHome() {
   };
 
   const eventDateOnChangeValidations = (param: {
+    state: "start" | "end";
     start: Date | null;
     end: Date | null;
     setCurrentCalendarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -96,7 +97,7 @@ export function CateringHome() {
       );
     }
 
-    if (param.start && param.end) {
+    if (param.start && param.end && param.state === "end") {
       const startDateTime = moment(param.start);
       const endDateTime = moment(param.end);
 
@@ -127,6 +128,7 @@ export function CateringHome() {
     switch (param.state) {
       case "start":
         eventDateOnChangeValidations({
+          state: param.state,
           start: param.value,
           end: cateringHomePageState.eventEndDate,
           setCurrentCalendarModalOpen: setOpenStartEventCalendar,
@@ -147,6 +149,7 @@ export function CateringHome() {
         break;
       case "end":
         eventDateOnChangeValidations({
+          state: param.state,
           start: cateringHomePageState.eventStartDate,
           end: param.value,
           setCurrentCalendarModalOpen: setOpenEndEventCalendar,
@@ -242,6 +245,7 @@ export function CateringHome() {
                 label="Select Event Start Date"
                 shouldDisableDate={disableDates}
                 open={openStartEventCalendar}
+                defaultCalendarMonth={moment().add(14, "days").toDate()}
                 onOpen={() => setOpenStartEventCalendar(true)}
                 onClose={() => setOpenStartEventCalendar(false)}
                 renderInput={(params) => (
@@ -271,6 +275,7 @@ export function CateringHome() {
                 label="Select Event End Date"
                 shouldDisableDate={disableDates}
                 open={openEndEventCalendar}
+                defaultCalendarMonth={moment().add(14, "days").toDate()}
                 onOpen={() => setOpenEndEventCalendar(true)}
                 onClose={() => setOpenEndEventCalendar(false)}
                 renderInput={(params) => (

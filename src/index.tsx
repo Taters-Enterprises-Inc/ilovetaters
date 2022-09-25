@@ -55,6 +55,7 @@ import {
   AdminSettingCreateGroup,
   AdminSettingEditUser,
   AdminAvailabilityDeal,
+  AdminAvailabilityProduct,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -211,6 +212,10 @@ root.render(
                         <Route
                           path="deal"
                           element={<AdminAvailabilityDeal />}
+                        />
+                        <Route
+                          path="product"
+                          element={<AdminAvailabilityProduct />}
                         />
                       </Route>
 

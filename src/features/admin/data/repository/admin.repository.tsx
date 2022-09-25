@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   EditAdminUserParam,
   UpdateStoreDealParam,
+  UpdateStoreProductParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -12,7 +13,9 @@ import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-ad
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
+import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
+import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
@@ -182,6 +185,55 @@ export interface UpdateStoreDealResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminStoreProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreProductsModel;
+  };
+}
+
+export interface GetProductCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<ProductCategoryModel>;
+  };
+}
+
+export interface UpdateStoreProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateStoreProductRepository(
+  param: UpdateStoreProductParam
+): Promise<UpdateStoreProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetProductCategoriesRepository(): Promise<GetProductCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/product-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreProductsRepository(
+  query: string
+): Promise<GetAdminStoreProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateStoreDealRepository(

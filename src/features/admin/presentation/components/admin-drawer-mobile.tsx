@@ -84,7 +84,7 @@ export function AdminDrawerMobile() {
             </div>
           ) : null}
         </div>
-        <AdminDrawerTabs />
+        <AdminDrawerTabs mobile />
       </Box>
     </Drawer>
   );

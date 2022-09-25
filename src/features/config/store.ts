@@ -106,6 +106,9 @@ import getPopclubRedeemsHistory from "features/profile/presentation/slices/get-p
 import redeemValidators from "features/popclub/presentation/slices/redeem-validators.slice";
 import getAdminStoreDeals from "features/admin/presentation/slices/get-admin-stores-deals.slice";
 import updateStoreDeal from "features/admin/presentation/slices/update-store-deal.slice";
+import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-stores-products.slice";
+import getProductCategories from "features/admin/presentation/slices/get-product-categories.slice";
+import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 
 export const store = configureStore({
   reducer: {
@@ -202,6 +205,9 @@ export const store = configureStore({
     redeemValidators,
     getAdminStoreDeals,
     updateStoreDeal,
+    getAdminStoreProducts,
+    getProductCategories,
+    updateStoreProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

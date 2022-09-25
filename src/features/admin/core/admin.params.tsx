@@ -7,3 +7,8 @@ export interface UpdateStoreDealParam {
   id: string;
   status: "1" | "0";
 }
+
+export interface UpdateStoreProductParam {
+  id: string;
+  status: "1" | "0";
+}
