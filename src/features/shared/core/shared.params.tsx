@@ -18,7 +18,7 @@ export interface UploadProofOfPaymentParam {
 
 export interface GetStoresAvailableParam {
   address: string | null;
-  service: "SNACKSHOP" | "CATERING";
+  service: "SNACKSHOP" | "CATERING" | "POPCLUB";
 }
 
 export interface SetStoreAndAddressParm {
