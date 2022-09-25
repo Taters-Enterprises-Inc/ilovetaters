@@ -31,18 +31,25 @@ export function CateringStoreList(props: StoreListProps) {
               return (
                 <button
                   key={index}
-                  onClick={() => {
-                    if (props.address === null || props.address === "") {
-                      dispatch(
-                        popUpSnackBar({
-                          message: "Please input an address",
-                          severity: "error",
-                        })
-                      );
-                    } else {
-                      props.onClickStore(store.store_id, store.region_store_id);
-                    }
-                  }}
+                  onClick={
+                    store_availability && props.address != null
+                      ? () => {}
+                      : () => {
+                          if (props.address === null || props.address === "") {
+                            dispatch(
+                              popUpSnackBar({
+                                message: "Please input an address",
+                                severity: "error",
+                              })
+                            );
+                          } else {
+                            props.onClickStore(
+                              store.store_id,
+                              store.region_store_id
+                            );
+                          }
+                        }
+                  }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
                   {store_availability &&
@@ -52,7 +59,9 @@ export function CateringStoreList(props: StoreListProps) {
                       Store not within reach
                     </span>
                   ) : null}
-                  <div className="py-1 text-sm uppercase">FULL MENU</div>
+                  <div className="py-1 text-sm uppercase">
+                    {store.menu_name}
+                  </div>
 
                   {props.address ? (
                     <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">

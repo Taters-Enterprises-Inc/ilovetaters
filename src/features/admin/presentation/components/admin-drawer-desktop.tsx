@@ -62,12 +62,13 @@ export function AdminDrawerDesktop() {
       anchor="left"
       variant="permanent"
       className="hidden lg:block"
+      sx={{ zIndex: 10 }}
       open={adminSideBarState.status}
       onClose={() => {
         dispatch(toggleAdminSideBar());
       }}
     >
-      <Box className="relative h-screen bg-secondary font-['Roboto'] duration-500  overflow-y-auto overflow-x-hidden">
+      <Box className="relative h-screen bg-secondary font-['Roboto'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
         <DrawerHeader className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
           <FaBars
             className={`cursor-pointer ${

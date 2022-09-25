@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAllAvailableStores } from "../slices/get-all-available-stores.slice";
 import { StoreClusterStoreVisit } from "../components";
@@ -22,15 +21,6 @@ export function StoreVisitStoreChooserModal(
   const storeVisitStoreChooserModalState = useAppSelector(
     selectStoreVisitStoreChooserModal
   );
-
-  React.useEffect(() => {
-    dispatch(
-      getStoresAvailablePopClubStoreVisit({
-        address: null,
-        service: "SNACKSHOP",
-      })
-    );
-  }, [dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -66,6 +56,22 @@ export function StoreVisitStoreChooserModal(
                   ? storeVisitStoreChooserModalState.address
                   : ""
               }
+              onDenied={() => {
+                dispatch(
+                  getStoresAvailablePopClubStoreVisit({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
+              onPrompt={() => {
+                dispatch(
+                  getStoresAvailablePopClubStoreVisit({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
               onLocateCurrentAddress={(place: string) => {
                 dispatch(
                   setAddressStoreVisitStoreChooserModal({ address: place })

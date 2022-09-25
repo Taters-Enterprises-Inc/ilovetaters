@@ -70,75 +70,75 @@ export function ShopOrder() {
     switch (status) {
       case 0:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
             Incomplete Transaction
           </span>
         );
       case 1:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
             Order Placed In System
           </span>
         );
       case 2:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#cca300] text-white px-2 py-1 text-[10px]">
             Payment under Verification
           </span>
         );
       case 3:
         if (payops === 3) {
           return (
-            <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
               Order Confirmed
             </span>
           );
         } else {
           return (
-            <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
               Payment Confirmed
             </span>
           );
         }
       case 4:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
             Order Declined
           </span>
         );
       case 5:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
             Order Cancelled
           </span>
         );
       case 6:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
             Product Received by Customer
           </span>
         );
       case 7:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
             Order Rejected due to Incorrect/Incomplete Payment
           </span>
         );
       case 8:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
             Product currently being prepared
           </span>
         );
       case 9:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
             Product en route to Customer
           </span>
         );
       default:
         return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
+          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
             Error Transaction
           </span>
         );
@@ -194,8 +194,20 @@ export function ShopOrder() {
         </div>
 
         <div className="flex-1">
-          <div className="bg-[#424242] h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div
+            className={`${
+              getOrdersState.data?.order.clients_info.status === 6
+                ? "bg-green-700"
+                : "bg-[#424242]"
+            } h-[0.25rem] relative`}
+          >
+            <div
+              className={`absolute text-white rounded-[50%]  font-bold ${
+                getOrdersState.data?.order.clients_info.status === 6
+                  ? "bg-green-700"
+                  : "bg-[#424242]"
+              }  h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+            >
               3
             </div>
           </div>
@@ -235,8 +247,20 @@ export function ShopOrder() {
                 </div>
 
                 <div className="flex-1">
-                  <div className="bg-[#424242] h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div
+                    className={`${
+                      getOrdersState.data?.order.clients_info.status === 6
+                        ? "bg-green-700"
+                        : "bg-[#424242]"
+                    } h-[0.25rem] relative`}
+                  >
+                    <div
+                      className={`absolute rounded-[50%] font-bold text-white ${
+                        getOrdersState.data?.order.clients_info.status === 6
+                          ? "bg-green-700"
+                          : "bg-[#424242]"
+                      } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+                    >
                       3
                     </div>
                   </div>
@@ -273,9 +297,7 @@ export function ShopOrder() {
                     Deliver To Address:{" "}
                   </h2>
                   <h3 className="text-xs font-semibold">
-                    {getOrdersState.data?.firstname +
-                      " " +
-                      getOrdersState.data?.lastname}
+                    {getOrdersState.data?.order.clients_info.add_name}
                   </h3>
                   <div className="text-xs">
                     <strong>Address:</strong>{" "}
@@ -304,9 +326,6 @@ export function ShopOrder() {
                   </div>
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
-                  </div>
-                  <div className="text-xs">
-                    <strong>Gift Card Number:</strong> 0
                   </div>
                 </div>
               </div>

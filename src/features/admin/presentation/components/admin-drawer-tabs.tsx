@@ -37,7 +37,7 @@ import {
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { MdFoodBank, MdOutlineSettings } from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
@@ -85,7 +85,12 @@ export function AdminDrawerTabs() {
       <nav>
         <ul>
           <li>
-            <Link to="/admin/order" className="flex ">
+            <NavLink
+              to="/admin/order"
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                   <FaRegListAlt size={20} />
@@ -99,11 +104,16 @@ export function AdminDrawerTabs() {
                   </span>
                 </span>
               </span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/admin/catering" className="flex ">
+            <NavLink
+              to="/admin/catering"
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                   <MdFoodBank size={20} />
@@ -117,11 +127,16 @@ export function AdminDrawerTabs() {
                   </span>
                 </span>
               </span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/admin/popclub" className="flex ">
+            <NavLink
+              to="/admin/popclub"
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                   <FaCartArrowDown size={20} />
@@ -135,7 +150,7 @@ export function AdminDrawerTabs() {
                   </span>
                 </span>
               </span>
-            </Link>
+            </NavLink>
           </li>
           {getAdminSessionState.data?.is_admin ? (
             <li>
@@ -161,7 +176,14 @@ export function AdminDrawerTabs() {
                     <AccordionDetails>
                       <ul>
                         <li>
-                          <Link to="/admin/setting/user" className="flex ">
+                          <NavLink
+                            to="/admin/setting/user"
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
                             <span className="flex items-center ">
                               <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                                 <IoIosArrowForward size={20} />
@@ -176,7 +198,7 @@ export function AdminDrawerTabs() {
                                 </span>
                               </span>
                             </span>
-                          </Link>
+                          </NavLink>
                         </li>
                       </ul>
                     </AccordionDetails>
@@ -186,7 +208,12 @@ export function AdminDrawerTabs() {
             </li>
           ) : null}
           <li>
-            <Link to="/admin/faq" className="flex ">
+            <NavLink
+              to="/admin/faq"
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                   <FaQuestionCircle size={20} />
@@ -200,7 +227,7 @@ export function AdminDrawerTabs() {
                   </span>
                 </span>
               </span>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </nav>

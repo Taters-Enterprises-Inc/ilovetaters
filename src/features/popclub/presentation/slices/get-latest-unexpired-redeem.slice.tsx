@@ -16,8 +16,6 @@ export enum GetLatestUnexpiredRedeemState {
 const initialState: {
   status: GetLatestUnexpiredRedeemState;
   message: string;
-  next_avialable_redeem?: string;
-  redeem_cooldown?: string;
   data: RedeemDealModel | undefined | null;
 } = {
   status: GetLatestUnexpiredRedeemState.initial,

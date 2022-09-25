@@ -16,6 +16,7 @@ import {
 } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { IoMdClose } from "react-icons/io";
 import { MessageModal } from "../modals";
+import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export function UnExpiredRedeem() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
+    dispatch(redeemValidators());
   }, [facebookLogoutState, dispatch, forfeitRedeemState]);
 
   return (

@@ -428,7 +428,7 @@ export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   },
   {
     name: "Rejected",
-    color: "#004d00",
+    color: "#a21013",
   },
   {
     name: "Preparing",
@@ -727,7 +727,7 @@ export const ORDER_STATUS: Array<{
   },
   {
     name: "Order Rejected due to Incorrect/Incomplete Payment",
-    color: "#004d00",
+    color: "#a21013",
   },
   {
     name: "Product currently being prepared",

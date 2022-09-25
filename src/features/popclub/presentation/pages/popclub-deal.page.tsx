@@ -50,6 +50,10 @@ import {
   selectForfeitRedeem,
 } from "../slices/forfeit-redeem.slice";
 import { MessageModal } from "features/shared/presentation/modals";
+import {
+  redeemValidators,
+  selectRedeemValidators,
+} from "../slices/redeem-validators.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -63,6 +67,7 @@ export function PopClubDeal() {
     selectGetLatestUnexpiredRedeem
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+  const redeemValidatorsState = useAppSelector(selectRedeemValidators);
 
   const navigate = useNavigate();
 
@@ -86,7 +91,6 @@ export function PopClubDeal() {
       getDealState.status === GetDealState.success &&
       getDealProductVariantsState.status === GetDealProductVariantsState.success
     ) {
-      console.log(getDealProductVariantsState.data);
       if (getDealProductVariantsState.data?.length > 0) {
         setOpenVariantChooserModal(true);
       } else {
@@ -108,6 +112,7 @@ export function PopClubDeal() {
   useEffect(() => {
     dispatch(resetGetRedeem());
     dispatch(getLatestUnexpiredRedeem());
+    dispatch(redeemValidators());
   }, [dispatch]);
 
   useEffect(() => {
@@ -192,7 +197,8 @@ export function PopClubDeal() {
   const redeemButton = () => {
     if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.next_avialable_redeem
+      redeemValidatorsState.data &&
+      redeemValidatorsState.data.next_available_redeem
     ) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -260,89 +266,11 @@ export function PopClubDeal() {
 
       return (
         <div className="w-full py-3 text-white bg-secondary">
-          <span className="mt-3">You can redeem after </span>
+          <span className="mt-3">You can redeem this deal after </span>
           <Countdown
             renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}
+            date={new Date(redeemValidatorsState.data.next_available_redeem)}
           />
-        </div>
-      );
-    } else if (
-      getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.redeem_cooldown
-    ) {
-      const pad = (number: number) => ("0" + number).slice(-2);
-
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
-        if (completed) {
-          if (
-            getDealState.status === GetDealState.success &&
-            getDealState.data
-          ) {
-            dispatch(
-              getRedeem({
-                deal_id: getDealState.data.id,
-              })
-            );
-          }
-          dispatch(getLatestUnexpiredRedeem());
-        } else if (!completed) {
-          let timeName = "";
-
-          if (hours > 0) {
-            if (hours === 1) {
-              timeName = "hour";
-            } else {
-              timeName = "hours";
-            }
-          } else if (minutes > 0) {
-            if (minutes === 1) {
-              timeName = "minute";
-            } else {
-              timeName = "minutes";
-            }
-          } else if (seconds > 0) {
-            if (seconds === 1) {
-              timeName = "second";
-            } else {
-              timeName = "seconds";
-            }
-          }
-
-          return (
-            <>
-              <div className="flex items-center justify-center px-4 text-xl text-white ">
-                <AiOutlineFieldTime className="mr-3 text-4xl" />
-                <div className="font-['Bebas_Neue'] tracking-[4px]">
-                  <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
-                  </span>
-                  <span className="ml-2 text-sm">{timeName}</span>
-                </div>
-              </div>
-            </>
-          );
-        }
-      };
-
-      return (
-        <div className="w-full py-3 text-white bg-secondary">
-          <span className="mt-3">Redeem cooldown: </span>
-          <Countdown
-            renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}
-          />
-
-          <button
-            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
-            onClick={() => {
-              navigate(
-                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
-              );
-            }}
-          >
-            Go Back
-          </button>
         </div>
       );
     } else if (

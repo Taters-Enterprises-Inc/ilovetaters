@@ -938,11 +938,9 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableCateringState.success:
-        showAlert(setSuccessAlert, getStoresAvailableCateringState.message);
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableCateringState.fail:
-        showAlert(setFailsAlert, getStoresAvailableCateringState.message);
         setOpenBackdropLoading(false);
         break;
     }

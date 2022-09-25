@@ -119,7 +119,26 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                     ? branchesNearYouComponentSlice.address
                     : ""
                 }
+                onPrompt={() => {
+                  dispatch(
+                    getStoresAvailableBranches({
+                      address: null,
+                      service: "SNACKSHOP",
+                    })
+                  );
+                }}
+                onDenied={() => {
+                  dispatch(
+                    getStoresAvailableBranches({
+                      address: null,
+                      service: "SNACKSHOP",
+                    })
+                  );
+                }}
                 onLocateCurrentAddress={(place: string) => {
+                  dispatch(
+                    setAddressBranchesNearYouComponent({ address: place })
+                  );
                   dispatch(
                     getStoresAvailableBranches({
                       address: place,
@@ -133,6 +152,9 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                   );
                 }}
                 onPlaceSelected={(place: string) => {
+                  dispatch(
+                    setAddressBranchesNearYouComponent({ address: place })
+                  );
                   dispatch(
                     getStoresAvailableBranches({
                       address: place,

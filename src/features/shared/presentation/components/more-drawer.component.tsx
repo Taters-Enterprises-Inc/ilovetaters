@@ -102,6 +102,7 @@ export default function MoreDrawer(props: MoreDrawerProps) {
           const { text, icon, path } = item;
           return (
             <div
+              key={index}
               className={`${
                 getSessionState.data?.userData === null
                   ? text === "My Account"

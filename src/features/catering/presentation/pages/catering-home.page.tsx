@@ -76,12 +76,6 @@ export function CateringHome() {
   useEffect(() => {
     dispatch(getSession());
     dispatch(storeReset());
-    dispatch(
-      getStoresAvailableCatering({
-        address: null,
-        service: "CATERING",
-      })
-    );
   }, [dispatch]);
 
   const disableDates = (date: Date) => {
@@ -106,7 +100,9 @@ export function CateringHome() {
       const startDateTime = moment(param.start);
       const endDateTime = moment(param.end);
 
-      const _3hoursBeforeTheStartDate = startDateTime.add(3, "hours");
+      const _3hoursBeforeTheStartDate = startDateTime
+        .add(2, "hours")
+        .add(59, "minutes");
 
       if (_3hoursBeforeTheStartDate.isSameOrAfter(endDateTime)) {
         dispatch(
@@ -162,7 +158,6 @@ export function CateringHome() {
             );
           },
         });
-
         break;
     }
   };
@@ -205,8 +200,30 @@ export function CateringHome() {
                     ? cateringHomePageState.address
                     : ""
                 }
+                onDenied={() => {
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: null,
+                      service: "CATERING",
+                    })
+                  );
+                }}
+                onPrompt={() => {
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: null,
+                      service: "CATERING",
+                    })
+                  );
+                }}
                 onLocateCurrentAddress={(place: string) => {
                   dispatch(setAddressCateringHomePage({ address: place }));
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: place,
+                      service: "CATERING",
+                    })
+                  );
                 }}
                 onChange={(value: string) => {
                   dispatch(setAddressCateringHomePage({ address: value }));
@@ -331,7 +348,7 @@ export function CateringHome() {
                 cateringHomePageState.address &&
                 cateringHomePageState.eventStartDate &&
                 cateringHomePageState.eventEndDate
-              )
+              ) {
                 dispatch(
                   setStoreAndAddress({
                     address: cateringHomePageState.address,
@@ -342,6 +359,30 @@ export function CateringHome() {
                     service: "CATERING",
                   })
                 );
+              } else {
+                if (cateringHomePageState.eventStartDate === null) {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Please select valid start date.",
+                      severity: "error",
+                    })
+                  );
+                } else if (cateringHomePageState.eventStartDate === null) {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Please select valid end date. ",
+                      severity: "error",
+                    })
+                  );
+                } else if (cateringHomePageState.address === null) {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Please select valid address.",
+                      severity: "error",
+                    })
+                  );
+                }
+              }
             }}
             address={cateringHomePageState.address}
           />

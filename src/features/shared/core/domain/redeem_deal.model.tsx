@@ -12,7 +12,5 @@ export interface RedeemDealModel {
   original_price: string;
   promo_price: string;
 
-  next_avialable_redeem?: string;
-  redeem_cooldown?: string;
   minimum_purchase?: number;
 }

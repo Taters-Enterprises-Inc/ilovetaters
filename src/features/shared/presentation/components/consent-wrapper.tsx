@@ -29,7 +29,6 @@ export function ConsentWrapper() {
         }}
         buttonWrapperClasses="px-4"
         declineButtonText="Decline"
-        expires={150}
       >
         Ilovetaters uses cookies to provide you with a personalized online
         experience and analyze how our site is used.{" "}

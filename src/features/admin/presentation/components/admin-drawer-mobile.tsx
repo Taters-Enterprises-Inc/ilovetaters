@@ -20,6 +20,7 @@ export function AdminDrawerMobile() {
     <Drawer
       anchor="left"
       className="lg:hidden"
+      sx={{ zIndex: 10 }}
       open={adminSideBarState.status}
       onClose={() => {
         dispatch(toggleAdminSideBar());

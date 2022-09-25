@@ -24,12 +24,6 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
 
   useEffect(() => {
     dispatch(getSession());
-    dispatch(
-      getStoresAvailablePopClub({
-        address: null,
-        service: "SNACKSHOP",
-      })
-    );
   }, [dispatch]);
 
   if (props.open) {
@@ -67,6 +61,22 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                   ? storeChooserModalState.address
                   : ""
               }
+              onDenied={() => {
+                dispatch(
+                  getStoresAvailablePopClub({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
+              onPrompt={() => {
+                dispatch(
+                  getStoresAvailablePopClub({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
               onLocateCurrentAddress={(place: string) => {
                 dispatch(setAddressStoreChooserModal({ address: place }));
                 dispatch(

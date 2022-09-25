@@ -21,12 +21,6 @@ export function ShopHome() {
   useEffect(() => {
     dispatch(getSession());
     dispatch(storeReset());
-    dispatch(
-      getStoresAvailableSnackshop({
-        address: null,
-        service: "SNACKSHOP",
-      })
-    );
   }, [dispatch]);
 
   return (
@@ -69,6 +63,22 @@ export function ShopHome() {
               value={shopHomePageState.address ? shopHomePageState.address : ""}
               onChange={(value: string) => {
                 dispatch(setAddressShopHomePage({ address: value }));
+              }}
+              onDenied={() => {
+                dispatch(
+                  getStoresAvailableSnackshop({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
+              onPrompt={() => {
+                dispatch(
+                  getStoresAvailableSnackshop({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
               }}
               onLocateCurrentAddress={(place: string) => {
                 dispatch(setAddressShopHomePage({ address: place }));

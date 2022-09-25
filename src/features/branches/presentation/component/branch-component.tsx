@@ -30,6 +30,22 @@ export const BranchComponent: React.FC = (): JSX.Element => {
                   ? branchesNearYouComponentSlice.address
                   : ""
               }
+              onPrompt={() => {
+                dispatch(
+                  getStoresAvailableBranches({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
+              onDenied={() => {
+                dispatch(
+                  getStoresAvailableBranches({
+                    address: null,
+                    service: "SNACKSHOP",
+                  })
+                );
+              }}
               onLocateCurrentAddress={(place: string) => {
                 dispatch(
                   getStoresAvailableBranches({

@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { getStoresAvailableSnackshop } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
 import { setAddressShopHomePage } from "features/shop/presentation/slices/shop-home-page.slice";
 import { useEffect, useRef, useState } from "react";
 import { selectGetSession } from "../slices/get-session.slice";
@@ -35,8 +36,8 @@ function handleScriptLoad(
     { componentRestrictions: { country: "ph" } }
   );
 
-  geolocate();
   autoComplete.setFields(["address_components", "formatted_address"]);
+  geolocate();
   autoComplete.addListener("place_changed", () => {
     onPlaceSelected(autoCompleteRef.current.value);
     setQuery(autoCompleteRef.current.value);
@@ -83,6 +84,8 @@ async function handlePlaceSelect() {
 interface SearchAddressProps {
   onPlaceSelected: any;
   value: string;
+  onPrompt: () => void;
+  onDenied: () => void;
   onChange: (newValue: string) => void;
   onLocateCurrentAddress: (place: string) => void;
 }
@@ -104,6 +107,13 @@ export function SearchAddress(props: SearchAddressProps) {
   }, []);
 
   const geolocate = () => {
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      if (result.state === "prompt") {
+        props.onPrompt();
+      } else if (result.state === "denied") {
+        props.onDenied();
+      }
+    });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         var geolocation = {
@@ -127,29 +137,10 @@ export function SearchAddress(props: SearchAddressProps) {
           { latLng: latlng },
           function (results: any, status: any) {
             if (status === google.maps.GeocoderStatus.OK) {
-              let city: any;
               if (results[1]) {
                 const place = results[0].formatted_address;
-                console.log(place);
+
                 props.onLocateCurrentAddress(place);
-                //find country name
-                // for (var i = 0; i < results[0].address_components.length; i++) {
-                //   for (
-                //     var b = 0;
-                //     b < results[0].address_components[i].types.length;
-                //     b++
-                //   ) {
-                //     //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                //     if (
-                //       results[0].address_components[i].types[b] ==
-                //       "administrative_area_level_1"
-                //     ) {
-                //       //this is the object you are looking for
-                //       city = results[0].address_components[i];
-                //       break;
-                //     }
-                //   }
-                // }
               } else {
                 console.log("No results found");
               }

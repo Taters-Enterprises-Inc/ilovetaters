@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { PaymentAccordion } from "../components/payment-accordion";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
@@ -11,7 +10,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
 import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
@@ -269,7 +268,7 @@ export function ShopCheckout() {
                 {getSessionState.data?.userData.first_name ? (
                   <TextField
                     required
-                    value={getSessionState.data.userData.first_name}
+                    defaultValue={getSessionState.data.userData.first_name}
                     variant="outlined"
                     className="w-full"
                     name="firstName"
@@ -287,7 +286,7 @@ export function ShopCheckout() {
                 {getSessionState.data?.userData.last_name ? (
                   <TextField
                     required
-                    value={getSessionState.data.userData.last_name}
+                    defaultValue={getSessionState.data.userData.last_name}
                     variant="outlined"
                     className="w-full"
                     name="lastName"
@@ -308,7 +307,7 @@ export function ShopCheckout() {
                       <TextField
                         autoComplete="off"
                         required
-                        value={getSessionState.data.userData.email}
+                        defaultValue={getSessionState.data.userData.email}
                         variant="outlined"
                         className="w-full"
                         name="eMail"
@@ -364,7 +363,7 @@ export function ShopCheckout() {
                 {getSessionState.data?.customer_address ? (
                   <TextField
                     required
-                    value={getSessionState.data?.customer_address}
+                    defaultValue={getSessionState.data?.customer_address}
                     variant="outlined"
                     className="w-full"
                     name="address"
@@ -379,16 +378,6 @@ export function ShopCheckout() {
                     autoComplete="off"
                   />
                 )}
-
-                {/* Need more clarification on marketing */}
-
-                {/* <TextField
-                  required
-                  label="Delivery Address"
-                  variant="outlined"
-                  className="w-full"
-                  name="Delivery Address"
-                /> */}
 
                 {getSessionState.data?.cache_data ? (
                   <>
