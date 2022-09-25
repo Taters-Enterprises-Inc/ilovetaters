@@ -145,8 +145,20 @@ export function CateringOrder() {
         </div>
 
         <div className="flex-1">
-          <div className="bg-[#424242] h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div
+            className={`${
+              getCateringOrdersState.data?.order.clients_info.status === 8
+                ? "bg-green-700"
+                : "bg-[#424242]"
+            } h-[0.25rem] relative`}
+          >
+            <div
+              className={`absolute rounded-[50%] text-white font-bold ${
+                getCateringOrdersState.data?.order.clients_info.status === 8
+                  ? "bg-green-700"
+                  : "bg-[#424242]"
+              } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+            >
               4
             </div>
           </div>
@@ -199,8 +211,22 @@ export function CateringOrder() {
                 </div>
 
                 <div className="flex-1">
-                  <div className="bg-[#424242] h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div
+                    className={`${
+                      getCateringOrdersState.data?.order.clients_info.status ===
+                      8
+                        ? "bg-green-700"
+                        : "bg-[#424242]"
+                    } h-[0.25rem] relative`}
+                  >
+                    <div
+                      className={`absolute rounded-[50%] text-white font-bold ${
+                        getCateringOrdersState.data?.order.clients_info
+                          .status === 8
+                          ? "bg-green-700"
+                          : "bg-[#424242]"
+                      } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+                    >
                       4
                     </div>
                   </div>

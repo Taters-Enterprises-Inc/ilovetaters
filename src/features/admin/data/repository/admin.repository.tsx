@@ -1,5 +1,8 @@
 import axios from "axios";
-import { EditAdminUserParam } from "features/admin/core/admin.params";
+import {
+  EditAdminUserParam,
+  UpdateStoreDealParam,
+} from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
@@ -8,6 +11,7 @@ import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
+import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -165,6 +169,42 @@ export interface AdminCateringBookingUpdateStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminStoreDealsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreDealsModel;
+  };
+}
+
+export interface UpdateStoreDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateStoreDealRepository(
+  param: UpdateStoreDealParam
+): Promise<UpdateStoreDealResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/deal`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreDealsRepository(
+  query: string
+): Promise<GetAdminStoreDealsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/deal${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminCateringBookingUpdateStatusRepository(

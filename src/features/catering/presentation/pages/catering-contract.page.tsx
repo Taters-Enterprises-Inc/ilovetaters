@@ -103,7 +103,7 @@ export function CateringContract() {
             </div>
           </div>
         </div>
-        <div className="py-16">
+        <div>
           {getCateringOrdersState.data?.status === 1 ? (
             <CateringWaitingForBookingConfirmation />
           ) : null}

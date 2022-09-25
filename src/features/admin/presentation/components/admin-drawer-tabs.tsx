@@ -38,7 +38,11 @@ import {
   FaQuestionCircle,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
-import { MdFoodBank, MdOutlineSettings } from "react-icons/md";
+import {
+  MdFoodBank,
+  MdOutlineSettings,
+  MdProductionQuantityLimits,
+} from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -207,6 +211,58 @@ export function AdminDrawerTabs() {
               </div>
             </li>
           ) : null}
+          <li>
+            <div className="flex px-4">
+              <div className="flex-1">
+                <Accordion disableGutters>
+                  <AccordionSummary>
+                    <span className="flex items-center">
+                      <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                        <MdProductionQuantityLimits size={20} />
+                        <span
+                          className={`whitespace-pre duration-300 ${
+                            !adminSideBarState.status &&
+                            "opacity-0 overflow-hidden"
+                          }`}
+                        >
+                          Availabilities
+                        </span>
+                      </span>
+                    </span>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ul>
+                      <li>
+                        <NavLink
+                          to="/admin/availability/deal"
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Deals Availability
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            </div>
+          </li>
           <li>
             <NavLink
               to="/admin/faq"

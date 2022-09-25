@@ -104,6 +104,8 @@ import getAdminCateringBooking from "features/admin/presentation/slices/get-admi
 import adminCateringBookingUpdateStatus from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
 import getPopclubRedeemsHistory from "features/profile/presentation/slices/get-popclub-redeems-history.slice";
 import redeemValidators from "features/popclub/presentation/slices/redeem-validators.slice";
+import getAdminStoreDeals from "features/admin/presentation/slices/get-admin-stores-deals.slice";
+import updateStoreDeal from "features/admin/presentation/slices/update-store-deal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -198,6 +200,8 @@ export const store = configureStore({
     adminCateringBookingUpdateStatus,
     getPopclubRedeemsHistory,
     redeemValidators,
+    getAdminStoreDeals,
+    updateStoreDeal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

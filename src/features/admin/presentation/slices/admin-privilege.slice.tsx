@@ -27,10 +27,9 @@ export const adminPrivilege = createAsyncThunk(
       const response: AdminPrivilegeResponse = await AdminPrivilegeRepository(
         formData
       );
-      console.log(response.data);
+
       return fulfillWithValue(response.data);
     } catch (error: any) {
-      console.log(error.response.data.message);
       throw rejectWithValue({ message: error.response.data.message });
     }
   }

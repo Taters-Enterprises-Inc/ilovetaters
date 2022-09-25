@@ -46,11 +46,6 @@ import {
   AdminReport,
   AdminFaq,
   AdminCFaq,
-  AdminAvailabilityCateringAddOn,
-  AdminAvailabilityProductAddOn,
-  AdminAvailabilityPackage,
-  AdminAvailabilityProduct,
-  AdminAvailabilityBanner,
   AdminSettingCategory,
   AdminProduct,
   AdminSettingUser,
@@ -59,6 +54,7 @@ import {
   AdminSettingCreateUser,
   AdminSettingCreateGroup,
   AdminSettingEditUser,
+  AdminAvailabilityDeal,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -213,25 +209,8 @@ root.render(
 
                       <Route path="availability">
                         <Route
-                          path="catering-add-on"
-                          element={<AdminAvailabilityCateringAddOn />}
-                        />
-                        <Route
-                          path="product-add-on"
-                          element={<AdminAvailabilityProductAddOn />}
-                        />
-
-                        <Route
-                          path="package"
-                          element={<AdminAvailabilityPackage />}
-                        />
-                        <Route
-                          path="product"
-                          element={<AdminAvailabilityProduct />}
-                        />
-                        <Route
-                          path="banner"
-                          element={<AdminAvailabilityBanner />}
+                          path="deal"
+                          element={<AdminAvailabilityDeal />}
                         />
                       </Route>
 

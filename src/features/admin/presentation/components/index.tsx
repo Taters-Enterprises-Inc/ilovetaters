@@ -16,3 +16,4 @@ export { AdminCateringBookings } from "./admin-catering-bookings";
 export { AdminCateringBookingCustomerInformation } from "./admin-catering-booking-customer-information";
 export { AdminCateringBookingCustomerInformationButtons } from "./admin-catering-booking-customer-information-buttons";
 export { AdminDrawerTabs } from "./admin-drawer-tabs";
+export { AdminAvailabilityDeals } from "./admin-availability-deals";
