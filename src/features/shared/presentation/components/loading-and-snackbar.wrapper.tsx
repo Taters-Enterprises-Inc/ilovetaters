@@ -665,16 +665,16 @@ export function LoadingAndSnackbarWrapper() {
   useEffect(() => {
     switch (getRedeemState.status) {
       case GetRedeemState.inProgress:
-        setOpenBackdropPopClubLoading(true);
+        setOpenBackdropLoading(true);
         break;
       case GetRedeemState.initial:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetRedeemState.success:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetRedeemState.fail:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
     }
   }, [getRedeemState, dispatch]);
@@ -845,16 +845,16 @@ export function LoadingAndSnackbarWrapper() {
   useEffect(() => {
     switch (getStoresAvailablePopClubState.status) {
       case GetStoresAvailablePopClubState.inProgress:
-        setOpenBackdropPopClubLoading(true);
+        setOpenBackdropLoading(true);
         break;
       case GetStoresAvailablePopClubState.initial:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetStoresAvailablePopClubState.success:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetStoresAvailablePopClubState.fail:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
     }
   }, [getStoresAvailablePopClubState]);

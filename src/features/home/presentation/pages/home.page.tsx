@@ -1,8 +1,4 @@
-import {
-  FooterNav,
-  HeaderNav,
-  HomeHeaderNav,
-} from "features/shared/presentation/components";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { useEffect, useRef, useState } from "react";
 import {
   REACT_APP_DOMAIN_URL,
@@ -29,8 +25,6 @@ export function Home() {
 
   return (
     <main className="min-h-screen bg-primary">
-      {/* <HomeHeaderNav active="HOME" sticky /> */}
-
       <HeaderNav
         activeUrl="HOME"
         className="hidden lg:block"

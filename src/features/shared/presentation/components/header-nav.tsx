@@ -78,8 +78,8 @@ export function HeaderNav(props: HeaderNavProps) {
   const anchorRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    dispatch(getAllPlatform());
-  }, [dispatch]);
+    if (openPlatformChooserModal) dispatch(getAllPlatform());
+  }, [dispatch, openPlatformChooserModal]);
 
   const [
     openMessageModalWhenSwitchingTabWhenCacheDataExist,
