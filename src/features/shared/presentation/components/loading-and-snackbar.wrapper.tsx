@@ -213,6 +213,10 @@ import {
   selectUpdateStoreDeal,
   UpdateStoreDealState,
 } from "features/admin/presentation/slices/update-store-deal.slice";
+import {
+  selectUpdateAdminSettingStore,
+  UpdateAdminSettingStoreState,
+} from "features/admin/presentation/slices/update-setting-store.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -321,6 +325,28 @@ export function LoadingAndSnackbarWrapper() {
   );
 
   const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
+
+  const updateAdminSettingStoreState = useAppSelector(
+    selectUpdateAdminSettingStore
+  );
+
+  useEffect(() => {
+    switch (updateAdminSettingStoreState.status) {
+      case UpdateAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateAdminSettingStoreState, dispatch]);
+
   useEffect(() => {
     switch (updateStoreDealState.status) {
       case UpdateStoreDealState.inProgress:

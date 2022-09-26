@@ -65,7 +65,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: null,
-                    service: "POPCLUB",
+                    service: "POPCLUB-ONLINE-DELIVERY",
                   })
                 );
               }}
@@ -73,7 +73,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: null,
-                    service: "POPCLUB",
+                    service: "POPCLUB-ONLINE-DELIVERY",
                   })
                 );
               }}
@@ -82,7 +82,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: place,
-                    service: "POPCLUB",
+                    service: "POPCLUB-ONLINE-DELIVERY",
                   })
                 );
               }}
@@ -94,7 +94,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: place,
-                    service: "POPCLUB",
+                    service: "POPCLUB-ONLINE-DELIVERY",
                   })
                 );
               }}

@@ -18,7 +18,10 @@ import {
   selectGetAdminSettingStores,
 } from "../slices/get-admin-setting-stores.slice";
 import Checkbox from "@mui/material/Checkbox";
-import { updateAdminSettingStore } from "../slices/update-setting-store.slice";
+import {
+  selectUpdateAdminSettingStore,
+  updateAdminSettingStore,
+} from "../slices/update-setting-store.slice";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -49,7 +52,6 @@ export function AdminSettingStores() {
   const navigate = useNavigate();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
-  const status = query.get("status") ?? "0";
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
@@ -58,18 +60,29 @@ export function AdminSettingStores() {
     selectGetAdminSettingStores
   );
 
+  const updateAdminSettingStoreState = useAppSelector(
+    selectUpdateAdminSettingStore
+  );
+
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
-      status: status ?? 0,
       order_by: orderBy,
       order: order,
       search: search,
     });
 
     dispatch(getAdminSettingStores(query));
-  }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
+  }, [
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+    updateAdminSettingStoreState,
+  ]);
 
   return (
     <>
@@ -88,7 +101,6 @@ export function AdminSettingStores() {
                 const params = {
                   page_no: null,
                   per_page: perPage,
-                  status: status,
                   order_by: orderBy,
                   order: order,
                   search: val === "" ? null : val,
@@ -106,7 +118,6 @@ export function AdminSettingStores() {
                   const params = {
                     page_no: pageNo,
                     per_page: event.target.value,
-                    status: status,
                     search: search,
                   };
 
@@ -125,7 +136,6 @@ export function AdminSettingStores() {
                   const params = {
                     page_no: newPage,
                     per_page: perPage,
-                    status: status,
                     search: search,
                   };
 
@@ -165,7 +175,6 @@ export function AdminSettingStores() {
                 const params = {
                   page_no: null,
                   per_page: perPage,
-                  status: status,
                   order_by: orderBy,
                   order: order,
                   search: val === "" ? null : val,
@@ -184,7 +193,6 @@ export function AdminSettingStores() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: status,
                   order_by: column_selected,
                   order: isAsc ? "desc" : "asc",
                   search: search,
@@ -204,7 +212,6 @@ export function AdminSettingStores() {
                   const params = {
                     page_no: pageNo,
                     per_page: event.target.value,
-                    status: status,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -225,7 +232,6 @@ export function AdminSettingStores() {
                   const params = {
                     page_no: newPage,
                     per_page: perPage,
-                    status: status,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -262,7 +268,7 @@ export function AdminSettingStores() {
                             );
                           }}
                           color="primary"
-                          defaultChecked={row.status === "1" ? true : false}
+                          checked={row.status === "1" ? true : false}
                         />
                       </DataTableCell>
                       <DataTableCell>
@@ -277,9 +283,7 @@ export function AdminSettingStores() {
                             );
                           }}
                           color="primary"
-                          defaultChecked={
-                            row.catering_status === 1 ? true : false
-                          }
+                          checked={row.catering_status === 1 ? true : false}
                         />
                       </DataTableCell>
                       <DataTableCell>
@@ -294,7 +298,7 @@ export function AdminSettingStores() {
                             );
                           }}
                           color="primary"
-                          defaultChecked={
+                          checked={
                             row.popclub_walk_in_status === 1 ? true : false
                           }
                         />
@@ -312,7 +316,7 @@ export function AdminSettingStores() {
                             );
                           }}
                           color="primary"
-                          defaultChecked={
+                          checked={
                             row.popclub_online_delivery_status === 1
                               ? true
                               : false

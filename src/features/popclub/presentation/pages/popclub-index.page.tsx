@@ -64,7 +64,9 @@ export function PopClubIndexPage() {
           }
         }}
         open={true}
-        onClose={() => {}}
+        onClose={() => {
+          navigate("/");
+        }}
       />
       <StoreChooserModal
         open={openStoreChooserModal}
