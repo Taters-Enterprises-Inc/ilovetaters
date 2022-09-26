@@ -52,7 +52,7 @@ export function UnExpiredRedeem() {
             getSessionState.data.customer_address &&
             getSessionState.data.cache_data.store_name &&
             !location.pathname.includes("popclub")
-              ? "sm:top-[80px] lg:top-[100px]"
+              ? "sm:top-[100px] lg:top-[100px]"
               : "sm:top-[70px] lg:top-[80px]"
           } h-[90px] w-full ${
             hash === getLatestUnexpiredRedeemState.data.deal_hash
