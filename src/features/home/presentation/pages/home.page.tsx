@@ -144,8 +144,8 @@ export function Home() {
         })}
       </section>
 
-      <footer className="bg-secondary text-white lg:pb-0 pb-16">
-        <div className="container py-6 text-sm flex flex-col lg:flex-row items-center justify-center lg:space-y-0 space-y-1">
+      <footer className="text-white pb-14 bg-secondary lg:pb-0">
+        <div className="container flex flex-col items-center justify-center py-4 space-y-1 text-sm font-bold lg:flex-row lg:space-y-0">
           <span className="flex-1">© All rights reserved.</span>
           <span className="flex-1">Customer Hotline: (+63) 997-275-5595</span>
           <span className="text-end">Taters Enterprises Incorporated</span>
