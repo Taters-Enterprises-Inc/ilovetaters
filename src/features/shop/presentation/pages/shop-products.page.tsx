@@ -5,11 +5,17 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  selectSetStoreAndAddress,
+  SetStoreAndAddressState,
+} from "features/shared/presentation/slices/set-store-and-address.slice";
+import { GetCategoryProductsRepository } from "features/shop/data/repository/shop.repository";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
 import {
   getCategoryProducts,
+  GetCategoryProductsState,
   selectGetCategoryProducts,
 } from "../slices/get-category-products.slice";
 
@@ -20,6 +26,8 @@ export function ShopProducts() {
   const dispatch = useAppDispatch();
 
   const location = useLocation();
+  const [onLoad, setOnLoad] = useState(false);
+  const reLoadSession = useRef(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,19 +39,30 @@ export function ShopProducts() {
   }, [dispatch]);
 
   useEffect(() => {
+    reLoadSession.current += 1;
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data
     ) {
-      getSessionState.data.cache_data?.region_id
-        ? dispatch(
-            getCategoryProducts({
-              region_id: getSessionState.data.cache_data.region_id,
-            })
-          )
-        : navigate("/delivery");
+      if (getSessionState.data.cache_data?.region_id) {
+        dispatch(
+          getCategoryProducts({
+            region_id: getSessionState.data.cache_data.region_id,
+          })
+        );
+      } else {
+        setOnLoad(true);
+      }
     }
   }, [dispatch, getSessionState]);
+
+  useEffect(() => {
+    if (onLoad && reLoadSession.current > 4) {
+      if (getSessionState.data?.cache_data?.region_id === undefined) {
+        navigate("/delivery");
+      }
+    }
+  }, [onLoad]);
 
   return (
     <main className="min-h-screen bg-primary">

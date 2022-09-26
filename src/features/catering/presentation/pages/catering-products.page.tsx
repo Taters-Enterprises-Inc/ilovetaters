@@ -5,8 +5,8 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCateringCategoryProducts,
   selectGetCateringCategoryProducts,
@@ -24,6 +24,10 @@ export function CateringProducts() {
 
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const reLoadSession = useRef(0);
+  const [onLoad, setOnLoad] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -34,6 +38,7 @@ export function CateringProducts() {
   }, [dispatch]);
 
   useEffect(() => {
+    reLoadSession.current += 1;
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data
@@ -44,9 +49,19 @@ export function CateringProducts() {
             region_id: getSessionState.data.cache_data.region_id,
           })
         );
+      } else {
+        setOnLoad(true);
       }
     }
   }, [dispatch, getSessionState]);
+
+  useEffect(() => {
+    if (onLoad && reLoadSession.current > 4) {
+      if (getSessionState.data?.cache_data?.region_id === undefined) {
+        navigate("/delivery");
+      }
+    }
+  }, [onLoad]);
 
   return (
     <main className="min-h-screen bg-primary">
