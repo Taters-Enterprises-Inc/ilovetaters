@@ -64,7 +64,10 @@ import {
   LoadingAndSnackbarWrapper,
   NotificationWrapper,
 } from "features/shared/presentation/components";
-import { ShopCheckoutGuard } from "features/shop/presentation/guards";
+import {
+  ShopCheckoutGuard,
+  ShopProductsGuard,
+} from "features/shop/presentation/guards";
 import { ProfileGuard } from "features/profile/presentation/guards";
 
 import { Admin } from "features/admin/presentation/pages/admin.page";
@@ -139,7 +142,9 @@ root.render(
                     <Route path="products/:hash" element={<ShopProduct />} />
                     <Route path="order/:hash" element={<ShopOrder />} />
 
-                    <Route path="products" element={<ShopProducts />} />
+                    <Route element={<ShopProductsGuard />}>
+                      <Route path="products" element={<ShopProducts />} />
+                    </Route>
                     <Route element={<ShopCheckoutGuard />}>
                       <Route path="checkout" element={<ShopCheckout />} />
                     </Route>

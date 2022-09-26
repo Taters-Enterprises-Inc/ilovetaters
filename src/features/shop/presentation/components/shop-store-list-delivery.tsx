@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   selectSetStoreAndAddress,
@@ -25,7 +26,9 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
-      navigate("products");
+      dispatch(getSession()).then(() => {
+        navigate("products");
+      });
       document.body.classList.remove("overflow-hidden");
     }
   }, [setStoreAndAddressState, navigate]);
