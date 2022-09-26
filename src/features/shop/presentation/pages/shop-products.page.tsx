@@ -6,7 +6,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
 import {
   getCategoryProducts,
@@ -20,6 +20,7 @@ export function ShopProducts() {
   const dispatch = useAppDispatch();
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -34,13 +35,13 @@ export function ShopProducts() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data
     ) {
-      if (getSessionState.data.cache_data?.region_id) {
-        dispatch(
-          getCategoryProducts({
-            region_id: getSessionState.data.cache_data.region_id,
-          })
-        );
-      }
+      getSessionState.data.cache_data?.region_id
+        ? dispatch(
+            getCategoryProducts({
+              region_id: getSessionState.data.cache_data.region_id,
+            })
+          )
+        : navigate("/delivery");
     }
   }, [dispatch, getSessionState]);
 
@@ -73,7 +74,7 @@ export function ShopProducts() {
         ></img>
       </section>
       <section className="space-y-10 pb-36 lg:pb-10">
-        {getCategoryProductsState.data?.map((category:any, i:number) => {
+        {getCategoryProductsState.data?.map((category: any, i: number) => {
           return (
             <section
               key={i}
