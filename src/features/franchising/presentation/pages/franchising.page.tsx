@@ -33,7 +33,7 @@ export function Franchising() {
         <img
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/desktop/franchising.webp"
+            "api/assets/images/franchising/hero/desktop/franchising-black.webp"
           }
           alt="The best pop corn in town"
           className="hidden object-contain object-center w-full lg:block"
@@ -41,7 +41,7 @@ export function Franchising() {
         <img
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/mobile/franchising.webp"
+            "api/assets/images/franchising/hero/mobile/franchising-black.webp"
           }
           alt="The best pop corn in town"
           className="block object-contain object-center w-full lg:hidden"
@@ -66,7 +66,7 @@ export function Franchising() {
           className="pt-6"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/mobile/franchising.webp"
+            "api/assets/images/franchising/hero/mobile/franchising-black.webp"
           }
           alt="The best pop corn in town"
         ></img>
@@ -90,7 +90,7 @@ export function Franchising() {
           className="min-w-full"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/desktop/franchising.webp"
+            "api/assets/images/franchising/hero/desktop/franchising-black.webp"
           }
           alt="The best pop corn in town"
         ></img>
