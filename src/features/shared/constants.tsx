@@ -73,7 +73,7 @@ export const SERVICES_MOBILE = [
     color: "#1d1115",
     textColor: "white",
     backgroundPosition: "100% 100%",
-    url: "shop",
+    url: "delivery",
     image: "api/assets/images/home/cards/taters_snackshop.webp",
   },
   {
