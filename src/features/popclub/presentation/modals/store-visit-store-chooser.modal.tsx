@@ -79,7 +79,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: place,
-                    service: "SNACKSHOP",
+                    service: "POPCLUB",
                   })
                 );
               }}
@@ -95,7 +95,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: place,
-                    service: "SNACKSHOP",
+                    service: "POPCLUB",
                   })
                 );
               }}

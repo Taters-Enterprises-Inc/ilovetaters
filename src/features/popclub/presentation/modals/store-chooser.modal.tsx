@@ -82,7 +82,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: place,
-                    service: "SNACKSHOP",
+                    service: "POPCLUB",
                   })
                 );
               }}
@@ -94,7 +94,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
                 dispatch(
                   getStoresAvailablePopClub({
                     address: place,
-                    service: "SNACKSHOP",
+                    service: "POPCLUB",
                   })
                 );
               }}

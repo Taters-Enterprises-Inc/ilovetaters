@@ -25,7 +25,7 @@ export interface SetStoreAndAddressParm {
   address: string | null;
   storeId: number;
   regionId: number;
-  service: "SNACKSHOP" | "CATERING";
+  service: "SNACKSHOP" | "CATERING" | "POPCLUB";
   cateringStartDate?: Date;
   cateringEndDate?: Date;
 }

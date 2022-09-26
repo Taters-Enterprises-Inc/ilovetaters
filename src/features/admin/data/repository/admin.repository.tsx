@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   EditAdminUserParam,
+  UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
   UpdateStoreProductParam,
 } from "features/admin/core/admin.params";
@@ -11,6 +12,7 @@ import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
+import { GetAdminSettingStoresModel } from "features/admin/core/domain/get-admin-setting-stores.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
 import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
@@ -205,6 +207,35 @@ export interface UpdateStoreProductResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingStoresResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingStoresModel;
+  };
+}
+
+export interface UpdateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingStoreRepository(
+  param: UpdateAdminSettingStoreParam
+): Promise<UpdateStoreProductResponse> {
+  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/store`, param, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingStoresRepository(
+  query: string
+): Promise<GetAdminSettingStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/stores${query}`, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateStoreProductRepository(

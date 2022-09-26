@@ -198,8 +198,14 @@ export function PopClubDeal() {
     if (
       getSessionState.data?.userData &&
       redeemValidatorsState.data &&
-      redeemValidatorsState.data.next_available_redeem
+      redeemValidatorsState.data?.some(
+        (o) => o.deal_id === getDealState.data?.deal_id
+      )
     ) {
+      const redeemValidator = redeemValidatorsState.data.find(
+        (o) => o.deal_id === getDealState.data?.deal_id
+      );
+
       const pad = (number: number) => ("0" + number).slice(-2);
 
       const renderer = ({ hours, minutes, seconds, completed }: any) => {
@@ -264,15 +270,16 @@ export function PopClubDeal() {
         }
       };
 
-      return (
-        <div className="w-full py-3 text-white bg-secondary">
-          <span className="mt-3">You can redeem this deal after </span>
-          <Countdown
-            renderer={renderer}
-            date={new Date(redeemValidatorsState.data.next_available_redeem)}
-          />
-        </div>
-      );
+      if (redeemValidator)
+        return (
+          <div className="w-full py-3 text-white bg-secondary">
+            <span className="mt-3">You can redeem this deal after </span>
+            <Countdown
+              renderer={renderer}
+              date={new Date(redeemValidator.next_available_redeem)}
+            />
+          </div>
+        );
     } else if (
       getSessionState.data?.userData &&
       getRedeemState.status === GetRedeemState.success &&
