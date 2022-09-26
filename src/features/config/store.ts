@@ -109,6 +109,8 @@ import updateStoreDeal from "features/admin/presentation/slices/update-store-dea
 import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-stores-products.slice";
 import getProductCategories from "features/admin/presentation/slices/get-product-categories.slice";
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
+import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
+import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 
 export const store = configureStore({
   reducer: {
@@ -208,6 +210,8 @@ export const store = configureStore({
     getAdminStoreProducts,
     getProductCategories,
     updateStoreProduct,
+    getAdminSettingStores,
+    updateAdminSettingStore,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
