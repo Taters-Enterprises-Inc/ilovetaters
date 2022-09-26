@@ -60,7 +60,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: null,
-                    service: "POPCLUB",
+                    service: "POPCLUB-STORE-VISIT",
                   })
                 );
               }}
@@ -68,7 +68,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: null,
-                    service: "POPCLUB",
+                    service: "POPCLUB-STORE-VISIT",
                   })
                 );
               }}
@@ -79,7 +79,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: place,
-                    service: "POPCLUB",
+                    service: "POPCLUB-STORE-VISIT",
                   })
                 );
               }}
@@ -95,7 +95,7 @@ export function StoreVisitStoreChooserModal(
                 dispatch(
                   getStoresAvailablePopClubStoreVisit({
                     address: place,
-                    service: "POPCLUB",
+                    service: "POPCLUB-STORE-VISIT",
                   })
                 );
               }}

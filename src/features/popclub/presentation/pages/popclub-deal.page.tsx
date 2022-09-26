@@ -293,9 +293,17 @@ export function PopClubDeal() {
                 onClick={() => {
                   navigate("/delivery/checkout");
                 }}
-                className="w-full py-3 text-white uppercase border border-white bg-button rounded-xl"
+                className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
               >
-                Checkout
+                Go Back to Checkout
+              </button>
+              <button
+                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
+                onClick={() => {
+                  setOpenForfeitModalMessage(true);
+                }}
+              >
+                Cancel Redeem
               </button>
               <button
                 className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
