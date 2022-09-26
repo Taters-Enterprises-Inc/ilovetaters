@@ -126,6 +126,7 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
+      dispatch(redeemValidators());
     }
   }, [dispatch, getDealState, forfeitRedeemState]);
 
