@@ -18,3 +18,4 @@ export { AdminCateringBookingCustomerInformationButtons } from "./admin-catering
 export { AdminDrawerTabs } from "./admin-drawer-tabs";
 export { AdminAvailabilityDeals } from "./admin-availability-deals";
 export { AdminAvailabilityProducts } from "./admin-availability-products";
+export { AdminSettingStores } from "./admin-setting-stores";

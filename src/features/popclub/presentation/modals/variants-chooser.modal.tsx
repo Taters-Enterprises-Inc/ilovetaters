@@ -170,7 +170,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-secondary px-4 py-8 lg:p-8 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px] text-white mb-10">
+      <div className="bg-secondary px-4 mb-36 py-8 lg:p-8 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px] text-white">
         <button
           className="absolute text-white top-2 right-4"
           onClick={props.onClose}

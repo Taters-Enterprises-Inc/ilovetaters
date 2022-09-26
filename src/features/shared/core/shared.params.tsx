@@ -18,14 +18,14 @@ export interface UploadProofOfPaymentParam {
 
 export interface GetStoresAvailableParam {
   address: string | null;
-  service: "SNACKSHOP" | "CATERING";
+  service: "SNACKSHOP" | "CATERING" | "POPCLUB";
 }
 
 export interface SetStoreAndAddressParm {
   address: string | null;
   storeId: number;
   regionId: number;
-  service: "SNACKSHOP" | "CATERING";
+  service: "SNACKSHOP" | "CATERING" | "POPCLUB";
   cateringStartDate?: Date;
   cateringEndDate?: Date;
 }

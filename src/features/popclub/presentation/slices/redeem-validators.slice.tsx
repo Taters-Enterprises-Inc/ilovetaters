@@ -16,7 +16,7 @@ export enum RedeemValidatorsState {
 const initialState: {
   status: RedeemValidatorsState.initial;
   message: string;
-  data: RedeemValidatorsModel | undefined;
+  data: Array<RedeemValidatorsModel> | undefined;
 } = {
   status: RedeemValidatorsState.initial,
   message: "",
@@ -48,7 +48,7 @@ export const redeemValidatorsSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: RedeemValidatorsModel | null;
+            data: Array<RedeemValidatorsModel> | null;
           }>
         ) => {
           const data = action.payload.data;

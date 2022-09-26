@@ -100,7 +100,7 @@ export function Deal(props: DealProps) {
     isDealAvailable = availableDays.includes(currentDayOfWeek);
   }
 
-  if (redeemValidatorsState.data) {
+  if (redeemValidatorsState.data?.some((el) => el.deal_id === props.deal.id)) {
     isDealAvailable = false;
   }
 
@@ -109,18 +109,22 @@ export function Deal(props: DealProps) {
   };
 
   const dealIsNotAvailableMessage = () => {
-    if (redeemValidatorsState.data) {
-      return (
-        <>
-          <span className="text-xs font-bold lg:text-base">
-            Available after
-          </span>
-          <Countdown
-            renderer={renderer}
-            date={redeemValidatorsState.data.next_available_redeem}
-          />
-        </>
+    if (redeemValidatorsState.data?.some((o) => o.deal_id === props.deal.id)) {
+      const redeemValidator = redeemValidatorsState.data.find(
+        (o) => o.deal_id === props.deal.id
       );
+      if (redeemValidator)
+        return (
+          <>
+            <span className="text-xs font-bold lg:text-base">
+              Available after
+            </span>
+            <Countdown
+              renderer={renderer}
+              date={redeemValidator.next_available_redeem}
+            />
+          </>
+        );
     } else if (availableStartTimeInDate) {
       return (
         <>
@@ -131,7 +135,11 @@ export function Deal(props: DealProps) {
         </>
       );
     } else if (props.deal.available_days) {
-      return <span>Only available on Weekdays</span>;
+      return (
+        <span className="text-xs font-bold lg:text-base">
+          Only available on Weekdays
+        </span>
+      );
     }
     return null;
   };

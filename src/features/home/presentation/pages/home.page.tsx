@@ -20,7 +20,7 @@ export function Home() {
   }, [dispatch]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
   return (
@@ -143,6 +143,14 @@ export function Home() {
           );
         })}
       </section>
+
+      <footer className="text-white pb-14 bg-secondary lg:pb-0">
+        <div className="container flex flex-col items-center justify-center py-4 space-y-1 text-sm font-bold lg:flex-row lg:space-y-0">
+          <span className="flex-1">© All rights reserved.</span>
+          <span className="flex-1">Customer Hotline: (+63) 997-275-5595</span>
+          <span className="text-end">Taters Enterprises Incorporated</span>
+        </div>
+      </footer>
 
       <FooterNav activeUrl="HOME"></FooterNav>
     </main>
