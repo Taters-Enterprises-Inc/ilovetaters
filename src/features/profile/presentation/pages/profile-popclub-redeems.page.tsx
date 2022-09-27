@@ -24,6 +24,7 @@ import {
   selectGetPopclubRedeemsHistory,
 } from "../slices/get-popclub-redeems-history.slice";
 import { PopclubRedeemModel } from "features/profile/core/domain/popclub-redeem.model";
+import moment from "moment";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -162,16 +163,29 @@ export function ProfilePopclubRedeems() {
                     <span className="text-lg text-gray-600">
                       {row.redeem_code}
                     </span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
-                    </span>
+                    {row.status === 1 &&
+                    moment(row.expiration).isBefore(moment()) ? (
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor: "#a21013",
+                        }}
+                      >
+                        Expired
+                      </span>
+                    ) : (
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                      </span>
+                    )}
                   </span>
                   <div className="flex justify-between">
                     <span className="text-xs">
@@ -284,16 +298,29 @@ export function ProfilePopclubRedeems() {
                       <DataTableCell>{row.redeem_code}</DataTableCell>
                       <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
                       <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
-                        </span>
+                        {row.status === 1 &&
+                        moment(row.expiration).isBefore(moment()) ? (
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor: "#a21013",
+                            }}
+                          >
+                            Expired
+                          </span>
+                        ) : (
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                          </span>
+                        )}
                       </DataTableCell>
                     </DataTableRow>
                   ))}

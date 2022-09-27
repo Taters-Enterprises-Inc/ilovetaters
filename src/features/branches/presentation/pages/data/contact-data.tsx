@@ -111,8 +111,8 @@ export const contactData: Array<ContactDataType> = [
       </svg>
     ),
     heading: "Email Address",
-    paragraph: "contact: support@tatersgroup.com",
-    href: "mailto:support@tatersgroup.com",
+    paragraph: "contact: tei.csr@tatersgroup.com",
+    href: "mailto:tei.csr@tatersgroup.com",
     cardOpt: {
       active: true,
       title: "contact",

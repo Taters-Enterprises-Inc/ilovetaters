@@ -8,7 +8,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
   const [resize, setResize] = useState<number>(window.innerWidth);
   const textLenght = 40;
   const sliceText = store.address.slice(0, textLenght);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     const resizeFunc = () => {
       setResize(window.innerWidth);
@@ -17,7 +17,6 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
 
     return () => window.removeEventListener("resize", resizeFunc);
   }, []);
-
 
   const distance_in_km = Math.ceil(
     store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5
@@ -30,40 +29,33 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
       }}
       className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
-      <div
-        className=" cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center"
-      >
+      <div className=" cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
         {store.store_name}
       </div>
 
-      <div
-      
-        className="absolute flex flex-col items-stretch w-full mt-10 space-y-2 bg-transparent cursor-pointer md:mt-16"
-      >
+      <div className="absolute flex flex-col items-stretch w-full mt-10 space-y-2 bg-transparent cursor-pointer md:mt-16">
         <div className="flex justify-end ">
-          <span className="px-2 text-sm bg-secondary">
-            {distance_in_km} KM
-          </span>
+          <span className="px-2 text-sm bg-secondary">{distance_in_km} KM</span>
         </div>
       </div>
 
-      <img
-        src={
-          store?.store_image
-            ? `https://ilovetaters.com/shop/assets/img//store_images/250/${store.store_image} `
-            : "https://ilovetaters.com/shop/assets/img//store_images/250/taters_ayalacircuit.jpg"
-        }
-        alt=""
-        className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
-      />
-
+      {store.store_image ? (
+        <img
+          src={`https://ilovetaters.com/shop/assets/img//store_images/250/${store.store_image}`}
+          alt=""
+          className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
+        />
+      ) : (
+        <img
+          src={`https://ilovetaters.com/shop/assets/img//store_images/250/blank.jpg`}
+          alt=""
+          className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
+        />
+      )}
       <div
-
         className={`transition-all cursor-pointer flex border-b border-[#7b7982] w-full pb-2`}
       >
-        <span
-          className={`p-4`}
-        >
+        <span className={`p-4`}>
           <svg
             className="w-4 h-4 stroke-red-400"
             fill="none"
@@ -85,42 +77,36 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
             ></path>
           </svg>
         </span>
-        <div
-      
-          className="text-left py-2 block leading-[20px] cursor-pointer"
-        >
-          <p
-            className={`text-[.8125rem] cursor-pointer	text-[#bcd2d6] pb-1`}
-          >
+        <div className="text-left py-2 block leading-[20px] cursor-pointer">
+          <p className={`text-[.8125rem] cursor-pointer	text-[#bcd2d6] pb-1`}>
             Find us
           </p>
           <div
-          
             className={` text-[#fff] md:text-[12px] text-[10px] font-normal cursor-pointer pr-2.5`}
           >
             {resize < 768 && store.address.length > textLenght && !showText
               ? sliceText + " . . . "
               : store.address}
-               {resize < 768 && store.address.length > textLenght && (
-            <button
-              className={`cursor-pointer hover:text-blue-300  text-white md:text-[13px] text-[10px] p-1 z-[100]  ${
-                showText && "block text w-full mt-2"
-              }`}
-              onClick={(e:any) => {
-                e.stopPropagation();
-                setShowText((s: boolean) => !s);
-              }}
-            >
-              {showText ? "Show Less" : "Read more"}
-            </button>
-          )}
-          </div>         
+            {resize < 768 && store.address.length > textLenght && (
+              <button
+                className={`cursor-pointer hover:text-blue-300  text-white md:text-[13px] text-[10px] p-1 z-[100]  ${
+                  showText && "block text w-full mt-2"
+                }`}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setShowText((s: boolean) => !s);
+                }}
+              >
+                {showText ? "Show Less" : "Read more"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div
-        onClick={(e:any) => {
-            e.stopPropagation();
-            window.location.href =`tel:${store.contactno}`;
+        onClick={(e: any) => {
+          e.stopPropagation();
+          window.location.href = `tel:${store.contactno}`;
         }}
         className="cursor-pointer flex border-b border-[#7b7982] w-full pb-2"
       >
@@ -148,12 +134,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         </div>
       </div>
 
-      <div
-        className="flex w-full h-auto pb-2 pr-4 cursor-pointer"
-      >
-        <span
-          className="p-4"
-        >
+      <div className="flex w-full h-auto pb-2 pr-4 cursor-pointer">
+        <span className="p-4">
           <svg
             className="w-4 h-4 stroke-red-400"
             fill="none"
@@ -169,19 +151,9 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
             ></path>
           </svg>
         </span>
-        <div
-      
-          className="block py-2 text-left"
-        >
-          <p
-          
-            className="text-[.7125rem] text-[#bcd2d6] pb-1"
-          >
-            Operating Hours
-          </p>
-          <div
-            className="  md:text-[13px] text-[10px] font-normal  text-[#fff] "
-          >
+        <div className="block py-2 text-left">
+          <p className="text-[.7125rem] text-[#bcd2d6] pb-1">Operating Hours</p>
+          <div className="  md:text-[13px] text-[10px] font-normal  text-[#fff] ">
             {store.operatinghours.split("</br>")[1] !== undefined
               ? store.operatinghours.split("</br>")[0] +
                 " , " +
