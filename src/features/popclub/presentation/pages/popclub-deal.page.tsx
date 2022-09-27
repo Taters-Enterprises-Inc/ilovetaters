@@ -178,6 +178,9 @@ export function PopClubDeal() {
     if (hash) {
       dispatch(resetGetDeal());
       dispatch(getDeal(hash));
+      dispatch(resetGetRedeem());
+      dispatch(getLatestUnexpiredRedeem());
+      dispatch(redeemValidators());
     }
   }, [dispatch, hash]);
 

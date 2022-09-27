@@ -8,6 +8,7 @@ import {
   setAddressStoreVisitStoreChooserModal,
 } from "../slices/store-visit-store-chooser-modal.slice";
 import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
+import { useEffect } from "react";
 
 interface StoreVisitStoreChooserModalProps {
   open: boolean;
@@ -18,6 +19,15 @@ export function StoreVisitStoreChooserModal(
   props: StoreVisitStoreChooserModalProps
 ) {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(
+      getStoresAvailablePopClubStoreVisit({
+        address: null,
+        service: "POPCLUB-STORE-VISIT",
+      })
+    );
+  }, []);
   const storeVisitStoreChooserModalState = useAppSelector(
     selectStoreVisitStoreChooserModal
   );
@@ -72,17 +82,7 @@ export function StoreVisitStoreChooserModal(
                   })
                 );
               }}
-              onLocateCurrentAddress={(place: string) => {
-                dispatch(
-                  setAddressStoreVisitStoreChooserModal({ address: place })
-                );
-                dispatch(
-                  getStoresAvailablePopClubStoreVisit({
-                    address: place,
-                    service: "POPCLUB-STORE-VISIT",
-                  })
-                );
-              }}
+              onLocateCurrentAddress={(place: string) => {}}
               onChange={(value: string) => {
                 dispatch(
                   setAddressStoreVisitStoreChooserModal({ address: value })
