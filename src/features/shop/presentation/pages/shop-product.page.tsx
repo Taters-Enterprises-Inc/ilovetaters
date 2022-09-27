@@ -373,6 +373,7 @@ export function ShopProduct() {
     size: number | undefined,
     flavor: number | undefined
   ) => {
+    console.log(size);
     if (getProductDetailsState.data) {
       dispatch(
         getProductSku({
@@ -382,8 +383,6 @@ export function ShopProduct() {
       );
     }
   };
-
-  console.log(currentFlavor);
 
   return (
     <main className="bg-secondary">

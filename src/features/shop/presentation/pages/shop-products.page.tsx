@@ -39,30 +39,18 @@ export function ShopProducts() {
   }, [dispatch]);
 
   useEffect(() => {
-    reLoadSession.current += 1;
     if (
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data
+      getSessionState.data &&
+      getSessionState.data.cache_data?.region_id
     ) {
-      if (getSessionState.data.cache_data?.region_id) {
-        dispatch(
-          getCategoryProducts({
-            region_id: getSessionState.data.cache_data.region_id,
-          })
-        );
-      } else {
-        setOnLoad(true);
-      }
+      dispatch(
+        getCategoryProducts({
+          region_id: getSessionState.data.cache_data.region_id,
+        })
+      );
     }
   }, [dispatch, getSessionState]);
-
-  useEffect(() => {
-    if (onLoad && reLoadSession.current > 4) {
-      if (getSessionState.data?.cache_data?.region_id === undefined) {
-        navigate("/delivery");
-      }
-    }
-  }, [onLoad]);
 
   return (
     <main className="min-h-screen bg-primary">

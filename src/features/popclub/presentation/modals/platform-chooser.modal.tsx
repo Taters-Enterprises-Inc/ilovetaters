@@ -39,7 +39,6 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
               <button
                 className=' text-sm w-full lg:text-base rounded-lg bg-transparent tracking-[3px] text-white py-3 px-10 border border-white mt-2  font-["Bebas_Neue"]'
                 onClick={() => {
-                  props.onClose();
                   props.onSelectedPlatform(platform.url_name);
                   dispatch(setPopClubData({ platform: platform.url_name }));
                 }}
