@@ -33,15 +33,14 @@ export function ShopProducts() {
   useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data
-    ) {
+      getSessionState.data &&
       getSessionState.data.cache_data?.region_id
-        ? dispatch(
-            getCategoryProducts({
-              region_id: getSessionState.data.cache_data.region_id,
-            })
-          )
-        : navigate("/delivery");
+    ) {
+      dispatch(
+        getCategoryProducts({
+          region_id: getSessionState.data.cache_data.region_id,
+        })
+      );
     }
   }, [dispatch, getSessionState]);
 
