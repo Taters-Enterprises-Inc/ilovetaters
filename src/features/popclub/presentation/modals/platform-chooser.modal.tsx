@@ -41,6 +41,7 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
                 onClick={() => {
                   props.onSelectedPlatform(platform.url_name);
                   dispatch(setPopClubData({ platform: platform.url_name }));
+                  props.onClose();
                 }}
               >
                 {temp[i]}
