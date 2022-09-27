@@ -373,6 +373,7 @@ export function ShopProduct() {
     size: number | undefined,
     flavor: number | undefined
   ) => {
+    console.log(size);
     if (getProductDetailsState.data) {
       dispatch(
         getProductSku({

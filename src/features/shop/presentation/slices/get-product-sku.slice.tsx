@@ -30,6 +30,7 @@ export const getProductSku = createAsyncThunk(
     const response: GetProductSkuResponse = await GetProductSkuRepository(
       param
     );
+    console.log(response.data);
     return response.data;
   }
 );
