@@ -69,7 +69,7 @@ import {
   ShopProductsGuard,
 } from "features/shop/presentation/guards";
 import { ProfileGuard } from "features/profile/presentation/guards";
-
+import { CateringProductsGuard } from "features/catering/presentation/guards/catering-products.guard";
 import { Admin } from "features/admin/presentation/pages/admin.page";
 import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 import { AdminGuard } from "features/admin/presentation/guards/admin.guard";
@@ -163,10 +163,7 @@ root.render(
                     />
                   </Route>
 
-                  <Route
-                    path="catering"
-                    element={<Navigate to={"/delivery"} />}
-                  />
+                  <Route path="catering" element={<Navigate to={"/shop"} />} />
                   <Route path="shop" element={<Catering />}>
                     <Route index element={<CateringHome />} />
                     <Route
@@ -178,7 +175,9 @@ root.render(
                       element={<CateringContract />}
                     />
                     <Route path="order/:hash" element={<CateringOrder />} />
-                    <Route path="products" element={<CateringProducts />} />
+                    <Route element={<CateringProductsGuard />}>
+                      <Route path="products" element={<CateringProducts />} />
+                    </Route>
                     <Route path="checkout" element={<CateringCheckout />} />
                   </Route>
                 </Route>

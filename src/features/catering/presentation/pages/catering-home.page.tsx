@@ -68,7 +68,9 @@ export function CateringHome() {
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
-      navigate("products");
+      dispatch(getSession()).then(() => {
+        navigate("products");
+      });
       document.body.classList.remove("overflow-hidden");
     }
   }, [setStoreAndAddressState, navigate]);

@@ -1,7 +1,13 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { selectGetStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
+import {
+  GetStoresAvailableCateringState,
+  selectGetStoresAvailableCatering,
+} from "../slices/get-stores-available-catering.slice";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface StoreListProps {
   address: string | null;
