@@ -200,11 +200,11 @@ export function PopClubDeal() {
       getSessionState.data?.userData &&
       redeemValidatorsState.data &&
       redeemValidatorsState.data?.some(
-        (o) => o.deal_id === getDealState.data?.deal_id
+        (o) => o.deal_id === getDealState.data?.id
       )
     ) {
       const redeemValidator = redeemValidatorsState.data.find(
-        (o) => o.deal_id === getDealState.data?.deal_id
+        (o) => o.deal_id === getDealState.data?.id
       );
 
       const pad = (number: number) => ("0" + number).slice(-2);
