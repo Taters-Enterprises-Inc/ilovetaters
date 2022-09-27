@@ -95,7 +95,7 @@ export function PopClubHome() {
           className="hidden lg:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/desktop/popclub.webp"
+            "api/assets/images/popclub/hero/desktop/popclub_black.webp"
           }
           alt="The best pop corn in town"
         ></img>

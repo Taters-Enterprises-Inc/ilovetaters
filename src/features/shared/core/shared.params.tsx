@@ -21,6 +21,7 @@ export interface GetStoresAvailableParam {
   service:
     | "SNACKSHOP"
     | "CATERING"
+    | "BRANCHES"
     | "POPCLUB-STORE-VISIT"
     | "POPCLUB-ONLINE-DELIVERY";
 }

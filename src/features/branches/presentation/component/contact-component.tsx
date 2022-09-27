@@ -30,7 +30,7 @@ export const ContactComponent: React.FC = (): JSX.Element => {
         className="hidden w-full lg:block"
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/branches/hero/desktop/branches_nationwide.webp"
+          "api/assets/images/branches/hero/desktop/branches_nationwide_black.webp"
         }
         alt="The best pop corn in town"
       ></img>
@@ -123,7 +123,7 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                   dispatch(
                     getStoresAvailableBranches({
                       address: null,
-                      service: "SNACKSHOP",
+                      service: "BRANCHES",
                     })
                   );
                 }}
@@ -131,7 +131,7 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                   dispatch(
                     getStoresAvailableBranches({
                       address: null,
-                      service: "SNACKSHOP",
+                      service: "BRANCHES",
                     })
                   );
                 }}
@@ -142,7 +142,7 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                   dispatch(
                     getStoresAvailableBranches({
                       address: place,
-                      service: "SNACKSHOP",
+                      service: "BRANCHES",
                     })
                   );
                 }}
@@ -158,7 +158,7 @@ export const ContactComponent: React.FC = (): JSX.Element => {
                   dispatch(
                     getStoresAvailableBranches({
                       address: place,
-                      service: "SNACKSHOP",
+                      service: "BRANCHES",
                     })
                   );
                 }}

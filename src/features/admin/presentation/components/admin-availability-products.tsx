@@ -39,6 +39,7 @@ import {
   selectUpdateStoreProduct,
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
+import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -76,12 +77,11 @@ export function AdminAvailabilityProducts() {
   const getAdminStoreProductsState = useAppSelector(
     selectGetAdminStoreProducts
   );
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getProductCategoriesState = useAppSelector(selectGetProductCategories);
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
 
   useEffect(() => {
-    dispatch(getAdminStores());
     dispatch(getProductCategories());
   }, [dispatch]);
 
@@ -170,13 +170,16 @@ export function AdminAvailabilityProducts() {
               Not-Available
             </button>
           </div>
-          {getAdminStoresState.data ? (
+          {getAdminSessionState.data ? (
             <FormControl sx={{ minWidth: 150 }} size="small">
               <InputLabel>Select a store</InputLabel>
 
               <Select
                 label="Select a store"
-                defaultValue={storeId ?? getAdminStoresState.data[0].store_id}
+                defaultValue={
+                  storeId ??
+                  getAdminSessionState.data.user_details.stores[0].store_id
+                }
                 onChange={(event) => {
                   if (event.target.value !== status) {
                     const params = {
@@ -198,13 +201,15 @@ export function AdminAvailabilityProducts() {
                   }
                 }}
               >
-                {getAdminStoresState.data?.map((store, index) => (
-                  <MenuItem key={index} value={store.store_id}>
-                    <span className="text-xs lg:text-base">
-                      {store.name} ( {store.menu_name} )
-                    </span>
-                  </MenuItem>
-                ))}
+                {getAdminSessionState.data.user_details.stores.map(
+                  (store, index) => (
+                    <MenuItem key={index} value={store.store_id}>
+                      <span className="text-xs lg:text-base">
+                        {store.name} ( {store.menu_name} )
+                      </span>
+                    </MenuItem>
+                  )
+                )}
               </Select>
             </FormControl>
           ) : null}

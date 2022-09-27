@@ -20,5 +20,10 @@ export interface AdminSessionModel {
       name: string;
       description: string;
     }>;
+    stores: Array<{
+      store_id: number;
+      name: string;
+      menu_name: string;
+    }>;
   };
 }
