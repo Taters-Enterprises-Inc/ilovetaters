@@ -17,6 +17,7 @@ import {
 } from "features/popclub/core/popclub.params";
 import { REACT_APP_DOMAIN_URL } from "../../../shared/constants";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
+import { RedeemValidatorsModel } from "features/popclub/core/domain/redeem_validators.model";
 
 export interface GetAllPlatformRepositoryResponse {
   data: {
@@ -110,6 +111,21 @@ export interface ForfeitRedeemResponse {
   data: {
     message: string;
   };
+}
+
+export interface RedeemValidatorsResponse {
+  data: {
+    message: string;
+    data: RedeemValidatorsModel;
+  };
+}
+export function RedeemValidatorsRepository(): Promise<RedeemValidatorsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeem-validators`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export function ForfeitRedeemRepository(): Promise<ForfeitRedeemResponse> {

@@ -1,11 +1,14 @@
-import { useAppSelector } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import { selectGetAllPlatform } from "features/popclub/presentation/slices/get-all-platform.slice";
+import {
+  getAllPlatform,
+  selectGetAllPlatform,
+} from "features/popclub/presentation/slices/get-all-platform.slice";
 import MoreDrawer from "./more-drawer.component";
 import { MessageModal } from "../modals";
 import { selectGetSession } from "../slices/get-session.slice";
@@ -19,13 +22,14 @@ export function FooterNav(props: FooterNavProps) {
   const getAllPlatformState = useAppSelector(selectGetAllPlatform);
   const getSessionState = useAppSelector(selectGetSession);
   const currentLocation = useLocation();
+  const dispatch = useAppDispatch();
 
   function isMoreActive() {
     const loc = currentLocation.pathname;
     if (
       loc === "/franchising" ||
-      loc === "/shop/profile" ||
-      loc === "/shop/terms-and-conditions"
+      loc === "/profile" ||
+      loc === "/delivery/terms-and-conditions"
     ) {
       return true;
     }
@@ -52,6 +56,10 @@ export function FooterNav(props: FooterNavProps) {
     message: "",
   });
 
+  useEffect(() => {
+    if (openPlatformChooserModal) dispatch(getAllPlatform());
+  }, [dispatch, openPlatformChooserModal]);
+
   const handleSwitchTab = (param: {
     url?: string;
     tabName: string;
@@ -76,7 +84,7 @@ export function FooterNav(props: FooterNavProps) {
 
   return (
     <>
-      <section className="fixed bottom-0 z-[2003]  w-full">
+      <section className="fixed bottom-0 z-[2003] lg:hidden w-full">
         <footer className="w-full shadow-l-2xl bg-secondary">
           <nav className="mx-auto lg:px-[200px] xl:px-[400px]">
             <ul className="flex h-full py-1 text-white item-stretch md:px-10">
@@ -138,7 +146,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <div
                   onClick={() =>
-                    handleSwitchTab({ url: "/shop", tabName: "snackshop" })
+                    handleSwitchTab({ url: "/delivery", tabName: "snackshop" })
                   }
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
@@ -165,7 +173,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <div
                   onClick={() =>
-                    handleSwitchTab({ url: "/catering", tabName: "catering" })
+                    handleSwitchTab({ url: "/shop", tabName: "catering" })
                   }
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >

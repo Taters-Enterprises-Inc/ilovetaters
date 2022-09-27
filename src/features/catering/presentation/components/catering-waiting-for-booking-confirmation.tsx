@@ -7,7 +7,7 @@ export function CateringWaitingForBookingConfirmation() {
   const { hash } = useParams();
 
   return (
-    <div className="container space-y-4">
+    <div className="container py-4 space-y-4 lg:py-16">
       <div
         className="px-4 py-3 mb-4 text-teal-900 bg-teal-100 border-t-4 border-teal-500 rounded-b shadow-md"
         role="alert"

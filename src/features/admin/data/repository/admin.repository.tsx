@@ -1,12 +1,23 @@
 import axios from "axios";
-import { EditAdminUserParam } from "features/admin/core/admin.params";
+import {
+  EditAdminUserParam,
+  UpdateAdminSettingStoreParam,
+  UpdateStoreDealParam,
+  UpdateStoreProductParam,
+} from "features/admin/core/admin.params";
+import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
+import { GetAdminSettingStoresModel } from "features/admin/core/domain/get-admin-setting-stores.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
+import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
+import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
+import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
@@ -121,6 +132,238 @@ export interface CreateAdminGroupResponse {
     message: string;
   };
 }
+
+export interface UploadProofOfPaymentAdminResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface ValidateReferenceNumberAdminResponse {
+  data: {
+    message: string;
+  };
+}
+export interface AdminShopOrderUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminPrivilegeResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminCateringBookingsResponse {
+  data: {
+    message: string;
+    data: GetAdminCateringBookingsModel;
+  };
+}
+
+export interface GetAdminCateringBookingResponse {
+  data: {
+    message: string;
+    data: AdminCateringBookingModel;
+  };
+}
+
+export interface AdminCateringBookingUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreDealsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreDealsModel;
+  };
+}
+
+export interface UpdateStoreDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreProductsModel;
+  };
+}
+
+export interface GetProductCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<ProductCategoryModel>;
+  };
+}
+
+export interface UpdateStoreProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingStoresResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingStoresModel;
+  };
+}
+
+export interface UpdateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingStoreRepository(
+  param: UpdateAdminSettingStoreParam
+): Promise<UpdateStoreProductResponse> {
+  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/store`, param, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingStoresRepository(
+  query: string
+): Promise<GetAdminSettingStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/stores${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStoreProductRepository(
+  param: UpdateStoreProductParam
+): Promise<UpdateStoreProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetProductCategoriesRepository(): Promise<GetProductCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/product-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreProductsRepository(
+  query: string
+): Promise<GetAdminStoreProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateStoreDealRepository(
+  param: UpdateStoreDealParam
+): Promise<UpdateStoreDealResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/deal`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreDealsRepository(
+  query: string
+): Promise<GetAdminStoreDealsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/deal${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminCateringBookingUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminCateringBookingUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminCateringBookingRepository(
+  trackingNo: string
+): Promise<GetAdminCateringBookingResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering/${trackingNo}`, {
+    withCredentials: true,
+  });
+}
+export function GetAdminCateringBookingsRepository(
+  query: string
+): Promise<GetAdminCateringBookingsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function AdminPrivilegeRepository(
+  formData: FormData
+): Promise<AdminPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminShopOrderUpdateStatusRepository(
+  formData: FormData
+): Promise<AdminShopOrderUpdateStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function ValidateReferenceNumberAdminRepository(
+  formData: FormData
+): Promise<ValidateReferenceNumberAdminResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UploadProofOfPaymentAdminRepository(
+  formData: FormData
+): Promise<UploadProofOfPaymentAdminResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/payment/`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
 export function CreateAdminGroupRepository(
   formData: FormData
 ): Promise<CreateAdminGroupResponse> {

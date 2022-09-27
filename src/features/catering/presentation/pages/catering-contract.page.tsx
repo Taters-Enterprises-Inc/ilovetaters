@@ -41,12 +41,12 @@ export function CateringContract() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
-          url: "/catering",
+          url: "/shop",
         }}
         className="lg:h-[200px]"
         title="Contract"
         pageTitles={[
-          { name: "Products", url: "/catering/products" },
+          { name: "Products", url: "/shop/products" },
           { name: "Contract" },
         ]}
       />
@@ -103,7 +103,7 @@ export function CateringContract() {
             </div>
           </div>
         </div>
-        <div className="py-16">
+        <div>
           {getCateringOrdersState.data?.status === 1 ? (
             <CateringWaitingForBookingConfirmation />
           ) : null}

@@ -56,10 +56,10 @@ export function CateringSignedContractIsRequired() {
   };
 
   return (
-    <div className="container flex flex-col justify-between space-y-4 lg:flex-row ">
+    <div className="container flex flex-col justify-between space-y-4 lg:flex-row lg:py-16 ">
       <div className="lg:flex-[0_0_57%] lg:max-w-[57%] order-2 lg:order-1 lg:mt-0 mt-4">
         <div
-          className="px-4 py-3 mb-4 text-blue-900 bg-blue-100 border-t-4 border-blue-500 rounded-b shadow-md"
+          className="hidden px-4 py-3 mb-4 text-blue-900 bg-blue-100 border-t-4 border-blue-500 rounded-b shadow-md lg:block"
           role="alert"
         >
           <div className="flex">
@@ -86,6 +86,29 @@ export function CateringSignedContractIsRequired() {
       {getCateringOrdersState.data &&
       getCateringOrdersState.data.order.order_details ? (
         <div className="lg:flex-[0_0_40%] lg:max-w-[40%] order-1 space-y-4  lg:order-2">
+          <div
+            className="px-4 py-3 mb-4 text-blue-900 bg-blue-100 border-t-4 border-blue-500 rounded-b shadow-md lg:hidden"
+            role="alert"
+          >
+            <div className="flex">
+              <div className="py-1">
+                <svg
+                  className="w-6 h-6 mr-4 text-blue-500 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                </svg>
+              </div>
+              <div>
+                <p className="m-0 font-bold">Signed contract is required</p>
+                <p className="text-xs ">
+                  We have succesfully verified the store, please read the
+                  contract and upload it with signature.
+                </p>
+              </div>
+            </div>
+          </div>
           <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
             Order Summary
           </h2>

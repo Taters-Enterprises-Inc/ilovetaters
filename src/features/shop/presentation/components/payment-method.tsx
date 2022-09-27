@@ -2,12 +2,14 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useState } from "react";
 import { PaymentCardModal } from "../modals";
 interface PaymentMethodOption {
   name: string;
-  value: "COD" | "E-WALLET" | "CARD";
+  value: "COD" | "E-WALLET" | "BANK-ACCOUNT" | "CARD";
 }
 const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
   {
@@ -19,15 +21,21 @@ const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
     value: "E-WALLET",
   },
   {
-    name: "Credit / Debit Card",
-    value: "CARD",
+    name: "Bank Account",
+    value: "BANK-ACCOUNT",
   },
+  // To be implemented.....
+  // {
+  //   name: "Credit / Debit Card",
+  //   value: "CARD",
+  // },
 ];
 
 export function PaymentMethod() {
+  const getSessionState = useAppSelector(selectGetSession);
   const [openPaymentCardModal, setOpenPaymentCardModal] = useState(false);
   const [paymentSelected, setPaymentSelected] = useState<
-    "COD" | "E-WALLET" | "CARD"
+    "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT"
   >("COD");
 
   const handlePaymentMethodChange = (option: PaymentMethodOption) => {
@@ -75,25 +83,77 @@ export function PaymentMethod() {
         ))}
       </ul>
 
-      {paymentSelected === "E-WALLET" ? (
-        <FormControl>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
-            name="radio-buttons-group"
-          >
-            <FormControlLabel
-              value="female"
-              control={<Radio />}
-              label={
-                <img
-                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops4.png`}
-                />
-              }
-            />
-          </RadioGroup>
-        </FormControl>
-      ) : null}
+      {/* Temporary fix will be deprecated once the payment gate away done  */}
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="payops aria label"
+          defaultValue="cash"
+          name="payops"
+        >
+          {paymentSelected === "COD" ? (
+            <>
+              {getSessionState.data?.payops_list.map((payops, i) => (
+                <>
+                  {payops.name === "CASH" ? (
+                    <FormControlLabel
+                      value={payops.id}
+                      control={<Radio required />}
+                      label={
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
+                          alt=""
+                        />
+                      }
+                    />
+                  ) : null}
+                </>
+              ))}
+            </>
+          ) : null}
+
+          {paymentSelected === "BANK-ACCOUNT" ? (
+            <>
+              {getSessionState.data?.payops_list.map((payops, i) => (
+                <>
+                  {!payops.qr_code && payops.name !== "CASH" ? (
+                    <FormControlLabel
+                      value={payops.id}
+                      control={<Radio required />}
+                      label={
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
+                          alt=""
+                        />
+                      }
+                    />
+                  ) : null}
+                </>
+              ))}
+            </>
+          ) : null}
+
+          {paymentSelected === "E-WALLET" ? (
+            <>
+              {getSessionState.data?.payops_list.map((payops, i) => (
+                <>
+                  {payops.qr_code ? (
+                    <FormControlLabel
+                      value={payops.id}
+                      control={<Radio required />}
+                      label={
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops4.png`}
+                          alt="Pay Ops"
+                        />
+                      }
+                    />
+                  ) : null}
+                </>
+              ))}
+            </>
+          ) : null}
+        </RadioGroup>
+      </FormControl>
 
       <PaymentCardModal
         open={openPaymentCardModal}

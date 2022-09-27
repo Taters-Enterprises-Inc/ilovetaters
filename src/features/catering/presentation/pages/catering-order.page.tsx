@@ -15,7 +15,10 @@ import {
   selectGetCateringOrders,
 } from "../slices/get-catering-orders.slice";
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  CATERING_BOOKING_STATUS,
+  REACT_APP_DOMAIN_URL,
+} from "features/shared/constants";
 import { useDropzone } from "react-dropzone";
 import {
   cateringUploadProofOfPayment,
@@ -68,68 +71,6 @@ export function CateringOrder() {
     }
   };
 
-  const getStatus = (
-    status: number | undefined,
-    payops: number | undefined
-  ) => {
-    switch (status) {
-      case 0:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Incomplete Transaction
-          </span>
-        );
-      case 4:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Order Placed In System
-          </span>
-        );
-      case 5:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment under Verification
-          </span>
-        );
-      case 6:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment Verified
-          </span>
-        );
-      case 7:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment under Verification
-          </span>
-        );
-      case 8:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment Verified
-          </span>
-        );
-      case 22:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Initial Payment Verified Denied
-          </span>
-        );
-      case 23:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Final Payment Verified Denied
-          </span>
-        );
-      default:
-        return (
-          <span className="rounded-full bg-green-700 text-white px-2 py-1 text-[10px]">
-            Error Transaction
-          </span>
-        );
-    }
-  };
-
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getCateringOrdersState.data?.order.order_details;
@@ -156,12 +97,12 @@ export function CateringOrder() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
-          url: "/catering",
+          url: "/shop",
         }}
         className="lg:h-[200px]"
         title="Order View"
         pageTitles={[
-          { name: "Products", url: "/catering/products" },
+          { name: "Products", url: "/shop/products" },
           { name: "Order View" },
         ]}
       />
@@ -204,8 +145,20 @@ export function CateringOrder() {
         </div>
 
         <div className="flex-1">
-          <div className="bg-[#424242] h-[0.25rem] relative">
-            <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+          <div
+            className={`${
+              getCateringOrdersState.data?.order.clients_info.status === 8
+                ? "bg-green-700"
+                : "bg-[#424242]"
+            } h-[0.25rem] relative`}
+          >
+            <div
+              className={`absolute rounded-[50%] text-white font-bold ${
+                getCateringOrdersState.data?.order.clients_info.status === 8
+                  ? "bg-green-700"
+                  : "bg-[#424242]"
+              } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+            >
               4
             </div>
           </div>
@@ -258,8 +211,22 @@ export function CateringOrder() {
                 </div>
 
                 <div className="flex-1">
-                  <div className="bg-[#424242] h-[0.25rem] relative">
-                    <div className="absolute rounded-[50%] text-white font-bold bg-[#424242] h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]">
+                  <div
+                    className={`${
+                      getCateringOrdersState.data?.order.clients_info.status ===
+                      8
+                        ? "bg-green-700"
+                        : "bg-[#424242]"
+                    } h-[0.25rem] relative`}
+                  >
+                    <div
+                      className={`absolute rounded-[50%] text-white font-bold ${
+                        getCateringOrdersState.data?.order.clients_info
+                          .status === 8
+                          ? "bg-green-700"
+                          : "bg-[#424242]"
+                      } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
+                    >
                       4
                     </div>
                   </div>
@@ -330,13 +297,28 @@ export function CateringOrder() {
                         .tracking_no
                     }
                   </div>
-                  <div className="space-x-2 text-xs">
-                    <strong>Status:</strong>{" "}
-                    {getStatus(
-                      getCateringOrdersState.data?.order.clients_info.status,
-                      getCateringOrdersState.data?.order.clients_info.payops
-                    )}
-                  </div>
+                  {getCateringOrdersState.data ? (
+                    <div className="space-x-2 text-xs">
+                      <strong>Status:</strong>{" "}
+                      <span
+                        style={{
+                          backgroundColor:
+                            CATERING_BOOKING_STATUS[
+                              getCateringOrdersState.data.order.clients_info
+                                .status
+                            ].color,
+                        }}
+                        className="rounded-full text-white px-2 py-1 text-[10px]"
+                      >
+                        {
+                          CATERING_BOOKING_STATUS[
+                            getCateringOrdersState.data.order.clients_info
+                              .status
+                          ].name
+                        }
+                      </span>
+                    </div>
+                  ) : null}
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
                   </div>

@@ -72,7 +72,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                     }
                     className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                   >
-                    <div className="text-sm uppercase ">FULL MENU</div>
+                    <div className="text-sm uppercase ">{store.menu_name}</div>
                     <img
                       src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                       alt=""

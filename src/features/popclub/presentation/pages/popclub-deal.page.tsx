@@ -50,6 +50,10 @@ import {
   selectForfeitRedeem,
 } from "../slices/forfeit-redeem.slice";
 import { MessageModal } from "features/shared/presentation/modals";
+import {
+  redeemValidators,
+  selectRedeemValidators,
+} from "../slices/redeem-validators.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -63,6 +67,7 @@ export function PopClubDeal() {
     selectGetLatestUnexpiredRedeem
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+  const redeemValidatorsState = useAppSelector(selectRedeemValidators);
 
   const navigate = useNavigate();
 
@@ -96,7 +101,7 @@ export function PopClubDeal() {
             })
           );
           if (getDealState.data.minimum_purchase) {
-            navigate("/shop/products");
+            navigate("/delivery/products");
           }
         }
       }
@@ -107,6 +112,7 @@ export function PopClubDeal() {
   useEffect(() => {
     dispatch(resetGetRedeem());
     dispatch(getLatestUnexpiredRedeem());
+    dispatch(redeemValidators());
   }, [dispatch]);
 
   useEffect(() => {
@@ -120,6 +126,7 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
+      dispatch(redeemValidators());
     }
   }, [dispatch, getDealState, forfeitRedeemState]);
 
@@ -191,8 +198,15 @@ export function PopClubDeal() {
   const redeemButton = () => {
     if (
       getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.next_avialable_redeem
+      redeemValidatorsState.data &&
+      redeemValidatorsState.data?.some(
+        (o) => o.deal_id === getDealState.data?.id
+      )
     ) {
+      const redeemValidator = redeemValidatorsState.data.find(
+        (o) => o.deal_id === getDealState.data?.id
+      );
+
       const pad = (number: number) => ("0" + number).slice(-2);
 
       const renderer = ({ hours, minutes, seconds, completed }: any) => {
@@ -257,93 +271,16 @@ export function PopClubDeal() {
         }
       };
 
-      return (
-        <div className="w-full py-3 text-white bg-secondary">
-          <span className="mt-3">You can redeem after </span>
-          <Countdown
-            renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.next_avialable_redeem)}
-          />
-        </div>
-      );
-    } else if (
-      getSessionState.data?.userData &&
-      getLatestUnexpiredRedeemState.redeem_cooldown
-    ) {
-      const pad = (number: number) => ("0" + number).slice(-2);
-
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
-        if (completed) {
-          if (
-            getDealState.status === GetDealState.success &&
-            getDealState.data
-          ) {
-            dispatch(
-              getRedeem({
-                deal_id: getDealState.data.id,
-              })
-            );
-          }
-          dispatch(getLatestUnexpiredRedeem());
-        } else if (!completed) {
-          let timeName = "";
-
-          if (hours > 0) {
-            if (hours === 1) {
-              timeName = "hour";
-            } else {
-              timeName = "hours";
-            }
-          } else if (minutes > 0) {
-            if (minutes === 1) {
-              timeName = "minute";
-            } else {
-              timeName = "minutes";
-            }
-          } else if (seconds > 0) {
-            if (seconds === 1) {
-              timeName = "second";
-            } else {
-              timeName = "seconds";
-            }
-          }
-
-          return (
-            <>
-              <div className="flex items-center justify-center px-4 text-xl text-white ">
-                <AiOutlineFieldTime className="mr-3 text-4xl" />
-                <div className="font-['Bebas_Neue'] tracking-[4px]">
-                  <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
-                  </span>
-                  <span className="ml-2 text-sm">{timeName}</span>
-                </div>
-              </div>
-            </>
-          );
-        }
-      };
-
-      return (
-        <div className="w-full py-3 text-white bg-secondary">
-          <span className="mt-3">Redeem cooldown: </span>
-          <Countdown
-            renderer={renderer}
-            date={new Date(getLatestUnexpiredRedeemState.redeem_cooldown)}
-          />
-
-          <button
-            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
-            onClick={() => {
-              navigate(
-                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
-              );
-            }}
-          >
-            Go Back
-          </button>
-        </div>
-      );
+      if (redeemValidator)
+        return (
+          <div className="w-full py-3 text-white bg-secondary">
+            <span className="mt-3">You can redeem this deal after </span>
+            <Countdown
+              renderer={renderer}
+              date={new Date(redeemValidator.next_available_redeem)}
+            />
+          </div>
+        );
     } else if (
       getSessionState.data?.userData &&
       getRedeemState.status === GetRedeemState.success &&
@@ -355,11 +292,19 @@ export function PopClubDeal() {
             <>
               <button
                 onClick={() => {
-                  navigate("/shop/checkout");
+                  navigate("/delivery/checkout");
                 }}
-                className="w-full py-3 text-white uppercase border border-white bg-button rounded-xl"
+                className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
               >
-                Checkout
+                Go Back to Checkout
+              </button>
+              <button
+                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
+                onClick={() => {
+                  setOpenForfeitModalMessage(true);
+                }}
+              >
+                Cancel Redeem
               </button>
               <button
                 className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
@@ -381,7 +326,7 @@ export function PopClubDeal() {
                 </span>
               </div>
               <button
-                className="w-full py-3 mt-4 font-bold text-white uppercase bg-primary border border-white rounded-xl"
+                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
                   setOpenForfeitModalMessage(true);
                 }}
@@ -546,7 +491,7 @@ export function PopClubDeal() {
           dispatch(forfeitRedeem());
           setOpenForfeitModalMessage(false);
         }}
-        message={"Are you sure you want to cancel the redeem?"}
+        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

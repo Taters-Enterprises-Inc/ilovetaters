@@ -189,6 +189,34 @@ import {
   CreateAdminGroupState,
   selectCreateAdminGroup,
 } from "features/admin/presentation/slices/create-admin-group.slice";
+import {
+  selectUploadProofOfPaymentAdmin,
+  UploadProofOfPaymentAdminState,
+} from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
+import {
+  selectValidateReferenceNumberAdmin,
+  ValidateReferenceNumberAdminState,
+} from "features/admin/presentation/slices/validate-reference-number.slice";
+import {
+  AdminShopOrderUpdateStatusState,
+  selectAdminShopOrderUpdateStatus,
+} from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
+import {
+  AdminPrivilegeState,
+  selectAdminPrivilege,
+} from "features/admin/presentation/slices/admin-privilege.slice";
+import {
+  AdminCateringBookingUpdateStatusState,
+  selectAdminCateringBookingUpdateStatus,
+} from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
+import {
+  selectUpdateStoreDeal,
+  UpdateStoreDealState,
+} from "features/admin/presentation/slices/update-store-deal.slice";
+import {
+  selectUpdateAdminSettingStore,
+  UpdateAdminSettingStoreState,
+} from "features/admin/presentation/slices/update-setting-store.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -281,6 +309,160 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminStores = useAppSelector(selectGetAdminStores);
   const updateAdminUserStores = useAppSelector(selectUpdateAdminUserStores);
   const createAdminGroupState = useAppSelector(selectCreateAdminGroup);
+  const uploadProofOfPaymentAdminState = useAppSelector(
+    selectUploadProofOfPaymentAdmin
+  );
+  const validateReferenceNumberAdminState = useAppSelector(
+    selectValidateReferenceNumberAdmin
+  );
+  const adminShopOrderUpdateStatusState = useAppSelector(
+    selectAdminShopOrderUpdateStatus
+  );
+  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+
+  const adminCateringBookingUpdateStatusState = useAppSelector(
+    selectAdminCateringBookingUpdateStatus
+  );
+
+  const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
+
+  const updateAdminSettingStoreState = useAppSelector(
+    selectUpdateAdminSettingStore
+  );
+
+  useEffect(() => {
+    switch (updateAdminSettingStoreState.status) {
+      case UpdateAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateAdminSettingStoreState, dispatch]);
+
+  useEffect(() => {
+    switch (updateStoreDealState.status) {
+      case UpdateStoreDealState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreDealState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreDealState.success:
+        showAlert(setSuccessAlert, updateStoreDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreDealState.fail:
+        showAlert(setFailsAlert, updateStoreDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreDealState, dispatch]);
+
+  useEffect(() => {
+    switch (adminCateringBookingUpdateStatusState.status) {
+      case AdminCateringBookingUpdateStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringBookingUpdateStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingUpdateStatusState.success:
+        showAlert(
+          setSuccessAlert,
+          adminCateringBookingUpdateStatusState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringBookingUpdateStatusState.fail:
+        showAlert(setFailsAlert, adminCateringBookingUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringBookingUpdateStatusState, dispatch]);
+
+  useEffect(() => {
+    switch (adminPrivilegeState.status) {
+      case AdminPrivilegeState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminPrivilegeState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminPrivilegeState.success:
+        showAlert(setSuccessAlert, adminPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminPrivilegeState.fail:
+        showAlert(setFailsAlert, adminPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminPrivilegeState, dispatch]);
+
+  useEffect(() => {
+    switch (adminShopOrderUpdateStatusState.status) {
+      case AdminShopOrderUpdateStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminShopOrderUpdateStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminShopOrderUpdateStatusState.success:
+        showAlert(setSuccessAlert, adminShopOrderUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminShopOrderUpdateStatusState.fail:
+        showAlert(setFailsAlert, adminShopOrderUpdateStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminShopOrderUpdateStatusState, dispatch]);
+
+  useEffect(() => {
+    switch (validateReferenceNumberAdminState.status) {
+      case ValidateReferenceNumberAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ValidateReferenceNumberAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ValidateReferenceNumberAdminState.success:
+        showAlert(setSuccessAlert, validateReferenceNumberAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ValidateReferenceNumberAdminState.fail:
+        showAlert(setFailsAlert, validateReferenceNumberAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [validateReferenceNumberAdminState, dispatch]);
+
+  useEffect(() => {
+    switch (uploadProofOfPaymentAdminState.status) {
+      case UploadProofOfPaymentAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadProofOfPaymentAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadProofOfPaymentAdminState.success:
+        showAlert(setSuccessAlert, uploadProofOfPaymentAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadProofOfPaymentAdminState.fail:
+        showAlert(setFailsAlert, uploadProofOfPaymentAdminState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadProofOfPaymentAdminState, dispatch]);
 
   useEffect(() => {
     switch (createAdminGroupState.status) {
@@ -486,9 +668,11 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case LoginAdminState.success:
+        showAlert(setSuccessAlert, loginAdminState.message);
         setOpenBackdropLoading(false);
         break;
       case LoginAdminState.fail:
+        showAlert(setFailsAlert, loginAdminState.message);
         setOpenBackdropLoading(false);
         break;
     }
@@ -531,16 +715,16 @@ export function LoadingAndSnackbarWrapper() {
   useEffect(() => {
     switch (getRedeemState.status) {
       case GetRedeemState.inProgress:
-        setOpenBackdropPopClubLoading(true);
+        setOpenBackdropLoading(true);
         break;
       case GetRedeemState.initial:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetRedeemState.success:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetRedeemState.fail:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
     }
   }, [getRedeemState, dispatch]);
@@ -711,16 +895,16 @@ export function LoadingAndSnackbarWrapper() {
   useEffect(() => {
     switch (getStoresAvailablePopClubState.status) {
       case GetStoresAvailablePopClubState.inProgress:
-        setOpenBackdropPopClubLoading(true);
+        setOpenBackdropLoading(true);
         break;
       case GetStoresAvailablePopClubState.initial:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetStoresAvailablePopClubState.success:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
       case GetStoresAvailablePopClubState.fail:
-        setOpenBackdropPopClubLoading(false);
+        setOpenBackdropLoading(false);
         break;
     }
   }, [getStoresAvailablePopClubState]);
@@ -804,11 +988,9 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableCateringState.success:
-        showAlert(setSuccessAlert, getStoresAvailableCateringState.message);
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableCateringState.fail:
-        showAlert(setFailsAlert, getStoresAvailableCateringState.message);
         setOpenBackdropLoading(false);
         break;
     }
@@ -1019,11 +1201,9 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableSnackshopState.success:
-        showAlert(setSuccessAlert, getStoresAvailableSnackshopState.message);
         setOpenBackdropLoading(false);
         break;
       case GetStoresAvailableSnackshopState.fail:
-        showAlert(setFailsAlert, getStoresAvailableSnackshopState.message);
         setOpenBackdropLoading(false);
         break;
     }

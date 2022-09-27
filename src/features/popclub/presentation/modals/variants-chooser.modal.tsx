@@ -1,7 +1,4 @@
-import {
-  resetGetDealProductVariantsState,
-  selectGetDealProductVariants,
-} from "../slices/get-deal-product-variants.slice";
+import { selectGetDealProductVariants } from "../slices/get-deal-product-variants.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   redeemDeal,
@@ -53,7 +50,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       getSessionState.data?.popclub_data.platform === "online-delivery" &&
       redeemDealState.data
     ) {
-      navigate("/shop/checkout");
+      navigate("/delivery/checkout");
       dispatch(getSession());
       dispatch(resetRedeemDeal());
     } else if (
@@ -94,10 +91,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         }
       }
 
-      // console.log(remarks);
-
       if (getDealState.data?.hash && remarks) {
-        dispatch(resetGetDealProductVariantsState());
         dispatch(
           redeemDeal({
             hash: getDealState.data?.hash,
@@ -128,49 +122,12 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     setOptionsSelected(data);
   };
 
-  useEffect(() => {
-    if (getDealProductVariantsState.data) {
-      const data: any = optionsSelected;
-
-      for (let i = 0; i < getDealProductVariantsState.data.length; i++) {
-        const dealProductVariant: DealProductVariantsModel =
-          getDealProductVariantsState.data[i];
-        if (dealProductVariant) {
-          const productVariants = dealProductVariant.product_variants;
-          for (let x = 0; x < productVariants.length; x++) {
-            const productVariant = productVariants[x];
-            const firstOption = productVariants[x].options[0];
-
-            const name = dealProductVariant.option_id + "_" + productVariant.id;
-
-            const optionName = firstOption.name;
-            const productName = dealProductVariant.product.name;
-            const quantity = dealProductVariant.quantity;
-
-            data[name] =
-              "<strong>" +
-              quantity +
-              "</strong> - " +
-              productName +
-              " (" +
-              optionName +
-              ")<br/>";
-          }
-        }
-      }
-
-      if (data) {
-        setOptionsSelected(data);
-      }
-    }
-  }, [getDealProductVariantsState]);
-
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
     >
-      <div className="bg-secondary px-4 py-8 lg:p-8 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px] text-white mb-10">
+      <div className="bg-secondary px-4 mb-36 py-8 lg:p-8 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px] text-white">
         <button
           className="absolute text-white top-2 right-4"
           onClick={props.onClose}
@@ -203,7 +160,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
                           onChange={(e) =>
                             handleFormChange(e, dealProductVariant)
                           }
-                          defaultValue={productVariant.options[0].name}
                         >
                           <h2 className="text-base uppercase">
                             PICK A {productVariant.name}
@@ -216,6 +172,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
                                     value={option.name}
                                     control={
                                       <Radio
+                                        required
                                         color="tertiary"
                                         sx={{ color: "white" }}
                                       />

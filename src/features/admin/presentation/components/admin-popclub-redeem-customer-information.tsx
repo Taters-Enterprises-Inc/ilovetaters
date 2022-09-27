@@ -38,7 +38,7 @@ export function AdminPopclubRedeemCustomerInformation(
   };
 
   return (
-    <div className="pt-1  text-secondary">
+    <div className="pt-1 text-secondary">
       <div className="space-y-1 ">
         <div className="grid-cols-3 gap-4 lg:grid ">
           <div>
@@ -56,7 +56,7 @@ export function AdminPopclubRedeemCustomerInformation(
                   moment()
                 ) ? (
                   <span
-                    className=" text-xs rounded-full py-1 px-2"
+                    className="px-2 py-1 text-xs rounded-full "
                     style={{
                       color: "white",
                       backgroundColor: "#a21013",
@@ -66,7 +66,7 @@ export function AdminPopclubRedeemCustomerInformation(
                   </span>
                 ) : (
                   <span
-                    className=" text-xs rounded-full py-1 px-2"
+                    className="px-2 py-1 text-xs rounded-full "
                     style={{
                       color: "white",
                       backgroundColor:
@@ -160,6 +160,8 @@ export function AdminPopclubRedeemCustomerInformation(
                 {getAdminPopclubRedeemState.data.items.map((item) => (
                   <tr className="bg-white">
                     <td className="px-6 py-4 font-medium text-secondary">
+                      <span className="font-bold">{item.alias}</span>
+                      <br />
                       <span
                         className="text-secondary"
                         dangerouslySetInnerHTML={{
@@ -201,6 +203,8 @@ export function AdminPopclubRedeemCustomerInformation(
                 <div className="lg:hidden">
                   <div className="py-2 border-b">
                     <p className="mb-2 text-xs leading-1 text-semibold">
+                      <span className="font-bold">{item.alias}</span>
+                      <br />
                       <span
                         dangerouslySetInnerHTML={{
                           __html: item.remarks,
@@ -240,7 +244,7 @@ export function AdminPopclubRedeemCustomerInformation(
         {getAdminPopclubRedeemState.data &&
         getAdminPopclubRedeemState.data.status === 1 &&
         moment(getAdminPopclubRedeemState.data.expiration).isAfter(moment()) ? (
-          <div className="flex items-start justify-end space-x-2 py-3">
+          <div className="flex items-start justify-end py-3 space-x-2">
             <button className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md">
               Decline
             </button>

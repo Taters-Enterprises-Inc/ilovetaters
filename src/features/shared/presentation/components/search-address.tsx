@@ -1,4 +1,6 @@
-import { useAppSelector } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { getStoresAvailableSnackshop } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
+import { setAddressShopHomePage } from "features/shop/presentation/slices/shop-home-page.slice";
 import { useEffect, useRef, useState } from "react";
 import { selectGetSession } from "../slices/get-session.slice";
 
@@ -26,13 +28,16 @@ const loadScript = (url: any, callback: any) => {
 function handleScriptLoad(
   setQuery: any,
   onPlaceSelected: any,
-  autoCompleteRef: any
+  autoCompleteRef: any,
+  geolocate: any
 ) {
   autoComplete = new window.google.maps.places.Autocomplete(
     autoCompleteRef.current,
     { componentRestrictions: { country: "ph" } }
   );
+
   autoComplete.setFields(["address_components", "formatted_address"]);
+  geolocate();
   autoComplete.addListener("place_changed", () => {
     onPlaceSelected(autoCompleteRef.current.value);
     setQuery(autoCompleteRef.current.value);
@@ -79,7 +84,10 @@ async function handlePlaceSelect() {
 interface SearchAddressProps {
   onPlaceSelected: any;
   value: string;
+  onPrompt: () => void;
+  onDenied: () => void;
   onChange: (newValue: string) => void;
+  onLocateCurrentAddress: (place: string) => void;
 }
 
 export function SearchAddress(props: SearchAddressProps) {
@@ -89,11 +97,23 @@ export function SearchAddress(props: SearchAddressProps) {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8&libraries=places`,
       () =>
-        handleScriptLoad(props.onChange, props.onPlaceSelected, autoCompleteRef)
+        handleScriptLoad(
+          props.onChange,
+          props.onPlaceSelected,
+          autoCompleteRef,
+          geolocate
+        )
     );
   }, []);
 
   const geolocate = () => {
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      if (result.state === "prompt") {
+        props.onPrompt();
+      } else if (result.state === "denied") {
+        props.onDenied();
+      }
+    });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         var geolocation = {
@@ -104,7 +124,31 @@ export function SearchAddress(props: SearchAddressProps) {
           center: geolocation,
           radius: position.coords.accuracy,
         });
+
+        var latlng: any = new google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        const geocoder: any = new google.maps.Geocoder();
         autoComplete.setBounds(circle.getBounds());
+
+        geocoder.geocode(
+          { latLng: latlng },
+          function (results: any, status: any) {
+            if (status === google.maps.GeocoderStatus.OK) {
+              if (results[1]) {
+                const place = results[0].formatted_address;
+
+                props.onLocateCurrentAddress(place);
+              } else {
+                console.log("No results found");
+              }
+            } else {
+              console.log("Geocoder failed due to: " + status);
+            }
+          }
+        );
       });
     }
   };
@@ -115,7 +159,6 @@ export function SearchAddress(props: SearchAddressProps) {
       onChange={(event) => props.onChange(event.target.value)}
       value={props.value}
       placeholder=" "
-      onFocus={geolocate}
     />
   );
 }

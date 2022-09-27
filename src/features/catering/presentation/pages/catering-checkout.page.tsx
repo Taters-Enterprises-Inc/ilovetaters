@@ -66,7 +66,7 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
-      navigate(`/catering/contract/${cateringCheckoutOrdersState.data.hash}`);
+      navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());
     }
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
@@ -242,12 +242,12 @@ export function CateringCheckout() {
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
-          url: "/catering",
+          url: "/shop",
         }}
         className="lg:h-[200px]"
         title="Checkout"
         pageTitles={[
-          { name: "Products", url: "/catering/products" },
+          { name: "Products", url: "/shop/products" },
           { name: "Checkout" },
         ]}
       />

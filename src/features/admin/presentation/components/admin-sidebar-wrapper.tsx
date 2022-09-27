@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { AdminSidebar } from "./admin-sidebar";
-
+import { AdminDrawerDesktop, AdminDrawerMobile } from ".";
 export function AdminSidebarWrapper() {
   return (
     <main className="flex min-h-screen">
-      <AdminSidebar />
+      <AdminDrawerDesktop />
+      <AdminDrawerMobile />
 
       <section className="flex-1 h-screen overflow-y-auto bg-paper">
         <Outlet />

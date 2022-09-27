@@ -18,6 +18,9 @@
   /*You just need this if you are only concerned with android and not desktop browsers.*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+.customer-information-table tr:nth-child(even) {
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
 .payment-method-active > .icon-tick-bold {
   position: absolute;
   right: 0;
@@ -81,31 +84,6 @@ input:-webkit-autofill:focus {
 }
 input[data-autocompleted] {
   background-color: transparent !important;
-}
-
-.mobview {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
-}
-
-.webview {
-  position: absolute;
-  left: 55%;
-  top: 10%;
-  max-width: 560;
-  max-height: 315;
-}
-
-.responsive {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .notes {

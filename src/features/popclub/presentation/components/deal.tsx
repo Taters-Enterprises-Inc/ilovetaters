@@ -7,6 +7,8 @@ import { RiTimerFlashFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
+import { useAppSelector } from "features/config/hooks";
+import { selectRedeemValidators } from "../slices/redeem-validators.slice";
 
 interface DealProps {
   deal: DealModel;
@@ -47,9 +49,10 @@ const renderer = ({ hours, minutes, seconds, completed }: any) => {
 
 export function Deal(props: DealProps) {
   const navigate = useNavigate();
+  const redeemValidatorsState = useAppSelector(selectRedeemValidators);
   let availableStartTime;
   let availableEndTime;
-  let availableStartTimeInDate;
+  let availableStartTimeInDate: any;
   let isDealAvailable = true;
 
   if (props.deal.available_start_time && props.deal.available_end_time) {
@@ -97,8 +100,48 @@ export function Deal(props: DealProps) {
     isDealAvailable = availableDays.includes(currentDayOfWeek);
   }
 
+  if (redeemValidatorsState.data?.some((el) => el.deal_id === props.deal.id)) {
+    isDealAvailable = false;
+  }
+
   const handleOnDealClick = () => {
     if (isDealAvailable) navigate(`/popclub/deal/${props.deal.hash}`);
+  };
+
+  const dealIsNotAvailableMessage = () => {
+    if (redeemValidatorsState.data?.some((o) => o.deal_id === props.deal.id)) {
+      const redeemValidator = redeemValidatorsState.data.find(
+        (o) => o.deal_id === props.deal.id
+      );
+      if (redeemValidator)
+        return (
+          <>
+            <span className="text-xs font-bold lg:text-base">
+              Available after
+            </span>
+            <Countdown
+              renderer={renderer}
+              date={redeemValidator.next_available_redeem}
+            />
+          </>
+        );
+    } else if (availableStartTimeInDate) {
+      return (
+        <>
+          <span className="text-xs font-bold lg:text-base">
+            Available after
+          </span>
+          <Countdown renderer={renderer} date={availableStartTimeInDate} />
+        </>
+      );
+    } else if (props.deal.available_days) {
+      return (
+        <span className="text-xs font-bold lg:text-base">
+          Only available on Weekdays
+        </span>
+      );
+    }
+    return null;
   };
 
   return (
@@ -110,20 +153,7 @@ export function Deal(props: DealProps) {
       >
         {isDealAvailable ? null : (
           <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
-            {availableStartTimeInDate ? (
-              <>
-                <span className="text-xs font-bold lg:text-base">
-                  Available after
-                </span>
-                <Countdown
-                  renderer={renderer}
-                  date={availableStartTimeInDate}
-                />
-              </>
-            ) : null}
-            {props.deal.available_days ? (
-              <span>Only available on Weekdays</span>
-            ) : null}
+            {dealIsNotAvailableMessage()}
           </div>
         )}
 
@@ -135,7 +165,7 @@ export function Deal(props: DealProps) {
             <div
               className={`text-[11px] lg:text-[12px] mb-[2px] bg-yellow-500 text-white rounded-r-[2px] font-bold px-1`}
             >
-              {Math.floor(
+              {Math.round(
                 ((props.deal.original_price - props.deal.promo_price) /
                   props.deal.original_price) *
                   100

@@ -83,6 +83,7 @@ export function CateringHome() {
   };
 
   const eventDateOnChangeValidations = (param: {
+    state: "start" | "end";
     start: Date | null;
     end: Date | null;
     setCurrentCalendarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -96,11 +97,13 @@ export function CateringHome() {
       );
     }
 
-    if (param.start && param.end) {
+    if (param.start && param.end && param.state === "end") {
       const startDateTime = moment(param.start);
       const endDateTime = moment(param.end);
 
-      const _3hoursBeforeTheStartDate = startDateTime.add(3, "hours");
+      const _3hoursBeforeTheStartDate = startDateTime
+        .add(2, "hours")
+        .add(59, "minutes");
 
       if (_3hoursBeforeTheStartDate.isSameOrAfter(endDateTime)) {
         dispatch(
@@ -125,6 +128,7 @@ export function CateringHome() {
     switch (param.state) {
       case "start":
         eventDateOnChangeValidations({
+          state: param.state,
           start: param.value,
           end: cateringHomePageState.eventEndDate,
           setCurrentCalendarModalOpen: setOpenStartEventCalendar,
@@ -145,6 +149,7 @@ export function CateringHome() {
         break;
       case "end":
         eventDateOnChangeValidations({
+          state: param.state,
           start: cateringHomePageState.eventStartDate,
           end: param.value,
           setCurrentCalendarModalOpen: setOpenEndEventCalendar,
@@ -156,7 +161,6 @@ export function CateringHome() {
             );
           },
         });
-
         break;
     }
   };
@@ -199,6 +203,31 @@ export function CateringHome() {
                     ? cateringHomePageState.address
                     : ""
                 }
+                onDenied={() => {
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: null,
+                      service: "CATERING",
+                    })
+                  );
+                }}
+                onPrompt={() => {
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: null,
+                      service: "CATERING",
+                    })
+                  );
+                }}
+                onLocateCurrentAddress={(place: string) => {
+                  dispatch(setAddressCateringHomePage({ address: place }));
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: place,
+                      service: "CATERING",
+                    })
+                  );
+                }}
                 onChange={(value: string) => {
                   dispatch(setAddressCateringHomePage({ address: value }));
                 }}
@@ -216,6 +245,7 @@ export function CateringHome() {
                 label="Select Event Start Date"
                 shouldDisableDate={disableDates}
                 open={openStartEventCalendar}
+                defaultCalendarMonth={moment().add(14, "days").toDate()}
                 onOpen={() => setOpenStartEventCalendar(true)}
                 onClose={() => setOpenStartEventCalendar(false)}
                 renderInput={(params) => (
@@ -245,6 +275,7 @@ export function CateringHome() {
                 label="Select Event End Date"
                 shouldDisableDate={disableDates}
                 open={openEndEventCalendar}
+                defaultCalendarMonth={moment().add(14, "days").toDate()}
                 onOpen={() => setOpenEndEventCalendar(true)}
                 onClose={() => setOpenEndEventCalendar(false)}
                 renderInput={(params) => (
@@ -315,29 +346,51 @@ export function CateringHome() {
             <span>Check Availability</span>
           </button>
 
-          {cateringHomePageState.address ? (
-            <CateringStoreList
-              onClickStore={(storeId: number, regionId: number) => {
-                if (
-                  cateringHomePageState &&
-                  cateringHomePageState.address &&
-                  cateringHomePageState.eventStartDate &&
-                  cateringHomePageState.eventEndDate
-                )
+          <CateringStoreList
+            onClickStore={(storeId: number, regionId: number) => {
+              if (
+                cateringHomePageState &&
+                cateringHomePageState.address &&
+                cateringHomePageState.eventStartDate &&
+                cateringHomePageState.eventEndDate
+              ) {
+                dispatch(
+                  setStoreAndAddress({
+                    address: cateringHomePageState.address,
+                    storeId,
+                    regionId,
+                    cateringEndDate: cateringHomePageState.eventEndDate,
+                    cateringStartDate: cateringHomePageState.eventStartDate,
+                    service: "CATERING",
+                  })
+                );
+              } else {
+                if (cateringHomePageState.eventStartDate === null) {
                   dispatch(
-                    setStoreAndAddress({
-                      address: cateringHomePageState.address,
-                      storeId,
-                      regionId,
-                      cateringEndDate: cateringHomePageState.eventEndDate,
-                      cateringStartDate: cateringHomePageState.eventStartDate,
-                      service: "CATERING",
+                    popUpSnackBar({
+                      message: "Please select valid start date.",
+                      severity: "error",
                     })
                   );
-              }}
-              address={cateringHomePageState.address}
-            />
-          ) : null}
+                } else if (cateringHomePageState.eventStartDate === null) {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Please select valid end date. ",
+                      severity: "error",
+                    })
+                  );
+                } else if (cateringHomePageState.address === null) {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Please select valid address.",
+                      severity: "error",
+                    })
+                  );
+                }
+              }
+            }}
+            address={cateringHomePageState.address}
+          />
         </div>
       </section>
     </main>

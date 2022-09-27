@@ -7,7 +7,8 @@ import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.mode
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
+import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
   GetCategoryProductsParam,
@@ -44,20 +45,6 @@ export interface GetOrdersResponse {
   };
 }
 
-export interface GetSnackShopOrderHistoryResponse {
-  data: {
-    message: string;
-    data: Array<SnackShopOrderModel>;
-  };
-}
-
-export interface GetCateringBookingHistoryResponse {
-  data: {
-    message: string;
-    data: Array<SnackShopOrderModel>;
-  };
-}
-
 export interface GetProductSkuResponse {
   data: {
     message: string;
@@ -71,6 +58,24 @@ export interface AddToCartShopResponse {
 }
 
 export interface RemoveItemFromCartShopResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetUserSessionResponse {
+  data: {
+    message: string;
+    data: UserSessionModel;
+  };
+}
+export interface GetCartItemResponse {
+  data: {
+    message: string;
+    data: CartItemModel;
+  };
+}
+export interface GetEditCartItemResponse {
   data: {
     message: string;
   };
@@ -101,40 +106,10 @@ export function AddToCartShopRepository(
   });
 }
 
-export interface GetCartItemResponse {
-  data: {
-    message: string;
-    data: CartItemModel;
-  };
-}
-export interface GetEditCartItemResponse {
-  data: {
-    message: string;
-  };
-}
-
 export function GetProductSkuRepository(
   param: GetProductSkuParam
 ): Promise<GetProductSkuResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/shop/get_product_sku`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
-export function GetCateringBookingHistoryRepository(): Promise<GetCateringBookingHistoryResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/catering-bookings`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
-export function GetSnackShopOrderHistoryRepository(): Promise<GetSnackShopOrderHistoryResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/snackshop-orders`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -219,6 +194,12 @@ export function GetEditCartItemRepository(
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
+  });
+}
+
+export function GetUserSessionRepository(): Promise<GetUserSessionResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/session`, {
     withCredentials: true,
   });
 }

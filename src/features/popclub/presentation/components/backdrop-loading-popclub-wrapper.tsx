@@ -15,7 +15,7 @@ export function BackdropLoadingPopClub(props: BackdropLoadingPopClubProps) {
         <img
           src={require("assets/poppy_dancing_30.gif")}
           alt="Poppy Dancing"
-          width={300}
+          width={180}
         />
       </Backdrop>
     </div>

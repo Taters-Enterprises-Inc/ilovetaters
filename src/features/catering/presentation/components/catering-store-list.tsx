@@ -1,9 +1,10 @@
-import { useAppSelector } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { selectGetStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
 
 interface StoreListProps {
-  address: string;
+  address: string | null;
   onClickStore: (storeId: number, regionId: number) => void;
 }
 
@@ -11,6 +12,7 @@ export function CateringStoreList(props: StoreListProps) {
   const getStoresAvailableCateringState = useAppSelector(
     selectGetStoresAvailableCatering
   );
+  const dispatch = useAppDispatch();
 
   return (
     <section className="text-white">
@@ -32,28 +34,44 @@ export function CateringStoreList(props: StoreListProps) {
                   onClick={
                     store_availability && props.address != null
                       ? () => {}
-                      : () =>
-                          props.onClickStore(
-                            store.store_id,
-                            store.region_store_id
-                          )
+                      : () => {
+                          if (props.address === null || props.address === "") {
+                            dispatch(
+                              popUpSnackBar({
+                                message: "Please input an address",
+                                severity: "error",
+                              })
+                            );
+                          } else {
+                            props.onClickStore(
+                              store.store_id,
+                              store.region_store_id
+                            );
+                          }
+                        }
                   }
                   className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
-                  {store_availability && props.address != null ? (
+                  {store_availability &&
+                  props.address != null &&
+                  props.address !== "" ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
                   ) : null}
-                  <div className="py-1 text-sm uppercase">FULL MENU</div>
-
-                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                    <div className="flex justify-end">
-                      <span className="px-2 text-sm bg-secondary">
-                        {distance_in_km} KM
-                      </span>
-                    </div>
+                  <div className="py-1 text-sm uppercase">
+                    {store.menu_name}
                   </div>
+
+                  {props.address ? (
+                    <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
+                      <div className="flex justify-end">
+                        <span className="px-2 text-sm bg-secondary">
+                          {distance_in_km} KM
+                        </span>
+                      </div>
+                    </div>
+                  ) : null}
 
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}

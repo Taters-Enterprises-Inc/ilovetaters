@@ -16,6 +16,7 @@ import {
 } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { IoMdClose } from "react-icons/io";
 import { MessageModal } from "../modals";
+import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export function UnExpiredRedeem() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
+    dispatch(redeemValidators());
   }, [facebookLogoutState, dispatch, forfeitRedeemState]);
 
   return (
@@ -50,7 +52,7 @@ export function UnExpiredRedeem() {
             getSessionState.data.customer_address &&
             getSessionState.data.cache_data.store_name &&
             !location.pathname.includes("popclub")
-              ? "sm:top-[80px] lg:top-[100px]"
+              ? "sm:top-[100px] lg:top-[100px]"
               : "sm:top-[70px] lg:top-[80px]"
           } h-[90px] w-full ${
             hash === getLatestUnexpiredRedeemState.data.deal_hash
@@ -88,7 +90,7 @@ export function UnExpiredRedeem() {
                 </Link>
                 <div className="relative">
                   <button
-                    className="absolute text-sm  text-white right-0 top-0 p-1 z-20"
+                    className="absolute top-0 right-0 z-20 p-1 text-sm text-white"
                     onClick={() => {
                       setOpenForfeitModalMessage(true);
                     }}
@@ -123,7 +125,7 @@ export function UnExpiredRedeem() {
           dispatch(forfeitRedeem());
           setOpenForfeitModalMessage(false);
         }}
-        message={"Are you sure you want to cancel the redeem?"}
+        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

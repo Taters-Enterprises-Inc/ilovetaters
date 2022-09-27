@@ -22,7 +22,7 @@ export function ShopTermsAndConditions() {
           </h1>
           <hr className="mt-2 mb-4 border-secondary" />
           <div className="space-y-4 text-secondary">
-            <p>1. Customers can order through www.ilovetaters.com/shop.</p>
+            <p>1. Customers can order through www.ilovetaters.com/delivery.</p>
             <p>
               2. Delivery and/or pick up of items is from Mondays to Saturdays
               between 10:00am to 5:00pm only.
@@ -60,7 +60,7 @@ export function ShopTermsAndConditions() {
               8. Once payment has been made, upload the{" "}
               <strong>payment screenshot</strong> on the link provided in the
               order confirmation email or go to{" "}
-              <strong>www.ilovetaters.com/shop/profile</strong>.
+              <strong>www.ilovetaters.com/profile</strong>.
             </p>
             <p>
               9. Once a payment has been verified, customer will receive a

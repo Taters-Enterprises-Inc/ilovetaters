@@ -5,6 +5,7 @@ export interface StoreModel {
     store_distance: number;
     store_name: string;
     store_address: string;
+    menu_name: number;
     menu_type: number;
     store_image: string;
     region_store_id: number;

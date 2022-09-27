@@ -50,7 +50,7 @@ export function ShopPeopleAlsoBoughtCarousel(
                   onClick={() => {
                     if (product.hash !== undefined) {
                       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-                      navigate(`/shop/products/${product.hash}`);
+                      navigate(`/delivery/products/${product.hash}`);
                     }
                   }}
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
@@ -60,11 +60,11 @@ export function ShopPeopleAlsoBoughtCarousel(
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
-                  <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                    <h2 className="text-white text-sm leading-4">
+                  <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                    <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="text-white font-bold">
+                    <h3 className="font-bold text-white">
                       <NumberFormat
                         value={product.price.toFixed(2)}
                         displayType={"text"}
@@ -89,7 +89,7 @@ export function ShopPeopleAlsoBoughtCarousel(
               {chunk.map((product, i) => (
                 <Link
                   key={i}
-                  to={`/shop/products/${product.hash}`}
+                  to={`/delivery/products/${product.hash}`}
                   className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
                 >
                   <img
@@ -97,11 +97,11 @@ export function ShopPeopleAlsoBoughtCarousel(
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
-                  <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                    <h2 className="text-white text-sm leading-4">
+                  <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                    <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="text-white font-bold">
+                    <h3 className="font-bold text-white">
                       <NumberFormat
                         value={product.price.toFixed(2)}
                         displayType={"text"}
@@ -123,7 +123,7 @@ export function ShopPeopleAlsoBoughtCarousel(
               {chunk.map((product, i) => (
                 <Link
                   key={i}
-                  to={`/shop/products/${product.hash}`}
+                  to={`/delivery/products/${product.hash}`}
                   className="bg-secondary h-full flex flex-col shadow-tertiary shadow-md rounded-[10px] text-white "
                 >
                   <img
@@ -131,11 +131,11 @@ export function ShopPeopleAlsoBoughtCarousel(
                     className="rounded-t-[10px] w-full"
                     alt=""
                   />
-                  <div className="p-3 space-y-2 flex flex-col justify-between flex-1">
-                    <h2 className="text-white text-sm leading-4">
+                  <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                    <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="text-white font-bold">
+                    <h3 className="font-bold text-white">
                       <NumberFormat
                         value={product.price.toFixed(2)}
                         displayType={"text"}

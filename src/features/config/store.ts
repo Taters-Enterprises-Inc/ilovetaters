@@ -22,8 +22,8 @@ import getBranchesStore from "../branches/presentation/slices/get-branches-store
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
 
-import getSnackShopOrderHistory from "../shop/presentation/slices/get-snackshop-order-history.slice";
-import getCateringBookingHistory from "../shop/presentation/slices/get-catering-booking-history.slice";
+import getSnackShopOrderHistory from "../profile/presentation/slices/get-snackshop-order-history.slice";
+import getCateringBookingHistory from "../profile/presentation/slices/get-catering-booking-history.slice";
 import facebookLogin from "../shared/presentation/slices/facebook-login.slice";
 import facebookLoginPoint from "../shared/presentation/slices/facebook-login-point.slice";
 import facebookLogout from "../shared/presentation/slices/facebook-logout.slice";
@@ -94,6 +94,24 @@ import getAdminUserStores from "features/admin/presentation/slices/get-admin-use
 import getAdminStores from "features/admin/presentation/slices/get-admin-stores.slice";
 import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
 import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
+
+import uploadProofOfPaymentAdmin from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
+import validateReferenceNumberAdmin from "features/admin/presentation/slices/validate-reference-number.slice";
+import adminShopOrderUpdateStatus from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
+import adminPrivilege from "features/admin/presentation/slices/admin-privilege.slice";
+
+import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
+import getAdminCateringBooking from "features/admin/presentation/slices/get-admin-catering-booking.slice";
+import adminCateringBookingUpdateStatus from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
+import getPopclubRedeemsHistory from "features/profile/presentation/slices/get-popclub-redeems-history.slice";
+import redeemValidators from "features/popclub/presentation/slices/redeem-validators.slice";
+import getAdminStoreDeals from "features/admin/presentation/slices/get-admin-stores-deals.slice";
+import updateStoreDeal from "features/admin/presentation/slices/update-store-deal.slice";
+import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-stores-products.slice";
+import getProductCategories from "features/admin/presentation/slices/get-product-categories.slice";
+import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
+import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
+import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 
 export const store = configureStore({
   reducer: {
@@ -180,12 +198,29 @@ export const store = configureStore({
     getAdminStores,
     updateAdminUserStores,
     createAdminGroup,
+    uploadProofOfPaymentAdmin,
+    validateReferenceNumberAdmin,
+    adminShopOrderUpdateStatus,
+    adminPrivilege,
+    getAdminCateringBookings,
+    getAdminCateringBooking,
+    adminCateringBookingUpdateStatus,
+    getPopclubRedeemsHistory,
+    redeemValidators,
+    getAdminStoreDeals,
+    updateStoreDeal,
+    getAdminStoreProducts,
+    getProductCategories,
+    updateStoreProduct,
+    getAdminSettingStores,
+    updateAdminSettingStore,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

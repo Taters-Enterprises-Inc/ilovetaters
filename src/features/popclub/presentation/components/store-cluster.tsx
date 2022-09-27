@@ -4,6 +4,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
@@ -16,7 +17,7 @@ import {
 
 interface StoreClusterProps {
   onClose: any;
-  address: string;
+  address: string | null;
 }
 
 export function StoreCluster(props: StoreClusterProps) {
@@ -46,27 +47,36 @@ export function StoreCluster(props: StoreClusterProps) {
   }, [setStoreAndAddressPopClubState, dispatch, category, platform]);
 
   const storeClicked = (storeId: number, regionId: number) => {
-    dispatch(
-      setStoreAndAddressPopClub({
-        address: props.address,
-        storeId,
-        regionId,
-        service: "SNACKSHOP",
-      })
-    );
+    if (props.address) {
+      dispatch(
+        setStoreAndAddressPopClub({
+          address: props.address,
+          storeId,
+          regionId,
+          service: "SNACKSHOP",
+        })
+      );
 
-    props.onClose();
+      props.onClose();
 
-    if (platform) {
-      if (platform === "store-visit") {
-        navigate(`/popclub/online-delivery?category=all`);
+      if (platform) {
+        if (platform === "store-visit") {
+          navigate(`/popclub/online-delivery?category=all`);
+        } else {
+          navigate(`?category=all`);
+        }
       } else {
-        navigate(`?category=all`);
+        navigate(`/popclub/online-delivery?category=all`);
       }
+      document.body.classList.remove("overflow-hidden");
     } else {
-      navigate(`/popclub/online-delivery?category=all`);
+      dispatch(
+        popUpSnackBar({
+          message: "Search address is required",
+          severity: "error",
+        })
+      );
     }
-    document.body.classList.remove("overflow-hidden");
   };
 
   return (
@@ -96,21 +106,25 @@ export function StoreCluster(props: StoreClusterProps) {
                   }
                   className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                 >
-                  {store_availability && props.address != null ? (
+                  {store_availability &&
+                  props.address !== null &&
+                  props.address !== "" ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
                   ) : null}
 
-                  <div className="text-sm uppercase ">FULL MENU</div>
-
-                  <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
-                    <div className="flex justify-end">
-                      <span className="px-2 text-sm bg-secondary">
-                        {distance_in_km} KM
-                      </span>
+                  <div className="text-sm uppercase ">{store.menu_name}</div>
+                  {props.address ? (
+                    <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
+                      <div className="flex justify-end">
+                        <span className="px-2 text-sm bg-secondary">
+                          {distance_in_km} KM
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
+
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                     alt=""

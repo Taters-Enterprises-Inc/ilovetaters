@@ -71,7 +71,7 @@ export default function MoreDrawer(props: MoreDrawerProps) {
           {
             text: "My Account",
             icon: <RiAccountBoxFill className="text-white" />,
-            path: "/shop/profile",
+            path: "/profile",
           },
           {
             text: "Franchising",
@@ -96,12 +96,13 @@ export default function MoreDrawer(props: MoreDrawerProps) {
           {
             text: "Terms & Conditions",
             icon: <RiFilePaper2Fill className="text-white" />,
-            path: "/shop/terms-and-conditions",
+            path: "/delivery/terms-and-conditions",
           },
         ].map((item, index) => {
           const { text, icon, path } = item;
           return (
             <div
+              key={index}
               className={`${
                 getSessionState.data?.userData === null
                   ? text === "My Account"

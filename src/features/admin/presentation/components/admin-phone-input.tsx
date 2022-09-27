@@ -8,7 +8,9 @@ export interface AdminPhoneInputProps {
 }
 
 export function AdminPhoneInput(props: AdminPhoneInputProps) {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    props.defaultValue ? props.defaultValue : ""
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replace(/[^0-9]/g, "");

@@ -5,7 +5,7 @@ import {
 } from "../../../shared/presentation/components/data-table";
 import Moment from "react-moment";
 import NumberFormat from "react-number-format";
-import { SnackShopOrderModel } from "features/shop/core/domain/snackshop-order.model";
+import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 
 const columns: Array<Column> = [
   { id: "addonName", label: "Product Add-on Name" },
