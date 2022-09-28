@@ -23,9 +23,13 @@ const initialState: {
 
 export const addContact = createAsyncThunk(
   "addContact",
-  async (param: AddContactParam) => {
-    const response: AddContactResponse = await AddContactRepository(param);
-    return response.data;
+  async (param: AddContactParam, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: AddContactResponse = await AddContactRepository(param);
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 

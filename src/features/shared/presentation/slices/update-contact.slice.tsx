@@ -23,11 +23,15 @@ const initialState: {
 
 export const updateContact = createAsyncThunk(
   "updateContact",
-  async (param: UpdateContactParam) => {
-    const response: UpdateContactResponse = await UpdateContactRepository(
-      param
-    );
-    return response.data;
+  async (param: UpdateContactParam, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: UpdateContactResponse = await UpdateContactRepository(
+        param
+      );
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 
