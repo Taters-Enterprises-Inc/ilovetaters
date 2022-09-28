@@ -161,9 +161,12 @@ export function AdminAvailabilityDeals() {
             <Autocomplete
               disablePortal
               options={getAdminSessionState.data.user_details.stores}
-              sx={{ width: 300 }}
+              sx={{ width: 320 }}
               size="small"
-              getOptionLabel={(option) => option.name}
+              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              getOptionLabel={(option) =>
+                option.name + " (" + option.menu_name + ") "
+              }
               onChange={(event, value) => {
                 if (value) {
                   const params = {
