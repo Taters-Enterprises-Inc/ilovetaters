@@ -180,7 +180,9 @@ export function AdminAvailabilityDeals() {
                   });
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Movie" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Select store" />
+              )}
             />
           ) : null}
         </div>

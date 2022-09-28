@@ -256,14 +256,23 @@ export function AdminPopclubRedeemCustomerInformation(
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Total:</span>
-                      <span className="text-xs">₱375.00</span>
+                      <span className="text-xs">
+                        <NumberFormat
+                          value={(item.price * item.quantity).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
                     </div>
                   </div>
                 </div>
               ))}
               <div className="flex justify-between">
                 <span className="text-sm font-bold">Grand Total:</span>
-                <span className="text-sm text-end">₱375.00</span>
+                <span className="text-sm text-end">
+                  {calculateGrandTotal()}
+                </span>
               </div>
             </div>
           </>
