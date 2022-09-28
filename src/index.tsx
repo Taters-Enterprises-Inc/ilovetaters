@@ -167,6 +167,14 @@ root.render(
                     path="catering"
                     element={<Navigate to={"/delivery"} />}
                   />
+                  <Route
+                    path="shop/admin"
+                    element={<Navigate to={"/admin"} />}
+                  />
+                  <Route
+                    path="shop/login"
+                    element={<Navigate to={"/admin"} />}
+                  />
                   <Route path="shop" element={<Catering />}>
                     <Route index element={<CateringHome />} />
                     <Route

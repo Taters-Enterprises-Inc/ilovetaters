@@ -37,6 +37,27 @@ export function AdminPopclubRedeemCustomerInformation(
     }
   };
 
+  const calculateGrandTotal = () => {
+    let calculatedPrice = 0;
+
+    const items = getAdminPopclubRedeemState.data?.items;
+
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        calculatedPrice += items[i].price * items[i].quantity;
+      }
+    }
+
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
+  };
+
   return (
     <div className="pt-1 text-secondary">
       <div className="space-y-1 ">
@@ -193,7 +214,7 @@ export function AdminPopclubRedeemCustomerInformation(
                   <td colSpan={3} className="px-6 py-2 font-bold text-end">
                     Grand Total:
                   </td>
-                  <td className="px-6 py-2">₱375.00</td>
+                  <td className="px-6 py-2">{calculateGrandTotal()}</td>
                 </tr>
               </tbody>
             </table>

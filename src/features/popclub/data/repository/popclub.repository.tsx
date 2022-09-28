@@ -4,7 +4,7 @@ import { PlatformCategoryModel } from "features/popclub/core/domain/platform-cat
 import { PlatformModel } from "features/popclub/core/domain/platform.model";
 import { PopClubDataModel } from "features/popclub/core/domain/popclub-data.model";
 import { ProductVariantModel } from "features/popclub/core/domain/product_variant.model";
-import { StoreModel } from "features/shared/core/domain/store.model";
+import { RegionModel } from "features/shared/core/domain/region.model";
 import {
   GetAllPlatformCategoriesParam,
   GetDealProductVariantsParam,
@@ -54,7 +54,7 @@ export interface SetPopClubDataResponse {
 export interface GetStoresAvailableResponse {
   data: {
     message: string;
-    data: Array<StoreModel>;
+    data: Array<RegionModel>;
   };
 }
 
