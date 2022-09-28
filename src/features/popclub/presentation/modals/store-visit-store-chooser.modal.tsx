@@ -9,7 +9,7 @@ import {
 } from "../slices/store-visit-store-chooser-modal.slice";
 import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
 import { useEffect } from "react";
-
+import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
 interface StoreVisitStoreChooserModalProps {
   open: boolean;
   onClose: () => void;
@@ -58,51 +58,10 @@ export function StoreVisitStoreChooserModal(
           Which store are you visiting?
         </h1>
 
-        <div className="flex items-center justify-center mb-3">
-          <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
-              value={
-                storeVisitStoreChooserModalState.address
-                  ? storeVisitStoreChooserModalState.address
-                  : ""
-              }
-              onDenied={() => {
-                dispatch(
-                  getStoresAvailablePopClubStoreVisit({
-                    address: null,
-                    service: "POPCLUB-STORE-VISIT",
-                  })
-                );
-              }}
-              onPrompt={() => {
-                dispatch(
-                  getStoresAvailablePopClubStoreVisit({
-                    address: null,
-                    service: "POPCLUB-STORE-VISIT",
-                  })
-                );
-              }}
-              onLocateCurrentAddress={(place: string) => {}}
-              onChange={(value: string) => {
-                dispatch(
-                  setAddressStoreVisitStoreChooserModal({ address: value })
-                );
-              }}
-              onPlaceSelected={(place: string) => {
-                dispatch(
-                  setAddressStoreVisitStoreChooserModal({ address: place })
-                );
-                dispatch(
-                  getStoresAvailablePopClubStoreVisit({
-                    address: place,
-                    service: "POPCLUB-STORE-VISIT",
-                  })
-                );
-              }}
-            />
-            <span>Search Address</span>
-          </label>
+        <div className="mb-4">
+          <StoreVisitStoreSearch label="Search Store" />
         </div>
+
         <StoreClusterStoreVisit
           onClose={props.onClose}
           address={
@@ -110,7 +69,7 @@ export function StoreVisitStoreChooserModal(
               ? storeVisitStoreChooserModalState.address
               : ""
           }
-        ></StoreClusterStoreVisit>
+        />
       </div>
     </div>
   );

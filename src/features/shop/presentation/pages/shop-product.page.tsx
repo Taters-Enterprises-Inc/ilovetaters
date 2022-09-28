@@ -373,12 +373,11 @@ export function ShopProduct() {
     size: number | undefined,
     flavor: number | undefined
   ) => {
-    console.log(size);
     if (getProductDetailsState.data) {
       dispatch(
         getProductSku({
-          prod_flavor: flavor ? flavor : -1,
-          prod_size: size ? size : -1,
+          prod_flavor: flavor,
+          prod_size: size,
         })
       );
     }

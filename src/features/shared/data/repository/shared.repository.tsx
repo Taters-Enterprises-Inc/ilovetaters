@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SessionModel } from "features/shared/core/domain/session.model";
-import { StoreModel } from "features/shared/core/domain/store.model";
+import { RegionModel } from "features/shared/core/domain/region.model";
 import {
   AddContactParam,
   DeleteContactParam,
@@ -16,7 +16,7 @@ import { REACT_APP_DOMAIN_URL } from "../../constants";
 export interface GetStoresAvailableResponse {
   data: {
     message: string;
-    data: Array<StoreModel>;
+    data: Array<RegionModel>;
   };
 }
 

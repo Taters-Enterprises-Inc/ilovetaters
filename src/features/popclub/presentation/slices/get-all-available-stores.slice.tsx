@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { StoreModel } from "features/shared/core/domain/store.model";
+import { RegionModel } from "features/shared/core/domain/region.model";
 import { GetStoresAvailableParam } from "features/popclub/core/popclub.params";
 import {
   GetStoresAvailableRepository,
@@ -16,7 +16,7 @@ export enum GetAllAvailableStoresState {
 
 const initialState: {
   status: GetAllAvailableStoresState;
-  data: Array<StoreModel>;
+  data: Array<RegionModel>;
 } = {
   status: GetAllAvailableStoresState.initial,
   data: [],
@@ -45,7 +45,7 @@ export const getAllAvailableStoresSlice = createSlice({
         getAllAvailableStores.fulfilled,
         (
           state: any,
-          action: PayloadAction<{ message: string; data: Array<StoreModel> }>
+          action: PayloadAction<{ message: string; data: Array<RegionModel> }>
         ) => {
           const data = action.payload.data;
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
+import { RegionModel } from "features/shared/core/domain/region.model";
 import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
 import {
@@ -16,11 +17,13 @@ export enum GetStoresAvailablePopClubStoreVisitState {
 
 const initialState: {
   status: GetStoresAvailablePopClubStoreVisitState;
-  data: Array<StoreModel>;
+  data: Array<RegionModel>;
+  search: Array<StoreModel> | undefined;
   message: string;
 } = {
   status: GetStoresAvailablePopClubStoreVisitState.initial,
   data: [],
+  search: undefined,
   message: "",
 };
 
@@ -37,7 +40,17 @@ export const getStoresAvailablePopClubStoreVisit = createAsyncThunk(
 export const getStoresAvailablePopClubStoreVisitSlice = createSlice({
   name: "getStoresAvailablePopClubStoreVisit",
   initialState,
-  reducers: {},
+  reducers: {
+    searchStores: (
+      state,
+      action: PayloadAction<{ stores: Array<StoreModel> }>
+    ) => {
+      state.search = action.payload.stores;
+    },
+    resetStoreSearch: (state) => {
+      state.search = undefined;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(getStoresAvailablePopClubStoreVisit.pending, (state: any) => {
@@ -47,7 +60,7 @@ export const getStoresAvailablePopClubStoreVisitSlice = createSlice({
         getStoresAvailablePopClubStoreVisit.fulfilled,
         (
           state: any,
-          action: PayloadAction<{ message: string; data: Array<StoreModel> }>
+          action: PayloadAction<{ message: string; data: Array<RegionModel> }>
         ) => {
           const { data, message } = action.payload;
           state.status = GetStoresAvailablePopClubStoreVisitState.success;
@@ -68,5 +81,8 @@ export const getStoresAvailablePopClubStoreVisitSlice = createSlice({
 
 export const selectGetStoresAvailablePopClubStoreVisit = (state: RootState) =>
   state.getStoresAvailablePopClubStoreVisit;
+
+export const { searchStores, resetStoreSearch } =
+  getStoresAvailablePopClubStoreVisitSlice.actions;
 
 export default getStoresAvailablePopClubStoreVisitSlice.reducer;

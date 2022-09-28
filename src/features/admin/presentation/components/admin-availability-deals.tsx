@@ -36,6 +36,8 @@ import {
   updateStoreDeal,
 } from "../slices/update-store-deal.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 const columns: Array<Column> = [
   { id: "alias", label: "Alias" },
@@ -154,47 +156,32 @@ export function AdminAvailabilityDeals() {
               Not-Available
             </button>
           </div>
-          {getAdminSessionState.data ? (
-            <FormControl sx={{ minWidth: 150 }} size="small">
-              <InputLabel>Select a store</InputLabel>
-
-              <Select
-                label="Select a store"
-                defaultValue={
-                  storeId ??
-                  getAdminSessionState.data.user_details.stores[0].store_id
+          {getAdminSessionState.data &&
+          getAdminSessionState.data.user_details.stores ? (
+            <Autocomplete
+              disablePortal
+              options={getAdminSessionState.data.user_details.stores}
+              sx={{ width: 300 }}
+              size="small"
+              getOptionLabel={(option) => option.name}
+              onChange={(event, value) => {
+                if (value) {
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    store_id: value.store_id === -1 ? null : value.store_id,
+                    search: search,
+                  };
+                  const queryParams = createQueryParams(params);
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
                 }
-                onChange={(event) => {
-                  if (event.target.value !== status) {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      store_id:
-                        event.target.value === -1 ? null : event.target.value,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-              >
-                {getAdminSessionState.data.user_details.stores.map(
-                  (store, index) => (
-                    <MenuItem key={index} value={store.store_id}>
-                      <span className="text-xs lg:text-base">
-                        {store.name} ( {store.menu_name} )
-                      </span>
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-            </FormControl>
+              }}
+              renderInput={(params) => <TextField {...params} label="Movie" />}
+            />
           ) : null}
         </div>
       </div>
