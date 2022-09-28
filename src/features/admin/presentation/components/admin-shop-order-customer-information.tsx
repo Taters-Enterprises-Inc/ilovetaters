@@ -484,18 +484,30 @@ export function AdminShopOrderCustomerInformation() {
         <div className="pt-2 pb-3">
           <span className="text-xl font-bold">Delivery Information</span>
           <div className="mt-1">
-            <strong>Address:</strong>{" "}
+            <strong>Landmark Address:</strong>{" "}
+            <span className="font-semibold">
+              {getAdminShopOrderState.data?.address ?? "N/A"}
+            </span>
+          </div>
+          <div className="mt-1">
+            <strong>Full Address:</strong>{" "}
             <span className="font-semibold">
               {getAdminShopOrderState.data?.add_address ?? "N/A"}
             </span>
           </div>
           <div>
             <strong>Contact Person:</strong>{" "}
-            <span className="font-semibold">Rej Benipayo</span>
+            <span className="font-semibold">
+              {" "}
+              {getAdminShopOrderState.data?.add_name ?? "N/A"}
+            </span>
           </div>
           <div>
             <strong>Contact Number:</strong>{" "}
-            <span className="font-semibold">09158642720</span>
+            <span className="font-semibold">
+              {" "}
+              {getAdminShopOrderState.data?.contact_number ?? "N/A"}
+            </span>
           </div>
         </div>
 

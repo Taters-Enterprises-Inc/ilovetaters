@@ -33,6 +33,7 @@ export interface CheckoutOrdersParam {
   phoneNumber: string;
   payops: string;
   address: string;
+  full_address: string;
 }
 
 export interface GetCategoryProductsParam {

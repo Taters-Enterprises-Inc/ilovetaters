@@ -11,6 +11,7 @@ export interface AdminShopOrderModel {
   cod_fee: string;
   invoice_num: string;
   client_name: string;
+  add_name: string;
   payops: number;
   email: string;
   contact_number: string;

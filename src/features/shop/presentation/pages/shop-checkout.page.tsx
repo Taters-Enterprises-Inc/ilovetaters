@@ -363,6 +363,7 @@ export function ShopCheckout() {
                 {getSessionState.data?.customer_address ? (
                   <TextField
                     required
+                    aria-readonly
                     defaultValue={getSessionState.data?.customer_address}
                     variant="outlined"
                     className="w-full"
@@ -372,12 +373,22 @@ export function ShopCheckout() {
                 ) : (
                   <TextField
                     required
+                    aria-readonly
                     variant="outlined"
                     className="w-full"
                     name="address"
                     autoComplete="off"
                   />
                 )}
+
+                <TextField
+                  required
+                  variant="outlined"
+                  name="full_address"
+                  className="w-full"
+                  label="Full Delivery Address"
+                  autoComplete="off"
+                />
 
                 {getSessionState.data?.cache_data ? (
                   <>
