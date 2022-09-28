@@ -51,19 +51,36 @@ export function AdminHead(props: AdminHeadProps) {
           size={20}
         /> */}
 
-        <div>
-          <button aria-describedby={id} type="button" onClick={handleClick}>
-            <MdOutlineNotificationsNone
-              className="mr-4 cursor-pointer "
-              size={20}
-            />
-          </button>
-          <Popper id={id} open={open} anchorEl={anchorEl}>
-            <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>
-              The content of the Popper.
+        <button aria-describedby={id} type="button" onClick={handleClick}>
+          <MdOutlineNotificationsNone
+            className="mr-4 cursor-pointer "
+            size={20}
+          />
+        </button>
+
+        <Popper id={id} open={open} anchorEl={anchorEl}>
+          <div>
+            <Box
+              className="w-48 lg:w-72 h-72"
+              mr={4}
+              sx={{
+                bgcolor: "background.paper",
+              }}
+            >
+              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center">
+                Notifications
+              </div>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
             </Box>
-          </Popper>
-        </div>
+          </div>
+        </Popper>
 
         <TbLogout
           onClick={() => {
