@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StoreType } from "./near-you-search-store";
 import { useNavigate } from "react-router-dom";
-export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { StoreModel } from "features/shared/core/domain/store.model";
+export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
   store,
 }): JSX.Element => {
   const [showText, setShowText] = useState<boolean>(false);
@@ -33,21 +34,15 @@ export const NearyouSearchCard: React.FC<{ store: StoreType }> = ({
         {store.store_name}
       </div>
 
-      <div className="absolute flex flex-col items-stretch w-full mt-10 space-y-2 bg-transparent cursor-pointer md:mt-16">
-        <div className="flex justify-end ">
-          <span className="px-2 text-sm bg-secondary">{distance_in_km} KM</span>
-        </div>
-      </div>
-
       {store.store_image ? (
         <img
-          src={`https://ilovetaters.com/shop/assets/img//store_images/250/${store.store_image}`}
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
           alt=""
           className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
         />
       ) : (
         <img
-          src={`https://ilovetaters.com/shop/assets/img//store_images/250/blank.jpg`}
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
           alt=""
           className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
         />

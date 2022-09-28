@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  resetStoreSearch,
-  searchStores,
-  selectGetStoresAvailablePopClubStoreVisit,
-} from "../slices/get-stores-available-popclub-store-visit.slice";
 import { useEffect } from "react";
+import { selectBranchesNearYouComponent } from "../slices/branches-near-you-component.slice";
+import {
+  resetBranchesSearch,
+  searchBranches,
+  selectGetStoresAvailableBranches,
+} from "../slices/get-stores-available-branches.slice";
 
 const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
   <TextField {...props} />
@@ -28,16 +29,16 @@ const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
     borderColor: "white !important",
   },
 }));
-interface StoreVisitStoreSearchProps {
+interface BranchesSearchProps {
   label: string;
 }
-export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
-  const getStoresAvailablePopClubStoreVisitState = useAppSelector(
-    selectGetStoresAvailablePopClubStoreVisit
+export function BranchesSearch(props: BranchesSearchProps) {
+  const getStoresAvailableBranchesState = useAppSelector(
+    selectGetStoresAvailableBranches
   );
 
   useEffect(() => {
-    dispatch(resetStoreSearch());
+    dispatch(resetBranchesSearch());
   }, []);
 
   const dispatch = useAppDispatch();
@@ -45,13 +46,13 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
   const handleOnChange = (event: any) => {
     const search = event.target.value;
     if (!search) {
-      dispatch(resetStoreSearch());
+      dispatch(resetBranchesSearch());
 
       return;
     }
 
-    if (getStoresAvailablePopClubStoreVisitState.data) {
-      const regions = getStoresAvailablePopClubStoreVisitState.data;
+    if (getStoresAvailableBranchesState.data) {
+      const regions = getStoresAvailableBranchesState.data;
       const merged_stores = [];
 
       for (let i = 0; i < regions.length; i++) {
@@ -67,7 +68,7 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
         );
       });
 
-      dispatch(searchStores({ stores: search_stores }));
+      dispatch(searchBranches({ stores: search_stores }));
     }
   };
 

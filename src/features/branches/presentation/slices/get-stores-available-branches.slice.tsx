@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { RegionModel } from "features/shared/core/domain/region.model";
+import { StoreModel } from "features/shared/core/domain/store.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
 import {
   GetStoresAvailableRepository,
@@ -17,11 +18,13 @@ export enum GetStoresAvailableBranchesState {
 const initialState: {
   status: GetStoresAvailableBranchesState;
   data: Array<RegionModel>;
+  search: Array<StoreModel> | undefined;
   message: string;
 } = {
   status: GetStoresAvailableBranchesState.initial,
   data: [],
   message: "",
+  search: undefined,
 };
 
 export const getStoresAvailableBranches = createAsyncThunk(
@@ -37,7 +40,17 @@ export const getStoresAvailableBranches = createAsyncThunk(
 export const getStoresAvailableBranchesSlice = createSlice({
   name: "getStoresAvailableBranches",
   initialState,
-  reducers: {},
+  reducers: {
+    searchBranches: (
+      state,
+      action: PayloadAction<{ stores: Array<StoreModel> }>
+    ) => {
+      state.search = action.payload.stores;
+    },
+    resetBranchesSearch: (state) => {
+      state.search = undefined;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(getStoresAvailableBranches.pending, (state: any) => {
@@ -68,5 +81,8 @@ export const getStoresAvailableBranchesSlice = createSlice({
 
 export const selectGetStoresAvailableBranches = (state: RootState) =>
   state.getStoresAvailableBranches;
+
+export const { resetBranchesSearch, searchBranches } =
+  getStoresAvailableBranchesSlice.actions;
 
 export default getStoresAvailableBranchesSlice.reducer;

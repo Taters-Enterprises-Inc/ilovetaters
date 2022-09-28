@@ -260,383 +260,392 @@ export function ShopCheckout() {
           </div>
 
           <div className="container">
-            <form
-              onSubmit={handleCheckout}
-              className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
-            >
-              <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                {getSessionState.data?.userData.first_name ? (
-                  <TextField
-                    required
-                    defaultValue={getSessionState.data.userData.first_name}
-                    variant="outlined"
-                    className="w-full"
-                    name="firstName"
-                  />
-                ) : (
-                  <TextField
-                    required
-                    label="First Name"
-                    variant="outlined"
-                    className="w-full"
-                    name="firstName"
-                  />
-                )}
+            {getSessionState.data ? (
+              <form
+                onSubmit={handleCheckout}
+                className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
+              >
+                <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
+                  {getSessionState.data.userData.first_name ? (
+                    <TextField
+                      required
+                      defaultValue={getSessionState.data.userData.first_name}
+                      variant="outlined"
+                      className="w-full"
+                      name="firstName"
+                    />
+                  ) : (
+                    <TextField
+                      required
+                      label="First Name"
+                      variant="outlined"
+                      className="w-full"
+                      name="firstName"
+                    />
+                  )}
 
-                {getSessionState.data?.userData.last_name ? (
-                  <TextField
-                    required
-                    defaultValue={getSessionState.data.userData.last_name}
-                    variant="outlined"
-                    className="w-full"
-                    name="lastName"
-                  />
-                ) : (
-                  <TextField
-                    required
-                    label="Last Name"
-                    variant="outlined"
-                    className="w-full"
-                    name="lastName"
-                  />
-                )}
+                  {getSessionState.data.userData.last_name ? (
+                    <TextField
+                      required
+                      defaultValue={getSessionState.data.userData.last_name}
+                      variant="outlined"
+                      className="w-full"
+                      name="lastName"
+                    />
+                  ) : (
+                    <TextField
+                      required
+                      label="Last Name"
+                      variant="outlined"
+                      className="w-full"
+                      name="lastName"
+                    />
+                  )}
 
-                <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
-                  <div className="flex-1">
-                    {getSessionState.data?.userData.email ? (
-                      <TextField
-                        autoComplete="off"
-                        required
-                        defaultValue={getSessionState.data.userData.email}
-                        variant="outlined"
-                        className="w-full"
-                        name="eMail"
-                      />
-                    ) : (
-                      <TextField
-                        autoComplete="off"
-                        required
-                        label="E-mail Address"
-                        variant="outlined"
-                        className="w-full"
-                        name="eMail"
-                      />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    {getContactsState?.data &&
-                    getContactsState.data.length > 0 ? (
-                      <FormControl className="w-full">
-                        <InputLabel id="demo-simple-select-helper-label">
-                          Contacts
-                        </InputLabel>
-                        <Select
-                          className="w-full"
-                          label="Contacts"
-                          name="phoneNumber"
-                          defaultValue={getContactsState.data[0].contact}
-                          required
+                  <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
+                    <div className="flex-1">
+                      {getSessionState.data.userData.email ? (
+                        <TextField
                           autoComplete="off"
-                        >
-                          {getContactsState.data.map((val) => (
-                            <MenuItem value={val.contact}>
-                              {val.contact}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    ) : (
-                      <PhoneInput />
-                    )}
+                          required
+                          defaultValue={getSessionState.data.userData.email}
+                          variant="outlined"
+                          className="w-full"
+                          name="eMail"
+                        />
+                      ) : (
+                        <TextField
+                          autoComplete="off"
+                          required
+                          label="E-mail Address"
+                          variant="outlined"
+                          className="w-full"
+                          name="eMail"
+                        />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      {getContactsState.data &&
+                      getContactsState.data.length > 0 ? (
+                        <FormControl className="w-full">
+                          <InputLabel id="demo-simple-select-helper-label">
+                            Contacts
+                          </InputLabel>
+                          <Select
+                            className="w-full"
+                            label="Contacts"
+                            name="phoneNumber"
+                            defaultValue={getContactsState.data[0].contact}
+                            required
+                            autoComplete="off"
+                          >
+                            {getContactsState.data.map((val) => (
+                              <MenuItem value={val.contact}>
+                                {val.contact}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      ) : (
+                        <PhoneInput />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenAddContactModal(true);
+                        }}
+                        className="text-xs underline text-primary underline-offset-4"
+                      >
+                        Setup your phone number
+                      </button>
+                    </div>
+                  </div>
+
+                  {getSessionState.data.customer_address ? (
+                    <TextField
+                      required
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      defaultValue={getSessionState.data?.customer_address}
+                      variant="outlined"
+                      className="w-full"
+                      name="address"
+                      autoComplete="off"
+                    />
+                  ) : (
+                    <TextField
+                      required
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      variant="outlined"
+                      className="w-full"
+                      name="address"
+                      autoComplete="off"
+                    />
+                  )}
+
+                  <TextField
+                    required
+                    variant="outlined"
+                    name="full_address"
+                    className="w-full"
+                    label="Complete Delivery Address"
+                    autoComplete="off"
+                  />
+
+                  {getSessionState.data.cache_data ? (
+                    <>
+                      <div className="mt-4 text-secondary lg:mt-0">
+                        <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                          Handling Method
+                        </h2>
+
+                        <ul className="mt-2 space-y-1">
+                          <li className="flex items-center space-x-2">
+                            <MdDeliveryDining className="text-2xl text-primary" />
+                            <h3 className="text-sm">Delivery</h3>
+                          </li>
+                          <li className="flex items-start space-x-3">
+                            <FaStore className="text-lg text-primary" />
+                            <h3 className="text-sm">
+                              Store:{" "}
+                              {getSessionState.data.cache_data.store_name}
+                            </h3>
+                          </li>
+                          <li className="flex items-start space-x-3 ">
+                            <FaMapMarkerAlt className="text-lg text-primary" />
+                            <h3 className="flex-1 text-sm">
+                              Store Address:{" "}
+                              {getSessionState.data.cache_data.store_address}
+                            </h3>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="mt-4 text-secondary lg:mt-0">
+                        <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                          Note:
+                        </h2>
+
+                        {
+                          <ul
+                            className="mt-2 space-y-2 text-sm notes"
+                            dangerouslySetInnerHTML={{
+                              __html: getSessionState.data.cache_data?.moh_notes
+                                ? getSessionState.data.cache_data.moh_notes
+                                : "",
+                            }}
+                          />
+                        }
+                      </div>
+                    </>
+                  ) : null}
+
+                  <div className="mt-4 space-y-2 text-secondary lg:mt-0">
+                    <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                      Choose payment method
+                    </h2>
+                    <PaymentMethod />
+
+                    {/* <PaymentAccordion /> */}
+                  </div>
+
+                  <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">
+                    <Checkbox color="primary" required />
+                    <span>I agree with the </span>
+                    <Link
+                      to="/delivery/terms-and-conditions"
+                      className="text-primary"
+                    >
+                      Terms & Conditions
+                    </Link>
+                  </div>
+
+                  <div className="flex flex-col lg:flex-row lg:space-x-4">
                     <button
                       type="button"
+                      className="order-2 w-full py-3 mt-4 font-bold text-white uppercase border bg-secondary rounded-xl lg:order-1"
                       onClick={() => {
-                        setOpenAddContactModal(true);
+                        navigate(-1);
                       }}
-                      className="text-xs underline text-primary underline-offset-4"
                     >
-                      Setup your phone number
+                      Go Back
+                    </button>
+
+                    <button
+                      type="submit"
+                      className="order-1 w-full py-3 mt-4 text-white uppercase border bg-button border-secondary rounded-xl lg:order-2"
+                    >
+                      Checkout
                     </button>
                   </div>
                 </div>
 
-                {getSessionState.data?.customer_address ? (
-                  <TextField
-                    required
-                    aria-readonly
-                    defaultValue={getSessionState.data?.customer_address}
-                    variant="outlined"
-                    className="w-full"
-                    name="address"
-                    autoComplete="off"
-                  />
-                ) : (
-                  <TextField
-                    required
-                    aria-readonly
-                    variant="outlined"
-                    className="w-full"
-                    name="address"
-                    autoComplete="off"
-                  />
-                )}
+                {getSessionState.data.orders || getSessionState.data.deals ? (
+                  <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
+                    <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
+                      Order Summary
+                    </h2>
 
-                <TextField
-                  required
-                  variant="outlined"
-                  name="full_address"
-                  className="w-full"
-                  label="Full Delivery Address"
-                  autoComplete="off"
-                />
-
-                {getSessionState.data?.cache_data ? (
-                  <>
-                    <div className="mt-4 text-secondary lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Handling Method
-                      </h2>
-
-                      <ul className="mt-2 space-y-1">
-                        <li className="flex items-center space-x-2">
-                          <MdDeliveryDining className="text-2xl text-primary" />
-                          <h3 className="text-sm">Delivery</h3>
-                        </li>
-                        <li className="flex items-start space-x-3">
-                          <FaStore className="text-lg text-primary" />
-                          <h3 className="text-sm">
-                            Store: {getSessionState.data.cache_data.store_name}
-                          </h3>
-                        </li>
-                        <li className="flex items-start space-x-3 ">
-                          <FaMapMarkerAlt className="text-lg text-primary" />
-                          <h3 className="flex-1 text-sm">
-                            Store Address:{" "}
-                            {getSessionState.data.cache_data.store_address}
-                          </h3>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="mt-4 text-secondary lg:mt-0">
-                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                        Note:
-                      </h2>
-
-                      {
-                        <ul
-                          className="mt-2 space-y-2 text-sm notes"
-                          dangerouslySetInnerHTML={{
-                            __html: getSessionState.data.cache_data?.moh_notes
-                              ? getSessionState.data.cache_data.moh_notes
-                              : "",
-                          }}
-                        />
-                      }
-                    </div>
-                  </>
-                ) : null}
-
-                <div className="mt-4 space-y-2 text-secondary lg:mt-0">
-                  <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
-                    Choose payment method
-                  </h2>
-                  <PaymentMethod />
-
-                  {/* <PaymentAccordion /> */}
-                </div>
-
-                <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">
-                  <Checkbox color="primary" required />
-                  <span>I agree with the </span>
-                  <Link
-                    to="/delivery/terms-and-conditions"
-                    className="text-primary"
-                  >
-                    Terms & Conditions
-                  </Link>
-                </div>
-
-                <div className="flex flex-col lg:flex-row lg:space-x-4">
-                  <button
-                    type="button"
-                    className="order-2 w-full py-3 mt-4 font-bold text-white uppercase border bg-secondary rounded-xl lg:order-1"
-                    onClick={() => {
-                      navigate(-1);
-                    }}
-                  >
-                    Go Back
-                  </button>
-
-                  <button
-                    type="submit"
-                    className="order-1 w-full py-3 mt-4 text-white uppercase border bg-button border-secondary rounded-xl lg:order-2"
-                  >
-                    Checkout
-                  </button>
-                </div>
-              </div>
-
-              {getSessionState.data?.orders || getSessionState.data?.deals ? (
-                <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
-                  <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
-                    Order Summary
-                  </h2>
-
-                  {getSessionState.data?.orders ? (
-                    <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                      {getSessionState.data?.orders.map((order, i) => (
-                        <div
-                          key={i}
-                          className="flex bg-secondary shadow-lg rounded-[10px] relative"
-                        >
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                            className="rounded-[10px] w-[92px] h-[92px]"
-                            alt=""
-                          />
-                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-sm w-[90%] font-bold leading-4">
-                              {order.prod_size} {order.prod_name}
-                            </h3>
-                            <h3 className="text-xs">
-                              Quantity:{" "}
-                              <span className="text-tertiary">
-                                {order.prod_qty}
-                              </span>
-                            </h3>
-
-                            {order.prod_flavor ? (
+                    {getSessionState.data.orders ? (
+                      <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                        {getSessionState.data.orders.map((order, i) => (
+                          <div
+                            key={i}
+                            className="flex bg-secondary shadow-lg rounded-[10px] relative"
+                          >
+                            <img
+                              src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
+                              className="rounded-[10px] w-[92px] h-[92px]"
+                              alt=""
+                            />
+                            <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                              <h3 className="text-sm w-[90%] font-bold leading-4">
+                                {order.prod_size} {order.prod_name}
+                              </h3>
                               <h3 className="text-xs">
-                                Flavor:{" "}
+                                Quantity:{" "}
                                 <span className="text-tertiary">
-                                  {order.prod_flavor}
+                                  {order.prod_qty}
                                 </span>
                               </h3>
-                            ) : null}
 
-                            {order.prod_multiflavors ? (
-                              <h3 className="text-xs">
-                                Flavor:
-                                <br />
-                                <span
-                                  className="text-tertiary"
-                                  dangerouslySetInnerHTML={{
-                                    __html: order.prod_multiflavors,
-                                  }}
+                              {order.prod_flavor ? (
+                                <h3 className="text-xs">
+                                  Flavor:{" "}
+                                  <span className="text-tertiary">
+                                    {order.prod_flavor}
+                                  </span>
+                                </h3>
+                              ) : null}
+
+                              {order.prod_multiflavors ? (
+                                <h3 className="text-xs">
+                                  Flavor:
+                                  <br />
+                                  <span
+                                    className="text-tertiary"
+                                    dangerouslySetInnerHTML={{
+                                      __html: order.prod_multiflavors,
+                                    }}
+                                  />
+                                </h3>
+                              ) : null}
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={order.prod_calc_amount.toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
                                 />
                               </h3>
-                            ) : null}
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={order.prod_calc_amount.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          </div>
-                          <button
-                            type="button"
-                            className="absolute text-white top-2 right-4 "
-                            onClick={() => {
-                              dispatch(removeItemFromCartShop(i));
-                            }}
-                          >
-                            <IoMdClose />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  {getSessionState.data?.deals ? (
-                    <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                      {getSessionState.data?.deals.map((deal, i) => (
-                        <div
-                          key={i}
-                          className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                        >
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
-                            className="rounded-[10px] w-[92px] h-[92px]"
-                            alt=""
-                          />
-                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-sm w-[90%] font-bold leading-4">
-                              {deal.deal_name}
-                            </h3>
-                            <h3 className="text-xs">
-                              Quantity:{" "}
-                              <span className="text-tertiary">
-                                {deal.deal_qty}
-                              </span>
-                            </h3>
-
-                            {deal.deal_remarks ? (
-                              <h3 className="text-xs">
-                                Flavor:
-                                <br />
-                                <span
-                                  className="text-tertiary"
-                                  dangerouslySetInnerHTML={{
-                                    __html: deal.deal_remarks,
-                                  }}
-                                />
-                              </h3>
-                            ) : null}
-
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={deal.deal_promo_price.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          </div>
-                          <button
-                            type="button"
-                            className="absolute text-white top-2 right-4 "
-                            onClick={() => {
-                              if (
-                                getSessionState.data &&
-                                getSessionState.data.orders &&
-                                getSessionState.data.orders.length > 1
-                              ) {
+                            </div>
+                            <button
+                              type="button"
+                              className="absolute text-white top-2 right-4 "
+                              onClick={() => {
                                 dispatch(removeItemFromCartShop(i));
-                              } else {
-                                dispatch(
-                                  popUpSnackBar({
-                                    message: "You cannot delete this item",
-                                    severity: "error",
-                                  })
-                                );
-                              }
-                            }}
+                              }}
+                            >
+                              <IoMdClose />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                    {getSessionState.data.deals ? (
+                      <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                        {getSessionState.data.deals.map((deal, i) => (
+                          <div
+                            key={i}
+                            className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
                           >
-                            <IoMdClose />
-                          </button>
-                        </div>
-                      ))}
+                            <img
+                              src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
+                              className="rounded-[10px] w-[92px] h-[92px]"
+                              alt=""
+                            />
+                            <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                              <h3 className="text-sm w-[90%] font-bold leading-4">
+                                {deal.deal_name}
+                              </h3>
+                              <h3 className="text-xs">
+                                Quantity:{" "}
+                                <span className="text-tertiary">
+                                  {deal.deal_qty}
+                                </span>
+                              </h3>
+
+                              {deal.deal_remarks ? (
+                                <h3 className="text-xs">
+                                  Flavor:
+                                  <br />
+                                  <span
+                                    className="text-tertiary"
+                                    dangerouslySetInnerHTML={{
+                                      __html: deal.deal_remarks,
+                                    }}
+                                  />
+                                </h3>
+                              ) : null}
+
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={deal.deal_promo_price.toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            </div>
+                            <button
+                              type="button"
+                              className="absolute text-white top-2 right-4 "
+                              onClick={() => {
+                                if (
+                                  getSessionState.data &&
+                                  getSessionState.data.orders &&
+                                  getSessionState.data.orders.length > 1
+                                ) {
+                                  dispatch(removeItemFromCartShop(i));
+                                } else {
+                                  dispatch(
+                                    popUpSnackBar({
+                                      message: "You cannot delete this item",
+                                      severity: "error",
+                                    })
+                                  );
+                                }
+                              }}
+                            >
+                              <IoMdClose />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    <hr className="mt-1 mb-2 border-secondary" />
+                    <div className="grid grid-cols-2 text-secondary">
+                      <span>Subtotal:</span>
+                      <span className="text-end">
+                        {calculateSubTotalPrice()}
+                      </span>
+                      <span>Delivery Fee:</span>
+                      <span className="text-end">{calculateDeliveryFee()}</span>
+                      <span>Discount:</span>
+                      <span className="text-end">( ₱ 0.00 )</span>
                     </div>
-                  ) : null}
 
-                  <hr className="mt-1 mb-2 border-secondary" />
-                  <div className="grid grid-cols-2 text-secondary">
-                    <span>Subtotal:</span>
-                    <span className="text-end">{calculateSubTotalPrice()}</span>
-                    <span>Delivery Fee:</span>
-                    <span className="text-end">{calculateDeliveryFee()}</span>
-                    <span>Discount:</span>
-                    <span className="text-end">( ₱ 0.00 )</span>
+                    <h1 className="text-4xl font-bold text-center text-secondary">
+                      {calculateTotalPrice()}
+                    </h1>
                   </div>
-
-                  <h1 className="text-4xl font-bold text-center text-secondary">
-                    {calculateTotalPrice()}
-                  </h1>
-                </div>
-              ) : null}
-            </form>
+                ) : null}
+              </form>
+            ) : null}
           </div>
         </div>
       </section>

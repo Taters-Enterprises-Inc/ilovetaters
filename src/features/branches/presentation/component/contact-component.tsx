@@ -1,5 +1,5 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import React from "react";
+import React, { useEffect } from "react";
 import { SearchAddress } from "features/shared/presentation/components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { contactData, ContactDataType } from "../pages/data/contact-data";
@@ -9,12 +9,22 @@ import {
 } from "../slices/branches-near-you-component.slice";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 import { NearyouSearchStore } from "./near-you-search-store";
+import { BranchesSearch } from "./branches-search";
 
 export const ContactComponent: React.FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const branchesNearYouComponentSlice = useAppSelector(
     selectBranchesNearYouComponent
   );
+
+  useEffect(() => {
+    dispatch(
+      getStoresAvailableBranches({
+        address: null,
+        service: "BRANCHES",
+      })
+    );
+  }, []);
 
   return (
     <main className="min-h-screen bg-primary">
@@ -111,60 +121,8 @@ export const ContactComponent: React.FC = (): JSX.Element => {
         </section>
 
         <section className="container pb-[200px]">
-          <div className="flex items-center justify-center mb-3">
-            <label className="w-full pure-material-textfield-outlined">
-              <SearchAddress
-                value={
-                  branchesNearYouComponentSlice.address
-                    ? branchesNearYouComponentSlice.address
-                    : ""
-                }
-                onPrompt={() => {
-                  dispatch(
-                    getStoresAvailableBranches({
-                      address: null,
-                      service: "BRANCHES",
-                    })
-                  );
-                }}
-                onDenied={() => {
-                  dispatch(
-                    getStoresAvailableBranches({
-                      address: null,
-                      service: "BRANCHES",
-                    })
-                  );
-                }}
-                onLocateCurrentAddress={(place: string) => {
-                  dispatch(
-                    setAddressBranchesNearYouComponent({ address: place })
-                  );
-                  dispatch(
-                    getStoresAvailableBranches({
-                      address: place,
-                      service: "BRANCHES",
-                    })
-                  );
-                }}
-                onChange={(value: string) => {
-                  dispatch(
-                    setAddressBranchesNearYouComponent({ address: value })
-                  );
-                }}
-                onPlaceSelected={(place: string) => {
-                  dispatch(
-                    setAddressBranchesNearYouComponent({ address: place })
-                  );
-                  dispatch(
-                    getStoresAvailableBranches({
-                      address: place,
-                      service: "BRANCHES",
-                    })
-                  );
-                }}
-              />
-              <span>Search Address</span>
-            </label>
+          <div className="mb-3">
+            <BranchesSearch label="Search store branch" />
           </div>
 
           <NearyouSearchStore />

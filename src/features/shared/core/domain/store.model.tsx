@@ -10,4 +10,7 @@ export interface StoreModel {
   action: string;
   opening_time: string;
   closing_time: string;
+  contactno: string;
+  operatinghours: string;
+  address: string;
 }

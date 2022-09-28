@@ -74,6 +74,12 @@ export interface AdminCompleteRedeemResponse {
   };
 }
 
+export interface AdminDeclineRedeemResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface GetAdminUsersResponse {
   data: {
     message: string;
@@ -220,6 +226,17 @@ export interface UpdateAdminSettingStoreResponse {
   data: {
     message: string;
   };
+}
+
+export function AdminDeclineRedeemRepository(
+  redeemCode: string
+): Promise<AdminDeclineRedeemResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/decline`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminSettingStoreRepository(

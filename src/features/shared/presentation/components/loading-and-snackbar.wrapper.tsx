@@ -217,6 +217,10 @@ import {
   selectUpdateAdminSettingStore,
   UpdateAdminSettingStoreState,
 } from "features/admin/presentation/slices/update-setting-store.slice";
+import {
+  AdminDeclineRedeemState,
+  selectAdminDeclineRedeem,
+} from "features/admin/presentation/slices/admin-decline-redeem.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -329,6 +333,27 @@ export function LoadingAndSnackbarWrapper() {
   const updateAdminSettingStoreState = useAppSelector(
     selectUpdateAdminSettingStore
   );
+
+  const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
+
+  useEffect(() => {
+    switch (adminDeclineRedeemState.status) {
+      case AdminDeclineRedeemState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminDeclineRedeemState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminDeclineRedeemState.success:
+        showAlert(setSuccessAlert, adminDeclineRedeemState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminDeclineRedeemState.fail:
+        showAlert(setFailsAlert, adminDeclineRedeemState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminDeclineRedeemState, dispatch]);
 
   useEffect(() => {
     switch (updateAdminSettingStoreState.status) {

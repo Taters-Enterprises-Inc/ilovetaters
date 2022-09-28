@@ -111,6 +111,7 @@ import getProductCategories from "features/admin/presentation/slices/get-product
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
 import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
+import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
 
 export const store = configureStore({
   reducer: {
@@ -212,6 +213,7 @@ export const store = configureStore({
     updateStoreProduct,
     getAdminSettingStores,
     updateAdminSettingStore,
+    adminDeclineRedeem,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

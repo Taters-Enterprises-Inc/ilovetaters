@@ -100,7 +100,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
             </section>
           ) : (
             <h1 className="text-base font-bold text-center">
-              Sorry, we couldn't find any open stores for your search.
+              Sorry, we couldn't find any available stores for your search.
             </h1>
           )}
         </>

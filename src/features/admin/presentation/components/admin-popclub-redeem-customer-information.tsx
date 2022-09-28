@@ -10,6 +10,7 @@ import {
   selectAdminCompleteRedeem,
 } from "../slices/admin-complete-redeem.slice";
 import { useEffect } from "react";
+import { adminDeclineRedeem } from "../slices/admin-decline-redeem.slice";
 
 interface AdminPopclubRedeemCustomerInformationProps {
   onClose: () => void;
@@ -34,6 +35,12 @@ export function AdminPopclubRedeemCustomerInformation(
       dispatch(
         adminCompleteRedeem(getAdminPopclubRedeemState.data.redeem_code)
       );
+    }
+  };
+
+  const handleDecline = () => {
+    if (getAdminPopclubRedeemState.data) {
+      dispatch(adminDeclineRedeem(getAdminPopclubRedeemState.data.redeem_code));
     }
   };
 
@@ -266,7 +273,10 @@ export function AdminPopclubRedeemCustomerInformation(
         getAdminPopclubRedeemState.data.status === 1 &&
         moment(getAdminPopclubRedeemState.data.expiration).isAfter(moment()) ? (
           <div className="flex items-start justify-end py-3 space-x-2">
-            <button className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md">
+            <button
+              onClick={handleDecline}
+              className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+            >
               Decline
             </button>
             <button
