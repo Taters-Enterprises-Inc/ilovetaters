@@ -56,7 +56,10 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
         }
       }
       const search_stores = merged_stores.filter((store, index) => {
-        return store.store_name.toLowerCase().includes(search.toLowerCase());
+        return (
+          store.store_name.toLowerCase().includes(search.toLowerCase()) ||
+          store.store_address.toLowerCase().includes(search.toLowerCase())
+        );
       });
 
       dispatch(searchStores({ stores: search_stores }));

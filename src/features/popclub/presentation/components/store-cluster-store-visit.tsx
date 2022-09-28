@@ -58,42 +58,52 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
   return (
     <section className="text-white ">
       {getStoresAvailablePopClubStoreVisitState.search ? (
-        <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-          {getStoresAvailablePopClubStoreVisitState.search.map(
-            (store, index) => {
-              return (
-                <button
-                  key={index}
-                  onClick={() => {
-                    props.onClose();
-                    storeClicked(store.store_id, store.region_store_id);
-                  }}
-                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
-                >
-                  <div className="text-sm uppercase ">{store.menu_name}</div>
+        <>
+          {getStoresAvailablePopClubStoreVisitState.search.length > 0 ? (
+            <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+              {getStoresAvailablePopClubStoreVisitState.search.map(
+                (store, index) => {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        props.onClose();
+                        storeClicked(store.store_id, store.region_store_id);
+                      }}
+                      className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
+                    >
+                      <div className="text-sm uppercase ">
+                        {store.menu_name}
+                      </div>
 
-                  {store.store_image ? (
-                    <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                      alt=""
-                      className="w-full"
-                    />
-                  ) : (
-                    <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                      alt=""
-                      className="w-full"
-                    />
-                  )}
-                  <div className="px-3 py-2">
-                    <h1 className="mb-1 text-xs">{store.store_name}</h1>
-                    <p className="text-[7px]">{store.store_address}</p>
-                  </div>
-                </button>
-              );
-            }
+                      {store.store_image ? (
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+                          alt=""
+                          className="w-full"
+                        />
+                      ) : (
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
+                          alt=""
+                          className="w-full"
+                        />
+                      )}
+                      <div className="px-3 py-2">
+                        <h1 className="mb-1 text-xs">{store.store_name}</h1>
+                        <p className="text-[7px]">{store.store_address}</p>
+                      </div>
+                    </button>
+                  );
+                }
+              )}
+            </section>
+          ) : (
+            <h1 className="text-base font-bold text-center">
+              Sorry, we couldn't find any open stores for your search.
+            </h1>
           )}
-        </section>
+        </>
       ) : (
         <>
           {getStoresAvailablePopClubStoreVisitState.data.map(

@@ -110,9 +110,9 @@ export function MobileLoginModal(props: MobileLoginModalProps) {
     <>
       <div
         style={{ display: props.open ? "flex" : "none" }}
-        className="fixed inset-0 z-30 flex items-center justify-center bg-secondary bg-opacity-30 backdrop-blur-sm "
+        className="fixed inset-0 z-30 flex items-start pt-10 pb-[200px] justify-center overflow-y-auto bg-secondary bg-opacity-30 backdrop-blur-sm "
       >
-        <div className="bg-secondary font-['Roboto'] p-6 px-6  text-sm text-center rounded-3xl w-[90%] sm:w-[350px] relative shadow-md shadow-tertiary">
+        <div className="bg-secondary font-['Roboto'] p-6 px-6 text-sm text-center rounded-3xl w-[90%] sm:w-[350px] relative shadow-md shadow-tertiary">
           <div className="pb-8">
             <button
               className="float-right text-xl text-white mb-1.5"
@@ -136,7 +136,6 @@ export function MobileLoginModal(props: MobileLoginModalProps) {
               />
             </StyledTabs>
           </div>
-
           <TabPanel value={value} index={0}>
             <MobileLoginSignIn />
           </TabPanel>
