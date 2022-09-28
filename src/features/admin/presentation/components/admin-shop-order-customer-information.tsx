@@ -490,7 +490,7 @@ export function AdminShopOrderCustomerInformation() {
             </span>
           </div>
           <div className="mt-1">
-            <strong>Full Address:</strong>{" "}
+            <strong>Complete Delivery Address:</strong>{" "}
             <span className="font-semibold">
               {getAdminShopOrderState.data?.add_address ?? "N/A"}
             </span>
