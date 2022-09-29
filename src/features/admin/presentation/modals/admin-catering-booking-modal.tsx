@@ -79,18 +79,10 @@ export function AdminCateringBookingModal(props: AdminShopOrdersModalProps) {
             aria-label="basic tabs example"
           >
             <Tab label="Customer Information" {...a11yProps(0)} />
-            <Tab label="Audit Logs" {...a11yProps(1)} />
-            <Tab label="Remarks" {...a11yProps(2)} />
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
             <AdminCateringBookingCustomerInformation />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
           </TabPanel>
         </div>
       </div>
