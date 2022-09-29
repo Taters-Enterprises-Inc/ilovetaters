@@ -55,7 +55,7 @@ export function CateringProducts() {
           className="sm:hidden"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
+            "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
           }
           alt="The best pop corn in town"
         ></img>
@@ -63,7 +63,7 @@ export function CateringProducts() {
           className="hidden sm:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/desktop/catering_munch_better_black.webp"
+            "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
           }
           alt="The best pop corn in town"
         ></img>

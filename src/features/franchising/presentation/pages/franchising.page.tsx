@@ -23,7 +23,7 @@ export function Franchising() {
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shared/logo/taters-logo.webp",
+            "api/assets/images/shared/logo/taters-logo.png",
           alt: "Taters Logo",
           className: "w-[150px] lg:w-[120px]",
         }}
@@ -33,7 +33,7 @@ export function Franchising() {
         <img
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/desktop/franchising-black.webp"
+            "api/assets/images/franchising/hero/desktop/franchising-black.jpg"
           }
           alt="The best pop corn in town"
           className="hidden object-contain object-center w-full lg:block"
@@ -41,7 +41,7 @@ export function Franchising() {
         <img
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/mobile/franchising-black.webp"
+            "api/assets/images/franchising/hero/mobile/franchising-black.jpg"
           }
           alt="The best pop corn in town"
           className="block object-contain object-center w-full lg:hidden"
@@ -61,51 +61,6 @@ export function Franchising() {
         </div>
       </div>
 
-      {/* <div className="lg:hidden">
-        <img
-          className="pt-6"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/mobile/franchising-black.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-
-        <div className="mobview">
-          <iframe
-            className="responsive"
-            width="500"
-            height="315"
-            src="https://www.youtube.com/embed/dvAGdCU6TTY"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
-      </div>
-
-      <div className="relative player-wrapper">
-        <img
-          className="min-w-full"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/franchising/hero/desktop/franchising-black.webp"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <iframe
-          className="webview"
-          width="560"
-          height="375"
-          src="https://www.youtube.com/embed/dvAGdCU6TTY"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div> */}
-
       <section className="container min-h-min">
         <section className="container px-4 pt-6 lg:px-0 md:px-8:"></section>
 
@@ -114,9 +69,6 @@ export function Franchising() {
         </h1>
         <CustomizedAccordions></CustomizedAccordions>
       </section>
-
-      {/* <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
-            <img src="..../assets/top.jpeg" alt='Taters Top Bottom Banner' className="hidden w-full lg:block"/> */}
 
       <section className="pt-6 pb-32 text-left lg:pb-16 lg:px-0 md:px-8 bg-primary">
         <div className="container mb-6 text-white">
@@ -149,8 +101,6 @@ export function Franchising() {
         </div>
       </section>
 
-      {/* <img src="top.jpeg" alt='Taters Top Bottom Banner' className="w-full lg:hidden"/>
-      <img src="top.jpeg" alt='Taters Top Bottom Banner' className="hidden w-full lg:block"/> */}
       <FooterNav activeUrl="HOME" />
     </main>
   );

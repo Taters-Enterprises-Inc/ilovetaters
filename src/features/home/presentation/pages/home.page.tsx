@@ -31,7 +31,7 @@ export function Home() {
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shared/logo/taters-logo.webp",
+            "api/assets/images/shared/logo/taters-logo.png",
           alt: "Taters Logo",
           className: "w-[150px] lg:w-[120px]",
         }}
@@ -39,7 +39,7 @@ export function Home() {
 
       <section
         style={{
-          backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.webp')`,
+          backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg')`,
           backgroundSize: "contain",
           backgroundPositionX: "center",
           backgroundRepeat: "no-repeat",
@@ -50,7 +50,7 @@ export function Home() {
         <img
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/home/hero/mobile/taters_entertainment_snacks.webp"
+            "api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg"
           }
           alt="The best pop corn in town"
           style={{ visibility: "hidden" }}
@@ -59,7 +59,7 @@ export function Home() {
       <img
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.webp"
+          "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.jpg"
         }
         className="hidden w-full sm:block"
         alt="The best pop corn in town"

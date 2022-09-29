@@ -29,7 +29,7 @@ export function PopClubIndexPage() {
           className="lg:hidden"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/mobile/popclub.webp"
+            "api/assets/images/popclub/hero/mobile/popclub.jpg"
           }
           alt="The best pop corn in town"
         ></img>
@@ -37,7 +37,7 @@ export function PopClubIndexPage() {
           className="hidden lg:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/desktop/popclub.webp"
+            "api/assets/images/popclub/hero/desktop/popclub.jpg"
           }
           alt="The best pop corn in town"
         ></img>
@@ -46,7 +46,7 @@ export function PopClubIndexPage() {
           className="hidden lg:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/banner/popclub_instruction.webp"
+            "api/assets/images/popclub/banner/popclub_instruction.jpg"
           }
           alt="The best pop corn in town"
         ></img>
