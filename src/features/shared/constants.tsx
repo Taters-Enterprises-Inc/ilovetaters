@@ -1,7 +1,7 @@
 import createTheme from "@mui/material/styles/createTheme";
-import { FaShoppingBag, FaUserAlt } from "react-icons/fa";
+import { FaShoppingBag, FaUserAlt, FaStoreAlt } from "react-icons/fa";
 import { MdPolicy, MdRule } from "react-icons/md";
-import { RiShoppingBag3Fill } from "react-icons/ri";
+import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
@@ -172,11 +172,13 @@ export const ADMIN_FAQ: Array<TabModel> = [
     name: "Store",
     active: "store",
     url: "/admin/faq/store",
+    icon: <FaStoreAlt />,
   },
   {
     name: "Customer",
     active: "customer",
     url: "/admin/faq/customer",
+    icon: <RiUserHeartLine />,
   },
 ];
 
