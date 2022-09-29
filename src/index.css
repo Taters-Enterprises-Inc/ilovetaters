@@ -75,6 +75,7 @@ textarea,
 .profile-tab-content {
   position: relative !important;
 }
+
 html {
   scroll-behavior: smooth;
 }
