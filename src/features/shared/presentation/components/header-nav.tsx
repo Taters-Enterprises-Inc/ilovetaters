@@ -522,6 +522,7 @@ export function HeaderNav(props: HeaderNavProps) {
       />
 
       <PlatformChooserModal
+        hasCloseButton={true}
         platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {

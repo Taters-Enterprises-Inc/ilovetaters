@@ -28,9 +28,9 @@ export function TabFaq(props: TabProps) {
               to={tab.url}
               className={`${
                 props.activeTab === tab.active
-                  ? "profile-tab-active bg-secondary  text-primary lg:text-white"
-                  : "text-secondary"
-              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
+                  ? "profile-tab-active lg:bg-secondary text-primary lg:text-white"
+                  : "text-secondary "
+              } flex w-full font-semibold active space-x-2 items-center  rounded-t-md text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
               {tab.icon} <span>{tab.name}</span>
             </Link>
@@ -38,7 +38,7 @@ export function TabFaq(props: TabProps) {
         ))}
       </ul>
 
-      <div className="w-full py-6 mb-10 border-2 bg-paper profile-tab-content lg:p-6 border-secondary ">
+      <div className="w-full py-6 mb-10 lg:border-2 md:rounded-tr-md md:border-0 bg-paper profile-tab-content lg:p-6 border-secondary ">
         {props.children}
       </div>
     </div>

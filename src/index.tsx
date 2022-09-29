@@ -104,7 +104,7 @@ root.render(
               <Route element={<LoadingAndSnackbarWrapper />}>
                 <Route element={<NotificationWrapper />}>
                   <Route path="/" element={<Home />} />
-                  <Route path="reseller" element={<Reseller />} />
+                  {/* <Route path="reseller" element={<Reseller />} /> */}
                   <Route path="branches" element={<Branches />} />
                   <Route path="franchising" element={<Franchising />} />
                   <Route path="privacy-policy" element={<PrivacyPolicy />} />

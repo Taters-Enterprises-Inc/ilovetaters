@@ -1,10 +1,21 @@
 import { ADMIN_FAQ } from "features/shared/constants";
 import { TabFaq } from "../components/tabfaq";
 import CustomizedAccordionsCFAQ from "../components/faq-customers";
+import { AdminHead } from "../components";
 
 export function AdminCFaq() {
   return (
     <>
+      <AdminHead
+        AdminBreadCrumbsProps={{
+          home: {
+            title: "Home",
+            url: "/admin",
+          },
+          className: "lg:h-[200px]",
+          pageTitles: [{ name: "FAQS", url: "/admin/faq/customer" }],
+        }}
+      />
       {/* change page info here */}
       <div className="relative block h-screen">
         <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary max-h-screen">

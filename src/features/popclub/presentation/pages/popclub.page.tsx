@@ -15,7 +15,7 @@ export function PopClub() {
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shared/logo/taters-logo.webp",
+            "api/assets/images/shared/logo/taters-logo.png",
           alt: "Taters Logo",
           className: "w-[100px] lg:w-[140px]",
         }}

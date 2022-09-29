@@ -1,7 +1,7 @@
 import createTheme from "@mui/material/styles/createTheme";
-import { FaShoppingBag, FaUserAlt } from "react-icons/fa";
+import { FaShoppingBag, FaUserAlt, FaStoreAlt } from "react-icons/fa";
 import { MdPolicy, MdRule } from "react-icons/md";
-import { RiShoppingBag3Fill } from "react-icons/ri";
+import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
@@ -17,7 +17,7 @@ export const SERVICES_DESKTOP = [
     textColor: "white",
     backgroundPosition: "100% 100%",
     url: "delivery",
-    image: "api/assets/images/home/cards/taters_snackshop.webp",
+    image: "api/assets/images/home/cards/taters_snackshop.jpg",
   },
   {
     title: "Franchising",
@@ -26,7 +26,7 @@ export const SERVICES_DESKTOP = [
     textColor: "white",
     backgroundPosition: "100% 100%",
     url: "franchising",
-    image: "api/assets/images/home/cards/taters_franchising.webp",
+    image: "api/assets/images/home/cards/taters_franchising.jpg",
   },
   {
     title: "PopClub",
@@ -35,7 +35,7 @@ export const SERVICES_DESKTOP = [
     textColor: "white",
     backgroundPosition: "center center",
     url: "popclub",
-    image: "api/assets/images/home/cards/taters_popclub.webp",
+    image: "api/assets/images/home/cards/taters_popclub.jpg",
   },
   {
     title: "Taters Caters",
@@ -44,7 +44,7 @@ export const SERVICES_DESKTOP = [
     textColor: "black",
     backgroundPosition: "100% 100%",
     url: "shop",
-    image: "api/assets/images/home/cards/taters_catering.webp",
+    image: "api/assets/images/home/cards/taters_catering.jpg",
   },
   {
     title: "Reseller",
@@ -53,7 +53,7 @@ export const SERVICES_DESKTOP = [
     textColor: "black",
     backgroundPosition: "center center",
     url: "reseller",
-    image: "api/assets/images/home/cards/taters_reseller.webp",
+    image: "api/assets/images/home/cards/taters_reseller.jpg",
   },
   {
     title: "Branches",
@@ -62,7 +62,7 @@ export const SERVICES_DESKTOP = [
     textColor: "black",
     backgroundPosition: "100% 100%",
     url: "branches",
-    image: "api/assets/images/home/cards/taters_branches.webp",
+    image: "api/assets/images/home/cards/taters_branches.jpg",
   },
 ];
 
@@ -74,7 +74,7 @@ export const SERVICES_MOBILE = [
     textColor: "white",
     backgroundPosition: "100% 100%",
     url: "delivery",
-    image: "api/assets/images/home/cards/taters_snackshop.webp",
+    image: "api/assets/images/home/cards/taters_snackshop.jpg",
   },
   {
     title: "Taters Caters",
@@ -83,7 +83,7 @@ export const SERVICES_MOBILE = [
     textColor: "black",
     backgroundPosition: "100% 100%",
     url: "shop",
-    image: "api/assets/images/home/cards/taters_catering.webp",
+    image: "api/assets/images/home/cards/taters_catering.jpg",
   },
   {
     title: "Franchising",
@@ -92,7 +92,7 @@ export const SERVICES_MOBILE = [
     textColor: "white",
     backgroundPosition: "90% 100%",
     url: "franchising",
-    image: "api/assets/images/home/cards/taters_franchising.webp",
+    image: "api/assets/images/home/cards/taters_franchising.jpg",
   },
   {
     title: "Reseller",
@@ -101,7 +101,7 @@ export const SERVICES_MOBILE = [
     textColor: "black",
     backgroundPosition: "center center",
     url: "reseller",
-    image: "api/assets/images/home/cards/taters_reseller.webp",
+    image: "api/assets/images/home/cards/taters_reseller.jpg",
   },
   {
     title: "PopClub",
@@ -110,7 +110,7 @@ export const SERVICES_MOBILE = [
     textColor: "white",
     backgroundPosition: "center center",
     url: "popclub",
-    image: "api/assets/images/home/cards/taters_popclub.webp",
+    image: "api/assets/images/home/cards/taters_popclub.jpg",
   },
   {
     title: "Branches",
@@ -119,7 +119,7 @@ export const SERVICES_MOBILE = [
     textColor: "black",
     backgroundPosition: "100% 100%",
     url: "branches",
-    image: "api/assets/images/home/cards/taters_branches.webp",
+    image: "api/assets/images/home/cards/taters_branches.jpg",
   },
 ];
 
@@ -172,11 +172,13 @@ export const ADMIN_FAQ: Array<TabModel> = [
     name: "Store",
     active: "store",
     url: "/admin/faq/store",
+    icon: <FaStoreAlt />,
   },
   {
     name: "Customer",
     active: "customer",
     url: "/admin/faq/customer",
+    icon: <RiUserHeartLine />,
   },
 ];
 

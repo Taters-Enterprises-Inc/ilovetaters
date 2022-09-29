@@ -67,8 +67,8 @@ interface DataTableProps {
 export function DataTable(props: DataTableProps) {
   return (
     <div className="space-y-4">
-      <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
-        <div className="flex  flex-1 space-x-4">
+      <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
+        <div className="flex flex-1 space-x-4">
           <TextField
             required
             label="Search"
@@ -108,11 +108,12 @@ export function DataTable(props: DataTableProps) {
                   key={i}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  sortDirection={
-                    props.orderBy === column.id ? props.order : false
-                  }
+                  // sortDirection={
+                  //   props.orderBy === column.id ? props.order : false
+                  // }
                 >
-                  <TableSortLabel
+                  <Table>{column.label}</Table>
+                  {/* <TableSortLabel
                     active={props.orderBy === column.id}
                     direction={
                       props.orderBy === column.id ? props.order : "asc"
@@ -129,7 +130,7 @@ export function DataTable(props: DataTableProps) {
                           : "sorted ascending"}
                       </Box>
                     ) : null}
-                  </TableSortLabel>
+                  </TableSortLabel> */}
                 </DataTableCell>
               ))}
             </DataTableRow>

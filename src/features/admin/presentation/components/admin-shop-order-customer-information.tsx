@@ -547,13 +547,17 @@ export function AdminShopOrderCustomerInformation() {
                       >
                         <span
                           dangerouslySetInnerHTML={{
-                            __html:
-                              item.product_label +
-                              " " +
-                              item.name +
-                              (item.add_details
-                                ? " , " + item.add_details
-                                : ""),
+                            __html: item.product_label
+                              ? item.product_label +
+                                " " +
+                                item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : "")
+                              : item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : ""),
                           }}
                         />
                       </th>
@@ -652,11 +656,15 @@ export function AdminShopOrderCustomerInformation() {
                     <p className="mb-2 text-xs leading-1 text-semibold">
                       <span
                         dangerouslySetInnerHTML={{
-                          __html:
-                            item.product_label +
-                            " " +
-                            item.name +
-                            (item.add_details ? " , " + item.add_details : ""),
+                          __html: item.product_label
+                            ? item.product_label +
+                              " " +
+                              item.name +
+                              (item.add_details ? " , " + item.add_details : "")
+                            : item.name +
+                              (item.add_details
+                                ? " , " + item.add_details
+                                : ""),
                         }}
                       />
                     </p>
