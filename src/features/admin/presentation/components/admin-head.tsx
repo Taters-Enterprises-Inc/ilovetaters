@@ -53,31 +53,23 @@ export function AdminHead(props: AdminHeadProps) {
 
         <button aria-describedby={id} type="button" onClick={handleClick}>
           <MdOutlineNotificationsNone
-            className="mr-4 cursor-pointer "
+            className="mr-2 cursor-pointer "
             size={20}
           />
         </button>
 
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <div>
+          <div className="z-40 m-2 shadow-xl lg:mr-10 bg-paper broder-secondary">
             <Box
-              className="w-48 lg:w-72 h-72"
-              mr={4}
               sx={{
                 bgcolor: "background.paper",
+                height: 600,
+                width: 400,
               }}
             >
-              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center">
+              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center text-xl w-100%">
                 Notifications
               </div>
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
             </Box>
           </div>
         </Popper>
