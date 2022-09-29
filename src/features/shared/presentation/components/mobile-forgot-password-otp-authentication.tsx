@@ -13,6 +13,7 @@ import {
   resetForgotPasswordValidateOTP,
   selectForgotPasswordValidateOTP,
 } from "../slices/forgot-password-validate-otp.slice";
+import { MobileForgotPasswordOtpCode } from "./mobile-forgot-password-otpcode";
 
 export function MobileForgotPasswordOtpAuthentication() {
   const dispatch = useAppDispatch();
@@ -70,16 +71,8 @@ export function MobileForgotPasswordOtpAuthentication() {
             className="hidden"
             readOnly
           />
-
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="text"
-              name="otpCode"
-              placeholder="Enter OTP code"
-              required
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            />
+          <div className="mt-4">
+            <MobileForgotPasswordOtpCode />
           </div>
 
           <button

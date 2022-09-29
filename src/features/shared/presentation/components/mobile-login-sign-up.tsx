@@ -5,6 +5,9 @@ import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 import { FormEvent } from "react";
 import { useAppDispatch } from "features/config/hooks";
 import { signUpMobileUser } from "../slices/sign-up-mobile-user.slice";
+import { MobileSignUpFirstName } from "./mobile-signup-firstname";
+import { MobileSignUpLastName } from "./mobile-signup-lastname";
+import { MobileSignUpEmail } from "./mobile-signup-email";
 
 export function MobileLoginSignUp() {
   const dispatch = useAppDispatch();
@@ -31,41 +34,13 @@ export function MobileLoginSignUp() {
           <p className="text-white">
             Please fill up the required information for each field.
           </p>
-
-          <div className="flex items-center justify-between w-full mt-6">
-            <div className="flex items-center justify-center w-[49%] bg-gray-100 rounded-2xl">
-              <CgProfile className="m-3" />
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                autoComplete="off"
-                className="w-full text-sm bg-gray-100 outline-none none h-9 rounded-2xl "
-              ></input>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between w-full mt-6 space-x-4">
+              <MobileSignUpFirstName />
+              <MobileSignUpLastName />
             </div>
-            <div className="flex items-center justify-center w-[49%] bg-gray-100 rounded-2xl">
-              <CgProfile className="m-3" />
-              <input
-                type="text"
-                name="lastName"
-                autoComplete="off"
-                placeholder="Last Name"
-                className="w-full text-sm bg-gray-100 outline-none h-9 rounded-2xl "
-              ></input>
-            </div>
-          </div>
-
-          <MobileLoginPhoneInput />
-
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="email"
-              name="email"
-              autoComplete="off"
-              placeholder="Email"
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
+            <MobileLoginPhoneInput />
+            <MobileSignUpEmail />
           </div>
 
           <button className="w-full py-2 mt-4 mb-2 text-white shadow-md bg-button rounded-3xl">

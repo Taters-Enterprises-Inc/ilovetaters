@@ -107,6 +107,9 @@ export function CateringProducts() {
           </section>
         ))}
 
+        <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
+          FREQUENTLY ASKED QUESTIONS
+        </h3>
         <CateringFaqs />
       </section>
 

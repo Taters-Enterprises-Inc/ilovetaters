@@ -73,9 +73,10 @@ export function MobileForgotPasswordOtp() {
       <div className="pt-4 login-body">
         <form onSubmit={handleOnSubmit}>
           <h1 className="mb-2 text-xl font-bold text-white">Forgot Password</h1>
-          <p className="text-white">
+          <p className="mb-4 text-white">
             Please Enter Your Mobile Number To Receive a OTP Code
           </p>
+
           <MobileLoginPhoneInput />
 
           <button
