@@ -32,18 +32,18 @@ export const ContactComponent: React.FC = (): JSX.Element => {
         className="lg:hidden"
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/branches/hero/mobile/branches_nationwide.webp"
+          "api/assets/images/branches/hero/mobile/branches_nationwide.jpg"
         }
         alt="The best pop corn in town"
-      ></img>
+      />
       <img
         className="hidden w-full lg:block"
         src={
           REACT_APP_DOMAIN_URL +
-          "api/assets/images/branches/hero/desktop/branches_nationwide_black.webp"
+          "api/assets/images/branches/hero/desktop/branches_nationwide_black.jpg"
         }
         alt="The best pop corn in town"
-      ></img>
+      />
 
       <section className="blockfont-['Bebas_Neue']">
         <h1 className="text-center py-4 text-white font-['Bebas_Neue'] md:text-[3rem] text-[2rem] font-normal tracking-[2px]">

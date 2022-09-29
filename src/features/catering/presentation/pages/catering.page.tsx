@@ -15,7 +15,7 @@ export function Catering() {
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shared/logo/taters-catering-logo.webp",
+            "api/assets/images/shared/logo/taters-catering-logo.png",
           alt: "Taters Logo",
           className: "w-[80px] lg:w-[90px]",
         }}

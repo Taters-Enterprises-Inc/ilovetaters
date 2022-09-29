@@ -98,7 +98,7 @@ export function FooterNav(props: FooterNavProps) {
                       props.activeUrl === "HOME" && !isMoreActive()
                         ? "-active"
                         : ""
-                    }.webp`}
+                    }.png`}
                     className="w-[28px] sm:w-[40px] lg:w-[30px]"
                     alt="Tater home icon"
                   />
@@ -128,7 +128,7 @@ export function FooterNav(props: FooterNavProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub${
                       props.activeUrl === "POPCLUB" ? "-active" : ""
-                    }.webp`}
+                    }.png`}
                     className="w-[20px] sm:w-[24px] lg:w-[22.69px]"
                     alt="Tater home icon"
                   />
@@ -155,7 +155,7 @@ export function FooterNav(props: FooterNavProps) {
                       props.activeUrl === "SNACKSHOP" && !isMoreActive()
                         ? "-active"
                         : ""
-                    }.webp`}
+                    }.png`}
                     className="w-[24px] sm:w-[30px] lg:w-[23px]"
                     alt="Tater home icon"
                   ></img>
@@ -180,7 +180,7 @@ export function FooterNav(props: FooterNavProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering${
                       props.activeUrl === "CATERING" ? "-active" : ""
-                    }.webp`}
+                    }.png`}
                     className="w-[24px] sm:w-[30px] lg:w-[24px]"
                     alt="Tater home icon"
                   ></img>
@@ -205,7 +205,7 @@ export function FooterNav(props: FooterNavProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/branches${
                       props.activeUrl === "BRANCHES" ? "-active" : ""
-                    }.webp`}
+                    }.png`}
                     className="w-[18px] sm:w-[25px] lg:w-[21px]"
                     alt="Tater home icon"
                   ></img>

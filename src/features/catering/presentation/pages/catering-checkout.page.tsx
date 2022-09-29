@@ -496,7 +496,7 @@ export function CateringCheckout() {
 
                 {enableCompanyName ? (
                   <div className="space-y-2">
-                    <span className="text-base text-white">Company Name</span>
+                    <span className="text-base text-black">Company Name</span>
 
                     <TextField
                       variant="outlined"

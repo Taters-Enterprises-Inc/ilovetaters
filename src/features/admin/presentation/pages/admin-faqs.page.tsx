@@ -3,6 +3,7 @@ import { TabFaq } from "../components/tabfaq";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CustomizedAccordionsSFAQ from "../components/faq-store";
+import { AdminHead } from "../components";
 
 export function AdminFaq() {
   const location = useLocation();
@@ -13,6 +14,16 @@ export function AdminFaq() {
 
   return (
     <>
+      <AdminHead
+        AdminBreadCrumbsProps={{
+          home: {
+            title: "Home",
+            url: "/admin",
+          },
+          className: "lg:h-[200px]",
+          pageTitles: [{ name: "FAQS", url: "/admin/faq/store" }],
+        }}
+      />
       {/* change page info here */}
       <div className="relative block h-screen">
         <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary max-h-screen">
