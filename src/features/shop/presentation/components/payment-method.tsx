@@ -5,7 +5,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { PaymentCardModal } from "../modals";
 interface PaymentMethodOption {
   name: string;
@@ -13,11 +13,11 @@ interface PaymentMethodOption {
 }
 const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
   {
-    name: "Cash on Delivery",
+    name: "COD",
     value: "COD",
   },
   {
-    name: "Payment Center / e-Wallet",
+    name: "E-Wallet",
     value: "E-WALLET",
   },
   {
@@ -31,12 +31,17 @@ const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
   // },
 ];
 
-export function PaymentMethod() {
+type PaymentMethodType = "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT";
+
+interface PaymentMethodProps {
+  onChange: (payment: string) => void;
+}
+
+export function PaymentMethod(props: PaymentMethodProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const [openPaymentCardModal, setOpenPaymentCardModal] = useState(false);
-  const [paymentSelected, setPaymentSelected] = useState<
-    "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT"
-  >("COD");
+  const [paymentSelected, setPaymentSelected] =
+    useState<PaymentMethodType>("COD");
 
   const handlePaymentMethodChange = (option: PaymentMethodOption) => {
     if (option.value === "CARD") {
@@ -48,13 +53,13 @@ export function PaymentMethod() {
 
   return (
     <>
-      <ul className="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
+      <ul className="flex space-x-2">
         {PAYMENT_OPTIONS.map((option) => (
           <li>
             <button
               type="button"
               onClick={() => handlePaymentMethodChange(option)}
-              className={`relative px-4 py-3 font-semibold border w-full lg:w-fit ${
+              className={`relative px-4 py-3 font-semibold border w-full text-sm lg:text-base lg:w-fit ${
                 option.value === paymentSelected
                   ? "text-green-900 border-green-900"
                   : " text-secondary border-secondary"
@@ -87,8 +92,10 @@ export function PaymentMethod() {
       <FormControl>
         <RadioGroup
           aria-labelledby="payops aria label"
-          defaultValue="cash"
           name="payops"
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            props.onChange((event.target as HTMLInputElement).value);
+          }}
         >
           {paymentSelected === "COD" ? (
             <>
