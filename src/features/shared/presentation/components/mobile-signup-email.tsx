@@ -28,27 +28,14 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   },
 }));
 
-export function MobileLoginPhoneInput() {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.replace(/[^0-9]/g, "");
-
-    if (value.length < 12) {
-      setPhoneNumber(value);
-    } else {
-      //   setError("Invalid phone number");
-    }
-  };
+export function MobileSignUpEmail() {
   return (
     <WhiteOutLinedTextField
       variant="outlined"
-      value={phoneNumber}
-      onChange={handleChange}
-      name="phoneNumber"
-      label="Phone"
+      name="email"
+      label="Email"
       size="small"
-      type="text"
+      type="email"
       required
       fullWidth
     />

@@ -229,6 +229,7 @@ export function FooterNav(props: FooterNavProps) {
       </section>
 
       <PlatformChooserModal
+        hasCloseButton={true}
         platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {

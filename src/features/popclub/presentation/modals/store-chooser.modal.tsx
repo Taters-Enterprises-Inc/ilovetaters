@@ -49,7 +49,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
           <IoMdClose />
         </button>
 
-        <h1 className="pt-1 pb-2 text-sm font-bold text-center text-white">
+        <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store do you want to have your snacks delivered?
         </h1>
 

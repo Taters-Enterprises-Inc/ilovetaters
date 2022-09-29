@@ -227,6 +227,7 @@ export function PopClubHome() {
       </section>
 
       <PlatformChooserModal
+        hasCloseButton={true}
         platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {

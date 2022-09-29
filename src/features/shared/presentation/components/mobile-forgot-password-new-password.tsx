@@ -13,6 +13,8 @@ import {
   resetForgotPasswordNewPassword,
   selectForgotPasswordNewPassword,
 } from "../slices/forgot-password-new-password-otp.slice";
+import { MobileForgotPasswordNewPasswordTextField } from "./mobile-forgot-password-new-password-text-field";
+import { MobileForgotPasswordConfirmPasswordTextField } from "./mobile-forgot-password-confirm-password-text-field";
 
 export function MobileForgotPasswordNewPassword() {
   const dispatch = useAppDispatch();
@@ -70,26 +72,9 @@ export function MobileForgotPasswordNewPassword() {
             readOnly
           />
 
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="password"
-              name="newPassword"
-              placeholder="New Password"
-              required
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
-          </div>
-
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="password"
-              name="confirmNewPassword"
-              placeholder="Confirm New Password"
-              required
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
+          <div className="pt-4 space-y-4">
+            <MobileForgotPasswordNewPasswordTextField />
+            <MobileForgotPasswordConfirmPasswordTextField />
           </div>
 
           <button

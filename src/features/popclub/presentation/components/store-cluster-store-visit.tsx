@@ -123,7 +123,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                         }}
                         className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                       >
-                        <div className="text-sm uppercase ">
+                        <div className="py-1 text-sm uppercase">
                           {store.menu_name}
                         </div>
 
@@ -140,9 +140,9 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                             className="w-full"
                           />
                         )}
-                        <div className="px-3 py-2">
-                          <h1 className="mb-1 text-xs">{store.store_name}</h1>
-                          <p className="text-[7px]">{store.store_address}</p>
+                        <div className="p-4 space-y-2">
+                          <h1 className="mb-1 text-sm font-bold leading-5">{store.store_name}</h1>
+                          <p className="text-xs">{store.store_address}</p>
                         </div>
                       </button>
                     );

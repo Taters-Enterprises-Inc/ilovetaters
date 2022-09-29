@@ -548,10 +548,13 @@ export function AdminShopOrderCustomerInformation() {
                         <span
                           dangerouslySetInnerHTML={{
                             __html: item.product_label
-                              ? item.product_label
-                              : "" +
+                              ? item.product_label +
                                 " " +
                                 item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : "")
+                              : item.name +
                                 (item.add_details
                                   ? " , " + item.add_details
                                   : ""),
@@ -654,10 +657,11 @@ export function AdminShopOrderCustomerInformation() {
                       <span
                         dangerouslySetInnerHTML={{
                           __html: item.product_label
-                            ? item.product_label
-                            : "" +
+                            ? item.product_label +
                               " " +
                               item.name +
+                              (item.add_details ? " , " + item.add_details : "")
+                            : item.name +
                               (item.add_details
                                 ? " , " + item.add_details
                                 : ""),
