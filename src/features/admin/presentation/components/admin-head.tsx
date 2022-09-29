@@ -59,7 +59,7 @@ export function AdminHead(props: AdminHeadProps) {
         </button>
 
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <div className="z-40 m-2 shadow-xl lg:mr-10 bg-paper broder-secondary">
+          <div className="z-40 mr-2 shadow-2xl lg:mr-10 bg-paper">
             <Box
               sx={{
                 bgcolor: "background.paper",
@@ -67,7 +67,7 @@ export function AdminHead(props: AdminHeadProps) {
                 width: 400,
               }}
             >
-              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center text-xl w-100%">
+              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center text-xl w-100% p-2">
                 Notifications
               </div>
             </Box>
