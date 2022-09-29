@@ -5,6 +5,7 @@ import { signInMobileUser } from "../slices/sign-in-mobile-user.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 import { MobileForgotPasswordModal } from "../modals";
+import { MobilePasswordTextField } from "./mobile-password-textfield";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
@@ -28,21 +29,13 @@ export function MobileLoginSignIn() {
       </div>
       <div className="pt-4 login-body">
         <form onSubmit={handleSignIn}>
-          <p className="text-white">
+          <p className="mb-4 text-white">
             Login with your mobile number and password below.{" "}
           </p>
 
-          <MobileLoginPhoneInput />
-
-          <div className="flex items-center w-full mt-4 bg-gray-100 rounded-2xl">
-            <MdLockOutline className="m-3" />
-            <input
-              type="password"
-              name="login_password"
-              placeholder="Password"
-              required
-              className="flex-1 w-full mr-4 text-sm bg-gray-100 outline-none h-9 autolog"
-            ></input>
+          <div className="space-y-4">
+            <MobileLoginPhoneInput />
+            <MobilePasswordTextField />
           </div>
 
           <div className="flex justify-between py-4 text-white">
