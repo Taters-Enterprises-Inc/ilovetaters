@@ -256,6 +256,27 @@ export function HeaderNav(props: HeaderNavProps) {
                   </div>
                 </li>
 
+                <li
+                  className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-light ${
+                    "BRANCHES" === props.activeUrl
+                      ? "text-tertiary"
+                      : "text-white"
+                  }`}
+                >
+                  <Link
+                    to="/branches"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      handleSwitchTab({
+                        url: "/",
+                        tabName: "BRANCHES",
+                      });
+                    }}
+                  >
+                    Branches
+                  </Link>
+                </li>
+
                 <li className="flex items-center justify-center px-4 pb-1">
                   <button
                     ref={anchorRef}
@@ -263,7 +284,8 @@ export function HeaderNav(props: HeaderNavProps) {
                     aria-expanded={open ? "true" : undefined}
                     aria-haspopup="true"
                     className={`font-['Bebas_Neue'] tracking-[4px] ${
-                      "HOME" !== props.activeUrl
+                      "HOME" !== props.activeUrl &&
+                      "BRANCHES" !== props.activeUrl
                         ? "text-tertiary"
                         : "text-white"
                     } text-lg font-light`}
