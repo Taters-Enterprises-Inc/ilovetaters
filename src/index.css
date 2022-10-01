@@ -18,6 +18,17 @@
   /*You just need this if you are only concerned with android and not desktop browsers.*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+/* 
+  Mask the input as password
+  FOR text='password' bug on IOS 13
+*/
+.password-mask {
+  -webkit-text-security: disc;
+  -moz-webkit-text-security: disc;
+  -moz-text-security: disc;
+}
+
 .customer-information-table tr:nth-child(even) {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
@@ -450,6 +461,6 @@ input[type="number"] {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
