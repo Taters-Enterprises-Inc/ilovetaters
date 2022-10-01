@@ -54,6 +54,7 @@ import {
   redeemValidators,
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
+import moment from "moment";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -280,7 +281,7 @@ export function PopClubDeal() {
             <span className="mt-3">You can redeem this deal after </span>
             <Countdown
               renderer={renderer}
-              date={new Date(redeemValidator.next_available_redeem)}
+              date={moment(redeemValidator.next_available_redeem).toDate()}
             />
           </div>
         );
