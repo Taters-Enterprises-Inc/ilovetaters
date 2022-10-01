@@ -742,12 +742,24 @@ export function AdminCateringBookingCustomerInformation() {
 
           <div className="flex flex-col items-start justify-between py-3 lg:flex-row">
             <div className="order-2 space-x-2 lg:order-1">
-              <button className="px-3 py-1 text-base text-white bg-blue-700 rounded-md shadow-md">
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href={`${REACT_APP_DOMAIN_URL}api/admin/print_view/${
+                  getAdminCateringBookingState.data?.tracking_no
+                }/${true}`}
+                className="px-3 py-1 text-base text-white bg-blue-700 rounded-md shadow-md"
+              >
                 Print
-              </button>
-              <button className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md">
+              </a>
+              <a
+                href={`${REACT_APP_DOMAIN_URL}api/admin/print_asdoc/${
+                  getAdminCateringBookingState.data?.tracking_no
+                }/${true}`}
+                className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+              >
                 Download Document
-              </button>
+              </a>
             </div>
             <div className="order-1 space-x-2 lg:order-2">
               <AdminCateringBookingCustomerInformationButtons />
