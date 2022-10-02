@@ -344,7 +344,12 @@ export function AdminSettingStores() {
                       </DataTableCell>
 
                       <DataTableCell>
-                        <button className="px-2 py-1 font-bold text-white bg-green-700 rounded-full">
+                        <button
+                          onClick={() => {
+                            navigate("?store_id=" + row.store_id);
+                          }}
+                          className="px-2 py-1 font-bold text-white bg-green-700 rounded-full"
+                        >
                           {moment(row.available_start_time, "HH:mm:ss").format(
                             "LT"
                           )}{" "}
