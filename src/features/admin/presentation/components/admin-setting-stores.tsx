@@ -22,14 +22,17 @@ import {
   selectUpdateAdminSettingStore,
   updateAdminSettingStore,
 } from "../slices/update-setting-store.slice";
+import moment from "moment";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
-  { id: "category", label: "Category" },
+  { id: "menu", label: "Menu" },
   { id: "snackshop", label: "Snackshop" },
   { id: "catering", label: "Catering" },
-  { id: "popclub-walk-in", label: "Popclub Walk-in" },
+  { id: "popclub-walk-in", label: "Popclub Store Visit" },
   { id: "popclub-online-delivery", label: "Popclub Online Delivery" },
+  { id: "branches", label: "Branches" },
+  { id: "operating-hours", label: "Operating Hours" },
 ];
 
 const createQueryParams = (params: object): string => {
@@ -322,6 +325,34 @@ export function AdminSettingStores() {
                               : false
                           }
                         />
+                      </DataTableCell>
+
+                      <DataTableCell>
+                        <Checkbox
+                          onChange={(e) => {
+                            dispatch(
+                              updateAdminSettingStore({
+                                store_id: row.store_id,
+                                name_of_field_status: "branch_status",
+                                status: e.target.checked ? 1 : 0,
+                              })
+                            );
+                          }}
+                          color="primary"
+                          checked={row.branch_status === 1 ? true : false}
+                        />
+                      </DataTableCell>
+
+                      <DataTableCell>
+                        <button className="px-2 py-1 font-bold text-white bg-green-700 rounded-full">
+                          {moment(row.available_start_time, "HH:mm:ss").format(
+                            "LT"
+                          )}{" "}
+                          -{" "}
+                          {moment(row.available_end_time, "HH:mm:ss").format(
+                            "LT"
+                          )}
+                        </button>
                       </DataTableCell>
                     </DataTableRow>
                   ))}
