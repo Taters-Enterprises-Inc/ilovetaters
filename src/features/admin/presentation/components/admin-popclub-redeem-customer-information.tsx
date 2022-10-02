@@ -51,7 +51,8 @@ export function AdminPopclubRedeemCustomerInformation(
 
     if (items) {
       for (let i = 0; i < items.length; i++) {
-        calculatedPrice += items[i].price * items[i].quantity;
+        const item = items[i];
+        if (item.price) calculatedPrice += item.price * item.quantity;
       }
     }
 
@@ -190,29 +191,46 @@ export function AdminPopclubRedeemCustomerInformation(
                     <td className="px-6 py-4 font-medium text-secondary">
                       <span className="font-bold">{item.alias}</span>
                       <br />
-                      <span
-                        className="text-secondary"
-                        dangerouslySetInnerHTML={{
-                          __html: item.remarks,
-                        }}
-                      />
+                      {item.remarks ? (
+                        <span
+                          className="text-secondary"
+                          dangerouslySetInnerHTML={{
+                            __html: item.remarks,
+                          }}
+                        />
+                      ) : (
+                        <span
+                          className="text-secondary"
+                          dangerouslySetInnerHTML={{
+                            __html: item.description,
+                          }}
+                        />
+                      )}
                     </td>
                     <td className="px-6 py-4">{item.quantity}</td>
                     <td className="px-6 py-4">
-                      <NumberFormat
-                        value={item.price.toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
+                      {item.price ? (
+                        <NumberFormat
+                          value={item.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      ) : (
+                        "₱0.00"
+                      )}
                     </td>
                     <td className="px-6 py-4">
-                      <NumberFormat
-                        value={(item.price * item.quantity).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
+                      {item.price ? (
+                        <NumberFormat
+                          value={(item.price * item.quantity).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      ) : (
+                        "₱0.00"
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -246,23 +264,31 @@ export function AdminPopclubRedeemCustomerInformation(
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Price:</span>
                       <span className="text-xs">
-                        <NumberFormat
-                          value={item.price.toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        {item.price ? (
+                          <NumberFormat
+                            value={item.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        ) : (
+                          "₱0.00"
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
-                        <NumberFormat
-                          value={(item.price * item.quantity).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        {item.price ? (
+                          <NumberFormat
+                            value={(item.price * item.quantity).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        ) : (
+                          "₱0.00"
+                        )}
                       </span>
                     </div>
                   </div>

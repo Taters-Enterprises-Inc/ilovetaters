@@ -294,14 +294,25 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              <button
-                onClick={() => {
-                  navigate("/delivery/checkout");
-                }}
-                className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-              >
-                Go Back to Checkout
-              </button>
+              {getRedeemState.data.minimum_purchase ? (
+                <button
+                  onClick={() => {
+                    navigate("/delivery/products");
+                  }}
+                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+                >
+                  Go Back to Products
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    navigate("/delivery/checkout");
+                  }}
+                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+                >
+                  Go Back to Checkout
+                </button>
+              )}
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
