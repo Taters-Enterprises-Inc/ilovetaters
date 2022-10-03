@@ -451,7 +451,7 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                <div className="flex md:w-[55%] md:h-[50%] h-[50%] w-[100%] min-w-[] md:max-w-[550px] md:max-h-[650px]">
+                <div className="flex md:w-[55%] md:h-[50%] h-[50%] w-[100%] md:max-w-[550px] md:max-h-[650px]">
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
                     alt="Deals"
