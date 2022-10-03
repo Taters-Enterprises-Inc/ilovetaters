@@ -78,6 +78,10 @@ export function AdminSettingStores() {
     selectUpdateAdminSettingStoreOperatingHours
   );
 
+  const updateAdminSettingStoreState = useAppSelector(
+    selectUpdateAdminSettingStore
+  );
+
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -95,6 +99,7 @@ export function AdminSettingStores() {
     orderBy,
     order,
     search,
+    updateAdminSettingStoreState,
     updateAdminSettingStoreOperatingHoursState,
   ]);
 

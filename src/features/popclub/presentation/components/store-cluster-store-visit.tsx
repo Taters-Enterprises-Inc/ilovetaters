@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { selectGetAllAvailableStores } from "../slices/get-all-available-stores.slice";
@@ -63,15 +64,41 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
             <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
               {getStoresAvailablePopClubStoreVisitState.search.map(
                 (store, index) => {
+                  const currentTime = moment(
+                    moment().format("HH:mm:ss"),
+                    "HH:mm:ss"
+                  );
+                  const availableStartTime = moment(
+                    store.available_start_time,
+                    "HH:mm:ss"
+                  );
+                  const availableEndTime = moment(
+                    store.available_end_time,
+                    "HH:mm:ss"
+                  );
+
+                  const isStoreOperating = currentTime.isBetween(
+                    availableStartTime,
+                    availableEndTime
+                  );
                   return (
                     <button
                       key={index}
                       onClick={() => {
-                        props.onClose();
-                        storeClicked(store.store_id, store.region_store_id);
+                        if (isStoreOperating) {
+                          props.onClose();
+                          storeClicked(store.store_id, store.region_store_id);
+                        }
                       }}
-                      className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
+                      className={`bg-secondary ${
+                        isStoreOperating === false ? "cursor-not-allowed" : ""
+                      } shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                     >
+                      {isStoreOperating == false ? (
+                        <span className="p-1 text-center not-available-overlay rounded-[10px]">
+                          Store will be available at 10:00AM to 6:00PM
+                        </span>
+                      ) : null}
                       <div className="text-sm uppercase ">
                         {store.menu_name}
                       </div>
@@ -114,15 +141,42 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                 </h1>
                 <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                   {store_cluster.stores.map((store, index) => {
+                    const currentTime = moment(
+                      moment().format("HH:mm:ss"),
+                      "HH:mm:ss"
+                    );
+                    const availableStartTime = moment(
+                      store.available_start_time,
+                      "HH:mm:ss"
+                    );
+                    const availableEndTime = moment(
+                      store.available_end_time,
+                      "HH:mm:ss"
+                    );
+
+                    const isStoreOperating = currentTime.isBetween(
+                      availableStartTime,
+                      availableEndTime
+                    );
+
                     return (
                       <button
                         key={index}
                         onClick={() => {
-                          props.onClose();
-                          storeClicked(store.store_id, store.region_store_id);
+                          if (isStoreOperating) {
+                            props.onClose();
+                            storeClicked(store.store_id, store.region_store_id);
+                          }
                         }}
-                        className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
+                        className={`bg-secondary ${
+                          isStoreOperating === false ? "cursor-not-allowed" : ""
+                        } shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                       >
+                        {isStoreOperating == false ? (
+                          <span className="p-1 text-center not-available-overlay rounded-[10px]">
+                            Store will be available at 10:00AM to 6:00PM
+                          </span>
+                        ) : null}
                         <div className="py-1 text-sm uppercase">
                           {store.menu_name}
                         </div>
@@ -141,7 +195,9 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                           />
                         )}
                         <div className="p-4 space-y-2">
-                          <h1 className="mb-1 text-sm font-bold leading-5">{store.store_name}</h1>
+                          <h1 className="mb-1 text-sm font-bold leading-5">
+                            {store.store_name}
+                          </h1>
                           <p className="text-xs">{store.store_address}</p>
                         </div>
                       </button>

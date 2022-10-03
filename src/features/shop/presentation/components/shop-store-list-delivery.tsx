@@ -7,6 +7,7 @@ import {
   setStoreAndAddress,
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
+import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { selectGetStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
@@ -65,26 +66,52 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                   store.store_distance * 1.609344 * 0.5
               );
 
-              const store_availability = distance_in_km > 10;
+              const isStoreFar = distance_in_km > 10;
+              const currentTime = moment(
+                moment().format("HH:mm:ss"),
+                "HH:mm:ss"
+              );
+              const availableStartTime = moment(
+                store.available_start_time,
+                "HH:mm:ss"
+              );
+              const availableEndTime = moment(
+                store.available_end_time,
+                "HH:mm:ss"
+              );
+
+              const isStoreOperating = currentTime.isBetween(
+                availableStartTime,
+                availableEndTime
+              );
+
+              const isStoreAvailable =
+                isStoreFar === false && props.address && isStoreOperating;
 
               return (
                 <button
                   key={index}
-                  onClick={
-                    store_availability && props.address != null
-                      ? () => {}
-                      : () =>
-                          storeClicked(store.store_id, store.region_store_id)
-                  }
-                  className={`bg-secondary h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
+                  onClick={() => {
+                    if (isStoreAvailable) {
+                      storeClicked(store.store_id, store.region_store_id);
+                    }
+                  }}
+                  className={`bg-secondary ${
+                    isStoreAvailable == false ? "cursor-not-allowed" : ""
+                  } h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
-                  {store_availability &&
+                  {isStoreFar &&
                   props.address != null &&
                   props.address !== "" ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
+                  ) : isStoreOperating == false ? (
+                    <span className="p-1 text-center not-available-overlay rounded-[10px]">
+                      Store will be available at 10:00AM to 6:00PM
+                    </span>
                   ) : null}
+
                   <div className="py-1 text-sm uppercase">
                     {store.menu_name}
                   </div>

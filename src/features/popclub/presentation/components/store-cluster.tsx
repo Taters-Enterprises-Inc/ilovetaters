@@ -5,6 +5,7 @@ import {
 } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDeals } from "../slices/get-deals.slice";
@@ -93,28 +94,55 @@ export function StoreCluster(props: StoreClusterProps) {
                   store.store_distance * 1.609344 * 0.5
               );
 
-              const store_availability = distance_in_km > 10;
+              const isStoreFar = distance_in_km > 10;
+              const currentTime = moment(
+                moment().format("HH:mm:ss"),
+                "HH:mm:ss"
+              );
+              const availableStartTime = moment(
+                store.available_start_time,
+                "HH:mm:ss"
+              );
+              const availableEndTime = moment(
+                store.available_end_time,
+                "HH:mm:ss"
+              );
+
+              const isStoreOperating = currentTime.isBetween(
+                availableStartTime,
+                availableEndTime
+              );
+
+              const isStoreAvailable =
+                isStoreFar === false && props.address && isStoreOperating;
 
               return (
                 <button
                   key={index}
-                  onClick={
-                    store_availability && props.address != null
-                      ? () => {}
-                      : () =>
-                          storeClicked(store.store_id, store.region_store_id)
-                  }
-                  className={`bg-secondary shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
+                  onClick={() => {
+                    if (isStoreAvailable) {
+                      storeClicked(store.store_id, store.region_store_id);
+                    }
+                  }}
+                  className={`bg-secondary ${
+                    isStoreAvailable == false ? "cursor-not-allowed" : ""
+                  } shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] m-[7px] lg:mb-4 relative`}
                 >
-                  {store_availability &&
+                  {isStoreFar &&
                   props.address !== null &&
                   props.address !== "" ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
+                  ) : isStoreOperating == false ? (
+                    <span className="p-1 text-center not-available-overlay rounded-[10px]">
+                      Store will be available at 10:00AM to 6:00PM
+                    </span>
                   ) : null}
 
-                  <div className="py-1 text-sm uppercase">{store.menu_name}</div>
+                  <div className="py-1 text-sm uppercase">
+                    {store.menu_name}
+                  </div>
                   {props.address ? (
                     <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                       <div className="flex justify-end">
@@ -140,7 +168,9 @@ export function StoreCluster(props: StoreClusterProps) {
                   )}
 
                   <div className="p-4 space-y-2">
-                    <h1 className="mb-1 text-sm font-bold leading-5">{store.store_name}</h1>
+                    <h1 className="mb-1 text-sm font-bold leading-5">
+                      {store.store_name}
+                    </h1>
                     <p className="text-xs">{store.store_address}</p>
                   </div>
                 </button>
