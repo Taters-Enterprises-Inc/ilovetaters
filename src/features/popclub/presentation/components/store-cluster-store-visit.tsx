@@ -96,7 +96,9 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                     >
                       {isStoreOperating == false ? (
                         <span className="p-1 text-center not-available-overlay rounded-[10px]">
-                          Store will be available at 10:00AM to 6:00PM
+                          Store will be available at{" "}
+                          {moment(store.available_start_time).format("LT")} to{" "}
+                          {moment(store.available_end_time).format("LT")}
                         </span>
                       ) : null}
                       <div className="text-sm uppercase ">
@@ -174,7 +176,9 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                       >
                         {isStoreOperating == false ? (
                           <span className="p-1 text-center not-available-overlay rounded-[10px]">
-                            Store will be available at 10:00AM to 6:00PM
+                            Store will be available at{" "}
+                            {moment(store.available_start_time).format("LT")} to{" "}
+                            {moment(store.available_end_time).format("LT")}
                           </span>
                         ) : null}
                         <div className="py-1 text-sm uppercase">
