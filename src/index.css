@@ -79,6 +79,10 @@ textarea,
   position: relative !important;
 }
 
+.menuitem {
+  background-color: #000;
+}
+
 .profile-tab-active {
   z-index: 1;
 }
