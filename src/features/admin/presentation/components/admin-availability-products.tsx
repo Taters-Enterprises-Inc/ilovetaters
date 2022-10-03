@@ -171,7 +171,7 @@ export function AdminAvailabilityProducts() {
             </button>
           </div>
           {getAdminSessionState.data ? (
-            <FormControl sx={{ minWidth: 150 }} size="small">
+            <FormControl sx={{ width: 328 }} size="small">
               <InputLabel>Select a store</InputLabel>
 
               <Select
@@ -217,7 +217,7 @@ export function AdminAvailabilityProducts() {
       </div>
       <div className="px-4 py-2">
         {getProductCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150 }} size="small">
+          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
             <Select
@@ -256,7 +256,7 @@ export function AdminAvailabilityProducts() {
 
       {getAdminStoreProductsState.data?.products ? (
         <>
-          <div className="p-4 lg:hidden">
+          <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {

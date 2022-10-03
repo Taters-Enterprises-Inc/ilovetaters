@@ -359,16 +359,12 @@ export function HeaderNav(props: HeaderNavProps) {
                         ? "text-tertiary"
                         : "text-white"
                     } text-lg font-light`}
-                    onMouseEnter={handleToggle}
-                    onMouseLeave={handleToggle}
                     onClick={handleToggle}
                   >
                     Services
                   </button>
                   <Popper
                     open={open}
-                    onMouseEnter={handleToggle}
-                    onMouseLeave={handleToggle}
                     anchorEl={anchorRef.current}
                     role={undefined}
                     placement="bottom-start"

@@ -38,7 +38,7 @@ import {
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   MdFoodBank,
   MdOutlineSettings,
@@ -46,6 +46,7 @@ import {
 } from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
+import { useState } from "react";
 
 const drawerWidth = "16rem";
 
@@ -89,6 +90,8 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const dispatch = useAppDispatch();
+
+  const location = useLocation();
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -204,7 +207,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           }}
                           className={(navData) =>
                             navData.isActive
-                              ? "flex bg-white text-secondary"
+                              ? "flex bg-white text-secondary "
                               : "flex"
                           }
                         >

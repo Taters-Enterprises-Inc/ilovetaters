@@ -161,7 +161,7 @@ export function AdminAvailabilityDeals() {
             <Autocomplete
               disablePortal
               options={getAdminSessionState.data.user_details.stores}
-              sx={{ width: 320 }}
+              sx={{ width: 328 }}
               size="small"
               defaultValue={getAdminSessionState.data.user_details.stores[0]}
               getOptionLabel={(option) =>
