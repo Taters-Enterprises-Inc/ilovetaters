@@ -233,6 +233,10 @@ import {
   GetAdminSettingStoresState,
   selectGetAdminSettingStores,
 } from "features/admin/presentation/slices/get-admin-setting-stores.slice";
+import {
+  selectUpdateStoreProduct,
+  UpdateStoreProductState,
+} from "features/admin/presentation/slices/update-store-product.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -354,6 +358,27 @@ export function LoadingAndSnackbarWrapper() {
   const updateAdminSettingStoreOperatingHoursState = useAppSelector(
     selectUpdateAdminSettingStoreOperatingHours
   );
+  const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
+
+  useEffect(() => {
+    switch (updateStoreProductState.status) {
+      case UpdateStoreProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreProductState.success:
+        showAlert(setSuccessAlert, updateStoreProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreProductState.fail:
+        showAlert(setFailsAlert, updateStoreProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreProductState, dispatch]);
+
   useEffect(() => {
     switch (getAdminSettingStoresState.status) {
       case GetAdminSettingStoresState.inProgress:

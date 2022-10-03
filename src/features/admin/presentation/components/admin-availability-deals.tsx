@@ -105,7 +105,7 @@ export function AdminAvailabilityDeals() {
           Deals Availability
         </span>
 
-        <div className="flex flex-col items-center justify-center space-y-4 lg:space-y-0 lg:space-x-2 lg:flex-row">
+        <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
           <div className="flex space-x-2 ">
             <button
               onClick={() => {
@@ -161,7 +161,7 @@ export function AdminAvailabilityDeals() {
             <Autocomplete
               disablePortal
               options={getAdminSessionState.data.user_details.stores}
-              sx={{ width: 320 }}
+              sx={{ width: 328 }}
               size="small"
               defaultValue={getAdminSessionState.data.user_details.stores[0]}
               getOptionLabel={(option) =>
