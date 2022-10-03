@@ -26,7 +26,7 @@ import {
 } from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
-import { FaUserCircle } from "react-icons/fa";
+import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
 import { MessageModal } from "../modals";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
@@ -34,6 +34,10 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
+import { ListItemIcon, ListItemText } from "@mui/material";
+import { BiLogOut } from "react-icons/bi";
+import { RiShoppingBag3Fill } from "react-icons/ri";
+import { GiPopcorn } from "react-icons/gi";
 
 interface HeaderNavProps {
   className?: string;
@@ -121,12 +125,28 @@ export function HeaderNav(props: HeaderNavProps) {
   const handleProfileMenuClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
+    console.log(event.currentTarget);
     setOpenProfileMenu(event.currentTarget);
   };
 
   const handleMyProfile = () => {
     setOpenProfileMenu(null);
     navigate("/profile");
+  };
+
+  const handleSnackshopOrders = () => {
+    setOpenProfileMenu(null);
+    navigate("/profile/snackshop-orders");
+  };
+
+  const handleCateringBooking = () => {
+    setOpenProfileMenu(null);
+    navigate("/profile/catering-bookings");
+  };
+
+  const handlePopClubRedeem = () => {
+    setOpenProfileMenu(null);
+    navigate("/profile/popclub-redeems");
   };
 
   const handleLogout = () => {
@@ -225,6 +245,57 @@ export function HeaderNav(props: HeaderNavProps) {
     prevOpen.current = open;
   }, [open]);
 
+  const profileMenu = [
+    {
+      id: 1,
+      text: getSessionState.data?.userData
+        ? getSessionState.data?.userData.first_name +
+          " " +
+          getSessionState.data?.userData.last_name
+        : "",
+      icon: <FaUserAlt />,
+      action: handleMyProfile,
+    },
+    {
+      id: 2,
+      text: "Snack Shop Orders",
+      icon: <FaShoppingBag />,
+      action: handleSnackshopOrders,
+    },
+    {
+      id: 3,
+      text: "Catering Bookings",
+      icon: <RiShoppingBag3Fill />,
+      action: handleCateringBooking,
+    },
+    {
+      id: 4,
+      text: "Popclub Redeems",
+      icon: <GiPopcorn />,
+      action: handlePopClubRedeem,
+    },
+    {
+      id: 5,
+      text: " Logout",
+      icon: <BiLogOut />,
+      action: handleLogout,
+    },
+  ];
+
+  const menuList = profileMenu.map((item) => {
+    const { text, icon, action, id } = item;
+
+    return (
+      <>
+        <MenuItem onClick={action} className="bg-secondary">
+          <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
+          <ListItemText primary={text} />
+        </MenuItem>
+        {id === 1 || id === 4 ? <hr /> : null}
+      </>
+    );
+  });
+
   return (
     <>
       <header className={`sticky w-full top-0 z-20 ${props.className}`}>
@@ -236,7 +307,7 @@ export function HeaderNav(props: HeaderNavProps) {
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
 
-            <div className="flex items-center justify-center space-x-4">
+            <div className="flex items-center justify-center pt-3 space-x-4">
               <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
                 <li
                   className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-light ${
@@ -416,7 +487,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         Boolean(openProfileMenu) ? "true" : undefined
                       }
                       onClick={handleProfileMenuClick}
-                      className="flex flex-col items-center justify-center space-y-1"
+                      className="flex flex-col items-center justify-center pb-2 space-y-1 "
                     >
                       {getSessionState.data?.userData.login_type ===
                       "mobile" ? (
@@ -426,28 +497,40 @@ export function HeaderNav(props: HeaderNavProps) {
                           src={getSessionState.data?.userData.picture}
                           alt="Profile pic"
                           className="rounded-full mt-[2px]"
-                          width={25}
+                          width={30}
                         />
                       )}
-                      <span className="text-xs font-light text-white">
+                      {/* <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
                         {getSessionState.data?.userData.last_name}
-                      </span>
+                      </span> */}
                     </button>
                     <Menu
                       anchorEl={openProfileMenu}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
                       open={Boolean(openProfileMenu)}
                       onClose={() => setOpenProfileMenu(null)}
                     >
-                      <MenuItem
+                      {menuList}
+                      {/* <MenuItem
                         onClick={handleMyProfile}
                         className="bg-secondary"
                       >
-                        My profile
+                        My Profile
                       </MenuItem>
-                      <MenuItem onClick={handleLogout} className="bg-secondary">
+                    
+                      <MenuItem onClick={handleLogout} 
+                      className="bg-secondary">
+                        
                         Logout
-                      </MenuItem>
+                      </MenuItem> */}
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
