@@ -419,18 +419,18 @@ export function PopClubDeal() {
 
   return (
     <>
-      <section className="relative flex flex-col min-h-screen pb-10 bg-secondary">
+      <section className="flex flex-col min-h-screen bg-secondary">
         {getDealState.data ? (
           <>
-            <div className="text-white text-center font-['Bebas_Neue'] tracking-[4px] text-xl">
+            <div className="pt-6 pb-3 text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] text-2xl">
               {getDealState.data.category_name}
             </div>
 
-            <section className="mx-auto lg:w-[40%] flex-1 flex flex-col">
-              <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
+            <section className="mx-auto md:px-6 mb-[18%] md:mb-0">
+              <div className="relative flex flex-col bg-secondary shadow-lg md:flex-row w-[310px] sm:w-[400px] md:w-[100%] justify-evenly md:justify-start items-center md:items-stretch h-[100vh] md:h-auto px-2">
                 {getDealState.data.original_price &&
                 getDealState.data.promo_price ? (
-                  <div className="absolute top-0 left-0">
+                  <div className="absolute top-0 left-0 ml-2">
                     <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
                       {Math.floor(
                         ((getDealState.data.original_price -
@@ -451,19 +451,19 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                <img
-                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
-                  alt="Deals"
-                />
-                <CountdownTimer />
-                <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
-                  <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
+                <div className="flex md:w-[55%] md:h-[50%] h-[50%] w-[100%]">
+                  <img
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
+                    alt="Deals"
+                  />
+                </div>
+                <div className="flex flex-col items-center px-4 justify-evenly w-[100%] md:h-auto md:w-[45%] h-[50%] bg-secondary">
+                  <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] lg:text-3xl md:text-2xl">
                     {getDealState.data.name}
                   </h1>
-                  <h1 className="text-lg text-white">
+                  <h1 className="text-white lg:text-base md:text-base text-sm">
                     {getDealState.data.description}
                   </h1>
-
                   <div className="text-center">{redeemButton()}</div>
                 </div>
               </div>
