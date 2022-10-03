@@ -22,7 +22,7 @@ export function AdminCFaq() {
           Frequently Asked Questions
         </h1>
         <main className="">
-          <section className="px-4 pt-6">
+          <section className="px-4 lg:mt-6">
             <TabFaq tabs={ADMIN_FAQ} activeTab="customer">
               <CustomizedAccordionsCFAQ></CustomizedAccordionsCFAQ>
             </TabFaq>
