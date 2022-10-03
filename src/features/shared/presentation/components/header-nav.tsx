@@ -248,10 +248,11 @@ export function HeaderNav(props: HeaderNavProps) {
   const profileMenu = [
     {
       id: 1,
-      text:
-        getSessionState.data?.userData.first_name +
-        " " +
-        getSessionState.data?.userData.last_name,
+      text: getSessionState.data?.userData
+        ? getSessionState.data?.userData.first_name +
+          " " +
+          getSessionState.data?.userData.last_name
+        : "",
       icon: <FaUserAlt />,
       action: handleMyProfile,
     },
