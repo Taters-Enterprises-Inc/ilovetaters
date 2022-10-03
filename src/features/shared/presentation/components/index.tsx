@@ -20,3 +20,4 @@ export { MobileForgotPasswordOtpAuthentication } from "./mobile-forgot-password-
 export { MobileForgotPasswordNewPassword } from "./mobile-forgot-password-new-password";
 export { DataList } from "./data-list";
 export { ConsentWrapper } from "./consent-wrapper";
+export { MobilePasswordTextField } from "./mobile-password-textfield";

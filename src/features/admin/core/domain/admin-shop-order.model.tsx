@@ -28,6 +28,7 @@ export interface AdminShopOrderModel {
     name: string;
     description: string;
     add_details: string;
-    product_label: string;
+    product_label?: string;
+    alias?: string;
   }>;
 }

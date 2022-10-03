@@ -114,7 +114,7 @@ export function StoreCluster(props: StoreClusterProps) {
                     </span>
                   ) : null}
 
-                  <div className="text-sm uppercase ">{store.menu_name}</div>
+                  <div className="py-1 text-sm uppercase">{store.menu_name}</div>
                   {props.address ? (
                     <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                       <div className="flex justify-end">
@@ -139,9 +139,9 @@ export function StoreCluster(props: StoreClusterProps) {
                     />
                   )}
 
-                  <div className="px-3 py-2">
-                    <h1 className="mb-1 text-xs">{store.store_name}</h1>
-                    <p className="text-[7px]">{store.store_address}</p>
+                  <div className="p-4 space-y-2">
+                    <h1 className="mb-1 text-sm font-bold leading-5">{store.store_name}</h1>
+                    <p className="text-xs">{store.store_address}</p>
                   </div>
                 </button>
               );

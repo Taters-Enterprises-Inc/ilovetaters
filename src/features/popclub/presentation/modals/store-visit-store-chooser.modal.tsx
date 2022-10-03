@@ -42,9 +42,9 @@ export function StoreVisitStoreChooserModal(
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
-      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
     >
-      <div className="bg-primary px-3 py-[13px] lg:p-8 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
+      <div className="bg-primary px-3 py-[13px] lg:p-8 round w-[90%] lg:w-[80%] relative rounded-[10px] lg:my-10 mt-[7%] mb-[21%] sm:mt-[5%]sm:mb-[15%]">
         <button
           className="absolute text-2xl text-white top-2 right-4"
           onClick={() => {
@@ -54,7 +54,7 @@ export function StoreVisitStoreChooserModal(
         >
           <IoMdClose />
         </button>
-        <h1 className="pt-4 pb-2 text-sm font-bold text-center text-white">
+        <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store are you visiting?
         </h1>
 

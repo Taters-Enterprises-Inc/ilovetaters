@@ -496,7 +496,7 @@ export function CateringCheckout() {
 
                 {enableCompanyName ? (
                   <div className="space-y-2">
-                    <span className="text-base text-white">Company Name</span>
+                    <span className="text-base text-black">Company Name</span>
 
                     <TextField
                       variant="outlined"
@@ -584,7 +584,7 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod />
+                  <PaymentMethod onChange={(payment) => {}} />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 

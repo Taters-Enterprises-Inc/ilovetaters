@@ -55,7 +55,7 @@ export function CateringProducts() {
           className="sm:hidden"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/mobile/catering_munch_better.webp"
+            "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
           }
           alt="The best pop corn in town"
         ></img>
@@ -63,7 +63,7 @@ export function CateringProducts() {
           className="hidden sm:block"
           src={
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/desktop/catering_munch_better_black.webp"
+            "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
           }
           alt="The best pop corn in town"
         ></img>
@@ -71,7 +71,7 @@ export function CateringProducts() {
       <section className="container space-y-10 pb-[90px]">
         {getCateringCategoryProductsState.data?.map((category, i) => (
           <section key={i}>
-            <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px]">
+            <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
               {category.category_name}
             </h1>
 
@@ -107,6 +107,9 @@ export function CateringProducts() {
           </section>
         ))}
 
+        <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
+          FREQUENTLY ASKED QUESTIONS
+        </h3>
         <CateringFaqs />
       </section>
 

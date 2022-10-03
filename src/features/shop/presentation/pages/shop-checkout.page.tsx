@@ -43,6 +43,7 @@ export function ShopCheckout() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
+  const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
@@ -181,6 +182,10 @@ export function ShopCheckout() {
       for (let i = 0; i < deals.length; i++) {
         calculatedPrice += deals[i].deal_promo_price;
       }
+    }
+
+    if (cashOnDelivery) {
+      calculatedPrice += cashOnDelivery;
     }
 
     if (getSessionState.data?.distance_rate_price) {
@@ -443,11 +448,25 @@ export function ShopCheckout() {
                     </>
                   ) : null}
 
-                  <div className="mt-4 space-y-2 text-secondary lg:mt-0">
+                  <div className="hidden mt-4 space-y-2 text-secondary lg:mt-0 lg:block">
                     <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                       Choose payment method
                     </h2>
-                    <PaymentMethod />
+                    <PaymentMethod
+                      onChange={(payment) => {
+                        if (
+                          getSessionState.data &&
+                          getSessionState.data.cash_delivery &&
+                          payment === "3"
+                        ) {
+                          setCashOnDelivery(
+                            parseInt(getSessionState.data.cash_delivery)
+                          );
+                        } else {
+                          setCashOnDelivery(undefined);
+                        }
+                      }}
+                    />
 
                     {/* <PaymentAccordion /> */}
                   </div>
@@ -627,6 +646,30 @@ export function ShopCheckout() {
                       </div>
                     ) : null}
 
+                    <div className="mt-4 space-y-2 text-secondary lg:mt-0 lg:hidden">
+                      <hr className="mt-1 mb-2 border-secondary" />
+                      <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                        Choose payment method
+                      </h2>
+                      <PaymentMethod
+                        onChange={(payment) => {
+                          if (
+                            getSessionState.data &&
+                            getSessionState.data.cash_delivery &&
+                            payment === "3"
+                          ) {
+                            setCashOnDelivery(
+                              parseInt(getSessionState.data.cash_delivery)
+                            );
+                          } else {
+                            setCashOnDelivery(undefined);
+                          }
+                        }}
+                      />
+
+                      {/* <PaymentAccordion /> */}
+                    </div>
+
                     <hr className="mt-1 mb-2 border-secondary" />
                     <div className="grid grid-cols-2 text-secondary">
                       <span>Subtotal:</span>
@@ -635,6 +678,19 @@ export function ShopCheckout() {
                       </span>
                       <span>Delivery Fee:</span>
                       <span className="text-end">{calculateDeliveryFee()}</span>
+                      {cashOnDelivery ? (
+                        <>
+                          <span>COD charge:</span>
+                          <span className="text-end">
+                            <NumberFormat
+                              value={cashOnDelivery.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </span>
+                        </>
+                      ) : null}
                       <span>Discount:</span>
                       <span className="text-end">( ₱ 0.00 )</span>
                     </div>

@@ -518,7 +518,7 @@ export function AdminShopOrderCustomerInformation() {
 
           {getAdminShopOrderState.data ? (
             <>
-              <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:block customer-information-table">
+              <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:table customer-information-table">
                 <thead className="text-xs text-white uppercase bg-secondary ">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -545,15 +545,23 @@ export function AdminShopOrderCustomerInformation() {
                         scope="row"
                         className="px-6 py-4 font-medium text-secondary"
                       >
+                        {item.alias ? (
+                          <span className="font-bold">{item.alias}</span>
+                        ) : null}
+                        <br />
                         <span
                           dangerouslySetInnerHTML={{
-                            __html:
-                              item.product_label +
-                              " " +
-                              item.name +
-                              (item.add_details
-                                ? " , " + item.add_details
-                                : ""),
+                            __html: item.product_label
+                              ? item.product_label +
+                                " " +
+                                item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : "")
+                              : item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : ""),
                           }}
                         />
                       </th>
@@ -650,13 +658,21 @@ export function AdminShopOrderCustomerInformation() {
                 {getAdminShopOrderState.data.items.map((item, i) => (
                   <div className="py-2 border-b">
                     <p className="mb-2 text-xs leading-1 text-semibold">
+                      {item.alias ? (
+                        <span className="font-bold">{item.alias}</span>
+                      ) : null}
+                      <br />
                       <span
                         dangerouslySetInnerHTML={{
-                          __html:
-                            item.product_label +
-                            " " +
-                            item.name +
-                            (item.add_details ? " , " + item.add_details : ""),
+                          __html: item.product_label
+                            ? item.product_label +
+                              " " +
+                              item.name +
+                              (item.add_details ? " , " + item.add_details : "")
+                            : item.name +
+                              (item.add_details
+                                ? " , " + item.add_details
+                                : ""),
                         }}
                       />
                     </p>

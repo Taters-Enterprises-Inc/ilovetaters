@@ -374,7 +374,7 @@ export function AdminCateringBookingCustomerInformation() {
         {getAdminCateringBookingState.data ? (
           <div className="pt-2 pb-3">
             <span className="text-xl font-bold">Catering Details</span>
-            <div className="lg:grid grid-cols-2 gap-4">
+            <div className="grid-cols-2 gap-4 lg:grid">
               <div>
                 <div className="mt-1">
                   <strong>Event Date:</strong>{" "}
@@ -498,7 +498,7 @@ export function AdminCateringBookingCustomerInformation() {
 
           {getAdminCateringBookingState.data ? (
             <>
-              <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:block customer-information-table">
+              <table className="hidden w-full mt-3 text-sm text-left rounded-lg lg:table customer-information-table">
                 <thead className="text-xs text-white uppercase bg-secondary ">
                   <tr>
                     <th scope="col" className="px-6 py-3">

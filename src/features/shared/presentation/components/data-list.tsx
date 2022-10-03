@@ -19,8 +19,8 @@ interface DataListProps {
 export function DataList(props: DataListProps) {
   return (
     <div>
-      <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
-        <div className="flex  flex-1 space-x-4">
+      <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
+        <div className="z-0 flex flex-1 space-x-4">
           <TextField
             required
             label="Search"

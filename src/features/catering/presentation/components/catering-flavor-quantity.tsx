@@ -7,7 +7,7 @@ export interface CateringFlavorQuantityProps {
   reset?: boolean;
   productQuantity: number;
   totalMultiFlavorsQuantity: number;
-  onChange: (action: "minus" | "plus") => void;
+  onChange: (action: "minus" | "plus" | "edit", value: number) => void;
 }
 
 export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
@@ -27,19 +27,42 @@ export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
         productQuantity={props.productQuantity}
         totalMultiFlavorsQuantity={props.totalMultiFlavorsQuantity}
         quantity={quantity}
-        onChange={(action) => {
+        onChange={(action, val) => {
           switch (action) {
             case "plus":
+              if (isNaN(quantity)) {
+                setQuantity(0);
+              }
+
               if (props.productQuantity - props.totalMultiFlavorsQuantity > 0) {
-                props.onChange(action);
+                props.onChange(action, NaN);
                 setQuantity((value) => value + 1);
               }
               break;
             case "minus":
               if (quantity > props.min) {
-                props.onChange(action);
+                props.onChange(action, NaN);
                 setQuantity((value) => value - 1);
               }
+              break;
+
+            case "edit":
+              if (val > props.productQuantity) {
+                console.log("over Total");
+                val = props.productQuantity;
+              } else if (
+                val + props.totalMultiFlavorsQuantity >
+                props.productQuantity
+              ) {
+                val = props.productQuantity - props.totalMultiFlavorsQuantity;
+              }
+              setQuantity(val);
+
+              setTimeout(() => {
+                if (isNaN(val)) props.onChange(action, 0);
+                else props.onChange(action, val);
+              }, 500);
+
               break;
           }
         }}
