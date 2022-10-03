@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -23,6 +23,8 @@ import {
   updateAdminSettingStore,
 } from "../slices/update-setting-store.slice";
 import moment from "moment";
+import { AdminStoreEditModal } from "../modals";
+import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -50,6 +52,8 @@ const createQueryParams = (params: object): string => {
 };
 
 export function AdminSettingStores() {
+  const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
+
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -58,13 +62,20 @@ export function AdminSettingStores() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const storeId = query.get("store_id");
+
+  useEffect(() => {
+    if (storeId) {
+      setOpenAdminStoreEditModal(true);
+    }
+  }, [dispatch, storeId]);
 
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
   );
 
-  const updateAdminSettingStoreState = useAppSelector(
-    selectUpdateAdminSettingStore
+  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
+    selectUpdateAdminSettingStoreOperatingHours
   );
 
   useEffect(() => {
@@ -84,7 +95,7 @@ export function AdminSettingStores() {
     orderBy,
     order,
     search,
-    updateAdminSettingStoreState,
+    updateAdminSettingStoreOperatingHoursState,
   ]);
 
   return (
@@ -367,6 +378,28 @@ export function AdminSettingStores() {
           </div>
         </>
       ) : null}
+      <AdminStoreEditModal
+        open={openAdminStoreEditModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            store_id: null,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+
+          setOpenAdminStoreEditModal(false);
+        }}
+      />
     </>
   );
 }

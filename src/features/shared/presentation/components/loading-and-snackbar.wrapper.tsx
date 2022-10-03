@@ -221,6 +221,18 @@ import {
   AdminDeclineRedeemState,
   selectAdminDeclineRedeem,
 } from "features/admin/presentation/slices/admin-decline-redeem.slice";
+import {
+  GetAdminStoreState,
+  selectGetAdminStore,
+} from "features/admin/presentation/slices/get-admin-store.slice";
+import {
+  selectUpdateAdminSettingStoreOperatingHours,
+  UpdateAdminSettingStoreOperatingHoursState,
+} from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
+import {
+  GetAdminSettingStoresState,
+  selectGetAdminSettingStores,
+} from "features/admin/presentation/slices/get-admin-setting-stores.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -335,6 +347,71 @@ export function LoadingAndSnackbarWrapper() {
   );
 
   const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
+  const getAdminStoreState = useAppSelector(selectGetAdminStore);
+  const getAdminSettingStoresState = useAppSelector(
+    selectGetAdminSettingStores
+  );
+  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
+    selectUpdateAdminSettingStoreOperatingHours
+  );
+  useEffect(() => {
+    switch (getAdminSettingStoresState.status) {
+      case GetAdminSettingStoresState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminSettingStoresState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSettingStoresState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSettingStoresState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminSettingStoresState, dispatch]);
+
+  useEffect(() => {
+    switch (updateAdminSettingStoreOperatingHoursState.status) {
+      case UpdateAdminSettingStoreOperatingHoursState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateAdminSettingStoreOperatingHoursState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreOperatingHoursState.success:
+        showAlert(
+          setSuccessAlert,
+          updateAdminSettingStoreOperatingHoursState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminSettingStoreOperatingHoursState.fail:
+        showAlert(
+          setFailsAlert,
+          updateAdminSettingStoreOperatingHoursState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateAdminSettingStoreOperatingHoursState, dispatch]);
+
+  useEffect(() => {
+    switch (getAdminStoreState.status) {
+      case GetAdminStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminStoreState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminStoreState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminStoreState, dispatch]);
 
   useEffect(() => {
     switch (adminDeclineRedeemState.status) {
