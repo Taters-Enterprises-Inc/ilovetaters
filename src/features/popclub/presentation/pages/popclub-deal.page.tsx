@@ -426,8 +426,8 @@ export function PopClubDeal() {
               {getDealState.data.category_name}
             </div>
 
-            <section className="mx-auto md:px-6 mb-[18%] md:mb-0">
-              <div className="relative flex flex-col bg-secondary shadow-lg md:flex-row w-[310px] sm:w-[400px] md:w-[100%] justify-evenly md:justify-start items-center md:items-stretch h-[100vh] md:h-auto px-2">
+            <section className="mx-auto md:px-6 mb-[20%] md:mb-0">
+              <div className="relative flex flex-col bg-secondary shadow-lg md:flex-row w-[310px] sm:w-[400px] md:w-[100%] justify-evenly md:justify-start items-center md:items-stretch h-[120vh] md:h-auto px-2 md:max-w-[1000px]">
                 {getDealState.data.original_price &&
                 getDealState.data.promo_price ? (
                   <div className="absolute top-0 left-0 ml-2">
@@ -451,17 +451,17 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                <div className="flex md:w-[55%] md:h-[50%] h-[50%] w-[100%]">
+                <div className="flex md:w-[55%] md:h-[50%] h-[50%] w-[100%] min-w-[] md:max-w-[550px] md:max-h-[650px]">
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
                     alt="Deals"
                   />
                 </div>
-                <div className="flex flex-col items-center px-4 justify-evenly w-[100%] md:h-auto md:w-[45%] h-[50%] bg-secondary">
-                  <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] lg:text-3xl md:text-2xl">
+                <div className="flex flex-col items-center px-4 justify-evenly w-[100%] md:h-auto md:w-[45%] h-[50%] bg-secondary md:max-w-[450px] md:max-h-[650px]">
+                  <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] lg:text-2xl md:text-xl text-md">
                     {getDealState.data.name}
                   </h1>
-                  <h1 className="text-white lg:text-base md:text-base text-sm">
+                  <h1 className="text-white lg:text-base text-sm text-center">
                     {getDealState.data.description}
                   </h1>
                   <div className="text-center">{redeemButton()}</div>
