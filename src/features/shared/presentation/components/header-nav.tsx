@@ -433,48 +433,6 @@ export function HeaderNav(props: HeaderNavProps) {
                   </Popper>
                 </li>
               </ul>
-              {/* <ul className="text-white font-semibold items-stretch h-[40px] justify-center hidden lg:flex">
-                {TABS.map((tab, i) => {
-                  return (
-                    <li
-                      key={i}
-                      className={`font-['Bebas_Neue'] tracking-[4px] px-4 pb-1 flex justify-center items-center text-lg font-light ${
-                        tab.name === props.activeUrl
-                          ? "text-tertiary"
-                          : "text-white"
-                      }`}
-                    >
-                      {tab.name === "POPCLUB" ? (
-                        <div
-                          className="tracking-[4px] cursor-pointer"
-                          onClick={() => {
-                            handleSwitchTab({
-                              onYes: () => {
-                                setOpenPlatformChooserModal(true);
-                              },
-                              tabName: "popclub",
-                            });
-                          }}
-                        >
-                          {tab.name}
-                        </div>
-                      ) : (
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => {
-                            handleSwitchTab({
-                              url: tab.url,
-                              tabName: tab.name.toLowerCase(),
-                            });
-                          }}
-                        >
-                          {tab.name}
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul> */}
               <div className="flex items-center justify-center space-x-3 lg:space-x-6">
                 {getSessionState.data?.userData ? (
                   <div>
@@ -537,9 +495,9 @@ export function HeaderNav(props: HeaderNavProps) {
                   <>
                     <button
                       onClick={() => setOpenLoginChooserModal(true)}
-                      className="flex flex-col items-center justify-center mt-1 space-y-1 text-white rounded-xl"
+                      className="flex flex-col items-center justify-center mt-1 mb-4 space-y-1 text-white rounded-xl"
                     >
-                      <AiOutlineUser className="text-2xl " />
+                      <AiOutlineUser className="text-2xl" />
                       <span className="tracking-[2px] text-xs font-light">
                         Sign In
                       </span>
