@@ -188,23 +188,31 @@ export function AdminSettingStores() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (
+                  column_selected !== "category" &&
+                  column_selected !== "snackshop" &&
+                  column_selected !== "catering" &&
+                  column_selected !== "popclub-walk-in" &&
+                  column_selected !== "popclub-online-delivery"
+                ) {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminSettingStoresStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminSettingStoresStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {

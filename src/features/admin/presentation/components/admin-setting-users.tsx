@@ -93,7 +93,7 @@ export function AdminSettingUsers() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Users
         </span>
-        <div className="flex flex-col lg:flex-row px-4 lg:space-x-4 ">
+        <div className="flex flex-col px-4 lg:flex-row lg:space-x-4 ">
           <div>
             <Link
               to="create-user"
@@ -225,23 +225,30 @@ export function AdminSettingUsers() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (
+                  column_selected !== "action" &&
+                  column_selected !== "status" &&
+                  column_selected !== "store" &&
+                  column_selected !== "groups"
+                ) {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminUsersStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminUsersStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -305,7 +312,7 @@ export function AdminSettingUsers() {
                       </DataTableCell>
                       <DataTableCell>
                         {row.active === 1 ? (
-                          <span className=" text-xs rounded-full py-1 px-2 bg-green-700 text-white">
+                          <span className="px-2 py-1 text-xs text-white bg-green-700 rounded-full ">
                             Active
                           </span>
                         ) : (
@@ -315,7 +322,7 @@ export function AdminSettingUsers() {
                       <DataTableCell>
                         <Link
                           to={`/admin/setting/user/edit-user/${row.id}`}
-                          className="border rounded-lg border-secondary py-1 px-3"
+                          className="px-3 py-1 border rounded-lg border-secondary"
                         >
                           Edit
                         </Link>
@@ -339,7 +346,7 @@ export function AdminSettingUsers() {
                               search: queryParams,
                             });
                           }}
-                          className="border rounded-lg border-secondary py-1 px-3"
+                          className="px-3 py-1 border rounded-lg border-secondary"
                         >
                           Choose
                         </button>
