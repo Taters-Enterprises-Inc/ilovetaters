@@ -67,7 +67,7 @@ export function AdminSettingStores() {
   ];
 
   if (
-    !getAdminSessionState.data?.is_admin ||
+    !getAdminSessionState.data?.is_admin &&
     !getAdminSessionState.data?.is_csr
   ) {
     columns = columns.filter((column) => column.id !== "branches");
