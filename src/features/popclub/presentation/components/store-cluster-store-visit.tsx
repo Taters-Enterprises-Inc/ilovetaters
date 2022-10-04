@@ -97,8 +97,14 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                       {isStoreOperating == false ? (
                         <span className="p-1 text-center not-available-overlay rounded-[10px]">
                           Store will be available at{" "}
-                          {moment(store.available_start_time).format("LT")} to{" "}
-                          {moment(store.available_end_time).format("LT")}
+                          {moment(
+                            store.available_start_time,
+                            "HH:mm:ss"
+                          ).format("LT")}{" "}
+                          to{" "}
+                          {moment(store.available_end_time, "HH:mm:ss").format(
+                            "LT"
+                          )}
                         </span>
                       ) : null}
                       <div className="text-sm uppercase ">
@@ -177,8 +183,15 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                         {isStoreOperating == false ? (
                           <span className="p-1 text-center not-available-overlay rounded-[10px]">
                             Store will be available at{" "}
-                            {moment(store.available_start_time).format("LT")} to{" "}
-                            {moment(store.available_end_time).format("LT")}
+                            {moment(
+                              store.available_start_time,
+                              "HH:mm:ss"
+                            ).format("LT")}{" "}
+                            to{" "}
+                            {moment(
+                              store.available_end_time,
+                              "HH:mm:ss"
+                            ).format("LT")}
                           </span>
                         ) : null}
                         <div className="py-1 text-sm uppercase">
