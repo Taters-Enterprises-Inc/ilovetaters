@@ -307,7 +307,9 @@ export function AdminSettingStores() {
                         />
                       </DataTableCell>
 
-                      {getAdminSessionState.data?.is_catering_admin ? (
+                      {getAdminSessionState.data?.is_admin ||
+                      getAdminSessionState.data?.is_csr ||
+                      getAdminSessionState.data?.is_catering_admin ? (
                         <DataTableCell>
                           <Checkbox
                             onChange={(e) => {
