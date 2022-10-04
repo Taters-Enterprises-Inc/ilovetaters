@@ -18,3 +18,8 @@ export interface UpdateAdminSettingStoreParam {
   name_of_field_status: string;
   status: number;
 }
+export interface UpdateAdminSettingStoreOperatingHoursParam {
+  store_id: string;
+  available_start_time: string;
+  available_end_time: string;
+}

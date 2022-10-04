@@ -93,11 +93,15 @@ export function AdminSettingUsers() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Users
         </span>
+<<<<<<< HEAD
         <div className="flex flex-col px-4 lg:flex-row lg:space-x-4 ">
+=======
+        <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
+>>>>>>> main
           <div>
             <Link
               to="create-user"
-              className="inline-flex items-center px-4 tracking-wide py-1 bg-button text-white font-['Roboto']  text-sm rounded-md font-700"
+              className="inline-flex items-center px-4 tracking-wide py-1  bg-button text-white font-['Roboto']  text-sm rounded-md font-700"
             >
               <MdOutlinePersonAddAlt1 size={20} />
               <span>&nbsp;&nbsp;Create a new user</span>
@@ -116,7 +120,7 @@ export function AdminSettingUsers() {
       </div>
       {getAdminUsersState.data ? (
         <>
-          <div className="py-4 lg:hidden">
+          <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {

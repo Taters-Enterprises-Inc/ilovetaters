@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -22,14 +22,19 @@ import {
   selectUpdateAdminSettingStore,
   updateAdminSettingStore,
 } from "../slices/update-setting-store.slice";
+import moment from "moment";
+import { AdminStoreEditModal } from "../modals";
+import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
-  { id: "category", label: "Category" },
+  { id: "menu", label: "Menu" },
   { id: "snackshop", label: "Snackshop" },
   { id: "catering", label: "Catering" },
-  { id: "popclub-walk-in", label: "Popclub Walk-in" },
+  { id: "popclub-walk-in", label: "Popclub Store Visit" },
   { id: "popclub-online-delivery", label: "Popclub Online Delivery" },
+  { id: "branches", label: "Branches" },
+  { id: "operating-hours", label: "Operating Hours" },
 ];
 
 const createQueryParams = (params: object): string => {
@@ -47,6 +52,8 @@ const createQueryParams = (params: object): string => {
 };
 
 export function AdminSettingStores() {
+  const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
+
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -55,9 +62,20 @@ export function AdminSettingStores() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const storeId = query.get("store_id");
+
+  useEffect(() => {
+    if (storeId) {
+      setOpenAdminStoreEditModal(true);
+    }
+  }, [dispatch, storeId]);
 
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
+  );
+
+  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
+    selectUpdateAdminSettingStoreOperatingHours
   );
 
   const updateAdminSettingStoreState = useAppSelector(
@@ -82,6 +100,7 @@ export function AdminSettingStores() {
     order,
     search,
     updateAdminSettingStoreState,
+    updateAdminSettingStoreOperatingHoursState,
   ]);
 
   return (
@@ -331,6 +350,39 @@ export function AdminSettingStores() {
                           }
                         />
                       </DataTableCell>
+
+                      <DataTableCell>
+                        <Checkbox
+                          onChange={(e) => {
+                            dispatch(
+                              updateAdminSettingStore({
+                                store_id: row.store_id,
+                                name_of_field_status: "branch_status",
+                                status: e.target.checked ? 1 : 0,
+                              })
+                            );
+                          }}
+                          color="primary"
+                          checked={row.branch_status === 1 ? true : false}
+                        />
+                      </DataTableCell>
+
+                      <DataTableCell>
+                        <button
+                          onClick={() => {
+                            navigate("?store_id=" + row.store_id);
+                          }}
+                          className="px-2 py-1 font-bold text-white bg-green-700 rounded-full"
+                        >
+                          {moment(row.available_start_time, "HH:mm:ss").format(
+                            "LT"
+                          )}{" "}
+                          -{" "}
+                          {moment(row.available_end_time, "HH:mm:ss").format(
+                            "LT"
+                          )}
+                        </button>
+                      </DataTableCell>
                     </DataTableRow>
                   ))}
                 </>
@@ -339,6 +391,28 @@ export function AdminSettingStores() {
           </div>
         </>
       ) : null}
+      <AdminStoreEditModal
+        open={openAdminStoreEditModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            store_id: null,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+
+          setOpenAdminStoreEditModal(false);
+        }}
+      />
     </>
   );
 }

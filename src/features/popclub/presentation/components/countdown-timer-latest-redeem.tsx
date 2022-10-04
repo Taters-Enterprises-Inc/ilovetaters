@@ -23,7 +23,7 @@ export function CountdownTimerLatestRedeem() {
     var expirationDate: any = moment(
       getLatestUnexpiredRedeemState.data.expiration
     );
-    var expirationDateCountDown = new Date(
+    var expirationDateCountDown = moment(
       getLatestUnexpiredRedeemState.data.expiration
     );
 
@@ -73,7 +73,10 @@ export function CountdownTimerLatestRedeem() {
 
     return (
       <>
-        <Countdown renderer={renderer} date={expirationDateCountDown} />
+        <Countdown
+          renderer={renderer}
+          date={expirationDateCountDown.toDate()}
+        />
       </>
     );
   }

@@ -300,7 +300,7 @@ export function GetStoresAvailableRepository(
 ): Promise<GetStoresAvailableResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/store?${
-      param.address ? `address=${param.address}` : ""
+      param.address ? `address=${encodeURIComponent(param.address)}` : ""
     }&service=${param.service}`,
     {
       headers: {

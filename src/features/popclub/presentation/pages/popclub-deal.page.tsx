@@ -54,6 +54,7 @@ import {
   redeemValidators,
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
+import moment from "moment";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -280,7 +281,7 @@ export function PopClubDeal() {
             <span className="mt-3">You can redeem this deal after </span>
             <Countdown
               renderer={renderer}
-              date={new Date(redeemValidator.next_available_redeem)}
+              date={moment(redeemValidator.next_available_redeem).toDate()}
             />
           </div>
         );
@@ -293,14 +294,25 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              <button
-                onClick={() => {
-                  navigate("/delivery/checkout");
-                }}
-                className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-              >
-                Go Back to Checkout
-              </button>
+              {getRedeemState.data.minimum_purchase ? (
+                <button
+                  onClick={() => {
+                    navigate("/delivery/products");
+                  }}
+                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+                >
+                  Go Back to Products
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    navigate("/delivery/checkout");
+                  }}
+                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+                >
+                  Go Back to Checkout
+                </button>
+              )}
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {

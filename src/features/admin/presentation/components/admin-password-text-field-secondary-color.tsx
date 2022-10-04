@@ -65,7 +65,11 @@ export function AdminPasswordTextFieldSecondaryColor(
   return (
     <SecondaryOutLinedTextField
       variant="outlined"
-      type={values.showPassword ? "text" : "password"}
+      type="text"
+      inputProps={{
+        className: values.showPassword ? "" : "password-mask",
+        autoComplete: "current-password",
+      }}
       value={values.password}
       onChange={handleChange("password")}
       name="password"
