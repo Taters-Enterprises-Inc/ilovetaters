@@ -39,10 +39,10 @@ export function AdminHead(props: AdminHeadProps) {
       dispatch(resetLogoutAdmin());
       navigate("/admin");
     }
-  }, [logoutAdminState, dispatch]);
+  }, [logoutAdminState, dispatch ,navigate]);
 
   return (
-    <div className="flex justify-between p-4">
+    <div className="flex justify-between p-4 ">
       <AdminBreadCrumbs {...props.AdminBreadCrumbsProps} />
 
       <div className="relative flex items-center justify-end text-secondary ">
