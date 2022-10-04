@@ -9,7 +9,7 @@ interface AdminSnackshopOrderStatusBbuttonParams {
   dispactAction:()=>void
   data :Array<any>
 }
-export const AdminSnackshopOrderStatusButton: React.FC<
+export const AdminChipsButton: React.FC<
   AdminSnackshopOrderStatusBbuttonParams
 > = ({ params, createQueryParams, status ,dispactAction ,data}) => {
   const navigate = useNavigate();

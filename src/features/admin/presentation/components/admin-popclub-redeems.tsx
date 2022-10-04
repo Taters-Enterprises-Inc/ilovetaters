@@ -28,7 +28,7 @@ import {
 } from "../slices/get-admin-popclub-redeems.slice";
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
-import { AdminSnackshopOrderStatusButton } from "./chips-button";
+import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -108,7 +108,7 @@ export function AdminPopClubRedeems() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Popclub Redemptions
         </span>
-        <AdminSnackshopOrderStatusButton
+        <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_POPCLUB_REDEEM_STATUS}
           dispactAction={() => {
