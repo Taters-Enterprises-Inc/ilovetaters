@@ -45,7 +45,7 @@ const columns: Array<Column> = [
   { id: "store_name", label: "Store" },
   { id: "payops", label: "Mode of Payment" },
   { id: "invoice_num", label: "Invoice Number" },
-  // { id: "action", label: "Action" },
+  { id: "action", label: "Action" },
 ];
 
 const createQueryParams = (params: object): string => {

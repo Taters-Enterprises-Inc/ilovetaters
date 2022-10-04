@@ -207,13 +207,7 @@ export function AdminSettingStores() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (
-                  column_selected !== "category" &&
-                  column_selected !== "snackshop" &&
-                  column_selected !== "catering" &&
-                  column_selected !== "popclub-walk-in" &&
-                  column_selected !== "popclub-online-delivery"
-                ) {
+                if (column_selected == "name") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
