@@ -93,11 +93,7 @@ export function AdminSettingUsers() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Users
         </span>
-<<<<<<< HEAD
-        <div className="flex flex-col px-4 lg:flex-row lg:space-x-4 ">
-=======
         <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
->>>>>>> main
           <div>
             <Link
               to="create-user"
