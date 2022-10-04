@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -93,6 +93,19 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
   const location = useLocation();
 
+  const [expanded, setExpanded] = useState<string | false>(location.pathname);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+
+  const [exp, setExp] = useState(true);
+
+  const toggle = () => {
+    setExp(true);
+  };
+
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
       <nav>
@@ -181,7 +194,11 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion disableGutters>
+                <Accordion
+                  disableGutters
+                  expanded={expanded === location.pathname || exp}
+                  onChange={handleChange(location.pathname)}
+                >
                   <AccordionSummary>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
@@ -265,7 +282,11 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion disableGutters>
+                <Accordion
+                  disableGutters
+                  // expanded={expanded2 === location.pathname || exp2}
+                  // onChange={handleChange2(location.pathname)}
+                >
                   <AccordionSummary>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
@@ -290,6 +311,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           <NavLink
                             to="/admin/setting/user"
                             onClick={() => {
+                              // toggle2();
                               if (props.mobile) dispatch(closeAdminSideBar());
                             }}
                             className={(navData) =>
@@ -319,6 +341,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                         <NavLink
                           to="/admin/setting/store"
                           onClick={() => {
+                            // toggle2();
                             if (props.mobile) dispatch(closeAdminSideBar());
                           }}
                           className={(navData) =>
