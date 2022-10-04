@@ -30,7 +30,7 @@ import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order
 import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
-import { AdminSnackshopOrderStatusButton } from "./admin-snackshop-order-status-button";
+import { AdminSnackshopOrderStatusButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },

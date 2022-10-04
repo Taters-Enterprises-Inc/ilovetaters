@@ -28,7 +28,7 @@ import {
 } from "../slices/get-admin-popclub-redeems.slice";
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
-import { AdminSnackshopOrderStatusButton } from "./admin-snackshop-order-status-button";
+import { AdminSnackshopOrderStatusButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },

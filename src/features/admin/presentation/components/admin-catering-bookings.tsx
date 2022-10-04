@@ -30,7 +30,7 @@ import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
-import { AdminSnackshopOrderStatusButton } from "./admin-snackshop-order-status-button";
+import { AdminSnackshopOrderStatusButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 300 },
