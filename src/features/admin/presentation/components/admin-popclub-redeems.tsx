@@ -12,15 +12,11 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
-import {
-  ADMIN_POPCLUB_REDEEM_STATUS,
-} from "features/shared/constants";
+import { ADMIN_POPCLUB_REDEEM_STATUS } from "features/shared/constants";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminPopclubRedeemModal } from "../modals";
-import {
-  getAdminPopclubRedeem,
-} from "../slices/get-admin-popclub-redeem.slice";
+import { getAdminPopclubRedeem } from "../slices/get-admin-popclub-redeem.slice";
 import {
   getAdminPopclubRedeems,
   resetGetAdminPopclubRedeemsStatus,
@@ -29,6 +25,7 @@ import {
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
 import { AdminChipsButton } from "./chips-button";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -126,6 +123,9 @@ export function AdminPopClubRedeems() {
             return params;
           }}
         />
+      </div>
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminPopclubRedeemsState.data?.orders ? (

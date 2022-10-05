@@ -27,6 +27,7 @@ import {
 } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -93,6 +94,7 @@ export function AdminSettingUsers() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Users
         </span>
+   
         <div className="flex flex-col lg:flex-row px-4 lg:space-x-4 ">
           <div>
             <Link
@@ -114,6 +116,10 @@ export function AdminSettingUsers() {
           </div>
         </div>
       </div>
+      <div className="px-4 m-2">
+          <ExtractButton />
+        </div>
+
       {getAdminUsersState.data ? (
         <>
           <div className="py-4 lg:hidden">

@@ -31,6 +31,7 @@ import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
 import { AdminChipsButton } from "./chips-button";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 300 },
@@ -153,7 +154,6 @@ export function AdminCateringBookings() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Catering Bookings
         </span>
-
         <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_CATERING_BOOKING_STATUS}
@@ -172,6 +172,9 @@ export function AdminCateringBookings() {
             return params;
           }}
         />
+      </div>
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminCateringBookingsState.data?.bookings ? (

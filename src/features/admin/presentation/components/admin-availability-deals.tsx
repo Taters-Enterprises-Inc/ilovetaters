@@ -38,6 +38,7 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "alias", label: "Alias" },
@@ -156,6 +157,7 @@ export function AdminAvailabilityDeals() {
               Not-Available
             </button>
           </div>
+
           {getAdminSessionState.data &&
           getAdminSessionState.data.user_details.stores ? (
             <Autocomplete
@@ -190,7 +192,9 @@ export function AdminAvailabilityDeals() {
           ) : null}
         </div>
       </div>
-
+      <div className="px-4 mt-2">
+        <ExtractButton />
+      </div>
       {getAdminStoreDealsState.data?.deals ? (
         <>
           <div className="p-4 lg:hidden">

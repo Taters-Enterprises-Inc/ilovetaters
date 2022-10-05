@@ -40,6 +40,7 @@ import {
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -252,6 +253,9 @@ export function AdminAvailabilityProducts() {
             </Select>
           </FormControl>
         ) : null}
+      </div>
+      <div className="px-4 mt-2 ">
+        <ExtractButton />
       </div>
 
       {getAdminStoreProductsState.data?.products ? (

@@ -22,6 +22,7 @@ import {
   selectUpdateAdminSettingStore,
   updateAdminSettingStore,
 } from "../slices/update-setting-store.slice";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -91,7 +92,9 @@ export function AdminSettingStores() {
           List of Stores
         </span>
       </div>
-
+      <div className="px-4 mt-2">
+        <ExtractButton />
+      </div>
       {getAdminSettingStoresState.data?.stores ? (
         <>
           <div className="p-4 lg:hidden">

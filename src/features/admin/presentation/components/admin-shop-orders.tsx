@@ -31,6 +31,7 @@ import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payme
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { AdminChipsButton } from "./chips-button";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -172,6 +173,9 @@ export function AdminShopOrders() {
               return params
           }}
         />
+      </div>
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminShopOrdersState.data?.orders ? (
