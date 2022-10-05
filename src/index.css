@@ -464,3 +464,16 @@ input[type="number"] {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.pac-container {
+
+  width: 86.5%;
+}
+
+@media only screen and (min-width: 1024px) {
+
+  .pac-container {
+
+    width: 78%;
+  }
+}
