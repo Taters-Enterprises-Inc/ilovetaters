@@ -22,20 +22,6 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
   const dispatch = useAppDispatch();
   const storeChooserModalState = useAppSelector(selectStoreChooserModal);
 
-  function adjustAutoComplete() {
-
-    var inputContainer = document.getElementsByTagName("input")[0];
-    var newTop = window.scrollY + inputContainer.getBoundingClientRect().bottom;
-    var newLeft = inputContainer.getBoundingClientRect().left;
-    var element = document.getElementsByClassName("pac-container")[0];
-    element.setAttribute("style", "top: " + newTop + "px;" + "left: " + newLeft + "px;");
-  }
-
-  useEffect(() => {
-
-    window.addEventListener("scroll", adjustAutoComplete);
-  });
-
   useEffect(() => {
     dispatch(getSession());
   }, [dispatch]);
