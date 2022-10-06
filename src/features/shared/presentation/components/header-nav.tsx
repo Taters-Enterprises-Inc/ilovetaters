@@ -512,7 +512,7 @@ export function HeaderNav(props: HeaderNavProps) {
                   >
                     <button
                       onClick={handleCart}
-                      className="flex flex-col items-center justify-center mt-1 space-y-1"
+                      className="flex flex-col items-center justify-center mt-1 mb-2 space-y-1"
                     >
                       <div className="flex items-center justify-center">
                         <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">

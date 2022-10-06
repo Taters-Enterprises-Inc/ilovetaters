@@ -34,7 +34,7 @@ import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.sl
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status", minWidth: 200 },
+  { id: "status", label: "Status", minWidth: 250 },
   { id: "dateadded", label: "Order Date" },
   { id: "serving_time", label: "Event Date" },
   { id: "tracking_no", label: "Tracking No." },
