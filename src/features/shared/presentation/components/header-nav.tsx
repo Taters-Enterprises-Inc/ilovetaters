@@ -34,10 +34,11 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
-import { ListItemIcon, ListItemText } from "@mui/material";
+import { ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
+import { CartListItem } from "./cart-item-list";
 
 interface HeaderNavProps {
   className?: string;
@@ -63,6 +64,7 @@ export function HeaderNav(props: HeaderNavProps) {
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
+  const [openCartMenu, setopenCartMenu] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const currentLocation = useLocation();
 
@@ -282,6 +284,13 @@ export function HeaderNav(props: HeaderNavProps) {
     },
   ];
 
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setopenCartMenu(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setopenCartMenu(null);
+  };
   const menuList = profileMenu.map((item) => {
     const { text, icon, action, id } = item;
 
@@ -477,18 +486,6 @@ export function HeaderNav(props: HeaderNavProps) {
                       onClose={() => setOpenProfileMenu(null)}
                     >
                       {menuList}
-                      {/* <MenuItem
-                        onClick={handleMyProfile}
-                        className="bg-secondary"
-                      >
-                        My Profile
-                      </MenuItem>
-                    
-                      <MenuItem onClick={handleLogout} 
-                      className="bg-secondary">
-                        
-                        Logout
-                      </MenuItem> */}
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
@@ -507,22 +504,52 @@ export function HeaderNav(props: HeaderNavProps) {
                 {getSessionState.data?.cache_data &&
                 (props.activeUrl === "CATERING" ||
                   props.activeUrl === "SNACKSHOP") ? (
-                  <button
-                    onClick={handleCart}
-                    className="flex flex-col items-center justify-center mt-1 space-y-1"
+                  <div
+                    aria-owns={open ? "mouse-over-popover" : undefined}
+                    aria-haspopup="true"
+                    onMouseEnter={handlePopoverOpen}
+                    onMouseLeave={handlePopoverClose}
                   >
-                    <div className="flex items-center justify-center">
-                      <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">
-                        <BsCart4 className="text-2xl text-white" />
-                        <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
-                          {calculateCartQuantity()}
-                        </span>
+                    <button
+                      onClick={handleCart}
+                      className="flex flex-col items-center justify-center mt-1 space-y-1"
+                    >
+                      <div className="flex items-center justify-center">
+                        <div className="relative flex flex-col items-center justify-center w-8 space-y-1 text-white rounded-xl">
+                          <BsCart4 className="text-2xl text-white" />
+                          <span className="absolute rounded-full bg-red-500 h-[1rem] w-[1rem] -top-2 -right-1 flex justify-center items-center text-[10px]">
+                            {calculateCartQuantity()}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <h5 className="text-xs font-light text-white">
-                      {calculateOrdersPrice()}
-                    </h5>
-                  </button>
+                      <h5 className="text-xs font-light text-white">
+                        {calculateOrdersPrice()}
+                      </h5>
+                    </button>
+
+                    <Popover
+                      id="mouse-over-popover"
+                      sx={{
+                        pointerEvents: "none",
+                      }}
+                      anchorEl={openCartMenu}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(openCartMenu)}
+                      onClose={() => setopenCartMenu(null)}
+                      disableRestoreFocus
+                    >
+                      <div className="pointer-events-auto">
+                        <CartListItem />
+                      </div>
+                    </Popover>
+                  </div>
                 ) : null}
               </div>
             </div>
