@@ -31,9 +31,9 @@ import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payme
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { AdminChipsButton } from "./chips-button";
+import { GridColDef } from "@mui/x-data-grid";
+import Table from "@mui/material/Table";
 import { ExtractButton } from "./extract-button";
-import { ExtractBtn } from "./extract-btn";
-import { MenuItem, Select } from "@mui/material";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -327,25 +327,27 @@ export function AdminShopOrders() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected != "action") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: status,
-                  tracking_no: trackingNo,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    tracking_no: trackingNo,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminShopOrdersStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminShopOrdersStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {

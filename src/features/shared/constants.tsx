@@ -137,10 +137,6 @@ export const TABS: Array<{ name: string; url: string }> = [
     url: "/shop",
   },
   {
-    name: "BRANCHES",
-    url: "/branches",
-  },
-  {
     name: "FRANCHISING",
     url: "/franchising",
   },

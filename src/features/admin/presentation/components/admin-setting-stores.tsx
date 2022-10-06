@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -22,16 +22,11 @@ import {
   selectUpdateAdminSettingStore,
   updateAdminSettingStore,
 } from "../slices/update-setting-store.slice";
+import moment from "moment";
+import { AdminStoreEditModal } from "../modals";
+import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
+import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { ExtractButton } from "./extract-button";
-
-const columns: Array<Column> = [
-  { id: "name", label: "Name" },
-  { id: "category", label: "Category" },
-  { id: "snackshop", label: "Snackshop" },
-  { id: "catering", label: "Catering" },
-  { id: "popclub-walk-in", label: "Popclub Walk-in" },
-  { id: "popclub-online-delivery", label: "Popclub Online Delivery" },
-];
 
 const createQueryParams = (params: object): string => {
   let result = "?";
@@ -48,6 +43,9 @@ const createQueryParams = (params: object): string => {
 };
 
 export function AdminSettingStores() {
+  const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -56,9 +54,45 @@ export function AdminSettingStores() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const storeId = query.get("store_id");
+
+  let columns: Array<Column> = [
+    { id: "name", label: "Name" },
+    { id: "menu", label: "Menu" },
+    { id: "snackshop", label: "Snackshop" },
+    { id: "catering", label: "Catering" },
+    { id: "popclub-walk-in", label: "Popclub Store Visit" },
+    { id: "popclub-online-delivery", label: "Popclub Online Delivery" },
+    { id: "branches", label: "Branches" },
+    { id: "operating-hours", label: "Operating Hours" },
+  ];
+
+  if (
+    !getAdminSessionState.data?.is_admin &&
+    !getAdminSessionState.data?.is_csr
+  ) {
+    columns = columns.filter((column) => column.id !== "branches");
+  }
+  if (
+    !getAdminSessionState.data?.is_admin &&
+    !getAdminSessionState.data?.is_csr &&
+    !getAdminSessionState.data?.is_catering_admin
+  ) {
+    columns = columns.filter((column) => column.id !== "catering");
+  }
+
+  useEffect(() => {
+    if (storeId) {
+      setOpenAdminStoreEditModal(true);
+    }
+  }, [dispatch, storeId]);
 
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
+  );
+
+  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
+    selectUpdateAdminSettingStoreOperatingHours
   );
 
   const updateAdminSettingStoreState = useAppSelector(
@@ -83,6 +117,7 @@ export function AdminSettingStores() {
     order,
     search,
     updateAdminSettingStoreState,
+    updateAdminSettingStoreOperatingHoursState,
   ]);
 
   return (
@@ -191,23 +226,25 @@ export function AdminSettingStores() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected == "name") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminSettingStoresStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminSettingStoresStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -274,21 +311,27 @@ export function AdminSettingStores() {
                           checked={row.status === "1" ? true : false}
                         />
                       </DataTableCell>
-                      <DataTableCell>
-                        <Checkbox
-                          onChange={(e) => {
-                            dispatch(
-                              updateAdminSettingStore({
-                                store_id: row.store_id,
-                                name_of_field_status: "catering_status",
-                                status: e.target.checked ? 1 : 0,
-                              })
-                            );
-                          }}
-                          color="primary"
-                          checked={row.catering_status === 1 ? true : false}
-                        />
-                      </DataTableCell>
+
+                      {getAdminSessionState.data?.is_admin ||
+                      getAdminSessionState.data?.is_csr ||
+                      getAdminSessionState.data?.is_catering_admin ? (
+                        <DataTableCell>
+                          <Checkbox
+                            onChange={(e) => {
+                              dispatch(
+                                updateAdminSettingStore({
+                                  store_id: row.store_id,
+                                  name_of_field_status: "catering_status",
+                                  status: e.target.checked ? 1 : 0,
+                                })
+                              );
+                            }}
+                            color="primary"
+                            checked={row.catering_status === 1 ? true : false}
+                          />
+                        </DataTableCell>
+                      ) : null}
+
                       <DataTableCell>
                         <Checkbox
                           onChange={(e) => {
@@ -326,6 +369,42 @@ export function AdminSettingStores() {
                           }
                         />
                       </DataTableCell>
+
+                      {getAdminSessionState.data?.is_admin ||
+                      getAdminSessionState.data?.is_csr ? (
+                        <DataTableCell>
+                          <Checkbox
+                            onChange={(e) => {
+                              dispatch(
+                                updateAdminSettingStore({
+                                  store_id: row.store_id,
+                                  name_of_field_status: "branch_status",
+                                  status: e.target.checked ? 1 : 0,
+                                })
+                              );
+                            }}
+                            color="primary"
+                            checked={row.branch_status === 1 ? true : false}
+                          />
+                        </DataTableCell>
+                      ) : null}
+
+                      <DataTableCell>
+                        <button
+                          onClick={() => {
+                            navigate("?store_id=" + row.store_id);
+                          }}
+                          className="px-2 py-1 font-bold text-white bg-green-700 rounded-full"
+                        >
+                          {moment(row.available_start_time, "HH:mm:ss").format(
+                            "LT"
+                          )}{" "}
+                          -{" "}
+                          {moment(row.available_end_time, "HH:mm:ss").format(
+                            "LT"
+                          )}
+                        </button>
+                      </DataTableCell>
                     </DataTableRow>
                   ))}
                 </>
@@ -334,6 +413,28 @@ export function AdminSettingStores() {
           </div>
         </>
       ) : null}
+      <AdminStoreEditModal
+        open={openAdminStoreEditModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            store_id: null,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+
+          setOpenAdminStoreEditModal(false);
+        }}
+      />
     </>
   );
 }

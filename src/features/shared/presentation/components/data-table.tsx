@@ -12,6 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
+import { TableSortLabel ,Box } from "@mui/material";
+import { visuallyHidden } from "@mui/utils";
 
 export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -91,7 +93,7 @@ export function DataTable(props: DataTableProps) {
         <Pagination
           page={props.page}
           onChange={props.onPageChange}
-          count={Math.floor(props.totalRows / props.perPage)}
+          count={Math.round(props.totalRows / props.perPage)}
           variant="outlined"
           shape="rounded"
         />
@@ -105,12 +107,11 @@ export function DataTable(props: DataTableProps) {
                   key={i}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  // sortDirection={
-                  //   props.orderBy === column.id ? props.order : false
-                  // }
+                  sortDirection={
+                    props.orderBy === column.id ? props.order : false
+                  }
                 >
-                  <Table>{column.label}</Table>
-                  {/* <TableSortLabel
+                  <TableSortLabel
                     active={props.orderBy === column.id}
                     direction={
                       props.orderBy === column.id ? props.order : "asc"
@@ -127,7 +128,7 @@ export function DataTable(props: DataTableProps) {
                           : "sorted ascending"}
                       </Box>
                     ) : null}
-                  </TableSortLabel> */}
+                  </TableSortLabel>
                 </DataTableCell>
               ))}
             </DataTableRow>

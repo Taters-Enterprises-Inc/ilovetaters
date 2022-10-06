@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   EditAdminUserParam,
+  UpdateAdminSettingStoreOperatingHoursParam,
   UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
   UpdateStoreProductParam,
@@ -226,6 +227,42 @@ export interface UpdateAdminSettingStoreResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminStoreResponse {
+  data: {
+    message: string;
+    data: AdminStoreModel;
+  };
+}
+
+export interface UpdateAdminSettingStoreOperatingHoursResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingStoreOperatingHoursRepository(
+  param: UpdateAdminSettingStoreOperatingHoursParam
+): Promise<UpdateAdminSettingStoreOperatingHoursResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/store-operating-hours`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreRepository(
+  storeId: string
+): Promise<GetAdminStoreResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/store?store_id=${storeId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminDeclineRedeemRepository(

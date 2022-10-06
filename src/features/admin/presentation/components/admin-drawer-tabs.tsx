@@ -38,7 +38,7 @@ import {
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   MdFoodBank,
   MdOutlineSettings,
@@ -46,6 +46,7 @@ import {
 } from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
+import { useState } from "react";
 
 const drawerWidth = "16rem";
 
@@ -89,6 +90,8 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const dispatch = useAppDispatch();
+
+  const location = useLocation();
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -204,7 +207,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           }}
                           className={(navData) =>
                             navData.isActive
-                              ? "flex bg-white text-secondary"
+                              ? "flex bg-white text-secondary "
                               : "flex"
                           }
                         >
@@ -259,30 +262,30 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </div>
             </div>
           </li>
-          {getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_csr ? (
-            <li>
-              <div className="flex px-4">
-                <div className="flex-1">
-                  <Accordion disableGutters>
-                    <AccordionSummary>
-                      <span className="flex items-center">
-                        <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                          <MdOutlineSettings size={20} />
+          <li>
+            <div className="flex px-4">
+              <div className="flex-1">
+                <Accordion disableGutters>
+                  <AccordionSummary>
+                    <span className="flex items-center">
+                      <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                        <MdOutlineSettings size={20} />
 
-                          <span
-                            className={`whitespace-pre duration-300 ${
-                              !adminSideBarState.status &&
-                              "opacity-0 overflow-hidden"
-                            }`}
-                          >
-                            Settings
-                          </span>
+                        <span
+                          className={`whitespace-pre duration-300 ${
+                            !adminSideBarState.status &&
+                            "opacity-0 overflow-hidden"
+                          }`}
+                        >
+                          Settings
                         </span>
                       </span>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ul>
+                    </span>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ul>
+                      {getAdminSessionState.data?.is_admin ||
+                      getAdminSessionState.data?.is_csr ? (
                         <li>
                           <NavLink
                             to="/admin/setting/user"
@@ -311,41 +314,41 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                             </span>
                           </NavLink>
                         </li>
-                        <li>
-                          <NavLink
-                            to="/admin/setting/store"
-                            onClick={() => {
-                              if (props.mobile) dispatch(closeAdminSideBar());
-                            }}
-                            className={(navData) =>
-                              navData.isActive
-                                ? "flex bg-white text-secondary"
-                                : "flex"
-                            }
-                          >
-                            <span className="flex items-center ">
-                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                                <IoIosArrowForward size={20} />
+                      ) : null}
+                      <li>
+                        <NavLink
+                          to="/admin/setting/store"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
 
-                                <span
-                                  className={`whitespace-pre duration-300 ${
-                                    !adminSideBarState.status &&
-                                    "opacity-0 overflow-hidden"
-                                  }`}
-                                >
-                                  Store
-                                </span>
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Store
                               </span>
                             </span>
-                          </NavLink>
-                        </li>
-                      </ul>
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
+                          </span>
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
               </div>
-            </li>
-          ) : null}
+            </div>
+          </li>
           <li>
             <NavLink
               to="/admin/faq"

@@ -60,10 +60,14 @@ export function MobilePasswordTextField() {
     <WhiteOutLinedTextField
       required
       variant="outlined"
-      type={values.showPassword ? "text" : "password"}
+      type="text"
       value={values.password}
       onChange={handleChange("password")}
       name="login_password"
+      inputProps={{
+        className: values.showPassword ? "" : "password-mask",
+        autoComplete: "current-password",
+      }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

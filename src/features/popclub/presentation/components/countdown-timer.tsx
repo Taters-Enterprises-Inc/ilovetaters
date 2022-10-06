@@ -19,7 +19,7 @@ export function CountdownTimer() {
   if (getRedeemState.status === GetRedeemState.success && getRedeemState.data) {
     var redeemDate: any = moment(getRedeemState.data.date_redeemed);
     var expirationDate: any = moment(getRedeemState.data.expiration);
-    var expirationDateCountDown = new Date(getRedeemState.data.expiration);
+    var expirationDateCountDown = moment(getRedeemState.data.expiration);
 
     const pad = (number: number) => ("0" + number).slice(-2);
 
@@ -78,7 +78,10 @@ export function CountdownTimer() {
 
     return (
       <>
-        <Countdown renderer={renderer} date={expirationDateCountDown} />
+        <Countdown
+          renderer={renderer}
+          date={expirationDateCountDown.toDate()}
+        />
       </>
     );
   }

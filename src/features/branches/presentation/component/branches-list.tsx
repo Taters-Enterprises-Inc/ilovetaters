@@ -1,21 +1,13 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import React, { useEffect } from "react";
-import { SearchAddress } from "features/shared/presentation/components";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useEffect } from "react";
+import { useAppDispatch } from "features/config/hooks";
 import { contactData, ContactDataType } from "../pages/data/contact-data";
-import {
-  selectBranchesNearYouComponent,
-  setAddressBranchesNearYouComponent,
-} from "../slices/branches-near-you-component.slice";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 import { NearyouSearchStore } from "./near-you-search-store";
 import { BranchesSearch } from "./branches-search";
 
-export const ContactComponent: React.FC = (): JSX.Element => {
+export function BranchesList() {
   const dispatch = useAppDispatch();
-  const branchesNearYouComponentSlice = useAppSelector(
-    selectBranchesNearYouComponent
-  );
 
   useEffect(() => {
     dispatch(
@@ -130,4 +122,4 @@ export const ContactComponent: React.FC = (): JSX.Element => {
       </section>
     </main>
   );
-};
+}

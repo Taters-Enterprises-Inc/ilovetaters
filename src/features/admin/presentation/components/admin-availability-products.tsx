@@ -40,6 +40,8 @@ import {
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
@@ -118,7 +120,7 @@ export function AdminAvailabilityProducts() {
           Products Availability
         </span>
 
-        <div className="flex flex-col items-center justify-center space-y-4 lg:space-y-0 lg:space-x-2 lg:flex-row">
+        <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
           <div className="flex space-x-2 ">
             <button
               onClick={() => {
@@ -171,54 +173,46 @@ export function AdminAvailabilityProducts() {
               Not-Available
             </button>
           </div>
+
           {getAdminSessionState.data ? (
-            <FormControl sx={{ minWidth: 150 }} size="small">
-              <InputLabel>Select a store</InputLabel>
+            <Autocomplete
+              disablePortal
+              options={getAdminSessionState.data.user_details.stores}
+              sx={{ width: 328 }}
+              size="small"
+              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              getOptionLabel={(option) =>
+                option.name + " (" + option.menu_name + ") "
+              }
+              onChange={(event, value) => {
+                if (value) {
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    category_id: categoryId,
+                    store_id: value.store_id === -1 ? null : value.store_id,
+                    search: search,
+                  };
 
-              <Select
-                label="Select a store"
-                defaultValue={
-                  storeId ??
-                  getAdminSessionState.data.user_details.stores[0].store_id
+                  const queryParams = createQueryParams(params);
+
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
                 }
-                onChange={(event) => {
-                  if (event.target.value !== status) {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      category_id: categoryId,
-                      store_id:
-                        event.target.value === -1 ? null : event.target.value,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-              >
-                {getAdminSessionState.data.user_details.stores.map(
-                  (store, index) => (
-                    <MenuItem key={index} value={store.store_id}>
-                      <span className="text-xs lg:text-base">
-                        {store.name} ( {store.menu_name} )
-                      </span>
-                    </MenuItem>
-                  )
-                )}
-              </Select>
-            </FormControl>
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Select store" />
+              )}
+            />
           ) : null}
         </div>
       </div>
       <div className="px-4 py-2">
         {getProductCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150 }} size="small">
+          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
             <Select
@@ -260,7 +254,7 @@ export function AdminAvailabilityProducts() {
 
       {getAdminStoreProductsState.data?.products ? (
         <>
-          <div className="p-4 lg:hidden">
+          <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
               onSearch={(val) => {
@@ -398,26 +392,28 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected != "action") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: status,
-                  store_id: storeId,
-                  category_id: categoryId,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    store_id: storeId,
+                    category_id: categoryId,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStoreProductsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminStoreProductsStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {

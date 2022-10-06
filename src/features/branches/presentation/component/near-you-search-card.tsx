@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { StoreModel } from "features/shared/core/domain/store.model";
+import moment from "moment";
 export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
   store,
 }): JSX.Element => {
@@ -149,11 +150,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
         <div className="block py-2 text-left">
           <p className="text-[.7125rem] text-[#bcd2d6] pb-1">Operating Hours</p>
           <div className="  md:text-[13px] text-[10px] font-normal  text-[#fff] ">
-            {store.operatinghours.split("</br>")[1] !== undefined
-              ? store.operatinghours.split("</br>")[0] +
-                " , " +
-                store.operatinghours.split("</br>")[1]
-              : store.operatinghours.split("</br>")[0]}
+            {moment(store.available_start_time, "HH:mm:ss").format("LT")} -{" "}
+            {moment(store.available_end_time, "HH:mm:ss").format("LT")}
           </div>
         </div>
       </div>
