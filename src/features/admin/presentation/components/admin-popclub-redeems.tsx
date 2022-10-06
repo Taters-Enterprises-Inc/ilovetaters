@@ -4,7 +4,6 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -14,18 +13,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import {
-  ADMIN_SNACKSHOP_MOP_STATUS,
   ADMIN_POPCLUB_REDEEM_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { AdminPopclubRedeemModal } from "../modals";
 import {
   getAdminPopclubRedeem,
-  GetAdminPopclubRedeemState,
-  selectGetAdminPopclubRedeem,
 } from "../slices/get-admin-popclub-redeem.slice";
 import {
   getAdminPopclubRedeems,
@@ -34,6 +28,7 @@ import {
 } from "../slices/get-admin-popclub-redeems.slice";
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
+import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -109,47 +104,28 @@ export function AdminPopClubRedeems() {
 
   return (
     <>
-      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
+      <div className="flex flex-col px-4 lg:flex-row lg:items-end gap-x-4">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Popclub Redemptions
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  redeem_code: redeemCode,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminPopclubRedeemsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_POPCLUB_REDEEM_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_POPCLUB_REDEEM_STATUS}
+          dispactAction={() => {
+            dispatch(resetGetAdminPopclubRedeemsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value.name,
+              redeem_code: redeemCode,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminPopclubRedeemsState.data?.orders ? (
