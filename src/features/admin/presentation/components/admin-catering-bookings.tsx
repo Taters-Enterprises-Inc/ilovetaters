@@ -154,7 +154,8 @@ export function AdminCateringBookings() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Catering Bookings
         </span>
-        <AdminChipsButton
+      </div>
+      <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_CATERING_BOOKING_STATUS}
           dispactAction={() => {
@@ -162,17 +163,18 @@ export function AdminCateringBookings() {
           }}
           status={status}
           params={(value) => {
-            const params = {
+            if (value !== status) {
+             const params = {
               page_no: pageNo,
               per_page: perPage,
-              status: value.name,
+              status:value === -1 ? null : value,
               tracking_no: trackingNo,
               search: search,
             };
-            return params;
+              return params;
+            }
           }}
         />
-      </div>
       <div className="px-4 mt-4">
         <ExtractButton />
       </div>

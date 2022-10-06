@@ -26,6 +26,7 @@ import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
 import { AdminChipsButton } from "./chips-button";
 import { ExtractButton } from "./extract-button";
+import { MenuItem, Select } from "@mui/material";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -105,7 +106,10 @@ export function AdminPopClubRedeems() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Popclub Redemptions
         </span>
-        <AdminChipsButton
+
+      </div>
+      
+      <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_POPCLUB_REDEEM_STATUS}
           dispactAction={() => {
@@ -113,17 +117,16 @@ export function AdminPopClubRedeems() {
           }}
           status={status}
           params={(value) => {
-            const params = {
-              page_no: pageNo,
-              per_page: perPage,
-              status: value.name,
-              redeem_code: redeemCode,
-              search: search,
-            };
-            return params;
+              const params = {
+                page_no: pageNo,
+                per_page: perPage,
+                status: value === -1 ? null : value,
+                redeem_code: redeemCode,
+                search: search,
+              };
+              return params;
           }}
         />
-      </div>
       <div className="px-4 mt-4">
         <ExtractButton />
       </div>

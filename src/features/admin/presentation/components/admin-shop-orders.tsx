@@ -32,6 +32,8 @@ import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-upd
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { AdminChipsButton } from "./chips-button";
 import { ExtractButton } from "./extract-button";
+import { ExtractBtn } from "./extract-btn";
+import { MenuItem, Select } from "@mui/material";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -155,25 +157,27 @@ export function AdminShopOrders() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Snackshop Orders
         </span>
-        <AdminChipsButton
+      
+      </div>
+      <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_SNACKSHOP_ORDER_STATUS}
-          dispactAction ={ ()=>{
-            dispatch(resetGetAdminShopOrdersStatus())
+          dispactAction={() => {
+            dispatch(resetGetAdminShopOrdersStatus());
           }}
           status={status}
-          params ={(value)=>{
-              const params = {
-                page_no: pageNo,
-                per_page: perPage,
-                status: value.name,
-                tracking_no: trackingNo,
-                search: search,
-              };
-              return params
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status:value === -1 ? null : value,
+              tracking_no: trackingNo,
+              search: search,
+            };
+
+            return params;
           }}
         />
-      </div>
       <div className="px-4 mt-4">
         <ExtractButton />
       </div>
