@@ -16,7 +16,7 @@ interface TabProps {
 
 export function TabFaq(props: TabProps) {
   return (
-    <div className="flex flex-col items-start justify-start ">
+    <div className="flex flex-col items-start justify-start">
       <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 ">
         {props.tabs.map((tab, i) => (
           <li
