@@ -93,6 +93,18 @@ interface SearchAddressProps {
 export function SearchAddress(props: SearchAddressProps) {
   const autoCompleteRef = useRef(null);
 
+  function hideAutoComplete() {
+
+    var autoCompleteContainer = document.getElementsByClassName("pac-container");
+
+    for (var i = 0; i < autoCompleteContainer.length; i++) {
+
+        autoCompleteContainer[i].setAttribute("style", "display: none");
+    }
+  }
+
+  window.addEventListener("scroll", hideAutoComplete, true);
+
   useEffect(() => {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8&libraries=places`,
