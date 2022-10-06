@@ -12,6 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
+import { visuallyHidden } from "@mui/utils";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Box from "@mui/material/Box";
 
 export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
