@@ -153,7 +153,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
     if (location.pathname.includes("store")) {
       if (expanded != true && isSettings1 == false) {
         setExp1(true);
-        handleChange1("/admin/settongs/store");
+        handleChange1("/admin/setting/store");
         setSettings(false);
         setSettings1(true);
       }
