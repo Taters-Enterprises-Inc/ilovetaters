@@ -422,16 +422,19 @@ export function ShopProduct() {
               </div>
 
               <div className="container flex-1 space-y-10 lg:px-0">
-                {getProductDetailsState.data?.product.description ? (
+                {getProductDetailsState.data?.product.add_details ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Info",
                       prefixIcon: <AiFillInfoCircle className="text-3xl" />,
                     }}
                   >
-                    <div className="p-4 text-sm">
-                      {getProductDetailsState.data.product.description}
-                    </div>
+                    <div
+                      className="p-4 text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html: getProductDetailsState.data.product.add_details,
+                      }}
+                    />
                   </ProductDetailsAccordion>
                 ) : null}
 

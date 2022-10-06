@@ -13,4 +13,6 @@ export interface StoreModel {
   contactno: string;
   operatinghours: string;
   address: string;
+  available_start_time: string;
+  available_end_time: string;
 }

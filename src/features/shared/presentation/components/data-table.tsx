@@ -91,7 +91,7 @@ export function DataTable(props: DataTableProps) {
         <Pagination
           page={props.page}
           onChange={props.onPageChange}
-          count={Math.floor(props.totalRows / props.perPage)}
+          count={Math.round(props.totalRows / props.perPage)}
           variant="outlined"
           shape="rounded"
         />
@@ -105,12 +105,11 @@ export function DataTable(props: DataTableProps) {
                   key={i}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  // sortDirection={
-                  //   props.orderBy === column.id ? props.order : false
-                  // }
+                  sortDirection={
+                    props.orderBy === column.id ? props.order : false
+                  }
                 >
-                  <Table>{column.label}</Table>
-                  {/* <TableSortLabel
+                  <TableSortLabel
                     active={props.orderBy === column.id}
                     direction={
                       props.orderBy === column.id ? props.order : "asc"
@@ -127,7 +126,7 @@ export function DataTable(props: DataTableProps) {
                           : "sorted ascending"}
                       </Box>
                     ) : null}
-                  </TableSortLabel> */}
+                  </TableSortLabel>
                 </DataTableCell>
               ))}
             </DataTableRow>

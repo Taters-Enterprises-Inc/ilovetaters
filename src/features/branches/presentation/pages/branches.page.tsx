@@ -4,8 +4,7 @@ import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
-import { BranchComponent } from "../component/branch-component";
-import { ContactComponent } from "../component/contact-component";
+import { BranchesList } from "../component/branches-list";
 
 export function Branches() {
   const dispatch = useAppDispatch();
@@ -28,8 +27,7 @@ export function Branches() {
           className: "w-[150px] lg:w-[120px]",
         }}
       />
-      <ContactComponent />
-      {/* <BranchComponent /> */}
+      <BranchesList />
       <FooterNav activeUrl="BRANCHES" />
     </>
   );

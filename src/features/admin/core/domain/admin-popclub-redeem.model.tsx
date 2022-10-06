@@ -15,9 +15,10 @@ export interface AdminPopclubRedeemModel {
   store_name: string;
 
   items: Array<{
-    price: number;
+    price: number | null;
     quantity: number;
     remarks: string;
     alias: string;
+    description: string;
   }>;
 }

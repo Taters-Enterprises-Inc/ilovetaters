@@ -105,7 +105,7 @@ export function AdminAvailabilityDeals() {
           Deals Availability
         </span>
 
-        <div className="flex flex-col items-center justify-center space-y-4 lg:space-y-0 lg:space-x-2 lg:flex-row">
+        <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
           <div className="flex space-x-2 ">
             <button
               onClick={() => {
@@ -161,7 +161,7 @@ export function AdminAvailabilityDeals() {
             <Autocomplete
               disablePortal
               options={getAdminSessionState.data.user_details.stores}
-              sx={{ width: 320 }}
+              sx={{ width: 328 }}
               size="small"
               defaultValue={getAdminSessionState.data.user_details.stores[0]}
               getOptionLabel={(option) =>
@@ -330,25 +330,27 @@ export function AdminAvailabilityDeals() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected != "action") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: status,
-                  store_id: storeId,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    store_id: storeId,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStoreDealsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminStoreDealsStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {

@@ -33,7 +33,7 @@ import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering
 import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status", minWidth: 300 },
+  { id: "status", label: "Status", minWidth: 200 },
   { id: "dateadded", label: "Order Date" },
   { id: "serving_time", label: "Event Date" },
   { id: "tracking_no", label: "Tracking No." },
@@ -320,25 +320,27 @@ export function AdminCateringBookings() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected != "action") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: status,
-                  tracking_no: trackingNo,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    tracking_no: trackingNo,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminCateringBookingsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetAdminCateringBookingsStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {

@@ -6,4 +6,7 @@ export interface AdminSettingStores {
   catering_status: number;
   popclub_walk_in_status: number;
   popclub_online_delivery_status: number;
+  branch_status: number;
+  available_start_time: string;
+  available_end_time: string;
 }

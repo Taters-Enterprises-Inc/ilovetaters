@@ -113,6 +113,9 @@ import getAdminSettingStores from "features/admin/presentation/slices/get-admin-
 import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
 
+import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
+import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatform,
@@ -214,6 +217,8 @@ export const store = configureStore({
     getAdminSettingStores,
     updateAdminSettingStore,
     adminDeclineRedeem,
+    getAdminStore,
+    updateAdminSettingStoreOperatingHours,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

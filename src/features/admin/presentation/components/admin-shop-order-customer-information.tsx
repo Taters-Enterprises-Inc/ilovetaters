@@ -779,13 +779,17 @@ export function AdminShopOrderCustomerInformation() {
               <a
                 target="_blank"
                 rel="noreferrer"
-                href={`${REACT_APP_DOMAIN_URL}api/admin/print_view/${getAdminShopOrderState.data?.id}`}
+                href={`${REACT_APP_DOMAIN_URL}api/admin/print_view/${
+                  getAdminShopOrderState.data?.id
+                }/${false}`}
                 className="px-3 py-1 text-base text-white bg-blue-700 rounded-md shadow-md"
               >
                 Print
               </a>
               <a
-                href={`${REACT_APP_DOMAIN_URL}api/admin/print_asdoc/${getAdminShopOrderState.data?.id}`}
+                href={`${REACT_APP_DOMAIN_URL}api/admin/print_asdoc/${
+                  getAdminShopOrderState.data?.id
+                }/${false}`}
                 className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
               >
                 Download Document
