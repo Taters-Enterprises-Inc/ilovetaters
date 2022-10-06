@@ -38,7 +38,7 @@ import {
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   MdFoodBank,
   MdOutlineSettings,
@@ -47,6 +47,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
+import { truncate } from "fs";
 
 const drawerWidth = "16rem";
 
@@ -93,17 +94,74 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
   const location = useLocation();
 
-  const [expanded, setExpanded] = useState<string | false>(location.pathname);
+  // Availability Tab - Accordion
+  const [expanded, setExpanded] = useState<string | true>(location.pathname);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? panel : false);
+      setExpanded(newExpanded ? panel : true);
     };
 
-  const [exp, setExp] = useState(true);
+  const [exp, setExp] = useState(false);
+  const [isDeal, setDeal] = useState(false);
+  const [isProd, setProd] = useState(false);
+  const pathchange = () => {
+    if (location.pathname.includes("deal")) {
+      if (expanded != true && isDeal == false) {
+        setExp(true);
+        handleChange("/admin/availability/deal");
+        setDeal(true);
+        setProd(false);
+      }
+    }
+    if (location.pathname.includes("product")) {
+      if (expanded != true && isProd == false) {
+        setExp(true);
+        handleChange("/admin/availability/product");
+        setDeal(false);
+        setProd(true);
+      }
+    }
+  };
 
-  const toggle = () => {
-    setExp(true);
+  const toggle2 = () => {
+    console.log("toggle2");
+    setExp(!exp);
+  };
+
+  // Settings Tab - Accordion
+
+  const [expanded1, setExpanded1] = useState<string | true>(location.pathname);
+
+  const handleChange1 =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded1(newExpanded ? panel : true);
+    };
+
+  const [exp1, setExp1] = useState(false);
+  const [isSettings, setSettings] = useState(false);
+  const [isSettings1, setSettings1] = useState(false);
+  const pathchange1 = () => {
+    if (location.pathname.includes("user")) {
+      if (expanded != true && isSettings == false) {
+        setExp1(true);
+        handleChange1("/admin/setting/user");
+        setSettings(true);
+        setSettings1(false);
+      }
+    }
+    if (location.pathname.includes("store")) {
+      if (expanded != true && isSettings1 == false) {
+        setExp1(true);
+        handleChange1("/admin/settongs/store");
+        setSettings(false);
+        setSettings1(true);
+      }
+    }
+  };
+
+  const toggleSetting = () => {
+    setExp1(!exp1);
   };
 
   return (
@@ -196,10 +254,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               <div className="flex-1">
                 <Accordion
                   disableGutters
-                  expanded={expanded === location.pathname || exp}
+                  expanded={
+                    expanded === "/admin/availability/deal" ||
+                    expanded === "/admin/availability/product" ||
+                    exp
+                  }
                   onChange={handleChange(location.pathname)}
+                  defaultExpanded={false}
                 >
-                  <AccordionSummary>
+                  <AccordionSummary onClick={toggle2}>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdProductionQuantityLimits size={20} />
@@ -284,10 +347,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               <div className="flex-1">
                 <Accordion
                   disableGutters
-                  // expanded={expanded2 === location.pathname || exp2}
-                  // onChange={handleChange2(location.pathname)}
+                  expanded={
+                    expanded1 === "/admin/setting/user" ||
+                    expanded1 === "/admin/setting/store" ||
+                    exp1
+                  }
+                  onChange={handleChange1(location.pathname)}
+                  defaultExpanded={false}
                 >
-                  <AccordionSummary>
+                  <AccordionSummary onClick={toggleSetting}>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdOutlineSettings size={20} />
