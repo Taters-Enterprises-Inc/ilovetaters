@@ -18,7 +18,7 @@ export function AdminCFaq() {
       />
       {/* change page info here */}
       <div className="relative block h-screen">
-        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary max-h-screen">
+        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-1 text-secondary max-h-screen">
           Frequently Asked Questions
         </h1>
         <main className="">

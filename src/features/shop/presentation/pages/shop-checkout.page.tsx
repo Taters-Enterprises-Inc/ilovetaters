@@ -277,6 +277,7 @@ export function ShopCheckout() {
                       defaultValue={getSessionState.data.userData.first_name}
                       variant="outlined"
                       className="w-full"
+                      label="First Name"
                       name="firstName"
                     />
                   ) : (
@@ -295,6 +296,7 @@ export function ShopCheckout() {
                       defaultValue={getSessionState.data.userData.last_name}
                       variant="outlined"
                       className="w-full"
+                      label="Last Name"
                       name="lastName"
                     />
                   ) : (
@@ -313,6 +315,7 @@ export function ShopCheckout() {
                         <TextField
                           autoComplete="off"
                           required
+                          label="E-mail Address"
                           defaultValue={getSessionState.data.userData.email}
                           variant="outlined"
                           className="w-full"
@@ -375,6 +378,7 @@ export function ShopCheckout() {
                       defaultValue={getSessionState.data?.customer_address}
                       variant="outlined"
                       className="w-full"
+                      label="Complete Delivery Address"
                       name="address"
                       autoComplete="off"
                     />
@@ -384,6 +388,7 @@ export function ShopCheckout() {
                       InputProps={{
                         readOnly: true,
                       }}
+                      label="Complete Delivery Address"
                       variant="outlined"
                       className="w-full"
                       name="address"
@@ -391,14 +396,14 @@ export function ShopCheckout() {
                     />
                   )}
 
-                  <TextField
+                  {/* <TextField
                     required
                     variant="outlined"
                     name="full_address"
                     className="w-full"
                     label="Complete Delivery Address"
                     autoComplete="off"
-                  />
+                  /> */}
 
                   {getSessionState.data.cache_data ? (
                     <>
