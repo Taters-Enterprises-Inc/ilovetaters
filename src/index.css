@@ -79,6 +79,10 @@ textarea,
   position: relative !important;
 }
 
+.menuitem {
+  background-color: #000;
+}
+
 .profile-tab-active {
   z-index: 1;
 }
@@ -464,3 +468,4 @@ input[type="number"] {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
