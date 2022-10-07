@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -38,7 +38,7 @@ import {
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   MdFoodBank,
   MdOutlineSettings,
@@ -47,6 +47,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
+import { truncate } from "fs";
 
 const drawerWidth = "16rem";
 
@@ -92,6 +93,76 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
   const dispatch = useAppDispatch();
 
   const location = useLocation();
+
+  // Availability Tab - Accordion
+  const [expanded, setExpanded] = useState<string | true>(location.pathname);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : true);
+    };
+
+  const [exp, setExp] = useState(false);
+  const [isDeal, setDeal] = useState(false);
+  const [isProd, setProd] = useState(false);
+  const pathchange = () => {
+    if (location.pathname.includes("deal")) {
+      if (expanded != true && isDeal == false) {
+        setExp(true);
+        handleChange("/admin/availability/deal");
+        setDeal(true);
+        setProd(false);
+      }
+    }
+    if (location.pathname.includes("product")) {
+      if (expanded != true && isProd == false) {
+        setExp(true);
+        handleChange("/admin/availability/product");
+        setDeal(false);
+        setProd(true);
+      }
+    }
+  };
+
+  const toggle2 = () => {
+    console.log("toggle2");
+    setExp(!exp);
+  };
+
+  // Settings Tab - Accordion
+
+  const [expanded1, setExpanded1] = useState<string | true>(location.pathname);
+
+  const handleChange1 =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded1(newExpanded ? panel : true);
+    };
+
+  const [exp1, setExp1] = useState(false);
+  const [isSettings, setSettings] = useState(false);
+  const [isSettings1, setSettings1] = useState(false);
+  const pathchange1 = () => {
+    if (location.pathname.includes("user")) {
+      if (expanded != true && isSettings == false) {
+        setExp1(true);
+        handleChange1("/admin/setting/user");
+        setSettings(true);
+        setSettings1(false);
+      }
+    }
+    if (location.pathname.includes("store")) {
+      if (expanded != true && isSettings1 == false) {
+        setExp1(true);
+        handleChange1("/admin/setting/store");
+        setSettings(false);
+        setSettings1(true);
+      }
+    }
+  };
+
+  const toggleSetting = () => {
+    setExp1(!exp1);
+  };
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -181,8 +252,17 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion disableGutters>
-                  <AccordionSummary>
+                <Accordion
+                  disableGutters
+                  expanded={
+                    expanded === "/admin/availability/deal" ||
+                    expanded === "/admin/availability/product" ||
+                    exp
+                  }
+                  onChange={handleChange(location.pathname)}
+                  defaultExpanded={false}
+                >
+                  <AccordionSummary onClick={toggle2}>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdProductionQuantityLimits size={20} />
@@ -265,8 +345,17 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion disableGutters>
-                  <AccordionSummary>
+                <Accordion
+                  disableGutters
+                  expanded={
+                    expanded1 === "/admin/setting/user" ||
+                    expanded1 === "/admin/setting/store" ||
+                    exp1
+                  }
+                  onChange={handleChange1(location.pathname)}
+                  defaultExpanded={false}
+                >
+                  <AccordionSummary onClick={toggleSetting}>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdOutlineSettings size={20} />
@@ -290,6 +379,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           <NavLink
                             to="/admin/setting/user"
                             onClick={() => {
+                              // toggle2();
                               if (props.mobile) dispatch(closeAdminSideBar());
                             }}
                             className={(navData) =>
@@ -319,6 +409,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                         <NavLink
                           to="/admin/setting/store"
                           onClick={() => {
+                            // toggle2();
                             if (props.mobile) dispatch(closeAdminSideBar());
                           }}
                           className={(navData) =>
