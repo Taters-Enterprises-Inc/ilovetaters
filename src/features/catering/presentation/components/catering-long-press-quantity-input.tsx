@@ -31,8 +31,6 @@ export function CateringLongPressQuantityInput(
       return;
     }
 
-    // if (isTouch === false) props.onChange(action);
-
     props.onChange(action, 0);
 
     timeout = setTimeout(function () {
@@ -64,10 +62,15 @@ export function CateringLongPressQuantityInput(
   };
 
   const onChangeQuantity = (e: any) => {
-    let val = parseInt(e.target.value);
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
 
-    // if (props.productQuantity >= props.totalMultiFlavorsQuantity) {
-    // }
+    let val = parseInt(e.target.value);
 
     props.onChange("edit", val);
   };

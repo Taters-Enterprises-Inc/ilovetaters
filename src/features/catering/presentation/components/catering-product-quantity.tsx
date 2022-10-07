@@ -29,10 +29,6 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
       return;
     }
 
-    // if (isTouch === false) props.onChange(action);
-
-    // props.onChange(action);
-
     timeout = setTimeout(function () {
       let counter = props.quantity;
 
@@ -59,6 +55,14 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
   };
 
   const onChangeQuantity = (e: any) => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+
     props.onEditInput(parseInt(e.target.value));
   };
 

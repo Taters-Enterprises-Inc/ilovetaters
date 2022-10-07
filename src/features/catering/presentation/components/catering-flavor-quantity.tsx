@@ -1,3 +1,5 @@
+import { useAppDispatch } from "features/config/hooks";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { useEffect, useState } from "react";
 import { CateringLongPressQuantityInput } from "./catering-long-press-quantity-input";
 
@@ -11,6 +13,7 @@ export interface CateringFlavorQuantityProps {
 }
 
 export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(props.min);
 
   useEffect(() => {
@@ -47,22 +50,28 @@ export function CateringFlavorQuantity(props: CateringFlavorQuantityProps) {
               break;
 
             case "edit":
-              if (val > props.productQuantity) {
-                console.log("over Total");
-                val = props.productQuantity;
+              if (
+                val + props.totalMultiFlavorsQuantity <=
+                props.productQuantity
+              ) {
+                setQuantity(val);
+                props.onChange(action, val);
               } else if (
                 val + props.totalMultiFlavorsQuantity >
                 props.productQuantity
               ) {
-                val = props.productQuantity - props.totalMultiFlavorsQuantity;
+                dispatch(
+                  popUpSnackBar({
+                    message: "Over the the limit of package quantity",
+                    severity: "error",
+                  })
+                );
+                setQuantity(0);
+                // props.onChange(action, 0);
+              } else {
+                setQuantity(val);
+                // props.onChange(action, 0);
               }
-              setQuantity(val);
-
-              setTimeout(() => {
-                if (isNaN(val)) props.onChange(action, 0);
-                else props.onChange(action, val);
-              }, 500);
-
               break;
           }
         }}

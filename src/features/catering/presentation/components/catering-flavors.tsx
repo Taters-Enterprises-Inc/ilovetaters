@@ -62,8 +62,6 @@ export function CateringFlavors(props: CateringFlavorsProps) {
 
                 props.onChange(props.currentMultiFlavors, action, val);
 
-                console.log(props.currentMultiFlavors);
-
                 setTotalMultiFlavorsQuantity((value) => {
                   let sum = 0;
 
