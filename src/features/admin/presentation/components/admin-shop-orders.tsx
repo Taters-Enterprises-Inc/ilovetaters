@@ -35,6 +35,8 @@ import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-upd
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { GridColDef } from "@mui/x-data-grid";
 import Table from "@mui/material/Table";
+import { ExtractButton } from "./extract-button";
+ import {AdminChipsButton} from './chips-button'
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -158,43 +160,28 @@ export function AdminShopOrders() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Snackshop Orders
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  tracking_no: trackingNo,
-                  search: search,
-                };
+      </div>
+      <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_SNACKSHOP_ORDER_STATUS}
+          dispactAction={() => {
+            dispatch(resetGetAdminShopOrdersStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status:value === -1 ? null : value,
+              tracking_no: trackingNo,
+              search: search,
+            };
 
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminShopOrdersStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_SNACKSHOP_ORDER_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+            return params;
+          }}
+        />
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminShopOrdersState.data?.orders ? (

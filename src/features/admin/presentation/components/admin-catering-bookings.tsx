@@ -32,6 +32,8 @@ import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
+import { AdminChipsButton } from "./chips-button";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -154,43 +156,29 @@ export function AdminCateringBookings() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Catering Bookings
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  tracking_no: trackingNo,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminCateringBookingsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+      </div>
+      <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_CATERING_BOOKING_STATUS}
+          dispactAction={() => {
+            dispatch(resetGetAdminCateringBookingsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            if (value !== status) {
+             const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status:value === -1 ? null : value,
+              tracking_no: trackingNo,
+              search: search,
+            };
+              return params;
+            }
+          }}
+        />
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminCateringBookingsState.data?.bookings ? (

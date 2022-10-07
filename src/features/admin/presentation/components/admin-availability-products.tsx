@@ -42,6 +42,7 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -246,6 +247,9 @@ export function AdminAvailabilityProducts() {
             </Select>
           </FormControl>
         ) : null}
+      </div>
+      <div className="px-4 mt-2 ">
+        <ExtractButton />
       </div>
 
       {getAdminStoreProductsState.data?.products ? (

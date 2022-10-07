@@ -27,6 +27,7 @@ import {
 } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
+import { ExtractButton } from "./extract-button";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -114,6 +115,10 @@ export function AdminSettingUsers() {
           </div>
         </div>
       </div>
+      <div className="px-4 m-2">
+          <ExtractButton />
+        </div>
+
       {getAdminUsersState.data ? (
         <>
           <div className="p-4 -mt-2 lg:hidden">

@@ -26,6 +26,7 @@ import moment from "moment";
 import { AdminStoreEditModal } from "../modals";
 import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
+import { ExtractButton } from "./extract-button";
 
 const createQueryParams = (params: object): string => {
   let result = "?";
@@ -126,7 +127,9 @@ export function AdminSettingStores() {
           List of Stores
         </span>
       </div>
-
+      <div className="px-4 mt-2">
+        <ExtractButton />
+      </div>
       {getAdminSettingStoresState.data?.stores ? (
         <>
           <div className="p-4 lg:hidden">
