@@ -1,8 +1,4 @@
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "../slices/get-all-platform.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +9,11 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 export function PopClubIndexPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
 
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
-  useEffect(() => {
-    dispatch(getAllPlatform());
-  }, [dispatch]);
   return (
     <>
       <section className="lg:container">
@@ -52,7 +44,6 @@ export function PopClubIndexPage() {
         ></img>
       </section>
       <PlatformChooserModal
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":

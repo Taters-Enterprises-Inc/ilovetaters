@@ -8,7 +8,6 @@ interface PlatformChooserModalProps {
   open: boolean;
   hasCloseButton: boolean;
   onClose: () => void;
-  platforms: Array<PlatformModel>;
   onSelectedPlatform: (platform: string) => void;
 }
 
@@ -34,28 +33,34 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
 
         <h1 className="text-xs text-center text-white ">Are you?</h1>
         <ul className="space-y-1 ">
-          {props.platforms.map((platform, i) => (
-            <li
-              key={i}
-              className="flex flex-col items-center justify-center flex-1"
+          <li className="flex flex-col items-center justify-center flex-1">
+            <button
+              className=' text-sm w-full lg:text-base rounded-lg bg-transparent tracking-[3px] text-white py-3 px-10 border border-white mt-2  font-["Bebas_Neue"]'
+              onClick={() => {
+                props.onClose();
+                props.onSelectedPlatform("store-visit");
+                dispatch(setPopClubData({ platform: "store-visit" }));
+              }}
             >
-              <button
-                className=' text-sm w-full lg:text-base rounded-lg bg-transparent tracking-[3px] text-white py-3 px-10 border border-white mt-2  font-["Bebas_Neue"]'
-                onClick={() => {
-                  props.onClose();
-                  props.onSelectedPlatform(platform.url_name);
-                  dispatch(setPopClubData({ platform: platform.url_name }));
-                }}
-              >
-                {temp[i]}
-              </button>
-              {i === 0 ? (
-                <h1 className="mt-3 text-xs text-center text-white">
-                  or having your
-                </h1>
-              ) : null}
-            </li>
-          ))}
+              Visiting a store
+            </button>
+          </li>
+
+          <h1 className="mt-3 text-xs text-center text-white">
+            or having your
+          </h1>
+          <li className="flex flex-col items-center justify-center flex-1">
+            <button
+              className=' text-sm w-full lg:text-base rounded-lg bg-transparent tracking-[3px] text-white py-3 px-10 border border-white mt-2  font-["Bebas_Neue"]'
+              onClick={() => {
+                props.onClose();
+                props.onSelectedPlatform("online-delivery");
+                dispatch(setPopClubData({ platform: "online-delivery" }));
+              }}
+            >
+              Snacks Delivered
+            </button>
+          </li>
         </ul>
       </div>
     </div>

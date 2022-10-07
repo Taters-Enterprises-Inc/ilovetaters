@@ -20,10 +20,6 @@ import {
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
 import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
@@ -72,8 +68,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const dispatch = useAppDispatch();
 
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
-
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -82,10 +76,6 @@ export function HeaderNav(props: HeaderNavProps) {
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (openPlatformChooserModal) dispatch(getAllPlatform());
-  }, [dispatch, openPlatformChooserModal]);
 
   const [
     openMessageModalWhenSwitchingTabWhenCacheDataExist,
@@ -609,7 +599,6 @@ export function HeaderNav(props: HeaderNavProps) {
 
       <PlatformChooserModal
         hasCloseButton={true}
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":

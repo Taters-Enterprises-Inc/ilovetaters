@@ -5,10 +5,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "features/popclub/presentation/slices/get-all-platform.slice";
 import MoreDrawer from "./more-drawer.component";
 import { MessageModal } from "../modals";
 import { selectGetSession } from "../slices/get-session.slice";
@@ -19,7 +15,6 @@ interface FooterNavProps {
 
 export function FooterNav(props: FooterNavProps) {
   const navigate = useNavigate();
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
   const getSessionState = useAppSelector(selectGetSession);
   const currentLocation = useLocation();
   const dispatch = useAppDispatch();
@@ -55,10 +50,6 @@ export function FooterNav(props: FooterNavProps) {
     status: false,
     message: "",
   });
-
-  useEffect(() => {
-    if (openPlatformChooserModal) dispatch(getAllPlatform());
-  }, [dispatch, openPlatformChooserModal]);
 
   const handleSwitchTab = (param: {
     url?: string;
@@ -230,7 +221,6 @@ export function FooterNav(props: FooterNavProps) {
 
       <PlatformChooserModal
         hasCloseButton={true}
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":

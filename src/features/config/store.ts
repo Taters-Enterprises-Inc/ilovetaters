@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import getAllPlatform from "../popclub/presentation/slices/get-all-platform.slice";
 import getAllPlatformCategories from "../popclub/presentation/slices/get-all-platform-categories.slice";
 import getDeals from "../popclub/presentation/slices/get-deals.slice";
 import getPopClubData from "../popclub/presentation/slices/get-popclub-data.slice";
@@ -118,7 +117,6 @@ import updateAdminSettingStoreOperatingHours from "features/admin/presentation/s
 
 export const store = configureStore({
   reducer: {
-    getAllPlatform,
     getAllPlatformCategories,
     getDeals,
     setPopClubData,

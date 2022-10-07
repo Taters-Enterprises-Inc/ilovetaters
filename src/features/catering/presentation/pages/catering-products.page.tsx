@@ -107,16 +107,16 @@ export function CateringProducts() {
           </section>
         ))}
 
-        <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
+        {/* <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
           FREQUENTLY ASKED QUESTIONS
-        </h3>
+        </h3> */}
         <CateringFaqs />
       </section>
 
       <a
-        target="_blank"
-        rel="noreferrer"
-        href="https://ilovetaters.com/shop/assets/upload/catering/Catering%20Packages.pdf"
+        onClick={() => {
+          window.open(require("assets/Catering Packages.pdf"));
+        }}
         className="bg-secondary cursor-pointer h-[100px] mb-14 lg:mb-0 flex justify-center items-center text-white font-['Bebas_Neue'] text-lg lg:text-2xl tracking-[3px]"
       >
         Download our Catering Flyer

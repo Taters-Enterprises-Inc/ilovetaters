@@ -12,10 +12,6 @@ import {
   getAllPlatformCategories,
   selectGetAllPlatformCategories,
 } from "../slices/get-all-platform-categories.slice";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "../slices/get-all-platform.slice";
 import { getDeals, selectGetDeals } from "../slices/get-deals.slice";
 import { getPopClubData } from "../slices/get-popclub-data.slice";
 import { selectSetPopClubData } from "../slices/set-popclub-data.slice";
@@ -36,7 +32,6 @@ export function PopClubHome() {
   const [opelPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
 
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
   const getAllPlatformCategoriesState = useAppSelector(
     selectGetAllPlatformCategories
   );
@@ -64,7 +59,6 @@ export function PopClubHome() {
     dispatch(getSession());
 
     if (platform !== undefined && category !== null) {
-      dispatch(getAllPlatform());
       dispatch(getAllPlatformCategories({ platform_url_name: platform }));
       dispatch(
         getDeals({ platform_url_name: platform, category_url_name: category })
@@ -228,7 +222,6 @@ export function PopClubHome() {
 
       <PlatformChooserModal
         hasCloseButton={true}
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":
