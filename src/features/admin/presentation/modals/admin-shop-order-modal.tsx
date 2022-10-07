@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
 import { AdminShopOrderCustomerInformation } from "../components";
+import { AdminShopOrderRemarks } from "../components/admin-shop-order-remarks";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -90,7 +91,7 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
             Item Two
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            <AdminShopOrderRemarks />
           </TabPanel>
         </div>
       </div>
