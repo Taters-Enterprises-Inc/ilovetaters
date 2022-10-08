@@ -12,11 +12,7 @@ interface CateringFlavorsProps {
     parent_name: string;
   }>;
   currentMultiFlavors: any;
-  onChange: (
-    updatedMultiFlavors: any,
-    action: "plus" | "minus" | "edit",
-    value: number
-  ) => void;
+  onChange: (updatedMultiFlavors: any, action: "plus" | "minus") => void;
   resetFlavorsQuantity: boolean;
 }
 
@@ -44,43 +40,19 @@ export function CateringFlavors(props: CateringFlavorsProps) {
               reset={props.resetFlavorsQuantity}
               productQuantity={props.productQuantity}
               totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
-              onChange={(action, val) => {
-                action === "edit"
-                  ? (props.currentMultiFlavors[flavor.id] = {
-                      name: flavor.name,
-                      quantity: props.currentMultiFlavors[flavor.id]
-                        ? (props.currentMultiFlavors[flavor.id].quantity = val)
-                        : val,
-                      parent: props.parent_name,
-                    })
-                  : (props.currentMultiFlavors[flavor.id] = {
-                      name: flavor.name,
-                      quantity: props.currentMultiFlavors[flavor.id]
-                        ? props.currentMultiFlavors[flavor.id].quantity + 1
-                        : 1,
-                    });
+              onChange={(action) => {
+                props.currentMultiFlavors[flavor.id] = {
+                  name: flavor.name,
+                  quantity: props.currentMultiFlavors[flavor.id]
+                    ? props.currentMultiFlavors[flavor.id].quantity + 1
+                    : 1,
+                };
 
-                props.onChange(props.currentMultiFlavors, action, val);
+                props.onChange(props.currentMultiFlavors, action);
 
-                setTotalMultiFlavorsQuantity((value) => {
-                  let sum = 0;
-
-                  for (let elem in props.currentMultiFlavors) {
-                    if (
-                      props.parent_name ===
-                      props.currentMultiFlavors[elem].parent
-                    )
-                      sum += props.currentMultiFlavors[elem].quantity;
-                  }
-
-                  if (action === "edit") {
-                    console.log(val, " ", value, " ", val + value);
-
-                    return sum;
-                  } else {
-                    return value + (action === "plus" ? +1 : -1);
-                  }
-                });
+                setTotalMultiFlavorsQuantity(
+                  (value) => value + (action === "plus" ? +1 : -1)
+                );
               }}
             />
           </li>

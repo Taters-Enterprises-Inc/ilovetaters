@@ -487,15 +487,6 @@ export function CateringProduct() {
                     <CateringProductQuantity
                       min={1}
                       quantity={quantity}
-                      onEditInput={(valueQuantity: number) => {
-                        setQuantity(valueQuantity);
-
-                        if (quantity < 1) {
-                          setQuantity(1);
-                        } else if (quantity > 10000) {
-                          setQuantity(10000);
-                        }
-                      }}
                       onChange={(action) => {
                         switch (action) {
                           case "minus":
@@ -510,7 +501,6 @@ export function CateringProduct() {
                             }
                             break;
                           case "plus":
-                            if (isNaN(quantity)) setQuantity(0);
                             setQuantity((value) => {
                               checkBaseProduct(value + 1);
                               return value + 1;
@@ -569,15 +559,11 @@ export function CateringProduct() {
                             parent_name={product_flavor.parent_name}
                             flavors={product_flavor.flavors}
                             productQuantity={quantity}
-                            onChange={(updatedMultiFlavors, action, val) => {
+                            onChange={(updatedMultiFlavors, action) => {
                               setCurrentMultiFlavors(updatedMultiFlavors);
-
-                              action === "edit"
-                                ? setTotalMultiFlavorsQuantity(val)
-                                : setTotalMultiFlavorsQuantity(
-                                    (value) =>
-                                      value + (action === "plus" ? 1 : -1)
-                                  );
+                              setTotalMultiFlavorsQuantity(
+                                (value) => value + (action === "plus" ? 1 : -1)
+                              );
                             }}
                           />
                         )
@@ -589,17 +575,11 @@ export function CateringProduct() {
                 <div className="space-y-4">
                   <button
                     onClick={() => {
-                      return isNaN(quantity)
-                        ? setDisabled
-                        : dispatchAddToCartCatering(() => {
-                            navigate("/shop/checkout");
-                          });
+                      dispatchAddToCartCatering(() => {
+                        navigate("/shop/checkout");
+                      });
                     }}
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isNaN(quantity) || quantity < 1
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -609,15 +589,9 @@ export function CateringProduct() {
 
                   <button
                     onClick={() => {
-                      return isNaN(quantity)
-                        ? setDisabled
-                        : dispatchAddToCartCatering();
+                      dispatchAddToCartCatering();
                     }}
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isNaN(quantity) || quantity < 1
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
