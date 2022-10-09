@@ -7,7 +7,7 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { SetStateAction, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -58,14 +58,25 @@ const DEFAULT_CAROUSEL = [
   "mr_poppy",
 ];
 
+export type CateringFlavorType = {
+  [key: string]: {
+    name: string;
+    quantity: number;
+  };
+};
+
+export type CateringMultiFlavorsType = {
+  [key: string]: CateringFlavorType;
+};
+
 export function CateringProduct() {
   const dispatch = useAppDispatch();
   let { hash } = useParams();
   const location = useLocation();
 
   const [quantity, setQuantity] = useState(1);
+
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [setDisabled] = useState(true);
 
   const getCateringProductDetailsState = useAppSelector(
     selectGetCateringProductDetails
@@ -73,22 +84,37 @@ export function CateringProduct() {
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
-  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<Object>({});
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<CateringMultiFlavorsType>({});
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
-    useState<number>(0);
+  const navigate = useNavigate();
 
+  const checkBaseProduct = (updatedQuantity: number) => {
+    if (
+      getCateringProductDetailsState.data &&
+      getCateringProductDetailsState.status ===
+        GetCateringProductDetailsState.success
+    ) {
+      const productPrices = getCateringProductDetailsState.data.product_prices;
+      for (let i = 0; i < productPrices.length; i++) {
+        if (productPrices[i].min_qty <= updatedQuantity) {
+          dispatch(
+            changeCateringProductPrice({ price: productPrices[i].price })
+          );
+        }
+      }
+    }
+  };
   useEffect(() => {
     if (resetMultiFlavors === true) {
       setResetMultiFlavors(false);
     }
   }, [resetMultiFlavors]);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
+
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringProductDetails({ hash }));
@@ -107,23 +133,6 @@ export function CateringProduct() {
       dispatch(getSession());
     }
   }, [addToCartShopState, dispatch]);
-
-  const checkBaseProduct = (updatedQuantity: number) => {
-    if (
-      getCateringProductDetailsState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success
-    ) {
-      const productPrices = getCateringProductDetailsState.data.product_prices;
-      for (let i = 0; i < productPrices.length; i++) {
-        if (productPrices[i].min_qty <= updatedQuantity) {
-          dispatch(
-            changeCateringProductPrice({ price: productPrices[i].price })
-          );
-        }
-      }
-    }
-  };
 
   const calculateFreeAddon = () => {
     if (
@@ -222,20 +231,24 @@ export function CateringProduct() {
 
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
-    const multiFlavorsArray: Array<{
-      name: string;
-      quantity: number;
-    }> = Object.values(currentMultiFlavors);
     let result: string | undefined;
 
-    for (let i = 0; i < multiFlavorsArray.length; i++) {
-      if (multiFlavorsArray[i].quantity > 0)
-        result =
-          (result === undefined ? "" : result) +
-          `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
-            multiFlavorsArray[i].name
-          }<br/>`;
-    }
+    Object.keys(currentMultiFlavors).forEach((key) => {
+      const multiFlavorsArray: Array<{
+        name: string;
+        quantity: number;
+      }> = Object.values(currentMultiFlavors[key]);
+
+      for (let i = 0; i < multiFlavorsArray.length; i++) {
+        if (multiFlavorsArray[i].quantity > 0)
+          result =
+            (result === undefined ? "" : result) +
+            `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
+              multiFlavorsArray[i].name
+            }<br/>`;
+      }
+    });
+
     return result ? result : undefined;
   };
 
@@ -262,16 +275,32 @@ export function CateringProduct() {
       getCateringProductDetailsState.data
     ) {
       if (
-        totalMultiFlavorsQuantity !==
-        quantity * getCateringProductDetailsState.data?.product_flavor.length
+        getCateringProductDetailsState.data?.product_flavor &&
+        getCateringProductDetailsState.data.product_flavor.length
       ) {
-        dispatch(
-          popUpSnackBar({
-            message: "Please meet the required number of flavors.",
-            severity: "error",
-          })
-        );
-        return;
+        for (
+          let i = 0;
+          i < getCateringProductDetailsState.data.product_flavor.length;
+          i++
+        ) {
+          let totalMultiFlavorsQuantity = 0;
+
+          Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+            const currentFlavor = currentMultiFlavors[i];
+            totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+          });
+
+          if (totalMultiFlavorsQuantity !== quantity) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+        }
       }
 
       let flavors_details = createFlavorDetails();
@@ -485,38 +514,21 @@ export function CateringProduct() {
                       Note: base price varies on order qty
                     </span>
                     <CateringProductQuantity
-                      min={1}
-                      quantity={quantity}
-                      onEditInput={(valueQuantity: number) => {
-                        setQuantity(valueQuantity);
-
-                        if (quantity < 1) {
-                          setQuantity(1);
-                        } else if (quantity > 10000) {
-                          setQuantity(10000);
-                        }
-                      }}
-                      onChange={(action) => {
+                      onChange={(action, value) => {
                         switch (action) {
-                          case "minus":
-                            if (quantity > 1) {
-                              setQuantity((value) => {
-                                checkBaseProduct(value - 1);
-                                setCurrentMultiFlavors({});
-                                setTotalMultiFlavorsQuantity(0);
-                                setResetMultiFlavors(true);
-                                return value - 1;
-                              });
-                            }
-                            break;
                           case "plus":
-                            if (isNaN(quantity)) setQuantity(0);
-                            setQuantity((value) => {
-                              checkBaseProduct(value + 1);
-                              return value + 1;
-                            });
+                            checkBaseProduct(value);
+                            break;
+                          case "minus":
+                            checkBaseProduct(value);
+                            setResetMultiFlavors(true);
+                            break;
+                          case "manual-input":
+                            checkBaseProduct(value);
+                            setResetMultiFlavors(true);
                             break;
                         }
+                        setQuantity(value);
                       }}
                     />
                     {getCateringProductDetailsState.data ? (
@@ -564,20 +576,21 @@ export function CateringProduct() {
                       {getCateringProductDetailsState.data?.product_flavor.map(
                         (product_flavor, i) => (
                           <CateringFlavors
+                            key={i}
                             resetFlavorsQuantity={resetMultiFlavors}
                             currentMultiFlavors={currentMultiFlavors}
+                            parent_index={i}
                             parent_name={product_flavor.parent_name}
                             flavors={product_flavor.flavors}
                             productQuantity={quantity}
-                            onChange={(updatedMultiFlavors, action, val) => {
-                              setCurrentMultiFlavors(updatedMultiFlavors);
+                            onChange={(updatedMultiFlavors) => {
+                              const updateCurrentMultiFlavor = {
+                                ...currentMultiFlavors,
+                              };
 
-                              action === "edit"
-                                ? setTotalMultiFlavorsQuantity(val)
-                                : setTotalMultiFlavorsQuantity(
-                                    (value) =>
-                                      value + (action === "plus" ? 1 : -1)
-                                  );
+                              updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                              setCurrentMultiFlavors(updateCurrentMultiFlavor);
                             }}
                           />
                         )
@@ -589,17 +602,11 @@ export function CateringProduct() {
                 <div className="space-y-4">
                   <button
                     onClick={() => {
-                      return isNaN(quantity)
-                        ? setDisabled
-                        : dispatchAddToCartCatering(() => {
-                            navigate("/shop/checkout");
-                          });
+                      dispatchAddToCartCatering(() => {
+                        navigate("/shop/checkout");
+                      });
                     }}
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isNaN(quantity) || quantity < 1
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -609,15 +616,9 @@ export function CateringProduct() {
 
                   <button
                     onClick={() => {
-                      return isNaN(quantity)
-                        ? setDisabled
-                        : dispatchAddToCartCatering();
+                      dispatchAddToCartCatering();
                     }}
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isNaN(quantity) || quantity < 1
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
+                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
