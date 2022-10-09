@@ -86,7 +86,6 @@ export function CateringProduct() {
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [currentMultiFlavors, setCurrentMultiFlavors] =
     useState<CateringMultiFlavorsType>({});
-  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const navigate = useNavigate();
 
   const checkBaseProduct = (updatedQuantity: number) => {
@@ -105,11 +104,6 @@ export function CateringProduct() {
       }
     }
   };
-  useEffect(() => {
-    if (resetMultiFlavors === true) {
-      setResetMultiFlavors(false);
-    }
-  }, [resetMultiFlavors]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -284,6 +278,17 @@ export function CateringProduct() {
           i++
         ) {
           let totalMultiFlavorsQuantity = 0;
+
+          if (currentMultiFlavors[i] === undefined) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
 
           Object.keys(currentMultiFlavors[i]).forEach(function (key) {
             const currentFlavor = currentMultiFlavors[i];
@@ -521,11 +526,11 @@ export function CateringProduct() {
                             break;
                           case "minus":
                             checkBaseProduct(value);
-                            setResetMultiFlavors(true);
+                            setCurrentMultiFlavors({});
                             break;
                           case "manual-input":
                             checkBaseProduct(value);
-                            setResetMultiFlavors(true);
+                            if (value < quantity) setCurrentMultiFlavors({});
                             break;
                         }
                         setQuantity(value);
@@ -577,7 +582,6 @@ export function CateringProduct() {
                         (product_flavor, i) => (
                           <CateringFlavors
                             key={i}
-                            resetFlavorsQuantity={resetMultiFlavors}
                             currentMultiFlavors={currentMultiFlavors}
                             parent_index={i}
                             parent_name={product_flavor.parent_name}

@@ -16,7 +16,6 @@ interface CateringFlavorsProps {
   parent_index: number;
   currentMultiFlavors: CateringMultiFlavorsType;
   onChange: (updatedMultiFlavors: CateringFlavorType) => void;
-  resetFlavorsQuantity: boolean;
 }
 
 export function CateringFlavors(props: CateringFlavorsProps) {
@@ -31,7 +30,6 @@ export function CateringFlavors(props: CateringFlavorsProps) {
             <span className="text-sm text-white">{flavor.name}</span>
             <CateringLongPressQuantityInput
               flavorId={flavor.id}
-              reset={props.resetFlavorsQuantity}
               productQuantity={props.productQuantity}
               parent_index={props.parent_index}
               currentMultiFlavors={props.currentMultiFlavors}

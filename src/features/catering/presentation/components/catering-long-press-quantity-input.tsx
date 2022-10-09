@@ -19,7 +19,6 @@ export interface CateringFlavorQuantityProps {
 
 interface LongPressQuantityInputProps {
   productQuantity: number;
-  reset?: boolean;
   parent_index: number;
   flavorId: number;
   currentMultiFlavors: CateringMultiFlavorsType;
@@ -51,6 +50,8 @@ export function CateringLongPressQuantityInput(
         totalMultiFlavorsQuantityWithoutCurrentInput +=
           currentMultiFlavors[key].quantity;
     });
+  } else if (quantity !== "0") {
+    setQuantity("0");
   }
 
   const remainingNumberOfFlavor =
