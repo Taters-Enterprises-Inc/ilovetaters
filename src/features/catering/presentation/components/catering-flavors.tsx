@@ -1,6 +1,8 @@
-import { QuantityInput } from "features/shared/presentation/components";
-import { useEffect, useState } from "react";
-import { CateringFlavorQuantity } from "./catering-flavor-quantity";
+import {
+  CateringFlavorType,
+  CateringMultiFlavorsType,
+} from "../pages/catering-product.page";
+import { CateringLongPressQuantityInput } from "./catering-long-press-quantity-input";
 
 interface CateringFlavorsProps {
   parent_name: string;
@@ -11,21 +13,13 @@ interface CateringFlavorsProps {
     product_variant_id: number;
     parent_name: string;
   }>;
-  currentMultiFlavors: any;
-  onChange: (updatedMultiFlavors: any, action: "plus" | "minus") => void;
+  parent_index: number;
+  currentMultiFlavors: CateringMultiFlavorsType;
+  onChange: (updatedMultiFlavors: CateringFlavorType) => void;
   resetFlavorsQuantity: boolean;
 }
 
 export function CateringFlavors(props: CateringFlavorsProps) {
-  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
-    useState<number>(0);
-
-  useEffect(() => {
-    if (props.resetFlavorsQuantity) {
-      setTotalMultiFlavorsQuantity(0);
-    }
-  }, [totalMultiFlavorsQuantity, props]);
-
   return (
     <div>
       <span className="text-white text-2xl tracking-[3px] font-['Bebas_Neue']">
@@ -35,24 +29,27 @@ export function CateringFlavors(props: CateringFlavorsProps) {
         {props.flavors.map((flavor, i) => (
           <li key={i}>
             <span className="text-sm text-white">{flavor.name}</span>
-            <CateringFlavorQuantity
-              min={0}
+            <CateringLongPressQuantityInput
+              flavorId={flavor.id}
               reset={props.resetFlavorsQuantity}
               productQuantity={props.productQuantity}
-              totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
-              onChange={(action) => {
-                props.currentMultiFlavors[flavor.id] = {
-                  name: flavor.name,
-                  quantity: props.currentMultiFlavors[flavor.id]
-                    ? props.currentMultiFlavors[flavor.id].quantity + 1
-                    : 1,
-                };
+              parent_index={props.parent_index}
+              currentMultiFlavors={props.currentMultiFlavors}
+              onChange={(value) => {
+                const currentMultiFlavors = props.currentMultiFlavors[
+                  props.parent_index
+                ]
+                  ? props.currentMultiFlavors[props.parent_index]
+                  : {};
 
-                props.onChange(props.currentMultiFlavors, action);
+                if (value !== undefined) {
+                  currentMultiFlavors[flavor.id] = {
+                    name: flavor.name,
+                    quantity: value,
+                  };
 
-                setTotalMultiFlavorsQuantity(
-                  (value) => value + (action === "plus" ? +1 : -1)
-                );
+                  props.onChange(currentMultiFlavors);
+                }
               }}
             />
           </li>
