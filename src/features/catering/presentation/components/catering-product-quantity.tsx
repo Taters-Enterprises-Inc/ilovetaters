@@ -92,6 +92,14 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             value={quantity}
             type="number"
             onChange={(e) => {
+              if (
+                getSessionState.data?.userData == null ||
+                getSessionState.data?.userData === undefined
+              ) {
+                setOpenLoginChooserModal(true);
+                return;
+              }
+
               setQuantity(e.target.value);
 
               if (e.target.value) {

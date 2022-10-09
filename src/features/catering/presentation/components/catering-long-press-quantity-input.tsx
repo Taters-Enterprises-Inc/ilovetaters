@@ -142,6 +142,14 @@ export function CateringLongPressQuantityInput(
             onWheel={(event) => event.currentTarget.blur()}
             value={quantity}
             onChange={(e) => {
+              if (
+                getSessionState.data?.userData == null ||
+                getSessionState.data?.userData === undefined
+              ) {
+                setOpenLoginChooserModal(true);
+                return;
+              }
+
               if (e.target.value === "") setQuantity(e.target.value);
 
               if (e.target.value) {
