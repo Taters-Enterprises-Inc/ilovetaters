@@ -69,7 +69,7 @@ export function AdminAvailabilityProducts() {
   const navigate = useNavigate();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
-  const status = query.get("status") ?? "0";
+  const status = query.get("status");
   const storeId = query.get("store_id");
   const categoryId = query.get("category_id");
   const orderBy = query.get("order_by");
@@ -91,9 +91,9 @@ export function AdminAvailabilityProducts() {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
-      status: status ?? 0,
+      status: status,
       store_id: storeId ?? 3,
-      category_id: categoryId ?? 6,
+      category_id: categoryId,
       order_by: orderBy,
       order: order,
       search: search,
@@ -141,7 +141,9 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status && status === "0" ? "text-base" : "text-xs opacity-40"
+                status === null || status === "0"
+                  ? "text-base"
+                  : "text-xs opacity-40"
               } rounded-full`}
             >
               Available
@@ -216,7 +218,7 @@ export function AdminAvailabilityProducts() {
 
             <Select
               label="Filter by category"
-              defaultValue={categoryId ?? 6}
+              defaultValue={categoryId ?? "all"}
               onChange={(event) => {
                 if (event.target.value !== status) {
                   const params = {
@@ -225,7 +227,7 @@ export function AdminAvailabilityProducts() {
                     status: status,
                     store_id: storeId,
                     category_id:
-                      event.target.value === -1 ? null : event.target.value,
+                      event.target.value === "all" ? null : event.target.value,
                     search: search,
                   };
 
@@ -238,6 +240,9 @@ export function AdminAvailabilityProducts() {
                 }
               }}
             >
+              <MenuItem value="all">
+                <span className="text-xs lg:text-base">All</span>
+              </MenuItem>
               {getProductCategoriesState.data?.map((category, index) => (
                 <MenuItem key={index} value={category.id}>
                   <span className="text-xs lg:text-base">{category.name}</span>
@@ -327,7 +332,7 @@ export function AdminAvailabilityProducts() {
                     <span className="text-xs lg:text-bas">{row.name}</span>
                   </span>
 
-                  {status && status === "0" ? (
+                  {status === null || status === "0" ? (
                     <button
                       onClick={() => {
                         if (row.id)
@@ -468,7 +473,7 @@ export function AdminAvailabilityProducts() {
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
-                        {status && status === "0" ? (
+                        {status === null || status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)

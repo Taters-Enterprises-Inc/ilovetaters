@@ -264,6 +264,19 @@ export interface UpdateStorePackageResponse {
   };
 }
 
+export interface GetDealCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export function GetDealCategoriesRepository(): Promise<GetDealCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deal-categories`, {
+    withCredentials: true,
+  });
+}
+
 export function UpdateStorePackageRepository(
   param: UpdateStorePackageParam
 ): Promise<UpdateStorePackageResponse> {
