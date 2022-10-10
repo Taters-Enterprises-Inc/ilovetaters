@@ -61,6 +61,7 @@ interface DataTableProps {
   search: string;
   totalRows: number;
   perPage: number;
+  emptyMessage: string;
   onRowsPerPageChange: (event: SelectChangeEvent) => void;
 }
 
@@ -134,9 +135,14 @@ export function DataTable(props: DataTableProps) {
               ))}
             </DataTableRow>
           </TableHead>
-
           <TableBody>{props.children}</TableBody>
         </Table>
+
+        {props.totalRows <= 0 ? (
+          <div className="py-4 text-center b-gray-700">
+            {props.emptyMessage}
+          </div>
+        ) : null}
       </TableContainer>
     </div>
   );

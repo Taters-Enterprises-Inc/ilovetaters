@@ -205,6 +205,7 @@ export function AdminSettingStores() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="No stores yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

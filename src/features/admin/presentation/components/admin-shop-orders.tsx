@@ -323,6 +323,7 @@ export function AdminShopOrders() {
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

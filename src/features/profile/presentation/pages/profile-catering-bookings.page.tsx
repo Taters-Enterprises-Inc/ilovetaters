@@ -212,6 +212,7 @@ export function ProfileCateringBookings() {
           <div className="hidden lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
+              emptyMessage="No catering bookings yet."
               orderBy={orderBy ?? "dateadded"}
               search={search ?? ""}
               onSearch={(val) => {

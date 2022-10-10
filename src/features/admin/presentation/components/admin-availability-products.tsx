@@ -380,6 +380,7 @@ export function AdminAvailabilityProducts() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="Empty availability products."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

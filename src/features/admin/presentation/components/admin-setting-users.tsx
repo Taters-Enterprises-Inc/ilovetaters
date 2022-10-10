@@ -207,6 +207,7 @@ export function AdminSettingUsers() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No users yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

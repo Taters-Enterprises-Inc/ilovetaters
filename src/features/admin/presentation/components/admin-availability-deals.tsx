@@ -376,6 +376,7 @@ export function AdminAvailabilityDeals() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="Empty availability deals."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

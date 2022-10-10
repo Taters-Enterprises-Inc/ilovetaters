@@ -335,6 +335,7 @@ export function AdminAvailabilityCatersPackageAddons() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="Empty availability caters package add-ons."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

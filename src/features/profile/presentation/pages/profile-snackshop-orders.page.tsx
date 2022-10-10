@@ -190,6 +190,7 @@ export function ProfileSnackshopOrders() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No snackshop orders yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
