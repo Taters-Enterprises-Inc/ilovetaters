@@ -52,58 +52,7 @@ export function ShopHeroCarousel() {
             alt="The best pop corn in town"
           ></img>
         </SwiperSlide>
-        <SwiperSlide>
-          <img
-            className="sm:hidden"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
-            }
-            alt="The best pop corn in town"
-          ></img>
-          <img
-            className="hidden sm:block"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
-            }
-            alt="The best pop corn in town"
-          ></img>
-          <img
-            className="hidden sm:block"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/instructions/snackshop_instructions.jpg"
-            }
-            alt="The best pop corn in town"
-          ></img>
-        </SwiperSlide>
       </Swiper>
-
-      {/* <img
-        className="sm:hidden"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
-        }
-        alt="The best pop corn in town"
-      ></img>
-      <img
-        className="hidden sm:block"
-        src={
-          REACT_APP_DOMAIN_URL +
-          "api/assets/images/shop/instructions/snackshop_instructions.jpg"
-        }
-        alt="The best pop corn in town"
-      ></img> */}
     </section>
   );
 }

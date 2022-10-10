@@ -312,9 +312,10 @@ export function CateringCheckout() {
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (
                   <TextField
-                    aria-readonly
-                    value={getSessionState.data.userData.first_name}
+                    required
+                    defaultValue={getSessionState.data.userData.first_name}
                     variant="outlined"
+                    label="First Name"
                     className="w-full"
                     name="firstName"
                   />
@@ -330,8 +331,9 @@ export function CateringCheckout() {
 
                 {getSessionState.data?.userData.last_name ? (
                   <TextField
-                    aria-readonly
-                    value={getSessionState.data.userData.last_name}
+                    required
+                    label="Last Name"
+                    defaultValue={getSessionState.data.userData.last_name}
                     variant="outlined"
                     className="w-full"
                     name="lastName"
