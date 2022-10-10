@@ -91,7 +91,7 @@ export function FooterNav(props: FooterNavProps) {
                         : ""
                     }.png`}
                     className="w-[28px] sm:w-[40px] lg:w-[30px]"
-                    alt="Tater home icon"
+                    alt="Entertainment Snacks est. 1994."
                   />
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
@@ -121,7 +121,7 @@ export function FooterNav(props: FooterNavProps) {
                       props.activeUrl === "POPCLUB" ? "-active" : ""
                     }.png`}
                     className="w-[20px] sm:w-[24px] lg:w-[22.69px]"
-                    alt="Tater home icon"
+                    alt="Best deals in town."
                   />
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
@@ -148,7 +148,7 @@ export function FooterNav(props: FooterNavProps) {
                         : ""
                     }.png`}
                     className="w-[24px] sm:w-[30px] lg:w-[23px]"
-                    alt="Tater home icon"
+                    alt="Snacks cravings delivered."
                   ></img>
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
@@ -173,7 +173,7 @@ export function FooterNav(props: FooterNavProps) {
                       props.activeUrl === "CATERING" ? "-active" : ""
                     }.png`}
                     className="w-[24px] sm:w-[30px] lg:w-[24px]"
-                    alt="Tater home icon"
+                    alt="Caters munch better celebrations."
                   ></img>
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
@@ -198,7 +198,7 @@ export function FooterNav(props: FooterNavProps) {
                       props.activeUrl === "BRANCHES" ? "-active" : ""
                     }.png`}
                     className="w-[18px] sm:w-[25px] lg:w-[21px]"
-                    alt="Tater home icon"
+                    alt="Over 80 branches nationwide."
                   ></img>
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
