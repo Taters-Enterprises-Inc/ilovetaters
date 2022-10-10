@@ -378,7 +378,7 @@ export function ShopCheckout() {
                       defaultValue={getSessionState.data?.customer_address}
                       variant="outlined"
                       className="w-full"
-                      label="Complete Delivery Address"
+                      label="Address"
                       name="address"
                       autoComplete="off"
                     />
@@ -388,7 +388,7 @@ export function ShopCheckout() {
                       InputProps={{
                         readOnly: true,
                       }}
-                      label="Complete Delivery Address"
+                      label="Address"
                       variant="outlined"
                       className="w-full"
                       name="address"
@@ -396,14 +396,14 @@ export function ShopCheckout() {
                     />
                   )}
 
-                  {/* <TextField
+                  <TextField
                     required
                     variant="outlined"
                     name="full_address"
                     className="w-full"
                     label="Complete Delivery Address"
                     autoComplete="off"
-                  /> */}
+                  />
 
                   {getSessionState.data.cache_data ? (
                     <>

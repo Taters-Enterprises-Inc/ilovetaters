@@ -1,6 +1,8 @@
-import { QuantityInput } from "features/shared/presentation/components";
-import { useEffect, useState } from "react";
-import { CateringFlavorQuantity } from "./catering-flavor-quantity";
+import {
+  CateringFlavorType,
+  CateringMultiFlavorsType,
+} from "../pages/catering-product.page";
+import { CateringLongPressQuantityInput } from "./catering-long-press-quantity-input";
 
 interface CateringFlavorsProps {
   parent_name: string;
@@ -11,25 +13,12 @@ interface CateringFlavorsProps {
     product_variant_id: number;
     parent_name: string;
   }>;
-  currentMultiFlavors: any;
-  onChange: (
-    updatedMultiFlavors: any,
-    action: "plus" | "minus" | "edit",
-    value: number
-  ) => void;
-  resetFlavorsQuantity: boolean;
+  parent_index: number;
+  currentMultiFlavors: CateringMultiFlavorsType;
+  onChange: (updatedMultiFlavors: CateringFlavorType) => void;
 }
 
 export function CateringFlavors(props: CateringFlavorsProps) {
-  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
-    useState<number>(0);
-
-  useEffect(() => {
-    if (props.resetFlavorsQuantity) {
-      setTotalMultiFlavorsQuantity(0);
-    }
-  }, [totalMultiFlavorsQuantity, props]);
-
   return (
     <div>
       <span className="text-white text-2xl tracking-[3px] font-['Bebas_Neue']">
@@ -39,50 +28,26 @@ export function CateringFlavors(props: CateringFlavorsProps) {
         {props.flavors.map((flavor, i) => (
           <li key={i}>
             <span className="text-sm text-white">{flavor.name}</span>
-            <CateringFlavorQuantity
-              min={0}
-              reset={props.resetFlavorsQuantity}
+            <CateringLongPressQuantityInput
+              flavorId={flavor.id}
               productQuantity={props.productQuantity}
-              totalMultiFlavorsQuantity={totalMultiFlavorsQuantity}
-              onChange={(action, val) => {
-                action === "edit"
-                  ? (props.currentMultiFlavors[flavor.id] = {
-                      name: flavor.name,
-                      quantity: props.currentMultiFlavors[flavor.id]
-                        ? (props.currentMultiFlavors[flavor.id].quantity = val)
-                        : val,
-                      parent: props.parent_name,
-                    })
-                  : (props.currentMultiFlavors[flavor.id] = {
-                      name: flavor.name,
-                      quantity: props.currentMultiFlavors[flavor.id]
-                        ? props.currentMultiFlavors[flavor.id].quantity + 1
-                        : 1,
-                    });
+              parent_index={props.parent_index}
+              currentMultiFlavors={props.currentMultiFlavors}
+              onChange={(value) => {
+                const currentMultiFlavors = props.currentMultiFlavors[
+                  props.parent_index
+                ]
+                  ? props.currentMultiFlavors[props.parent_index]
+                  : {};
 
-                props.onChange(props.currentMultiFlavors, action, val);
+                if (value !== undefined) {
+                  currentMultiFlavors[flavor.id] = {
+                    name: flavor.name,
+                    quantity: value,
+                  };
 
-                console.log(props.currentMultiFlavors);
-
-                setTotalMultiFlavorsQuantity((value) => {
-                  let sum = 0;
-
-                  for (let elem in props.currentMultiFlavors) {
-                    if (
-                      props.parent_name ===
-                      props.currentMultiFlavors[elem].parent
-                    )
-                      sum += props.currentMultiFlavors[elem].quantity;
-                  }
-
-                  if (action === "edit") {
-                    console.log(val, " ", value, " ", val + value);
-
-                    return sum;
-                  } else {
-                    return value + (action === "plus" ? +1 : -1);
-                  }
-                });
+                  props.onChange(currentMultiFlavors);
+                }
               }}
             />
           </li>

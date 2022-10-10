@@ -285,13 +285,13 @@ export function HeaderNav(props: HeaderNavProps) {
     const { text, icon, action, id } = item;
 
     return (
-      <>
+      <div>
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
           <ListItemText primary={text} />
         </MenuItem>
         {id === 1 || id === 4 ? <hr /> : null}
-      </>
+      </div>
     );
   });
 
@@ -395,7 +395,7 @@ export function HeaderNav(props: HeaderNavProps) {
                             >
                               {TABS.map((tab, i) => {
                                 return (
-                                  <>
+                                  <div key={i}>
                                     {tab.name === "POPCLUB" ? (
                                       <MenuItem
                                         onClick={() => {
@@ -421,7 +421,7 @@ export function HeaderNav(props: HeaderNavProps) {
                                         {tab.name}
                                       </MenuItem>
                                     )}
-                                  </>
+                                  </div>
                                 );
                               })}
                             </MenuList>
