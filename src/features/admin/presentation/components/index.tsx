@@ -20,3 +20,4 @@ export { AdminAvailabilityDeals } from "./admin-availability-deals";
 export { AdminAvailabilityProducts } from "./admin-availability-products";
 export { AdminSettingStores } from "./admin-setting-stores";
 export { AdminAvailabilityPackages } from "./admin-availability-packages";
+export { AdminAvailabilityCatersAddons } from "./admin-availability-caters-addons";
