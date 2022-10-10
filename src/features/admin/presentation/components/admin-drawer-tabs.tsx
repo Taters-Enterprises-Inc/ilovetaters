@@ -92,78 +92,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
-
-  // Availability Tab - Accordion
-  const [expanded, setExpanded] = useState<string | true>(location.pathname);
-
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? panel : true);
-    };
-
-  const [exp, setExp] = useState(false);
-  const [isDeal, setDeal] = useState(false);
-  const [isProd, setProd] = useState(false);
-  const pathchange = () => {
-    if (location.pathname.includes("deal")) {
-      if (expanded != true && isDeal == false) {
-        setExp(true);
-        handleChange("/admin/availability/deal");
-        setDeal(true);
-        setProd(false);
-      }
-    }
-    if (location.pathname.includes("product")) {
-      if (expanded != true && isProd == false) {
-        setExp(true);
-        handleChange("/admin/availability/product");
-        setDeal(false);
-        setProd(true);
-      }
-    }
-  };
-
-  const toggle2 = () => {
-    console.log("toggle2");
-    setExp(!exp);
-  };
-
-  // Settings Tab - Accordion
-
-  const [expanded1, setExpanded1] = useState<string | true>(location.pathname);
-
-  const handleChange1 =
-    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded1(newExpanded ? panel : true);
-    };
-
-  const [exp1, setExp1] = useState(false);
-  const [isSettings, setSettings] = useState(false);
-  const [isSettings1, setSettings1] = useState(false);
-  const pathchange1 = () => {
-    if (location.pathname.includes("user")) {
-      if (expanded != true && isSettings == false) {
-        setExp1(true);
-        handleChange1("/admin/setting/user");
-        setSettings(true);
-        setSettings1(false);
-      }
-    }
-    if (location.pathname.includes("store")) {
-      if (expanded != true && isSettings1 == false) {
-        setExp1(true);
-        handleChange1("/admin/setting/store");
-        setSettings(false);
-        setSettings1(true);
-      }
-    }
-  };
-
-  const toggleSetting = () => {
-    setExp1(!exp1);
-  };
-
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
       <nav>
@@ -252,19 +180,8 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion
-                  disableGutters
-                  expanded={
-                    expanded === "/admin/availability/deal" ||
-                    expanded === "/admin/availability/product" ||
-                    expanded === "/admin/availability/package" ||
-                    expanded === "/admin/availability/caters-add-on" ||
-                    exp
-                  }
-                  onChange={handleChange(location.pathname)}
-                  defaultExpanded={false}
-                >
-                  <AccordionSummary onClick={toggle2}>
+                <Accordion>
+                  <AccordionSummary>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdProductionQuantityLimits size={20} />
@@ -303,7 +220,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Deals Availability
+                                Deals
                               </span>
                             </span>
                           </span>
@@ -332,7 +249,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Shop Products Availability
+                                Shop Products
                               </span>
                             </span>
                           </span>
@@ -341,7 +258,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
                       <li>
                         <NavLink
-                          to="/admin/availability/package"
+                          to="/admin/availability/caters-package"
                           onClick={() => {
                             if (props.mobile) dispatch(closeAdminSideBar());
                           }}
@@ -361,7 +278,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Caters Packages Availability
+                                Caters Packages
                               </span>
                             </span>
                           </span>
@@ -370,7 +287,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
                       <li>
                         <NavLink
-                          to="/admin/availability/caters-add-on"
+                          to="/admin/availability/caters-package-addon"
                           onClick={() => {
                             if (props.mobile) dispatch(closeAdminSideBar());
                           }}
@@ -390,7 +307,36 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Caters Add-ons Availability
+                                Caters Package Add-ons
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink
+                          to="/admin/availability/caters-product-addon"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Caters Product Add-ons
                               </span>
                             </span>
                           </span>
@@ -405,17 +351,8 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
           <li>
             <div className="flex px-4">
               <div className="flex-1">
-                <Accordion
-                  disableGutters
-                  expanded={
-                    expanded1 === "/admin/setting/user" ||
-                    expanded1 === "/admin/setting/store" ||
-                    exp1
-                  }
-                  onChange={handleChange1(location.pathname)}
-                  defaultExpanded={false}
-                >
-                  <AccordionSummary onClick={toggleSetting}>
+                <Accordion>
+                  <AccordionSummary>
                     <span className="flex items-center">
                       <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                         <MdOutlineSettings size={20} />

@@ -19,5 +19,6 @@ export { AdminDrawerTabs } from "./admin-drawer-tabs";
 export { AdminAvailabilityDeals } from "./admin-availability-deals";
 export { AdminAvailabilityProducts } from "./admin-availability-products";
 export { AdminSettingStores } from "./admin-setting-stores";
-export { AdminAvailabilityPackages } from "./admin-availability-packages";
-export { AdminAvailabilityCatersAddons } from "./admin-availability-caters-addons";
+export { AdminAvailabilityCatersPackages } from "./admin-availability-caters-packages";
+export { AdminAvailabilityCatersPackageAddons } from "./admin-availability-caters-package-addons";
+export { AdminAvailabilityCatersProductAddons } from "./admin-availability-caters-product-addons";

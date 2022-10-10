@@ -1,4 +1,4 @@
-export interface AdminStorePackageModel {
+export interface AdminStoreCatersPackageModel {
   id: number;
   name: string;
   store_id: number;

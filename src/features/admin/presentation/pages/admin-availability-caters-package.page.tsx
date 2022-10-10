@@ -1,6 +1,6 @@
-import { AdminAvailabilityCatersAddons, AdminHead } from "../components";
+import { AdminAvailabilityCatersPackages, AdminHead } from "../components";
 
-export function AdminAvailabilityCatersAddon() {
+export function AdminAvailabilityCatersPackage() {
   return (
     <>
       <AdminHead
@@ -16,7 +16,7 @@ export function AdminAvailabilityCatersAddon() {
         }}
       />
 
-      <AdminAvailabilityCatersAddons />
+      <AdminAvailabilityCatersPackages />
     </>
   );
 }

@@ -27,18 +27,14 @@ import {
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
-  getAdminStorePackages,
-  resetGetAdminStorePackagesStatus,
-  selectGetAdminStorePackages,
-} from "../slices/get-admin-stores-packages.slice";
+  getAdminStoreCatersPackageAddons,
+  resetGetAdminStoreCatersPackageAddonsStatus,
+  selectGetAdminStoreCatersPackageAddons,
+} from "../slices/get-admin-stores-caters-package-addons.slice";
 import {
-  getPackageCategories,
-  selectGetPackageCategories,
-} from "../slices/get-package-categories.slice";
-import {
-  selectUpdateStorePackage,
-  updateStorePackage,
-} from "../slices/update-store-packages.slice";
+  selectUpdateStoreCatersPackageAddon,
+  updateStoreCatersPackageAddon,
+} from "../slices/update-store-caters-package-addons.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -46,7 +42,6 @@ import TextField from "@mui/material/TextField";
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
-  { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
 
@@ -64,7 +59,7 @@ const createQueryParams = (params: object): string => {
   return result;
 };
 
-export function AdminAvailabilityPackages() {
+export function AdminAvailabilityCatersPackageAddons() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -72,21 +67,18 @@ export function AdminAvailabilityPackages() {
   const perPage = query.get("per_page");
   const status = query.get("status");
   const storeId = query.get("store_id");
-  const categoryId = query.get("category_id");
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
 
-  const getAdminStorePackagesState = useAppSelector(
-    selectGetAdminStorePackages
+  const getAdminStoreCatersPackageAddonsState = useAppSelector(
+    selectGetAdminStoreCatersPackageAddons
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getPackageCategoriesState = useAppSelector(selectGetPackageCategories);
-  const updateStorePackageState = useAppSelector(selectUpdateStorePackage);
 
-  useEffect(() => {
-    dispatch(getPackageCategories());
-  }, [dispatch]);
+  const updateStoreCatersPackageAddonState = useAppSelector(
+    selectUpdateStoreCatersPackageAddon
+  );
 
   useEffect(() => {
     const query = createQueryParams({
@@ -94,12 +86,11 @@ export function AdminAvailabilityPackages() {
       per_page: perPage,
       status: status,
       store_id: storeId ?? 3,
-      category_id: categoryId,
       order_by: orderBy,
       order: order,
       search: search,
     });
-    dispatch(getAdminStorePackages(query));
+    dispatch(getAdminStoreCatersPackageAddons(query));
   }, [
     dispatch,
     pageNo,
@@ -109,15 +100,14 @@ export function AdminAvailabilityPackages() {
     order,
     search,
     storeId,
-    categoryId,
-    updateStorePackageState,
+    updateStoreCatersPackageAddonState,
   ]);
 
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Packages Availability
+          Caters Package Add-ons Availability
         </span>
 
         <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
@@ -128,14 +118,14 @@ export function AdminAvailabilityPackages() {
                   page_no: pageNo,
                   per_page: perPage,
                   status: 0,
-                  category_id: categoryId,
+
                   store_id: storeId,
                   search: search,
                 };
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStorePackagesStatus());
+                dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -156,13 +146,13 @@ export function AdminAvailabilityPackages() {
                   per_page: perPage,
                   status: 1,
                   store_id: storeId,
-                  category_id: categoryId,
+
                   search: search,
                 };
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStorePackagesStatus());
+                dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -192,7 +182,7 @@ export function AdminAvailabilityPackages() {
                     page_no: pageNo,
                     per_page: perPage,
                     status: status,
-                    category_id: categoryId,
+
                     store_id: value.store_id === -1 ? null : value.store_id,
                     search: search,
                   };
@@ -212,49 +202,8 @@ export function AdminAvailabilityPackages() {
           ) : null}
         </div>
       </div>
-      <div className="px-4 py-2">
-        {getPackageCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
-            <InputLabel>Filter by category</InputLabel>
 
-            <Select
-              label="Filter by category"
-              defaultValue={categoryId ?? "all"}
-              onChange={(event) => {
-                if (event.target.value !== status) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    status: status,
-                    store_id: storeId,
-                    category_id:
-                      event.target.value === "all" ? null : event.target.value,
-                    search: search,
-                  };
-
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="all">
-                <span className="text-xs lg:text-base">All</span>
-              </MenuItem>
-              {getPackageCategoriesState.data?.map((category, index) => (
-                <MenuItem key={index} value={category.id}>
-                  <span className="text-xs lg:text-base">{category.name}</span>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        ) : null}
-      </div>
-
-      {getAdminStorePackagesState.data?.packages ? (
+      {getAdminStoreCatersPackageAddonsState.data?.caters_package_addons ? (
         <>
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
@@ -266,7 +215,7 @@ export function AdminAvailabilityPackages() {
                   status: status,
                   order_by: orderBy,
                   store_id: storeId,
-                  category_id: categoryId,
+
                   order: order,
                   search: val === "" ? null : val,
                 };
@@ -285,13 +234,13 @@ export function AdminAvailabilityPackages() {
                     per_page: event.target.value,
                     status: status,
                     store_id: storeId,
-                    category_id: categoryId,
+
                     search: search,
                   };
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStorePackagesStatus());
+                  dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -306,73 +255,79 @@ export function AdminAvailabilityPackages() {
                     per_page: perPage,
                     status: status,
                     store_id: storeId,
-                    category_id: categoryId,
+
                     search: search,
                   };
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStorePackagesStatus());
+                  dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminStorePackagesState.data.pagination.total_rows}
-              perPage={getAdminStorePackagesState.data.pagination.per_page}
+              totalRows={
+                getAdminStoreCatersPackageAddonsState.data.pagination.total_rows
+              }
+              perPage={
+                getAdminStoreCatersPackageAddonsState.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminStorePackagesState.data.packages.map((row, i) => (
-                <div
-                  className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 font-semibold">
-                    {row.name}
-                  </span>
-
+              {getAdminStoreCatersPackageAddonsState.data.caters_package_addons.map(
+                (row, i) => (
                   <div
-                    className="text-sm"
-                    dangerouslySetInnerHTML={{
-                      __html: row.add_details,
-                    }}
-                  />
+                    className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 font-semibold">
+                      {row.name}
+                    </span>
 
-                  {status === null || status === "0" ? (
-                    <button
-                      onClick={() => {
-                        if (row.id)
-                          dispatch(
-                            updateStorePackage({
-                              status: "1",
-                              id: row.id.toString(),
-                            })
-                          );
+                    <div
+                      className="text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html: row.add_details,
                       }}
-                      className={`px-4 py-1 text-white bg-red-700 rounded-full`}
-                    >
-                      Disable
-                    </button>
-                  ) : status === "1" ? (
-                    <button
-                      onClick={() => {
-                        if (row.id)
-                          dispatch(
-                            updateStorePackage({
-                              status: "0",
-                              id: row.id.toString(),
-                            })
-                          );
-                      }}
-                      className={`px-4 py-1 text-white bg-green-700 rounded-full`}
-                    >
-                      Enable
-                    </button>
-                  ) : null}
-                </div>
-              ))}
+                    />
+
+                    {status === null || status === "0" ? (
+                      <button
+                        onClick={() => {
+                          if (row.id)
+                            dispatch(
+                              updateStoreCatersPackageAddon({
+                                status: "1",
+                                id: row.id.toString(),
+                              })
+                            );
+                        }}
+                        className={`px-4 py-1 text-white bg-red-700 rounded-full`}
+                      >
+                        Disable
+                      </button>
+                    ) : status === "1" ? (
+                      <button
+                        onClick={() => {
+                          if (row.id)
+                            dispatch(
+                              updateStoreCatersPackageAddon({
+                                status: "0",
+                                id: row.id.toString(),
+                              })
+                            );
+                        }}
+                        className={`px-4 py-1 text-white bg-green-700 rounded-full`}
+                      >
+                        Enable
+                      </button>
+                    ) : null}
+                  </div>
+                )
+              )}
             </DataList>
           </div>
 
@@ -388,7 +343,7 @@ export function AdminAvailabilityPackages() {
                   status: status,
                   store_id: storeId,
                   order_by: orderBy,
-                  category_id: categoryId,
+
                   order: order,
                   search: val === "" ? null : val,
                 };
@@ -409,7 +364,7 @@ export function AdminAvailabilityPackages() {
                     per_page: perPage,
                     status: status,
                     store_id: storeId,
-                    category_id: categoryId,
+
                     order_by: column_selected,
                     order: isAsc ? "desc" : "asc",
                     search: search,
@@ -417,7 +372,7 @@ export function AdminAvailabilityPackages() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStorePackagesStatus());
+                  dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -433,14 +388,14 @@ export function AdminAvailabilityPackages() {
                     status: status,
                     store_id: storeId,
                     order_by: orderBy,
-                    category_id: categoryId,
+
                     order: order,
                     search: search,
                   };
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStorePackagesStatus());
+                  dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -456,72 +411,78 @@ export function AdminAvailabilityPackages() {
                     status: status,
                     store_id: storeId,
                     order_by: orderBy,
-                    category_id: categoryId,
+
                     order: order,
                     search: search,
                   };
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStorePackagesStatus());
+                  dispatch(resetGetAdminStoreCatersPackageAddonsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminStorePackagesState.data.pagination.total_rows}
-              perPage={getAdminStorePackagesState.data.pagination.per_page}
+              totalRows={
+                getAdminStoreCatersPackageAddonsState.data.pagination.total_rows
+              }
+              perPage={
+                getAdminStoreCatersPackageAddonsState.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminStorePackagesState.data.packages !== undefined ? (
+              {getAdminStoreCatersPackageAddonsState.data
+                .caters_package_addons !== undefined ? (
                 <>
-                  {getAdminStorePackagesState.data.packages.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>{row.name}</DataTableCell>
-                      <DataTableCell>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: row.add_details,
-                          }}
-                        />
-                      </DataTableCell>
-                      <DataTableCell>{row.category_name}</DataTableCell>
-                      <DataTableCell>
-                        {status === null || status === "0" ? (
-                          <button
-                            onClick={() => {
-                              if (row.id)
-                                dispatch(
-                                  updateStorePackage({
-                                    status: "1",
-                                    id: row.id.toString(),
-                                  })
-                                );
+                  {getAdminStoreCatersPackageAddonsState.data.caters_package_addons.map(
+                    (row, i) => (
+                      <DataTableRow key={i}>
+                        <DataTableCell>{row.name}</DataTableCell>
+                        <DataTableCell>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: row.add_details,
                             }}
-                            className={`px-4 py-1 text-white bg-red-700 rounded-full`}
-                          >
-                            Disable
-                          </button>
-                        ) : status === "1" ? (
-                          <button
-                            onClick={() => {
-                              if (row.id)
-                                dispatch(
-                                  updateStorePackage({
-                                    status: "0",
-                                    id: row.id.toString(),
-                                  })
-                                );
-                            }}
-                            className={`px-4 py-1 text-white bg-green-700 rounded-full`}
-                          >
-                            Enable
-                          </button>
-                        ) : null}
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                          />
+                        </DataTableCell>
+                        <DataTableCell>
+                          {status === null || status === "0" ? (
+                            <button
+                              onClick={() => {
+                                if (row.id)
+                                  dispatch(
+                                    updateStoreCatersPackageAddon({
+                                      status: "1",
+                                      id: row.id.toString(),
+                                    })
+                                  );
+                              }}
+                              className={`px-4 py-1 text-white bg-red-700 rounded-full`}
+                            >
+                              Disable
+                            </button>
+                          ) : status === "1" ? (
+                            <button
+                              onClick={() => {
+                                if (row.id)
+                                  dispatch(
+                                    updateStoreCatersPackageAddon({
+                                      status: "0",
+                                      id: row.id.toString(),
+                                    })
+                                  );
+                              }}
+                              className={`px-4 py-1 text-white bg-green-700 rounded-full`}
+                            >
+                              Enable
+                            </button>
+                          ) : null}
+                        </DataTableCell>
+                      </DataTableRow>
+                    )
+                  )}
                 </>
               ) : null}
             </DataTable>
