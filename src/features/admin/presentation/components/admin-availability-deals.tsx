@@ -35,6 +35,10 @@ import {
   selectUpdateStoreDeal,
   updateStoreDeal,
 } from "../slices/update-store-deal.slice";
+import {
+  getDealCategories,
+  selectGetDealCategories,
+} from "../slices/get-deal-categories.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -65,22 +69,29 @@ export function AdminAvailabilityDeals() {
   const navigate = useNavigate();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
-  const status = query.get("status") ?? "0";
+  const status = query.get("status");
   const storeId = query.get("store_id");
+  const categoryId = query.get("category_id");
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
 
   const getAdminStoreDealsState = useAppSelector(selectGetAdminStoreDeals);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getDealCategoriesState = useAppSelector(selectGetDealCategories);
   const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
+
+  useEffect(() => {
+    dispatch(getDealCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
-      status: status ?? 0,
+      status: status,
       store_id: storeId ?? 3,
+      category_id: categoryId,
       order_by: orderBy,
       order: order,
       search: search,
@@ -95,6 +106,7 @@ export function AdminAvailabilityDeals() {
     order,
     search,
     storeId,
+    categoryId,
     updateStoreDealState,
   ]);
 
@@ -114,6 +126,7 @@ export function AdminAvailabilityDeals() {
                   per_page: perPage,
                   status: 0,
                   store_id: storeId,
+                  category_id: categoryId,
                   search: search,
                 };
 
@@ -126,7 +139,9 @@ export function AdminAvailabilityDeals() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status && status === "0" ? "text-base" : "text-xs opacity-40"
+                status === null || status === "0"
+                  ? "text-base"
+                  : "text-xs opacity-40"
               } rounded-full`}
             >
               Available
@@ -138,6 +153,7 @@ export function AdminAvailabilityDeals() {
                   per_page: perPage,
                   status: 1,
                   store_id: storeId,
+                  category_id: categoryId,
                   search: search,
                 };
 
@@ -174,6 +190,7 @@ export function AdminAvailabilityDeals() {
                     per_page: perPage,
                     status: status,
                     store_id: value.store_id === -1 ? null : value.store_id,
+                    category_id: categoryId,
                     search: search,
                   };
                   const queryParams = createQueryParams(params);
@@ -191,6 +208,48 @@ export function AdminAvailabilityDeals() {
         </div>
       </div>
 
+      <div className="px-4 py-2">
+        {getDealCategoriesState.data ? (
+          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
+            <InputLabel>Filter by category</InputLabel>
+
+            <Select
+              label="Filter by category"
+              defaultValue={categoryId ?? "all"}
+              onChange={(event) => {
+                if (event.target.value !== status) {
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    status: status,
+                    store_id: storeId,
+                    category_id:
+                      event.target.value === "all" ? null : event.target.value,
+                    search: search,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
+              }}
+            >
+              <MenuItem value="all">
+                <span className="text-xs lg:text-base">All</span>
+              </MenuItem>
+              {getDealCategoriesState.data?.map((category, index) => (
+                <MenuItem key={index} value={category.id}>
+                  <span className="text-xs lg:text-base">{category.name}</span>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        ) : null}
+      </div>
+
       {getAdminStoreDealsState.data?.deals ? (
         <>
           <div className="p-4 lg:hidden">
@@ -203,6 +262,7 @@ export function AdminAvailabilityDeals() {
                   status: status,
                   order_by: orderBy,
                   store_id: storeId,
+                  category_id: categoryId,
                   order: order,
                   search: val === "" ? null : val,
                 };
@@ -221,6 +281,7 @@ export function AdminAvailabilityDeals() {
                     per_page: event.target.value,
                     status: status,
                     store_id: storeId,
+                    category_id: categoryId,
                     search: search,
                   };
 
@@ -241,6 +302,7 @@ export function AdminAvailabilityDeals() {
                     per_page: perPage,
                     status: status,
                     store_id: storeId,
+                    category_id: categoryId,
                     search: search,
                   };
 
@@ -263,14 +325,18 @@ export function AdminAvailabilityDeals() {
                   className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-xs lg:text-bas">
-                      {" "}
-                      {row.alias} - {row.name}
-                    </span>
+                  <span className="flex flex-wrap items-center space-x-1 font-semibold">
+                    {row.alias}
                   </span>
 
-                  {status && status === "0" ? (
+                  <div
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: row.name,
+                    }}
+                  />
+
+                  {status === null || status === "0" ? (
                     <button
                       onClick={() => {
                         if (row.id)
@@ -317,6 +383,7 @@ export function AdminAvailabilityDeals() {
                   per_page: perPage,
                   status: status,
                   store_id: storeId,
+                  category_id: categoryId,
                   order_by: orderBy,
                   order: order,
                   search: val === "" ? null : val,
@@ -338,6 +405,7 @@ export function AdminAvailabilityDeals() {
                     per_page: perPage,
                     status: status,
                     store_id: storeId,
+                    category_id: categoryId,
                     order_by: column_selected,
                     order: isAsc ? "desc" : "asc",
                     search: search,
@@ -360,6 +428,7 @@ export function AdminAvailabilityDeals() {
                     per_page: event.target.value,
                     status: status,
                     store_id: storeId,
+                    category_id: categoryId,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -382,6 +451,7 @@ export function AdminAvailabilityDeals() {
                     per_page: perPage,
                     status: status,
                     store_id: storeId,
+                    category_id: categoryId,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -407,7 +477,7 @@ export function AdminAvailabilityDeals() {
                       <DataTableCell>{row.alias}</DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
-                        {status && status === "0" ? (
+                        {status === null || status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)

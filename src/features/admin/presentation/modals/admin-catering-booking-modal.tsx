@@ -59,7 +59,7 @@ export function AdminCateringBookingModal(props: AdminShopOrdersModalProps) {
     >
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-2xl text-white">Order Summary</span>
+          <span className="text-2xl text-white">Booking Summary</span>
           <button
             className="text-2xl text-white"
             onClick={() => {

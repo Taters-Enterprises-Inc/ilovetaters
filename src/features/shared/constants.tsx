@@ -467,7 +467,7 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
     color: "#a21013",
   },
   {
-    name: "Forfeited",
+    name: "Cancelled",
     color: "#a21013",
   },
   {

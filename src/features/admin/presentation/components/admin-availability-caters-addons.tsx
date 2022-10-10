@@ -27,18 +27,18 @@ import {
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
-  getAdminStoreProducts,
-  resetGetAdminStoreProductsStatus,
-  selectGetAdminStoreProducts,
-} from "../slices/get-admin-stores-products.slice";
+  getAdminStorePackages,
+  resetGetAdminStorePackagesStatus,
+  selectGetAdminStorePackages,
+} from "../slices/get-admin-stores-packages.slice";
 import {
-  getProductCategories,
-  selectGetProductCategories,
-} from "../slices/get-product-categories.slice";
+  getPackageCategories,
+  selectGetPackageCategories,
+} from "../slices/get-package-categories.slice";
 import {
-  selectUpdateStoreProduct,
-  updateStoreProduct,
-} from "../slices/update-store-product.slice";
+  selectUpdateStorePackage,
+  updateStorePackage,
+} from "../slices/update-store-packages.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -64,7 +64,7 @@ const createQueryParams = (params: object): string => {
   return result;
 };
 
-export function AdminAvailabilityProducts() {
+export function AdminAvailabilityCatersAddons() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -77,15 +77,15 @@ export function AdminAvailabilityProducts() {
   const order = query.get("order");
   const search = query.get("search");
 
-  const getAdminStoreProductsState = useAppSelector(
-    selectGetAdminStoreProducts
+  const getAdminStorePackagesState = useAppSelector(
+    selectGetAdminStorePackages
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getProductCategoriesState = useAppSelector(selectGetProductCategories);
-  const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
+  const getPackageCategoriesState = useAppSelector(selectGetPackageCategories);
+  const updateStorePackageState = useAppSelector(selectUpdateStorePackage);
 
   useEffect(() => {
-    dispatch(getProductCategories());
+    dispatch(getPackageCategories());
   }, [dispatch]);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export function AdminAvailabilityProducts() {
       order: order,
       search: search,
     });
-    dispatch(getAdminStoreProducts(query));
+    dispatch(getAdminStorePackages(query));
   }, [
     dispatch,
     pageNo,
@@ -110,14 +110,14 @@ export function AdminAvailabilityProducts() {
     search,
     storeId,
     categoryId,
-    updateStoreProductState,
+    updateStorePackageState,
   ]);
 
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Products Availability
+          Packages Availability
         </span>
 
         <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
@@ -135,7 +135,7 @@ export function AdminAvailabilityProducts() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStoreProductsStatus());
+                dispatch(resetGetAdminStorePackagesStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -162,7 +162,7 @@ export function AdminAvailabilityProducts() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminStoreProductsStatus());
+                dispatch(resetGetAdminStorePackagesStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -213,7 +213,7 @@ export function AdminAvailabilityProducts() {
         </div>
       </div>
       <div className="px-4 py-2">
-        {getProductCategoriesState.data ? (
+        {getPackageCategoriesState.data ? (
           <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
@@ -244,7 +244,7 @@ export function AdminAvailabilityProducts() {
               <MenuItem value="all">
                 <span className="text-xs lg:text-base">All</span>
               </MenuItem>
-              {getProductCategoriesState.data?.map((category, index) => (
+              {getPackageCategoriesState.data?.map((category, index) => (
                 <MenuItem key={index} value={category.id}>
                   <span className="text-xs lg:text-base">{category.name}</span>
                 </MenuItem>
@@ -254,7 +254,7 @@ export function AdminAvailabilityProducts() {
         ) : null}
       </div>
 
-      {getAdminStoreProductsState.data?.products ? (
+      {getAdminStorePackagesState.data?.packages ? (
         <>
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
@@ -291,7 +291,7 @@ export function AdminAvailabilityProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStoreProductsStatus());
+                  dispatch(resetGetAdminStorePackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -312,19 +312,19 @@ export function AdminAvailabilityProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStoreProductsStatus());
+                  dispatch(resetGetAdminStorePackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminStoreProductsState.data.pagination.total_rows}
-              perPage={getAdminStoreProductsState.data.pagination.per_page}
+              totalRows={getAdminStorePackagesState.data.pagination.total_rows}
+              perPage={getAdminStorePackagesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminStoreProductsState.data.products.map((row, i) => (
+              {getAdminStorePackagesState.data.packages.map((row, i) => (
                 <div
                   className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
                   key={i}
@@ -345,7 +345,7 @@ export function AdminAvailabilityProducts() {
                       onClick={() => {
                         if (row.id)
                           dispatch(
-                            updateStoreProduct({
+                            updateStorePackage({
                               status: "1",
                               id: row.id.toString(),
                             })
@@ -360,7 +360,7 @@ export function AdminAvailabilityProducts() {
                       onClick={() => {
                         if (row.id)
                           dispatch(
-                            updateStoreProduct({
+                            updateStorePackage({
                               status: "0",
                               id: row.id.toString(),
                             })
@@ -401,7 +401,7 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
@@ -417,7 +417,7 @@ export function AdminAvailabilityProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStoreProductsStatus());
+                  dispatch(resetGetAdminStorePackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -440,7 +440,7 @@ export function AdminAvailabilityProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStoreProductsStatus());
+                  dispatch(resetGetAdminStorePackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -463,20 +463,20 @@ export function AdminAvailabilityProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminStoreProductsStatus());
+                  dispatch(resetGetAdminStorePackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminStoreProductsState.data.pagination.total_rows}
-              perPage={getAdminStoreProductsState.data.pagination.per_page}
+              totalRows={getAdminStorePackagesState.data.pagination.total_rows}
+              perPage={getAdminStorePackagesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminStoreProductsState.data.products !== undefined ? (
+              {getAdminStorePackagesState.data.packages !== undefined ? (
                 <>
-                  {getAdminStoreProductsState.data.products.map((row, i) => (
+                  {getAdminStorePackagesState.data.packages.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
@@ -493,7 +493,7 @@ export function AdminAvailabilityProducts() {
                             onClick={() => {
                               if (row.id)
                                 dispatch(
-                                  updateStoreProduct({
+                                  updateStorePackage({
                                     status: "1",
                                     id: row.id.toString(),
                                   })
@@ -508,7 +508,7 @@ export function AdminAvailabilityProducts() {
                             onClick={() => {
                               if (row.id)
                                 dispatch(
-                                  updateStoreProduct({
+                                  updateStorePackage({
                                     status: "0",
                                     id: row.id.toString(),
                                   })

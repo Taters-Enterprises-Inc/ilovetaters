@@ -63,7 +63,7 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
           </button>
 
           <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">
-            Hi! Welcome to Popclub
+            Hi! Welcome to Taters
           </h1>
           <h2 className="text-xs text-center">
             Continue with us by connecting your existing account

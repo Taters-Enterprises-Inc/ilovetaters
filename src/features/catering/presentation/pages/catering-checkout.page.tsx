@@ -47,7 +47,6 @@ export function CateringCheckout() {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
-  const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
   const [enableCompanyName, setEnableCompanyName] = useState(false);
 
@@ -312,9 +311,10 @@ export function CateringCheckout() {
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
                 {getSessionState.data?.userData.first_name ? (
                   <TextField
-                    aria-readonly
-                    value={getSessionState.data.userData.first_name}
+                    required
+                    defaultValue={getSessionState.data.userData.first_name}
                     variant="outlined"
+                    label="First Name"
                     className="w-full"
                     name="firstName"
                   />
@@ -330,8 +330,9 @@ export function CateringCheckout() {
 
                 {getSessionState.data?.userData.last_name ? (
                   <TextField
-                    aria-readonly
-                    value={getSessionState.data.userData.last_name}
+                    required
+                    label="Last Name"
+                    defaultValue={getSessionState.data.userData.last_name}
                     variant="outlined"
                     className="w-full"
                     name="lastName"
@@ -350,9 +351,10 @@ export function CateringCheckout() {
                   <div className="flex-1">
                     {getSessionState.data?.userData.email ? (
                       <TextField
+                        required
                         autoComplete="off"
-                        aria-readonly
-                        value={getSessionState.data.userData.email}
+                        label="E-mail Address"
+                        defaultValue={getSessionState.data.userData.email}
                         variant="outlined"
                         className="w-full"
                         name="eMail"
@@ -369,38 +371,7 @@ export function CateringCheckout() {
                     )}
                   </div>
                   <div className="flex-1">
-                    {getContactsState?.data &&
-                    getContactsState.data.length > 0 ? (
-                      <FormControl className="w-full">
-                        <InputLabel>Contacts</InputLabel>
-                        <Select
-                          className="w-full"
-                          label="Contacts"
-                          name="phoneNumber"
-                          required
-                          defaultValue={getContactsState.data[0].contact}
-                          ref={phoneNumberRef}
-                          autoComplete="off"
-                        >
-                          {getContactsState.data.map((val) => (
-                            <MenuItem value={val.contact}>
-                              {val.contact}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    ) : (
-                      <PhoneInput />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenAddContactModal(true);
-                      }}
-                      className="text-xs underline text-primary underline-offset-4"
-                    >
-                      Setup your phone number
-                    </button>
+                    <PhoneInput />
                   </div>
                 </div>
 
@@ -735,13 +706,6 @@ export function CateringCheckout() {
           </div>
         </div>
       </section>
-
-      <AddContactModal
-        open={openAddContactModal}
-        onClose={() => {
-          setOpenAddContactModal(false);
-        }}
-      />
 
       <CateringFaqsModal
         open={openCateringFaqsModal}

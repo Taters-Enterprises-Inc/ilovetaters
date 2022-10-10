@@ -4,6 +4,7 @@ import {
   UpdateAdminSettingStoreOperatingHoursParam,
   UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
+  UpdateStorePackageParam,
   UpdateStoreProductParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
@@ -18,9 +19,10 @@ import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-sh
 import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
-import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
+import { CategoryModel } from "features/admin/core/domain/category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { GetAdminStorePackagesModel } from "features/admin/core/domain/get-admin-store-packages.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -206,7 +208,7 @@ export interface GetAdminStoreProductsResponse {
 export interface GetProductCategoriesResponse {
   data: {
     message: string;
-    data: Array<ProductCategoryModel>;
+    data: Array<CategoryModel>;
   };
 }
 
@@ -240,6 +242,68 @@ export interface UpdateAdminSettingStoreOperatingHoursResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetPackageCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface GetAdminStorePackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminStorePackagesModel;
+  };
+}
+
+export interface UpdateStorePackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetDealCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export function GetDealCategoriesRepository(): Promise<GetDealCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deal-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStorePackageRepository(
+  param: UpdateStorePackageParam
+): Promise<UpdateStorePackageResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStorePackagesRepository(
+  query: string
+): Promise<GetAdminStorePackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/package${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetPackageCategoriesRepository(): Promise<GetPackageCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/package-categories`, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateAdminSettingStoreOperatingHoursRepository(

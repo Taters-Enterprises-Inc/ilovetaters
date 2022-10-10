@@ -257,6 +257,8 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   expanded={
                     expanded === "/admin/availability/deal" ||
                     expanded === "/admin/availability/product" ||
+                    expanded === "/admin/availability/package" ||
+                    expanded === "/admin/availability/caters-add-on" ||
                     exp
                   }
                   onChange={handleChange(location.pathname)}
@@ -330,7 +332,65 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Products Availability
+                                Shop Products Availability
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink
+                          to="/admin/availability/package"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Caters Packages Availability
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink
+                          to="/admin/availability/caters-add-on"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Caters Add-ons Availability
                               </span>
                             </span>
                           </span>

@@ -3,12 +3,12 @@ import { GroupModel } from "features/admin/core/domain/group.model";
 import { CategoryModel } from "features/admin/core/domain/category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import {
-  GetProductCategoriesRepository,
-  GetProductCategoriesResponse,
+  GetPackageCategoriesRepository,
+  GetPackageCategoriesResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetProductCategoriesState {
+export enum GetPackageCategoriesState {
   initial,
   inProgress,
   success,
@@ -16,21 +16,21 @@ export enum GetProductCategoriesState {
 }
 
 const initialState: {
-  status: GetProductCategoriesState;
+  status: GetPackageCategoriesState;
   message: string;
   data: Array<CategoryModel> | undefined;
 } = {
-  status: GetProductCategoriesState.initial,
+  status: GetPackageCategoriesState.initial,
   message: "",
   data: undefined,
 };
 
-export const getProductCategories = createAsyncThunk(
-  "getProductCategories",
+export const getPackageCategories = createAsyncThunk(
+  "getPackageCategories",
   async (param, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: GetProductCategoriesResponse =
-        await GetProductCategoriesRepository();
+      const response: GetPackageCategoriesResponse =
+        await GetPackageCategoriesRepository();
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
@@ -39,17 +39,17 @@ export const getProductCategories = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getProductCategoriesSlice = createSlice({
-  name: "getProductCategories",
+export const getPackageCategoriesSlice = createSlice({
+  name: "getPackageCategories",
   initialState,
   reducers: {},
   extraReducers: (builder: any) => {
     builder
-      .addCase(getProductCategories.pending, (state: any) => {
-        state.status = GetProductCategoriesState.inProgress;
+      .addCase(getPackageCategories.pending, (state: any) => {
+        state.status = GetPackageCategoriesState.inProgress;
       })
       .addCase(
-        getProductCategories.fulfilled,
+        getPackageCategories.fulfilled,
         (
           state: any,
           action: PayloadAction<{
@@ -58,17 +58,17 @@ export const getProductCategoriesSlice = createSlice({
           }>
         ) => {
           const { message, data } = action.payload;
-          state.status = GetProductCategoriesState.success;
+          state.status = GetPackageCategoriesState.success;
           state.message = message;
           state.data = data;
         }
       )
       .addCase(
-        getProductCategories.rejected,
+        getPackageCategories.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           const { message } = action.payload;
 
-          state.status = GetProductCategoriesState.fail;
+          state.status = GetPackageCategoriesState.fail;
           state.message = message;
           state.data = null;
         }
@@ -76,7 +76,7 @@ export const getProductCategoriesSlice = createSlice({
   },
 });
 
-export const selectGetProductCategories = (state: RootState) =>
-  state.getProductCategories;
+export const selectGetPackageCategories = (state: RootState) =>
+  state.getPackageCategories;
 
-export default getProductCategoriesSlice.reducer;
+export default getPackageCategoriesSlice.reducer;

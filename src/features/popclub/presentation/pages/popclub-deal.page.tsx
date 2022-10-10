@@ -28,7 +28,6 @@ import {
 } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
-import "react-toastify/dist/ReactToastify.css";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import {

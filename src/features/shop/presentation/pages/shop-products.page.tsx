@@ -8,10 +8,16 @@ import {
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
+import { ShopHeroCarousel } from "../carousels/shop-hero.carousel";
 import {
   getCategoryProducts,
   selectGetCategoryProducts,
 } from "../slices/get-category-products.slice";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
 
 export function ShopProducts() {
   const getSessionState = useAppSelector(selectGetSession);
@@ -46,32 +52,8 @@ export function ShopProducts() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <section className="lg:container">
-        <img
-          className="sm:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/instructions/snackshop_instructions.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <ShopHeroCarousel />
+
       <section className="space-y-10 pb-36 lg:pb-10">
         {getCategoryProductsState.data?.map((category: any, i: number) => {
           return (
