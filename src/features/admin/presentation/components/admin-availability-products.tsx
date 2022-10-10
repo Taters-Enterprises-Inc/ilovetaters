@@ -45,6 +45,7 @@ import TextField from "@mui/material/TextField";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
+  { id: "description", label: "Description" },
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
@@ -328,9 +329,16 @@ export function AdminAvailabilityProducts() {
                   className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-xs lg:text-bas">{row.name}</span>
+                  <span className="flex flex-wrap items-center space-x-1 font-semibold">
+                    {row.name}
                   </span>
+
+                  <div
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: row.add_details,
+                    }}
+                  />
 
                   {status === null || status === "0" ? (
                     <button
@@ -471,6 +479,13 @@ export function AdminAvailabilityProducts() {
                   {getAdminStoreProductsState.data.products.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>{row.name}</DataTableCell>
+                      <DataTableCell>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: row.add_details,
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
                         {status === null || status === "0" ? (
