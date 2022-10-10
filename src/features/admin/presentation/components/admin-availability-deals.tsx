@@ -325,12 +325,16 @@ export function AdminAvailabilityDeals() {
                   className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-xs lg:text-bas">
-                      {" "}
-                      {row.alias} - {row.name}
-                    </span>
+                  <span className="flex flex-wrap items-center space-x-1 font-semibold">
+                    {row.alias}
                   </span>
+
+                  <div
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: row.name,
+                    }}
+                  />
 
                   {status === null || status === "0" ? (
                     <button
