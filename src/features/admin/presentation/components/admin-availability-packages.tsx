@@ -45,6 +45,7 @@ import TextField from "@mui/material/TextField";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
+  { id: "description", label: "Description" },
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
@@ -471,6 +472,13 @@ export function AdminAvailabilityPackages() {
                   {getAdminStorePackagesState.data.packages.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>{row.name}</DataTableCell>
+                      <DataTableCell>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: row.add_details,
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
                         {status === null || status === "0" ? (
