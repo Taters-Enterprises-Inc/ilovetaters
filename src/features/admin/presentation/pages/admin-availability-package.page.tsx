@@ -1,16 +1,22 @@
-import { AdminAvailabilityPackageTable } from "../tables/admin-availability-package-table";
+import { AdminAvailabilityPackages, AdminHead } from "../components";
 
 export function AdminAvailabilityPackage() {
   return (
     <>
-      <div className="relative flex">
-        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-5 text-secondary">
-          Packages Availability
-        </h1>
-      </div>
-      <div className="font-['Bebas_Neue'] text-3xl ml-4 mr-4 mt-4">
-        <AdminAvailabilityPackageTable />
-      </div>
+      <AdminHead
+        AdminBreadCrumbsProps={{
+          home: {
+            title: "Home",
+            url: "/admin",
+          },
+          className: "lg:h-[200px]",
+          pageTitles: [
+            { name: "Availabilities", url: "/admin/availabilities" },
+          ],
+        }}
+      />
+
+      <AdminAvailabilityPackages />
     </>
   );
 }
