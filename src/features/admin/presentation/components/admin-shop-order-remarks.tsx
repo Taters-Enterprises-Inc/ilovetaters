@@ -3,22 +3,31 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  TextField,
 } from "@mui/material";
+import { borderRadius } from "@mui/system";
 import React from "react";
-
-interface State {
-  remarks: string;
-}
 
 export function AdminShopOrderRemarks() {
   return (
-    <FormControl fullWidth sx={{ m: 1 }}>
-      <InputLabel htmlFor="outlined-adornment-amount">Remarks</InputLabel>
-      <OutlinedInput
-        id="outlined-adornment-amount"
-        startAdornment={<InputAdornment position="start">$</InputAdornment>}
-        label="Amount"
+    <form className="flex flex-col flex-1 m-4 lg:flex-row">
+      <TextField
+        fullWidth
+        sx={{
+          "& fieldset": {
+            borderRadius: "0px",
+          },
+        }}
+        required
+        label="Remarks"
+        placeholder="Enter your remarks here"
       />
-    </FormControl>
+      <button
+        type="submit"
+        className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
+      >
+        Save Remarks
+      </button>
+    </form>
   );
 }
