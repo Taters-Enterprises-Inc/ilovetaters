@@ -25,10 +25,10 @@ const initialState: {
 
 export const adminCompleteRedeem = createAsyncThunk(
   "adminCompleteRedeem",
-  async (redeemCode: string, { rejectWithValue, fulfillWithValue }) => {
+  async (redeemId: number, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: AdminCompleteRedeemResponse =
-        await AdminCompleteRedeemRepository(redeemCode);
+        await AdminCompleteRedeemRepository(redeemId);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
