@@ -198,6 +198,7 @@ export function AdminCateringBookings() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No catering bookings yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

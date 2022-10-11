@@ -115,6 +115,7 @@ export function ProfileCateringBookings() {
         <>
           <div className="py-4 lg:hidden">
             <DataList
+              emptyMessage="No catering bookings yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

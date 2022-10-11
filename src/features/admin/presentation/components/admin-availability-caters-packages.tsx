@@ -263,6 +263,7 @@ export function AdminAvailabilityCatersPackages() {
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="Empty availability caters packages."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

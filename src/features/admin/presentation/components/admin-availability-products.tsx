@@ -259,6 +259,7 @@ export function AdminAvailabilityProducts() {
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="Empty availability products."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

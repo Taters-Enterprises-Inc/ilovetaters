@@ -98,6 +98,7 @@ export function ProfilePopclubRedeems() {
         <>
           <div className="py-4 lg:hidden">
             <DataList
+              emptyMessage="No popclub redeems yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

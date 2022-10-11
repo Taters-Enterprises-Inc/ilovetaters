@@ -119,6 +119,7 @@ export function AdminSettingUsers() {
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No users yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

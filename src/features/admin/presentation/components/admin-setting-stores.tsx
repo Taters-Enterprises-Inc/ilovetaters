@@ -132,6 +132,7 @@ export function AdminSettingStores() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No stores yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

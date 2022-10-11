@@ -139,9 +139,7 @@ export function DataTable(props: DataTableProps) {
         </Table>
 
         {props.totalRows <= 0 ? (
-          <div className="py-4 text-center b-gray-700">
-            {props.emptyMessage}
-          </div>
+          <div className="py-4 text-center">{props.emptyMessage}</div>
         ) : null}
       </TableContainer>
     </div>
