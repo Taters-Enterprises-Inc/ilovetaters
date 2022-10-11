@@ -680,6 +680,25 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
   },
 ];
 
+export const ADMIN_SNACKSHOP_TRANSACTION_LOGS_ACTION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  { name: "", color: "" },
+  {
+    name: "Update",
+    color: "#cca300",
+  },
+  {
+    name: "Accept",
+    color: "#004d00",
+  },
+  {
+    name: "Error",
+    color: "#a21013",
+  },
+];
+
 export const ADMIN_SNACKSHOP_MOP_STATUS = [
   "' - '",
   "BPI",

@@ -10,9 +10,9 @@ import React from "react";
 
 export function AdminShopOrderRemarks() {
   return (
-    <form className="flex flex-col flex-1 m-4 lg:flex-row">
+    <form className="flex flex-col m-4 lg:flex-row">
       <TextField
-        fullWidth
+        className="flex-1"
         sx={{
           "& fieldset": {
             borderRadius: "0px",
