@@ -33,12 +33,42 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
     return null;
   }
 
+  function adjustAutoComplete() {
+
+    var inputContainer = document.querySelector("#storeModal input")!;
+    var autoComplete = document.getElementsByClassName("pac-container");
+    var autoCompleteIndex = autoComplete.length - 1;  
+
+    var newTop = window.scrollY + inputContainer.getBoundingClientRect().bottom;
+    var newLeft = inputContainer.getBoundingClientRect().left;
+
+    if ((inputContainer as HTMLInputElement).value == "" || autoComplete[autoCompleteIndex].textContent == "") {
+
+      autoComplete[autoCompleteIndex].setAttribute("style", "display: none;");
+    }
+
+      else {
+
+        autoComplete[autoCompleteIndex].setAttribute("style", 
+          "top: " + newTop + "px;" +
+          "left: " + newLeft + "px;"
+        ); 
+      }
+
+    for (var i = autoCompleteIndex + 1; i <= autoComplete.length; i++) {
+
+      autoComplete[i].setAttribute("style", "display: none;");
+    }
+  }
+
+  window.addEventListener("scroll", adjustAutoComplete, true);
+
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
       className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
     >
-      <div className="bg-primary px-3 py-[30px] round w-[90%] lg:w-[80%] relative rounded-[10px] my-10">
+      <div id="storeModal" className="bg-primary px-3 py-[30px] round w-[90%] lg:w-[80%] relative rounded-[10px] my-10">
         <button
           className="absolute text-2xl text-white top-2 right-4"
           onClick={() => {
