@@ -104,7 +104,7 @@ export function ProfileHome() {
             required
             label="E-mail"
             defaultValue={getSessionState.data?.userData.email}
-            className="w-full flex-1"
+            className="flex-1 w-full"
             name="eMail"
           />
         ) : null}
