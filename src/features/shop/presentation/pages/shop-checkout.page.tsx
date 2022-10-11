@@ -36,7 +36,7 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { PhoneInput } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
-import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -139,12 +139,13 @@ export function ShopCheckout() {
         calculatedPrice += deals[i].deal_promo_price;
       }
     }
-
+    
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
       if (
         getLatestUnexpiredRedeemState.data &&
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice 
+        && getLatestUnexpiredRedeemState.data.store === getSessionState.data.cache_data?.store_id
       ) {
         isDeliveryApplied.current = true;
 
@@ -660,6 +661,7 @@ export function ShopCheckout() {
 
                     {getLatestUnexpiredRedeemState.data &&
                     isDeliveryApplied.current ? (
+
                       <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
                         <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                           Popclub Deal
@@ -667,7 +669,7 @@ export function ShopCheckout() {
                         <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
                           <img
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getLatestUnexpiredRedeemState.data?.product_image}`}
-                            className="rounded-[10px] w-[92px] h-[92px]"
+                            className="rounded-[10px] w-[92px] h-[92px]" 
                             alt=""
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
