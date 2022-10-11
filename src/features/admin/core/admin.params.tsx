@@ -13,6 +13,21 @@ export interface UpdateStoreProductParam {
   status: "1" | "0";
 }
 
+export interface UpdateStoreCatersPackageParam {
+  id: string;
+  status: "1" | "0";
+}
+
+export interface UpdateStoreCatersPackageAddonParam {
+  id: string;
+  status: "1" | "0";
+}
+
+export interface UpdateStoreCatersProductAddonParam {
+  id: string;
+  status: "1" | "0";
+}
+
 export interface UpdateAdminSettingStoreParam {
   store_id: number;
   name_of_field_status: string;

@@ -157,6 +157,7 @@ export function AdminPopClubRedeems() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No popclub redeems yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -294,6 +295,7 @@ export function AdminPopClubRedeems() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No popclub redeems yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

@@ -10,9 +10,9 @@ export { AdminCFaq } from "./admin-cfaqs.page";
 export { AdminRaffleSnackshop } from "./admin-raffle-snackshop.page";
 export { AdminRaffleInstore } from "./admin-raffle-instore-page";
 
-export { AdminAvailabilityCateringAddOn } from "./admin-availability-catering-addon.page";
-export { AdminAvailabilityProductAddOn } from "./admin-availability-product-addon.page";
-export { AdminAvailabilityPackage } from "./admin-availability-package.page";
+export { AdminAvailabilityCatersPackage } from "./admin-availability-caters-package.page";
+export { AdminAvailabilityCatersPackageAddon } from "./admin-availability-caters-package-addon.page";
+export { AdminAvailabilityCatersProductAddon } from "./admin-availability-caters-product-addon.page";
 export { AdminAvailabilityProduct } from "./admin-availability-product.page";
 export { AdminAvailabilityBanner } from "./admin-availability-banner.page";
 

@@ -198,6 +198,7 @@ export function AdminCateringBookings() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No catering bookings yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -319,6 +320,7 @@ export function AdminCateringBookings() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No catering bookings yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

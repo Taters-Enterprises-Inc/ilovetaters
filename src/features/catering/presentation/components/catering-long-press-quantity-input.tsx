@@ -1,15 +1,28 @@
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useRef, useState } from "react";
-import { useAppSelector } from "features/config/hooks";
+import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { CateringMultiFlavorsType } from "../pages/catering-product.page";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+
+export type CateringFlavorQuantityActionType = "minus" | "plus";
+
+export interface CateringFlavorQuantityProps {
+  min: number;
+  reset?: boolean;
+  productQuantity: number;
+  parent_index: number;
+  currentMultiFlavors: CateringMultiFlavorsType;
+  onChange: (manualInputValue: number) => void;
+}
 
 interface LongPressQuantityInputProps {
-  min: number;
-  max?: number;
-  quantity: number;
   productQuantity: number;
-  totalMultiFlavorsQuantity: number;
-  onChange: (action: "plus" | "minus" | "edit", value: number) => void;
+  parent_index: number;
+  flavorId: number;
+  currentMultiFlavors: CateringMultiFlavorsType;
+  onChange: (value: number) => void;
 }
 
 let timeout: any;
@@ -19,10 +32,35 @@ export function CateringLongPressQuantityInput(
   props: LongPressQuantityInputProps
 ) {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const [quantity, setQuantity] = useState<string>("0");
   const getSessionState = useAppSelector(selectGetSession);
-  const [setDisabled] = useState(true);
+  const dispatch = useAppDispatch();
 
-  const quantityOnPressed = (action: "plus" | "minus") => {
+  let totalMultiFlavorsQuantity = 0;
+  let totalMultiFlavorsQuantityWithoutCurrentInput = 0;
+  const currentMultiFlavors = props.currentMultiFlavors[props.parent_index];
+
+  if (currentMultiFlavors !== undefined) {
+    Object.keys(currentMultiFlavors).forEach(function (key) {
+      totalMultiFlavorsQuantity += currentMultiFlavors[key].quantity;
+    });
+
+    Object.keys(currentMultiFlavors).forEach(function (key) {
+      if (props.flavorId.toString() !== key)
+        totalMultiFlavorsQuantityWithoutCurrentInput +=
+          currentMultiFlavors[key].quantity;
+    });
+  } else if (quantity !== "0") {
+    setQuantity("0");
+  }
+
+  const remainingNumberOfFlavor =
+    props.productQuantity - totalMultiFlavorsQuantity;
+
+  const quantityOnPressed = (
+    action: CateringFlavorQuantityActionType,
+    isTouch = false
+  ) => {
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
@@ -31,28 +69,49 @@ export function CateringLongPressQuantityInput(
       return;
     }
 
-    // if (isTouch === false) props.onChange(action);
+    if (isTouch === false) {
+      switch (action) {
+        case "plus":
+          if (remainingNumberOfFlavor > 0) {
+            props.onChange(parseInt(quantity) + 1);
+            setQuantity((parseInt(quantity) + 1).toString());
+          } else {
+            return;
+          }
+          break;
+        case "minus":
+          if (
+            parseInt(quantity) > 0 &&
+            remainingNumberOfFlavor < props.productQuantity
+          ) {
+            props.onChange(parseInt(quantity) - 1);
+            setQuantity((parseInt(quantity) - 1).toString());
+          } else {
+            return;
+          }
+          break;
+      }
+    }
 
-    props.onChange(action, 0);
+    const remainingNumberOfFlavorWithoutCurrentInput =
+      props.productQuantity - totalMultiFlavorsQuantityWithoutCurrentInput;
 
     timeout = setTimeout(function () {
-      let counter = action === "plus" ? 0 : props.quantity;
+      let counter = parseInt(quantity);
       interval = setInterval(function () {
-        console.log("LongPress");
         counter = counter + (action === "plus" ? +1 : -1);
-
         if (
           action === "plus" &&
-          props.productQuantity - (props.totalMultiFlavorsQuantity + counter) <=
-            0
+          remainingNumberOfFlavorWithoutCurrentInput < counter
         ) {
           clearTimeout(timeout);
           clearInterval(interval);
-        } else if (counter > props.min) {
-          props.onChange(action, 0);
-        } else {
+        } else if (action === "minus" && counter < 0) {
           clearTimeout(timeout);
           clearInterval(interval);
+        } else {
+          props.onChange(counter);
+          setQuantity(counter.toString());
         }
       }, 100);
     }, 500);
@@ -63,63 +122,72 @@ export function CateringLongPressQuantityInput(
     clearInterval(interval);
   };
 
-  const onChangeQuantity = (e: any) => {
-    let val = parseInt(e.target.value);
-
-    // if (props.productQuantity >= props.totalMultiFlavorsQuantity) {
-    // }
-
-    props.onChange("edit", val);
-  };
-
   return (
     <>
       <div className="w-full sm:w-[200px] h-12">
         <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
           <button
             onMouseDown={() => quantityOnPressed("minus")}
-            onMouseUp={(e) => quantityOffPressed()}
-            onTouchStart={() => quantityOnPressed("minus")}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              quantityOffPressed();
-            }}
-            className={`w-[150px] h-full rounded-l outline-none cursor-pointer bg-primary ${
-              props.quantity === props.min || isNaN(props.quantity)
-                ? "opacity-30 cursor-not-allowed"
-                : ""
+            onMouseUp={quantityOffPressed}
+            onTouchStart={() => quantityOnPressed("minus", true)}
+            onTouchEnd={quantityOffPressed}
+            className={`w-[150px] h-full flex justify-center items-center rounded-l outline-none bg-primary ${
+              quantity === "0" ? "opacity-30 cursor-not-allowed" : ""
             }`}
           >
-            <span className="m-auto text-2xl font-thin leading-3">−</span>
+            <AiOutlineMinus className="text-2xl font-thin" />
           </button>
 
           <input
-            value={props.quantity}
-            onChange={(e) => onChangeQuantity(e)}
-            min="1"
+            onWheel={(event) => event.currentTarget.blur()}
+            value={quantity}
+            onChange={(e) => {
+              if (
+                getSessionState.data?.userData == null ||
+                getSessionState.data?.userData === undefined
+              ) {
+                setOpenLoginChooserModal(true);
+                return;
+              }
+
+              if (e.target.value === "") setQuantity(e.target.value);
+
+              if (e.target.value) {
+                const value = parseInt(e.target.value);
+
+                const remainingNumberOfFlavorWithoutCurrentInput =
+                  props.productQuantity -
+                  totalMultiFlavorsQuantityWithoutCurrentInput;
+
+                if (remainingNumberOfFlavorWithoutCurrentInput >= value) {
+                  setQuantity(value.toString());
+                  props.onChange(value);
+                } else {
+                  dispatch(
+                    popUpSnackBar({
+                      message: "Number of flavor exceeded",
+                      severity: "error",
+                    })
+                  );
+                }
+              }
+            }}
             type="number"
             className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
           />
 
           <button
             onMouseDown={() => quantityOnPressed("plus")}
-            onMouseUp={(e) => quantityOffPressed()}
-            onTouchStart={() => quantityOnPressed("plus")}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              quantityOffPressed();
-            }}
-            className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-              (props.quantity === props.max) === true
-                ? "opacity-30 cursor-not-allowed"
-                : ""
-            } ${
-              props.productQuantity - props.totalMultiFlavorsQuantity <= 0
+            onMouseUp={quantityOffPressed}
+            onTouchStart={() => quantityOnPressed("plus", true)}
+            onTouchEnd={quantityOffPressed}
+            className={`h-full w-[150px] flex justify-center items-center rounded-r bg-primary ${
+              remainingNumberOfFlavor <= 0
                 ? "opacity-30 cursor-not-allowed"
                 : ""
             }`}
           >
-            <span className="m-auto text-2xl font-thin leading-3">+</span>
+            <AiOutlinePlus className="text-2xl font-thin" />
           </button>
         </div>
       </div>

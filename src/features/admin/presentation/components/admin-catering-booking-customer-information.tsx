@@ -358,6 +358,12 @@ export function AdminCateringBookingCustomerInformation() {
             </span>
           </div>
           <div>
+            <strong>Contact Email Address:</strong>{" "}
+            <span className="font-semibold">
+              {getAdminCateringBookingState.data?.email ?? "N/A"}
+            </span>
+          </div>
+          <div>
             <strong>Payment Terms:</strong>{" "}
             <span className="font-semibold">
               {getAdminCateringBookingState.data?.payment_plan === "half"

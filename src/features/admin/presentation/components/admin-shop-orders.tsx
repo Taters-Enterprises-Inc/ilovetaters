@@ -202,6 +202,7 @@ export function AdminShopOrders() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -323,6 +324,7 @@ export function AdminShopOrders() {
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

@@ -56,6 +56,9 @@ import {
   AdminSettingEditUser,
   AdminAvailabilityDeal,
   AdminAvailabilityProduct,
+  AdminAvailabilityCatersPackage,
+  AdminAvailabilityCatersPackageAddon,
+  AdminAvailabilityCatersProductAddon,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -229,6 +232,18 @@ root.render(
                         <Route
                           path="product"
                           element={<AdminAvailabilityProduct />}
+                        />
+                        <Route
+                          path="caters-package"
+                          element={<AdminAvailabilityCatersPackage />}
+                        />
+                        <Route
+                          path="caters-package-addon"
+                          element={<AdminAvailabilityCatersPackageAddon />}
+                        />
+                        <Route
+                          path="caters-product-addon"
+                          element={<AdminAvailabilityCatersProductAddon />}
                         />
                       </Route>
 

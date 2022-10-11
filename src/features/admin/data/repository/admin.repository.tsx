@@ -4,7 +4,10 @@ import {
   UpdateAdminSettingStoreOperatingHoursParam,
   UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
+  UpdateStoreCatersPackageParam,
   UpdateStoreProductParam,
+  UpdateStoreCatersPackageAddonParam,
+  UpdateStoreCatersProductAddonParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -18,9 +21,12 @@ import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-sh
 import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
-import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
+import { CategoryModel } from "features/admin/core/domain/category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { GetAdminStoreCatersPackagesModel } from "features/admin/core/domain/get-admin-store-caters-packages.model";
+import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
+import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -206,7 +212,7 @@ export interface GetAdminStoreProductsResponse {
 export interface GetProductCategoriesResponse {
   data: {
     message: string;
-    data: Array<ProductCategoryModel>;
+    data: Array<CategoryModel>;
   };
 }
 
@@ -240,6 +246,143 @@ export interface UpdateAdminSettingStoreOperatingHoursResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetCatersPackageCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface GetAdminStoreCatersPackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersPackagesModel;
+  };
+}
+
+export interface UpdateStoreCatersPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetDealCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface GetAdminStoreCatersPackageAddonsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersPackageAddonsModel;
+  };
+}
+
+export interface UpdateStoreCatersPackageAddonResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreCatersProductAddonsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersProductAddonsModel;
+  };
+}
+
+export interface UpdateStoreCatersProductAddonResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateStoreCatersProductAddonRepository(
+  param: UpdateStoreCatersProductAddonParam
+): Promise<UpdateStoreCatersProductAddonResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product-addon`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersProductAddonsRepository(
+  query: string
+): Promise<GetAdminStoreCatersProductAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product-addon${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateStoreCatersPackageAddonRepository(
+  param: UpdateStoreCatersPackageAddonParam
+): Promise<UpdateStoreCatersPackageAddonResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package-addon`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersPackageAddonsRepository(
+  query: string
+): Promise<GetAdminStoreCatersPackageAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package-addon${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetDealCategoriesRepository(): Promise<GetDealCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deal-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStoreCatersPackageRepository(
+  param: UpdateStoreCatersPackageParam
+): Promise<UpdateStoreCatersPackageResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersPackagesRepository(
+  query: string
+): Promise<GetAdminStoreCatersPackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCatersPackageCategoriesRepository(): Promise<GetCatersPackageCategoriesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/caters-package-categories`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminSettingStoreOperatingHoursRepository(

@@ -98,6 +98,7 @@ export function ProfilePopclubRedeems() {
         <>
           <div className="py-4 lg:hidden">
             <DataList
+              emptyMessage="No popclub redeems yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -203,6 +204,7 @@ export function ProfilePopclubRedeems() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No popclub redeems yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

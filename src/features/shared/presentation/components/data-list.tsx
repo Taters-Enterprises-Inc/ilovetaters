@@ -13,6 +13,7 @@ interface DataListProps {
   search: string;
   totalRows: number;
   perPage: number;
+  emptyMessage: string;
   onRowsPerPageChange: (event: SelectChangeEvent) => void;
 }
 
@@ -54,6 +55,12 @@ export function DataList(props: DataListProps) {
       </div>
 
       {props.children}
+
+      {props.totalRows <= 0 ? (
+        <div className="py-4 text-center text-secondary">
+          {props.emptyMessage}
+        </div>
+      ) : null}
     </div>
   );
 }

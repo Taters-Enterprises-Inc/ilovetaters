@@ -115,6 +115,7 @@ export function ProfileCateringBookings() {
         <>
           <div className="py-4 lg:hidden">
             <DataList
+              emptyMessage="No catering bookings yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -212,6 +213,7 @@ export function ProfileCateringBookings() {
           <div className="hidden lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
+              emptyMessage="No catering bookings yet."
               orderBy={orderBy ?? "dateadded"}
               search={search ?? ""}
               onSearch={(val) => {

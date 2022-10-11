@@ -114,6 +114,14 @@ import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline
 
 import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
 import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
+import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
+import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
+import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
+import getDealCategories from "features/admin/presentation/slices/get-deal-categories.slice";
+import getAdminStoreCatersPackageAddons from "features/admin/presentation/slices/get-admin-stores-caters-package-addons.slice";
+import updateStoreCatersPackageAddon from "features/admin/presentation/slices/update-store-caters-package-addons.slice";
+import getAdminStoreCatersProductAddons from "features/admin/presentation/slices/get-admin-stores-caters-product-addons.slice";
+import updateStoreCatersProductAddon from "features/admin/presentation/slices/update-store-caters-product-addons.slice";
 
 export const store = configureStore({
   reducer: {
@@ -217,6 +225,14 @@ export const store = configureStore({
     adminDeclineRedeem,
     getAdminStore,
     updateAdminSettingStoreOperatingHours,
+    getCatersPackageCategories,
+    getAdminStoreCatersPackages,
+    updateStoreCatersPackage,
+    getDealCategories,
+    getAdminStoreCatersPackageAddons,
+    updateStoreCatersPackageAddon,
+    getAdminStoreCatersProductAddons,
+    updateStoreCatersProductAddon,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
