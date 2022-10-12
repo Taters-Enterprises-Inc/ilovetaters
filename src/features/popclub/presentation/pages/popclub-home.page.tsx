@@ -24,6 +24,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectSetStoreAndAddressPopClub } from "../slices/set-store-and-address-popclub.slice";
 import { Deal } from "../components";
 import { redeemValidators } from "../slices/redeem-validators.slice";
+import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
 export function PopClubHome() {
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -76,33 +77,7 @@ export function PopClubHome() {
 
   return (
     <>
-      <section className="lg:container">
-        <img
-          className="lg:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/mobile/popclub.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden lg:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/desktop/popclub_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-
-        <img
-          className="hidden lg:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/banner/popclub_instruction.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <PopclubHeroCarousel />
       <section className="container ">
         <div className="flex flex-col items-start justify-start text-xs leading-4 lg:leading-5 sm:text-sm md:text-base lg:mt-2">
           {getSessionState.data?.popclub_data ? (

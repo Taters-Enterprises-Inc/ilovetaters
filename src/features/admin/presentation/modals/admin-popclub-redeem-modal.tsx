@@ -56,7 +56,7 @@ export function AdminPopclubRedeemModal(props: AdminPopclubRedeemsModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-white text-2xl">Redeem Summary</span>
+          <span className="text-2xl text-white">Redeem Summary</span>
           <button
             className="text-2xl text-white"
             onClick={() => {
@@ -68,7 +68,7 @@ export function AdminPopclubRedeemModal(props: AdminPopclubRedeemsModalProps) {
           </button>
         </div>
 
-        <div className="bg-white border-l-2 border-b-2 border-secondary border-r-2 px-4 ">
+        <div className="px-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
           <Tabs
             value={value}
             onChange={handleChange}
@@ -76,18 +76,10 @@ export function AdminPopclubRedeemModal(props: AdminPopclubRedeemsModalProps) {
             aria-label="basic tabs example"
           >
             <Tab label="Customer Information" {...a11yProps(0)} />
-            <Tab label="Audit Logs" {...a11yProps(1)} />
-            <Tab label="Remarks" {...a11yProps(2)} />
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
             <AdminPopclubRedeemCustomerInformation onClose={props.onClose} />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
           </TabPanel>
         </div>
       </div>

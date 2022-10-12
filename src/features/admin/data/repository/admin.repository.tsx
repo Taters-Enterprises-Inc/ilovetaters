@@ -27,6 +27,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetAdminStoreCatersPackagesModel } from "features/admin/core/domain/get-admin-store-caters-packages.model";
 import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
 import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
+import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -301,6 +302,24 @@ export interface UpdateStoreCatersProductAddonResponse {
   };
 }
 
+export interface GetShopTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<ShopTransactionLogsModel>;
+  };
+}
+
+export function GetShopTransactionLogsRepository(
+  transactionId: number
+): Promise<GetShopTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/snackshop-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateStoreCatersProductAddonRepository(
   param: UpdateStoreCatersProductAddonParam
 ): Promise<UpdateStoreCatersProductAddonResponse> {
@@ -409,10 +428,10 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  redeemCode: string
+  redeemId: number
 ): Promise<AdminDeclineRedeemResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/decline`,
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemId}/decline`,
     {
       withCredentials: true,
     }
@@ -640,10 +659,10 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  redeemCode: string
+  redeemId: number
 ): Promise<AdminCompleteRedeemResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/complete`,
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemId}/complete`,
     {
       withCredentials: true,
     }

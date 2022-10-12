@@ -18,7 +18,7 @@ export function PageTitleAndBreadCrumbs(props: PageTitleAndBreadCrumbsProps) {
   return (
     <div className={`bg-secondary text-white ${props.className}`}>
       <div className="container flex flex-col items-center justify-between py-6 space-y-4 lg:flex-row bg-secondary lg:space-y-0">
-        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl leading-6 text-center">
+        <h1 className="text-white font-['Bebas_Neue'] tracking-[3px] text-2xl leading-6 text-center pt-8">
           {props.title}
         </h1>
 

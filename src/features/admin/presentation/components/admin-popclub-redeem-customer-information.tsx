@@ -32,15 +32,13 @@ export function AdminPopclubRedeemCustomerInformation(
 
   const handleComplete = () => {
     if (getAdminPopclubRedeemState.data) {
-      dispatch(
-        adminCompleteRedeem(getAdminPopclubRedeemState.data.redeem_code)
-      );
+      dispatch(adminCompleteRedeem(getAdminPopclubRedeemState.data.id));
     }
   };
 
   const handleDecline = () => {
     if (getAdminPopclubRedeemState.data) {
-      dispatch(adminDeclineRedeem(getAdminPopclubRedeemState.data.redeem_code));
+      dispatch(adminDeclineRedeem(getAdminPopclubRedeemState.data.id));
     }
   };
 
