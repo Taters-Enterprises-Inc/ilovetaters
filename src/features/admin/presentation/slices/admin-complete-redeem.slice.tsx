@@ -40,7 +40,11 @@ export const adminCompleteRedeem = createAsyncThunk(
 export const adminCompleteRedeemSlice = createSlice({
   name: "adminCompleteRedeem",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAdminCompleteRedeemSliceStatus: (state) => {
+      state.status = AdminCompleteRedeemState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(adminCompleteRedeem.pending, (state: any) => {
@@ -73,5 +77,8 @@ export const adminCompleteRedeemSlice = createSlice({
 
 export const selectAdminCompleteRedeem = (state: RootState) =>
   state.adminCompleteRedeem;
+
+export const { resetAdminCompleteRedeemSliceStatus } =
+  adminCompleteRedeemSlice.actions;
 
 export default adminCompleteRedeemSlice.reducer;

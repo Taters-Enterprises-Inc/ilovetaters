@@ -7,10 +7,16 @@ import Moment from "react-moment";
 import {
   adminCompleteRedeem,
   AdminCompleteRedeemState,
+  resetAdminCompleteRedeemSliceStatus,
   selectAdminCompleteRedeem,
 } from "../slices/admin-complete-redeem.slice";
 import { useEffect } from "react";
-import { adminDeclineRedeem } from "../slices/admin-decline-redeem.slice";
+import {
+  adminDeclineRedeem,
+  AdminDeclineRedeemState,
+  resetAdminDeclineRedeemSliceStatus,
+  selectAdminDeclineRedeem,
+} from "../slices/admin-decline-redeem.slice";
 
 interface AdminPopclubRedeemCustomerInformationProps {
   onClose: () => void;
@@ -20,12 +26,21 @@ export function AdminPopclubRedeemCustomerInformation(
 ) {
   const dispatch = useAppDispatch();
   const adminCompleteRedeemState = useAppSelector(selectAdminCompleteRedeem);
+  const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
   const getAdminPopclubRedeemState = useAppSelector(
     selectGetAdminPopclubRedeem
   );
 
   useEffect(() => {
+    if (adminDeclineRedeemState.status === AdminDeclineRedeemState.success) {
+      dispatch(resetAdminDeclineRedeemSliceStatus());
+      props.onClose();
+    }
+  }, [adminDeclineRedeemState, dispatch]);
+
+  useEffect(() => {
     if (adminCompleteRedeemState.status === AdminCompleteRedeemState.success) {
+      dispatch(resetAdminCompleteRedeemSliceStatus());
       props.onClose();
     }
   }, [adminCompleteRedeemState, dispatch]);
