@@ -34,6 +34,7 @@ import {
 } from "../slices/get-admin-popclub-redeems.slice";
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -45,20 +46,6 @@ const columns: Array<Column> = [
   { id: "store_name", label: "Hub" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminPopClubRedeems() {
   const dispatch = useAppDispatch();

@@ -35,6 +35,7 @@ import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-upd
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { GridColDef } from "@mui/x-data-grid";
 import Table from "@mui/material/Table";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -47,20 +48,6 @@ const columns: Array<Column> = [
   { id: "invoice_num", label: "Invoice Number" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminShopOrders() {
   const dispatch = useAppDispatch();

@@ -13,6 +13,8 @@ export interface AdminPopclubRedeemModel {
   address: string;
   add_address: string;
   store_name: string;
+  mobile_user_id: number;
+  fb_user_id: number;
 
   items: Array<{
     price: number | null;

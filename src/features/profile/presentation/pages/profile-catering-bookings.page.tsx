@@ -23,6 +23,7 @@ import {
 } from "features/profile/presentation/slices/get-catering-booking-history.slice";
 import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { CATERING_BOOKING_STATUS } from "features/shared/constants";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -31,20 +32,6 @@ const columns: Array<Column> = [
   { id: "bookingStatus", label: "Booking Status" },
   { id: "view", label: "View" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function ProfileCateringBookings() {
   const dispatch = useAppDispatch();

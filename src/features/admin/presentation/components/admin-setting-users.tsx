@@ -27,6 +27,7 @@ import {
 } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -37,20 +38,6 @@ const columns: Array<Column> = [
   { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminSettingUsers() {
   const dispatch = useAppDispatch();
