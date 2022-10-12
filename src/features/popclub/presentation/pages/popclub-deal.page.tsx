@@ -182,7 +182,7 @@ export function PopClubDeal() {
       dispatch(getLatestUnexpiredRedeem());
       dispatch(redeemValidators());
     }
-  }, [dispatch, hash]);
+  }, [hash]);
 
   const handleRedeem = () => {
     if (hash) {
