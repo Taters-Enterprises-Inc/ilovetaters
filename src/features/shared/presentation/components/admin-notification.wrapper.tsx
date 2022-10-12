@@ -3,6 +3,8 @@ import Pusher from "pusher-js";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAppDispatch } from "features/config/hooks";
+import { getAdminShopOrders } from "features/admin/presentation/slices/get-admin-shop-orders.slice";
 
 const pusher = new Pusher("8a62b17c8a9baa690edb", {
   cluster: "ap1",
@@ -14,6 +16,8 @@ interface SnackshopSnackshopNotificationParam {
 }
 
 export function AdminNotificationWrapper() {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const snackshopChannel = pusher.subscribe("snackshop");
 
@@ -21,6 +25,7 @@ export function AdminNotificationWrapper() {
       "order-transaction",
       (data: SnackshopSnackshopNotificationParam) => {
         toast(data.message);
+        dispatch(getAdminShopOrders(""));
       }
     );
   }, []);

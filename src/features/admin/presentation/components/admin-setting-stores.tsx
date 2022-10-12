@@ -26,20 +26,7 @@ import moment from "moment";
 import { AdminStoreEditModal } from "../modals";
 import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
+import { createQueryParams } from "features/config/helpers";
 
 export function AdminSettingStores() {
   const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
