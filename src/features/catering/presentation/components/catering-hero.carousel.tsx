@@ -14,12 +14,11 @@ export function CateringHeroCarousel() {
   return (
     <section className="lg:container">
       <Swiper
-        modules={[Navigation, EffectFade]}
-        navigation
-        speed={800}
+        // modules={[Navigation, EffectFade]}
+        // navigation
+        // speed={800}
         slidesPerView={1}
-        loop
-        className="myswiper"
+        // loop
       >
         <SwiperSlide>
           <img
@@ -29,7 +28,7 @@ export function CateringHeroCarousel() {
               "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
           <img
             className="hidden lg:block"
             src={
@@ -37,7 +36,7 @@ export function CateringHeroCarousel() {
               "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
         </SwiperSlide>
       </Swiper>
     </section>

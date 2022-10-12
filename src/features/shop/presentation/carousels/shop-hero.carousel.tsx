@@ -19,12 +19,11 @@ export function ShopHeroCarousel() {
   return (
     <section className="lg:container">
       <Swiper
-        modules={[Navigation, EffectFade]}
-        navigation
-        speed={800}
+        // modules={[Navigation, EffectFade]}
+        // navigation
+        // speed={800}
         slidesPerView={1}
-        loop
-        className="myswiper"
+        // loop
       >
         <SwiperSlide>
           <img
@@ -34,7 +33,7 @@ export function ShopHeroCarousel() {
               "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
           <img
             className="hidden sm:block"
             src={
@@ -42,7 +41,7 @@ export function ShopHeroCarousel() {
               "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
           <img
             className="hidden sm:block"
             src={
@@ -50,7 +49,7 @@ export function ShopHeroCarousel() {
               "api/assets/images/shop/instructions/snackshop_instructions.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
         </SwiperSlide>
       </Swiper>
     </section>

@@ -14,12 +14,11 @@ export function PopclubHeroCarousel() {
   return (
     <section className="lg:container">
       <Swiper
-        modules={[Navigation, EffectFade]}
-        navigation
-        speed={800}
+        // modules={[Navigation, EffectFade]}
+        // navigation
+        // speed={800}
         slidesPerView={1}
-        loop
-        className="myswiper"
+        // loop
       >
         <SwiperSlide>
           <img
@@ -29,7 +28,7 @@ export function PopclubHeroCarousel() {
               "api/assets/images/popclub/hero/mobile/popclub.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
           <img
             className="hidden lg:block"
             src={
@@ -37,7 +36,7 @@ export function PopclubHeroCarousel() {
               "api/assets/images/popclub/hero/desktop/popclub_black.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
 
           <img
             className="hidden lg:block"
@@ -46,7 +45,7 @@ export function PopclubHeroCarousel() {
               "api/assets/images/popclub/banner/popclub_instruction.jpg"
             }
             alt="The best pop corn in town"
-          ></img>
+          />
         </SwiperSlide>
       </Swiper>
     </section>
