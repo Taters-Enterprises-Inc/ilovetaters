@@ -108,7 +108,6 @@ root.render(
               <Route element={<LoadingAndSnackbarWrapper />}>
                 <Route element={<UserNotificationWrapper />}>
                   <Route path="/" element={<Home />} />
-                  {/* <Route path="reseller" element={<Reseller />} /> */}
                   <Route path="branches" element={<Branches />} />
                   <Route path="franchising" element={<Franchising />} />
                   <Route path="privacy-policy" element={<PrivacyPolicy />} />
@@ -195,10 +194,9 @@ root.render(
                   </Route>
                 </Route>
 
-                <Route element={<AdminNotificationWrapper />}>
-                  <Route path="admin" element={<Admin />}>
-                    <Route index element={<AdminLogin />} />
-
+                <Route path="admin" element={<Admin />}>
+                  <Route index element={<AdminLogin />} />
+                  <Route element={<AdminNotificationWrapper />}>
                     <Route element={<AdminGuard />}>
                       <Route element={<AdminSidebarWrapper />}>
                         <Route path="order" element={<AdminShopOrder />} />

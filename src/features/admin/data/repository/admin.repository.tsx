@@ -659,10 +659,11 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  redeemId: number
+  formData: FormData
 ): Promise<AdminCompleteRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemId}/complete`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
+    formData,
     {
       withCredentials: true,
     }

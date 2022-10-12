@@ -3,38 +3,83 @@ import Pusher from "pusher-js";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAdminShopOrders } from "features/admin/presentation/slices/get-admin-shop-orders.slice";
+import {
+  GetAdminSessionState,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
+import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
+import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 
-const pusher = new Pusher("8a62b17c8a9baa690edb", {
-  cluster: "ap1",
-});
-
-interface SnackshopSnackshopNotificationParam {
-  store_id: string;
+interface TransactionParam {
+  store_id: number;
   message: string;
 }
 
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    const snackshopChannel = pusher.subscribe("snackshop");
+    if (getAdminSessionState.status === GetAdminSessionState.success) {
+      const pusher = new Pusher("8a62b17c8a9baa690edb", {
+        cluster: "ap1",
+      });
 
-    snackshopChannel.bind(
-      "order-transaction",
-      (data: SnackshopSnackshopNotificationParam) => {
-        toast(data.message);
-        dispatch(getAdminShopOrders(""));
-      }
-    );
+      const snackshopChannel = pusher.subscribe("snackshop");
+      const cateringChannel = pusher.subscribe("catering");
+      const popclubChannel = pusher.subscribe("popclub");
+
+      snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.is_admin ||
+          getAdminSessionState.data?.is_csr ||
+          getAdminSessionState.data?.user_details.stores.some(
+            (store) => store.store_id === data.store_id
+          )
+        ) {
+          toast("🦄 " + data.message);
+          dispatch(getAdminShopOrders(""));
+        }
+      });
+
+      cateringChannel.bind("booking-transaction", (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.is_admin ||
+          getAdminSessionState.data?.is_csr ||
+          getAdminSessionState.data?.user_details.stores.some(
+            (store) => store.store_id === data.store_id
+          )
+        ) {
+          toast("🦄 " + data.message);
+          dispatch(getAdminCateringBookings(""));
+        }
+      });
+
+      popclubChannel.bind(
+        "popclub-store-visit-transaction",
+        (data: TransactionParam) => {
+          if (
+            getAdminSessionState.data?.is_admin ||
+            getAdminSessionState.data?.is_csr ||
+            getAdminSessionState.data?.user_details.stores.some(
+              (store) => store.store_id === data.store_id
+            )
+          ) {
+            toast("🦄 " + data.message);
+            dispatch(getAdminPopclubRedeems(""));
+          }
+        }
+      );
+    }
   }, []);
 
   return (
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={18000000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
