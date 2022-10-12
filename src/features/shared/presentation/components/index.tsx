@@ -12,7 +12,7 @@ export { Addon } from "./addon";
 export { MobileLoginSignIn } from "./mobile-login-sign-in";
 export { MobileLoginSignUp } from "./mobile-login-sign-up";
 export { UnExpiredRedeem } from "./unexpired-redeem";
-export { NotificationWrapper } from "./notification.wrapper";
+export { UserNotificationWrapper } from "./user-notification.wrapper";
 export { PhoneInput } from "./phone-input";
 export { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 export { MobileForgotPasswordOtp } from "./mobile-forgot-password-otp";
@@ -21,3 +21,4 @@ export { MobileForgotPasswordNewPassword } from "./mobile-forgot-password-new-pa
 export { DataList } from "./data-list";
 export { ConsentWrapper } from "./consent-wrapper";
 export { MobilePasswordTextField } from "./mobile-password-textfield";
+export { AdminNotificationWrapper } from "./admin-notification.wrapper";

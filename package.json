@@ -25,6 +25,7 @@
     "env-cmd": "^10.1.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
+    "pusher-js": "^7.4.0",
     "react": "^18.2.0",
     "react-collapsed": "^3.3.2",
     "react-cookie-consent": "^8.0.1",
