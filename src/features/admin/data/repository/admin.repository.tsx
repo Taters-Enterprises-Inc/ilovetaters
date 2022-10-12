@@ -428,10 +428,11 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  redeemId: number
+  formData: FormData
 ): Promise<AdminDeclineRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemId}/decline`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
+    formData,
     {
       withCredentials: true,
     }

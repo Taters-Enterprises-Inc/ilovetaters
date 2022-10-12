@@ -70,6 +70,25 @@ export function UserNotificationWrapper() {
         }
       }
     );
+
+    popclubChannel.bind("popclub-redeem-declined", (data: TransactionParam) => {
+      if (
+        getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
+        getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+      ) {
+        showAlert(setFailsAlert, data.message);
+        dispatch(getLatestUnexpiredRedeem());
+        dispatch(redeemValidators());
+
+        if (getDealState.status === GetDealState.success && getDealState.data) {
+          dispatch(
+            getRedeem({
+              deal_id: getDealState.data.id,
+            })
+          );
+        }
+      }
+    });
   }, []);
 
   return (

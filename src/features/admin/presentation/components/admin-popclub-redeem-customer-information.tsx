@@ -53,7 +53,23 @@ export function AdminPopclubRedeemCustomerInformation(
 
   const handleDecline = () => {
     if (getAdminPopclubRedeemState.data) {
-      dispatch(adminDeclineRedeem(getAdminPopclubRedeemState.data.id));
+      const formData = new FormData();
+      formData.append(
+        "redeem_id",
+        getAdminPopclubRedeemState.data.id.toString()
+      );
+      if (getAdminPopclubRedeemState.data.mobile_user_id)
+        formData.append(
+          "mobile_user_id",
+          getAdminPopclubRedeemState.data.mobile_user_id.toString()
+        );
+      if (getAdminPopclubRedeemState.data.fb_user_id)
+        formData.append(
+          "fb_user_id",
+          getAdminPopclubRedeemState.data.fb_user_id.toString()
+        );
+
+      dispatch(adminDeclineRedeem(formData));
     }
   };
 
