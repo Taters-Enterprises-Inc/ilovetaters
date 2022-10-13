@@ -60,7 +60,7 @@ export function UserNotificationWrapper() {
         cluster: REACT_APP_PUSHER_CLUSTER,
       });
 
-      const cateringChannel = pusher.subscribe("caterirng");
+      const cateringChannel = pusher.subscribe("catering");
 
       cateringChannel.bind(
         "catering-booking-updated",

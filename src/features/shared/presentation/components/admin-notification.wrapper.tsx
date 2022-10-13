@@ -26,16 +26,43 @@ export function AdminNotificationWrapper() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    if (getAdminSessionState.status === GetAdminSessionState.success) {
-      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-        cluster: REACT_APP_PUSHER_CLUSTER,
-      });
+    const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+      cluster: REACT_APP_PUSHER_CLUSTER,
+    });
 
-      const snackshopChannel = pusher.subscribe("snackshop");
-      const cateringChannel = pusher.subscribe("catering");
-      const popclubChannel = pusher.subscribe("popclub");
+    const snackshopChannel = pusher.subscribe("snackshop");
+    const cateringChannel = pusher.subscribe("catering");
+    const popclubChannel = pusher.subscribe("popclub");
 
-      snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
+    snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminShopOrders(""));
+      }
+    });
+
+    cateringChannel.bind("booking-transaction", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminCateringBookings(""));
+      }
+    });
+
+    popclubChannel.bind(
+      "popclub-store-visit-transaction",
+      (data: TransactionParam) => {
         if (
           getAdminSessionState.data?.is_admin ||
           getAdminSessionState.data?.is_csr ||
@@ -44,40 +71,11 @@ export function AdminNotificationWrapper() {
           )
         ) {
           toast("🦄 " + data.message);
-          dispatch(getAdminShopOrders(""));
+          dispatch(getAdminPopclubRedeems(""));
         }
-      });
-
-      cateringChannel.bind("booking-transaction", (data: TransactionParam) => {
-        if (
-          getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_csr ||
-          getAdminSessionState.data?.user_details.stores.some(
-            (store) => store.store_id === data.store_id
-          )
-        ) {
-          toast("🦄 " + data.message);
-          dispatch(getAdminCateringBookings(""));
-        }
-      });
-
-      popclubChannel.bind(
-        "popclub-store-visit-transaction",
-        (data: TransactionParam) => {
-          if (
-            getAdminSessionState.data?.is_admin ||
-            getAdminSessionState.data?.is_csr ||
-            getAdminSessionState.data?.user_details.stores.some(
-              (store) => store.store_id === data.store_id
-            )
-          ) {
-            toast("🦄 " + data.message);
-            dispatch(getAdminPopclubRedeems(""));
-          }
-        }
-      );
-    }
-  }, [getAdminSessionState]);
+      }
+    );
+  }, []);
 
   return (
     <>
