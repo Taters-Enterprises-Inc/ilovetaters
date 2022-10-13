@@ -11,11 +11,19 @@ import {
 } from "features/admin/presentation/slices/get-admin-session.slice";
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
+import {
+  REACT_APP_PUSHER_CLUSTER,
+  REACT_APP_PUSHER_KEY,
+} from "features/shared/constants";
 
 interface TransactionParam {
   store_id: number;
   message: string;
 }
+
+const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+  cluster: REACT_APP_PUSHER_CLUSTER,
+});
 
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
@@ -23,10 +31,6 @@ export function AdminNotificationWrapper() {
 
   useEffect(() => {
     if (getAdminSessionState.status === GetAdminSessionState.success) {
-      const pusher = new Pusher("8a62b17c8a9baa690edb", {
-        cluster: "ap1",
-      });
-
       const snackshopChannel = pusher.subscribe("snackshop");
       const cateringChannel = pusher.subscribe("catering");
       const popclubChannel = pusher.subscribe("popclub");

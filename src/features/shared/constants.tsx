@@ -9,6 +9,11 @@ import { GiPopcorn } from "react-icons/gi";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 
+// PUSHER
+export const REACT_APP_PUSHER_KEY = process.env.REACT_APP_PUSHER_KEY ?? "";
+export const REACT_APP_PUSHER_CLUSTER =
+  process.env.REACT_APP_PUSHER_CLUSTER ?? "";
+
 export const SERVICES_DESKTOP = [
   {
     title: "Snackshop",
