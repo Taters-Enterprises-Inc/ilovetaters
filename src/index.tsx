@@ -84,6 +84,8 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
+import { Bsc } from "features/bsc/presentation/pages/bsc.page";
+import { BSCLogin } from "features/bsc/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -273,6 +275,10 @@ root.render(
                       </Route>
                     </Route>
                   </Route>
+                </Route>
+
+                <Route path="bsc" element={<Bsc />}>
+                  <Route index element={<BSCLogin />} />
                 </Route>
               </Route>
             </Route>
