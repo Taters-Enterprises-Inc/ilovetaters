@@ -22,3 +22,4 @@ export { AdminSettingStores } from "./admin-setting-stores";
 export { AdminAvailabilityCatersPackages } from "./admin-availability-caters-packages";
 export { AdminAvailabilityCatersPackageAddons } from "./admin-availability-caters-package-addons";
 export { AdminAvailabilityCatersProductAddons } from "./admin-availability-caters-product-addons";
+export { AdminScPwdVerification } from "./admin-scpwd-verification";

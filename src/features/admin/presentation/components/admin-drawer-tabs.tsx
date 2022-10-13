@@ -48,6 +48,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { truncate } from "fs";
+import { AiOutlineIdcard } from "react-icons/ai";
 
 const drawerWidth = "16rem";
 
@@ -177,6 +178,33 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+
+          <li>
+            <NavLink
+              to="/admin/scpwd"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <AiOutlineIdcard size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    SC/PWD
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
           <li>
             <div className="flex px-4">
               <div className="flex-1">

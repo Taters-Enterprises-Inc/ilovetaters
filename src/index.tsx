@@ -59,6 +59,7 @@ import {
   AdminAvailabilityCatersPackage,
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
+  ScPwd,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -202,6 +203,7 @@ root.render(
                           element={<AdminCateringBooking />}
                         />
                         <Route path="popclub" element={<AdminPopclub />} />
+                        <Route path="scpwd" element={<ScPwd />} />
                         <Route path="product" element={<AdminProduct />} />
                         <Route path="report" element={<AdminReport />} />
                         <Route path="faq">

@@ -481,6 +481,32 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   },
 ];
 
+export const ADMIN_SCPWD_VERIFICATION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#a21013",
+  },
+  {
+    name: "Approved",
+    color: "#a21013",
+  },
+  {
+    name: "Rejected",
+    color: "#004d00",
+  },
+];
+
 export const CATERING_BOOKING_STATUS: Array<{
   name: string;
   color: string;
