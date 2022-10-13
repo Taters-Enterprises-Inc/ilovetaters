@@ -166,10 +166,7 @@ root.render(
                     />
                   </Route>
 
-                  <Route
-                    path="catering"
-                    element={<Navigate to={"/delivery"} />}
-                  />
+                  <Route path="catering" element={<Navigate to={"/shop"} />} />
                   <Route
                     path="shop/admin"
                     element={<Navigate to={"/admin"} />}
