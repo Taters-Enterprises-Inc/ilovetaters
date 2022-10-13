@@ -23,6 +23,7 @@ export interface SessionModel {
     link: string;
     login_type: "mobile" | "facebook";
     mobile_user_id: number;
+    fb_user_id: number;
     mobile_number: string;
   };
 

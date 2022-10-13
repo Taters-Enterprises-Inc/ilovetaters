@@ -82,7 +82,6 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
           >
             <Tab label="Customer Information" {...a11yProps(0)} />
             <Tab label="Audit Logs" {...a11yProps(1)} />
-            <Tab label="Remarks" {...a11yProps(2)} />
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
@@ -90,9 +89,6 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <AdminShopOrderAudit />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <AdminShopOrderRemarks />
           </TabPanel>
         </div>
       </div>

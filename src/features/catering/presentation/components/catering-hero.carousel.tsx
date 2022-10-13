@@ -10,12 +10,7 @@ import "swiper/css/autoplay";
 import { Autoplay, Navigation, EffectFade } from "swiper";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
-interface ShopProductsCarouselProps {
-  products: Array<any>;
-  parentIndex: number;
-}
-
-export function ShopHeroCarousel() {
+export function CateringHeroCarousel() {
   return (
     <section className="lg:container">
       <Swiper
@@ -27,26 +22,18 @@ export function ShopHeroCarousel() {
       >
         <SwiperSlide>
           <img
-            className="sm:hidden"
+            className="lg:hidden"
             src={
               REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
+              "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
             }
             alt="The best pop corn in town"
           />
           <img
-            className="hidden sm:block"
+            className="hidden lg:block"
             src={
               REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
-            }
-            alt="The best pop corn in town"
-          />
-          <img
-            className="hidden sm:block"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/shop/instructions/snackshop_instructions.jpg"
+              "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
             }
             alt="The best pop corn in town"
           />

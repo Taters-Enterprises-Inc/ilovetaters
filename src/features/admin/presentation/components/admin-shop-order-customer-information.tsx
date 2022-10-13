@@ -230,7 +230,7 @@ export function AdminShopOrderCustomerInformation() {
             <div>
               <strong>Tracking Number:</strong>{" "}
               <span className="font-semibold">
-                {getAdminShopOrderState.data?.tracking_no ?? "N/A"}
+                {getAdminShopOrderState.data?.id ?? "N/A"}
               </span>
             </div>
             <div>
@@ -422,9 +422,15 @@ export function AdminShopOrderCustomerInformation() {
                 name="trans_id"
                 value={getAdminShopOrderState.data?.id}
               />
+              <input
+                readOnly
+                hidden
+                name="from_status_id"
+                value={getAdminShopOrderState.data?.status}
+              />
               <Select
                 size="small"
-                name="status"
+                name="to_status_id"
                 defaultValue={getAdminShopOrderState.data?.status}
               >
                 {ADMIN_SNACKSHOP_ORDER_STATUS.map((value, index) => {
@@ -459,10 +465,18 @@ export function AdminShopOrderCustomerInformation() {
               name="trans_id"
               value={getAdminShopOrderState.data?.id}
             />
+
+            <input
+              readOnly
+              hidden
+              name="from_store_id"
+              value={getAdminShopOrderState.data?.store}
+            />
+
             <Select
               size="small"
               defaultValue={getAdminShopOrderState.data?.store}
-              name="store_id"
+              name="to_store_id"
             >
               {getAdminStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>

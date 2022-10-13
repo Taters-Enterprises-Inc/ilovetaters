@@ -9,6 +9,11 @@ import { GiPopcorn } from "react-icons/gi";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 
+// PUSHER
+export const REACT_APP_PUSHER_KEY = process.env.REACT_APP_PUSHER_KEY ?? "";
+export const REACT_APP_PUSHER_CLUSTER =
+  process.env.REACT_APP_PUSHER_CLUSTER ?? "";
+
 export const SERVICES_DESKTOP = [
   {
     title: "Snackshop",
@@ -676,6 +681,25 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
   },
   {
     name: "Final Payment denied",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_SNACKSHOP_TRANSACTION_LOGS_ACTION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  { name: "", color: "" },
+  {
+    name: "Update",
+    color: "#cca300",
+  },
+  {
+    name: "Accept",
+    color: "#004d00",
+  },
+  {
+    name: "Error",
     color: "#a21013",
   },
 ];

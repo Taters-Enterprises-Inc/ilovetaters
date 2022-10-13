@@ -42,6 +42,7 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -49,20 +50,6 @@ const columns: Array<Column> = [
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminAvailabilityCatersPackages() {
   const dispatch = useAppDispatch();

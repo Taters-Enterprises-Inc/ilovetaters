@@ -32,6 +32,7 @@ import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -44,20 +45,6 @@ const columns: Array<Column> = [
   { id: "payops", label: "Mode of Payment" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminCateringBookings() {
   const dispatch = useAppDispatch();
