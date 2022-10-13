@@ -1,14 +1,20 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { selectGetAllAvailableStores } from "../slices/get-all-available-stores.slice";
 import { selectGetStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
+import { setPopClubData } from "../slices/set-popclub-data.slice";
 import {
+  resetStoreAndAddressPopClub,
   selectSetStoreAndAddressPopClub,
   setStoreAndAddressPopClub,
+  SetStoreAndAddressPopClubState,
 } from "../slices/set-store-and-address-popclub.slice";
 
 interface StoreClusterProps {
@@ -24,12 +30,11 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
   const setStoreAndAddressPopClubState = useAppSelector(
     selectSetStoreAndAddressPopClub
   );
+  const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
   let { platform } = useParams();
 
   const storeClicked = (storeId: number, regionId: number) => {
-    props.onClose();
-
     dispatch(
       setStoreAndAddressPopClub({
         address: props.address,
@@ -38,23 +43,38 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         service: "SNACKSHOP",
       })
     );
-
-    if (platform) {
-      if (platform === "online-delivery") {
-        navigate(`/popclub/store-visit?category=all`);
-      } else {
-        navigate(`?category=all`);
-      }
-    } else {
-      navigate(`/popclub/store-visit?category=all`);
-    }
-
-    document.body.classList.remove("overflow-hidden");
   };
 
   useEffect(() => {
     dispatch(getSession());
-  }, [setStoreAndAddressPopClubState, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setStoreAndAddressPopClubState]);
+
+  useEffect(() => {
+    if (
+      setStoreAndAddressPopClubState.status ===
+      SetStoreAndAddressPopClubState.success
+    ) {
+      props.onClose();
+
+      dispatch(resetStoreAndAddressPopClub());
+
+      dispatch(setPopClubData({ platform: "store-visit" }));
+
+      if (platform) {
+        if (platform === "online-delivery") {
+          navigate(`/popclub/store-visit?category=all`);
+        } else {
+          navigate(`?category=all`);
+        }
+      } else {
+        navigate(`/popclub/store-visit?category=all`);
+      }
+
+      document.body.classList.remove("overflow-hidden");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getSessionState]);
 
   return (
     <section className="text-white ">
@@ -86,7 +106,6 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                       key={index}
                       onClick={() => {
                         if (isStoreOperating) {
-                          props.onClose();
                           storeClicked(store.store_id, store.region_store_id);
                         }
                       }}
@@ -172,7 +191,6 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
                         key={index}
                         onClick={() => {
                           if (isStoreOperating) {
-                            props.onClose();
                             storeClicked(store.store_id, store.region_store_id);
                           }
                         }}

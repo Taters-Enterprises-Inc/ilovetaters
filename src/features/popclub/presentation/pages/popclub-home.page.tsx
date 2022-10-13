@@ -40,40 +40,24 @@ export function PopClubHome() {
   const getDealsState = useAppSelector(selectGetDeals);
 
   const setPopClubDataState = useAppSelector(selectSetPopClubData);
-  const setSessionState = useAppSelector(selectSetSession);
-  const setStoreAndAddressPopClubState = useAppSelector(
-    selectSetStoreAndAddressPopClub
-  );
-
   const dispatch = useAppDispatch();
   let { platform } = useParams();
   const query = useQuery();
-  const navigate = useNavigate();
   const category = query.get("category");
 
   useEffect(() => {
-    dispatch(getPopClubData());
-    dispatch(redeemValidators());
-  }, [setPopClubDataState, dispatch]);
-
-  useEffect(() => {
-    dispatch(getSession());
-
     if (platform !== undefined && category !== null) {
+      dispatch(getSession());
+      dispatch(getPopClubData());
+      dispatch(redeemValidators());
+
       dispatch(getAllPlatformCategories({ platform_url_name: platform }));
       dispatch(
         getDeals({ platform_url_name: platform, category_url_name: category })
       );
     }
-  }, [
-    dispatch,
-    platform,
-    query,
-    navigate,
-    category,
-    setStoreAndAddressPopClubState,
-    setSessionState,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [platform, query, category, setPopClubDataState]);
 
   return (
     <>

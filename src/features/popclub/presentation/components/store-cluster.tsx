@@ -1,16 +1,17 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDeals } from "../slices/get-deals.slice";
 import { selectGetStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
+import { setPopClubData } from "../slices/set-popclub-data.slice";
 import {
+  resetStoreAndAddressPopClub,
   selectSetStoreAndAddressPopClub,
   setStoreAndAddressPopClub,
   SetStoreAndAddressPopClubState,
@@ -28,37 +29,27 @@ export function StoreCluster(props: StoreClusterProps) {
   const setStoreAndAddressPopClubState = useAppSelector(
     selectSetStoreAndAddressPopClub
   );
+  const getSessionState = useAppSelector(selectGetSession);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let { platform } = useParams();
-  const query = useQuery();
-  const category = query.get("category");
+
+  useEffect(() => {
+    dispatch(getSession());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {
     if (
       setStoreAndAddressPopClubState.status ===
       SetStoreAndAddressPopClubState.success
     ) {
-      if (platform !== undefined && category !== null) {
-        dispatch(
-          getDeals({ platform_url_name: platform, category_url_name: category })
-        );
-      }
-    }
-  }, [setStoreAndAddressPopClubState, dispatch, category, platform]);
-
-  const storeClicked = (storeId: number, regionId: number) => {
-    if (props.address) {
-      dispatch(
-        setStoreAndAddressPopClub({
-          address: props.address,
-          storeId,
-          regionId,
-          service: "SNACKSHOP",
-        })
-      );
-
       props.onClose();
+
+      dispatch(resetStoreAndAddressPopClub());
+
+      dispatch(setPopClubData({ platform: "online-delivery" }));
 
       if (platform) {
         if (platform === "store-visit") {
@@ -70,6 +61,20 @@ export function StoreCluster(props: StoreClusterProps) {
         navigate(`/popclub/online-delivery?category=all`);
       }
       document.body.classList.remove("overflow-hidden");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getSessionState]);
+
+  const storeClicked = (storeId: number, regionId: number) => {
+    if (props.address) {
+      dispatch(
+        setStoreAndAddressPopClub({
+          address: props.address,
+          storeId,
+          regionId,
+          service: "SNACKSHOP",
+        })
+      );
     } else {
       dispatch(
         popUpSnackBar({
