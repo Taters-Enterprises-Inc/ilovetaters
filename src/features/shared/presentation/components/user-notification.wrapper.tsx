@@ -89,7 +89,7 @@ export function UserNotificationWrapper() {
         }
       }
     });
-  }, []);
+  }, [getDealState, getSessionState]);
 
   return (
     <>
