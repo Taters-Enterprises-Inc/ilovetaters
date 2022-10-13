@@ -13,12 +13,20 @@ import {
   selectGetDeal,
 } from "features/popclub/presentation/slices/get-deal.slice";
 import { getRedeem } from "features/popclub/presentation/slices/get-redeem.slice";
+import {
+  REACT_APP_PUSHER_CLUSTER,
+  REACT_APP_PUSHER_KEY,
+} from "features/shared/constants";
 
 interface TransactionParam {
   fb_user_id?: number;
   mobile_user_id?: number;
   message: string;
 }
+
+const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+  cluster: REACT_APP_PUSHER_CLUSTER,
+});
 
 export function UserNotificationWrapper() {
   const dispatch = useAppDispatch();
@@ -40,10 +48,6 @@ export function UserNotificationWrapper() {
   });
 
   useEffect(() => {
-    const pusher = new Pusher("8a62b17c8a9baa690edb", {
-      cluster: "ap1",
-    });
-
     const popclubChannel = pusher.subscribe("popclub");
 
     popclubChannel.bind(
