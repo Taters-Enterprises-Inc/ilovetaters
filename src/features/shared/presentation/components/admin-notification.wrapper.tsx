@@ -26,11 +26,11 @@ export function AdminNotificationWrapper() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-      cluster: REACT_APP_PUSHER_CLUSTER,
-    });
-
     if (getAdminSessionState.status === GetAdminSessionState.success) {
+      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+        cluster: REACT_APP_PUSHER_CLUSTER,
+      });
+
       const snackshopChannel = pusher.subscribe("snackshop");
       const cateringChannel = pusher.subscribe("catering");
       const popclubChannel = pusher.subscribe("popclub");
@@ -64,7 +64,6 @@ export function AdminNotificationWrapper() {
       popclubChannel.bind(
         "popclub-store-visit-transaction",
         (data: TransactionParam) => {
-          console.log(getAdminSessionState);
           if (
             getAdminSessionState.data?.is_admin ||
             getAdminSessionState.data?.is_csr ||
@@ -78,7 +77,7 @@ export function AdminNotificationWrapper() {
         }
       );
     }
-  }, []);
+  }, [getAdminSessionState]);
 
   return (
     <>

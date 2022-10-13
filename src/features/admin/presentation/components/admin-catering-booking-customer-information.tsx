@@ -267,7 +267,7 @@ export function AdminCateringBookingCustomerInformation() {
 
           <hr />
 
-          <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
+          {/* <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
             <form
               onSubmit={handleOnSubmitAdminPrivilege}
               className="flex flex-col flex-1 lg:flex-row"
@@ -298,14 +298,14 @@ export function AdminCateringBookingCustomerInformation() {
                 type="submit"
                 className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
               >
-                Change Order Status
+                Change Booking Status
               </button>
             </form>
-          </div>
+          </div> */}
 
           <hr />
 
-          <form
+          {/* <form
             onSubmit={handleOnSubmitAdminPrivilege}
             className="flex flex-col flex-1 lg:flex-row"
           >
@@ -332,7 +332,7 @@ export function AdminCateringBookingCustomerInformation() {
             >
               Transfer to Store
             </button>
-          </form>
+          </form> */}
         </div>
 
         <hr className="mt-1" />
