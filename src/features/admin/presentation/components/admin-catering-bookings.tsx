@@ -167,7 +167,7 @@ export function AdminCateringBookings() {
           >
             <MenuItem value={-1}>All</MenuItem>
             {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
-              if (index === 0) {
+              if (index === 0 || value.name === "") {
                 return null;
               }
               return (
