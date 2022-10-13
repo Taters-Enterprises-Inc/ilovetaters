@@ -21,15 +21,15 @@ interface TransactionParam {
   message: string;
 }
 
-const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-  cluster: REACT_APP_PUSHER_CLUSTER,
-});
-
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
+    const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+      cluster: REACT_APP_PUSHER_CLUSTER,
+    });
+
     if (getAdminSessionState.status === GetAdminSessionState.success) {
       const snackshopChannel = pusher.subscribe("snackshop");
       const cateringChannel = pusher.subscribe("catering");
@@ -64,6 +64,7 @@ export function AdminNotificationWrapper() {
       popclubChannel.bind(
         "popclub-store-visit-transaction",
         (data: TransactionParam) => {
+          console.log(getAdminSessionState);
           if (
             getAdminSessionState.data?.is_admin ||
             getAdminSessionState.data?.is_csr ||
@@ -77,7 +78,7 @@ export function AdminNotificationWrapper() {
         }
       );
     }
-  }, [getAdminSessionState]);
+  }, []);
 
   return (
     <>

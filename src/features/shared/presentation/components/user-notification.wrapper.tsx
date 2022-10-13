@@ -24,10 +24,6 @@ interface TransactionParam {
   message: string;
 }
 
-const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-  cluster: REACT_APP_PUSHER_CLUSTER,
-});
-
 export function UserNotificationWrapper() {
   const dispatch = useAppDispatch();
   const getSessionState = useAppSelector(selectGetSession);
@@ -48,6 +44,10 @@ export function UserNotificationWrapper() {
   });
 
   useEffect(() => {
+    const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+      cluster: REACT_APP_PUSHER_CLUSTER,
+    });
+
     const popclubChannel = pusher.subscribe("popclub");
 
     popclubChannel.bind(
@@ -93,7 +93,7 @@ export function UserNotificationWrapper() {
         }
       }
     });
-  }, [getDealState, getSessionState]);
+  }, [getDealState]);
 
   return (
     <>
