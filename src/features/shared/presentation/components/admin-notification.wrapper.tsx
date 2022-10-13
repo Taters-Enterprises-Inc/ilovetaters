@@ -73,7 +73,7 @@ export function AdminNotificationWrapper() {
         }
       );
     }
-  }, []);
+  }, [getAdminSessionState]);
 
   return (
     <>
