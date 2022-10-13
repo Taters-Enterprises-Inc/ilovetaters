@@ -46,7 +46,7 @@ import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
-  { id: "description", label: "Description" },
+  { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
