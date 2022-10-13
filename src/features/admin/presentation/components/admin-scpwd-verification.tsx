@@ -32,13 +32,14 @@ import moment from "moment";
 import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
-  { id: "status", label: "Status", minWidth: 200 },
-  { id: "dateadded", label: "Order Date" },
-  { id: "expiration", label: "Valid Until" },
-  { id: "redeem_code", label: "Redeem Code" },
-  { id: "client_name", label: "Client Name" },
-  { id: "purchase_amount", label: "Amount" },
-  { id: "store_name", label: "Hub" },
+  { id: "status", label: "Status" },
+  { id: "appDate", label: "Application Date" },
+  { id: "name", label: "Full Name" },
+  { id: "fname", label: "First Name" },
+  { id: "lname", label: "Last Name" },
+  { id: "mname", label: "Middle Name" },
+  { id: "birthday", label: "Birthday" },
+  { id: "scpwdNumber", label: "SC/PWD Number" },
   { id: "action", label: "Action" },
 ];
 
@@ -139,7 +140,7 @@ export function AdminScPwdVerification() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No popclub redeems yet."
+              emptyMessage="No Senior Citizen or PWD Application yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -246,9 +247,13 @@ export function AdminScPwdVerification() {
                           color: "white",
                           backgroundColor:
                             ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                          //  ADMIN_SCPWD_VERIFICATION_STATUS[row.status].color,
                         }}
                       >
-                        {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                        {
+                          ADMIN_POPCLUB_REDEEM_STATUS[row.status].name
+                          //  ADMIN_SCPWD_VERIFICATION_STATUS[row.status].color,
+                        }
                       </span>
                     )}
                   </span>
@@ -274,10 +279,12 @@ export function AdminScPwdVerification() {
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
+            {/* Table */}
+
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
-              emptyMessage="No popclub redeems yet."
+              emptyMessage="No Senior Citizen or PWD Application yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -391,9 +398,13 @@ export function AdminScPwdVerification() {
                               color: "white",
                               backgroundColor:
                                 ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                              // ADMIN_SCPWD_VERIFICATION_STATUS[row.status].color,
                             }}
                           >
-                            {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                            {
+                              ADMIN_POPCLUB_REDEEM_STATUS[row.status].name
+                              //  ADMIN_SCPWD_VERIFICATION_STATUS[row.status].color,
+                            }
                           </span>
                         )}
                       </DataTableCell>
