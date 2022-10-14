@@ -12,6 +12,7 @@ import {
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import {
+  pusher,
   REACT_APP_PUSHER_CLUSTER,
   REACT_APP_PUSHER_KEY,
 } from "features/shared/constants";
@@ -26,10 +27,6 @@ export function AdminNotificationWrapper() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-      cluster: REACT_APP_PUSHER_CLUSTER,
-    });
-
     const snackshopChannel = pusher.subscribe("snackshop");
     const cateringChannel = pusher.subscribe("catering");
     const popclubChannel = pusher.subscribe("popclub");
