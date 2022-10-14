@@ -80,6 +80,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
+import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -123,6 +124,11 @@ root.render(
                       <Route
                         path="popclub-redeems"
                         element={<ProfilePopclubRedeems />}
+                      />
+
+                      <Route
+                        path="popclub-sc-pwd"
+                        element={<ProfileCsPwd />}
                       />
                     </Route>
                   </Route>

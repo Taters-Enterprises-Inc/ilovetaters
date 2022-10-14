@@ -105,7 +105,6 @@ export function ProfileCateringBookings() {
       />
     );
   };
-  console.log(getCateringBookingHistoryState.data);
   return (
     <ProfileContainer title="Catering Bookings" activeTab="catering">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
