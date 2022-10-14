@@ -85,6 +85,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
+import { PopClubGuard } from "features/popclub/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -133,8 +134,10 @@ root.render(
 
                   <Route path="popclub" element={<PopClub />}>
                     <Route index element={<PopClubIndexPage />} />
-                    <Route path=":platform" element={<PopClubHome />} />
-                    <Route path="deal/:hash" element={<PopClubDeal />} />
+                    <Route element={<PopClubGuard />}>
+                      <Route path=":platform" element={<PopClubHome />} />
+                      <Route path="deal/:hash" element={<PopClubDeal />} />
+                    </Route>
                   </Route>
 
                   <Route path="delivery" element={<Shop />}>

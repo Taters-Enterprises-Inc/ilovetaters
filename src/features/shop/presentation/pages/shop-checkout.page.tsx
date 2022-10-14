@@ -10,7 +10,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import NumberFormat from "react-number-format";
 import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
@@ -36,7 +36,7 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { PhoneInput } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
-import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { getLatestUnexpiredRedeem, selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -44,6 +44,8 @@ export function ShopCheckout() {
   const location = useLocation();
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
+
+  const isDeliveryApplied = useRef(false);
 
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
@@ -137,13 +139,16 @@ export function ShopCheckout() {
         calculatedPrice += deals[i].deal_promo_price;
       }
     }
-
+    
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
       if (
         getLatestUnexpiredRedeemState.data &&
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice 
+        && getLatestUnexpiredRedeemState.data.store === getSessionState.data.cache_data?.store_id
       ) {
+        isDeliveryApplied.current = true;
+
         return <>₱ 0.00</>;
       }
 
@@ -581,6 +586,9 @@ export function ShopCheckout() {
                     ) : null}
                     {getSessionState.data.deals ? (
                       <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
+                          Popclub Deal
+                        </h2>
                         {getSessionState.data.deals.map((deal, i) => (
                           <div
                             key={i}
@@ -648,6 +656,37 @@ export function ShopCheckout() {
                             </button>
                           </div>
                         ))}
+                      </div>
+                    ) : null}
+
+                    {getLatestUnexpiredRedeemState.data &&
+                    isDeliveryApplied.current ? (
+
+                      <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
+                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
+                          Popclub Deal
+                        </h2>
+                        <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getLatestUnexpiredRedeemState.data?.product_image}`}
+                            className="rounded-[10px] w-[92px] h-[92px]" 
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-white text-sm w-[90%] font-bold leading-4">
+                              {getLatestUnexpiredRedeemState.data?.name}
+                            </h3>
+                            <h3 className="text-xs mt-2">
+                              Minumum purchase: {""}
+                              <span className="text-tertiary">
+                                {
+                                  getLatestUnexpiredRedeemState.data
+                                    ?.minimum_purchase
+                                }
+                              </span>
+                            </h3>
+                          </div>
+                        </div>
                       </div>
                     ) : null}
 
