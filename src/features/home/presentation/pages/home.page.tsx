@@ -74,7 +74,7 @@ export function Home() {
             return (
               <div key={i}>
                 <div className=" sm:h-[300px] lg:h-[500px] text-white">
-                  <a href={service_desktop.url} key={i}>
+                  <Link to={service_desktop.url} key={i}>
                     <div
                       style={{
                         backgroundImage: `url("${
@@ -101,7 +101,7 @@ export function Home() {
                         <p className="text-xs">{service_desktop.subtitle}</p>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             );
