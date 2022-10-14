@@ -468,3 +468,6 @@ input[type="number"] {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* Add Varela Round fonts for admin page */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');

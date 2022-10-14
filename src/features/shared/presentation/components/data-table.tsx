@@ -20,12 +20,12 @@ export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 12,
     backgroundColor: "#22201A",
-    color: "white",
+    fontFamily: "Varela Round",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 12,
     backgroundColor: "#f8f8f8",
-    color: "#22201A",
+    fontFamily: "Varela Round",
   },
 }));
 
@@ -66,6 +66,7 @@ interface DataTableProps {
 }
 
 export function DataTable(props: DataTableProps) {
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
