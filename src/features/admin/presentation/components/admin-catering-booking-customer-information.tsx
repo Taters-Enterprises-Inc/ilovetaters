@@ -265,9 +265,11 @@ export function AdminCateringBookingCustomerInformation() {
             </div>
           </div>
 
+          {/* 
+
           <hr />
 
-          {/* <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
+          <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
             <form
               onSubmit={handleOnSubmitAdminPrivilege}
               className="flex flex-col flex-1 lg:flex-row"
@@ -301,9 +303,10 @@ export function AdminCateringBookingCustomerInformation() {
                 Change Booking Status
               </button>
             </form>
-          </div> */}
+          </div> 
 
           <hr />
+          */}
 
           {/* <form
             onSubmit={handleOnSubmitAdminPrivilege}
