@@ -74,7 +74,13 @@ export function Home() {
             return (
               <div key={i}>
                 <div className=" sm:h-[300px] lg:h-[500px] text-white">
-                  <Link to={service_desktop.url} key={i}>
+                  <Link
+                    to={service_desktop.url}
+                    key={i}
+                    target={
+                      service_desktop.url === "reseller" ? "_blank" : undefined
+                    }
+                  >
                     <div
                       style={{
                         backgroundImage: `url("${
@@ -113,7 +119,12 @@ export function Home() {
             return (
               <div key={i}>
                 <div key={i} className="h-[250px] sm:h-[300px] text-white">
-                  <Link to={service_mobile.url}>
+                  <Link
+                    to={service_mobile.url}
+                    target={
+                      service_mobile.url === "reseller" ? "_blank" : undefined
+                    }
+                  >
                     <div
                       style={{
                         backgroundImage: `url("${
