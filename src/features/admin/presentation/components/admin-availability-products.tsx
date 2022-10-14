@@ -42,27 +42,14 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
-  { id: "description", label: "Description" },
+  { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminAvailabilityProducts() {
   const dispatch = useAppDispatch();
@@ -145,7 +132,7 @@ export function AdminAvailabilityProducts() {
                 status === null || status === "0"
                   ? "text-base"
                   : "text-xs opacity-40"
-              } rounded-full`}
+              } rounded-full font-['Varela_Round']`}
             >
               Available
             </button>
@@ -170,9 +157,9 @@ export function AdminAvailabilityProducts() {
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
                 status && status === "1" ? "text-base" : "text-xs opacity-40"
-              } rounded-full `}
+              } rounded-full font-['Varela_Round']`}
             >
-              Not-Available
+              Not Available
             </button>
           </div>
 

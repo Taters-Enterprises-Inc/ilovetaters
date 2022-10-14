@@ -25,6 +25,7 @@ import {
 } from "../slices/get-popclub-redeems-history.slice";
 import { PopclubRedeemModel } from "features/profile/core/domain/popclub-redeem.model";
 import moment from "moment";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -33,20 +34,6 @@ const columns: Array<Column> = [
   { id: "purchase_amount", label: "Purchase Amount" },
   { id: "status", label: "Redeem Status" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function ProfilePopclubRedeems() {
   const dispatch = useAppDispatch();

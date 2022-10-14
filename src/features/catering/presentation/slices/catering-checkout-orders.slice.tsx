@@ -26,11 +26,18 @@ const initialState: {
 
 export const cateringCheckoutOrders = createAsyncThunk(
   "cateringCheckoutOrders",
-  async (param: CateringCheckoutOrdersParam) => {
-    const response: CateringCheckoutOrdersResponse =
-      await CateringCheckoutOrdersRepository(param);
+  async (
+    param: CateringCheckoutOrdersParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const response: CateringCheckoutOrdersResponse =
+        await CateringCheckoutOrdersRepository(param);
 
-    return response.data;
+      return response.data;
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 
@@ -64,6 +71,16 @@ export const cateringCheckoutOrdersSlice = createSlice({
           state.data = data;
           state.message = message;
           state.status = CateringCheckoutOrdersState.success;
+        }
+      )
+      .addCase(
+        cateringCheckoutOrders.rejected,
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          const { message } = action.payload;
+
+          state.status = CateringCheckoutOrdersState.fail;
+          state.message = message;
+          state.data = null;
         }
       );
   },
