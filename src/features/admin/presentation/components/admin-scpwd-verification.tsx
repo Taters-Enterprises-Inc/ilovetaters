@@ -34,7 +34,7 @@ import { createQueryParams } from "features/config/helpers";
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "appDate", label: "Application Date" },
-  { id: "name", label: "Full Name" },
+  { id: "name", label: "Profile Name" },
   { id: "fname", label: "First Name" },
   { id: "lname", label: "Last Name" },
   { id: "mname", label: "Middle Name" },
