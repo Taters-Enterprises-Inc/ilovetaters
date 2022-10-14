@@ -14,8 +14,8 @@ import {
 } from "features/popclub/presentation/slices/get-deal.slice";
 import { getRedeem } from "features/popclub/presentation/slices/get-redeem.slice";
 import {
-  ADMIN_SNACKSHOP_ORDER_STATUS,
   ORDER_STATUS,
+  pusher,
   REACT_APP_PUSHER_CLUSTER,
   REACT_APP_PUSHER_KEY,
 } from "features/shared/constants";
@@ -56,10 +56,6 @@ export function UserNotificationWrapper() {
       getCateringOrdersState.status === GetCateringOrdersState.success &&
       getCateringOrdersState.data
     ) {
-      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-        cluster: REACT_APP_PUSHER_CLUSTER,
-      });
-
       const cateringChannel = pusher.subscribe("catering");
 
       cateringChannel.bind(
