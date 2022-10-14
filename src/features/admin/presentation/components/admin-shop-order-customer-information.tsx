@@ -430,7 +430,12 @@ export function AdminShopOrderCustomerInformation() {
               />
               <Select
                 size="small"
-                name="to_status_id"
+                name="status"
+                sx={{
+                  "& fieldset": {
+                    borderRadius: "0px",
+                  },
+                }}
                 defaultValue={getAdminShopOrderState.data?.status}
               >
                 {ADMIN_SNACKSHOP_ORDER_STATUS.map((value, index) => {
@@ -446,7 +451,7 @@ export function AdminShopOrderCustomerInformation() {
               </Select>
               <button
                 type="submit"
-                className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
+                className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
               >
                 Change Order Status
               </button>
@@ -475,6 +480,11 @@ export function AdminShopOrderCustomerInformation() {
 
             <Select
               size="small"
+              sx={{
+                "& fieldset": {
+                  borderRadius: "0px",
+                },
+              }}
               defaultValue={getAdminShopOrderState.data?.store}
               name="to_store_id"
             >
@@ -486,7 +496,7 @@ export function AdminShopOrderCustomerInformation() {
             </Select>
             <button
               type="submit"
-              className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
+              className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
             >
               Transfer to Store
             </button>
