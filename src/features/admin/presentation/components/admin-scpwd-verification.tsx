@@ -375,7 +375,7 @@ export function AdminScPwdVerification() {
               perPage={getAdminPopclubRedeemsState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminPopclubRedeemsState.data.orders !== undefined ? (
+              {/* {getAdminPopclubRedeemsState.data.orders !== undefined ? (
                 <>
                   {getAdminPopclubRedeemsState.data.orders.map((row, i) => (
                     <DataTableRow key={i}>
@@ -452,7 +452,7 @@ export function AdminScPwdVerification() {
                     </DataTableRow>
                   ))}
                 </>
-              ) : null}
+              ) : null} */}
             </DataTable>
           </div>
         </>
