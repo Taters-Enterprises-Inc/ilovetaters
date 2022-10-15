@@ -36,6 +36,10 @@ import {
   selectLogoutAdmin,
 } from "../slices/logout-admin.slice";
 import { useEffect } from "react";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -80,6 +84,13 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const logoutAdminState = useAppSelector(selectLogoutAdmin);
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, []);
 
   useEffect(() => {
     if (logoutAdminState.status === LogoutAdminState.success) {
@@ -106,7 +117,13 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <Badge badgeContent={0} color="primary">
+                  <Badge
+                    badgeContent={
+                      getAdminNotificationsState.data?.snackshop_order
+                        .unseen_notifications_count
+                    }
+                    color="primary"
+                  >
                     <FaRegListAlt size={20} />
                   </Badge>
 

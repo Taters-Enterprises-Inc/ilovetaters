@@ -111,6 +111,7 @@ import updateStoreCatersProductAddon from "features/admin/presentation/slices/up
 import getShopTransactionLogs from "features/admin/presentation/slices/get-shop-transaction-logs.slice";
 import adminCateringPrivilege from "features/admin/presentation/slices/admin-catering-privilege.slice";
 import getCateringTransactionLogs from "features/admin/presentation/slices/get-catering-transaction-logs.slice";
+import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 
 export const store = configureStore({
   reducer: {
@@ -225,6 +226,7 @@ export const store = configureStore({
     getShopTransactionLogs,
     adminCateringPrivilege,
     getCateringTransactionLogs,
+    getAdminNotifications,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
