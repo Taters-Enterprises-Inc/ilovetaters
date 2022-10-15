@@ -20,11 +20,11 @@ import {
 } from "../slices/get-admin-stores.slice";
 import { AdminPasswordModal } from "../modals";
 import {
-  adminPrivilege,
-  AdminPrivilegeState,
-  selectAdminPrivilege,
-  resetAdminPrivilege,
-} from "../slices/admin-privilege.slice";
+  adminCateringPrivilege,
+  AdminCateringPrivilegeState,
+  selectAdminCateringPrivilege,
+  resetAdminCateringPrivilege,
+} from "../slices/admin-catering-privilege.slice";
 import { AdminCateringBookingCustomerInformationButtons } from "./admin-catering-booking-customer-information-buttons";
 import {
   getAdminCateringBooking,
@@ -50,20 +50,24 @@ export function AdminCateringBookingCustomerInformation() {
   );
   const getAdminStoresState = useAppSelector(selectGetAdminStores);
 
-  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
 
   useEffect(() => {
-    if (adminPrivilegeState.status === AdminPrivilegeState.success) {
-      dispatch(resetAdminPrivilege());
+    if (
+      adminCateringPrivilegeState.status === AdminCateringPrivilegeState.success
+    ) {
+      dispatch(resetAdminCateringPrivilege());
       setOpenAdminPasswordModal({ status: false });
     }
-  }, [adminPrivilegeState, dispatch]);
+  }, [adminCateringPrivilegeState, dispatch]);
 
   useEffect(() => {
     if (trackingNo) {
       dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [dispatch, trackingNo, adminPrivilegeState]);
+  }, [dispatch, trackingNo, adminCateringPrivilegeState]);
 
   useEffect(() => {
     dispatch(getAdminStores());
@@ -166,7 +170,9 @@ export function AdminCateringBookingCustomerInformation() {
     );
   };
 
-  const handleOnSubmitAdminPrivilege = (e: FormEvent<HTMLFormElement>) => {
+  const handleOnSubmitAdminCateringPrivilege = (
+    e: FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     setOpenAdminPasswordModal({
@@ -265,13 +271,11 @@ export function AdminCateringBookingCustomerInformation() {
             </div>
           </div>
 
-          {/* 
-
           <hr />
 
           <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
             <form
-              onSubmit={handleOnSubmitAdminPrivilege}
+              onSubmit={handleOnSubmitAdminCateringPrivilege}
               className="flex flex-col flex-1 lg:flex-row"
             >
               <input
@@ -280,13 +284,19 @@ export function AdminCateringBookingCustomerInformation() {
                 name="trans_id"
                 value={getAdminCateringBookingState.data?.id}
               />
+              <input
+                readOnly
+                hidden
+                name="from_status_id"
+                value={getAdminCateringBookingState.data?.status}
+              />
               <Select
                 size="small"
-                name="status"
+                name="to_status_id"
                 defaultValue={getAdminCateringBookingState.data?.status}
               >
                 {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
-                  if (index === 0) {
+                  if (index === 0 || value.name === "") {
                     return null;
                   }
                   return (
@@ -303,13 +313,12 @@ export function AdminCateringBookingCustomerInformation() {
                 Change Booking Status
               </button>
             </form>
-          </div> 
+          </div>
 
           <hr />
-          */}
 
-          {/* <form
-            onSubmit={handleOnSubmitAdminPrivilege}
+          <form
+            onSubmit={handleOnSubmitAdminCateringPrivilege}
             className="flex flex-col flex-1 lg:flex-row"
           >
             <input
@@ -318,10 +327,18 @@ export function AdminCateringBookingCustomerInformation() {
               name="trans_id"
               value={getAdminCateringBookingState.data?.id}
             />
+
+            <input
+              readOnly
+              hidden
+              name="from_store_id"
+              value={getAdminCateringBookingState.data?.store}
+            />
+
             <Select
               size="small"
               defaultValue={getAdminCateringBookingState.data?.store}
-              name="store_id"
+              name="to_store_id"
             >
               {getAdminStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
@@ -335,7 +352,7 @@ export function AdminCateringBookingCustomerInformation() {
             >
               Transfer to Store
             </button>
-          </form> */}
+          </form>
         </div>
 
         <hr className="mt-1" />
@@ -782,7 +799,7 @@ export function AdminCateringBookingCustomerInformation() {
         onEnterPassword={(password: string) => {
           if (openAdminPasswordModal.formData) {
             openAdminPasswordModal.formData.append("password", password);
-            dispatch(adminPrivilege(openAdminPasswordModal.formData));
+            dispatch(adminCateringPrivilege(openAdminPasswordModal.formData));
           }
         }}
         onClose={() => {

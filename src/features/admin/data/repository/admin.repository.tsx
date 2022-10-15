@@ -28,6 +28,7 @@ import { GetAdminStoreCatersPackagesModel } from "features/admin/core/domain/get
 import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
 import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
+import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -159,6 +160,12 @@ export interface ValidateReferenceNumberAdminResponse {
   };
 }
 export interface AdminShopOrderUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminCateringPrivilegeResponse {
   data: {
     message: string;
   };
@@ -307,6 +314,24 @@ export interface GetShopTransactionLogsResponse {
     message: string;
     data: Array<ShopTransactionLogsModel>;
   };
+}
+
+export interface GetCateringTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<CateringTransactionLogsModel>;
+  };
+}
+
+export function GetCateringTransactionLogsRepository(
+  transactionId: number
+): Promise<GetCateringTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetShopTransactionLogsRepository(
@@ -532,6 +557,18 @@ export function GetAdminCateringBookingsRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
     withCredentials: true,
   });
+}
+
+export function AdminCateringPrivilegeRepository(
+  formData: FormData
+): Promise<AdminCateringPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminPrivilegeRepository(
