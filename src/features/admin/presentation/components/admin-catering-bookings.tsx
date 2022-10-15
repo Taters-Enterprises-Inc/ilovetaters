@@ -26,7 +26,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
-import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
+import { selectAdminCateringPrivilege } from "../slices/admin-catering-privilege.slice";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
@@ -67,7 +67,9 @@ export function AdminCateringBookings() {
     selectAdminCateringBookingUpdateStatus
   );
 
-  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
 
   useEffect(() => {
     if (trackingNo) {
@@ -95,7 +97,7 @@ export function AdminCateringBookings() {
     orderBy,
     order,
     search,
-    adminPrivilegeState,
+    adminCateringPrivilegeState,
     adminCateringBookingUpdateStatusState,
   ]);
 
