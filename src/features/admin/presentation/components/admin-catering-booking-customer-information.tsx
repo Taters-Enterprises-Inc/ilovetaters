@@ -189,7 +189,7 @@ export function AdminCateringBookingCustomerInformation() {
             <div>
               <strong>Tracking Number:</strong>{" "}
               <span className="font-semibold">
-                {getAdminCateringBookingState.data?.id ?? "N/A"}
+                {getAdminCateringBookingState.data?.tracking_no ?? "N/A"}
               </span>
             </div>
             {getAdminCateringBookingState.data ? (
