@@ -59,6 +59,34 @@ export function UserNotificationWrapper() {
       const cateringChannel = pusher.subscribe("catering");
 
       cateringChannel.bind(
+        "catering-booking-changed",
+        (data: {
+          fb_user_id?: number;
+          mobile_user_id?: number;
+          message: string;
+        }) => {
+          if (
+            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+          ) {
+            showAlert(setSuccessAlert, data.message);
+
+            if (
+              getCateringOrdersState.status ===
+                GetCateringOrdersState.success &&
+              getCateringOrdersState.data
+            ) {
+              dispatch(
+                getCateringOrders({
+                  hash: getCateringOrdersState.data.order.clients_info.hash_key,
+                })
+              );
+            }
+          }
+        }
+      );
+
+      cateringChannel.bind(
         "catering-booking-updated",
         (data: {
           fb_user_id?: number;
