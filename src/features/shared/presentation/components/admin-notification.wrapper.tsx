@@ -16,6 +16,7 @@ import {
   REACT_APP_PUSHER_CLUSTER,
   REACT_APP_PUSHER_KEY,
 } from "features/shared/constants";
+import { getAdminNotifications } from "features/admin/presentation/slices/get-admin-notifications.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -34,26 +35,28 @@ export function AdminNotificationWrapper() {
     snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
       if (
         getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.is_csr_admin ||
         getAdminSessionState.data?.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
         toast("🦄 " + data.message);
         dispatch(getAdminShopOrders(""));
+        dispatch(getAdminNotifications());
       }
     });
 
     cateringChannel.bind("booking-transaction", (data: TransactionParam) => {
       if (
         getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.is_csr_admin ||
         getAdminSessionState.data?.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
         toast("🦄 " + data.message);
         dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
       }
     });
 
@@ -62,13 +65,14 @@ export function AdminNotificationWrapper() {
       (data: TransactionParam) => {
         if (
           getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_csr ||
+          getAdminSessionState.data?.is_csr_admin ||
           getAdminSessionState.data?.user_details.stores.some(
             (store) => store.store_id === data.store_id
           )
         ) {
           toast("🦄 " + data.message);
           dispatch(getAdminPopclubRedeems(""));
+          dispatch(getAdminNotifications());
         }
       }
     );

@@ -317,28 +317,32 @@ export function AdminSettingUsers() {
                         </Link>
                       </DataTableCell>
                       <DataTableCell>
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                              user_id: row.id,
-                            };
+                        {row.groups.some(
+                          (group) => group.id == 1 || group.id == 10
+                        ) ? null : (
+                          <button
+                            onClick={() => {
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                                user_id: row.id,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
-                        >
-                          Choose
-                        </button>
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                            className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                          >
+                            Choose
+                          </button>
+                        )}
                       </DataTableCell>
                     </DataTableRow>
                   ))}

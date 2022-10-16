@@ -139,7 +139,7 @@ export function AdminPopClubRedeems() {
         </div>
       </div>
 
-      {getAdminPopclubRedeemsState.data?.orders ? (
+      {getAdminPopclubRedeemsState.data?.redeems ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -207,7 +207,7 @@ export function AdminPopClubRedeems() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminPopclubRedeemsState.data.orders.map((row, i) => (
+              {getAdminPopclubRedeemsState.data.redeems.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -373,9 +373,9 @@ export function AdminPopClubRedeems() {
               perPage={getAdminPopclubRedeemsState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminPopclubRedeemsState.data.orders !== undefined ? (
+              {getAdminPopclubRedeemsState.data.redeems !== undefined ? (
                 <>
-                  {getAdminPopclubRedeemsState.data.orders.map((row, i) => (
+                  {getAdminPopclubRedeemsState.data.redeems.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>
                         {row.status === 1 &&

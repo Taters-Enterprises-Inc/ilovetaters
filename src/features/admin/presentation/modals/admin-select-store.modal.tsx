@@ -15,6 +15,7 @@ import {
 import { selectGetAdminUser } from "../slices/get-admin-user.slice";
 import { FormEvent, useEffect } from "react";
 import {
+  resetUpdateAdminUserStoresStatus,
   selectUpdateAdminUserStores,
   updateAdminUserStores,
   UpdateAdminUserStoresState,
@@ -41,6 +42,7 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
       updateAdminUserStoresState.status === UpdateAdminUserStoresState.success
     ) {
       props.onClose();
+      dispatch(resetUpdateAdminUserStoresStatus());
     }
   }, [updateAdminUserStoresState, props]);
 
@@ -69,7 +71,7 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-white text-2xl">Select Store</span>
+          <span className="text-2xl text-white">Select Store</span>
           <button
             className="text-2xl text-white"
             onClick={() => {
@@ -81,8 +83,8 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
           </button>
         </div>
         {getAdminStoresState.data ? (
-          <form onSubmit={handleUpdateStore} className="bg-paper p-4 space-y-4">
-            <span className="text-secondary text-xl">
+          <form onSubmit={handleUpdateStore} className="p-4 space-y-4 bg-paper">
+            <span className="text-xl text-secondary">
               Account Name: {getAdminUserStateState.data?.first_name}{" "}
               {getAdminUserStateState.data?.last_name}
             </span>
@@ -109,10 +111,10 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
               )}
             />
 
-            <div className="flex justify-end items-center">
+            <div className="flex items-center justify-end">
               <button
                 type="submit"
-                className="bg-button rounded-lg py-2 px-4 text-white w-fit"
+                className="px-4 py-2 text-white rounded-lg bg-button w-fit"
               >
                 Update Store
               </button>

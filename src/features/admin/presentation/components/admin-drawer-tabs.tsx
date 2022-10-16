@@ -141,7 +141,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           {getAdminSessionState.data?.is_admin ||
           getAdminSessionState.data?.is_catering_admin ||
-          getAdminSessionState.data?.is_csr ? (
+          getAdminSessionState.data?.is_csr_admin ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -390,13 +390,11 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
-                      {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr ? (
+                      {getAdminSessionState.data?.is_admin ? (
                         <li>
                           <NavLink
                             to="/admin/setting/user"
                             onClick={() => {
-                              // toggle2();
                               if (props.mobile) dispatch(closeAdminSideBar());
                             }}
                             className={(navData) =>
