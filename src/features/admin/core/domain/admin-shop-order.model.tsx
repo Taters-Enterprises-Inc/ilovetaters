@@ -21,6 +21,8 @@ export interface AdminShopOrderModel {
   payment_proof: string;
   reference_num: string;
   store: number;
+  fb_user_id: number | null;
+  mobile_user_id: number | null;
   items: Array<{
     product_price: string;
     quantity: number;

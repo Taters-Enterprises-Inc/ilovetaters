@@ -104,7 +104,7 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
 
               if (e.target.value) {
                 const value = parseInt(e.target.value);
-                if (value > 1) {
+                if (value >= 1) {
                   props.onChange("manual-input", value);
                 }
               }

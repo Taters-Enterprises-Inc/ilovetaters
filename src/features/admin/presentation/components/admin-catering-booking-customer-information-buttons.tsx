@@ -38,6 +38,16 @@ export function AdminCateringBookingCustomerInformationButtons() {
         "trans_id",
         getAdminCateringBookingState.data.id.toString()
       );
+      if (getAdminCateringBookingState.data.fb_user_id)
+        formData.append(
+          "fb_user_id",
+          getAdminCateringBookingState.data.fb_user_id.toString()
+        );
+      if (getAdminCateringBookingState.data.mobile_user_id)
+        formData.append(
+          "mobile_user_id",
+          getAdminCateringBookingState.data.mobile_user_id.toString()
+        );
       formData.append("status", status);
       dispatch(adminCateringBookingUpdateStatus(formData));
     }
