@@ -11,6 +11,10 @@ import {
 import { Link } from "react-router-dom";
 import { FaExclamationCircle } from "react-icons/fa";
 import moment from "moment";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
 interface AdminHeadProps {
   AdminBreadCrumbsProps: AdminBreadCrumbsProps;
 }
@@ -22,10 +26,13 @@ export function AdminHead(props: AdminHeadProps) {
   const getAdminNotificationsState = useAppSelector(
     selectGetAdminNotifications
   );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, []);
+  }, [updateAdminNotificationDateSeenState]);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -54,6 +61,40 @@ export function AdminHead(props: AdminHeadProps) {
               <div className="bg-secondary font-bold text-white text-center text-xl w-100% p-2">
                 Notifications
               </div>
+
+              {getAdminNotificationsState.data?.all.notifications ? (
+                <ul>
+                  {getAdminNotificationsState.data.all.notifications.map(
+                    (notification) => (
+                      <li>
+                        <Link
+                          className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
+                            notification.dateseen === null ? " bg-gray-200" : ""
+                          }`}
+                          onClick={() => {
+                            dispatch(
+                              updateAdminNotificationDateSeen(notification.id)
+                            );
+                          }}
+                          to={`/admin/order?tracking_no=${notification.tracking_no}`}
+                        >
+                          <FaExclamationCircle className="text-4xl text-green-700" />
+                          <div className="flex flex-col justify-start">
+                            <span className="text-sm font-semibold">
+                              {notification.text}
+                            </span>
+                            <span className="text-xs">
+                              {moment(notification.dateadded)
+                                .startOf("hour")
+                                .fromNow()}
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+              ) : null}
             </div>
           </div>
           <div className="z-40 hidden mr-6 shadow-2xl lg:block bg-paper">
@@ -70,6 +111,11 @@ export function AdminHead(props: AdminHeadProps) {
                           className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
                             notification.dateseen === null ? " bg-gray-200" : ""
                           }`}
+                          onClick={() => {
+                            dispatch(
+                              updateAdminNotificationDateSeen(notification.id)
+                            );
+                          }}
                           to={`/admin/order?tracking_no=${notification.tracking_no}`}
                         >
                           <FaExclamationCircle className="text-4xl text-green-700" />

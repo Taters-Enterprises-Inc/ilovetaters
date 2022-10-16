@@ -36,6 +36,15 @@ import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
 import { GridColDef } from "@mui/x-data-grid";
 import Table from "@mui/material/Table";
 import { createQueryParams } from "features/config/helpers";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -70,6 +79,17 @@ export function AdminShopOrders() {
     selectAdminShopOrderUpdateStatus
   );
   const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState]);
 
   useEffect(() => {
     if (trackingNo) {
@@ -270,7 +290,13 @@ export function AdminShopOrders() {
                       search: queryParams,
                     });
                   }}
-                  className="flex flex-col px-4 py-2 border-b"
+                  className={`flex flex-col px-4 py-2 border-b ${
+                    getAdminNotificationsState.data?.snackshop_order.unseen_notifications.some(
+                      (val) => val.tracking_no === row.tracking_no
+                    )
+                      ? "bg-gray-200"
+                      : ""
+                  }`}
                   key={i}
                 >
                   <span className="flex flex-wrap items-center space-x-1 text-xl">
@@ -403,57 +429,76 @@ export function AdminShopOrders() {
             >
               {getAdminShopOrdersState.data.orders !== undefined ? (
                 <>
-                  {getAdminShopOrdersState.data.orders.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.tracking_no}</DataTableCell>
-                      <DataTableCell>{row.client_name}</DataTableCell>
-                      <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
-                      <DataTableCell>{row.store_name}</DataTableCell>
-                      <DataTableCell>
-                        <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
-                      </DataTableCell>
-                      <DataTableCell>{row.invoice_num}</DataTableCell>
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              tracking_no: row.tracking_no,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                  {getAdminShopOrdersState.data.orders.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
+                        (notification) =>
+                          notification.tracking_no === row.tracking_no
+                      );
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.tracking_no}</DataTableCell>
+                        <DataTableCell>{row.client_name}</DataTableCell>
+                        <DataTableCell>
+                          {calculateGrandTotal(row)}
+                        </DataTableCell>
+                        <DataTableCell>{row.store_name}</DataTableCell>
+                        <DataTableCell>
+                          <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
+                        </DataTableCell>
+                        <DataTableCell>{row.invoice_num}</DataTableCell>
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                tracking_no: row.tracking_no,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

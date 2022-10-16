@@ -331,6 +331,24 @@ export interface GetAdminNotificationsResponse {
   };
 }
 
+export interface UpdateAdminNotificationDateSeenResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminNotificationDateSeenRepository(
+  notificationId: number
+) {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
+    new FormData(),
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminNotificationsRepository() {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/notifications`, {
     withCredentials: true,

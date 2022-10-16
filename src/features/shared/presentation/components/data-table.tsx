@@ -24,7 +24,6 @@ export const DataTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 12,
-    backgroundColor: "#f8f8f8",
     fontFamily: "Varela Round",
   },
 }));
@@ -66,7 +65,6 @@ interface DataTableProps {
 }
 
 export function DataTable(props: DataTableProps) {
-
   return (
     <div className="space-y-4">
       <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
