@@ -66,8 +66,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
 
@@ -94,8 +95,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
 
@@ -114,6 +116,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCateringOrdersState]);
 
   useEffect(() => {
@@ -135,8 +138,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
 
@@ -162,8 +166,9 @@ export function UserNotificationWrapper() {
           status: number;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, ORDER_STATUS[data.status].name);
 
@@ -181,6 +186,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getOrdersState]);
 
   useEffect(() => {
@@ -199,8 +205,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
             dispatch(getLatestUnexpiredRedeem());
@@ -228,8 +235,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setFailsAlert, data.message);
             dispatch(getLatestUnexpiredRedeem());
@@ -249,6 +257,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getDealState]);
 
   return (
