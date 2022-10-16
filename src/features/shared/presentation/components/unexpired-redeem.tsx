@@ -17,6 +17,7 @@ import {
 import { IoMdClose } from "react-icons/io";
 import { MessageModal } from "../modals";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
+import { selectSignInMobileUser } from "../slices/sign-in-mobile-user.slice";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ export function UnExpiredRedeem() {
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const getSessionState = useAppSelector(selectGetSession);
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+  const signInMobileUserState = useAppSelector(selectSignInMobileUser);
 
   const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
 
@@ -40,7 +42,12 @@ export function UnExpiredRedeem() {
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
     dispatch(redeemValidators());
-  }, [facebookLogoutState, dispatch, forfeitRedeemState]);
+  }, [
+    facebookLogoutState,
+    dispatch,
+    forfeitRedeemState,
+    signInMobileUserState,
+  ]);
 
   return (
     <>

@@ -22,12 +22,11 @@ import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { AdminSelectStoreModal } from "../modals";
 import {
   getAdminUserStores,
-  GetAdminUserStoresState,
-  selectGetAdminUserStores,
 } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
 import { ExtractButton } from "./extract-button";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -38,20 +37,6 @@ const columns: Array<Column> = [
   { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminSettingUsers() {
   const dispatch = useAppDispatch();
@@ -124,6 +109,7 @@ export function AdminSettingUsers() {
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No users yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -212,6 +198,7 @@ export function AdminSettingUsers() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No users yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

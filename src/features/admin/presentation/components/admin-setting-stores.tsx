@@ -26,21 +26,8 @@ import moment from "moment";
 import { AdminStoreEditModal } from "../modals";
 import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
+import { createQueryParams } from "features/config/helpers";
 import { ExtractButton } from "./extract-button";
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminSettingStores() {
   const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
@@ -71,14 +58,14 @@ export function AdminSettingStores() {
     !getAdminSessionState.data?.is_admin &&
     !getAdminSessionState.data?.is_csr
   ) {
-    columns = columns.filter((column) => column.id !== "branches");
-  }
-  if (
-    !getAdminSessionState.data?.is_admin &&
-    !getAdminSessionState.data?.is_csr &&
-    !getAdminSessionState.data?.is_catering_admin
-  ) {
-    columns = columns.filter((column) => column.id !== "catering");
+    columns = columns.filter(
+      (column) =>
+        column.id !== "snackshop" &&
+        column.id !== "catering" &&
+        column.id !== "popclub-walk-in" &&
+        column.id !== "popclub-online-delivery" &&
+        column.id !== "branches"
+    );
   }
 
   useEffect(() => {
@@ -135,6 +122,7 @@ export function AdminSettingStores() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No stores yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -208,6 +196,7 @@ export function AdminSettingStores() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="No stores yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -226,7 +215,7 @@ export function AdminSettingStores() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected == "name") {
+                if (column_selected === "name") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
@@ -296,97 +285,94 @@ export function AdminSettingStores() {
                     <DataTableRow key={i}>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>{row.menu_name}</DataTableCell>
-                      <DataTableCell>
-                        <Checkbox
-                          onChange={(e) => {
-                            dispatch(
-                              updateAdminSettingStore({
-                                store_id: row.store_id,
-                                name_of_field_status: "status",
-                                status: e.target.checked ? 1 : 0,
-                              })
-                            );
-                          }}
-                          color="primary"
-                          checked={row.status === "1" ? true : false}
-                        />
-                      </DataTableCell>
-
-                      {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr ||
-                      getAdminSessionState.data?.is_catering_admin ? (
-                        <DataTableCell>
-                          <Checkbox
-                            onChange={(e) => {
-                              dispatch(
-                                updateAdminSettingStore({
-                                  store_id: row.store_id,
-                                  name_of_field_status: "catering_status",
-                                  status: e.target.checked ? 1 : 0,
-                                })
-                              );
-                            }}
-                            color="primary"
-                            checked={row.catering_status === 1 ? true : false}
-                          />
-                        </DataTableCell>
-                      ) : null}
-
-                      <DataTableCell>
-                        <Checkbox
-                          onChange={(e) => {
-                            dispatch(
-                              updateAdminSettingStore({
-                                store_id: row.store_id,
-                                name_of_field_status: "popclub_walk_in_status",
-                                status: e.target.checked ? 1 : 0,
-                              })
-                            );
-                          }}
-                          color="primary"
-                          checked={
-                            row.popclub_walk_in_status === 1 ? true : false
-                          }
-                        />
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Checkbox
-                          onChange={(e) => {
-                            dispatch(
-                              updateAdminSettingStore({
-                                store_id: row.store_id,
-                                name_of_field_status:
-                                  "popclub_online_delivery_status",
-                                status: e.target.checked ? 1 : 0,
-                              })
-                            );
-                          }}
-                          color="primary"
-                          checked={
-                            row.popclub_online_delivery_status === 1
-                              ? true
-                              : false
-                          }
-                        />
-                      </DataTableCell>
 
                       {getAdminSessionState.data?.is_admin ||
                       getAdminSessionState.data?.is_csr ? (
-                        <DataTableCell>
-                          <Checkbox
-                            onChange={(e) => {
-                              dispatch(
-                                updateAdminSettingStore({
-                                  store_id: row.store_id,
-                                  name_of_field_status: "branch_status",
-                                  status: e.target.checked ? 1 : 0,
-                                })
-                              );
-                            }}
-                            color="primary"
-                            checked={row.branch_status === 1 ? true : false}
-                          />
-                        </DataTableCell>
+                        <>
+                          <DataTableCell>
+                            <Checkbox
+                              onChange={(e) => {
+                                dispatch(
+                                  updateAdminSettingStore({
+                                    store_id: row.store_id,
+                                    name_of_field_status: "status",
+                                    status: e.target.checked ? 1 : 0,
+                                  })
+                                );
+                              }}
+                              color="primary"
+                              checked={row.status === "1" ? true : false}
+                            />
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Checkbox
+                              onChange={(e) => {
+                                dispatch(
+                                  updateAdminSettingStore({
+                                    store_id: row.store_id,
+                                    name_of_field_status: "catering_status",
+                                    status: e.target.checked ? 1 : 0,
+                                  })
+                                );
+                              }}
+                              color="primary"
+                              checked={row.catering_status === 1 ? true : false}
+                            />
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Checkbox
+                              onChange={(e) => {
+                                dispatch(
+                                  updateAdminSettingStore({
+                                    store_id: row.store_id,
+                                    name_of_field_status:
+                                      "popclub_walk_in_status",
+                                    status: e.target.checked ? 1 : 0,
+                                  })
+                                );
+                              }}
+                              color="primary"
+                              checked={
+                                row.popclub_walk_in_status === 1 ? true : false
+                              }
+                            />
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Checkbox
+                              onChange={(e) => {
+                                dispatch(
+                                  updateAdminSettingStore({
+                                    store_id: row.store_id,
+                                    name_of_field_status:
+                                      "popclub_online_delivery_status",
+                                    status: e.target.checked ? 1 : 0,
+                                  })
+                                );
+                              }}
+                              color="primary"
+                              checked={
+                                row.popclub_online_delivery_status === 1
+                                  ? true
+                                  : false
+                              }
+                            />
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Checkbox
+                              onChange={(e) => {
+                                dispatch(
+                                  updateAdminSettingStore({
+                                    store_id: row.store_id,
+                                    name_of_field_status: "branch_status",
+                                    status: e.target.checked ? 1 : 0,
+                                  })
+                                );
+                              }}
+                              color="primary"
+                              checked={row.branch_status === 1 ? true : false}
+                            />
+                          </DataTableCell>
+                        </>
                       ) : null}
 
                       <DataTableCell>

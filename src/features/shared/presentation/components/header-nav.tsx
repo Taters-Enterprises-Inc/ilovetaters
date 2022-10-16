@@ -20,10 +20,6 @@ import {
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "features/popclub/presentation/slices/get-all-platform.slice";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
 import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
@@ -33,7 +29,6 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 import { ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
@@ -73,8 +68,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const dispatch = useAppDispatch();
 
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
-
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -83,10 +76,6 @@ export function HeaderNav(props: HeaderNavProps) {
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (openPlatformChooserModal) dispatch(getAllPlatform());
-  }, [dispatch, openPlatformChooserModal]);
 
   const [
     openMessageModalWhenSwitchingTabWhenCacheDataExist,
@@ -307,13 +296,13 @@ export function HeaderNav(props: HeaderNavProps) {
     const { text, icon, action, id } = item;
 
     return (
-      <>
+      <div>
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
           <ListItemText primary={text} />
         </MenuItem>
         {id === 1 || id === 5 ? <hr /> : null}
-      </>
+      </div>
     );
   });
 
@@ -417,7 +406,7 @@ export function HeaderNav(props: HeaderNavProps) {
                             >
                               {TABS.map((tab, i) => {
                                 return (
-                                  <>
+                                  <div key={i}>
                                     {tab.name === "POPCLUB" ? (
                                       <MenuItem
                                         onClick={() => {
@@ -443,7 +432,7 @@ export function HeaderNav(props: HeaderNavProps) {
                                         {tab.name}
                                       </MenuItem>
                                     )}
-                                  </>
+                                  </div>
                                 );
                               })}
                             </MenuList>
@@ -621,7 +610,6 @@ export function HeaderNav(props: HeaderNavProps) {
 
       <PlatformChooserModal
         hasCloseButton={true}
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":

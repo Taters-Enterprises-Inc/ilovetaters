@@ -237,6 +237,22 @@ import {
   selectUpdateStoreProduct,
   UpdateStoreProductState,
 } from "features/admin/presentation/slices/update-store-product.slice";
+import {
+  selectUpdateStoreCatersPackage,
+  UpdateStoreCatersPackageState,
+} from "features/admin/presentation/slices/update-store-caters-packages.slice";
+import {
+  selectUpdateStoreCatersPackageAddon,
+  UpdateStoreCatersPackageAddonState,
+} from "features/admin/presentation/slices/update-store-caters-package-addons.slice";
+import {
+  selectUpdateStoreCatersProductAddon,
+  UpdateStoreCatersProductAddonState,
+} from "features/admin/presentation/slices/update-store-caters-product-addons.slice";
+import {
+  AdminCateringPrivilegeState,
+  selectAdminCateringPrivilege,
+} from "features/admin/presentation/slices/admin-catering-privilege.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -359,6 +375,94 @@ export function LoadingAndSnackbarWrapper() {
     selectUpdateAdminSettingStoreOperatingHours
   );
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
+  const updateStoreCatersPackageState = useAppSelector(
+    selectUpdateStoreCatersPackage
+  );
+  const updateStoreCatersPackageAddonState = useAppSelector(
+    selectUpdateStoreCatersPackageAddon
+  );
+  const updateStoreCatersProductAddonState = useAppSelector(
+    selectUpdateStoreCatersProductAddon
+  );
+
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
+  useEffect(() => {
+    switch (adminCateringPrivilegeState.status) {
+      case AdminCateringPrivilegeState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringPrivilegeState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringPrivilegeState.success:
+        showAlert(setSuccessAlert, adminCateringPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringPrivilegeState.fail:
+        showAlert(setFailsAlert, adminCateringPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringPrivilegeState, dispatch]);
+
+  useEffect(() => {
+    switch (updateStoreCatersProductAddonState.status) {
+      case UpdateStoreCatersProductAddonState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreCatersProductAddonState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersProductAddonState.success:
+        showAlert(setSuccessAlert, updateStoreCatersProductAddonState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersProductAddonState.fail:
+        showAlert(setFailsAlert, updateStoreCatersProductAddonState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreCatersProductAddonState, dispatch]);
+
+  useEffect(() => {
+    switch (updateStoreCatersPackageAddonState.status) {
+      case UpdateStoreCatersPackageAddonState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreCatersPackageAddonState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersPackageAddonState.success:
+        showAlert(setSuccessAlert, updateStoreCatersPackageAddonState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersPackageAddonState.fail:
+        showAlert(setFailsAlert, updateStoreCatersPackageAddonState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreCatersPackageAddonState, dispatch]);
+
+  useEffect(() => {
+    switch (updateStoreCatersPackageState.status) {
+      case UpdateStoreCatersPackageState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateStoreCatersPackageState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersPackageState.success:
+        showAlert(setSuccessAlert, updateStoreCatersPackageState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateStoreCatersPackageState.fail:
+        showAlert(setFailsAlert, updateStoreCatersPackageState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStoreCatersPackageState, dispatch]);
 
   useEffect(() => {
     switch (updateStoreProductState.status) {

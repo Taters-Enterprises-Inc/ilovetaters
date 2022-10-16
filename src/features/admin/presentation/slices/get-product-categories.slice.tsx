@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupModel } from "features/admin/core/domain/group.model";
-import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
+import { CategoryModel } from "features/admin/core/domain/category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import {
   GetProductCategoriesRepository,
@@ -18,7 +18,7 @@ export enum GetProductCategoriesState {
 const initialState: {
   status: GetProductCategoriesState;
   message: string;
-  data: Array<ProductCategoryModel> | undefined;
+  data: Array<CategoryModel> | undefined;
 } = {
   status: GetProductCategoriesState.initial,
   message: "",
@@ -54,7 +54,7 @@ export const getProductCategoriesSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: ProductCategoryModel | null;
+            data: CategoryModel | null;
           }>
         ) => {
           const { message, data } = action.payload;

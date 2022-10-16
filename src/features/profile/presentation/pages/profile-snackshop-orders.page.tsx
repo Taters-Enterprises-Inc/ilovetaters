@@ -22,6 +22,7 @@ import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { DataList } from "features/shared/presentation/components";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -31,20 +32,6 @@ const columns: Array<Column> = [
   { id: "raffle_status", label: "Raffle Status" },
   { id: "view", label: "View" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function ProfileSnackshopOrders() {
   const dispatch = useAppDispatch();
@@ -105,6 +92,7 @@ export function ProfileSnackshopOrders() {
           <div className="py-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -190,6 +178,7 @@ export function ProfileSnackshopOrders() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No snackshop orders yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {

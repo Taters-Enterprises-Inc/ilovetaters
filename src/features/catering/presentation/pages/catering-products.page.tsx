@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
+import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 
 export function CateringProducts() {
   const getSessionState = useAppSelector(selectGetSession);
@@ -50,24 +51,7 @@ export function CateringProducts() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <section className="lg:container">
-        <img
-          className="sm:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <CateringHeroCarousel />
       <section className="container space-y-10 pb-[90px]">
         {getCateringCategoryProductsState.data?.map((category, i) => (
           <section key={i}>
@@ -107,16 +91,16 @@ export function CateringProducts() {
           </section>
         ))}
 
-        <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
+        {/* <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
           FREQUENTLY ASKED QUESTIONS
-        </h3>
+        </h3> */}
         <CateringFaqs />
       </section>
 
       <a
-        target="_blank"
-        rel="noreferrer"
-        href="https://ilovetaters.com/shop/assets/upload/catering/Catering%20Packages.pdf"
+        onClick={() => {
+          window.open(require("assets/Catering Packages.pdf"));
+        }}
         className="bg-secondary cursor-pointer h-[100px] mb-14 lg:mb-0 flex justify-center items-center text-white font-['Bebas_Neue'] text-lg lg:text-2xl tracking-[3px]"
       >
         Download our Catering Flyer

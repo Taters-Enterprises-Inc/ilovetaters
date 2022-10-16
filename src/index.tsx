@@ -56,13 +56,17 @@ import {
   AdminSettingEditUser,
   AdminAvailabilityDeal,
   AdminAvailabilityProduct,
+  AdminAvailabilityCatersPackage,
+  AdminAvailabilityCatersPackageAddon,
+  AdminAvailabilityCatersProductAddon,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
 import {
+  AdminNotificationWrapper,
   ConsentWrapper,
   LoadingAndSnackbarWrapper,
-  NotificationWrapper,
+  UserNotificationWrapper,
 } from "features/shared/presentation/components";
 import {
   ShopCheckoutGuard,
@@ -81,6 +85,8 @@ import {
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
 import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
+import { PopClubGuard } from "features/popclub/presentation/guards";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -103,9 +109,8 @@ root.render(
           <Routes>
             <Route element={<ConsentWrapper />}>
               <Route element={<LoadingAndSnackbarWrapper />}>
-                <Route element={<NotificationWrapper />}>
+                <Route element={<UserNotificationWrapper />}>
                   <Route path="/" element={<Home />} />
-                  {/* <Route path="reseller" element={<Reseller />} /> */}
                   <Route path="branches" element={<Branches />} />
                   <Route path="franchising" element={<Franchising />} />
                   <Route path="privacy-policy" element={<PrivacyPolicy />} />
@@ -135,8 +140,10 @@ root.render(
 
                   <Route path="popclub" element={<PopClub />}>
                     <Route index element={<PopClubIndexPage />} />
-                    <Route path=":platform" element={<PopClubHome />} />
-                    <Route path="deal/:hash" element={<PopClubDeal />} />
+                    <Route element={<PopClubGuard />}>
+                      <Route path=":platform" element={<PopClubHome />} />
+                      <Route path="deal/:hash" element={<PopClubDeal />} />
+                    </Route>
                   </Route>
 
                   <Route path="delivery" element={<Shop />}>
@@ -169,10 +176,7 @@ root.render(
                     />
                   </Route>
 
-                  <Route
-                    path="catering"
-                    element={<Navigate to={"/delivery"} />}
-                  />
+                  <Route path="catering" element={<Navigate to={"/shop"} />} />
                   <Route
                     path="shop/admin"
                     element={<Navigate to={"/admin"} />}
@@ -199,70 +203,83 @@ root.render(
 
                 <Route path="admin" element={<Admin />}>
                   <Route index element={<AdminLogin />} />
+                  <Route element={<AdminNotificationWrapper />}>
+                    <Route element={<AdminGuard />}>
+                      <Route element={<AdminSidebarWrapper />}>
+                        <Route path="order" element={<AdminShopOrder />} />
+                        <Route
+                          path="catering"
+                          element={<AdminCateringBooking />}
+                        />
+                        <Route path="popclub" element={<AdminPopclub />} />
+                        <Route path="product" element={<AdminProduct />} />
+                        <Route path="report" element={<AdminReport />} />
+                        <Route path="faq">
+                          <Route index element={<AdminFaq />} />
+                          <Route path="store" element={<AdminFaq />} />
+                          <Route path="customer" element={<AdminCFaq />} />
+                        </Route>
 
-                  <Route element={<AdminGuard />}>
-                    <Route element={<AdminSidebarWrapper />}>
-                      <Route path="order" element={<AdminShopOrder />} />
-                      <Route
-                        path="catering"
-                        element={<AdminCateringBooking />}
-                      />
-                      <Route path="popclub" element={<AdminPopclub />} />
-                      <Route path="product" element={<AdminProduct />} />
-                      <Route path="report" element={<AdminReport />} />
-                      <Route path="faq">
-                        <Route index element={<AdminFaq />} />
-                        <Route path="store" element={<AdminFaq />} />
-                        <Route path="customer" element={<AdminCFaq />} />
-                      </Route>
-
-                      <Route path="raffle">
-                        <Route
-                          path="snackshop"
-                          element={<AdminRaffleSnackshop />}
-                        />
-                        <Route
-                          path="instore"
-                          element={<AdminRaffleInstore />}
-                        />
-                      </Route>
-
-                      <Route path="availability">
-                        <Route
-                          path="deal"
-                          element={<AdminAvailabilityDeal />}
-                        />
-                        <Route
-                          path="product"
-                          element={<AdminAvailabilityProduct />}
-                        />
-                      </Route>
-
-                      <Route path="setting">
-                        <Route
-                          path="category"
-                          element={<AdminSettingCategory />}
-                        />
-                        <Route path="user">
-                          <Route index element={<AdminSettingUser />} />
+                        <Route path="raffle">
                           <Route
-                            path="create-user"
-                            element={<AdminSettingCreateUser />}
+                            path="snackshop"
+                            element={<AdminRaffleSnackshop />}
                           />
                           <Route
-                            path="edit-user/:id"
-                            element={<AdminSettingEditUser />}
-                          />
-                          <Route
-                            path="create-group"
-                            element={<AdminSettingCreateGroup />}
+                            path="instore"
+                            element={<AdminRaffleInstore />}
                           />
                         </Route>
-                        <Route
-                          path="voucher"
-                          element={<AdminSettingVoucher />}
-                        />
-                        <Route path="store" element={<AdminSettingStore />} />
+
+                        <Route path="availability">
+                          <Route
+                            path="deal"
+                            element={<AdminAvailabilityDeal />}
+                          />
+                          <Route
+                            path="product"
+                            element={<AdminAvailabilityProduct />}
+                          />
+                          <Route
+                            path="caters-package"
+                            element={<AdminAvailabilityCatersPackage />}
+                          />
+                          <Route
+                            path="caters-package-addon"
+                            element={<AdminAvailabilityCatersPackageAddon />}
+                          />
+                          <Route
+                            path="caters-product-addon"
+                            element={<AdminAvailabilityCatersProductAddon />}
+                          />
+                        </Route>
+
+                        <Route path="setting">
+                          <Route
+                            path="category"
+                            element={<AdminSettingCategory />}
+                          />
+                          <Route path="user">
+                            <Route index element={<AdminSettingUser />} />
+                            <Route
+                              path="create-user"
+                              element={<AdminSettingCreateUser />}
+                            />
+                            <Route
+                              path="edit-user/:id"
+                              element={<AdminSettingEditUser />}
+                            />
+                            <Route
+                              path="create-group"
+                              element={<AdminSettingCreateGroup />}
+                            />
+                          </Route>
+                          <Route
+                            path="voucher"
+                            element={<AdminSettingVoucher />}
+                          />
+                          <Route path="store" element={<AdminSettingStore />} />
+                        </Route>
                       </Route>
                     </Route>
                   </Route>

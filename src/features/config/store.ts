@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import getAllPlatform from "../popclub/presentation/slices/get-all-platform.slice";
 import getAllPlatformCategories from "../popclub/presentation/slices/get-all-platform-categories.slice";
 import getDeals from "../popclub/presentation/slices/get-deals.slice";
 import getPopClubData from "../popclub/presentation/slices/get-popclub-data.slice";
@@ -21,29 +20,24 @@ import addToCartShop from "../shop/presentation/slices/add-to-cart-shop.slice";
 import getBranchesStore from "../branches/presentation/slices/get-branches-store";
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
-
 import getSnackShopOrderHistory from "../profile/presentation/slices/get-snackshop-order-history.slice";
 import getCateringBookingHistory from "../profile/presentation/slices/get-catering-booking-history.slice";
 import facebookLogin from "../shared/presentation/slices/facebook-login.slice";
 import facebookLoginPoint from "../shared/presentation/slices/facebook-login-point.slice";
 import facebookLogout from "../shared/presentation/slices/facebook-logout.slice";
 import storeReset from "../shared/presentation/slices/store-reset.slice";
-
 import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
 import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
-
 import addContact from "../shared/presentation/slices/add-contact.slice";
 import deleteContact from "../shared/presentation/slices/delete-contact.slice";
 import updateContact from "../shared/presentation/slices/update-contact.slice";
 import getContacts from "../shared/presentation/slices/get-contacts.slice";
-
 import getStoresAvailableSnackshop from "../shop/presentation/slices/get-stores-available-snackshop.slice";
 import getStoresAvailableCatering from "../catering/presentation/slices/get-stores-available-catering.slice";
 import getStoresAvailableBranches from "../branches/presentation/slices/get-stores-available-branches.slice";
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
-
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
 import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
@@ -51,17 +45,14 @@ import addToCartCatering from "../catering/presentation/slices/add-to-cart-cater
 import removeItemFromCartCatering from "../catering/presentation/slices/remove-item-from-cart-catering.slice";
 import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
-
 import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
 import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
 import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
 import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
 import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
 import uploadContract from "../catering/presentation/slices/upload-contract.slice";
-
 import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
 import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
-
 import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
 import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
 import signUpMobileUser from "../shared/presentation/slices/sign-up-mobile-user.slice";
@@ -73,14 +64,11 @@ import loginAdmin from "features/admin/presentation/slices/login-admin.slice";
 import getAdminSession from "features/admin/presentation/slices/get-admin-session.slice";
 import logoutAdmin from "features/admin/presentation/slices/logout-admin.slice";
 import forfeitRedeem from "features/popclub/presentation/slices/forfeit-redeem.slice";
-
 import adminSideBar from "features/admin/presentation/slices/admin-sidebar.slice";
 import getAdminShopOrders from "features/admin/presentation/slices/get-admin-shop-orders.slice";
 import getAdminShopOrder from "features/admin/presentation/slices/get-admin-shop-order.slice";
-
 import getAdminPopclubRedeems from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import getAdminPopclubRedeem from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
-
 import adminCompleteRedeem from "features/admin/presentation/slices/admin-complete-redeem.slice";
 import storeVisitStoreChooserModal from "features/popclub/presentation/slices/store-visit-store-chooser-modal.slice";
 import getStoresAvailablePopClubStoreVisit from "features/popclub/presentation/slices/get-stores-available-popclub-store-visit.slice";
@@ -93,12 +81,10 @@ import getAdminUserStores from "features/admin/presentation/slices/get-admin-use
 import getAdminStores from "features/admin/presentation/slices/get-admin-stores.slice";
 import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
 import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
-
 import uploadProofOfPaymentAdmin from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
 import validateReferenceNumberAdmin from "features/admin/presentation/slices/validate-reference-number.slice";
 import adminShopOrderUpdateStatus from "features/admin/presentation/slices/admin-shop-order-update-status.slice";
 import adminPrivilege from "features/admin/presentation/slices/admin-privilege.slice";
-
 import getAdminCateringBookings from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import getAdminCateringBooking from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import adminCateringBookingUpdateStatus from "features/admin/presentation/slices/admin-catering-booking-update-status.slice";
@@ -112,13 +98,22 @@ import updateStoreProduct from "features/admin/presentation/slices/update-store-
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
 import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
-
 import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
 import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
+import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
+import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
+import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
+import getDealCategories from "features/admin/presentation/slices/get-deal-categories.slice";
+import getAdminStoreCatersPackageAddons from "features/admin/presentation/slices/get-admin-stores-caters-package-addons.slice";
+import updateStoreCatersPackageAddon from "features/admin/presentation/slices/update-store-caters-package-addons.slice";
+import getAdminStoreCatersProductAddons from "features/admin/presentation/slices/get-admin-stores-caters-product-addons.slice";
+import updateStoreCatersProductAddon from "features/admin/presentation/slices/update-store-caters-product-addons.slice";
+import getShopTransactionLogs from "features/admin/presentation/slices/get-shop-transaction-logs.slice";
+import adminCateringPrivilege from "features/admin/presentation/slices/admin-catering-privilege.slice";
+import getCateringTransactionLogs from "features/admin/presentation/slices/get-catering-transaction-logs.slice";
 
 export const store = configureStore({
   reducer: {
-    getAllPlatform,
     getAllPlatformCategories,
     getDeals,
     setPopClubData,
@@ -219,6 +214,17 @@ export const store = configureStore({
     adminDeclineRedeem,
     getAdminStore,
     updateAdminSettingStoreOperatingHours,
+    getCatersPackageCategories,
+    getAdminStoreCatersPackages,
+    updateStoreCatersPackage,
+    getDealCategories,
+    getAdminStoreCatersPackageAddons,
+    updateStoreCatersPackageAddon,
+    getAdminStoreCatersProductAddons,
+    updateStoreCatersProductAddon,
+    getShopTransactionLogs,
+    adminCateringPrivilege,
+    getCateringTransactionLogs,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

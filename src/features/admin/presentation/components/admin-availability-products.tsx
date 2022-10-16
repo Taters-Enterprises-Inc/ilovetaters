@@ -4,26 +4,16 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import NumberFormat from "react-number-format";
-import { ADMIN_SNACKSHOP_ORDER_STATUS } from "features/shared/constants";
-import Moment from "react-moment";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
-import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
-import {
-  getAdminStores,
-  selectGetAdminStores,
-} from "../slices/get-admin-stores.slice";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -42,27 +32,14 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { ExtractButton } from "./extract-button";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
+  { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminAvailabilityProducts() {
   const dispatch = useAppDispatch();
@@ -70,7 +47,7 @@ export function AdminAvailabilityProducts() {
   const navigate = useNavigate();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
-  const status = query.get("status") ?? "0";
+  const status = query.get("status");
   const storeId = query.get("store_id");
   const categoryId = query.get("category_id");
   const orderBy = query.get("order_by");
@@ -92,9 +69,9 @@ export function AdminAvailabilityProducts() {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
-      status: status ?? 0,
+      status: status,
       store_id: storeId ?? 3,
-      category_id: categoryId ?? 6,
+      category_id: categoryId,
       order_by: orderBy,
       order: order,
       search: search,
@@ -142,7 +119,9 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status && status === "0" ? "text-base" : "text-xs opacity-40"
+                status === null || status === "0"
+                  ? "text-base"
+                  : "text-xs opacity-40"
               } rounded-full`}
             >
               Available
@@ -217,7 +196,7 @@ export function AdminAvailabilityProducts() {
 
             <Select
               label="Filter by category"
-              defaultValue={categoryId ?? 6}
+              defaultValue={categoryId ?? "all"}
               onChange={(event) => {
                 if (event.target.value !== status) {
                   const params = {
@@ -226,7 +205,7 @@ export function AdminAvailabilityProducts() {
                     status: status,
                     store_id: storeId,
                     category_id:
-                      event.target.value === -1 ? null : event.target.value,
+                      event.target.value === "all" ? null : event.target.value,
                     search: search,
                   };
 
@@ -239,6 +218,9 @@ export function AdminAvailabilityProducts() {
                 }
               }}
             >
+              <MenuItem value="all">
+                <span className="text-xs lg:text-base">All</span>
+              </MenuItem>
               {getProductCategoriesState.data?.map((category, index) => (
                 <MenuItem key={index} value={category.id}>
                   <span className="text-xs lg:text-base">{category.name}</span>
@@ -248,15 +230,14 @@ export function AdminAvailabilityProducts() {
           </FormControl>
         ) : null}
       </div>
-      <div className="px-4 mt-2 ">
-        <ExtractButton />
-      </div>
+   
 
       {getAdminStoreProductsState.data?.products ? (
         <>
           <div className="p-4 -mt-2 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="Empty availability products."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -327,11 +308,18 @@ export function AdminAvailabilityProducts() {
                   className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-xs lg:text-bas">{row.name}</span>
+                  <span className="flex flex-wrap items-center space-x-1 font-semibold">
+                    {row.name}
                   </span>
 
-                  {status && status === "0" ? (
+                  <div
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: row.add_details,
+                    }}
+                  />
+
+                  {status === null || status === "0" ? (
                     <button
                       onClick={() => {
                         if (row.id)
@@ -371,6 +359,7 @@ export function AdminAvailabilityProducts() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "id"}
+              emptyMessage="Empty availability products."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -392,7 +381,7 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
@@ -470,9 +459,16 @@ export function AdminAvailabilityProducts() {
                   {getAdminStoreProductsState.data.products.map((row, i) => (
                     <DataTableRow key={i}>
                       <DataTableCell>{row.name}</DataTableCell>
+                      <DataTableCell>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: row.add_details,
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
-                        {status && status === "0" ? (
+                        {status === null || status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)

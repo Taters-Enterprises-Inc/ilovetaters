@@ -4,7 +4,6 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -14,18 +13,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import {
-  ADMIN_SNACKSHOP_MOP_STATUS,
   ADMIN_POPCLUB_REDEEM_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { AdminPopclubRedeemModal } from "../modals";
 import {
   getAdminPopclubRedeem,
-  GetAdminPopclubRedeemState,
-  selectGetAdminPopclubRedeem,
 } from "../slices/get-admin-popclub-redeem.slice";
 import {
   getAdminPopclubRedeems,
@@ -36,6 +30,7 @@ import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
 import { ExtractButton } from "./extract-button";
  import {AdminChipsButton} from './chips-button'
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -47,20 +42,6 @@ const columns: Array<Column> = [
   { id: "store_name", label: "Hub" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminPopClubRedeems() {
   const dispatch = useAppDispatch();
@@ -144,6 +125,7 @@ export function AdminPopClubRedeems() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No popclub redeems yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -281,6 +263,7 @@ export function AdminPopClubRedeems() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No popclub redeems yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -301,7 +284,7 @@ export function AdminPopClubRedeems() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {

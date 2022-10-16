@@ -21,7 +21,7 @@ export interface GetDealsParam {
 }
 
 export interface SetPopclubDataParam {
-  platform?: string;
+  platform?: "store-visit" | "online-delivery";
 }
 
 export interface GetStoresAvailableParam {

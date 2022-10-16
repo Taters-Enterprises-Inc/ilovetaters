@@ -12,10 +12,6 @@ import {
   getAllPlatformCategories,
   selectGetAllPlatformCategories,
 } from "../slices/get-all-platform-categories.slice";
-import {
-  getAllPlatform,
-  selectGetAllPlatform,
-} from "../slices/get-all-platform.slice";
 import { getDeals, selectGetDeals } from "../slices/get-deals.slice";
 import { getPopClubData } from "../slices/get-popclub-data.slice";
 import { selectSetPopClubData } from "../slices/set-popclub-data.slice";
@@ -28,6 +24,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectSetStoreAndAddressPopClub } from "../slices/set-store-and-address-popclub.slice";
 import { Deal } from "../components";
 import { redeemValidators } from "../slices/redeem-validators.slice";
+import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
 export function PopClubHome() {
   const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
@@ -36,7 +33,6 @@ export function PopClubHome() {
   const [opelPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
 
-  const getAllPlatformState = useAppSelector(selectGetAllPlatform);
   const getAllPlatformCategoriesState = useAppSelector(
     selectGetAllPlatformCategories
   );
@@ -44,71 +40,28 @@ export function PopClubHome() {
   const getDealsState = useAppSelector(selectGetDeals);
 
   const setPopClubDataState = useAppSelector(selectSetPopClubData);
-  const setSessionState = useAppSelector(selectSetSession);
-  const setStoreAndAddressPopClubState = useAppSelector(
-    selectSetStoreAndAddressPopClub
-  );
-
   const dispatch = useAppDispatch();
   let { platform } = useParams();
   const query = useQuery();
-  const navigate = useNavigate();
   const category = query.get("category");
 
   useEffect(() => {
-    dispatch(getPopClubData());
-    dispatch(redeemValidators());
-  }, [setPopClubDataState, dispatch]);
-
-  useEffect(() => {
-    dispatch(getSession());
-
     if (platform !== undefined && category !== null) {
-      dispatch(getAllPlatform());
+      dispatch(getSession());
+      dispatch(getPopClubData());
+      dispatch(redeemValidators());
+
       dispatch(getAllPlatformCategories({ platform_url_name: platform }));
       dispatch(
         getDeals({ platform_url_name: platform, category_url_name: category })
       );
     }
-  }, [
-    dispatch,
-    platform,
-    query,
-    navigate,
-    category,
-    setStoreAndAddressPopClubState,
-    setSessionState,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [platform, query, category, setPopClubDataState]);
 
   return (
     <>
-      <section className="lg:container">
-        <img
-          className="lg:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/mobile/popclub.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden lg:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/hero/desktop/popclub_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-
-        <img
-          className="hidden lg:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/popclub/banner/popclub_instruction.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <PopclubHeroCarousel />
       <section className="container ">
         <div className="flex flex-col items-start justify-start text-xs leading-4 lg:leading-5 sm:text-sm md:text-base lg:mt-2">
           {getSessionState.data?.popclub_data ? (
@@ -228,7 +181,6 @@ export function PopClubHome() {
 
       <PlatformChooserModal
         hasCloseButton={true}
-        platforms={getAllPlatformState.data}
         onSelectedPlatform={(platform: string) => {
           switch (platform) {
             case "store-visit":

@@ -602,7 +602,7 @@ export function ShopOrder() {
                             ) : (
                               <>
                                 <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                                <span className="text-lg text-white">
+                                <span className="text-lg text-secondary">
                                   Drag and drop here to upload
                                 </span>
                                 <button

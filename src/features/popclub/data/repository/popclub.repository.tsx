@@ -19,12 +19,6 @@ import { REACT_APP_DOMAIN_URL } from "../../../shared/constants";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import { RedeemValidatorsModel } from "features/popclub/core/domain/redeem_validators.model";
 
-export interface GetAllPlatformRepositoryResponse {
-  data: {
-    message: string;
-    data: Array<PlatformModel>;
-  };
-}
 export interface GetAllPlatformCategoriesRepositoryResponse {
   data: {
     message: string;
@@ -194,15 +188,6 @@ export function GetDealProductVariantsRepository(
     }
   );
 }
-export function GetAllPlatformRepository(): Promise<GetAllPlatformRepositoryResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/platform`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
 export function GetAllPlatformCategoriesRepository(
   param: GetAllPlatformCategoriesParam
 ): Promise<GetAllPlatformCategoriesRepositoryResponse> {

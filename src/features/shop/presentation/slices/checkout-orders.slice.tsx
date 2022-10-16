@@ -26,11 +26,15 @@ const initialState: {
 
 export const checkoutOrders = createAsyncThunk(
   "checkoutOrders",
-  async (param: CheckoutOrdersParam) => {
-    const response: CheckoutOrdersResponse = await CheckoutOrdersRepository(
-      param
-    );
-    return response.data;
+  async (param: CheckoutOrdersParam, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: CheckoutOrdersResponse = await CheckoutOrdersRepository(
+        param
+      );
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 
@@ -64,6 +68,16 @@ export const checkoutOrdersSlice = createSlice({
           state.data = data;
           state.message = message;
           state.status = CheckoutOrdersState.success;
+        }
+      )
+      .addCase(
+        checkoutOrders.rejected,
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          const { message } = action.payload;
+
+          state.status = CheckoutOrdersState.fail;
+          state.message = message;
+          state.data = null;
         }
       );
   },

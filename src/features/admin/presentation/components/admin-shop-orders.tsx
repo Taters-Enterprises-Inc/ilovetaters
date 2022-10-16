@@ -4,7 +4,6 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "../components/extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -23,8 +22,6 @@ import {
   ADMIN_SNACKSHOP_ORDER_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { AdminShopOrderModal } from "../modals";
 import { getAdminShopOrder } from "../slices/get-admin-shop-order.slice";
@@ -33,10 +30,9 @@ import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order
 import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
-import { GridColDef } from "@mui/x-data-grid";
-import Table from "@mui/material/Table";
 import { ExtractButton } from "./extract-button";
  import {AdminChipsButton} from './chips-button'
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -49,20 +45,6 @@ const columns: Array<Column> = [
   { id: "invoice_num", label: "Invoice Number" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminShopOrders() {
   const dispatch = useAppDispatch();
@@ -189,6 +171,7 @@ export function AdminShopOrders() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -310,6 +293,7 @@ export function AdminShopOrders() {
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
               search={search ?? ""}
+              emptyMessage="No snackshop orders yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -329,7 +313,7 @@ export function AdminShopOrders() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {

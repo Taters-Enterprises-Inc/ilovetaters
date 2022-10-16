@@ -22,18 +22,18 @@ import {
   ADMIN_CATERING_BOOKING_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
-import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
+import { selectAdminCateringPrivilege } from "../slices/admin-catering-privilege.slice";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
-import { AdminChipsButton } from "./chips-button";
+import {  AdminChipsButton } from "./chips-button";
 import { ExtractButton } from "./extract-button";
+import { createQueryParams } from "features/config/helpers";
+
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -46,20 +46,6 @@ const columns: Array<Column> = [
   { id: "payops", label: "Mode of Payment" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminCateringBookings() {
   const dispatch = useAppDispatch();
@@ -82,7 +68,9 @@ export function AdminCateringBookings() {
     selectAdminCateringBookingUpdateStatus
   );
 
-  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
 
   useEffect(() => {
     if (trackingNo) {
@@ -110,7 +98,7 @@ export function AdminCateringBookings() {
     orderBy,
     order,
     search,
-    adminPrivilegeState,
+    adminCateringPrivilegeState,
     adminCateringBookingUpdateStatusState,
   ]);
 
@@ -186,6 +174,7 @@ export function AdminCateringBookings() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
+              emptyMessage="No catering bookings yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -307,6 +296,7 @@ export function AdminCateringBookings() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
+              emptyMessage="No catering bookings yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -327,7 +317,7 @@ export function AdminCateringBookings() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {

@@ -29,6 +29,7 @@ import {
 } from "../slices/catering-home-page.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { styled } from "@mui/material/styles";
+import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
@@ -167,24 +168,7 @@ export function CateringHome() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <section className="lg:container">
-        <img
-          className="lg:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/mobile/catering_munch_better.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden lg:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/catering/hero/desktop/catering_munch_better_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-      </section>
+      <CateringHeroCarousel/>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
           Thank you for considering Taters for your celebration.{" "}

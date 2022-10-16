@@ -4,7 +4,10 @@ import {
   UpdateAdminSettingStoreOperatingHoursParam,
   UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
+  UpdateStoreCatersPackageParam,
   UpdateStoreProductParam,
+  UpdateStoreCatersPackageAddonParam,
+  UpdateStoreCatersProductAddonParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -18,9 +21,14 @@ import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-sh
 import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
-import { ProductCategoryModel } from "features/admin/core/domain/product-category.model";
+import { CategoryModel } from "features/admin/core/domain/category.model";
 import { UserModel } from "features/admin/core/domain/user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { GetAdminStoreCatersPackagesModel } from "features/admin/core/domain/get-admin-store-caters-packages.model";
+import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
+import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
+import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
+import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -157,6 +165,12 @@ export interface AdminShopOrderUpdateStatusResponse {
   };
 }
 
+export interface AdminCateringPrivilegeResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface AdminPrivilegeResponse {
   data: {
     message: string;
@@ -206,7 +220,7 @@ export interface GetAdminStoreProductsResponse {
 export interface GetProductCategoriesResponse {
   data: {
     message: string;
-    data: Array<ProductCategoryModel>;
+    data: Array<CategoryModel>;
   };
 }
 
@@ -242,6 +256,179 @@ export interface UpdateAdminSettingStoreOperatingHoursResponse {
   };
 }
 
+export interface GetCatersPackageCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface GetAdminStoreCatersPackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersPackagesModel;
+  };
+}
+
+export interface UpdateStoreCatersPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetDealCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface GetAdminStoreCatersPackageAddonsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersPackageAddonsModel;
+  };
+}
+
+export interface UpdateStoreCatersPackageAddonResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreCatersProductAddonsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCatersProductAddonsModel;
+  };
+}
+
+export interface UpdateStoreCatersProductAddonResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetShopTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<ShopTransactionLogsModel>;
+  };
+}
+
+export interface GetCateringTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<CateringTransactionLogsModel>;
+  };
+}
+
+export function GetCateringTransactionLogsRepository(
+  transactionId: number
+): Promise<GetCateringTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetShopTransactionLogsRepository(
+  transactionId: number
+): Promise<GetShopTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/snackshop-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateStoreCatersProductAddonRepository(
+  param: UpdateStoreCatersProductAddonParam
+): Promise<UpdateStoreCatersProductAddonResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product-addon`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersProductAddonsRepository(
+  query: string
+): Promise<GetAdminStoreCatersProductAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product-addon${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateStoreCatersPackageAddonRepository(
+  param: UpdateStoreCatersPackageAddonParam
+): Promise<UpdateStoreCatersPackageAddonResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package-addon`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersPackageAddonsRepository(
+  query: string
+): Promise<GetAdminStoreCatersPackageAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package-addon${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetDealCategoriesRepository(): Promise<GetDealCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deal-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStoreCatersPackageRepository(
+  param: UpdateStoreCatersPackageParam
+): Promise<UpdateStoreCatersPackageResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCatersPackagesRepository(
+  query: string
+): Promise<GetAdminStoreCatersPackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-package${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCatersPackageCategoriesRepository(): Promise<GetCatersPackageCategoriesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/caters-package-categories`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateAdminSettingStoreOperatingHoursRepository(
   param: UpdateAdminSettingStoreOperatingHoursParam
 ): Promise<UpdateAdminSettingStoreOperatingHoursResponse> {
@@ -266,10 +453,11 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  redeemCode: string
+  formData: FormData
 ): Promise<AdminDeclineRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/decline`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
+    formData,
     {
       withCredentials: true,
     }
@@ -369,6 +557,18 @@ export function GetAdminCateringBookingsRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
     withCredentials: true,
   });
+}
+
+export function AdminCateringPrivilegeRepository(
+  formData: FormData
+): Promise<AdminCateringPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminPrivilegeRepository(
@@ -497,10 +697,11 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  redeemCode: string
+  formData: FormData
 ): Promise<AdminCompleteRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/complete`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
+    formData,
     {
       withCredentials: true,
     }
