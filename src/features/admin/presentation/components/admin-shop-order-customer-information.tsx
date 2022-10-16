@@ -230,7 +230,7 @@ export function AdminShopOrderCustomerInformation() {
             <div>
               <strong>Tracking Number:</strong>{" "}
               <span className="font-semibold">
-                {getAdminShopOrderState.data?.id ?? "N/A"}
+                {getAdminShopOrderState.data?.tracking_no ?? "N/A"}
               </span>
             </div>
             <div>
