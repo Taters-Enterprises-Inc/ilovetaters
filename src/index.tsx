@@ -92,6 +92,7 @@ import {
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
+import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -135,6 +136,8 @@ root.render(
                         path="popclub-redeems"
                         element={<ProfilePopclubRedeems />}
                       />
+
+                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>

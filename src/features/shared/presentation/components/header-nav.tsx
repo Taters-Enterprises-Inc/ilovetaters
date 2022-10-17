@@ -35,6 +35,7 @@ import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
 import { CartListItem } from "./cart-item-list";
+import { HiDocumentText } from "react-icons/hi";
 
 interface HeaderNavProps {
   className?: string;
@@ -139,6 +140,10 @@ export function HeaderNav(props: HeaderNavProps) {
   const handlePopClubRedeem = () => {
     setOpenProfileMenu(null);
     navigate("/profile/popclub-redeems");
+  };
+  const handleCSPWD = () => {
+    setOpenProfileMenu(null);
+    navigate("/profile/popclub-sc-pwd");
   };
 
   const handleLogout = () => {
@@ -268,6 +273,12 @@ export function HeaderNav(props: HeaderNavProps) {
     },
     {
       id: 5,
+      text: "CS/PWD",
+      icon: <HiDocumentText />,
+      action: handleCSPWD,
+    },
+    {
+      id: 6,
       text: " Logout",
       icon: <BiLogOut />,
       action: handleLogout,
@@ -290,7 +301,7 @@ export function HeaderNav(props: HeaderNavProps) {
           <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
           <ListItemText primary={text} />
         </MenuItem>
-        {id === 1 || id === 4 ? <hr /> : null}
+        {id === 1 || id === 5 ? <hr /> : null}
       </div>
     );
   });

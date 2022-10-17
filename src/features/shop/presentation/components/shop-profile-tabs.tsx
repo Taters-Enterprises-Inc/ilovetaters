@@ -9,7 +9,8 @@ export interface ShopProfileTabsProps {
     | "catering"
     | "popclub"
     | "raffle"
-    | "gift-cards";
+    | "gift-cards"
+    | "sc-pwd";
 }
 
 const TABS = [

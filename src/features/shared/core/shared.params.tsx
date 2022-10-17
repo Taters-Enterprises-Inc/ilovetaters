@@ -16,6 +16,10 @@ export interface UploadProofOfPaymentParam {
   formData: FormData;
 }
 
+export interface DiscountRegistrationParam {
+  formData: FormData;
+}
+
 export interface GetStoresAvailableParam {
   address: string | null;
   service:
