@@ -65,33 +65,46 @@ export function AdminHead(props: AdminHeadProps) {
               {getAdminNotificationsState.data?.all.notifications ? (
                 <ul>
                   {getAdminNotificationsState.data.all.notifications.map(
-                    (notification) => (
-                      <li>
-                        <Link
-                          className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
-                            notification.dateseen === null ? " bg-gray-200" : ""
-                          }`}
-                          onClick={() => {
-                            dispatch(
-                              updateAdminNotificationDateSeen(notification.id)
-                            );
-                          }}
-                          to={`/admin/order?tracking_no=${notification.tracking_no}`}
-                        >
-                          <FaExclamationCircle className="text-4xl text-green-700" />
-                          <div className="flex flex-col justify-start">
-                            <span className="text-sm font-semibold">
-                              {notification.text}
-                            </span>
-                            <span className="text-xs">
-                              {moment(notification.dateadded)
-                                .startOf("hour")
-                                .fromNow()}
-                            </span>
-                          </div>
-                        </Link>
-                      </li>
-                    )
+                    (notification) => {
+                      let notificationLink = "";
+                      switch (notification.notification_event_type_id) {
+                        case 1:
+                          notificationLink = `/admin/order?tracking_no=${notification.tracking_no}`;
+                          break;
+                        case 2:
+                          notificationLink = `/admin/catering?tracking_no=${notification.catering_tracking_no}`;
+                          break;
+                      }
+                      return (
+                        <li>
+                          <Link
+                            className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
+                              notification.dateseen === null
+                                ? " bg-gray-200"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              dispatch(
+                                updateAdminNotificationDateSeen(notification.id)
+                              );
+                            }}
+                            to={notificationLink}
+                          >
+                            <FaExclamationCircle className="text-4xl text-green-700" />
+                            <div className="flex flex-col justify-start">
+                              <span className="text-sm font-semibold">
+                                {notification.text}
+                              </span>
+                              <span className="text-xs">
+                                {moment(notification.dateadded)
+                                  .startOf("hour")
+                                  .fromNow()}
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    }
                   )}
                 </ul>
               ) : null}

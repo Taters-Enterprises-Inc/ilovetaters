@@ -154,7 +154,13 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               >
                 <span className="flex items-center px-4 ">
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                    <Badge badgeContent={0} color="primary">
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.catering_order
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
                       <MdFoodBank size={20} />
                     </Badge>
 
