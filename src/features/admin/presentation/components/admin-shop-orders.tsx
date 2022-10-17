@@ -272,63 +272,71 @@ export function AdminShopOrders() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminShopOrdersState.data.orders.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      tracking_no: row.tracking_no,
-                      search: search,
-                    };
+              {getAdminShopOrdersState.data.orders.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
+                    (notification) =>
+                      notification.tracking_no === row.tracking_no
+                  );
+                return (
+                  <div
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(
+                          updateAdminNotificationDateSeen(notification.id)
+                        );
+                      }
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        tracking_no: row.tracking_no,
+                        search: search,
+                      };
 
-                    const queryParams = createQueryParams(params);
+                      const queryParams = createQueryParams(params);
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className={`flex flex-col px-4 py-2 border-b ${
-                    getAdminNotificationsState.data?.snackshop_order.unseen_notifications.some(
-                      (val) => val.tracking_no === row.tracking_no
-                    )
-                      ? "bg-gray-200"
-                      : ""
-                  }`}
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>{row.client_name}</span>
-                    <span className="text-lg text-gray-600">
-                      #{row.tracking_no}
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>{row.client_name}</span>
+                      <span className="text-lg text-gray-600">
+                        #{row.tracking_no}
+                      </span>
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
+                      </span>
                     </span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_SNACKSHOP_ORDER_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_SNACKSHOP_ORDER_STATUS[row.status].name}
-                    </span>
-                  </span>
-                  <span className="text-xs">
-                    <strong>Store:</strong> {row.store_name}
-                  </span>
-
-                  <div className="flex justify-between">
                     <span className="text-xs">
-                      <Moment format="LLL">{row.dateadded}</Moment>
+                      <strong>Store:</strong> {row.store_name}
                     </span>
-                    <span className="text-lg font-semibold">
-                      {calculateGrandTotal(row)}
-                    </span>
+
+                    <div className="flex justify-between">
+                      <span className="text-xs">
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {calculateGrandTotal(row)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </DataList>
           </div>
 
