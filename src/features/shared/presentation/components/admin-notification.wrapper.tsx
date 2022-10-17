@@ -8,6 +8,7 @@ import { selectGetAdminSession } from "features/admin/presentation/slices/get-ad
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import { pusher } from "features/shared/constants";
+import { getAdminNotifications } from "features/admin/presentation/slices/get-admin-notifications.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -25,13 +26,14 @@ export function AdminNotificationWrapper() {
     snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
       if (
         getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.is_csr_admin ||
         getAdminSessionState.data?.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
         toast("🦄 " + data.message);
         dispatch(getAdminShopOrders(""));
+        dispatch(getAdminNotifications());
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,13 +46,14 @@ export function AdminNotificationWrapper() {
     cateringChannel.bind("booking-transaction", (data: TransactionParam) => {
       if (
         getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr ||
+        getAdminSessionState.data?.is_csr_admin ||
         getAdminSessionState.data?.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
         toast("🦄 " + data.message);
         dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,13 +68,14 @@ export function AdminNotificationWrapper() {
       (data: TransactionParam) => {
         if (
           getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_csr ||
+          getAdminSessionState.data?.is_csr_admin ||
           getAdminSessionState.data?.user_details.stores.some(
             (store) => store.store_id === data.store_id
           )
         ) {
           toast("🦄 " + data.message);
           dispatch(getAdminPopclubRedeems(""));
+          dispatch(getAdminNotifications());
         }
       }
     );

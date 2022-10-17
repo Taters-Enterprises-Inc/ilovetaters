@@ -55,7 +55,7 @@ export function AdminSettingStores() {
 
   if (
     !getAdminSessionState.data?.is_admin &&
-    !getAdminSessionState.data?.is_csr
+    !getAdminSessionState.data?.is_csr_admin
   ) {
     columns = columns.filter(
       (column) =>
@@ -284,7 +284,7 @@ export function AdminSettingStores() {
                       <DataTableCell>{row.menu_name}</DataTableCell>
 
                       {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr ? (
+                      getAdminSessionState.data?.is_csr_admin ? (
                         <>
                           <DataTableCell>
                             <Checkbox
