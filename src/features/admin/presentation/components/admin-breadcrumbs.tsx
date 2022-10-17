@@ -34,7 +34,7 @@ export function AdminBreadCrumbs(props: AdminBreadCrumbsProps) {
                 <div className="flex items-center ">
                   <Link
                     to={props.home.url}
-                    className="inline-flex items-center text-xs font-medium text-secondary lg:text-sm"
+                    className="inline-flex items-center text-xs font-medium text-secondary lg:text-sm font-['Varela_Round']"
                   >
                     <svg
                       className="w-4 h-4 mr-2"
@@ -52,7 +52,7 @@ export function AdminBreadCrumbs(props: AdminBreadCrumbsProps) {
                 <li>
                   <div className="flex items-center">
                     <svg
-                      className="w-6 h-6 text-secondary"
+                      className="w-6 h-6"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export function AdminBreadCrumbs(props: AdminBreadCrumbsProps) {
                         i !== props.pageTitles.length - 1
                           ? "text-gray-600"
                           : "text-secondary"
-                      }  ml-1 text-xs lg:text-sm font-medium md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis`}
+                      }  ml-1 text-xs lg:text-sm font-medium md:ml-2 whitespace-nowrap overflow-hidden lg:max-w-full max-w-[80px] text-ellipsis font-['Varela_Round']`}
                     >
                       {title.name}
                     </Link>

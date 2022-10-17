@@ -41,7 +41,11 @@ export const updateAdminUserStores = createAsyncThunk(
 export const updateAdminUserStoresSlice = createSlice({
   name: "updateAdminUserStores",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUpdateAdminUserStoresStatus: (state) => {
+      state.status = UpdateAdminUserStoresState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(updateAdminUserStores.pending, (state: any) => {
@@ -74,5 +78,6 @@ export const updateAdminUserStoresSlice = createSlice({
 
 export const selectUpdateAdminUserStores = (state: RootState) =>
   state.updateAdminUserStores;
-
+export const { resetUpdateAdminUserStoresStatus } =
+  updateAdminUserStoresSlice.actions;
 export default updateAdminUserStoresSlice.reducer;

@@ -29,6 +29,7 @@ import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domai
 import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
+import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -321,6 +322,37 @@ export interface GetCateringTransactionLogsResponse {
     message: string;
     data: Array<CateringTransactionLogsModel>;
   };
+}
+
+export interface GetAdminNotificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminNotificationModel;
+  };
+}
+
+export interface UpdateAdminNotificationDateSeenResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminNotificationDateSeenRepository(
+  notificationId: number
+) {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
+    new FormData(),
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminNotificationsRepository() {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/notifications`, {
+    withCredentials: true,
+  });
 }
 
 export function GetCateringTransactionLogsRepository(

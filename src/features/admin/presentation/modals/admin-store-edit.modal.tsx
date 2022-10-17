@@ -92,8 +92,8 @@ export function AdminStoreEditModal(props: AdminStoreEditModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[400px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-2xl text-white">Edit Store</span>
-          <button className="text-2xl text-white" onClick={props.onClose}>
+          <span className="text-xl text-white font-['Varela_Round']">Edit Store</span>
+          <button className="text-xl text-white" onClick={props.onClose}>
             <IoMdClose />
           </button>
         </div>
@@ -128,13 +128,13 @@ export function AdminStoreEditModal(props: AdminStoreEditModalProps) {
             <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={props.onClose}
-                className="w-[100px] py-1 text-white rounded-full bg-secondary"
+                className="w-[100px] py-1 text-white rounded-full bg-secondary font-['Varela_Round']"
               >
                 Cancel
               </button>
               <button
                 onClick={handleOnEdit}
-                className="w-[100px] py-1 text-white rounded-full bg-button"
+                className="w-[100px] py-1 text-white rounded-full bg-button font-['Varela_Round']"
               >
                 Edit
               </button>

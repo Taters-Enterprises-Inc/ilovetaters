@@ -55,7 +55,7 @@ export function AdminSettingStores() {
 
   if (
     !getAdminSessionState.data?.is_admin &&
-    !getAdminSessionState.data?.is_csr
+    !getAdminSessionState.data?.is_csr_admin
   ) {
     columns = columns.filter(
       (column) =>
@@ -284,7 +284,7 @@ export function AdminSettingStores() {
                       <DataTableCell>{row.menu_name}</DataTableCell>
 
                       {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr ? (
+                      getAdminSessionState.data?.is_csr_admin ? (
                         <>
                           <DataTableCell>
                             <Checkbox
@@ -377,7 +377,7 @@ export function AdminSettingStores() {
                           onClick={() => {
                             navigate("?store_id=" + row.store_id);
                           }}
-                          className="px-2 py-1 font-bold text-white bg-green-700 rounded-full"
+                          className="px-2 py-1 font-semibold text-white bg-green-700 rounded-full"
                         >
                           {moment(row.available_start_time, "HH:mm:ss").format(
                             "LT"
