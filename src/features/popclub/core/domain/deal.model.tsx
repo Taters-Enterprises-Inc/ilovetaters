@@ -26,6 +26,5 @@ export interface DealModel {
   minimum_purchase?: number;
 
   deal_id: number;
-  platform_category_id: number;
   category_name: string;
 }
