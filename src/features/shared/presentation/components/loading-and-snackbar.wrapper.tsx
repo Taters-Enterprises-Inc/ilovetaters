@@ -249,6 +249,10 @@ import {
   selectUpdateStoreCatersProductAddon,
   UpdateStoreCatersProductAddonState,
 } from "features/admin/presentation/slices/update-store-caters-product-addons.slice";
+import {
+  AdminCateringPrivilegeState,
+  selectAdminCateringPrivilege,
+} from "features/admin/presentation/slices/admin-catering-privilege.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -380,6 +384,28 @@ export function LoadingAndSnackbarWrapper() {
   const updateStoreCatersProductAddonState = useAppSelector(
     selectUpdateStoreCatersProductAddon
   );
+
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
+  useEffect(() => {
+    switch (adminCateringPrivilegeState.status) {
+      case AdminCateringPrivilegeState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminCateringPrivilegeState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringPrivilegeState.success:
+        showAlert(setSuccessAlert, adminCateringPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminCateringPrivilegeState.fail:
+        showAlert(setFailsAlert, adminCateringPrivilegeState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminCateringPrivilegeState, dispatch]);
 
   useEffect(() => {
     switch (updateStoreCatersProductAddonState.status) {

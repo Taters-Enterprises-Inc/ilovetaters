@@ -74,12 +74,7 @@ export function AdminShopOrderModal(props: AdminShopOrdersModalProps) {
         </div>
 
         <div className="px-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="scrollable"
-            aria-label="basic tabs example"
-          >
+          <Tabs value={value} onChange={handleChange} variant="scrollable">
             <Tab label="Customer Information" {...a11yProps(0)} />
             <Tab label="Audit Logs" {...a11yProps(1)} />
           </Tabs>

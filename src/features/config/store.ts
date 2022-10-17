@@ -109,6 +109,10 @@ import updateStoreCatersPackageAddon from "features/admin/presentation/slices/up
 import getAdminStoreCatersProductAddons from "features/admin/presentation/slices/get-admin-stores-caters-product-addons.slice";
 import updateStoreCatersProductAddon from "features/admin/presentation/slices/update-store-caters-product-addons.slice";
 import getShopTransactionLogs from "features/admin/presentation/slices/get-shop-transaction-logs.slice";
+import adminCateringPrivilege from "features/admin/presentation/slices/admin-catering-privilege.slice";
+import getCateringTransactionLogs from "features/admin/presentation/slices/get-catering-transaction-logs.slice";
+import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
+import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 
 export const store = configureStore({
   reducer: {
@@ -221,6 +225,10 @@ export const store = configureStore({
     getAdminStoreCatersProductAddons,
     updateStoreCatersProductAddon,
     getShopTransactionLogs,
+    adminCateringPrivilege,
+    getCateringTransactionLogs,
+    getAdminNotifications,
+    updateAdminNotificationDateSeen,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

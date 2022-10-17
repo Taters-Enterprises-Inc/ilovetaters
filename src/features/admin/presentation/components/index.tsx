@@ -23,3 +23,4 @@ export { AdminAvailabilityCatersPackages } from "./admin-availability-caters-pac
 export { AdminAvailabilityCatersPackageAddons } from "./admin-availability-caters-package-addons";
 export { AdminAvailabilityCatersProductAddons } from "./admin-availability-caters-product-addons";
 export { AdminScPwdVerification } from "./admin-scpwd-verification";
+export { AdminCateringBookingAudit } from "./admin-catering-booking-audit";

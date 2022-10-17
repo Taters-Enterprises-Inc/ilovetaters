@@ -14,8 +14,8 @@ import {
 } from "features/popclub/presentation/slices/get-deal.slice";
 import { getRedeem } from "features/popclub/presentation/slices/get-redeem.slice";
 import {
-  ADMIN_SNACKSHOP_ORDER_STATUS,
   ORDER_STATUS,
+  pusher,
   REACT_APP_PUSHER_CLUSTER,
   REACT_APP_PUSHER_KEY,
 } from "features/shared/constants";
@@ -56,11 +56,37 @@ export function UserNotificationWrapper() {
       getCateringOrdersState.status === GetCateringOrdersState.success &&
       getCateringOrdersState.data
     ) {
-      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-        cluster: REACT_APP_PUSHER_CLUSTER,
-      });
+      pusher.unsubscribe("user-catering");
+      const cateringChannel = pusher.subscribe("user-catering");
 
-      const cateringChannel = pusher.subscribe("catering");
+      cateringChannel.bind(
+        "catering-booking-changed",
+        (data: {
+          fb_user_id?: number;
+          mobile_user_id?: number;
+          message: string;
+        }) => {
+          if (
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
+          ) {
+            showAlert(setSuccessAlert, data.message);
+
+            if (
+              getCateringOrdersState.status ===
+                GetCateringOrdersState.success &&
+              getCateringOrdersState.data
+            ) {
+              dispatch(
+                getCateringOrders({
+                  hash: getCateringOrdersState.data.order.clients_info.hash_key,
+                })
+              );
+            }
+          }
+        }
+      );
 
       cateringChannel.bind(
         "catering-booking-updated",
@@ -70,8 +96,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
 
@@ -90,6 +117,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCateringOrdersState]);
 
   useEffect(() => {
@@ -97,11 +125,8 @@ export function UserNotificationWrapper() {
       getOrdersState.status === GetOrdersState.success &&
       getOrdersState.data
     ) {
-      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-        cluster: REACT_APP_PUSHER_CLUSTER,
-      });
-
-      const snackshopChannel = pusher.subscribe("snackshop");
+      pusher.unsubscribe("user-snackshop");
+      const snackshopChannel = pusher.subscribe("user-snackshop");
 
       snackshopChannel.bind(
         "snackshop-order-changed",
@@ -111,8 +136,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
 
@@ -138,8 +164,9 @@ export function UserNotificationWrapper() {
           status: number;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, ORDER_STATUS[data.status].name);
 
@@ -157,15 +184,13 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getOrdersState]);
 
   useEffect(() => {
     if (getDealState.status === GetDealState.success && getDealState.data) {
-      const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
-        cluster: REACT_APP_PUSHER_CLUSTER,
-      });
-
-      const popclubChannel = pusher.subscribe("popclub");
+      pusher.unsubscribe("user-popclub");
+      const popclubChannel = pusher.subscribe("user-popclub");
 
       popclubChannel.bind(
         "popclub-redeem-completed",
@@ -174,9 +199,12 @@ export function UserNotificationWrapper() {
           mobile_user_id?: number;
           message: string;
         }) => {
+          console.log(data);
+          console.log(getDealState);
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setSuccessAlert, data.message);
             dispatch(getLatestUnexpiredRedeem());
@@ -204,8 +232,9 @@ export function UserNotificationWrapper() {
           message: string;
         }) => {
           if (
-            getSessionState.data?.userData.fb_user_id == data.fb_user_id ||
-            getSessionState.data?.userData.mobile_user_id == data.mobile_user_id
+            getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+            getSessionState.data?.userData.mobile_user_id ===
+              data.mobile_user_id
           ) {
             showAlert(setFailsAlert, data.message);
             dispatch(getLatestUnexpiredRedeem());
@@ -225,6 +254,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getDealState]);
 
   return (
