@@ -4,6 +4,7 @@ import { RegionModel } from "features/shared/core/domain/region.model";
 import {
   AddContactParam,
   DeleteContactParam,
+  DiscountRegistrationParam,
   FacebookLoginPointParam,
   GetStoresAvailableParam,
   SetSessionParam,
@@ -119,6 +120,12 @@ export interface ForgotPasswordValidateOTPResponse {
 }
 
 export interface ForgotPasswordNewPasswordResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface DiscountRegistrationResponse {
   data: {
     message: string;
   };
@@ -242,6 +249,21 @@ export function UploadProofOfPaymentRepository(
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/shared/upload_payment/`,
     param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function DiscountRegistrationRepository(
+  param: FormData
+): Promise<DiscountRegistrationResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/shared/discount_registration/`,
+    param,
     {
       headers: {
         "Content-Type": "multipart/form-data",
