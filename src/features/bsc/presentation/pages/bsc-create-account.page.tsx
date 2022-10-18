@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { BSCPasswordTextField } from "../components/bsc-password-text-field";
 import { BSCEmailTextField } from "../components/bsc-email-text-field";
 import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
@@ -17,10 +17,16 @@ import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
 //   selectLoginAdmin,
 // } from "../slices/login-admin.slice";
 import { useEffect } from "react";
-import InputLabel from '@mui/material/InputLabel';
+import InputLabel from "@mui/material/InputLabel";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const navigatetoLogin = () => {
+    navigate("/bsc");
+  };
   // const loginAdminState = useAppSelector(selectLoginAdmin);
   // const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
@@ -57,12 +63,15 @@ export function BSCCreateAccount() {
       >
         <div className="pt-1 login-body">
           <form>
-            <p className="text-white text-2xl font-bold text-left mb-3">
+            <p className="mb-3 text-2xl font-bold text-left text-white">
               Create an Account
             </p>
-            <p className="text-white text-left text-xs"> Enter the following information to register. </p>
+            <p className="text-xs text-left text-white">
+              {" "}
+              Enter the following information to register.{" "}
+            </p>
             <div className="pt-4 space-y-4">
-              <BSCFirstNameTextField/>
+              <BSCFirstNameTextField />
               <BSCLastNameTextField />
               <BSCEmailTextField />
               <BSCPasswordTextField />
@@ -70,7 +79,8 @@ export function BSCCreateAccount() {
 
             <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
               <p className="mx-auto">
-                <input className="mr-2" type="checkbox" /> I agree to the Terms of Service and Privacy Policy.
+                <input className="mr-2" type="checkbox" /> I agree to the Terms
+                of Service and Privacy Policy.
               </p>
             </div>
             <button
@@ -79,7 +89,17 @@ export function BSCCreateAccount() {
             >
               CREATE ACCOUNT
             </button>
-            <p className="text-center text-white my-1 text-xs"> Already have an account? <span className="text-button cursor-pointer"> Log in here. </span></p>
+            <p className="my-1 text-xs text-center text-white">
+              {" "}
+              Already have an account?{" "}
+              <span
+                onClick={navigatetoLogin}
+                className="cursor-pointer text-button"
+              >
+                {" "}
+                Log in here.{" "}
+              </span>
+            </p>
           </form>
         </div>
       </div>
