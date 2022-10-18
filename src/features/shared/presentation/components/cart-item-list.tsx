@@ -1,4 +1,3 @@
-import { ListItemText, MenuItem } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {

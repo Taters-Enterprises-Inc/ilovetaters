@@ -5,6 +5,7 @@ import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
+import {HiDocumentText} from 'react-icons/hi'
 import Pusher from "pusher-js";
 import { HiDocumentText } from "react-icons/hi";
 
@@ -219,7 +220,7 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     active: "sc-pwd",
     icon: <HiDocumentText />,
     url: "/profile/popclub-sc-pwd",
-  },
+}
 ];
 
 export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [

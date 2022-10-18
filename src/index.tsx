@@ -89,6 +89,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
+import { ProfileCsPwd } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
@@ -138,6 +139,7 @@ root.render(
                       />
 
                       <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
+
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>

@@ -22,8 +22,6 @@ import {
   ADMIN_CATERING_BOOKING_STATUS,
 } from "features/shared/constants";
 import Moment from "react-moment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
 import { selectAdminCateringPrivilege } from "../slices/admin-catering-privilege.slice";
@@ -32,6 +30,8 @@ import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
+import {  AdminChipsButton } from "./chips-button";
+import { ExtractButton } from "./extract-button";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminNotifications,
@@ -42,6 +42,7 @@ import {
   updateAdminNotificationDateSeen,
 } from "../slices/update-admin-notification-dateseen.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
+
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -163,43 +164,29 @@ export function AdminCateringBookings() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Catering Bookings
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  tracking_no: trackingNo,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminCateringBookingsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
-              if (index === 0 || value.name === "") {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+      </div>
+      <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_CATERING_BOOKING_STATUS}
+          dispactAction={() => {
+            dispatch(resetGetAdminCateringBookingsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            if (value !== status) {
+             const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status:value === -1 ? null : value,
+              tracking_no: trackingNo,
+              search: search,
+            };
+              return params;
+            }
+          }}
+        />
+      <div className="px-4 mt-4">
+        <ExtractButton />
       </div>
 
       {getAdminCateringBookingsState.data?.bookings ? (
@@ -364,7 +351,7 @@ export function AdminCateringBookings() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {

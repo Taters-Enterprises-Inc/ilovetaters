@@ -29,13 +29,12 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 import { ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
 import { CartListItem } from "./cart-item-list";
-import { HiDocumentText } from "react-icons/hi";
+import {HiDocumentText} from 'react-icons/hi'
 
 interface HeaderNavProps {
   className?: string;
