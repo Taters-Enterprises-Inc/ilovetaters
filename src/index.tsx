@@ -4,7 +4,11 @@ import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { Home, PrivacyPolicy } from "features/home/presentation/pages";
+import {
+  Home,
+  NotFound,
+  PrivacyPolicy,
+} from "features/home/presentation/pages";
 import { REACT_APP_BASE_NAME, theme } from "features/shared/constants";
 import { store } from "features/config/store";
 import {
@@ -84,9 +88,10 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
-import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
+import { ProfileCsPwd } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
-
+import { Bsc } from "features/bsc/presentation/pages/bsc.page";
+import { BSCLogin } from "features/bsc/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -136,6 +141,7 @@ root.render(
                         element={<ProfileCsPwd />}
                       />
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                   </Route>
 
                   <Route path="popclub" element={<PopClub />}>
@@ -144,6 +150,7 @@ root.render(
                       <Route path=":platform" element={<PopClubHome />} />
                       <Route path="deal/:hash" element={<PopClubDeal />} />
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                   </Route>
 
                   <Route path="delivery" element={<Shop />}>
@@ -174,6 +181,7 @@ root.render(
                       path="return-policy"
                       element={<ShopReturnPolicy />}
                     />
+                    <Route path="*" element={<NotFound />} />
                   </Route>
 
                   <Route path="catering" element={<Navigate to={"/shop"} />} />
@@ -198,7 +206,9 @@ root.render(
                     <Route path="order/:hash" element={<CateringOrder />} />
                     <Route path="products" element={<CateringProducts />} />
                     <Route path="checkout" element={<CateringCheckout />} />
+                    <Route path="*" element={<NotFound />} />
                   </Route>
+                  <Route path="*" element={<NotFound />} />
                 </Route>
 
                 <Route path="admin" element={<Admin />}>
@@ -283,6 +293,11 @@ root.render(
                       </Route>
                     </Route>
                   </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+
+                <Route path="bsc" element={<Bsc />}>
+                  <Route index element={<BSCLogin />} />
                 </Route>
               </Route>
             </Route>

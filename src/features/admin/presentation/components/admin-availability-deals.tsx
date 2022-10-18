@@ -119,7 +119,7 @@ export function AdminAvailabilityDeals() {
                 status === null || status === "0"
                   ? "text-base"
                   : "text-xs opacity-40"
-              } rounded-full`}
+              } rounded-full font-['Varela_Round']`}
             >
               Available
             </button>
@@ -144,9 +144,9 @@ export function AdminAvailabilityDeals() {
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
                 status && status === "1" ? "text-base" : "text-xs opacity-40"
-              } rounded-full `}
+              } rounded-full font-['Varela_Round']`}
             >
-              Not-Available
+              Not Available
             </button>
           </div>
           {getAdminSessionState.data &&
