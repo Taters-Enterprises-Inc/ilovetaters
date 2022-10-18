@@ -1,4 +1,4 @@
-export interface AdminDiscountVerificationModel {
+export interface AdminUserDiscountModel {
   id: number;
   first_name: string;
   middle_name: string;
@@ -7,7 +7,7 @@ export interface AdminDiscountVerificationModel {
   id_number: string;
   id_front: string;
   id_back: string;
-  deateadded: string;
+  dateadded: string;
   discount_type_id: number;
   fb_user_id: number;
   mobile_user_id: number;

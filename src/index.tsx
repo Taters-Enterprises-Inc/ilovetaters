@@ -63,7 +63,7 @@ import {
   AdminAvailabilityCatersPackage,
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
-  ScPwd,
+  AdminUserDiscount,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -89,7 +89,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
-import { ProfileCsPwd } from "features/profile/presentation/pages";
+import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
@@ -137,8 +137,10 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
-                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
-
+                      <Route
+                        path="user-discount"
+                        element={<ProfileUserDiscount />}
+                      />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
@@ -221,7 +223,10 @@ root.render(
                           element={<AdminCateringBooking />}
                         />
                         <Route path="popclub" element={<AdminPopclub />} />
-                        <Route path="scpwd" element={<ScPwd />} />
+                        <Route
+                          path="user-discount"
+                          element={<AdminUserDiscount />}
+                        />
                         <Route path="product" element={<AdminProduct />} />
                         <Route path="report" element={<AdminReport />} />
                         <Route path="faq">

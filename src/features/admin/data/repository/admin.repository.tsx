@@ -30,8 +30,8 @@ import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domai
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
-import { GetAdminDiscountVerificationsModel } from "features/admin/core/domain/get-admin-discount-verifications.model";
-import { AdminDiscountVerificationModel } from "features/admin/core/domain/get-admin-discount-verification.model";
+import { GetAdminUserDiscountsModel } from "features/admin/core/domain/get-admin-user-discounts.model";
+import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -80,17 +80,17 @@ export interface GetAdminPopclubRedeemResponse {
   };
 }
 
-export interface GetAdminDiscountVerificationsResponse {
+export interface GetAdminUserDiscountsResponse {
   data: {
     message: string;
-    data: GetAdminDiscountVerificationsModel;
+    data: GetAdminUserDiscountsModel;
   };
 }
 
-export interface GetAdminDiscountVerificationResponse {
+export interface GetAdminUserDiscountResponse {
   data: {
     message: string;
-    data: AdminDiscountVerificationModel;
+    data: AdminUserDiscountModel;
   };
 }
 
@@ -772,17 +772,17 @@ export function GetAdminPopclubRedeemsRepository(
   });
 }
 
-export function GetAdminDiscountVerificationRepository(
+export function GetAdminUserDiscountRepository(
   redeemCode: string
-): Promise<GetAdminDiscountVerificationResponse> {
+): Promise<GetAdminUserDiscountResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${redeemCode}`, {
     withCredentials: true,
   });
 }
 
-export function GetAdminDiscountVerificationsRepository(
+export function GetAdminUserDiscountsRepository(
   query: string
-): Promise<GetAdminDiscountVerificationsResponse> {
+): Promise<GetAdminUserDiscountsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount${query}`, {
     withCredentials: true,
   });
@@ -823,5 +823,3 @@ export function LogoutAdminRepository(): Promise<LogoutAdminResponse> {
     withCredentials: true,
   });
 }
-
-

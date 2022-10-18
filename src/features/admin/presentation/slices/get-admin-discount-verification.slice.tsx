@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminDiscountVerificationModel } from "features/admin/core/domain/get-admin-discount-verification.model";
+import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
 import {
-  GetAdminDiscountVerificationRepository,
-  GetAdminDiscountVerificationResponse,
+  GetAdminUserDiscountRepository,
+  GetAdminUserDiscountResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetAdminDiscountVerificationState {
+export enum GetAdminUserDiscountState {
   initial,
   inProgress,
   success,
@@ -14,21 +14,21 @@ export enum GetAdminDiscountVerificationState {
 }
 
 const initialState: {
-  status: GetAdminDiscountVerificationState;
+  status: GetAdminUserDiscountState;
   message: string;
-  data: AdminDiscountVerificationModel | undefined;
+  data: AdminUserDiscountModel | undefined;
 } = {
-  status: GetAdminDiscountVerificationState.initial,
+  status: GetAdminUserDiscountState.initial,
   message: "",
   data: undefined,
 };
 
-export const getAdminDiscountVerification = createAsyncThunk(
-  "getAdminDiscountVerification",
+export const getAdminUserDiscount = createAsyncThunk(
+  "getAdminUserDiscount",
   async (trackingNo: string, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: GetAdminDiscountVerificationResponse =
-        await GetAdminDiscountVerificationRepository(trackingNo);
+      const response: GetAdminUserDiscountResponse =
+        await GetAdminUserDiscountRepository(trackingNo);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
@@ -37,36 +37,36 @@ export const getAdminDiscountVerification = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getAdminDiscountVerificationSlice = createSlice({
-  name: "getAdminDiscountVerification",
+export const getAdminUserDiscountSlice = createSlice({
+  name: "getAdminUserDiscount",
   initialState,
   reducers: {},
   extraReducers: (builder: any) => {
     builder
-      .addCase(getAdminDiscountVerification.pending, (state: any) => {
-        state.status = GetAdminDiscountVerificationState.inProgress;
+      .addCase(getAdminUserDiscount.pending, (state: any) => {
+        state.status = GetAdminUserDiscountState.inProgress;
       })
       .addCase(
-        getAdminDiscountVerification.fulfilled,
+        getAdminUserDiscount.fulfilled,
         (
           state: any,
           action: PayloadAction<{
             message: string;
-            data: AdminDiscountVerificationModel | null;
+            data: AdminUserDiscountModel | null;
           }>
         ) => {
           const { message, data } = action.payload;
-          state.status = GetAdminDiscountVerificationState.success;
+          state.status = GetAdminUserDiscountState.success;
           state.message = message;
           state.data = data;
         }
       )
       .addCase(
-        getAdminDiscountVerification.rejected,
+        getAdminUserDiscount.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           const { message } = action.payload;
 
-          state.status = GetAdminDiscountVerificationState.fail;
+          state.status = GetAdminUserDiscountState.fail;
           state.message = message;
           state.data = null;
         }
@@ -74,7 +74,7 @@ export const getAdminDiscountVerificationSlice = createSlice({
   },
 });
 
-export const selectGetAdminDiscountVerification = (state: RootState) =>
-  state.getAdminDiscountVerification;
+export const selectGetAdminUserDiscount = (state: RootState) =>
+  state.getAdminUserDiscount;
 
-export default getAdminDiscountVerificationSlice.reducer;
+export default getAdminUserDiscountSlice.reducer;

@@ -11,42 +11,31 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import {
-  ADMIN_POPCLUB_REDEEM_STATUS,
-  ADMIN_SCPWD_VERIFICATION_STATUS,
-} from "features/shared/constants";
+import { ADMIN_USER_DISCOUNT_STATUS } from "features/shared/constants";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  getAdminPopclubRedeems,
-  resetGetAdminPopclubRedeemsStatus,
-  selectGetAdminPopclubRedeems,
-} from "../slices/get-admin-popclub-redeems.slice";
 import { createQueryParams } from "features/config/helpers";
 import {
-  getAdminDiscountVerifications,
-  resetGetAdminDiscountVerificationsStatus,
+  getAdminUserDiscounts,
+  resetGetAdminUserDiscountsStatus,
   selectGetDiscountVerifications,
-} from "../slices/get-admin-discount-verifications.slice";
+} from "../slices/get-admin-user-discounts.slice";
 import { DataList } from "features/shared/presentation/components";
-import moment from "moment";
 import Moment from "react-moment";
-import NumberFormat from "react-number-format";
 import { FaEye } from "react-icons/fa";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "appDate", label: "Application Date" },
+  { id: "discount_type", label: "Discount Type" },
   { id: "name", label: "Profile Name" },
-  { id: "fname", label: "First Name" },
-  { id: "lname", label: "Last Name" },
-  { id: "mname", label: "Middle Name" },
+  { id: "full_name", label: "Full Name" },
   { id: "birthday", label: "Birthday" },
-  { id: "scpwdNumber", label: "SC/PWD Number" },
+  { id: "id_number", label: "ID Number" },
   { id: "action", label: "Action" },
 ];
 
-export function AdminDiscountVerification() {
+export function AdminUserDiscounts() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -62,22 +51,6 @@ export function AdminDiscountVerification() {
     selectGetDiscountVerifications
   );
 
-  // const getAdminPopclubRedeemsState = useAppSelector(
-  //   selectGetAdminPopclubRedeems
-  // );
-
-  // useEffect(() => {
-  //   const query = createQueryParams({
-  //     page_no: pageNo,
-  //     per_page: perPage,
-  //     status: status,
-  //     order_by: orderBy,
-  //     order: order,
-  //     search: search,
-  //   });
-  //   dispatch(getAdminPopclubRedeems(query));
-  // }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
-
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -87,14 +60,14 @@ export function AdminDiscountVerification() {
       order: order,
       search: search,
     });
-    dispatch(getAdminDiscountVerifications(query));
+    dispatch(getAdminUserDiscounts(query));
   }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
 
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          SC/PWD Verification
+          User Discount
         </span>
         <div className="flex">
           <Select
@@ -112,7 +85,7 @@ export function AdminDiscountVerification() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminDiscountVerificationsStatus());
+                dispatch(resetGetAdminUserDiscountsStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -121,7 +94,7 @@ export function AdminDiscountVerification() {
             }}
           >
             <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_SCPWD_VERIFICATION_STATUS.map((value, index) => {
+            {ADMIN_USER_DISCOUNT_STATUS.map((value, index) => {
               if (index === 0) {
                 return null;
               }
@@ -140,7 +113,7 @@ export function AdminDiscountVerification() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No SC/PWD request yet."
+              emptyMessage="No User Discount request yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -171,7 +144,7 @@ export function AdminDiscountVerification() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminDiscountVerificationsStatus());
+                  dispatch(resetGetAdminUserDiscountsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -191,7 +164,7 @@ export function AdminDiscountVerification() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminDiscountVerificationsStatus());
+                  dispatch(resetGetAdminUserDiscountsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -243,10 +216,10 @@ export function AdminDiscountVerification() {
                       style={{
                         color: "white",
                         backgroundColor:
-                          ADMIN_SCPWD_VERIFICATION_STATUS[row.status].color,
+                          ADMIN_USER_DISCOUNT_STATUS[row.status].color,
                       }}
                     >
-                      {ADMIN_SCPWD_VERIFICATION_STATUS[row.status].name}
+                      {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
                     </span>
                   </span>
 
@@ -255,7 +228,7 @@ export function AdminDiscountVerification() {
                   </span>
                   <span className="text-xs">
                     <strong>Application Date: </strong>
-                    <Moment format="LLL">{row.deateadded}</Moment>
+                    <Moment format="LLL">{row.dateadded}</Moment>
                   </span>
                 </div>
               ))}
@@ -265,7 +238,7 @@ export function AdminDiscountVerification() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
-              emptyMessage="No popclub redeems yet."
+              emptyMessage="No user discount request yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -301,7 +274,7 @@ export function AdminDiscountVerification() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminDiscountVerificationsStatus());
+                  dispatch(resetGetAdminUserDiscountsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -323,7 +296,7 @@ export function AdminDiscountVerification() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminDiscountVerificationsStatus());
+                  dispatch(resetGetAdminUserDiscountsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -345,7 +318,7 @@ export function AdminDiscountVerification() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminDiscountVerificationsStatus());
+                  dispatch(resetGetAdminUserDiscountsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -371,15 +344,14 @@ export function AdminDiscountVerification() {
                             style={{
                               color: "white",
                               backgroundColor:
-                                ADMIN_SCPWD_VERIFICATION_STATUS[row.status]
-                                  .color,
+                                ADMIN_USER_DISCOUNT_STATUS[row.status].color,
                             }}
                           >
-                            {ADMIN_SCPWD_VERIFICATION_STATUS[row.status].name}
+                            {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
                           </span>
                         </DataTableCell>
                         <DataTableCell>
-                          <Moment format="LLL">{row.deateadded}</Moment>
+                          <Moment format="LLL">{row.dateadded}</Moment>
                         </DataTableCell>
                         <DataTableCell>
                           {row.first_name +
@@ -388,9 +360,9 @@ export function AdminDiscountVerification() {
                             " " +
                             row.last_name}
                         </DataTableCell>
-                        <DataTableCell>{row.first_name}</DataTableCell>
-                        <DataTableCell>{row.middle_name}</DataTableCell>
-                        <DataTableCell>{row.last_name}</DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
                         <DataTableCell>{row.birthday}</DataTableCell>
                         <DataTableCell>{row.id_number}</DataTableCell>
 
