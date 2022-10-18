@@ -15,8 +15,6 @@ import { applyUserDiscount } from "../slices/apply-user-discount.slice";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
-
-  const [birthDate, setBirthDate] = useState();
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
   const [uploadedFileFront, setUploadedFileFront] = useState<any>(undefined);
@@ -135,11 +133,11 @@ export function ProfileUserDiscount() {
               <DesktopDatePicker
                 maxDate={new Date()}
                 label="Birth Date"
-                value={birthDate}
-                onChange={(newValue: any) => {
-                  setBirthDate(newValue);
-                }}
-                renderInput={(params) => <TextField fullWidth {...params} />}
+                value={null}
+                onChange={(newValue: any) => {}}
+                renderInput={(params) => (
+                  <TextField fullWidth name="birth_date" {...params} />
+                )}
               />
             </LocalizationProvider>
           </div>
@@ -147,7 +145,7 @@ export function ProfileUserDiscount() {
             required
             label="ID Number"
             className="flex-1 w-full"
-            name="front_id_number"
+            name="id_number"
             type="text"
           />
         </div>
@@ -159,13 +157,7 @@ export function ProfileUserDiscount() {
             </h2>
 
             <div>
-              <input
-                type="text"
-                className="hidden"
-                name="tracking_no"
-                readOnly
-              />
-              <input type="text" className="hidden" name="trans_id" readOnly />
+              <input type="text" className="hidden" name="front_id" readOnly />
 
               <div>
                 <div
@@ -222,13 +214,7 @@ export function ProfileUserDiscount() {
             </h2>
 
             <div>
-              <input
-                type="text"
-                className="hidden"
-                name="tracking_no"
-                readOnly
-              />
-              <input type="text" className="hidden" name="trans_id" readOnly />
+              <input type="text" className="hidden" name="back_id" readOnly />
 
               <div>
                 <div
