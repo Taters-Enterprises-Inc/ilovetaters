@@ -13,7 +13,6 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-
 import {
   FaRegListAlt,
   FaCartArrowDown,
@@ -31,7 +30,7 @@ import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
 
-const drawerWidth = "16rem";
+
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
 import {
