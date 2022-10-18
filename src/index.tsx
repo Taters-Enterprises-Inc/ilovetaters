@@ -89,10 +89,10 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
+import { ProfileCsPwd } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
-import { BSCCreateAccount, BSCLogin } from "features/bsc/presentation/pages";
-import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
+import { BSCLogin, BSCCreateAccount } from "features/bsc/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

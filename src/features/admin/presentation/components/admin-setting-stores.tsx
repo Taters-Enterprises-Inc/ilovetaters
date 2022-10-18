@@ -27,6 +27,7 @@ import { AdminStoreEditModal } from "../modals";
 import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { ExtractButton } from "./extract-button";
 
 export function AdminSettingStores() {
   const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
@@ -113,7 +114,9 @@ export function AdminSettingStores() {
           List of Stores
         </span>
       </div>
-
+      <div className="px-4 mt-2">
+        <ExtractButton />
+      </div>
       {getAdminSettingStoresState.data?.stores ? (
         <>
           <div className="p-4 lg:hidden">
@@ -212,7 +215,7 @@ export function AdminSettingStores() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected == "name") {
+                if (column_selected === "name") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
