@@ -1,4 +1,5 @@
-import { AdminHead, AdminScPwdVerification } from "../components";
+import { AdminHead } from "../components";
+import { AdminDiscountVerification } from "../components/admin-discount-verification";
 
 export function ScPwd() {
   return (
@@ -14,7 +15,7 @@ export function ScPwd() {
         }}
       />
 
-      <AdminScPwdVerification />
+      <AdminDiscountVerification />
     </>
   );
 }

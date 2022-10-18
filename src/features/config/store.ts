@@ -114,6 +114,8 @@ import getCateringTransactionLogs from "features/admin/presentation/slices/get-c
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
+import getAdminDiscountVerifications from "features/admin/presentation/slices/get-admin-discount-verifications.slice";
+import getAdminDiscountVerification from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 
 export const store = configureStore({
   reducer: {
@@ -231,6 +233,8 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     discountRegistration,
+    getAdminDiscountVerifications,
+    getAdminDiscountVerification,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
