@@ -1,86 +1,169 @@
-import { useEffect } from "react";
-import { TbLogout } from "react-icons/tb";
 import { MdOutlineNotificationsNone } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  logoutAdmin,
-  LogoutAdminState,
-  resetLogoutAdmin,
-  selectLogoutAdmin,
-} from "../slices/logout-admin.slice";
-import { getAdminSession } from "../slices/get-admin-session.slice";
 import { AdminBreadCrumbs, AdminBreadCrumbsProps } from "./admin-breadcrumbs";
-import { useNavigate } from "react-router-dom";
 import Popper from "@mui/material/Popper";
-import * as React from "react";
-import Box from "@mui/material/Box";
-
+import { useState, useEffect, MouseEvent } from "react";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import Badge from "@mui/material/Badge";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import { Link } from "react-router-dom";
+import { FaExclamationCircle } from "react-icons/fa";
+import moment from "moment";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
 interface AdminHeadProps {
   AdminBreadCrumbsProps: AdminBreadCrumbsProps;
 }
 
 export function AdminHead(props: AdminHeadProps) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const dispatch = useAppDispatch();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState]);
+
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
-
-  const dispatch = useAppDispatch();
-  const logoutAdminState = useAppSelector(selectLogoutAdmin);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (logoutAdminState.status === LogoutAdminState.success) {
-      dispatch(getAdminSession());
-      dispatch(resetLogoutAdmin());
-      navigate("/admin");
-    }
-  }, [logoutAdminState, dispatch]);
-
   return (
     <div className="flex justify-between p-4">
       <AdminBreadCrumbs {...props.AdminBreadCrumbsProps} />
-
       <div className="relative flex items-center justify-end text-secondary ">
-        {/* <MdOutlineNotificationsNone
-          className="mr-4 cursor-pointer "
-          size={20}
-        /> */}
-
         <button aria-describedby={id} type="button" onClick={handleClick}>
-          <MdOutlineNotificationsNone
-            className="mr-2 cursor-pointer "
-            size={20}
-          />
+          <Badge
+            badgeContent={
+              getAdminNotificationsState.data?.all.unseen_notifications_count
+            }
+            color="primary"
+          >
+            <MdOutlineNotificationsNone className="cursor-pointer " size={20} />
+          </Badge>
         </button>
 
         <Popper id={id} open={open} anchorEl={anchorEl}>
-          <div className="z-40 mr-2 shadow-2xl lg:mr-10 bg-paper">
-            <Box
-              sx={{
-                bgcolor: "background.paper",
-                height: 600,
-                width: 400,
-              }}
-            >
-              <div className="bg-secondary font-['Bebas_Neue'] text-white text-center text-xl w-100% p-2">
+          <div className="z-40 mr-4 shadow-2xl lg:hidden bg-paper">
+            <div className="bg-color-paper h-[600px] w-[300px]">
+              <div className="bg-secondary font-bold text-white text-center text-xl w-100% p-2">
                 Notifications
               </div>
-            </Box>
+
+              {getAdminNotificationsState.data?.all.notifications ? (
+                <ul>
+                  {getAdminNotificationsState.data.all.notifications.map(
+                    (notification, i) => {
+                      let notificationLink = "";
+                      switch (notification.notification_event_type_id) {
+                        case 1:
+                          notificationLink = `/admin/order?tracking_no=${notification.tracking_no}`;
+                          break;
+                        case 2:
+                          notificationLink = `/admin/catering?tracking_no=${notification.catering_tracking_no}`;
+                          break;
+                      }
+                      return (
+                        <li key={i}>
+                          <Link
+                            className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
+                              notification.dateseen === null
+                                ? " bg-gray-200"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              dispatch(
+                                updateAdminNotificationDateSeen(notification.id)
+                              );
+                            }}
+                            to={notificationLink}
+                          >
+                            <FaExclamationCircle className="text-4xl text-green-700" />
+                            <div className="flex flex-col justify-start">
+                              <span className="text-sm font-semibold">
+                                {notification.text}
+                              </span>
+                              <span className="text-xs">
+                                {moment(notification.dateadded)
+                                  .startOf("hour")
+                                  .fromNow()}
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    }
+                  )}
+                </ul>
+              ) : null}
+            </div>
+          </div>
+          <div className="z-40 hidden mr-6 shadow-2xl lg:block bg-paper">
+            <div className="bg-color-paper h-[400px] max-w-[400px] min-w-[300px] overflow-y-auto">
+              <div className="bg-secondary font-bold text-white text-center text-xl w-100% p-2">
+                Notifications
+              </div>
+              {getAdminNotificationsState.data?.all.notifications ? (
+                <ul>
+                  {getAdminNotificationsState.data.all.notifications.map(
+                    (notification, i) => {
+                      let notificationLink = "";
+                      switch (notification.notification_event_type_id) {
+                        case 1:
+                          notificationLink = `/admin/order?tracking_no=${notification.tracking_no}`;
+                          break;
+                        case 2:
+                          notificationLink = `/admin/catering?tracking_no=${notification.catering_tracking_no}`;
+                          break;
+                      }
+                      return (
+                        <li key={i}>
+                          <Link
+                            className={`flex py-2 items-center px-3 space-x-2 mb-1 ${
+                              notification.dateseen === null
+                                ? " bg-gray-200"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              dispatch(
+                                updateAdminNotificationDateSeen(notification.id)
+                              );
+                            }}
+                            to={notificationLink}
+                          >
+                            <FaExclamationCircle className="text-4xl text-green-700" />
+                            <div className="flex flex-col justify-start">
+                              <span className="text-sm font-semibold">
+                                {notification.text}
+                              </span>
+                              <span className="text-xs">
+                                {moment(notification.dateadded)
+                                  .startOf("hour")
+                                  .fromNow()}
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    }
+                  )}
+                </ul>
+              ) : null}
+            </div>
           </div>
         </Popper>
-
-        <TbLogout
-          onClick={() => {
-            dispatch(logoutAdmin());
-          }}
-          className="cursor-pointer"
-          size={20}
-        />
       </div>
     </div>
   );

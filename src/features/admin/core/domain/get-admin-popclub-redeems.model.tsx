@@ -5,5 +5,5 @@ export interface GetAdminPopclubRedeemsModel {
     total_rows: number;
     per_page: number;
   };
-  orders: Array<AdminPopclubRedeemModel>;
+  redeems: Array<AdminPopclubRedeemModel>;
 }

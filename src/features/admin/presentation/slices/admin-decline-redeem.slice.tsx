@@ -23,10 +23,10 @@ const initialState: {
 
 export const adminDeclineRedeem = createAsyncThunk(
   "adminDeclineRedeem",
-  async (redeemCode: string, { rejectWithValue, fulfillWithValue }) => {
+  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: AdminDeclineRedeemResponse =
-        await AdminDeclineRedeemRepository(redeemCode);
+        await AdminDeclineRedeemRepository(formData);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
@@ -38,7 +38,11 @@ export const adminDeclineRedeem = createAsyncThunk(
 export const adminDeclineRedeemSlice = createSlice({
   name: "adminDeclineRedeem",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAdminDeclineRedeemSliceStatus: (state) => {
+      state.status = AdminDeclineRedeemState.initial;
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(adminDeclineRedeem.pending, (state: any) => {
@@ -71,5 +75,8 @@ export const adminDeclineRedeemSlice = createSlice({
 
 export const selectAdminDeclineRedeem = (state: RootState) =>
   state.adminDeclineRedeem;
+
+export const { resetAdminDeclineRedeemSliceStatus } =
+  adminDeclineRedeemSlice.actions;
 
 export default adminDeclineRedeemSlice.reducer;

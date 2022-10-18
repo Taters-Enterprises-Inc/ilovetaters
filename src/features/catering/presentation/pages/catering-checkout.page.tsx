@@ -357,6 +357,7 @@ export function CateringCheckout() {
                         defaultValue={getSessionState.data.userData.email}
                         variant="outlined"
                         className="w-full"
+                        type="email"
                         name="eMail"
                       />
                     ) : (
@@ -366,6 +367,7 @@ export function CateringCheckout() {
                         label="E-mail Address"
                         variant="outlined"
                         className="w-full"
+                        type="email"
                         name="eMail"
                       />
                     )}

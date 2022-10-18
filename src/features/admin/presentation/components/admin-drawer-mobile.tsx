@@ -26,7 +26,7 @@ export function AdminDrawerMobile() {
         dispatch(toggleAdminSideBar());
       }}
     >
-      <Box className="w-[16rem] relative h-screen bg-secondary font-['Roboto'] duration-500  overflow-y-auto overflow-x-hidden">
+      <Box className="w-[16rem] relative h-screen bg-secondary font-['Varela_Round'] duration-500  overflow-y-auto overflow-x-hidden">
         <div className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
           <FaBars
             className={`cursor-pointer ${

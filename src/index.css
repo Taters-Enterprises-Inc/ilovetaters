@@ -481,3 +481,5 @@ input[type="number"] {
     width: 78%;
   }
 }
+/* Add Varela Round fonts for admin page */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');

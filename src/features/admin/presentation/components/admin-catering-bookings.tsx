@@ -26,12 +26,22 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FaEye } from "react-icons/fa";
 import { DataList } from "features/shared/presentation/components";
-import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
+import { selectAdminCateringPrivilege } from "../slices/admin-catering-privilege.slice";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
+import { createQueryParams } from "features/config/helpers";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -44,20 +54,6 @@ const columns: Array<Column> = [
   { id: "payops", label: "Mode of Payment" },
   { id: "action", label: "Action" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminCateringBookings() {
   const dispatch = useAppDispatch();
@@ -80,7 +76,20 @@ export function AdminCateringBookings() {
     selectAdminCateringBookingUpdateStatus
   );
 
-  const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
+  const adminCateringPrivilegeState = useAppSelector(
+    selectAdminCateringPrivilege
+  );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState]);
 
   useEffect(() => {
     if (trackingNo) {
@@ -108,7 +117,7 @@ export function AdminCateringBookings() {
     orderBy,
     order,
     search,
-    adminPrivilegeState,
+    adminCateringPrivilegeState,
     adminCateringBookingUpdateStatusState,
   ]);
 
@@ -180,7 +189,7 @@ export function AdminCateringBookings() {
           >
             <MenuItem value={-1}>All</MenuItem>
             {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
-              if (index === 0) {
+              if (index === 0 || value.name === "") {
                 return null;
               }
               return (
@@ -263,57 +272,71 @@ export function AdminCateringBookings() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminCateringBookingsState.data.bookings.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      tracking_no: row.tracking_no,
-                      search: search,
-                    };
+              {getAdminCateringBookingsState.data.bookings.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getAdminNotificationsState.data?.catering_order.unseen_notifications.find(
+                    (notification) =>
+                      notification.catering_tracking_no === row.tracking_no
+                  );
+                return (
+                  <div
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(
+                          updateAdminNotificationDateSeen(notification.id)
+                        );
+                      }
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        tracking_no: row.tracking_no,
+                        search: search,
+                      };
 
-                    const queryParams = createQueryParams(params);
+                      const queryParams = createQueryParams(params);
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>{row.client_name}</span>
-                    <span className="text-lg text-gray-600">
-                      #{row.tracking_no}
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>{row.client_name}</span>
+                      <span className="text-lg text-gray-600">
+                        #{row.tracking_no}
+                      </span>
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_CATERING_BOOKING_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
+                      </span>
                     </span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_CATERING_BOOKING_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
-                    </span>
-                  </span>
-                  <span className="text-xs">
-                    <strong>Hub:</strong> {row.store_name}
-                  </span>
-
-                  <div className="flex justify-between">
                     <span className="text-xs">
-                      <Moment format="LLL">{row.dateadded}</Moment>
+                      <strong>Hub:</strong> {row.store_name}
                     </span>
-                    <span className="text-lg font-semibold">
-                      {calculateGrandTotal(row)}
-                    </span>
+
+                    <div className="flex justify-between">
+                      <span className="text-xs">
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {calculateGrandTotal(row)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -415,61 +438,80 @@ export function AdminCateringBookings() {
             >
               {getAdminCateringBookingsState.data.bookings !== undefined ? (
                 <>
-                  {getAdminCateringBookingsState.data.bookings.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_CATERING_BOOKING_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">
-                          {moment.unix(parseInt(row.serving_time))}
-                        </Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.tracking_no}</DataTableCell>
-                      <DataTableCell>{row.client_name}</DataTableCell>
-                      <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
-                      <DataTableCell>{row.store_name}</DataTableCell>
-                      <DataTableCell>
-                        <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
-                      </DataTableCell>
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              tracking_no: row.tracking_no,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                  {getAdminCateringBookingsState.data.bookings.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.catering_order.unseen_notifications.find(
+                        (notification) =>
+                          notification.catering_tracking_no === row.tracking_no
+                      );
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_CATERING_BOOKING_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_CATERING_BOOKING_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">
+                            {moment.unix(parseInt(row.serving_time))}
+                          </Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.tracking_no}</DataTableCell>
+                        <DataTableCell>{row.client_name}</DataTableCell>
+                        <DataTableCell>
+                          {calculateGrandTotal(row)}
+                        </DataTableCell>
+                        <DataTableCell>{row.store_name}</DataTableCell>
+                        <DataTableCell>
+                          <span>{ADMIN_SNACKSHOP_MOP_STATUS[row.payops]}</span>
+                        </DataTableCell>
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                tracking_no: row.tracking_no,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

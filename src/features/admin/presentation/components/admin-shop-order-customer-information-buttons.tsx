@@ -33,6 +33,16 @@ export function AdminShopOrderCustomerInformationButtons() {
       const formData = new FormData();
       formData.append("trans_id", getAdminShopOrderState.data.id.toString());
       formData.append("status", status);
+      if (getAdminShopOrderState.data.fb_user_id)
+        formData.append(
+          "fb_user_id",
+          getAdminShopOrderState.data.fb_user_id.toString()
+        );
+      if (getAdminShopOrderState.data.mobile_user_id)
+        formData.append(
+          "mobile_user_id",
+          getAdminShopOrderState.data.mobile_user_id.toString()
+        );
       dispatch(adminShopOrderUpdateStatus(formData));
     }
   };

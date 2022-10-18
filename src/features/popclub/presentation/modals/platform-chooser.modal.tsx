@@ -14,8 +14,6 @@ interface PlatformChooserModalProps {
 export function PlatformChooserModal(props: PlatformChooserModalProps) {
   const dispatch = useAppDispatch();
 
-  const temp = ["visiting a store", "snacks delivered"];
-
   return (
     <div
       style={{ display: props.open ? "flex" : "none" }}
@@ -39,7 +37,6 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
               onClick={() => {
                 props.onClose();
                 props.onSelectedPlatform("store-visit");
-                dispatch(setPopClubData({ platform: "store-visit" }));
               }}
             >
               Visiting a store
@@ -55,7 +52,6 @@ export function PlatformChooserModal(props: PlatformChooserModalProps) {
               onClick={() => {
                 props.onClose();
                 props.onSelectedPlatform("online-delivery");
-                dispatch(setPopClubData({ platform: "online-delivery" }));
               }}
             >
               Snacks Delivered

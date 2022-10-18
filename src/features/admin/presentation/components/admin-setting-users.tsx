@@ -27,6 +27,7 @@ import {
 } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
+import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
@@ -37,20 +38,6 @@ const columns: Array<Column> = [
   { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
 ];
-
-const createQueryParams = (params: object): string => {
-  let result = "?";
-  const paramsEntries = Object.entries(params);
-
-  for (let [key, value] of paramsEntries) {
-    if (value !== null) {
-      result += `${key}=${value}&`;
-    }
-  }
-  result = result.slice(0, -1);
-
-  return result;
-};
 
 export function AdminSettingUsers() {
   const dispatch = useAppDispatch();
@@ -97,7 +84,7 @@ export function AdminSettingUsers() {
           <div>
             <Link
               to="create-user"
-              className="inline-flex items-center px-4 tracking-wide py-1  bg-button text-white font-['Roboto']  text-sm rounded-md font-700"
+              className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
             >
               <MdOutlinePersonAddAlt1 size={20} />
               <span>&nbsp;&nbsp;Create a new user</span>
@@ -106,7 +93,7 @@ export function AdminSettingUsers() {
           <div>
             <Link
               to="create-group"
-              className="inline-flex items-center px-4 tracking-wide bg-button text-white py-1 font-['Roboto']  text-sm rounded-md font-700"
+              className="inline-flex items-center px-4 tracking-wide bg-button font-['Varela_Round'] text-white py-1 text-xs rounded-md font-700"
             >
               <MdOutlineGroupAdd size={20} />
               <span>&nbsp;&nbsp;Create a new group</span>
@@ -314,7 +301,7 @@ export function AdminSettingUsers() {
                       </DataTableCell>
                       <DataTableCell>
                         {row.active === 1 ? (
-                          <span className="px-2 py-1 text-xs text-white bg-green-700 rounded-full ">
+                          <span className="px-2 py-1 text-xs text-white font-['Varela_Round'] bg-green-700 rounded-full ">
                             Active
                           </span>
                         ) : (
@@ -324,34 +311,38 @@ export function AdminSettingUsers() {
                       <DataTableCell>
                         <Link
                           to={`/admin/setting/user/edit-user/${row.id}`}
-                          className="px-3 py-1 border rounded-lg border-secondary"
+                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
                         >
                           Edit
                         </Link>
                       </DataTableCell>
                       <DataTableCell>
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                              user_id: row.id,
-                            };
+                        {row.groups.some(
+                          (group) => group.id == 1 || group.id == 10
+                        ) ? null : (
+                          <button
+                            onClick={() => {
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                                user_id: row.id,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                          className="px-3 py-1 border rounded-lg border-secondary"
-                        >
-                          Choose
-                        </button>
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                            className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                          >
+                            Choose
+                          </button>
+                        )}
                       </DataTableCell>
                     </DataTableRow>
                   ))}

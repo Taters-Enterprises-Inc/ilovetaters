@@ -1,31 +1,13 @@
-import React, { Fragment } from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   closeAdminSideBar,
   selectAdminSideBar,
-  toggleAdminSideBar,
 } from "../slices/admin-sidebar.slice";
-import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "../slices/get-admin-session.slice";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionSummary, {
   AccordionSummaryProps,
@@ -33,12 +15,11 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 
 import {
-  FaBars,
   FaRegListAlt,
   FaCartArrowDown,
   FaQuestionCircle,
 } from "react-icons/fa";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   MdFoodBank,
   MdOutlineSettings,
@@ -46,10 +27,19 @@ import {
 } from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
-import { useState } from "react";
-import { truncate } from "fs";
-
-const drawerWidth = "16rem";
+import Badge from "@mui/material/Badge";
+import { TbLogout } from "react-icons/tb";
+import {
+  logoutAdmin,
+  LogoutAdminState,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
+import { useEffect } from "react";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -88,9 +78,28 @@ export interface AdminDrawerTabsProps {
 }
 
 export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const dispatch = useAppDispatch();
+  const logoutAdminState = useAppSelector(selectLogoutAdmin);
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, []);
+
+  useEffect(() => {
+    if (logoutAdminState.status === LogoutAdminState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logoutAdminState]);
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -108,7 +117,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <FaRegListAlt size={20} />
+                  <Badge
+                    badgeContent={
+                      getAdminNotificationsState.data?.snackshop_order
+                        .unseen_notifications_count
+                    }
+                    color="primary"
+                  >
+                    <FaRegListAlt size={20} />
+                  </Badge>
 
                   <span
                     className={`whitespace-pre duration-300 ${
@@ -124,7 +141,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           {getAdminSessionState.data?.is_admin ||
           getAdminSessionState.data?.is_catering_admin ||
-          getAdminSessionState.data?.is_csr ? (
+          getAdminSessionState.data?.is_csr_admin ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -137,7 +154,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               >
                 <span className="flex items-center px-4 ">
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                    <MdFoodBank size={20} />
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.catering_order
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
+                      <MdFoodBank size={20} />
+                    </Badge>
 
                     <span
                       className={`whitespace-pre duration-300 ${
@@ -164,8 +189,9 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <FaCartArrowDown size={20} />
-
+                  <Badge badgeContent={0} color="primary">
+                    <FaCartArrowDown size={20} />
+                  </Badge>
                   <span
                     className={`whitespace-pre duration-300 ${
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
@@ -370,13 +396,11 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
-                      {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr ? (
+                      {getAdminSessionState.data?.is_admin ? (
                         <li>
                           <NavLink
                             to="/admin/setting/user"
                             onClick={() => {
-                              // toggle2();
                               if (props.mobile) dispatch(closeAdminSideBar());
                             }}
                             className={(navData) =>
@@ -461,6 +485,28 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                 </span>
               </span>
             </NavLink>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                dispatch(logoutAdmin());
+              }}
+              className="flex w-full"
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <TbLogout size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Logout
+                  </span>
+                </span>
+              </span>
+            </button>
           </li>
         </ul>
       </nav>

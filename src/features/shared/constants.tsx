@@ -5,9 +5,19 @@ import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
+import Pusher from "pusher-js";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
+
+// PUSHER
+export const REACT_APP_PUSHER_KEY = process.env.REACT_APP_PUSHER_KEY ?? "";
+export const REACT_APP_PUSHER_CLUSTER =
+  process.env.REACT_APP_PUSHER_CLUSTER ?? "";
+
+export const pusher = new Pusher(REACT_APP_PUSHER_KEY, {
+  cluster: REACT_APP_PUSHER_CLUSTER,
+});
 
 export const SERVICES_DESKTOP = [
   {
@@ -676,6 +686,25 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
   },
   {
     name: "Final Payment denied",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_SNACKSHOP_TRANSACTION_LOGS_ACTION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  { name: "", color: "" },
+  {
+    name: "Update",
+    color: "#cca300",
+  },
+  {
+    name: "Accept",
+    color: "#004d00",
+  },
+  {
+    name: "Error",
     color: "#a21013",
   },
 ];

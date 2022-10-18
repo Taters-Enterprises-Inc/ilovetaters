@@ -27,6 +27,9 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetAdminStoreCatersPackagesModel } from "features/admin/core/domain/get-admin-store-caters-packages.model";
 import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
 import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domain/get-admin-store-caters-product-addons.model";
+import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
+import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
+import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -158,6 +161,12 @@ export interface ValidateReferenceNumberAdminResponse {
   };
 }
 export interface AdminShopOrderUpdateStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminCateringPrivilegeResponse {
   data: {
     message: string;
   };
@@ -301,6 +310,73 @@ export interface UpdateStoreCatersProductAddonResponse {
   };
 }
 
+export interface GetShopTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<ShopTransactionLogsModel>;
+  };
+}
+
+export interface GetCateringTransactionLogsResponse {
+  data: {
+    message: string;
+    data: Array<CateringTransactionLogsModel>;
+  };
+}
+
+export interface GetAdminNotificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminNotificationModel;
+  };
+}
+
+export interface UpdateAdminNotificationDateSeenResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminNotificationDateSeenRepository(
+  notificationId: number
+) {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
+    new FormData(),
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminNotificationsRepository() {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/notifications`, {
+    withCredentials: true,
+  });
+}
+
+export function GetCateringTransactionLogsRepository(
+  transactionId: number
+): Promise<GetCateringTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetShopTransactionLogsRepository(
+  transactionId: number
+): Promise<GetShopTransactionLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/snackshop-transaction-logs/${transactionId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateStoreCatersProductAddonRepository(
   param: UpdateStoreCatersProductAddonParam
 ): Promise<UpdateStoreCatersProductAddonResponse> {
@@ -409,10 +485,11 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  redeemCode: string
+  formData: FormData
 ): Promise<AdminDeclineRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/decline`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
+    formData,
     {
       withCredentials: true,
     }
@@ -512,6 +589,18 @@ export function GetAdminCateringBookingsRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/catering${query}`, {
     withCredentials: true,
   });
+}
+
+export function AdminCateringPrivilegeRepository(
+  formData: FormData
+): Promise<AdminCateringPrivilegeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminPrivilegeRepository(
@@ -640,10 +729,11 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  redeemCode: string
+  formData: FormData
 ): Promise<AdminCompleteRedeemResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/popclub/${redeemCode}/complete`,
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
+    formData,
     {
       withCredentials: true,
     }
