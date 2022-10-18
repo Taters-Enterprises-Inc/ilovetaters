@@ -467,23 +467,25 @@ export function AdminCateringBookingCustomerInformation() {
 
         <hr />
 
-        {getAdminCateringBookingState.data &&
-        getAdminCateringBookingState.data.uploaded_contract ? (
+        {getAdminCateringBookingState.data ? (
           <div className="pt-2 pb-3">
             <span className="text-xl font-bold">Attached Documents</span>
-            <div className="mt-1">
-              <strong>Uploaded Contract:</strong>{" "}
-              <span className="font-semibold">
-                <a
-                  className="text-blue-600 underline"
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`${REACT_APP_DOMAIN_URL}api/load-image-catering-contract/${getAdminCateringBookingState.data?.uploaded_contract}`}
-                >
-                  Click to view
-                </a>
-              </span>
-            </div>
+
+            {getAdminCateringBookingState.data.uploaded_contract ? (
+              <div className="mt-1">
+                <strong>Uploaded Contract:</strong>{" "}
+                <span className="font-semibold">
+                  <a
+                    className="text-blue-600 underline"
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`${REACT_APP_DOMAIN_URL}api/load-image-catering-contract/${getAdminCateringBookingState.data?.uploaded_contract}`}
+                  >
+                    Click to view
+                  </a>
+                </span>
+              </div>
+            ) : null}
             {getAdminCateringBookingState.data.initial_payment_proof ? (
               <div>
                 <strong>Proof of initial payment:</strong>{" "}
