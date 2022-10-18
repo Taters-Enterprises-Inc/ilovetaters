@@ -469,17 +469,5 @@ input[type="number"] {
   scrollbar-width: none; /* Firefox */
 }
 
-.pac-container {
-
-  width: 85%;
-}
-
-@media only screen and (min-width: 1024px) {
-
-  .pac-container {
-
-    width: 78%;
-  }
-}
 /* Add Varela Round fonts for admin page */
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
