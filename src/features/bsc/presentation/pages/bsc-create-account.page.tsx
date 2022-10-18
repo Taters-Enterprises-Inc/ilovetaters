@@ -6,6 +6,7 @@ import { BSCPasswordTextField } from "../components/bsc-password-text-field";
 import { BSCEmailTextField } from "../components/bsc-email-text-field";
 import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
 import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
+import { BSCDesignationField } from "../components/bsc-designation-field";
 // import {
 //   getAdminSession,
 //   GetAdminSessionState,
@@ -18,6 +19,7 @@ import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
 // } from "../slices/login-admin.slice";
 import { useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
+import BSCStoreSelect from "../components/bsc-store-select";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
@@ -71,8 +73,13 @@ export function BSCCreateAccount() {
               Enter the following information to register.{" "}
             </p>
             <div className="pt-4 space-y-4">
-              <BSCFirstNameTextField />
-              <BSCLastNameTextField />
+              <div className="flex space-x-2">
+                <BSCFirstNameTextField />
+                <BSCLastNameTextField />
+              </div>
+
+              <BSCDesignationField />
+              <BSCStoreSelect />
               <BSCEmailTextField />
               <BSCPasswordTextField />
             </div>
