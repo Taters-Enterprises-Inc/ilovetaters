@@ -63,6 +63,7 @@ import {
   AdminAvailabilityCatersPackage,
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
+  ScPwd,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -92,6 +93,7 @@ import { ProfileCsPwd } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
+import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -136,10 +138,8 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
-                      <Route
-                        path="popclub-sc-pwd"
-                        element={<ProfileCsPwd />}
-                      />
+                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
+
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
@@ -222,6 +222,7 @@ root.render(
                           element={<AdminCateringBooking />}
                         />
                         <Route path="popclub" element={<AdminPopclub />} />
+                        <Route path="scpwd" element={<ScPwd />} />
                         <Route path="product" element={<AdminProduct />} />
                         <Route path="report" element={<AdminReport />} />
                         <Route path="faq">

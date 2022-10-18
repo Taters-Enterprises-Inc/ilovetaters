@@ -145,7 +145,6 @@ export function HeaderNav(props: HeaderNavProps) {
     navigate("/profile/popclub-sc-pwd");
   };
 
-
   const handleLogout = () => {
     setOpenProfileMenu(null);
 

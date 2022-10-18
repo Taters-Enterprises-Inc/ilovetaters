@@ -7,6 +7,7 @@ import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
 import {HiDocumentText} from 'react-icons/hi'
 import Pusher from "pusher-js";
+import { HiDocumentText } from "react-icons/hi";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
@@ -219,7 +220,7 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     active: "sc-pwd",
     icon: <HiDocumentText />,
     url: "/profile/popclub-sc-pwd",
-  }
+}
 ];
 
 export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
@@ -489,6 +490,32 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   },
   {
     name: "Completed",
+    color: "#004d00",
+  },
+];
+
+export const ADMIN_SCPWD_VERIFICATION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#a21013",
+  },
+  {
+    name: "Approved",
+    color: "#a21013",
+  },
+  {
+    name: "Rejected",
     color: "#004d00",
   },
 ];

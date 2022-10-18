@@ -2,6 +2,7 @@ export { AdminLogin } from "./admin-login.page";
 export { AdminShopOrder } from "./admin-shop-order.page";
 export { AdminCateringBooking } from "./admin-catering-booking.page";
 export { AdminPopclub } from "./admin-popclub.page";
+export { ScPwd } from "./admin-scpwd.page";
 export { AdminProduct } from "./admin-product.page";
 export { AdminReport } from "./admin-report.page";
 export { AdminFaq } from "./admin-faqs.page";
