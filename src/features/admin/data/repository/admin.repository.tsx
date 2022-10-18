@@ -30,6 +30,8 @@ import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domai
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
+import { GetAdminDiscountVerificationsModel } from "features/admin/core/domain/get-admin-discount-verifications.model";
+import { AdminDiscountVerificationModel } from "features/admin/core/domain/get-admin-discount-verification.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -75,6 +77,20 @@ export interface GetAdminPopclubRedeemResponse {
   data: {
     message: string;
     data: AdminPopclubRedeemModel;
+  };
+}
+
+export interface GetAdminDiscountVerificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminDiscountVerificationsModel;
+  };
+}
+
+export interface GetAdminDiscountVerificationResponse {
+  data: {
+    message: string;
+    data: AdminDiscountVerificationModel;
   };
 }
 
@@ -752,6 +768,22 @@ export function GetAdminPopclubRedeemsRepository(
   query: string
 ): Promise<GetAdminPopclubRedeemsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/popclub${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminDiscountVerificationRepository(
+  redeemCode: string
+): Promise<GetAdminDiscountVerificationResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${redeemCode}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminDiscountVerificationsRepository(
+  query: string
+): Promise<GetAdminDiscountVerificationsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount${query}`, {
     withCredentials: true,
   });
 }

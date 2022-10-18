@@ -1,3 +1,5 @@
+import { AdminDiscountVerification } from "./admin-discount-verification";
+
 export { AdminEmailTextField } from "./admin-email-text-field";
 export { AdminPasswordTextField } from "./admin-password-text-field";
 export { AdminHead } from "./admin-head";
@@ -22,5 +24,4 @@ export { AdminSettingStores } from "./admin-setting-stores";
 export { AdminAvailabilityCatersPackages } from "./admin-availability-caters-packages";
 export { AdminAvailabilityCatersPackageAddons } from "./admin-availability-caters-package-addons";
 export { AdminAvailabilityCatersProductAddons } from "./admin-availability-caters-product-addons";
-export { AdminScPwdVerification } from "./admin-scpwd-verification";
 export { AdminCateringBookingAudit } from "./admin-catering-booking-audit";
