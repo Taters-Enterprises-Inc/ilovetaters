@@ -30,6 +30,8 @@ import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domai
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
+import { GetAdminUserDiscountsModel } from "features/admin/core/domain/get-admin-user-discounts.model";
+import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -75,6 +77,20 @@ export interface GetAdminPopclubRedeemResponse {
   data: {
     message: string;
     data: AdminPopclubRedeemModel;
+  };
+}
+
+export interface GetAdminUserDiscountsResponse {
+  data: {
+    message: string;
+    data: GetAdminUserDiscountsModel;
+  };
+}
+
+export interface GetAdminUserDiscountResponse {
+  data: {
+    message: string;
+    data: AdminUserDiscountModel;
   };
 }
 
@@ -756,6 +772,22 @@ export function GetAdminPopclubRedeemsRepository(
   });
 }
 
+export function GetAdminUserDiscountRepository(
+  redeemCode: string
+): Promise<GetAdminUserDiscountResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${redeemCode}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminUserDiscountsRepository(
+  query: string
+): Promise<GetAdminUserDiscountsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount${query}`, {
+    withCredentials: true,
+  });
+}
+
 export function GetAdminShopOrderRepository(
   trackingNo: string
 ): Promise<GetAdminShopOrderResponse> {
@@ -791,5 +823,3 @@ export function LogoutAdminRepository(): Promise<LogoutAdminResponse> {
     withCredentials: true,
   });
 }
-
-

@@ -32,7 +32,7 @@ export function AdminSettingCreateUser() {
 
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    dispatch(createAdminUser(formData)).then(() => {});
+    dispatch(createAdminUser(formData));
   };
   return (
     <>
@@ -55,7 +55,7 @@ export function AdminSettingCreateUser() {
           Create User
         </span>
 
-        <div className="space-y-6 pb-10">
+        <div className="pb-10 space-y-6">
           <span>Please enter the user's information below.</span>
 
           <form onSubmit={onSubmit} className="flex flex-col space-y-4">
@@ -76,7 +76,7 @@ export function AdminSettingCreateUser() {
             />
             <button
               type="submit"
-              className="bg-button rounded-lg py-2 px-4 text-white w-fit"
+              className="px-4 py-2 text-white rounded-lg bg-button w-fit"
             >
               Create User
             </button>

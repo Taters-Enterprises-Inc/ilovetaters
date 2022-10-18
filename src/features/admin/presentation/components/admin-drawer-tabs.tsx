@@ -30,7 +30,6 @@ import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
 
-
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
 import {
@@ -210,7 +209,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           <li>
             <NavLink
-              to="/admin/scpwd"
+              to="/admin/user-discount"
               onClick={() => {
                 if (props.mobile) dispatch(closeAdminSideBar());
               }}
@@ -227,7 +226,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    SC/PWD
+                    User Discount
                   </span>
                 </span>
               </span>

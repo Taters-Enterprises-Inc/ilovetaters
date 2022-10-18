@@ -5,7 +5,7 @@ import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
-import {HiDocumentText} from 'react-icons/hi'
+import { HiDocumentText } from "react-icons/hi";
 import Pusher from "pusher-js";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
@@ -189,7 +189,7 @@ export const ADMIN_FAQ: Array<TabModel> = [
   },
 ];
 
-export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
+export const PROFILE_TABS: Array<TabModel> = [
   {
     name: "My Profile",
     active: "profile",
@@ -215,11 +215,11 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     url: "/profile/popclub-redeems",
   },
   {
-    name: "SC/PWD",
-    active: "sc-pwd",
+    name: "User Discount",
+    active: "user-discount",
     icon: <HiDocumentText />,
-    url: "/profile/popclub-sc-pwd",
-}
+    url: "/profile/user-discount",
+  },
 ];
 
 export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
@@ -493,7 +493,7 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   },
 ];
 
-export const ADMIN_SCPWD_VERIFICATION_STATUS: Array<{
+export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   name: string;
   color: string;
 }> = [
