@@ -23,7 +23,7 @@ export const AdminChipsButton: React.FC<
   }, [dispactAction]);
 
   return (
-    <div className="flex flex-wrap gap-2 px-4 md:justify-end justify-center">
+    <div className="flex  flex-wrap gap-2 px-4 md:justify-end justify-start items-center ">
       <button
         onClick={() => {
           if (status !== null) {
@@ -36,8 +36,8 @@ export const AdminChipsButton: React.FC<
           }
         }}
         className={` ${
-          !status ? "text-base" : "text-xs opacity-40"
-        } rounded-full px-4 py-1 text-white bg-black`}
+          !status ? "sm:text-base h-auto text-[13px]" : "text-xs opacity-40"
+        } rounded-full px-4 py-1 text-white bg-black h-auto `}
       >
         All
       </button>
@@ -66,9 +66,9 @@ export const AdminChipsButton: React.FC<
             }}
             className={` ${
               status && parseInt(status) === index
-                ? "text-base"
-                : "text-xs opacity-40"
-            } rounded-full px-4 py-1 text-white `}
+                ? "sm:text-base h-auto text-[13px]"
+                : "text-xs opacity-40 "
+            } rounded-full px-4  py-1 text-white  text-center	`}
           >
             {value.name}
           </button>

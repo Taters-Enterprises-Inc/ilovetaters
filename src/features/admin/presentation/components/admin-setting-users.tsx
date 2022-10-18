@@ -100,7 +100,7 @@ export function AdminSettingUsers() {
           </div>
         </div>
       </div>
-      <div className="px-4 m-2">
+      <div className="px-4 mt-1">
           <ExtractButton />
         </div>
 
