@@ -20,6 +20,8 @@ import { BSCDesignationField } from "../components/bsc-designation-field";
 import { useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import BSCStoreSelect from "../components/bsc-store-select";
+import BSCCompanySelect from "../components/bsc-company-select";
+import { BSCContactField } from "../components/bsc-contact-text-field";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
@@ -77,10 +79,11 @@ export function BSCCreateAccount() {
                 <BSCFirstNameTextField />
                 <BSCLastNameTextField />
               </div>
-
               <BSCDesignationField />
+              <BSCCompanySelect />
               <BSCStoreSelect />
               <BSCEmailTextField />
+              <BSCContactField />
               <BSCPasswordTextField />
             </div>
 
@@ -101,7 +104,7 @@ export function BSCCreateAccount() {
               Already have an account?{" "}
               <span
                 onClick={navigatetoLogin}
-                className="cursor-pointer text-button"
+                className="cursor-pointer text-button hover:underline"
               >
                 {" "}
                 Log in here.{" "}

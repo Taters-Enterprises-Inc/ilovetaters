@@ -25,6 +25,7 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
 export function BSCFirstNameTextField() {
   return (
     <WhiteOutLinedTextField
+      required
       variant="outlined"
       type="text"
       label="First Name"

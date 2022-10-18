@@ -58,6 +58,7 @@ export function BSCPasswordTextField() {
 
   return (
     <WhiteOutLinedTextField
+      required
       variant="outlined"
       type="text"
       inputProps={{

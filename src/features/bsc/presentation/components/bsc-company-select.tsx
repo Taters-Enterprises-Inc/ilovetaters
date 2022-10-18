@@ -90,7 +90,7 @@ export default function BSCStoreSelect() {
       select
       size="small"
       variant="outlined"
-      label="Store"
+      label="Company Name"
       onChange={handleChange}
     >
       {stores.map((option) => (
