@@ -25,6 +25,27 @@ export interface GetPopclubRedeemsHistoryResponse {
   };
 }
 
+export interface ApplyUserDiscountResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function ApplyUserDiscountRepository(
+  formData: FormData
+): Promise<ApplyUserDiscountResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/user-discount`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetPopclubRedeemsHistoryRepository(
   query: string
 ): Promise<GetPopclubRedeemsHistoryResponse> {

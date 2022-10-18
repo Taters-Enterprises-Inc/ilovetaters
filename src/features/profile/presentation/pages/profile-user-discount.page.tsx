@@ -10,8 +10,12 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { useAppDispatch } from "features/config/hooks";
+import { applyUserDiscount } from "../slices/apply-user-discount.slice";
 
 export function ProfileUserDiscount() {
+  const dispatch = useAppDispatch();
+
   const [birthDate, setBirthDate] = useState();
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
@@ -62,6 +66,10 @@ export function ProfileUserDiscount() {
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    dispatch(applyUserDiscount(formData));
   };
 
   return (
@@ -95,113 +103,51 @@ export function ProfileUserDiscount() {
         </FormControl>
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
-          {"logic" ? (
-            <TextField
-              required
-              label="First Name"
-              className="flex-1"
-              name="first_name"
-              type="text"
-            />
-          ) : null}
           <TextField
-            required={false}
+            required
             label="First Name"
-            variant="outlined"
-            className={`flex-1 ${"logic" ? "!hidden" : ""}`}
+            className="flex-1"
             name="first_name"
             type="text"
           />
 
-          {"logic" ? (
-            <TextField
-              required
-              label="Middle Name"
-              className="flex-1"
-              name="middle_name"
-            />
-          ) : null}
           <TextField
-            required={false}
+            required
             label="Middle Name"
-            variant="outlined"
-            className={`flex-1 ${"logic" ? "!hidden" : ""}`}
+            className="flex-1"
             name="middle_name"
-            type="text"
           />
 
-          {"logic" ? (
-            <TextField
-              required
-              label="Last Name"
-              className="flex-1"
-              name="last_name"
-            />
-          ) : null}
           <TextField
-            type="text"
-            required={false}
+            required
             label="Last Name"
-            variant="outlined"
-            className={`flex-1 ${"logic" ? "!hidden" : ""}`}
+            className="flex-1"
             name="last_name"
           />
         </div>
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
-          {"logic" ? (
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <div className={`flex sm:w-[calc(50%-10px)] w-full `}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DesktopDatePicker
-                    maxDate={new Date()}
-                    label="Birth Date"
-                    value={birthDate}
-                    onChange={(newValue: any) => {
-                      setBirthDate(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField fullWidth {...params} />
-                    )}
-                  />
-                </LocalizationProvider>
-              </div>
-            </LocalizationProvider>
-          ) : null}
-          <div
-            className={`flex sm:w-[calc(50%-10px)] w-full ${
-              "logic" ? "!hidden" : ""
-            }`}
-          >
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <div className="flex-1">
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              className="flex-1"
+            >
               <DesktopDatePicker
-                label="Date desktop"
+                maxDate={new Date()}
+                label="Birth Date"
                 value={birthDate}
                 onChange={(newValue: any) => {
                   setBirthDate(newValue);
                 }}
-                renderInput={(params) => (
-                  <TextField required fullWidth {...params} />
-                )}
+                renderInput={(params) => <TextField fullWidth {...params} />}
               />
             </LocalizationProvider>
           </div>
-          {"logic" ? (
-            <TextField
-              required
-              label="ID Number"
-              className="flex-1 w-full"
-              name="front_id_number"
-              type="text"
-            />
-          ) : null}
-
           <TextField
-            required={false}
+            required
             label="ID Number"
-            variant="outlined"
-            className={`w-full ${"logic" ? "!hidden" : ""}`}
-            name="back_id_number"
+            className="flex-1 w-full"
+            name="front_id_number"
             type="text"
           />
         </div>

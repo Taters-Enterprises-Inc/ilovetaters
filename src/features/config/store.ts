@@ -116,6 +116,7 @@ import updateAdminNotificationDateSeen from "features/admin/presentation/slices/
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
 import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
+import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
 
 export const store = configureStore({
   reducer: {
@@ -235,6 +236,7 @@ export const store = configureStore({
     discountRegistration,
     getAdminUserDiscounts,
     getAdminUserDiscount,
+    applyUserDiscount,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
