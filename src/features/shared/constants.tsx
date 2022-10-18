@@ -7,7 +7,6 @@ import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
 import {HiDocumentText} from 'react-icons/hi'
 import Pusher from "pusher-js";
-import { HiDocumentText } from "react-icons/hi";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
