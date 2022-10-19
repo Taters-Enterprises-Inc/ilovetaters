@@ -71,7 +71,7 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
   //   const logoutAdminState = useAppSelector(selectLogoutAdmin);
 
   return (
-    <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
+    <div className="relative flex flex-col pb-4 m-1 mt-2 text-sm text-white">
       <nav>
         <ul>
           <li>
@@ -93,7 +93,7 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
                       !BSCSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    Orders
+                    Employees
                   </span>
                 </span>
               </span>

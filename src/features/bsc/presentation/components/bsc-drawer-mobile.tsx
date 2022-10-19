@@ -1,80 +1,39 @@
-import { styled, Theme, CSSObject } from "@mui/material/styles";
+import { Fragment } from "react";
 import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
+import Drawer from "@mui/material/Drawer";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import React from "react";
 import {
   selectBSCSideBar,
   toggleBSCSideBar,
 } from "../slices/bsc-sidebar.slice";
+
 import { FaBars } from "react-icons/fa";
-import { AdminDrawerTabs } from "features/admin/presentation/components";
 import { BSCDrawerTabs } from "./bsc-drawer-tabs";
 
-const drawerWidth = "16rem";
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `5rem`,
-});
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
-const DrawerHeader = styled("div")(({ theme }) => ({
-  ...theme.mixins.toolbar,
-}));
-
-export default function BSCDrawerDesktop() {
+export function BSCDrawerMobile() {
   const BSCSideBarState = useAppSelector(selectBSCSideBar);
   const dispatch = useAppDispatch();
   //   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   return (
     <Drawer
       anchor="left"
-      variant="permanent"
-      className="hidden lg:block"
+      className="lg:hidden"
       sx={{ zIndex: 10 }}
       open={BSCSideBarState.status}
       onClose={() => {
         dispatch(toggleBSCSideBar());
       }}
     >
-      <Box className="relative h-screen bg-secondary font-['Varela_Round'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
-        <DrawerHeader className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
+      <Box className="w-[16rem] relative h-screen bg-secondary font-['Varela_Round'] duration-500  overflow-y-auto overflow-x-hidden">
+        <div className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
           <FaBars
             className={`cursor-pointer ${
               !BSCSideBarState.status && "-translate-x-4"
             }`}
             onClick={() => dispatch(toggleBSCSideBar())}
           />
-        </DrawerHeader>
+        </div>
 
         <div className="flex items-center px-4 gap-x-4">
           <img
@@ -93,6 +52,7 @@ export default function BSCDrawerDesktop() {
             Balance Score Card
           </h1>
         </div>
+
         <div
           className={`whitespace-pre duration-300 mt-3 px-4 text-white 
                 ${
@@ -103,8 +63,7 @@ export default function BSCDrawerDesktop() {
           <h1>San ka punta?</h1>
           <h2 className="text-xs">To the moon</h2>
         </div>
-
-        <BSCDrawerTabs />
+        <BSCDrawerTabs mobile />
       </Box>
     </Drawer>
   );
