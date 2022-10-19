@@ -25,6 +25,7 @@ import {
   ADMIN_USER_DISCOUNT_STATUS,
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
+import { updateUserDiscount } from "../slices/update-user-discount.slice";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
@@ -156,18 +157,37 @@ export function ProfileUserDiscount() {
       formState.birthday &&
       formState.discountTypeId
     ) {
-      dispatch(
-        applyUserDiscount({
-          firstName: formState.firstName,
-          middleName: formState.middleName,
-          lastName: formState.lastName,
-          idNumber: formState.idNumber,
-          idFront: formState.idFront,
-          idBack: formState.idBack,
-          birthday: formState.birthday,
-          discountTypeId: formState.discountTypeId,
-        })
-      );
+      if (
+        getUserDiscountState.data &&
+        getUserDiscountState.status === GetUserDiscountState.success
+      ) {
+        dispatch(
+          updateUserDiscount({
+            id: getUserDiscountState.data.id,
+            firstName: formState.firstName,
+            middleName: formState.middleName,
+            lastName: formState.lastName,
+            idNumber: formState.idNumber,
+            idFront: formState.idFront,
+            idBack: formState.idBack,
+            birthday: formState.birthday,
+            discountTypeId: formState.discountTypeId,
+          })
+        );
+      } else {
+        dispatch(
+          applyUserDiscount({
+            firstName: formState.firstName,
+            middleName: formState.middleName,
+            lastName: formState.lastName,
+            idNumber: formState.idNumber,
+            idFront: formState.idFront,
+            idBack: formState.idBack,
+            birthday: formState.birthday,
+            discountTypeId: formState.discountTypeId,
+          })
+        );
+      }
     }
     e.preventDefault();
   };
@@ -432,7 +452,7 @@ export function ProfileUserDiscount() {
               type="submit"
               className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-lg mt-[-10px]"
             >
-              Update Application
+              Edit Application
             </button>
           </div>
         ) : null}
