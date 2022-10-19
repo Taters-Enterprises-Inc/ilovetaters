@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { BSCPasswordTextField } from "../components/bsc-password-text-field";
 import { BSCEmailTextField } from "../components/bsc-email-text-field";
 // import {
@@ -18,6 +18,12 @@ import { useEffect } from "react";
 
 export function BSCLogin() {
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const navigatetoCreateUser = () => {
+    navigate("create-account");
+  };
   // const loginAdminState = useAppSelector(selectLoginAdmin);
   // const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
@@ -50,11 +56,11 @@ export function BSCLogin() {
     <main className="flex items-center justify-center h-screen bg-paper">
       <div
         className='bg-secondary w-[90%] sm:w-[400px] mx-auto p-6 px-6 
-              font-["Roboto"] text-sm text-center rounded-3xl shadow-md'
+              text-sm text-center rounded-3xl shadow-md font-["Varela_Round"]'
       >
         <div className="flex items-center justify-center header_image">
           <img
-            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shop/snackshop-logo-creamy-red.png`}
+            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/logo/taters-logo.png`}
             alt="Taters Logo"
             className="w-36"
           ></img>
@@ -83,6 +89,7 @@ export function BSCLogin() {
             </button>
             <button
               type="submit"
+              onClick={navigatetoCreateUser}
               className="w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
             >
               CREATE ACCOUNT
