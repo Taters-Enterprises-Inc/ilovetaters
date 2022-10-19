@@ -118,6 +118,7 @@ import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
 import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
+import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
 
 export const store = configureStore({
   reducer: {
@@ -239,6 +240,7 @@ export const store = configureStore({
     getAdminUserDiscount,
     applyUserDiscount,
     getUserDiscount,
+    BSCSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
