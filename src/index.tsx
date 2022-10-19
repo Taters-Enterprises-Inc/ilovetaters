@@ -92,7 +92,11 @@ import {
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
-import { BSCLogin, BSCCreateAccount } from "features/bsc/presentation/pages";
+import {
+  BSCLogin,
+  BSCCreateAccount,
+  BSCEmployee,
+} from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -305,10 +309,9 @@ root.render(
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
                   <Route path="create-account" element={<BSCCreateAccount />} />
-                  <Route
-                    path="homepage"
-                    element={<BSCSidebarWrapper />}
-                  ></Route>
+                  <Route element={<BSCSidebarWrapper />}>
+                    <Route path="employee" element={<BSCEmployee />} />
+                  </Route>
                 </Route>
               </Route>
             </Route>

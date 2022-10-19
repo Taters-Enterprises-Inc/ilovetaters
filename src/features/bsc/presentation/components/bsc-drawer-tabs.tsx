@@ -71,12 +71,12 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
   //   const logoutAdminState = useAppSelector(selectLogoutAdmin);
 
   return (
-    <div className="relative flex flex-col pb-4 m-1 mt-2 text-sm text-white">
+    <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
       <nav>
         <ul>
           <li>
             <NavLink
-              to="/bsc/scorecard"
+              to="/bsc/employee"
               onClick={() => {
                 if (props.mobile) dispatch(closeBSCSideBar());
               }}
