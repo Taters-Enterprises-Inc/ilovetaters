@@ -22,13 +22,13 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   },
 }));
 
-export function BSCFirstNameTextField() {
+export function BSCLastNameTextField() {
   return (
     <WhiteOutLinedTextField
       required
       variant="outlined"
       type="text"
-      label="First Name"
+      label="Last Name"
       size="small"
       fullWidth
       name="identity"

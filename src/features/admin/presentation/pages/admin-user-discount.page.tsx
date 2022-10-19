@@ -1,7 +1,7 @@
 import { AdminHead } from "../components";
-import { AdminDiscountVerification } from "../components/admin-discount-verification";
+import { AdminUserDiscounts } from "../components/admin-user-discounts";
 
-export function ScPwd() {
+export function AdminUserDiscount() {
   return (
     <>
       <AdminHead
@@ -11,11 +11,11 @@ export function ScPwd() {
             url: "/admin",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "SC/PWD", url: "/admin/scpwd" }],
+          pageTitles: [{ name: "User Discount", url: "/admin/user-discount" }],
         }}
       />
 
-      <AdminDiscountVerification />
+      <AdminUserDiscounts />
     </>
   );
 }

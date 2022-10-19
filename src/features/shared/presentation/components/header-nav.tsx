@@ -29,7 +29,6 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 import { ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
@@ -141,9 +140,9 @@ export function HeaderNav(props: HeaderNavProps) {
     setOpenProfileMenu(null);
     navigate("/profile/popclub-redeems");
   };
-  const handleCSPWD = () => {
+  const handleUserDiscount = () => {
     setOpenProfileMenu(null);
-    navigate("/profile/discount-registration");
+    navigate("/profile/user-discount");
   };
 
   const handleLogout = () => {
@@ -273,9 +272,9 @@ export function HeaderNav(props: HeaderNavProps) {
     },
     {
       id: 5,
-      text: "CS/PWD",
+      text: "User Discount",
       icon: <HiDocumentText />,
-      action: handleCSPWD,
+      action: handleUserDiscount,
     },
     {
       id: 6,

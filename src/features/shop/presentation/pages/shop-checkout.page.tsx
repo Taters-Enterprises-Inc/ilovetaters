@@ -40,6 +40,10 @@ import {
   getLatestUnexpiredRedeem,
   selectGetLatestUnexpiredRedeem,
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  getUserDiscount,
+  selectGetUserDiscount,
+} from "features/profile/presentation/slices/get-user-discount.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -54,9 +58,16 @@ export function ShopCheckout() {
   const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
   const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+
+  const getUserDiscountState = useAppSelector(selectGetUserDiscount);
+
+  useEffect(() => {
+    dispatch(getUserDiscount());
+  }, []);
 
   useEffect(() => {
     if (
@@ -194,6 +205,12 @@ export function ShopCheckout() {
       }
     }
 
+    if (getUserDiscountState.data?.percentage) {
+      const percentage = parseFloat(getUserDiscountState.data.percentage);
+
+      calculatedPrice -= calculatedPrice * percentage;
+    }
+
     if (cashOnDelivery) {
       calculatedPrice += cashOnDelivery;
     }
@@ -218,6 +235,46 @@ export function ShopCheckout() {
         prefix={"₱"}
       />
     );
+  };
+
+  const calculateUserDiscount = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    if (getUserDiscountState.data) {
+      const percentage = parseFloat(getUserDiscountState.data.percentage);
+      return (
+        <>
+          <span>
+            {percentage * 100}% {getUserDiscountState.data.discount_type_name}:
+          </span>
+          <span className="text-end">
+            -{" "}
+            <NumberFormat
+              value={(calculatedPrice * percentage).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -682,7 +739,7 @@ export function ShopCheckout() {
                             <h3 className="text-white text-sm w-[90%] font-bold leading-4">
                               {getLatestUnexpiredRedeemState.data?.name}
                             </h3>
-                            <h3 className="text-xs mt-2">
+                            <h3 className="mt-2 text-xs">
                               Minumum purchase: {""}
                               <span className="text-tertiary">
                                 {
@@ -741,8 +798,8 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-                      <span>Discount:</span>
-                      <span className="text-end">( ₱ 0.00 )</span>
+
+                      {calculateUserDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

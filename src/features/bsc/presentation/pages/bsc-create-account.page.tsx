@@ -4,6 +4,9 @@ import { FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { BSCPasswordTextField } from "../components/bsc-password-text-field";
 import { BSCEmailTextField } from "../components/bsc-email-text-field";
+import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
+import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
+import { BSCDesignationField } from "../components/bsc-designation-field";
 // import {
 //   getAdminSession,
 //   GetAdminSessionState,
@@ -15,14 +18,18 @@ import { BSCEmailTextField } from "../components/bsc-email-text-field";
 //   selectLoginAdmin,
 // } from "../slices/login-admin.slice";
 import { useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import BSCStoreSelect from "../components/bsc-store-select";
+import BSCCompanySelect from "../components/bsc-company-select";
+import { BSCContactField } from "../components/bsc-contact-text-field";
 
-export function BSCLogin() {
+export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
-  const navigatetoCreateUser = () => {
-    navigate("create-account");
+  const navigatetoLogin = () => {
+    navigate("/bsc");
   };
   // const loginAdminState = useAppSelector(selectLoginAdmin);
   // const getAdminSessionState = useAppSelector(selectGetAdminSession);
@@ -55,45 +62,54 @@ export function BSCLogin() {
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
       <div
-        className='bg-secondary w-[90%] sm:w-[400px] mx-auto p-6 px-6 
-              text-sm text-center rounded-3xl shadow-md font-["Varela_Round"]'
+        className="bg-secondary w-[90%] sm:w-[400px] mx-auto p-6 px-6 
+          font-['Varela_Round'] text-sm text-center rounded-3xl shadow-md"
       >
-        <div className="flex items-center justify-center header_image">
-          <img
-            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/logo/taters-logo.png`}
-            alt="Taters Logo"
-            className="w-36"
-          ></img>
-        </div>
-        <div className="pt-4 login-body">
+        <div className="pt-1 login-body">
           <form>
-            <p className="text-white">
-              Please login with your email/username and password below.
+            <p className="mb-3 text-2xl font-bold text-left text-white">
+              Create an Account
+            </p>
+            <p className="text-xs text-left text-white">
+              {" "}
+              Enter the following information to register.{" "}
             </p>
             <div className="pt-4 space-y-4">
+              <div className="flex space-x-2">
+                <BSCFirstNameTextField />
+                <BSCLastNameTextField />
+              </div>
+              <BSCDesignationField />
+              <BSCCompanySelect />
+              <BSCStoreSelect />
               <BSCEmailTextField />
+              <BSCContactField />
               <BSCPasswordTextField />
             </div>
 
-            <div className="flex justify-between py-4 text-white">
-              <p className="flex items-center">
-                <input className="mr-2" type="checkbox" /> Remember Me
+            <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
+              <p className="mx-auto">
+                <input className="mr-2" type="checkbox" /> I agree to the Terms
+                of Service and Privacy Policy.
               </p>
-              <a href="#">Forgot Password?</a>
             </div>
             <button
               type="submit"
-              className="w-full py-2 my-2 text-white shadow-md bg-button rounded-3xl"
-            >
-              LOG IN
-            </button>
-            <button
-              type="submit"
-              onClick={navigatetoCreateUser}
-              className="w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
+              className="w-full py-2 my-3 text-white bg-button rounded-3xl"
             >
               CREATE ACCOUNT
             </button>
+            <p className="my-1 text-xs text-center text-white">
+              {" "}
+              Already have an account?{" "}
+              <span
+                onClick={navigatetoLogin}
+                className="cursor-pointer text-button hover:underline"
+              >
+                {" "}
+                Log in here.{" "}
+              </span>
+            </p>
           </form>
         </div>
       </div>

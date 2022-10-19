@@ -114,8 +114,12 @@ import getCateringTransactionLogs from "features/admin/presentation/slices/get-c
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
-import getAdminDiscountVerifications from "features/admin/presentation/slices/get-admin-discount-verifications.slice";
-import getAdminDiscountVerification from "features/admin/presentation/slices/get-admin-discount-verification.slice";
+import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
+import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
+import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
+import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
+import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
+import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
 
 export const store = configureStore({
   reducer: {
@@ -233,8 +237,12 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     discountRegistration,
-    getAdminDiscountVerifications,
-    getAdminDiscountVerification,
+    getAdminUserDiscounts,
+    getAdminUserDiscount,
+    applyUserDiscount,
+    getUserDiscount,
+    adminUserDiscountChangeStatus,
+    updateUserDiscount,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

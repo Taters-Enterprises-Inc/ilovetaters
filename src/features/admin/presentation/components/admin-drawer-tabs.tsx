@@ -13,7 +13,6 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-
 import {
   FaRegListAlt,
   FaCartArrowDown,
@@ -31,7 +30,6 @@ import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
 
-const drawerWidth = "16rem";
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
 import {
@@ -211,7 +209,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           <li>
             <NavLink
-              to="/admin/scpwd"
+              to="/admin/user-discount"
               onClick={() => {
                 if (props.mobile) dispatch(closeAdminSideBar());
               }}
@@ -228,7 +226,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    SC/PWD
+                    User Discount
                   </span>
                 </span>
               </span>
