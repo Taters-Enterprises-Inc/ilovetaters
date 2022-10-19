@@ -10,4 +10,7 @@ export interface UserDiscountModel {
   dateadded: string;
   discount_type_id: number;
   status: number;
+
+  discount_type_name: string;
+  percentage: string;
 }
