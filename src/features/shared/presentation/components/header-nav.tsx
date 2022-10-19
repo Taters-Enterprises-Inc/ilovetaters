@@ -143,7 +143,7 @@ export function HeaderNav(props: HeaderNavProps) {
   };
   const handleCSPWD = () => {
     setOpenProfileMenu(null);
-    navigate("/profile/popclub-sc-pwd");
+    navigate("/profile/discount-registration");
   };
 
   const handleLogout = () => {

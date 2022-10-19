@@ -218,7 +218,7 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     name: "SC/PWD",
     active: "sc-pwd",
     icon: <HiDocumentText />,
-    url: "/profile/popclub-sc-pwd",
+    url: "/profile/discount-registration",
   },
 ];
 

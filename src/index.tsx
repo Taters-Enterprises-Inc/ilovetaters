@@ -88,11 +88,12 @@ import {
   ProfileHome,
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
+  ProfileCsPwd,
 } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
-import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
+// import { ProfileCsPwd } from "features/profile/presentation/pages/profile-cs-pwd.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -137,7 +138,10 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
-                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
+                      <Route
+                        path="discount-registration"
+                        element={<ProfileCsPwd />}
+                      />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
