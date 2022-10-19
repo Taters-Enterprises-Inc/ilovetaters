@@ -257,6 +257,10 @@ import {
   ApplyUserDiscountState,
   selectApplyUserDiscount,
 } from "features/profile/presentation/slices/apply-user-discount.slice";
+import {
+  AdminUserDiscountChangeStatusState,
+  selectAdminUserDiscountChangeStatus,
+} from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -394,6 +398,48 @@ export function LoadingAndSnackbarWrapper() {
   );
 
   const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
+
+  const adminUserDiscountChangeStatusState = useAppSelector(
+    selectAdminUserDiscountChangeStatus
+  );
+
+  useEffect(() => {
+    switch (adminUserDiscountChangeStatusState.status) {
+      case AdminUserDiscountChangeStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminUserDiscountChangeStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminUserDiscountChangeStatusState.success:
+        showAlert(setSuccessAlert, adminUserDiscountChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminUserDiscountChangeStatusState.fail:
+        showAlert(setFailsAlert, adminUserDiscountChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminUserDiscountChangeStatusState, dispatch]);
+
+  useEffect(() => {
+    switch (applyUserDiscountState.status) {
+      case ApplyUserDiscountState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ApplyUserDiscountState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.success:
+        showAlert(setSuccessAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.fail:
+        showAlert(setFailsAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [applyUserDiscountState, dispatch]);
 
   useEffect(() => {
     switch (applyUserDiscountState.status) {

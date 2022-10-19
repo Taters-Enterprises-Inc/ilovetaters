@@ -9,5 +9,12 @@ export interface AdminUserDiscountModel {
   id_back: string;
   dateadded: string;
   discount_type_id: number;
+  discount_type_name: string;
   status: number;
+
+  fb_first_name: string;
+  fb_last_name: string;
+
+  mobile_first_name: string;
+  mobile_last_name: string;
 }

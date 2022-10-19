@@ -352,7 +352,23 @@ export interface UpdateAdminNotificationDateSeenResponse {
     message: string;
   };
 }
+export interface AdminUserDiscountChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
 
+export function AdminUserDiscountChangeStatusRepository(
+  formData: FormData
+): Promise<AdminUserDiscountChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/discount/user-discount-change-status`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
 ) {
@@ -773,9 +789,9 @@ export function GetAdminPopclubRedeemsRepository(
 }
 
 export function GetAdminUserDiscountRepository(
-  redeemCode: string
+  id: string
 ): Promise<GetAdminUserDiscountResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${redeemCode}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${id}`, {
     withCredentials: true,
   });
 }
@@ -783,7 +799,7 @@ export function GetAdminUserDiscountRepository(
 export function GetAdminUserDiscountsRepository(
   query: string
 ): Promise<GetAdminUserDiscountsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discounts${query}`, {
     withCredentials: true,
   });
 }

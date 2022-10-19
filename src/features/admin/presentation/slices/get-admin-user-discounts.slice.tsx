@@ -78,7 +78,7 @@ export const getAdminUserDiscountsSlice = createSlice({
   },
 });
 
-export const selectGetDiscountVerifications = (state: RootState) =>
+export const selectGetAdminUserDiscounts = (state: RootState) =>
   state.getAdminUserDiscounts;
 
 export const { resetGetAdminUserDiscountsStatus } =

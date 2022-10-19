@@ -12,15 +12,11 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import NumberFormat from "react-number-format";
-import {
-  ADMIN_POPCLUB_REDEEM_STATUS,
-} from "features/shared/constants";
+import { ADMIN_POPCLUB_REDEEM_STATUS } from "features/shared/constants";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminPopclubRedeemModal } from "../modals";
-import {
-  getAdminPopclubRedeem,
-} from "../slices/get-admin-popclub-redeem.slice";
+import { getAdminPopclubRedeem } from "../slices/get-admin-popclub-redeem.slice";
 import {
   getAdminPopclubRedeems,
   resetGetAdminPopclubRedeemsStatus,
@@ -29,7 +25,7 @@ import {
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
 import { ExtractButton } from "./extract-button";
- import {AdminChipsButton} from './chips-button'
+import { AdminChipsButton } from "./chips-button";
 import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
@@ -97,25 +93,25 @@ export function AdminPopClubRedeems() {
           Popclub Redemptions
         </span>
       </div>
-      
+
       <AdminChipsButton
-          createQueryParams={createQueryParams}
-          data={ADMIN_POPCLUB_REDEEM_STATUS}
-          dispactAction={() => {
-            dispatch(resetGetAdminPopclubRedeemsStatus());
-          }}
-          status={status}
-          params={(value) => {
-              const params = {
-                page_no: pageNo,
-                per_page: perPage,
-                status: value === -1 ? null : value,
-                redeem_code: redeemCode,
-                search: search,
-              };
-              return params;
-          }}
-        />
+        createQueryParams={createQueryParams}
+        data={ADMIN_POPCLUB_REDEEM_STATUS}
+        dispactAction={() => {
+          dispatch(resetGetAdminPopclubRedeemsStatus());
+        }}
+        status={status}
+        params={(value) => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            status: value === -1 ? null : value,
+            redeem_code: redeemCode,
+            search: search,
+          };
+          return params;
+        }}
+      />
       <div className="px-4 mt-4">
         <ExtractButton />
       </div>

@@ -25,10 +25,10 @@ const initialState: {
 
 export const getAdminUserDiscount = createAsyncThunk(
   "getAdminUserDiscount",
-  async (trackingNo: string, { rejectWithValue, fulfillWithValue }) => {
+  async (id: string, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: GetAdminUserDiscountResponse =
-        await GetAdminUserDiscountRepository(trackingNo);
+        await GetAdminUserDiscountRepository(id);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

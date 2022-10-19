@@ -11,23 +11,39 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { applyUserDiscount } from "../slices/apply-user-discount.slice";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import {
+  applyUserDiscount,
+  selectApplyUserDiscount,
+} from "../slices/apply-user-discount.slice";
 import {
   getUserDiscount,
   GetUserDiscountState,
   selectGetUserDiscount,
 } from "../slices/get-user-discount.slice";
 import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
+import {
+  ADMIN_USER_DISCOUNT_STATUS,
+  REACT_APP_DOMAIN_URL,
+} from "features/shared/constants";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
   const getUserDiscountState = useAppSelector(selectGetUserDiscount);
+  const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
   const [openBirthDateCalendar, setOpenBirthDateCalendar] = useState(false);
 
-  const [formState, setFormState] = useState<ApplyUserDiscountParam>({
+  const [formState, setFormState] = useState<{
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    birthday: string;
+    idNumber: string;
+    idFront: string;
+    idBack: string;
+    discountTypeId: number | null;
+  }>({
     firstName: "",
     middleName: "",
     lastName: "",
@@ -35,13 +51,13 @@ export function ProfileUserDiscount() {
     idNumber: "",
     idFront: "",
     idBack: "",
-    discountTypeId: 0,
+    discountTypeId: null,
   });
 
   useEffect(() => {
     dispatch(getUserDiscount());
-  }, []);
-  console.log(getUserDiscountState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [applyUserDiscountState]);
 
   useEffect(() => {
     if (
@@ -57,6 +73,12 @@ export function ProfileUserDiscount() {
         idFront: getUserDiscountState.data.id_front,
         idBack: getUserDiscountState.data.id_back,
         discountTypeId: getUserDiscountState.data.discount_type_id,
+      });
+      setImagesFront({
+        src: `${REACT_APP_DOMAIN_URL}api/load-image-user-discount/${getUserDiscountState.data.id_front}`,
+      });
+      setImagesBack({
+        src: `${REACT_APP_DOMAIN_URL}api/load-image-user-discount/${getUserDiscountState.data.id_back}`,
       });
     }
   }, [getUserDiscountState]);
@@ -123,15 +145,67 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(applyUserDiscount(formState));
+    if (
+      formState &&
+      formState.firstName &&
+      formState.middleName &&
+      formState.lastName &&
+      formState.idNumber &&
+      formState.idFront &&
+      formState.idBack &&
+      formState.birthday &&
+      formState.discountTypeId
+    ) {
+      dispatch(
+        applyUserDiscount({
+          firstName: formState.firstName,
+          middleName: formState.middleName,
+          lastName: formState.lastName,
+          idNumber: formState.idNumber,
+          idFront: formState.idFront,
+          idBack: formState.idBack,
+          birthday: formState.birthday,
+          discountTypeId: formState.discountTypeId,
+        })
+      );
+    }
     e.preventDefault();
   };
   return (
     <form onSubmit={handleSubmitApplication}>
       <ProfileContainer title="User Discount" activeTab="user-discount">
-        <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
-          User Discount Application Form
-        </h1>
+        <div className="flex flex-col items-start sm:flex-row sm:justify-between sm:items-center">
+          <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl ">
+            User Discount Form
+          </h1>
+
+          {getUserDiscountState.data?.status ? (
+            <span
+              className="px-4 py-1 text-base rounded-lg"
+              style={{
+                color: "white",
+                backgroundColor:
+                  ADMIN_USER_DISCOUNT_STATUS[getUserDiscountState.data.status]
+                    .color,
+              }}
+            >
+              {
+                ADMIN_USER_DISCOUNT_STATUS[getUserDiscountState.data.status]
+                  .name
+              }
+            </span>
+          ) : (
+            <span
+              className="px-4 py-1 text-base rounded-lg"
+              style={{
+                color: "white",
+                backgroundColor: "#a21013",
+              }}
+            >
+              No Application
+            </span>
+          )}
+        </div>
 
         <FormControl>
           <label id="discount-type-id" className="text-lg font-bold">
@@ -140,7 +214,12 @@ export function ProfileUserDiscount() {
           <RadioGroup
             row
             aria-labelledby="discount-type-id"
-            onChange={handleInputChange}
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                discountTypeId: parseInt(e.target.value),
+              });
+            }}
             name="discountTypeId"
             value={formState.discountTypeId}
           >
@@ -199,11 +278,10 @@ export function ProfileUserDiscount() {
               className="flex-1"
             >
               <DesktopDatePicker
-                disableFuture
                 label="Birthday"
                 openTo="year"
                 views={["year", "month", "day"]}
-                value={formState.birthday}
+                value={formState.birthday ? formState.birthday : null}
                 onChange={(newValue: any) => {
                   setFormState({
                     ...formState,
@@ -261,7 +339,7 @@ export function ProfileUserDiscount() {
                         <img
                           src={imagesFront.src}
                           className=" sm:h-[150px] h-full w-[150px] object-cover sm:mb-0 mb-2  border sm:mx-0 mx-auto"
-                          alt="upload file"
+                          alt="id front user discount"
                         />
                       ) : (
                         <>
@@ -311,7 +389,7 @@ export function ProfileUserDiscount() {
                         <img
                           src={imagesBack.src}
                           className=" sm:h-[150px] h-full w-[150px] object-cover sm:mb-0 mb-2  border sm:mx-0 mx-auto"
-                          alt="upload file"
+                          alt="id back user discount"
                         />
                       ) : (
                         <>
@@ -339,15 +417,25 @@ export function ProfileUserDiscount() {
             </div>
           </div>
         </div>
-
-        <div>
-          <button
-            type="submit"
-            className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-lg mt-[-10px]"
-          >
-            Submit Application
-          </button>
-        </div>
+        {getUserDiscountState.data === null ? (
+          <div>
+            <button
+              type="submit"
+              className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-lg mt-[-10px]"
+            >
+              Submit Application
+            </button>
+          </div>
+        ) : getUserDiscountState.data?.status === 1 ? (
+          <div>
+            <button
+              type="submit"
+              className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-lg mt-[-10px]"
+            >
+              Update Application
+            </button>
+          </div>
+        ) : null}
       </ProfileContainer>
     </form>
   );
