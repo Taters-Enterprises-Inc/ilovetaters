@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { FormEvent, useCallback, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -10,39 +10,99 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { applyUserDiscount } from "../slices/apply-user-discount.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import {
+  getUserDiscount,
+  GetUserDiscountState,
+  selectGetUserDiscount,
+} from "../slices/get-user-discount.slice";
+import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
+  const getUserDiscountState = useAppSelector(selectGetUserDiscount);
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
-  const [uploadedFileFront, setUploadedFileFront] = useState<any>(undefined);
-  const [uploadedFileBack, setUploadedFileBack] = useState<any>(undefined);
+  const [openBirthDateCalendar, setOpenBirthDateCalendar] = useState(false);
 
-  const onDropFrontImage = useCallback((acceptedFiles: any) => {
-    setUploadedFileFront(acceptedFiles);
-    acceptedFiles.map((file: any, index: any) => {
-      const reader = new FileReader();
-      reader.onload = function (e: any) {
-        setImagesFront({ id: index, src: e.target.result });
-      };
-      reader.readAsDataURL(file);
-      return file;
-    });
-  }, []);
+  const [formState, setFormState] = useState<ApplyUserDiscountParam>({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthday: "",
+    idNumber: "",
+    idFront: "",
+    idBack: "",
+    discountTypeId: 0,
+  });
 
-  const onDropBackImage = useCallback((acceptedFiles: any) => {
-    setUploadedFileBack(acceptedFiles);
-    acceptedFiles.map((file: any, index: any) => {
-      const reader = new FileReader();
-      reader.onload = function (e: any) {
-        setImagesBack({ id: index, src: e.target.result });
-      };
-      reader.readAsDataURL(file);
-      return file;
-    });
+  useEffect(() => {
+    dispatch(getUserDiscount());
   }, []);
+  console.log(getUserDiscountState);
+
+  useEffect(() => {
+    if (
+      getUserDiscountState.status === GetUserDiscountState.success &&
+      getUserDiscountState.data
+    ) {
+      setFormState({
+        firstName: getUserDiscountState.data.first_name,
+        middleName: getUserDiscountState.data.middle_name,
+        lastName: getUserDiscountState.data.last_name,
+        birthday: getUserDiscountState.data.birthday,
+        idNumber: getUserDiscountState.data.id_number,
+        idFront: getUserDiscountState.data.id_front,
+        idBack: getUserDiscountState.data.id_back,
+        discountTypeId: getUserDiscountState.data.discount_type_id,
+      });
+    }
+  }, [getUserDiscountState]);
+
+  function handleInputChange(evt: any) {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  }
+  const onDropFrontImage = useCallback(
+    (acceptedFiles: any) => {
+      setFormState({
+        ...formState,
+        idFront: acceptedFiles[0],
+      });
+      acceptedFiles.map((file: any, index: any) => {
+        const reader = new FileReader();
+        reader.onload = function (e: any) {
+          setImagesFront({ id: index, src: e.target.result });
+        };
+        reader.readAsDataURL(file);
+        return file;
+      });
+    },
+    [formState]
+  );
+
+  const onDropBackImage = useCallback(
+    (acceptedFiles: any) => {
+      setFormState({
+        ...formState,
+        idBack: acceptedFiles[0],
+      });
+      acceptedFiles.map((file: any, index: any) => {
+        const reader = new FileReader();
+        reader.onload = function (e: any) {
+          setImagesBack({ id: index, src: e.target.result });
+        };
+        reader.readAsDataURL(file);
+        return file;
+      });
+    },
+    [formState]
+  );
 
   const {
     getRootProps: getRootPropsFrontImage,
@@ -63,13 +123,9 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(applyUserDiscount(formState));
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(applyUserDiscount(formData));
   };
-
   return (
     <form onSubmit={handleSubmitApplication}>
       <ProfileContainer title="User Discount" activeTab="user-discount">
@@ -78,23 +134,29 @@ export function ProfileUserDiscount() {
         </h1>
 
         <FormControl>
-          <label id="discount-type" className="text-lg font-bold">
+          <label id="discount-type-id" className="text-lg font-bold">
             Discount Type
           </label>
-          <RadioGroup row aria-labelledby="discount-type" name="discount_type">
+          <RadioGroup
+            row
+            aria-labelledby="discount-type-id"
+            onChange={handleInputChange}
+            name="discountTypeId"
+            value={formState.discountTypeId}
+          >
             <FormControlLabel
-              value="senior-citizen-discount"
-              control={<Radio />}
+              value={1}
+              control={<Radio required />}
               label="Senior Citizen Discount"
             />
             <FormControlLabel
-              value="person-with-disability-discount"
-              control={<Radio />}
+              value={2}
+              control={<Radio required />}
               label="Person With Disability Discount"
             />
             <FormControlLabel
-              value="employee-discount"
-              control={<Radio />}
+              value={3}
+              control={<Radio required />}
               label="Employee Discount"
             />
           </RadioGroup>
@@ -104,8 +166,10 @@ export function ProfileUserDiscount() {
           <TextField
             required
             label="First Name"
+            value={formState.firstName}
+            onChange={handleInputChange}
+            name="firstName"
             className="flex-1"
-            name="first_name"
             type="text"
           />
 
@@ -113,14 +177,18 @@ export function ProfileUserDiscount() {
             required
             label="Middle Name"
             className="flex-1"
-            name="middle_name"
+            value={formState.middleName}
+            onChange={handleInputChange}
+            name="middleName"
           />
 
           <TextField
             required
             label="Last Name"
             className="flex-1"
-            name="last_name"
+            value={formState.lastName}
+            onChange={handleInputChange}
+            name="lastName"
           />
         </div>
 
@@ -131,12 +199,29 @@ export function ProfileUserDiscount() {
               className="flex-1"
             >
               <DesktopDatePicker
-                maxDate={new Date()}
-                label="Birth Date"
-                value={null}
-                onChange={(newValue: any) => {}}
+                disableFuture
+                label="Birthday"
+                openTo="year"
+                views={["year", "month", "day"]}
+                value={formState.birthday}
+                onChange={(newValue: any) => {
+                  setFormState({
+                    ...formState,
+                    birthday: newValue,
+                  });
+                }}
+                open={openBirthDateCalendar}
+                onOpen={() => setOpenBirthDateCalendar(true)}
+                onClose={() => setOpenBirthDateCalendar(false)}
                 renderInput={(params) => (
-                  <TextField fullWidth name="birth_date" {...params} />
+                  <TextField
+                    onClick={() => {
+                      setOpenBirthDateCalendar(true);
+                    }}
+                    required
+                    fullWidth
+                    {...params}
+                  />
                 )}
               />
             </LocalizationProvider>
@@ -145,7 +230,9 @@ export function ProfileUserDiscount() {
             required
             label="ID Number"
             className="flex-1 w-full"
-            name="id_number"
+            value={formState.idNumber}
+            onChange={handleInputChange}
+            name="idNumber"
             type="text"
           />
         </div>
@@ -157,19 +244,12 @@ export function ProfileUserDiscount() {
             </h2>
 
             <div>
-              <input type="text" className="hidden" name="front_id" readOnly />
-
               <div>
                 <div
                   {...getRootPropsFrontImage()}
                   className="border-dashed border-2 border-secondary h-[400px] rounded-lg flex justify-center items-center flex-col space-y-2"
                 >
-                  <input
-                    type="file"
-                    name="uploaded_file"
-                    {...getInputPropsFrontImage()}
-                    multiple
-                  />
+                  <input type="file" {...getInputPropsFrontImage()} />
 
                   {isDragActiveFrontImage ? (
                     <span className="text-lg text-secondary">
@@ -214,19 +294,12 @@ export function ProfileUserDiscount() {
             </h2>
 
             <div>
-              <input type="text" className="hidden" name="back_id" readOnly />
-
               <div>
                 <div
                   {...getRootPropsBackImage()}
                   className="border-dashed border-2 border-secondary h-[400px] rounded-lg flex justify-center items-center flex-col space-y-2"
                 >
-                  <input
-                    type="file"
-                    name="uploaded_file"
-                    {...getInputPropsBackImage()}
-                    multiple
-                  />
+                  <input type="file" {...getInputPropsBackImage()} />
 
                   {isDragActiveBackImage ? (
                     <span className="text-lg text-secondary">

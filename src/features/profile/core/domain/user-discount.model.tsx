@@ -1,4 +1,4 @@
-export interface AdminUserDiscountModel {
+export interface UserDiscountModel {
   id: number;
   first_name: string;
   middle_name: string;

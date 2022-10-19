@@ -117,6 +117,7 @@ import discountRegistration from "features/profile/presentation/slices/discount-
 import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
+import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
 
 export const store = configureStore({
   reducer: {
@@ -237,6 +238,7 @@ export const store = configureStore({
     getAdminUserDiscounts,
     getAdminUserDiscount,
     applyUserDiscount,
+    getUserDiscount,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

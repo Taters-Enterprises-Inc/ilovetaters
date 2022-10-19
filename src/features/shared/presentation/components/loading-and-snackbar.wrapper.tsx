@@ -253,6 +253,10 @@ import {
   AdminCateringPrivilegeState,
   selectAdminCateringPrivilege,
 } from "features/admin/presentation/slices/admin-catering-privilege.slice";
+import {
+  ApplyUserDiscountState,
+  selectApplyUserDiscount,
+} from "features/profile/presentation/slices/apply-user-discount.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -388,6 +392,28 @@ export function LoadingAndSnackbarWrapper() {
   const adminCateringPrivilegeState = useAppSelector(
     selectAdminCateringPrivilege
   );
+
+  const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
+
+  useEffect(() => {
+    switch (applyUserDiscountState.status) {
+      case ApplyUserDiscountState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ApplyUserDiscountState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.success:
+        showAlert(setSuccessAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.fail:
+        showAlert(setFailsAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [applyUserDiscountState, dispatch]);
+
   useEffect(() => {
     switch (adminCateringPrivilegeState.status) {
       case AdminCateringPrivilegeState.inProgress:

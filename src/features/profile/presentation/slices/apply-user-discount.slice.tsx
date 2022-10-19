@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
+import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
 import {
   ApplyUserDiscountRepository,
   ApplyUserDiscountResponse,
@@ -25,11 +26,14 @@ const initialState: {
 
 export const applyUserDiscount = createAsyncThunk(
   "applyUserDiscount",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: ApplyUserDiscountParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: ApplyUserDiscountResponse =
-        await ApplyUserDiscountRepository(formData);
-      return response.data;
+        await ApplyUserDiscountRepository(param);
+      return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
     }
@@ -41,7 +45,7 @@ export const applyUserDiscountSlice = createSlice({
   name: "applyUserDiscount",
   initialState,
   reducers: {
-    resetGetCateringBookingHistoryStatus: (state) => {
+    resetApplyUserDiscountStatus: (state) => {
       state.status = ApplyUserDiscountState.initial;
     },
   },
@@ -75,10 +79,7 @@ export const applyUserDiscountSlice = createSlice({
   },
 });
 
-export const selectGetCateringBookingHistory = (state: RootState) =>
+export const selectApplyUserDiscount = (state: RootState) =>
   state.applyUserDiscount;
-
-export const { resetGetCateringBookingHistoryStatus } =
-  applyUserDiscountSlice.actions;
 
 export default applyUserDiscountSlice.reducer;

@@ -2,6 +2,8 @@ import axios from "axios";
 import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-popclub-redeems-history.model";
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
+import { UserDiscountModel } from "features/profile/core/domain/user-discount.model";
+import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface GetCateringBookingHistoryResponse {
@@ -31,19 +33,28 @@ export interface ApplyUserDiscountResponse {
   };
 }
 
+export interface GetUserDiscountResponse {
+  data: {
+    message: string;
+    data: UserDiscountModel;
+  };
+}
+
+export function GetUserDiscountRepository(): Promise<GetUserDiscountResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/user-discount`, {
+    withCredentials: true,
+  });
+}
+
 export function ApplyUserDiscountRepository(
-  formData: FormData
+  param: ApplyUserDiscountParam
 ): Promise<ApplyUserDiscountResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/profile/user-discount`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/profile/user-discount`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetPopclubRedeemsHistoryRepository(
