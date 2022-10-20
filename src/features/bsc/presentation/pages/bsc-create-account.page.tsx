@@ -31,14 +31,6 @@ export function BSCCreateAccount() {
   const navigatetoLogin = () => {
     navigate("/bsc");
   };
-
-  const navigateToTerms = () => {
-    navigate("/delivery/terms-and-conditions");
-  };
-
-  const navigateToPrivacy = () => {
-    navigate("/delivery/privacy-policy");
-  }
   // const loginAdminState = useAppSelector(selectLoginAdmin);
   // const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
@@ -97,9 +89,8 @@ export function BSCCreateAccount() {
 
             <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
               <p className="mx-auto">
-                <input className="mr-2" type="checkbox" /> 
-                I agree to the <span className="hover:underline cursor-pointer" onClick={navigateToTerms}> Terms of Service </span> 
-                and <span className="hover:underline cursor-pointer" onClick={navigateToPrivacy}> Privacy Policy </span>.
+                <input className="mr-2" type="checkbox" /> I agree to the Terms
+                of Service and Privacy Policy.
               </p>
             </div>
             <button
