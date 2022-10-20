@@ -5,25 +5,20 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import {
-  FaRegListAlt,
-  FaCartArrowDown,
-  FaQuestionCircle,
-} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
-import {
-  MdFoodBank,
-  MdOutlineSettings,
-  MdProductionQuantityLimits,
-} from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+// icons
 import { IoIosArrowForward } from "react-icons/io";
+import { AiOutlineIdcard } from "react-icons/ai";
+import { HiUsers } from "react-icons/hi";
+import { RiUser2Fill } from "react-icons/ri";
+import { TbLogout } from "react-icons/tb";
+
 import { useState } from "react";
 import { truncate } from "fs";
-import { AiOutlineIdcard } from "react-icons/ai";
-
 import Badge from "@mui/material/Badge";
-import { TbLogout } from "react-icons/tb";
+
 import { closeBSCSideBar, selectBSCSideBar } from "../slices/bsc-sidebar.slice";
 
 const Accordion = styled((props: AccordionProps) => (
@@ -86,7 +81,7 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <FaRegListAlt size={20} />
+                  <RiUser2Fill size={20} />
 
                   <span
                     className={`whitespace-pre duration-300 ${
@@ -99,12 +94,36 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
-
-          {/* <li>
-            <button
+          <li>
+            <NavLink
+              to="/bsc/users"
               onClick={() => {
-                dispatch(logoutAdmin());
+                if (props.mobile) dispatch(closeBSCSideBar());
               }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <HiUsers size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !BSCSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Users
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+          <li>
+            <button
+              // onClick={() => {
+              //   dispatch(logoutAdmin());
+              // }}
               className="flex w-full"
             >
               <span className="flex items-center px-4 ">
@@ -121,7 +140,7 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
                 </span>
               </span>
             </button>
-          </li> */}
+          </li>
         </ul>
       </nav>
     </div>
