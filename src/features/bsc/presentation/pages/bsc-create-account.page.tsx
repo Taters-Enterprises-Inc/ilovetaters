@@ -7,16 +7,7 @@ import { BSCEmailTextField } from "../components/bsc-email-text-field";
 import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
 import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
 import { BSCDesignationField } from "../components/bsc-designation-field";
-// import {
-//   getAdminSession,
-//   GetAdminSessionState,
-//   selectGetAdminSession,
-// } from "../slices/get-admin-session.slice";
-// import {
-//   loginAdmin,
-//   LoginAdminState,
-//   selectLoginAdmin,
-// } from "../slices/login-admin.slice";
+
 import { useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import BSCStoreSelect from "../components/bsc-store-select";
@@ -31,33 +22,6 @@ export function BSCCreateAccount() {
   const navigatetoLogin = () => {
     navigate("/bsc");
   };
-  // const loginAdminState = useAppSelector(selectLoginAdmin);
-  // const getAdminSessionState = useAppSelector(selectGetAdminSession);
-
-  // useEffect(() => {
-  //   if (loginAdminState.status === LoginAdminState.success) {
-  //     dispatch(getAdminSession());
-  //   }
-  // }, [loginAdminState, dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getAdminSession());
-  // }, [dispatch]);
-
-  // const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-  //   dispatch(loginAdmin(formData));
-  // };
-
-  // if (
-  //   getAdminSessionState.data &&
-  //   getAdminSessionState.status === GetAdminSessionState.success
-  // ) {
-  //   return <Navigate to={"/admin/order"} />;
-  // }
 
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
