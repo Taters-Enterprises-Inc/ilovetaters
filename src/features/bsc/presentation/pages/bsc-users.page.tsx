@@ -1,6 +1,6 @@
 import { BSCHead } from "../components/bsc-head";
 
-export function BSCEmployee() {
+export function BSCUsers() {
   return (
     <>
       <BSCHead
@@ -10,7 +10,7 @@ export function BSCEmployee() {
             url: "/bsc",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Employees", url: "/bsc/employee" }],
+          pageTitles: [{ name: "Users", url: "/bsc/users" }],
         }}
       />
     </>

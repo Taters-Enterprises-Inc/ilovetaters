@@ -98,6 +98,7 @@ import {
   BSCEmployee,
 } from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
+import { BSCUsers } from "features/bsc/presentation/pages/bsc-users.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -311,6 +312,7 @@ root.render(
                   <Route path="create-account" element={<BSCCreateAccount />} />
                   <Route element={<BSCSidebarWrapper />}>
                     <Route path="employee" element={<BSCEmployee />} />
+                    <Route path="users" element={<BSCUsers />} />
                   </Route>
                 </Route>
               </Route>
