@@ -1,5 +1,5 @@
 import { BSCHead } from "../components/bsc-head";
-import { BSCScoreCardPage } from "../components/bsc-score-card.page";
+import { BSCScoreCardPage } from "../components/bsc-score-card";
 
 export function BSCEmployee() {
   return (
