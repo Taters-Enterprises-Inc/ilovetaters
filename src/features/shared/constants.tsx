@@ -507,15 +507,15 @@ export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   },
   {
     name: "Under Review",
-    color: "#a21013",
+    color: "#cca300",
   },
   {
     name: "Approved",
-    color: "#a21013",
+    color: "#004d00",
   },
   {
     name: "Rejected",
-    color: "#004d00",
+    color: "#a21013",
   },
 ];
 

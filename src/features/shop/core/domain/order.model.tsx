@@ -23,6 +23,8 @@ export interface OrderModel {
       reseller_id: number;
       reseller_discount: string;
       discount: string;
+      discount_name?: string;
+      discount_percentage?: string;
       voucher_id: number;
       table_number: null;
       store_name: string;
@@ -103,4 +105,5 @@ export interface OrderModel {
   lastname: string;
   delivery_hours: string;
   subtotal: string;
+  discount: number;
 }

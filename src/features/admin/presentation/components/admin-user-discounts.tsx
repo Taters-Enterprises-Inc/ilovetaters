@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -18,17 +18,19 @@ import { createQueryParams } from "features/config/helpers";
 import {
   getAdminUserDiscounts,
   resetGetAdminUserDiscountsStatus,
-  selectGetDiscountVerifications,
+  selectGetAdminUserDiscounts,
 } from "../slices/get-admin-user-discounts.slice";
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
+import { AdminUserDiscountModal } from "../modals";
+import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
+import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "appDate", label: "Application Date" },
   { id: "discount_type", label: "Discount Type" },
-  { id: "name", label: "Profile Name" },
   { id: "full_name", label: "Full Name" },
   { id: "birthday", label: "Birthday" },
   { id: "id_number", label: "ID Number" },
@@ -42,14 +44,29 @@ export function AdminUserDiscounts() {
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const status = query.get("status");
-  const idNumber = query.get("id_number");
+  const id = query.get("id");
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
 
-  const getAdminDiscountVerificationStates = useAppSelector(
-    selectGetDiscountVerifications
+  const [openAdminUserDiscountModal, setOpenAdminUserDiscountModal] =
+    useState(false);
+
+  const getAdminUserDiscountsStates = useAppSelector(
+    selectGetAdminUserDiscounts
   );
+
+  const adminUserDicountChangeStatusState = useAppSelector(
+    selectAdminUserDiscountChangeStatus
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getAdminUserDiscount(id)).then(() => {
+        setOpenAdminUserDiscountModal(true);
+      });
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     const query = createQueryParams({
@@ -61,7 +78,16 @@ export function AdminUserDiscounts() {
       search: search,
     });
     dispatch(getAdminUserDiscounts(query));
-  }, [dispatch, pageNo, status, perPage, orderBy, order, search]);
+  }, [
+    dispatch,
+    pageNo,
+    status,
+    perPage,
+    orderBy,
+    order,
+    search,
+    adminUserDicountChangeStatusState,
+  ]);
 
   return (
     <>
@@ -79,7 +105,6 @@ export function AdminUserDiscounts() {
                   page_no: pageNo,
                   per_page: perPage,
                   status: event.target.value === -1 ? null : event.target.value,
-                  id_number: idNumber,
                   search: search,
                 };
 
@@ -108,18 +133,17 @@ export function AdminUserDiscounts() {
         </div>
       </div>
 
-      {getAdminDiscountVerificationStates.data?.request ? (
+      {getAdminUserDiscountsStates.data?.discounts ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No User Discount request yet."
+              emptyMessage="No user discounts yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
                   per_page: perPage,
                   status: status,
-                  id_number: idNumber,
                   order_by: orderBy,
                   order: order,
                   search: val === "" ? null : val,
@@ -138,7 +162,6 @@ export function AdminUserDiscounts() {
                     page_no: pageNo,
                     per_page: event.target.value,
                     status: status,
-                    id_number: idNumber,
                     search: search,
                   };
 
@@ -158,7 +181,6 @@ export function AdminUserDiscounts() {
                     page_no: newPage,
                     per_page: perPage,
                     status: status,
-                    id_number: idNumber,
                     search: search,
                   };
 
@@ -171,17 +193,13 @@ export function AdminUserDiscounts() {
                   });
                 }
               }}
-              totalRows={
-                getAdminDiscountVerificationStates.data.pagination.total_rows
-              }
-              perPage={
-                getAdminDiscountVerificationStates.data.pagination.per_page
-              }
+              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
+              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminDiscountVerificationStates.data.request.map((row, i) => (
+              {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -228,7 +246,7 @@ export function AdminUserDiscounts() {
                   </span>
                   <span className="text-xs">
                     <strong>Application Date: </strong>
-                    <Moment format="LLL">{row.dateadded}</Moment>
+                    <Moment format="lll">{row.dateadded}</Moment>
                   </span>
                 </div>
               ))}
@@ -238,14 +256,13 @@ export function AdminUserDiscounts() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
-              emptyMessage="No user discount request yet."
+              emptyMessage="No user discounts yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
                   status: status,
-                  id_number: idNumber,
                   order_by: orderBy,
                   order: order,
                   search: val === "" ? null : val,
@@ -259,14 +276,13 @@ export function AdminUserDiscounts() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
                     page_no: pageNo,
                     per_page: perPage,
                     status: status,
-                    id_number: idNumber,
                     order_by: column_selected,
                     order: isAsc ? "desc" : "asc",
                     search: search,
@@ -288,7 +304,6 @@ export function AdminUserDiscounts() {
                     page_no: pageNo,
                     per_page: event.target.value,
                     status: status,
-                    id_number: idNumber,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -310,7 +325,6 @@ export function AdminUserDiscounts() {
                     page_no: newPage,
                     per_page: perPage,
                     status: status,
-                    id_number: idNumber,
                     order_by: orderBy,
                     order: order,
                     search: search,
@@ -325,80 +339,93 @@ export function AdminUserDiscounts() {
                   });
                 }
               }}
-              totalRows={
-                getAdminDiscountVerificationStates.data.pagination.total_rows
-              }
-              perPage={
-                getAdminDiscountVerificationStates.data.pagination.per_page
-              }
+              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
+              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminDiscountVerificationStates.data.request !== undefined ? (
+              {getAdminUserDiscountsStates.data.discounts !== undefined ? (
                 <>
-                  {getAdminDiscountVerificationStates.data.request.map(
-                    (row, i) => (
-                      <DataTableRow key={i}>
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                ADMIN_USER_DISCOUNT_STATUS[row.status].color,
-                            }}
-                          >
-                            {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell>
-                          <Moment format="LLL">{row.dateadded}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>
-                          {row.first_name +
-                            " " +
-                            row.middle_name +
-                            " " +
-                            row.last_name}
-                        </DataTableCell>
-                        <DataTableCell>
-                          {row.first_name} {row.middle_name} {row.last_name}
-                        </DataTableCell>
-                        <DataTableCell>{row.birthday}</DataTableCell>
-                        <DataTableCell>{row.id_number}</DataTableCell>
+                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
+                    <DataTableRow key={i}>
+                      <DataTableCell>
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                          }}
+                        >
+                          {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
+                        </span>
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Moment format="lll">{row.dateadded}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>{row.discount_type_name}</DataTableCell>
+                      <DataTableCell>
+                        {row.first_name} {row.middle_name} {row.last_name}
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Moment format="ll">{row.birthday}</Moment>
+                      </DataTableCell>
+                      <DataTableCell>{row.id_number}</DataTableCell>
 
-                        <DataTableCell align="left">
-                          <button
-                            onClick={() => {
-                              const params = {
-                                page_no: pageNo,
-                                per_page: perPage,
-                                status: status,
-                                id_number: row.id_number,
-                                order_by: orderBy,
-                                order: order,
-                                search: search,
-                              };
+                      <DataTableCell align="left">
+                        <button
+                          onClick={() => {
+                            const params = {
+                              page_no: pageNo,
+                              per_page: perPage,
+                              status: status,
+                              id: row.id,
+                              order_by: orderBy,
+                              order: order,
+                              search: search,
+                            };
 
-                              const queryParams = createQueryParams(params);
+                            const queryParams = createQueryParams(params);
 
-                              navigate({
-                                pathname: "",
-                                search: queryParams,
-                              });
-                            }}
-                          >
-                            <FaEye className="text-lg" />
-                          </button>
-                        </DataTableCell>
-                      </DataTableRow>
-                    )
-                  )}
+                            navigate({
+                              pathname: "",
+                              search: queryParams,
+                            });
+                          }}
+                        >
+                          <FaEye className="text-lg" />
+                        </button>
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
                 </>
               ) : null}
             </DataTable>
           </div>
         </>
       ) : null}
+
+      <AdminUserDiscountModal
+        open={openAdminUserDiscountModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            status: status,
+            redeem_code: null,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+          setOpenAdminUserDiscountModal(false);
+        }}
+      />
     </>
   );
 }

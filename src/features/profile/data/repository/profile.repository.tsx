@@ -3,7 +3,10 @@ import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get
 import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-popclub-redeems-history.model";
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
 import { UserDiscountModel } from "features/profile/core/domain/user-discount.model";
-import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
+import {
+  ApplyUserDiscountParam,
+  UpdateUserDiscountParam,
+} from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface GetCateringBookingHistoryResponse {
@@ -40,6 +43,25 @@ export interface GetUserDiscountResponse {
   };
 }
 
+export interface UpdateUserDiscountResponse {
+  data: {
+    message: string;
+  };
+}
+export function UpdateUserDiscountRepository(
+  param: UpdateUserDiscountParam
+): Promise<UpdateUserDiscountResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/update-user-discount`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
 export function GetUserDiscountRepository(): Promise<GetUserDiscountResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/user-discount`, {
     withCredentials: true,

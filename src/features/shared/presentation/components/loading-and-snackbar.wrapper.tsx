@@ -257,6 +257,14 @@ import {
   ApplyUserDiscountState,
   selectApplyUserDiscount,
 } from "features/profile/presentation/slices/apply-user-discount.slice";
+import {
+  AdminUserDiscountChangeStatusState,
+  selectAdminUserDiscountChangeStatus,
+} from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
+import {
+  selectUpdateUserDiscount,
+  UpdateUserDiscountState,
+} from "features/profile/presentation/slices/update-user-discount.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -395,6 +403,50 @@ export function LoadingAndSnackbarWrapper() {
 
   const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
 
+  const adminUserDiscountChangeStatusState = useAppSelector(
+    selectAdminUserDiscountChangeStatus
+  );
+
+  const updateUserDiscountState = useAppSelector(selectUpdateUserDiscount);
+
+  useEffect(() => {
+    switch (updateUserDiscountState.status) {
+      case UpdateUserDiscountState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateUserDiscountState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateUserDiscountState.success:
+        showAlert(setSuccessAlert, updateUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateUserDiscountState.fail:
+        showAlert(setFailsAlert, updateUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateUserDiscountState]);
+
+  useEffect(() => {
+    switch (adminUserDiscountChangeStatusState.status) {
+      case AdminUserDiscountChangeStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminUserDiscountChangeStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminUserDiscountChangeStatusState.success:
+        showAlert(setSuccessAlert, adminUserDiscountChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminUserDiscountChangeStatusState.fail:
+        showAlert(setFailsAlert, adminUserDiscountChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminUserDiscountChangeStatusState]);
+
   useEffect(() => {
     switch (applyUserDiscountState.status) {
       case ApplyUserDiscountState.inProgress:
@@ -412,7 +464,26 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [applyUserDiscountState, dispatch]);
+  }, [applyUserDiscountState]);
+
+  useEffect(() => {
+    switch (applyUserDiscountState.status) {
+      case ApplyUserDiscountState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ApplyUserDiscountState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.success:
+        showAlert(setSuccessAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyUserDiscountState.fail:
+        showAlert(setFailsAlert, applyUserDiscountState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [applyUserDiscountState]);
 
   useEffect(() => {
     switch (adminCateringPrivilegeState.status) {
@@ -431,7 +502,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminCateringPrivilegeState, dispatch]);
+  }, [adminCateringPrivilegeState]);
 
   useEffect(() => {
     switch (updateStoreCatersProductAddonState.status) {
@@ -450,7 +521,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateStoreCatersProductAddonState, dispatch]);
+  }, [updateStoreCatersProductAddonState]);
 
   useEffect(() => {
     switch (updateStoreCatersPackageAddonState.status) {
@@ -469,7 +540,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateStoreCatersPackageAddonState, dispatch]);
+  }, [updateStoreCatersPackageAddonState]);
 
   useEffect(() => {
     switch (updateStoreCatersPackageState.status) {
@@ -488,7 +559,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateStoreCatersPackageState, dispatch]);
+  }, [updateStoreCatersPackageState]);
 
   useEffect(() => {
     switch (updateStoreProductState.status) {
@@ -507,7 +578,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateStoreProductState, dispatch]);
+  }, [updateStoreProductState]);
 
   useEffect(() => {
     switch (getAdminSettingStoresState.status) {
@@ -524,7 +595,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminSettingStoresState, dispatch]);
+  }, [getAdminSettingStoresState]);
 
   useEffect(() => {
     switch (updateAdminSettingStoreOperatingHoursState.status) {
@@ -549,7 +620,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateAdminSettingStoreOperatingHoursState, dispatch]);
+  }, [updateAdminSettingStoreOperatingHoursState]);
 
   useEffect(() => {
     switch (getAdminStoreState.status) {
@@ -566,7 +637,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminStoreState, dispatch]);
+  }, [getAdminStoreState]);
 
   useEffect(() => {
     switch (adminDeclineRedeemState.status) {
@@ -585,7 +656,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminDeclineRedeemState, dispatch]);
+  }, [adminDeclineRedeemState]);
 
   useEffect(() => {
     switch (updateAdminSettingStoreState.status) {
@@ -602,7 +673,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateAdminSettingStoreState, dispatch]);
+  }, [updateAdminSettingStoreState]);
 
   useEffect(() => {
     switch (updateStoreDealState.status) {
@@ -621,7 +692,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateStoreDealState, dispatch]);
+  }, [updateStoreDealState]);
 
   useEffect(() => {
     switch (adminCateringBookingUpdateStatusState.status) {
@@ -643,7 +714,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminCateringBookingUpdateStatusState, dispatch]);
+  }, [adminCateringBookingUpdateStatusState]);
 
   useEffect(() => {
     switch (adminPrivilegeState.status) {
@@ -662,7 +733,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminPrivilegeState, dispatch]);
+  }, [adminPrivilegeState]);
 
   useEffect(() => {
     switch (adminShopOrderUpdateStatusState.status) {
@@ -681,7 +752,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminShopOrderUpdateStatusState, dispatch]);
+  }, [adminShopOrderUpdateStatusState]);
 
   useEffect(() => {
     switch (validateReferenceNumberAdminState.status) {
@@ -700,7 +771,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [validateReferenceNumberAdminState, dispatch]);
+  }, [validateReferenceNumberAdminState]);
 
   useEffect(() => {
     switch (uploadProofOfPaymentAdminState.status) {
@@ -719,7 +790,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [uploadProofOfPaymentAdminState, dispatch]);
+  }, [uploadProofOfPaymentAdminState]);
 
   useEffect(() => {
     switch (createAdminGroupState.status) {
@@ -738,7 +809,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [createAdminGroupState, dispatch]);
+  }, [createAdminGroupState]);
 
   useEffect(() => {
     switch (updateAdminUserStores.status) {
@@ -757,7 +828,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateAdminUserStores, dispatch]);
+  }, [updateAdminUserStores]);
 
   useEffect(() => {
     switch (getAdminStores.status) {
@@ -774,7 +845,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminStores, dispatch]);
+  }, [getAdminStores]);
 
   useEffect(() => {
     switch (getAdminUserStores.status) {
@@ -791,7 +862,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminUserStores, dispatch]);
+  }, [getAdminUserStores]);
 
   useEffect(() => {
     switch (editAdminUserState.status) {
@@ -810,7 +881,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [editAdminUserState, dispatch]);
+  }, [editAdminUserState]);
 
   useEffect(() => {
     switch (getAdminGroupsState.status) {
@@ -827,7 +898,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminGroupsState, dispatch]);
+  }, [getAdminGroupsState]);
 
   useEffect(() => {
     switch (getAdminUserState.status) {
@@ -844,7 +915,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminUserState, dispatch]);
+  }, [getAdminUserState]);
 
   useEffect(() => {
     switch (createAdminUserState.status) {
@@ -863,7 +934,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [createAdminUserState, dispatch]);
+  }, [createAdminUserState]);
 
   useEffect(() => {
     switch (getAdminUsersState.status) {
@@ -880,7 +951,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminUsersState, dispatch]);
+  }, [getAdminUsersState]);
 
   useEffect(() => {
     switch (getAdminPopclubRedeemState.status) {
@@ -897,7 +968,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminPopclubRedeemState, dispatch]);
+  }, [getAdminPopclubRedeemState]);
 
   useEffect(() => {
     switch (getAdminSessionState.status) {
@@ -914,7 +985,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminSessionState, dispatch]);
+  }, [getAdminSessionState]);
 
   useEffect(() => {
     switch (loginAdminState.status) {
@@ -933,7 +1004,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [loginAdminState, dispatch]);
+  }, [loginAdminState]);
 
   useEffect(() => {
     switch (getAdminShopOrderState.status) {
@@ -950,7 +1021,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminShopOrderState, dispatch]);
+  }, [getAdminShopOrderState]);
 
   useEffect(() => {
     switch (getAdminShopOrdersState.status) {
@@ -967,7 +1038,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminShopOrdersState, dispatch]);
+  }, [getAdminShopOrdersState]);
 
   useEffect(() => {
     switch (getRedeemState.status) {
@@ -984,7 +1055,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getRedeemState, dispatch]);
+  }, [getRedeemState]);
 
   useEffect(() => {
     switch (getDealProductVariantsState.status) {
@@ -1001,7 +1072,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropPopClubLoading(false);
         break;
     }
-  }, [getDealProductVariantsState, dispatch]);
+  }, [getDealProductVariantsState]);
 
   useEffect(() => {
     switch (getDealState.status) {
@@ -1018,7 +1089,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropPopClubLoading(false);
         break;
     }
-  }, [getDealState, dispatch]);
+  }, [getDealState]);
 
   useEffect(() => {
     switch (forgotPasswordNewPasswordOTP.status) {
@@ -1130,7 +1201,7 @@ export function LoadingAndSnackbarWrapper() {
         dispatch(resetStoreAndAddress());
         break;
     }
-  }, [setStoreAndAddressPopClub, dispatch]);
+  }, [setStoreAndAddressPopClub]);
 
   useEffect(() => {
     switch (getDealsState.status) {
@@ -1234,7 +1305,7 @@ export function LoadingAndSnackbarWrapper() {
         dispatch(popOutSnackBar());
         break;
     }
-  }, [popSnackBarState, dispatch]);
+  }, [popSnackBarState]);
 
   useEffect(() => {
     switch (getStoresAvailableCateringState.status) {
@@ -1251,7 +1322,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getStoresAvailableCateringState, dispatch]);
+  }, [getStoresAvailableCateringState]);
 
   useEffect(() => {
     switch (updateContactState.status) {
@@ -1270,7 +1341,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateContactState, dispatch]);
+  }, [updateContactState]);
 
   useEffect(() => {
     switch (deleteContactState.status) {
@@ -1289,7 +1360,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [deleteContactState, dispatch]);
+  }, [deleteContactState]);
 
   useEffect(() => {
     switch (addContactState.status) {
@@ -1308,7 +1379,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addContactState, dispatch]);
+  }, [addContactState]);
 
   useEffect(() => {
     switch (addContactState.status) {
@@ -1327,7 +1398,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [addContactState, dispatch]);
+  }, [addContactState]);
 
   useEffect(() => {
     switch (cateringUploadProofOfPaymentState.status) {
@@ -1346,7 +1417,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [cateringUploadProofOfPaymentState, dispatch]);
+  }, [cateringUploadProofOfPaymentState]);
 
   useEffect(() => {
     switch (uploadProofOfPaymentState.status) {
@@ -1365,7 +1436,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [uploadProofOfPaymentState, dispatch]);
+  }, [uploadProofOfPaymentState]);
 
   useEffect(() => {
     switch (uploadContractState.status) {
@@ -1384,7 +1455,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [uploadContractState, dispatch]);
+  }, [uploadContractState]);
 
   useEffect(() => {
     switch (removeItemFromCartShopState.status) {
@@ -1403,7 +1474,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [removeItemFromCartShopState, dispatch]);
+  }, [removeItemFromCartShopState]);
 
   useEffect(() => {
     switch (facebookLoginPointState.status) {
@@ -1414,7 +1485,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [facebookLoginPointState, dispatch]);
+  }, [facebookLoginPointState]);
 
   useEffect(() => {
     switch (facebookLoginState.status) {
@@ -1428,7 +1499,7 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
     }
-  }, [facebookLoginState, dispatch]);
+  }, [facebookLoginState]);
 
   useEffect(() => {
     switch (setStoreAndAddressState.status) {
@@ -1447,7 +1518,7 @@ export function LoadingAndSnackbarWrapper() {
         dispatch(resetStoreAndAddress());
         break;
     }
-  }, [setStoreAndAddressState, dispatch]);
+  }, [setStoreAndAddressState]);
 
   useEffect(() => {
     switch (getStoresAvailableSnackshopState.status) {

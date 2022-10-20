@@ -532,6 +532,26 @@ export function ShopOrder() {
                     </span>
                   </>
                 ) : null}
+
+                {getOrdersState.data?.order.clients_info.discount_name &&
+                getOrdersState.data?.order.clients_info.discount ? (
+                  <>
+                    <span>
+                      {getOrdersState.data?.order.clients_info.discount_name}:
+                    </span>
+                    <span className="text-end">
+                      -{" "}
+                      <NumberFormat
+                        value={parseInt(
+                          getOrdersState.data?.order.clients_info.discount
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                  </>
+                ) : null}
               </div>
 
               <hr className="mt-1 border-secondary" />

@@ -5,5 +5,5 @@ export interface GetAdminUserDiscountsModel {
     total_rows: number;
     per_page: number;
   };
-  request: Array<AdminUserDiscountModel>;
+  discounts: Array<AdminUserDiscountModel>;
 }

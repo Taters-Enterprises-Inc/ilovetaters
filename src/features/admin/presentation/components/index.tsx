@@ -24,3 +24,4 @@ export { AdminAvailabilityCatersPackageAddons } from "./admin-availability-cater
 export { AdminAvailabilityCatersProductAddons } from "./admin-availability-caters-product-addons";
 export { AdminCateringBookingAudit } from "./admin-catering-booking-audit";
 export { AdminUserDiscounts } from "./admin-user-discounts";
+export { AdminIdUserDiscountInformation } from "./admin-user-discount-id-information";
