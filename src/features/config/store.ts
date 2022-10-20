@@ -118,6 +118,7 @@ import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
 import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
+import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
 import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
 import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
 import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
@@ -243,6 +244,7 @@ export const store = configureStore({
     getAdminUserDiscount,
     applyUserDiscount,
     getUserDiscount,
+    BSCSideBar,
     adminUserDiscountChangeStatus,
     updateUserDiscount,
     loginBsc,
