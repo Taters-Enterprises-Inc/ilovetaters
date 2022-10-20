@@ -302,6 +302,13 @@ export function ProfileUserDiscount() {
                 openTo="year"
                 views={["year", "month", "day"]}
                 value={formState.birthday ? formState.birthday : null}
+                shouldDisableYear={(year: Date) => {
+                  let currentYear = new Date().getFullYear();
+
+                  return formState.discountTypeId === 1
+                    ? year.getFullYear() > currentYear - 60
+                    : year.getFullYear() > currentYear;
+                }}
                 onChange={(newValue: any) => {
                   setFormState({
                     ...formState,
