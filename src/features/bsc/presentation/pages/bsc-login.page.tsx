@@ -4,16 +4,16 @@ import { FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { BSCPasswordTextField } from "../components/bsc-password-text-field";
 import { BSCEmailTextField } from "../components/bsc-email-text-field";
-// import {
-//   getAdminSession,
-//   GetAdminSessionState,
-//   selectGetAdminSession,
-// } from "../slices/get-admin-session.slice";
-// import {
-//   loginAdmin,
-//   LoginAdminState,
-//   selectLoginAdmin,
-// } from "../slices/login-admin.slice";
+import {
+  getBscSession,
+  GetBscSessionState,
+  selectGetBscSession,
+} from "../slices/get-bsc-session.slice";
+import {
+  loginBsc,
+  selectLoginBsc,
+  LoginBscState,
+} from "../slices/login-bsc.slice";
 import { useEffect } from "react";
 
 export function BSCLogin() {
@@ -24,33 +24,32 @@ export function BSCLogin() {
   const navigatetoCreateUser = () => {
     navigate("create-account");
   };
-  // const loginAdminState = useAppSelector(selectLoginAdmin);
-  // const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const loginBscState = useAppSelector(selectLoginBsc);
+  const getBscSessionState = useAppSelector(selectGetBscSession);
 
-  // useEffect(() => {
-  //   if (loginAdminState.status === LoginAdminState.success) {
-  //     dispatch(getAdminSession());
-  //   }
-  // }, [loginAdminState, dispatch]);
+  useEffect(() => {
+    if (loginBscState.status === LoginBscState.success) {
+      dispatch(getBscSession());
+    }
+  }, [loginBscState, dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(getAdminSession());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getBscSession());
+  }, [dispatch]);
 
-  // const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  //   const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    dispatch(loginBsc(formData));
+  };
 
-  //   dispatch(loginAdmin(formData));
-  // };
-
-  // if (
-  //   getAdminSessionState.data &&
-  //   getAdminSessionState.status === GetAdminSessionState.success
-  // ) {
-  //   return <Navigate to={"/admin/order"} />;
-  // }
+  if (
+    getBscSessionState.data &&
+    getBscSessionState.status === GetBscSessionState.success
+  ) {
+    return <Navigate to={"/admin/order"} />;
+  }
 
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
@@ -66,7 +65,7 @@ export function BSCLogin() {
           ></img>
         </div>
         <div className="pt-4 login-body">
-          <form>
+          <form onSubmit={handleOnSubmit}>
             <p className="text-white">
               Please login with your email/username and password below.
             </p>

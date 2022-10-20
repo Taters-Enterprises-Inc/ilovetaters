@@ -1,10 +1,23 @@
 import axios from "axios";
+import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginBscResponse {
   data: {
     message: string;
   };
+}
+export interface GetBscSessionResponse {
+  data: {
+    message: string;
+    data: BscSessionModel;
+  };
+}
+
+export function GetBscSessionRepository(): Promise<GetBscSessionResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/session`, {
+    withCredentials: true,
+  });
 }
 
 export function LoginBscRepository(param: FormData): Promise<LoginBscResponse> {
