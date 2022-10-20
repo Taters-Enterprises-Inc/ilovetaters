@@ -156,10 +156,12 @@ export function AdminAvailabilityProducts() {
           {getAdminSessionState.data ? (
             <Autocomplete
               disablePortal
-              options={getAdminSessionState.data.user_details.stores}
+              options={getAdminSessionState.data.admin.user_details.stores}
               sx={{ width: 328 }}
               size="small"
-              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              defaultValue={
+                getAdminSessionState.data.admin.user_details.stores[0]
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
@@ -230,7 +232,6 @@ export function AdminAvailabilityProducts() {
           </FormControl>
         ) : null}
       </div>
-   
 
       {getAdminStoreProductsState.data?.products ? (
         <>
