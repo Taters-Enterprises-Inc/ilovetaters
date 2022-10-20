@@ -625,7 +625,7 @@ export function AdminShopOrderCustomerInformation() {
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold ">
-                      Code[ ] Voucher Discount:
+                      Discount:
                     </td>
                     <td className="px-6 py-2">
                       {calculateWithZeroIfNoValue(

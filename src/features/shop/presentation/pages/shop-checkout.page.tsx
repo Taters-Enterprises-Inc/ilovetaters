@@ -205,12 +205,6 @@ export function ShopCheckout() {
       }
     }
 
-    if (getUserDiscountState.data?.percentage) {
-      const percentage = parseFloat(getUserDiscountState.data.percentage);
-
-      calculatedPrice -= calculatedPrice * percentage;
-    }
-
     if (cashOnDelivery) {
       calculatedPrice += cashOnDelivery;
     }
@@ -225,6 +219,12 @@ export function ShopCheckout() {
       ) {
         calculatedPrice -= getSessionState.data.distance_rate_price;
       }
+    }
+
+    if (getUserDiscountState.data?.percentage) {
+      const percentage = parseFloat(getUserDiscountState.data.percentage);
+
+      calculatedPrice -= calculatedPrice * percentage;
     }
 
     return (
@@ -251,6 +251,22 @@ export function ShopCheckout() {
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
         calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    if (cashOnDelivery) {
+      calculatedPrice += cashOnDelivery;
+    }
+
+    if (getSessionState.data?.distance_rate_price) {
+      calculatedPrice += getSessionState.data.distance_rate_price;
+
+      if (
+        getLatestUnexpiredRedeemState.data &&
+        getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+      ) {
+        calculatedPrice -= getSessionState.data.distance_rate_price;
       }
     }
 
