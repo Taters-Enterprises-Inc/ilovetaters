@@ -48,7 +48,7 @@ export function BSCLogin() {
     getBscSessionState.data &&
     getBscSessionState.status === GetBscSessionState.success
   ) {
-    return <Navigate to={"/admin/order"} />;
+    return <Navigate to={"/bsc/employee"} />;
   }
 
   return (

@@ -123,6 +123,7 @@ import adminUserDiscountChangeStatus from "features/admin/presentation/slices/ad
 import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
 import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
 import getBscSession from "features/bsc/presentation/slices/get-bsc-session.slice";
+import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
 
 export const store = configureStore({
   reducer: {
@@ -249,6 +250,7 @@ export const store = configureStore({
     updateUserDiscount,
     loginBsc,
     getBscSession,
+    logoutBsc,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
