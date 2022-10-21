@@ -41,9 +41,9 @@ import {
   selectGetLatestUnexpiredRedeem,
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
-  getUserDiscount,
-  selectGetUserDiscount,
-} from "features/profile/presentation/slices/get-user-discount.slice";
+  getAvailableUserDiscount,
+  selectGetAvailableUserDiscount,
+} from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -63,10 +63,12 @@ export function ShopCheckout() {
     selectGetLatestUnexpiredRedeem
   );
 
-  const getUserDiscountState = useAppSelector(selectGetUserDiscount);
+  const getAvailableUserDiscountState = useAppSelector(
+    selectGetAvailableUserDiscount
+  );
 
   useEffect(() => {
-    dispatch(getUserDiscount());
+    dispatch(getAvailableUserDiscount());
   }, []);
 
   useEffect(() => {
@@ -205,6 +207,14 @@ export function ShopCheckout() {
       }
     }
 
+    if (getAvailableUserDiscountState.data?.percentage) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
+
+      calculatedPrice -= calculatedPrice * percentage;
+    }
+
     if (cashOnDelivery) {
       calculatedPrice += cashOnDelivery;
     }
@@ -221,12 +231,6 @@ export function ShopCheckout() {
       }
     }
 
-    if (getUserDiscountState.data?.percentage) {
-      const percentage = parseFloat(getUserDiscountState.data.percentage);
-
-      calculatedPrice -= calculatedPrice * percentage;
-    }
-
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -237,7 +241,7 @@ export function ShopCheckout() {
     );
   };
 
-  const calculateUserDiscount = () => {
+  const calculateAvailableUserDiscount = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
     const deals = getSessionState.data?.deals;
@@ -254,28 +258,15 @@ export function ShopCheckout() {
       }
     }
 
-    if (cashOnDelivery) {
-      calculatedPrice += cashOnDelivery;
-    }
-
-    if (getSessionState.data?.distance_rate_price) {
-      calculatedPrice += getSessionState.data.distance_rate_price;
-
-      if (
-        getLatestUnexpiredRedeemState.data &&
-        getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
-      ) {
-        calculatedPrice -= getSessionState.data.distance_rate_price;
-      }
-    }
-
-    if (getUserDiscountState.data) {
-      const percentage = parseFloat(getUserDiscountState.data.percentage);
+    if (getAvailableUserDiscountState.data) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
       return (
         <>
           <span>
-            {percentage * 100}% {getUserDiscountState.data.discount_type_name}:
+            {percentage * 100}%{" "}
+            {getAvailableUserDiscountState.data.discount_type_name}:
           </span>
           <span className="text-end">
             -{" "}
@@ -815,7 +806,7 @@ export function ShopCheckout() {
                         </>
                       ) : null}
 
-                      {calculateUserDiscount()}
+                      {calculateAvailableUserDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

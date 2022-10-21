@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
-  GetUserDiscountRepository,
-  GetUserDiscountResponse,
-} from "features/profile/data/repository/profile.repository";
+  GetAvailableUserDiscountRepository,
+  GetAvailableUserDiscountResponse,
+} from "features/shared/data/repository/shared.repository";
 
-export enum GetUserDiscountState {
+export enum GetAvailableUserDiscountState {
   initial,
   inProgress,
   success,
@@ -14,19 +14,19 @@ export enum GetUserDiscountState {
 }
 
 const initialState: {
-  status: GetUserDiscountState;
+  status: GetAvailableUserDiscountState;
   data: UserDiscountModel | undefined;
 } = {
-  status: GetUserDiscountState.initial,
+  status: GetAvailableUserDiscountState.initial,
   data: undefined,
 };
 
-export const getUserDiscount = createAsyncThunk(
-  "getUserDiscount",
+export const getAvailableUserDiscount = createAsyncThunk(
+  "getAvailableUserDiscount",
   async (param, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: GetUserDiscountResponse =
-        await GetUserDiscountRepository();
+      const response: GetAvailableUserDiscountResponse =
+        await GetAvailableUserDiscountRepository();
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
@@ -35,17 +35,17 @@ export const getUserDiscount = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getUserDiscountSlice = createSlice({
-  name: "getUserDiscount",
+export const getAvailableUserDiscountSlice = createSlice({
+  name: "getAvailableUserDiscount",
   initialState,
   reducers: {},
   extraReducers: (builder: any) => {
     builder
-      .addCase(getUserDiscount.pending, (state: any) => {
-        state.status = GetUserDiscountState.inProgress;
+      .addCase(getAvailableUserDiscount.pending, (state: any) => {
+        state.status = GetAvailableUserDiscountState.inProgress;
       })
       .addCase(
-        getUserDiscount.fulfilled,
+        getAvailableUserDiscount.fulfilled,
         (
           state: any,
           action: PayloadAction<{
@@ -54,24 +54,24 @@ export const getUserDiscountSlice = createSlice({
           }>
         ) => {
           const { message, data } = action.payload;
-          state.status = GetUserDiscountState.success;
+          state.status = GetAvailableUserDiscountState.success;
           state.message = message;
           state.data = data;
         }
       )
       .addCase(
-        getUserDiscount.rejected,
+        getAvailableUserDiscount.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           const { message } = action.payload;
 
-          state.status = GetUserDiscountState.fail;
+          state.status = GetAvailableUserDiscountState.fail;
           state.message = message;
         }
       );
   },
 });
 
-export const selectGetUserDiscount = (state: RootState) =>
-  state.getUserDiscount;
+export const selectGetAvailableUserDiscount = (state: RootState) =>
+  state.getAvailableUserDiscount;
 
-export default getUserDiscountSlice.reducer;
+export default getAvailableUserDiscountSlice.reducer;

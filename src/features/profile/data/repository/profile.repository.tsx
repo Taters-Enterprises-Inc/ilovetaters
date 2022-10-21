@@ -2,7 +2,7 @@ import axios from "axios";
 import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-popclub-redeems-history.model";
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
-import { UserDiscountModel } from "features/profile/core/domain/user-discount.model";
+import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
   ApplyUserDiscountParam,
   UpdateUserDiscountParam,

@@ -623,16 +623,18 @@ export function AdminShopOrderCustomerInformation() {
                     </td>
                     <td className="px-6 py-2">{calculateOrderTotal()}</td>
                   </tr>
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold ">
-                      Discount:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminShopOrderState.data.discount
-                      )}
-                    </td>
-                  </tr>
+                  {getAdminShopOrderState.data.discount ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold ">
+                        {getAdminShopOrderState.data.discount_name}
+                      </td>
+                      <td className="px-6 py-2">
+                        {calculateWithZeroIfNoValue(
+                          getAdminShopOrderState.data.discount
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Gift Card No.[ 0 ]:
