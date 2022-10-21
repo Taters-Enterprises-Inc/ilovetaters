@@ -34,7 +34,10 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { PhoneInput } from "features/shared/presentation/components";
+import {
+  MaterialInput,
+  PhoneInput,
+} from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
 import {
   getLatestUnexpiredRedeem,
@@ -345,6 +348,7 @@ export function ShopCheckout() {
                 className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
               >
                 <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
+                  <MaterialInput colorTheme="white" />
                   {getSessionState.data.userData.first_name ? (
                     <TextField
                       required

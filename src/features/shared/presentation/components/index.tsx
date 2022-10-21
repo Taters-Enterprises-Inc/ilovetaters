@@ -22,3 +22,5 @@ export { DataList } from "./data-list";
 export { ConsentWrapper } from "./consent-wrapper";
 export { MobilePasswordTextField } from "./mobile-password-textfield";
 export { AdminNotificationWrapper } from "./admin-notification.wrapper";
+
+export { MaterialInput } from "./material-input";
