@@ -9,7 +9,7 @@ import {
   styled,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { ChangeEventHandler } from "react";
 
 const SelectField = styled((props: OutlinedTextFieldProps) => (
   <TextField {...props} />
@@ -64,34 +64,36 @@ const SelectField = styled((props: OutlinedTextFieldProps) => (
 
 const stores = [
   {
-    value: "1",
+    value: 1,
     label: "Taters Cash and Carry Mall",
   },
   {
-    value: "2",
+    value: 2,
     label: "Taters Robinsons Magnolia",
   },
   {
-    value: "3",
+    value: 3,
     label: "Taters SM Megamall",
   },
 ];
 
-export default function BSCStoreSelect() {
-  const [store, setStore] = React.useState("");
+interface BSCStoreSelectProps {
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  value: number | null;
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStore(event.target.value as string);
-  };
+export default function BSCStoreSelect(props: BSCStoreSelectProps) {
   return (
     <SelectField
-      value={store}
+      required
+      value={props.value}
+      onChange={props.onChange}
       fullWidth
       select
       size="small"
       variant="outlined"
       label="Company Name"
-      onChange={handleChange}
+      name="company"
     >
       {stores.map((option) => (
         <MenuItem key={option.value} value={option.value}>

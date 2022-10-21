@@ -9,7 +9,8 @@ import {
   styled,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { ChangeEventHandler } from "react";
+import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 
 const SelectField = styled((props: OutlinedTextFieldProps) => (
   <TextField {...props} />
@@ -40,58 +41,37 @@ const SelectField = styled((props: OutlinedTextFieldProps) => (
   },
 }));
 
-// const SelectInput = styled(InputBase)(({ theme }) => ({
-//   "label + &": {
-//     color: "white !important",
-//   },
-//   "& .MuiInputBase-input": {
-//     borderRadius: 4,
-//     border: "1px solid #ffff",
-//     fontSize: 16,
-//     padding: "8px 26px 7px 12px",
-//     color: "white !important",
-//     "-webkit-text-fill-color": "white !important",
-//   },
-//   ".MuiSvgIcon-root ": {
-//     fill: "white !important",
-//   },
-//   "& .MuiInputLabel": {
-//     root: {
-//       color: "white !important",
-//     },
-//   },
-// }));
-
 const stores = [
   {
-    value: "1",
+    value: 1,
     label: "Taters Cash and Carry Mall",
   },
   {
-    value: "2",
+    value: 2,
     label: "Taters Robinsons Magnolia",
   },
   {
-    value: "3",
+    value: 3,
     label: "Taters SM Megamall",
   },
 ];
 
-export default function BSCStoreSelect() {
-  const [store, setStore] = React.useState("");
+interface BSCStoreSelectProps {
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  value: number | null;
+}
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStore(event.target.value as string);
-  };
+export default function BSCStoreSelect(props: BSCStoreSelectProps) {
   return (
     <SelectField
-      value={store}
+      required
+      onChange={props.onChange}
+      value={props.value}
       fullWidth
       select
       size="small"
       variant="outlined"
       label="Store"
-      onChange={handleChange}
     >
       {stores.map((option) => (
         <MenuItem key={option.value} value={option.value}>

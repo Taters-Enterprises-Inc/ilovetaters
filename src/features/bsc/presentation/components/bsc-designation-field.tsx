@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
+import { ChangeEventHandler } from "react";
 
 const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   <TextField {...props} />
@@ -22,16 +23,23 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   },
 }));
 
-export function BSCDesignationField() {
+interface BSCDesignationFieldProps {
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  value: string | null;
+}
+
+export function BSCDesignationField(props: BSCDesignationFieldProps) {
   return (
     <WhiteOutLinedTextField
       required
+      value={props.value}
+      onChange={props.onChange}
       variant="outlined"
       type="text"
       label="Designation"
       size="small"
       fullWidth
-      name="identity"
+      name="designation"
     />
   );
 }

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useStepContext } from "@mui/material";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 
 const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   <TextField {...props} />
@@ -24,8 +24,12 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
   },
 }));
 
-export function BSCContactField() {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+interface BSCContactFieldProps {
+  onChange: (value: string) => void;
+  value: string | null;
+}
+
+export function BSCContactField(props: BSCContactFieldProps) {
   const [error, setError] = useState<string | null>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,18 +37,19 @@ export function BSCContactField() {
 
     if (value.length < 12) {
       setError(null);
-      setPhoneNumber(value);
+      props.onChange(value);
     } else {
       setError("Invalid phone number");
     }
   };
+
   return (
     <WhiteOutLinedTextField
-      size="small"
       required
+      size="small"
       error={error ? true : false}
       helperText={error}
-      value={phoneNumber}
+      value={props.value}
       onChange={handleChange}
       label="Phone Number"
       variant="outlined"

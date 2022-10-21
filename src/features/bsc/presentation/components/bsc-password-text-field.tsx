@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import styled from "@emotion/styled";
 import IconButton from "@mui/material/IconButton";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
@@ -32,22 +32,16 @@ interface State {
   showPassword: boolean;
 }
 
-export function BSCPasswordTextField() {
-  const [values, setValues] = useState<State>({
-    password: "",
-    showPassword: false,
-  });
+interface BSCPasswordTextFieldProps {
+  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  value: string | null;
+}
 
-  const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+export function BSCPasswordTextField(props: BSCPasswordTextFieldProps) {
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (
@@ -62,11 +56,11 @@ export function BSCPasswordTextField() {
       variant="outlined"
       type="text"
       inputProps={{
-        className: values.showPassword ? "" : "password-mask",
+        className: showPassword ? "" : "password-mask",
         autoComplete: "current-password",
       }}
-      value={values.password}
-      onChange={handleChange("password")}
+      value={props.value}
+      onChange={props.onChange}
       name="password"
       InputProps={{
         endAdornment: (
@@ -77,7 +71,7 @@ export function BSCPasswordTextField() {
               onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {values.showPassword ? (
+              {showPassword ? (
                 <VisibilityOff sx={{ color: "white" }} />
               ) : (
                 <Visibility sx={{ color: "white" }} />
