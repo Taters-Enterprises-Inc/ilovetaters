@@ -121,6 +121,7 @@ import getUserDiscount from "features/profile/presentation/slices/get-user-disco
 import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
 import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
 import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
+import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export const store = configureStore({
   reducer: {
@@ -245,6 +246,7 @@ export const store = configureStore({
     BSCSideBar,
     adminUserDiscountChangeStatus,
     updateUserDiscount,
+    getAvailableUserDiscount,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
