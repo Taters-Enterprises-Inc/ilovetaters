@@ -158,9 +158,8 @@ export function ShopOrder() {
 
   const navigate = useNavigate();
 
-  const navigateToBSCustomer = () => {
-    // 👇️ navigate to /contacts
-    navigate("/bsc/customer");
+  const navigateToCustomerSurvey = () => {
+    navigate("/survey");
   };
 
   return (
@@ -651,7 +650,7 @@ export function ShopOrder() {
               </div>
               <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
                 <button
-                  onClick={navigateToBSCustomer}
+                  onClick={navigateToCustomerSurvey}
                   className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                 >
                   <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

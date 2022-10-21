@@ -55,6 +55,10 @@
   bottom: 0;
 }
 
+.MuiRating-iconEmpty {
+  border-color: #fff;
+}
+
 .payment-method-active:before {
   border: 0.9375rem solid transparent;
   border-bottom: 0.9375rem solid var(--brand-primary-color, green);
@@ -470,4 +474,4 @@ input[type="number"] {
 }
 
 /* Add Varela Round fonts for admin page */
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
