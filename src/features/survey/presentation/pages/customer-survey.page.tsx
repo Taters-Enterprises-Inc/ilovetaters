@@ -10,8 +10,6 @@ import { RatingCustomer } from "../components/customer-survey.rating";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 
 export function CustomerSurvey() {
-  const navigate = useNavigate();
-
   return (
     <>
       <Helmet>
