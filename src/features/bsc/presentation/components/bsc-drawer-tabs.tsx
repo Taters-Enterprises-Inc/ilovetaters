@@ -15,11 +15,21 @@ import { HiUsers } from "react-icons/hi";
 import { RiUser2Fill } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { truncate } from "fs";
 import Badge from "@mui/material/Badge";
 
 import { closeBSCSideBar, selectBSCSideBar } from "../slices/bsc-sidebar.slice";
+import {
+  logoutBsc,
+  LogoutBscState,
+  resetLogoutBsc,
+  selectLogoutBsc,
+} from "../slices/logout-bsc.slice";
+import {
+  getBscSession,
+  selectGetBscSession,
+} from "../slices/get-bsc-session.slice";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -62,8 +72,17 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
   const dispatch = useAppDispatch();
 
   const BSCSideBarState = useAppSelector(selectBSCSideBar);
-  //   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  //   const logoutAdminState = useAppSelector(selectLogoutAdmin);
+  const getBscSessionState = useAppSelector(selectGetBscSession);
+  const logoutBscState = useAppSelector(selectLogoutBsc);
+
+  useEffect(() => {
+    if (logoutBscState.status === LogoutBscState.success) {
+      dispatch(getBscSession());
+      dispatch(resetLogoutBsc());
+      navigate("/bsc");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logoutBscState]);
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -121,9 +140,9 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
           </li>
           <li>
             <button
-              // onClick={() => {
-              //   dispatch(logoutAdmin());
-              // }}
+              onClick={() => {
+                dispatch(logoutBsc());
+              }}
               className="flex w-full"
             >
               <span className="flex items-center px-4 ">

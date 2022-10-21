@@ -142,9 +142,9 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             </NavLink>
           </li>
 
-          {getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_catering_admin ||
-          getAdminSessionState.data?.is_csr_admin ? (
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_catering_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -426,7 +426,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
-                      {getAdminSessionState.data?.is_admin ? (
+                      {getAdminSessionState.data?.admin.is_admin ? (
                         <li>
                           <NavLink
                             to="/admin/setting/user"

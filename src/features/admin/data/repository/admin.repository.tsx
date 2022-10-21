@@ -747,7 +747,7 @@ export function GetAdminUserRepository(
 export function CreateAdminUserRepository(
   formData: FormData
 ): Promise<CreateAdminUserResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create_user`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, formData, {
     withCredentials: true,
   });
 }
