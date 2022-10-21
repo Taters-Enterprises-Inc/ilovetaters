@@ -216,8 +216,6 @@ export function CateringCheckout() {
       (value, property: string) => (responseBody[property] = value)
     );
 
-    responseBody["payops"] = 3;
-
     if (
       (responseBody.phoneNumber.match(/63/) &&
         responseBody.phoneNumber.length === 15) ||
