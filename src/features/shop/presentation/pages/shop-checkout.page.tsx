@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -36,6 +37,7 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   MaterialInput,
+  MaterialInputSelect,
   PhoneInput,
 } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
@@ -52,11 +54,20 @@ export function ShopCheckout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    eMail: "",
+    phoneNumber: "",
+    landmarkAddress: "",
+    completeDeliveryAddress: "",
+  });
+
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const isDeliveryApplied = useRef(false);
-
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
@@ -92,6 +103,32 @@ export function ShopCheckout() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data
+    ) {
+      setFormState({
+        firstName: getSessionState.data.userData.first_name,
+        lastName: getSessionState.data.userData.last_name,
+        eMail: getSessionState.data.userData.email,
+        phoneNumber: getContactsState.data
+          ? getContactsState.data[0].contact
+          : "",
+        landmarkAddress: "",
+        completeDeliveryAddress: "",
+      });
+    }
+  }, [getSessionState, getContactsState]);
+
+  const handleInputChange = (evt: any) => {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -348,69 +385,37 @@ export function ShopCheckout() {
                 className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
               >
                 <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                  <MaterialInput colorTheme="white" />
-                  {getSessionState.data.userData.first_name ? (
-                    <TextField
-                      required
-                      defaultValue={getSessionState.data.userData.first_name}
-                      variant="outlined"
-                      className="w-full"
-                      label="First Name"
-                      name="firstName"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      label="First Name"
-                      variant="outlined"
-                      className="w-full"
-                      name="firstName"
-                    />
-                  )}
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="First Name"
+                    name="firstName"
+                    fullWidth
+                    value={formState.firstName}
+                    onChange={handleInputChange}
+                  />
 
-                  {getSessionState.data.userData.last_name ? (
-                    <TextField
-                      required
-                      defaultValue={getSessionState.data.userData.last_name}
-                      variant="outlined"
-                      className="w-full"
-                      label="Last Name"
-                      name="lastName"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      label="Last Name"
-                      variant="outlined"
-                      className="w-full"
-                      name="lastName"
-                    />
-                  )}
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="Last Name"
+                    name="lastName"
+                    fullWidth
+                    value={formState.lastName}
+                    onChange={handleInputChange}
+                  />
 
                   <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
                     <div className="flex-1">
-                      {getSessionState.data.userData.email ? (
-                        <TextField
-                          autoComplete="off"
-                          required
-                          label="E-mail Address"
-                          defaultValue={getSessionState.data.userData.email}
-                          variant="outlined"
-                          className="w-full"
-                          type="email"
-                          name="eMail"
-                        />
-                      ) : (
-                        <TextField
-                          autoComplete="off"
-                          required
-                          label="E-mail Address"
-                          variant="outlined"
-                          type="email"
-                          className="w-full"
-                          name="eMail"
-                        />
-                      )}
+                      <MaterialInput
+                        colorTheme="black"
+                        required
+                        label="E-mail"
+                        name="eMail"
+                        fullWidth
+                        value={formState.eMail}
+                        onChange={handleInputChange}
+                      />
                     </div>
                     <div className="flex-1">
                       {getContactsState.data &&
@@ -419,11 +424,13 @@ export function ShopCheckout() {
                           <InputLabel id="demo-simple-select-helper-label">
                             Contacts
                           </InputLabel>
-                          <Select
+                          <MaterialInputSelect
+                            colorTheme="black"
                             className="w-full"
                             label="Contacts"
                             name="phoneNumber"
-                            defaultValue={getContactsState.data[0].contact}
+                            onChange={handleInputChange}
+                            value={formState.phoneNumber}
                             required
                             autoComplete="off"
                           >
@@ -432,7 +439,7 @@ export function ShopCheckout() {
                                 {val.contact}
                               </MenuItem>
                             ))}
-                          </Select>
+                          </MaterialInputSelect>
                         </FormControl>
                       ) : (
                         <PhoneInput />

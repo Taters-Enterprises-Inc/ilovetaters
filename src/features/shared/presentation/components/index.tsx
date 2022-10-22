@@ -24,3 +24,4 @@ export { MobilePasswordTextField } from "./mobile-password-textfield";
 export { AdminNotificationWrapper } from "./admin-notification.wrapper";
 
 export { MaterialInput } from "./material-input";
+export { MaterialInputSelect } from "./material-input-select";

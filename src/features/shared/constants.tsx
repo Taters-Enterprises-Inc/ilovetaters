@@ -713,13 +713,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiSelect: {
-      styleOverrides: {
-        iconOutlined: {
-          color: "#22201A",
-        },
-      },
-    },
     MuiTabs: {
       styleOverrides: {
         indicator: {
@@ -755,47 +748,5 @@ export const theme = createTheme({
         },
       },
     },
-
-    // MuiOutlinedInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       "& fieldset": {
-    //         borderColor: "#22201A",
-    //       },
-    //       "&:hover fieldset": {
-    //         borderColor: "#22201A",
-    //       },
-    //       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    //         borderColor: "#22201A",
-    //       },
-    //       ".Mui-error .MuiOutlinedInput-notchedOutline": {
-    //         borderColor: "#22201A",
-    //       },
-    //       // "&.Mui-focused fieldset": {
-    //       //   borderColor: "blue !important",
-    //       // },
-    //     },
-    //   },
-    // },
-    // MuiInputBase: {
-    //   styleOverrides: {
-    //     input: {
-    //       color: "#22201A",
-    //       "-webkit-text-fill-color": "#22201A !important",
-    //     },
-    //   },
-    // },
-    // MuiTextField: {
-    //   styleOverrides: {
-    //     root: {
-    //       "& label.Mui-focused": {
-    //         color: "#22201A",
-    //       },
-    //       "& label": {
-    //         color: "#22201A !important",
-    //       },
-    //     },
-    //   },
-    // },
   },
 });
