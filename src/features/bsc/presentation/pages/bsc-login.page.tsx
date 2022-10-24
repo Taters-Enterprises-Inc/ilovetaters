@@ -2,8 +2,6 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { BSCPasswordTextField } from "../components/bsc-password-text-field";
-import { BSCEmailTextField } from "../components/bsc-email-text-field";
 import {
   getBscSession,
   GetBscSessionState,
@@ -70,8 +68,8 @@ export function BSCLogin() {
               Please login with your email/username and password below.
             </p>
             <div className="pt-4 space-y-4">
-              <BSCEmailTextField />
-              <BSCPasswordTextField />
+              {/* <BSCEmailTextField />
+              <BSCPasswordTextField /> */}
             </div>
 
             <div className="flex justify-between py-4 text-white">

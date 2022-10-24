@@ -62,3 +62,17 @@ export interface LoginAdminParam {
   identity: string;
   password: string;
 }
+
+export interface AdminPrivilegeParam {
+  password: string;
+  transactionId: number;
+  fromStatusId?: number;
+  toStatusId?: string;
+  fromStoreId?: number;
+  toStoreId?: string;
+}
+
+export interface ValidateReferenceNumberParam {
+  referenceNumber: string;
+  transactionId: number;
+}

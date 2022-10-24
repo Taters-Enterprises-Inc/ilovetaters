@@ -1,28 +1,6 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { BSCPasswordTextField } from "../components/bsc-password-text-field";
-import { BSCEmailTextField } from "../components/bsc-email-text-field";
-import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
-import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
-import { BSCDesignationField } from "../components/bsc-designation-field";
-
-import { useEffect } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import BSCStoreSelect from "../components/bsc-store-select";
-import BSCCompanySelect from "../components/bsc-company-select";
-import { BSCContactField } from "../components/bsc-contact-text-field";
+import { useNavigate } from "react-router-dom";
 
 export function BSCCreateAccount() {
-  const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
-
-  const navigatetoLogin = () => {
-    navigate("/bsc");
-  };
-
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
       <div
@@ -40,15 +18,15 @@ export function BSCCreateAccount() {
             </p>
             <div className="pt-4 space-y-4">
               <div className="flex space-x-2">
-                <BSCFirstNameTextField />
-                <BSCLastNameTextField />
+                {/* <BSCFirstNameTextField />
+                <BSCLastNameTextField /> */}
               </div>
-              <BSCDesignationField />
+              {/* <BSCDesignationField />
               <BSCCompanySelect />
               <BSCStoreSelect />
               <BSCEmailTextField />
               <BSCContactField />
-              <BSCPasswordTextField />
+              <BSCPasswordTextField /> */}
             </div>
 
             <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
@@ -67,7 +45,7 @@ export function BSCCreateAccount() {
               {" "}
               Already have an account?{" "}
               <span
-                onClick={navigatetoLogin}
+                // onClick={navigatetoLogin}
                 className="cursor-pointer text-button hover:underline"
               >
                 {" "}

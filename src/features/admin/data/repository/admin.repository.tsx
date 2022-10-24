@@ -10,6 +10,8 @@ import {
   UpdateStoreCatersProductAddonParam,
   CreateAdminUserParam,
   LoginAdminParam,
+  AdminPrivilegeParam,
+  ValidateReferenceNumberParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -626,11 +628,11 @@ export function GetAdminCateringBookingsRepository(
 }
 
 export function AdminCateringPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminCateringPrivilegeResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -638,15 +640,11 @@ export function AdminCateringPrivilegeRepository(
 }
 
 export function AdminPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminPrivilegeResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`, param, {
+    withCredentials: true,
+  });
 }
 
 export function AdminShopOrderUpdateStatusRepository(
@@ -662,15 +660,11 @@ export function AdminShopOrderUpdateStatusRepository(
 }
 
 export function ValidateReferenceNumberAdminRepository(
-  formData: FormData
+  param: ValidateReferenceNumberParam
 ): Promise<ValidateReferenceNumberAdminResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/reference-num/`, param, {
+    withCredentials: true,
+  });
 }
 
 export function UploadProofOfPaymentAdminRepository(

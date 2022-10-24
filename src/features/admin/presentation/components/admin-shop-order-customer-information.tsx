@@ -5,6 +5,7 @@ import {
 } from "features/config/hooks";
 import {
   getAdminShopOrder,
+  GetAdminShopOrderState,
   selectGetAdminShopOrder,
 } from "../slices/get-admin-shop-order.slice";
 import {
@@ -16,7 +17,6 @@ import {
 import NumberFormat from "react-number-format";
 import { AdminShopOrderCustomerInformationButtons } from "./admin-shop-order-customer-information-buttons";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormEvent, useEffect, useState } from "react";
 import {
@@ -38,17 +38,27 @@ import {
   selectAdminPrivilege,
   resetAdminPrivilege,
 } from "../slices/admin-privilege.slice";
-import { MaterialInputSelect } from "features/shared/presentation/components";
+import {
+  MaterialInput,
+  MaterialInputSelect,
+} from "features/shared/presentation/components";
 
 export function AdminShopOrderCustomerInformation() {
   const query = useQuery();
   const dispatch = useAppDispatch();
-  const [openAdminPasswordModal, setOpenAdminPasswordModal] = useState<{
-    status: boolean;
-    formData?: FormData;
-  }>({
-    status: false,
-  });
+
+  const [status, setStatus] = useState<string>("");
+  const [store, setStore] = useState<string>("");
+
+  const [
+    openAdminPasswordStoreChangeModal,
+    setOpenAdminPasswordStoreChangeModal,
+  ] = useState<boolean>(false);
+  const [
+    openAdminPasswordStatusChangeModal,
+    setOpenAdminPasswordStatusChangeModal,
+  ] = useState<boolean>(false);
+  const [referenceNumber, setReferenceNumber] = useState<string>("");
 
   const trackingNo = query.get("tracking_no");
 
@@ -64,9 +74,20 @@ export function AdminShopOrderCustomerInformation() {
   const adminPrivilegeState = useAppSelector(selectAdminPrivilege);
 
   useEffect(() => {
+    if (
+      getAdminShopOrderState.status === GetAdminShopOrderState.success &&
+      getAdminShopOrderState.data
+    ) {
+      setStatus(getAdminShopOrderState.data.status.toString());
+      setStore(getAdminShopOrderState.data.store.toString());
+    }
+  }, [getAdminShopOrderState]);
+
+  useEffect(() => {
     if (adminPrivilegeState.status === AdminPrivilegeState.success) {
       dispatch(resetAdminPrivilege());
-      setOpenAdminPasswordModal({ status: false });
+      setOpenAdminPasswordStoreChangeModal(false);
+      setOpenAdminPasswordStatusChangeModal(false);
     }
   }, [adminPrivilegeState, dispatch]);
 
@@ -206,25 +227,8 @@ export function AdminShopOrderCustomerInformation() {
     dispatch(uploadProofOfPaymentAdmin(formData));
   };
 
-  const handleOnSubmitValidateReferenceNumber = (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(validateReferenceNumberAdmin(formData));
-  };
-
-  const handleOnSubmitAdminPrivilege = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    setOpenAdminPasswordModal({
-      status: true,
-      formData,
-    });
-  };
-
   return (
-    <div>
+    <>
       <div className="pt-1 text-secondary">
         <div className="space-y-1 ">
           <div className="grid-cols-3 gap-4 lg:grid ">
@@ -374,28 +378,32 @@ export function AdminShopOrderCustomerInformation() {
             {getAdminShopOrderState.data?.payops !== 3 ? (
               <>
                 {getAdminShopOrderState.data?.reference_num === "" ? (
-                  <form
-                    onSubmit={handleOnSubmitValidateReferenceNumber}
-                    className="flex flex-col flex-1 lg:flex-row"
-                  >
-                    <TextField
+                  <div className="flex flex-col flex-1 lg:flex-row">
+                    <MaterialInput
+                      colorTheme="black"
                       size="small"
                       label="Payment Ref. No"
-                      name="ref_num"
-                    />
-                    <input
-                      readOnly
-                      hidden
-                      name="trans_id"
-                      value={getAdminShopOrderState.data?.id}
+                      name="referenceNumber"
+                      value={referenceNumber}
+                      onChange={(e) => {
+                        setReferenceNumber(e.target.value);
+                      }}
                     />
                     <button
-                      type="submit"
+                      onClick={() => {
+                        if (getAdminShopOrderState.data)
+                          dispatch(
+                            validateReferenceNumberAdmin({
+                              transactionId: getAdminShopOrderState.data.id,
+                              referenceNumber,
+                            })
+                          );
+                      }}
                       className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
                     >
                       Validate
                     </button>
-                  </form>
+                  </div>
                 ) : (
                   <div className="flex items-start justify-start flex-1 space-x-2">
                     <strong>Payment Ref. No: </strong>
@@ -413,32 +421,20 @@ export function AdminShopOrderCustomerInformation() {
                 )}
               </>
             ) : null}
-            <form
-              onSubmit={handleOnSubmitAdminPrivilege}
-              className="flex flex-col flex-1 lg:flex-row"
-            >
-              <input
-                readOnly
-                hidden
-                name="trans_id"
-                value={getAdminShopOrderState.data?.id}
-              />
-              <input
-                readOnly
-                hidden
-                name="from_status_id"
-                value={getAdminShopOrderState.data?.status}
-              />
+            <div className="flex flex-col flex-1 lg:flex-row">
               <MaterialInputSelect
                 colorTheme="black"
                 size="small"
-                name="to_status_id"
+                name="toStatusId"
                 sx={{
                   "& fieldset": {
                     borderRadius: "0px",
                   },
                 }}
-                defaultValue={getAdminShopOrderState.data?.status}
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value as string);
+                }}
               >
                 {ADMIN_SNACKSHOP_ORDER_STATUS.map((value, index) => {
                   if (index === 0) {
@@ -452,34 +448,19 @@ export function AdminShopOrderCustomerInformation() {
                 })}
               </MaterialInputSelect>
               <button
-                type="submit"
+                onClick={() => {
+                  setOpenAdminPasswordStatusChangeModal(true);
+                }}
                 className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
               >
                 Change Order Status
               </button>
-            </form>
+            </div>
           </div>
 
           <hr />
 
-          <form
-            onSubmit={handleOnSubmitAdminPrivilege}
-            className="flex flex-col flex-1 lg:flex-row"
-          >
-            <input
-              readOnly
-              hidden
-              name="trans_id"
-              value={getAdminShopOrderState.data?.id}
-            />
-
-            <input
-              readOnly
-              hidden
-              name="from_store_id"
-              value={getAdminShopOrderState.data?.store}
-            />
-
+          <div className="flex flex-col flex-1 lg:flex-row">
             <MaterialInputSelect
               colorTheme="black"
               size="small"
@@ -488,8 +469,11 @@ export function AdminShopOrderCustomerInformation() {
                   borderRadius: "0px",
                 },
               }}
-              defaultValue={getAdminShopOrderState.data?.store}
-              name="to_store_id"
+              value={store}
+              onChange={(e) => {
+                setStore(e.target.value as string);
+              }}
+              name="toStoreId"
             >
               {getAdminStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
@@ -498,12 +482,14 @@ export function AdminShopOrderCustomerInformation() {
               ))}
             </MaterialInputSelect>
             <button
-              type="submit"
+              onClick={() => {
+                setOpenAdminPasswordStoreChangeModal(true);
+              }}
               className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
             >
               Transfer to Store
             </button>
-          </form>
+          </div>
         </div>
 
         <hr className="mt-1" />
@@ -832,19 +818,40 @@ export function AdminShopOrderCustomerInformation() {
       </div>
 
       <AdminPasswordModal
-        open={openAdminPasswordModal.status}
+        open={openAdminPasswordStatusChangeModal}
         onEnterPassword={(password: string) => {
-          if (openAdminPasswordModal.formData) {
-            openAdminPasswordModal.formData.append("password", password);
-            dispatch(adminPrivilege(openAdminPasswordModal.formData));
-          }
+          if (getAdminShopOrderState.data)
+            dispatch(
+              adminPrivilege({
+                password,
+                transactionId: getAdminShopOrderState.data.id,
+                fromStatusId: getAdminShopOrderState.data.status,
+                toStatusId: status,
+              })
+            );
         }}
         onClose={() => {
-          setOpenAdminPasswordModal({
-            status: false,
-          });
+          setOpenAdminPasswordStatusChangeModal(false);
         }}
       />
-    </div>
+
+      <AdminPasswordModal
+        open={openAdminPasswordStoreChangeModal}
+        onEnterPassword={(password: string) => {
+          if (getAdminShopOrderState.data)
+            dispatch(
+              adminPrivilege({
+                password,
+                transactionId: getAdminShopOrderState.data.id,
+                fromStoreId: getAdminShopOrderState.data.store,
+                toStoreId: store,
+              })
+            );
+        }}
+        onClose={() => {
+          setOpenAdminPasswordStoreChangeModal(false);
+        }}
+      />
+    </>
   );
 }
