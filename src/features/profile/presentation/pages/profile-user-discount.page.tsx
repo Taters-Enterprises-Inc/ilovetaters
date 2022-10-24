@@ -26,7 +26,10 @@ import {
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import { updateUserDiscount } from "../slices/update-user-discount.slice";
-import { MaterialInput } from "features/shared/presentation/components";
+import {
+  MaterialDateInput,
+  MaterialInput,
+} from "features/shared/presentation/components";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
@@ -34,7 +37,6 @@ export function ProfileUserDiscount() {
   const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
-  const [openBirthDateCalendar, setOpenBirthDateCalendar] = useState(false);
 
   const [formState, setFormState] = useState<{
     firstName: string;
@@ -147,6 +149,7 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
+    console.log(formState);
     if (
       formState &&
       formState.firstName &&
@@ -297,46 +300,26 @@ export function ProfileUserDiscount() {
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
           <div className="flex-1">
-            <LocalizationProvider
-              dateAdapter={AdapterDateFns}
-              className="flex-1"
-            >
-              <DesktopDatePicker
-                label="Birthday"
-                openTo="year"
-                views={["year", "month", "day"]}
-                value={formState.birthday ? formState.birthday : null}
-                shouldDisableYear={(year: Date) => {
-                  let currentYear = new Date().getFullYear();
+            <MaterialDateInput
+              colorTheme="black"
+              label="Birthday"
+              openTo="year"
+              views={["year", "month", "day"]}
+              value={formState.birthday ? formState.birthday : null}
+              shouldDisableYear={(year: Date) => {
+                let currentYear = new Date().getFullYear();
 
-                  return formState.discountTypeId === 1
-                    ? year.getFullYear() > currentYear - 60
-                    : year.getFullYear() > currentYear;
-                }}
-                onChange={(newValue: any) => {
-                  setFormState({
-                    ...formState,
-                    birthday: newValue,
-                  });
-                }}
-                open={openBirthDateCalendar}
-                onOpen={() => setOpenBirthDateCalendar(true)}
-                onClose={() => setOpenBirthDateCalendar(false)}
-                renderInput={(params) => (
-                  <MaterialInput
-                    colorTheme="black"
-                    onClick={() => {
-                      setOpenBirthDateCalendar(true);
-                    }}
-                    required
-                    fullWidth
-                    value=""
-                    name=""
-                    onChange={() => {}}
-                  />
-                )}
-              />
-            </LocalizationProvider>
+                return formState.discountTypeId === 1
+                  ? year.getFullYear() > currentYear - 60
+                  : year.getFullYear() > currentYear;
+              }}
+              onChange={(newValue: any) => {
+                setFormState({
+                  ...formState,
+                  birthday: newValue,
+                });
+              }}
+            />
           </div>
           <MaterialInput
             colorTheme="black"
@@ -452,7 +435,8 @@ export function ProfileUserDiscount() {
             </div>
           </div>
         </div>
-        {getUserDiscountState.data === null ? (
+        {getUserDiscountState.data === null ||
+        getUserDiscountState.data === undefined ? (
           <div>
             <button
               type="submit"
