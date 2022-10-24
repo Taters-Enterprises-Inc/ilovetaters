@@ -1,5 +1,5 @@
 import { BSCHead } from "../components/bsc-head";
-import { BSCUser } from "../components/bsc-users";
+import { BSCUser } from "../components/bsc-user";
 
 export function BSCUsers() {
   return (

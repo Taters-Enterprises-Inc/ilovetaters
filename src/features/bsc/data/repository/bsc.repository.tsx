@@ -1,4 +1,6 @@
 import axios from "axios";
+import { EditBscUserParam } from "features/bsc/core/bsc-params";
+import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import { UserModel } from "features/bsc/core/domain/bsc-user.model";
@@ -30,6 +32,18 @@ export interface GetBscUserResponse {
   };
 }
 
+export interface CreateBscUserResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CreateBscGroupResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface GetBscUserStoresResponse {
   data: {
     message: string;
@@ -47,6 +61,19 @@ export interface GetBscStoresResponse {
 export interface UpdateBscUserStoresResponse {
   data: {
     message: string;
+  };
+}
+
+export interface EditBscUserResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetBscGroupsResponse {
+  data: {
+    message: string;
+    data: Array<GroupModel>;
   };
 }
 
@@ -89,6 +116,21 @@ export function GetBscUserRepository(
     withCredentials: true,
   });
 }
+export function CreateBscUserRepository(
+  formData: FormData
+): Promise<CreateBscUserResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, formData, {
+    withCredentials: true,
+  });
+}
+
+export function CreateBscGroupRepository(
+  formData: FormData
+): Promise<CreateBscGroupResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, formData, {
+    withCredentials: true,
+  });
+}
 
 export function GetBscUserStoresRepository(
   userId: string
@@ -119,6 +161,24 @@ export function UpdateBscUserStoresRepository(
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
+  });
+}
+
+export function EditBscUserRepository(
+  param: EditBscUserParam
+): Promise<EditBscUserResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/auth/edit-user/${param.userId}`,
+    param.formData,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetBscGroupsRepository(): Promise<GetBscGroupsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/groups`, {
     withCredentials: true,
   });
 }

@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import {
-  CreateAdminUserRepository,
-  CreateAdminUserResponse,
-  UpdateAdminUserStoresRepository,
-  UpdateAdminUserStoresResponse,
-} from "features/admin/data/repository/admin.repository";
+  UpdateBscUserStoresRepository,
+  UpdateBscUserStoresResponse,
+} from "features/bsc/data/repository/bsc.repository";
 import { RootState } from "features/config/store";
 
 export enum UpdateBscUserStoresState {
@@ -27,8 +25,8 @@ export const updateBscUserStores = createAsyncThunk(
   "updateBscUserStores",
   async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: UpdateAdminUserStoresResponse =
-        await UpdateAdminUserStoresRepository(formData);
+      const response: UpdateBscUserStoresResponse =
+        await UpdateBscUserStoresRepository(formData);
       console.log(response.data);
       return fulfillWithValue(response.data);
     } catch (error: any) {

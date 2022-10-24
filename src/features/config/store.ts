@@ -130,6 +130,10 @@ import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
 import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
 import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
 import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
+import editBscUser from "features/bsc/presentation/slices/bsc-edit-user.slice";
+import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
+import createBscUser from "features/bsc/presentation/slices/bsc-create-user.slice";
+import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 
 export const store = configureStore({
   reducer: {
@@ -263,6 +267,10 @@ export const store = configureStore({
     getBscUserStores,
     getBscStores,
     updateBscUserStores,
+    editBscUser,
+    getBscGroups,
+    createBscUser,
+    createBscGroup,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

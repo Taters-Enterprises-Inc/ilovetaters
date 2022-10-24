@@ -32,6 +32,7 @@ const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
+  { id: "verify", label: "Verify" },
 ];
 
 export function BSCUser() {
@@ -213,7 +214,8 @@ export function BSCUser() {
                   column_selected !== "action" &&
                   column_selected !== "status" &&
                   column_selected !== "store" &&
-                  column_selected !== "groups"
+                  column_selected !== "groups" &&
+                  column_selected !== "verify"
                 ) {
                   const isAsc = orderBy === column_selected && order === "asc";
 
@@ -305,7 +307,7 @@ export function BSCUser() {
                       </DataTableCell>
                       <DataTableCell>
                         <Link
-                          to={`/admin/setting/user/edit-user/${row.id}`}
+                          to={`/bsc/users/edit-user/${row.id}`}
                           className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
                         >
                           Edit
