@@ -125,6 +125,11 @@ import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
 import getBscSession from "features/bsc/presentation/slices/get-bsc-session.slice";
 import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
 import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
+import getBscUsers from "features/bsc/presentation/slices/get-bsc-users.slice";
+import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
+import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
+import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
+import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
 
 export const store = configureStore({
   reducer: {
@@ -253,6 +258,11 @@ export const store = configureStore({
     getBscSession,
     logoutBsc,
     getAvailableUserDiscount,
+    getBscUsers,
+    getBscUser,
+    getBscUserStores,
+    getBscStores,
+    updateBscUserStores,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
