@@ -59,6 +59,7 @@ export function ShopCheckout() {
     firstName: "",
     lastName: "",
     eMail: "",
+    payops: "",
     phoneNumber: "",
     landmarkAddress: "",
     completeDeliveryAddress: "",
@@ -113,10 +114,12 @@ export function ShopCheckout() {
         firstName: getSessionState.data.userData.first_name,
         lastName: getSessionState.data.userData.last_name,
         eMail: getSessionState.data.userData.email,
-        phoneNumber: getContactsState.data
-          ? getContactsState.data[0].contact
-          : "",
-        landmarkAddress: "",
+        payops: "",
+        phoneNumber:
+          getContactsState.data && getContactsState.data.length > 0
+            ? getContactsState.data[0].contact
+            : "",
+        landmarkAddress: getSessionState.data.customer_address,
         completeDeliveryAddress: "",
       });
     }
@@ -131,25 +134,8 @@ export function ShopCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(checkoutOrders(formState));
     e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    const responseBody: any = {};
-
-    formData.forEach(
-      (value, property: string) => (responseBody[property] = value)
-    );
-
-    if (responseBody.phoneNumber.length === 11) {
-      dispatch(checkoutOrders(responseBody));
-    } else {
-      dispatch(
-        popUpSnackBar({
-          message: "Invalid phone number",
-          severity: "error",
-        })
-      );
-    }
   };
 
   const calculateSubTotalPrice = () => {
@@ -442,7 +428,13 @@ export function ShopCheckout() {
                           </MaterialInputSelect>
                         </FormControl>
                       ) : (
-                        <PhoneInput />
+                        <PhoneInput
+                          colorTheme="black"
+                          fullWidth
+                          onChange={handleInputChange}
+                          value={formState.phoneNumber}
+                          name="phoneNumber"
+                        />
                       )}
                       <button
                         type="button"
@@ -456,40 +448,26 @@ export function ShopCheckout() {
                     </div>
                   </div>
 
-                  {getSessionState.data.customer_address ? (
-                    <TextField
-                      required
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      defaultValue={getSessionState.data?.customer_address}
-                      variant="outlined"
-                      className="w-full"
-                      label="Landmark Address"
-                      name="address"
-                      autoComplete="off"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      label="Landmark Address"
-                      variant="outlined"
-                      className="w-full"
-                      name="address"
-                      autoComplete="off"
-                    />
-                  )}
-
-                  <TextField
+                  <MaterialInput
+                    colorTheme="black"
                     required
-                    variant="outlined"
-                    name="full_address"
-                    className="w-full"
-                    label="Complete Delivery Address"
+                    label="Landmark Address"
+                    name="landmarkAddress"
+                    fullWidth
                     autoComplete="off"
+                    value={formState.landmarkAddress}
+                    onChange={handleInputChange}
+                  />
+
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="Complete Delivery Address"
+                    name="completeDeliveryAddress"
+                    fullWidth
+                    autoComplete="off"
+                    value={formState.completeDeliveryAddress}
+                    onChange={handleInputChange}
                   />
 
                   {getSessionState.data.cache_data ? (
@@ -546,6 +524,10 @@ export function ShopCheckout() {
                     </h2>
                     <PaymentMethod
                       onChange={(payment) => {
+                        setFormState({
+                          ...formState,
+                          payops: payment,
+                        });
                         if (
                           getSessionState.data &&
                           getSessionState.data.cash_delivery &&

@@ -2,7 +2,7 @@ import { useAppDispatch } from "features/config/hooks";
 import { ContactModel } from "features/shared/core/domain/contact.model";
 import { PhoneInput } from "features/shared/presentation/components";
 import { updateContact } from "features/shared/presentation/slices/update-contact.slice";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
 interface UpdateContactModalProps {
@@ -20,6 +20,7 @@ interface UpdateContactFormElement extends HTMLFormElement {
 
 export function UpdateContactModal(props: UpdateContactModalProps) {
   const dispatch = useAppDispatch();
+  const [contact, setContact] = useState<string>("");
 
   if (props.open && props.contact) {
     document.body.classList.add("overflow-hidden");
@@ -29,21 +30,20 @@ export function UpdateContactModal(props: UpdateContactModalProps) {
   }
 
   const handleUpdateContact = (e: FormEvent<UpdateContactFormElement>) => {
-    e.preventDefault();
-
-    const phoneNumber: string = e.currentTarget.elements.phoneNumber.value;
-    if (props.contact && phoneNumber.length === 11) {
+    if (props.contact) {
       props.onClose();
 
       dispatch(
         updateContact({
           id: props.contact.id,
           body: {
-            contact: phoneNumber,
+            contact: contact,
           },
         })
       );
     }
+
+    e.preventDefault();
   };
 
   return (
@@ -64,9 +64,21 @@ export function UpdateContactModal(props: UpdateContactModalProps) {
             <span>Update Contact</span>
           </div>
           <div className="space-y-4">
-            <PhoneInput />
+            <PhoneInput
+              colorTheme="black"
+              onChange={(e) => {
+                setContact(e.target.value);
+              }}
+              required
+              fullWidth
+              value={contact}
+              name="contact"
+            />
 
-            <button className="w-full py-2 text-lg text-white border rounded-lg bg-button border-whitet">
+            <button
+              type="submit"
+              className="w-full py-2 text-lg text-white border rounded-lg bg-button border-whitet"
+            >
               Update Contact
             </button>
           </div>

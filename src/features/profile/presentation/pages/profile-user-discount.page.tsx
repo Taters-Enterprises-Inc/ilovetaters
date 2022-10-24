@@ -26,6 +26,7 @@ import {
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import { updateUserDiscount } from "../slices/update-user-discount.slice";
+import { MaterialInput } from "features/shared/presentation/components";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
@@ -262,7 +263,8 @@ export function ProfileUserDiscount() {
         </FormControl>
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="First Name"
             value={formState.firstName}
@@ -272,7 +274,8 @@ export function ProfileUserDiscount() {
             type="text"
           />
 
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="Middle Name"
             className="flex-1"
@@ -281,7 +284,8 @@ export function ProfileUserDiscount() {
             name="middleName"
           />
 
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="Last Name"
             className="flex-1"
@@ -319,19 +323,23 @@ export function ProfileUserDiscount() {
                 onOpen={() => setOpenBirthDateCalendar(true)}
                 onClose={() => setOpenBirthDateCalendar(false)}
                 renderInput={(params) => (
-                  <TextField
+                  <MaterialInput
+                    colorTheme="black"
                     onClick={() => {
                       setOpenBirthDateCalendar(true);
                     }}
                     required
                     fullWidth
-                    {...params}
+                    value=""
+                    name=""
+                    onChange={() => {}}
                   />
                 )}
               />
             </LocalizationProvider>
           </div>
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="ID Number"
             className="flex-1 w-full"

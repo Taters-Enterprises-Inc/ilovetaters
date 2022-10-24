@@ -1,6 +1,7 @@
 import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { ContactModel } from "features/shared/core/domain/contact.model";
+import { MaterialInput } from "features/shared/presentation/components";
 import { AddContactModal } from "features/shared/presentation/modals";
 import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
 import {
@@ -59,118 +60,95 @@ export function ProfileHome() {
           Personal Information
         </h1>
 
-        <div className="flex space-x-4">
-          {getSessionState.data?.userData.first_name ? (
-            <TextField
+        {getSessionState.data ? (
+          <>
+            <div className="flex space-x-4">
+              <MaterialInput
+                colorTheme="black"
+                required
+                className="flex-1"
+                label="First Name"
+                onChange={() => {}}
+                name="firstName"
+                value={getSessionState.data.userData.first_name}
+              />
+
+              <MaterialInput
+                colorTheme="black"
+                required
+                className="flex-1"
+                label="Last Name"
+                onChange={() => {}}
+                name="lastName"
+                value={getSessionState.data.userData.last_name}
+              />
+            </div>
+
+            <MaterialInput
+              colorTheme="black"
               required
-              label="First Name"
-              defaultValue={getSessionState.data?.userData.first_name}
               className="flex-1"
-              name="firstName"
+              label="E-mail"
+              onChange={() => {}}
+              name="email"
+              fullWidth
+              value={getSessionState.data.userData.email}
             />
-          ) : null}
-          <TextField
-            required
-            label="First Name"
-            variant="outlined"
-            className={`flex-1 ${
-              getSessionState.data?.userData.first_name ? "!hidden" : ""
-            }`}
-            name="firstName"
-          />
 
-          {getSessionState.data?.userData.last_name ? (
-            <TextField
-              required
-              label="Last Name"
-              defaultValue={getSessionState.data?.userData.last_name}
-              className="flex-1"
-              name="lastName"
-            />
-          ) : null}
-          <TextField
-            required
-            label="Last Name"
-            variant="outlined"
-            className={`flex-1 ${
-              getSessionState.data?.userData.last_name ? "!hidden" : ""
-            }`}
-            name="lastName"
-          />
-        </div>
-
-        {getSessionState.data?.userData.email ? (
-          <TextField
-            required
-            label="E-mail"
-            defaultValue={getSessionState.data?.userData.email}
-            className="flex-1 w-full"
-            name="eMail"
-          />
-        ) : null}
-
-        <TextField
-          required
-          label="E-mail"
-          variant="outlined"
-          className={`w-full ${
-            getSessionState.data?.userData.email ? "!hidden" : ""
-          }`}
-          name="eMail"
-        />
-
-        <div className="py-8 space-y-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
-              Contact
-            </h1>
-            <button
-              onClick={() => {
-                setOpenAddContactModal(true);
-              }}
-              className="bg-button border border-secondary  text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
-            >
-              <IoMdAdd />
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {getContactsState.data?.map((val) => (
-              <div className="flex">
-                <div className="flex-1 border border-secondary rounded-l-md">
-                  <input
-                    readOnly
-                    className="w-full px-4 py-4 bg-transparent text-secondary"
-                    value={val.contact}
-                  />
-                </div>
+            <div className="py-8 space-y-4">
+              <div className="flex items-center justify-between">
+                <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
+                  Contact
+                </h1>
                 <button
                   onClick={() => {
-                    setOpenUpdateContactModal({
-                      status: true,
-                      contact: val,
-                    });
+                    setOpenAddContactModal(true);
                   }}
-                  className="px-4 text-white bg-blue-700 border border-blue-700"
+                  className="bg-button border border-secondary  text-white text-xl shadow-lg w-[100px] h-[40px] flex justify-center items-center rounded-md"
                 >
-                  <FiEdit />
-                </button>
-                <button
-                  onClick={() => {
-                    dispatch(
-                      deleteContact({
-                        id: val.id,
-                      })
-                    );
-                  }}
-                  className="px-4 text-white bg-orange-700 border border-orange-700"
-                >
-                  <BsFillTrashFill />
+                  <IoMdAdd />
                 </button>
               </div>
-            ))}
-          </div>
-        </div>
+
+              <div className="space-y-4">
+                {getContactsState.data?.map((val) => (
+                  <div className="flex">
+                    <div className="flex-1 border border-secondary rounded-l-md">
+                      <input
+                        readOnly
+                        className="w-full px-4 py-4 bg-transparent text-secondary"
+                        value={val.contact}
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        setOpenUpdateContactModal({
+                          status: true,
+                          contact: val,
+                        });
+                      }}
+                      className="px-4 text-white bg-blue-700 border border-blue-700"
+                    >
+                      <FiEdit />
+                    </button>
+                    <button
+                      onClick={() => {
+                        dispatch(
+                          deleteContact({
+                            id: val.id,
+                          })
+                        );
+                      }}
+                      className="px-4 text-white bg-orange-700 border border-orange-700"
+                    >
+                      <BsFillTrashFill />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : null}
       </ProfileContainer>
       <AddContactModal
         open={openAddContactModal}

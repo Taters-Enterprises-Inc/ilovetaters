@@ -1,12 +1,16 @@
 import TextField, { StandardTextFieldProps } from "@mui/material/TextField";
 import { alpha, styled } from "@mui/material/styles";
+import { ChangeEventHandler } from "react";
 
-interface InputProps extends StandardTextFieldProps {
+export interface MaterialInputProps extends StandardTextFieldProps {
   colorTheme: "white" | "black";
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  value: string | null;
+  name: string;
 }
 
 export const MaterialInput = styled(
-  (props: InputProps) => <TextField {...props} />,
+  (props: MaterialInputProps) => <TextField {...props} />,
   {
     shouldForwardProp: (prop) => prop !== "colorTheme",
   }

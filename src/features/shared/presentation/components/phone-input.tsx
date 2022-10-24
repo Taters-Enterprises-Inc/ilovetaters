@@ -1,8 +1,10 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
+import { MaterialInput, MaterialInputProps } from "./material-input";
 
-export function PhoneInput() {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+interface PhoneInputProps extends MaterialInputProps {}
+
+export function PhoneInput(props: MaterialInputProps) {
   const [error, setError] = useState<string | null>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -10,24 +12,21 @@ export function PhoneInput() {
 
     if (value.length < 12) {
       setError(null);
-      setPhoneNumber(value);
+      props.onChange(event);
     } else {
       setError("Invalid phone number");
     }
   };
 
   return (
-    <TextField
-      required
+    <MaterialInput
+      {...props}
       error={error ? true : false}
       helperText={error}
-      value={phoneNumber}
       onChange={handleChange}
       label="Phone Number"
-      variant="outlined"
-      className="w-full"
-      name="phoneNumber"
       placeholder="0905XXXXXXX"
+      name="phoneNumber"
     />
   );
 }

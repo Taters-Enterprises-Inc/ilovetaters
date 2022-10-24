@@ -373,7 +373,12 @@ export function CateringCheckout() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <PhoneInput />
+                    <PhoneInput
+                      colorTheme="black"
+                      onChange={() => {}}
+                      value=""
+                      name=""
+                    />
                   </div>
                 </div>
 

@@ -26,20 +26,20 @@ export interface GetOrdersParam {
   hash: string;
 }
 
-export interface CheckoutOrdersParam {
-  firstName: string;
-  lastName: string;
-  eMail: string;
-  phoneNumber: string;
-  payops: string;
-  address: string;
-  full_address: string;
-}
-
 export interface GetCategoryProductsParam {
   region_id: number;
 }
 
 export interface GetProductDetailsParam {
   hash: string;
+}
+
+export interface CheckoutOrdersParam {
+  firstName: string;
+  lastName: string;
+  eMail: string;
+  payops: string;
+  phoneNumber: string;
+  landmarkAddress: string;
+  completeDeliveryAddress: string;
 }
