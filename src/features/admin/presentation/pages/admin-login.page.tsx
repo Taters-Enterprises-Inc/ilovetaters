@@ -1,8 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { AdminEmailTextField, AdminPasswordTextField } from "../components";
 import {
   getAdminSession,
   GetAdminSessionState,
@@ -14,11 +13,18 @@ import {
   selectLoginAdmin,
 } from "../slices/login-admin.slice";
 import { useEffect } from "react";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+} from "features/shared/presentation/components";
 
 export function AdminLogin() {
   const dispatch = useAppDispatch();
   const loginAdminState = useAppSelector(selectLoginAdmin);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const [identity, setIdentity] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (loginAdminState.status === LoginAdminState.success) {
@@ -31,11 +37,13 @@ export function AdminLogin() {
   }, [dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      loginAdmin({
+        identity,
+        password,
+      })
+    );
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(loginAdmin(formData));
   };
 
   if (
@@ -74,8 +82,27 @@ export function AdminLogin() {
             )}
 
             <div className="pt-4 space-y-4">
-              <AdminEmailTextField />
-              <AdminPasswordTextField />
+              <MaterialInput
+                colorTheme="white"
+                type="email"
+                label="Email"
+                size="small"
+                fullWidth
+                name="identity"
+                value={identity}
+                onChange={(e) => {
+                  setIdentity(e.target.value);
+                }}
+              />
+              <MaterialInputPassword
+                label="Email"
+                name="password"
+                colorTheme="white"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
             </div>
 
             <div className="flex justify-between py-4 text-white">

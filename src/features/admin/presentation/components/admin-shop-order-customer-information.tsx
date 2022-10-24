@@ -38,6 +38,7 @@ import {
   selectAdminPrivilege,
   resetAdminPrivilege,
 } from "../slices/admin-privilege.slice";
+import { MaterialInputSelect } from "features/shared/presentation/components";
 
 export function AdminShopOrderCustomerInformation() {
   const query = useQuery();
@@ -428,7 +429,8 @@ export function AdminShopOrderCustomerInformation() {
                 name="from_status_id"
                 value={getAdminShopOrderState.data?.status}
               />
-              <Select
+              <MaterialInputSelect
+                colorTheme="black"
                 size="small"
                 name="status"
                 sx={{
@@ -448,7 +450,7 @@ export function AdminShopOrderCustomerInformation() {
                     </MenuItem>
                   );
                 })}
-              </Select>
+              </MaterialInputSelect>
               <button
                 type="submit"
                 className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"
@@ -478,7 +480,8 @@ export function AdminShopOrderCustomerInformation() {
               value={getAdminShopOrderState.data?.store}
             />
 
-            <Select
+            <MaterialInputSelect
+              colorTheme="black"
               size="small"
               sx={{
                 "& fieldset": {
@@ -493,7 +496,7 @@ export function AdminShopOrderCustomerInformation() {
                   {store.name}
                 </MenuItem>
               ))}
-            </Select>
+            </MaterialInputSelect>
             <button
               type="submit"
               className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0 lg:rounded-tr-md lg:rounded-br-md"

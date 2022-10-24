@@ -15,6 +15,8 @@ import { ReactNode } from "react";
 import { visuallyHidden } from "@mui/utils";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
+import { MaterialInputSelect } from "./material-input-select";
+import { MaterialInput } from "./material-input";
 
 export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -61,7 +63,7 @@ interface DataTableProps {
   totalRows: number;
   perPage: number;
   emptyMessage: string;
-  onRowsPerPageChange: (event: SelectChangeEvent) => void;
+  onRowsPerPageChange: (event: SelectChangeEvent<unknown>) => void;
 }
 
 export function DataTable(props: DataTableProps) {
@@ -69,17 +71,18 @@ export function DataTable(props: DataTableProps) {
     <div className="space-y-4">
       <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
         <div className="flex flex-1 space-x-4">
-          <TextField
-            required
+          <MaterialInput
+            colorTheme="black"
             label="Search"
-            variant="outlined"
             size="small"
-            defaultValue={props.search}
+            name="search"
+            value={props.search}
             onChange={(e) => {
               props.onSearch(e.target.value);
             }}
           />
-          <Select
+          <MaterialInputSelect
+            colorTheme="black"
             size="small"
             defaultValue={props.perPage.toString()}
             onChange={props.onRowsPerPageChange}
@@ -88,7 +91,7 @@ export function DataTable(props: DataTableProps) {
             <MenuItem value={25}>25</MenuItem>
             <MenuItem value={50}>50</MenuItem>
             <MenuItem value={100}>100</MenuItem>
-          </Select>
+          </MaterialInputSelect>
         </div>
 
         <Pagination

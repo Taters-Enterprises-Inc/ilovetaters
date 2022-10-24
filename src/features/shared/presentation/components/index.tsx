@@ -26,3 +26,5 @@ export { AdminNotificationWrapper } from "./admin-notification.wrapper";
 export { MaterialInput } from "./material-input";
 export { MaterialInputSelect } from "./material-input-select";
 export { MaterialDateInput } from "./material-date-input";
+export { MaterialDateTimeInput } from "./material-date-time-input";
+export { MaterialInputPassword } from "./material-input-password";

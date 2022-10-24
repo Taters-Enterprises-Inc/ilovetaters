@@ -8,6 +8,8 @@ import {
   UpdateStoreProductParam,
   UpdateStoreCatersPackageAddonParam,
   UpdateStoreCatersProductAddonParam,
+  CreateAdminUserParam,
+  LoginAdminParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -723,7 +725,7 @@ export function EditAdminUserRepository(
 ): Promise<EditAdminUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/auth/edit-user/${param.userId}`,
-    param.formData,
+    param.body,
     {
       withCredentials: true,
     }
@@ -745,9 +747,9 @@ export function GetAdminUserRepository(
 }
 
 export function CreateAdminUserRepository(
-  formData: FormData
+  param: CreateAdminUserParam
 ): Promise<CreateAdminUserResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, param, {
     withCredentials: true,
   });
 }
@@ -827,7 +829,7 @@ export function GetAdminSessionRepository(): Promise<GetAdminSessionResponse> {
 }
 
 export function LoginAdminRepository(
-  param: FormData
+  param: LoginAdminParam
 ): Promise<LoginAdminResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/login`, param, {
     withCredentials: true,

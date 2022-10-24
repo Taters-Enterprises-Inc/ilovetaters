@@ -1,14 +1,11 @@
-import {
-  AdminCreateUserPasswordTextField,
-  AdminHead,
-  AdminPhoneInput,
-} from "../components";
+import { AdminHead, AdminPhoneInput } from "../components";
 import TextField from "@mui/material/TextField";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAdminUser,
+  GetAdminUserState,
   resetAdminUser,
   selectGetAdminUser,
 } from "../slices/get-admin-user.slice";
@@ -23,6 +20,12 @@ import {
   resetEditAdminUser,
   selectEditAdminUser,
 } from "../slices/edit-admin-user.slice";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+  PhoneInput,
+} from "features/shared/presentation/components";
+import { get } from "http";
 
 export function AdminSettingEditUser() {
   const dispatch = useAppDispatch();
@@ -32,7 +35,34 @@ export function AdminSettingEditUser() {
   const getAdminUserState = useAppSelector(selectGetAdminUser);
   const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
   const editAdminUserState = useAppSelector(selectEditAdminUser);
-  console.log(getAdminUserState);
+
+  const [formState, setFormState] = useState<{
+    firstName: string;
+    lastName: string;
+    company: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+    groups: Array<number> | null;
+  }>({
+    firstName: "",
+    lastName: "",
+    company: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+    groups: null,
+  });
+
+  const handleInputChange = (evt: any) => {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  };
 
   useEffect(() => {
     if (editAdminUserState.status === EditAdminUserState.success) {
@@ -49,18 +79,49 @@ export function AdminSettingEditUser() {
     }
   }, [dispatch, id]);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (
+      getAdminUserState.status === GetAdminUserState.success &&
+      getAdminUserState.data
+    ) {
+      let groups = null;
 
+      if (getAdminUserState.data.groups) {
+        const currentGroups = getAdminUserState.data.groups;
+
+        for (let i = 0; i < currentGroups.length; i++) {
+          if (groups === null) {
+            groups = [currentGroups[i].id];
+          } else {
+            groups.push(currentGroups[i].id);
+          }
+        }
+      }
+      console.log(groups);
+
+      setFormState({
+        firstName: getAdminUserState.data.first_name,
+        lastName: getAdminUserState.data.last_name,
+        company: getAdminUserState.data.company,
+        email: getAdminUserState.data.email,
+        phoneNumber: getAdminUserState.data.phone,
+        password: "",
+        confirmPassword: "",
+        groups: groups,
+      });
+    }
+  }, [getAdminUserState]);
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (id) {
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
       dispatch(
         editAdminUser({
           userId: id,
-          formData: formData,
+          body: formState,
         })
       );
     }
+    e.preventDefault();
   };
   return (
     <>
@@ -88,43 +149,57 @@ export function AdminSettingEditUser() {
 
           {getAdminUserState.data && getAdminGroupsState.data ? (
             <form onSubmit={onSubmit} className="flex flex-col space-y-4">
-              <TextField
+              <MaterialInput
+                colorTheme="black"
+                required
                 label="First Name"
-                name="first_name"
-                required
-                defaultValue={getAdminUserState.data.first_name}
+                name="firstName"
+                value={formState.firstName}
+                onChange={handleInputChange}
               />
-              <TextField
+              <MaterialInput
+                colorTheme="black"
+                required
                 label="Last Name"
-                name="last_name"
-                required
-                defaultValue={getAdminUserState.data.last_name}
+                name="lastName"
+                value={formState.lastName}
+                onChange={handleInputChange}
               />
-              <TextField
+              <MaterialInput
+                colorTheme="black"
+                required
                 label="Company Name"
                 name="company"
-                required
-                defaultValue={getAdminUserState.data.company}
+                value={formState.company}
+                onChange={handleInputChange}
               />
-              <AdminPhoneInput
-                label="Phone Number"
-                name="phone"
-                defaultValue={getAdminUserState.data.phone}
+              <PhoneInput
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.phoneNumber}
+                name="phoneNumber"
               />
-              <AdminCreateUserPasswordTextField
+
+              <MaterialInputPassword
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.password}
                 name="password"
-                label="Password ( if changing )"
+                label="Password"
               />
-              <AdminCreateUserPasswordTextField
-                name="password_confirm"
-                label="Confirm Password ( if changing password )"
+              <MaterialInputPassword
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.confirmPassword}
+                name="confirmPassword"
+                label="Confirm Password"
               />
+
               <div className="flex flex-wrap">
                 {getAdminGroupsState.data?.map((group) => (
                   <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">
                     <Checkbox
                       color="primary"
-                      name="groups[]"
                       value={group.id}
                       defaultChecked={getAdminUserState.data?.groups.some(
                         (element) => {
@@ -135,6 +210,22 @@ export function AdminSettingEditUser() {
                           return false;
                         }
                       )}
+                      onChange={(event) => {
+                        let groups = formState.groups;
+
+                        if (groups === null) {
+                          groups = [group.id];
+                        } else if (groups.some((e) => e === group.id)) {
+                          groups = groups.filter((e) => e !== group.id);
+                        } else {
+                          groups.push(group.id);
+                        }
+
+                        setFormState({
+                          ...formState,
+                          groups: groups,
+                        });
+                      }}
                     />
                     <span>{group.name}</span>
                   </div>

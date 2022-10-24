@@ -1,6 +1,15 @@
 export interface EditAdminUserParam {
-  formData: FormData;
   userId: string;
+  body: {
+    firstName: string;
+    lastName: string;
+    company: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+    groups: Array<number> | null;
+  };
 }
 
 export interface UpdateStoreDealParam {
@@ -37,4 +46,19 @@ export interface UpdateAdminSettingStoreOperatingHoursParam {
   store_id: string;
   available_start_time: string;
   available_end_time: string;
+}
+
+export interface CreateAdminUserParam {
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface LoginAdminParam {
+  identity: string;
+  password: string;
 }

@@ -32,6 +32,7 @@ import {
 } from "../slices/get-admin-catering-booking.slice";
 import Moment from "react-moment";
 import moment from "moment";
+import { MaterialInputSelect } from "features/shared/presentation/components";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -290,7 +291,8 @@ export function AdminCateringBookingCustomerInformation() {
                 name="from_status_id"
                 value={getAdminCateringBookingState.data?.status}
               />
-              <Select
+              <MaterialInputSelect
+                colorTheme="black"
                 size="small"
                 name="to_status_id"
                 defaultValue={getAdminCateringBookingState.data?.status}
@@ -305,7 +307,7 @@ export function AdminCateringBookingCustomerInformation() {
                     </MenuItem>
                   );
                 })}
-              </Select>
+              </MaterialInputSelect>
               <button
                 type="submit"
                 className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
@@ -335,7 +337,8 @@ export function AdminCateringBookingCustomerInformation() {
               value={getAdminCateringBookingState.data?.store}
             />
 
-            <Select
+            <MaterialInputSelect
+              colorTheme="black"
               size="small"
               defaultValue={getAdminCateringBookingState.data?.store}
               name="to_store_id"
@@ -345,7 +348,7 @@ export function AdminCateringBookingCustomerInformation() {
                   {store.name}
                 </MenuItem>
               ))}
-            </Select>
+            </MaterialInputSelect>
             <button
               type="submit"
               className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
