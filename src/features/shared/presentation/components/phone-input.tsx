@@ -2,8 +2,6 @@ import { TextField } from "@mui/material";
 import { useState } from "react";
 import { MaterialInput, MaterialInputProps } from "./material-input";
 
-interface PhoneInputProps extends MaterialInputProps {}
-
 export function PhoneInput(props: MaterialInputProps) {
   const [error, setError] = useState<string | null>();
 

@@ -14,13 +14,11 @@ export { MobileLoginSignUp } from "./mobile-login-sign-up";
 export { UnExpiredRedeem } from "./unexpired-redeem";
 export { UserNotificationWrapper } from "./user-notification.wrapper";
 export { PhoneInput } from "./phone-input";
-export { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 export { MobileForgotPasswordOtp } from "./mobile-forgot-password-otp";
 export { MobileForgotPasswordOtpAuthentication } from "./mobile-forgot-password-otp-authentication";
 export { MobileForgotPasswordNewPassword } from "./mobile-forgot-password-new-password";
 export { DataList } from "./data-list";
 export { ConsentWrapper } from "./consent-wrapper";
-export { MobilePasswordTextField } from "./mobile-password-textfield";
 export { AdminNotificationWrapper } from "./admin-notification.wrapper";
 
 export { MaterialInput } from "./material-input";

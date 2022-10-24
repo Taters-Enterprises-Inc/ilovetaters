@@ -9,6 +9,8 @@ import {
   GetStoresAvailableParam,
   SetSessionParam,
   SetStoreAndAddressParm,
+  SignInMobileUserParam,
+  SignUpMobileUserParam,
   UpdateContactParam,
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
@@ -185,7 +187,7 @@ export function ForgotPasswordGenerateOTPRepository(
 }
 
 export function SignUpMobileUserRepository(
-  param: FormData
+  param: SignUpMobileUserParam
 ): Promise<SignUpMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/registration`,
@@ -197,7 +199,7 @@ export function SignUpMobileUserRepository(
 }
 
 export function SignInMobileUserRepository(
-  param: FormData
+  param: SignInMobileUserParam
 ): Promise<SignInMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/login_mobile_user`,

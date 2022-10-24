@@ -8,6 +8,8 @@ import { MaterialInput, MaterialInputProps } from "./material-input";
 export function MaterialInputPassword(props: MaterialInputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const color = props.colorTheme === "black" ? "#22201A" : "white";
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -35,9 +37,9 @@ export function MaterialInputPassword(props: MaterialInputProps) {
               edge="end"
             >
               {showPassword ? (
-                <VisibilityOff sx={{ color: "#22201A" }} />
+                <VisibilityOff sx={{ color }} />
               ) : (
-                <Visibility sx={{ color: "#22201A" }} />
+                <Visibility sx={{ color }} />
               )}
             </IconButton>
           </InputAdornment>

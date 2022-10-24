@@ -47,3 +47,15 @@ export interface SetSessionParam {
 export interface FacebookLoginPointParam {
   currentUrl: string;
 }
+
+export interface SignInMobileUserParam {
+  phoneNumber: string;
+  password: string;
+}
+
+export interface SignUpMobileUserParam {
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}

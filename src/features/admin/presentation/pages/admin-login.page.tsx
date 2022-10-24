@@ -95,7 +95,8 @@ export function AdminLogin() {
                 }}
               />
               <MaterialInputPassword
-                label="Email"
+                label="Password"
+                size="small"
                 name="password"
                 colorTheme="white"
                 value={password}
