@@ -10,21 +10,48 @@ import { RatingCustomer } from "../components/customer-survey.rating";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { BranchesList } from "../components/branches.dropdown";
 import { RatingRadioButton } from "../components/radio-button";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-export function CustomerSurvey() {
+export function CustomerSurveyPageFive() {
   const navigate = useNavigate();
-  const navigateToCustomerSurveyP2 = () => {
-    navigate("/survey/page-two");
+  const navigateToCustomerSurveyP6 = () => {
+    navigate("/survey/page-six");
   };
 
+  function YesorNoRadioButton() {
+    return (
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue=""
+          name="radio-buttons-group"
+        >
+          <FormControlLabel
+            value="Yes"
+            control={<Radio size="small" />}
+            label="Yes"
+          />
+          <FormControlLabel
+            value="No"
+            control={<Radio size="small" />}
+            label="No"
+          />
+        </RadioGroup>
+      </FormControl>
+    );
+  }
   return (
     <>
       <Helmet>
         <title>Taters | Customer Satisfaction Survey</title>
       </Helmet>
 
-      <main className="min-h-screen bg-paper">
+      <main className="min-h-screen bg-primary">
         <section
           style={{
             backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg')`,
@@ -68,20 +95,17 @@ export function CustomerSurvey() {
             <div className="space-y-4 lg:flex-w-full text-md lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] pt-6 lg:px-4">
               <section className="px-6 text-black">
                 <p>
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
+                  <strong>Did you have problem during your experience?</strong>
                 </p>
                 <div className="flex py-2">
-                  <RatingRadioButton />
+                  <YesorNoRadioButton />
                 </div>
               </section>
             </div>
 
             <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP6}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
               >
@@ -91,7 +115,7 @@ export function CustomerSurvey() {
               </button>
             </div>
             <div className="flex items-center justify-center pb-6 bg-paper text-sm">
-              <p className="">1% Complete</p>
+              <p className="">43% Complete</p>
             </div>
           </div>
 
@@ -110,19 +134,18 @@ export function CustomerSurvey() {
               <section className="px-20 text-lg text-black">
                 <p className="pl-4">
                   <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
+                    Did you have a problem during your experience?
                   </strong>
                 </p>
                 <div className="flex pl-4 py-4">
-                  <RatingRadioButton />
+                  <YesorNoRadioButton />
                 </div>
               </section>
             </div>
 
             <div className="flex items-center justify-center pb-1">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP6}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
               >
@@ -132,7 +155,7 @@ export function CustomerSurvey() {
               </button>
             </div>
             <div className="flex items-center justify-center pb-6 bg-paper">
-              <p className="">1% Complete</p>
+              <p className="">43% Complete</p>
             </div>
           </div>
         </section>

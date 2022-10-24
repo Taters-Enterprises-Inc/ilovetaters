@@ -4,11 +4,16 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect } from "react";
 
 const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
-  <TextField {...props} />
+  <TextField
+    {...props}
+    multiline
+    rows={4}
+    InputProps={{ style: { fontSize: 14 } }}
+  />
 ))(({ theme }) => ({
   "& input": {
     color: "black !important",
-    "-webkit-text-fill-color": "black !important",
+    "-webkit-text-fill-color": "white !important",
   },
   "& label": {
     color: "black !important",
@@ -23,9 +28,16 @@ const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
     borderColor: "black !important",
   },
 }));
-interface RecieptNumber {
+interface Comment {
   label: string;
 }
-export function TextInputWalkIn(props: RecieptNumber) {
-  return <WhiteTextFiled variant="outlined" fullWidth label={props.label} />;
+export function CommentTextInput(props: Comment) {
+  return (
+    <WhiteTextFiled
+      variant="outlined"
+      fullWidth
+      label={props.label}
+      placeholder="Comment here."
+    />
+  );
 }

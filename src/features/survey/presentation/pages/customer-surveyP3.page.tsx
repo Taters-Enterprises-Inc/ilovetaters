@@ -12,19 +12,18 @@ import { BranchesList } from "../components/branches.dropdown";
 import { RatingRadioButton } from "../components/radio-button";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-export function CustomerSurvey() {
+export function CustomerSurveyPageThree() {
   const navigate = useNavigate();
-  const navigateToCustomerSurveyP2 = () => {
-    navigate("/survey/page-two");
+  const navigateToCustomerSurveyP4 = () => {
+    navigate("/survey/page-four");
   };
-
   return (
     <>
       <Helmet>
         <title>Taters | Customer Satisfaction Survey</title>
       </Helmet>
 
-      <main className="min-h-screen bg-paper">
+      <main className="min-h-screen bg-primary">
         <section
           style={{
             backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg')`,
@@ -66,22 +65,40 @@ export function CustomerSurvey() {
               service.
             </p>
             <div className="space-y-4 lg:flex-w-full text-md lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] pt-6 lg:px-4">
-              <section className="px-6 text-black">
-                <p>
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
+              <section className="px-4 text-black">
+                <p className="pb-4 pl-4">
+                  <strong>Please Rate your satisfaction with:</strong>
                 </p>
-                <div className="flex py-2">
+                <p className="pl-4">The friendlyness of the delivery driver.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Taste of your food.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">The availability of the menu items.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Speed of service</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Temperature of food</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">The accuracy of order</p>
+                <div className="flex pl-4 pt-2 pb-4">
                   <RatingRadioButton />
                 </div>
               </section>
             </div>
 
-            <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
+            <div className="flex items-center justify-center pb-1 bg-paper">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP4}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
               >
@@ -90,8 +107,8 @@ export function CustomerSurvey() {
                 </span>
               </button>
             </div>
-            <div className="flex items-center justify-center pb-6 bg-paper text-sm">
-              <p className="">1% Complete</p>
+            <div className="flex items-center justify-center pb-6 bg-paper">
+              <p className="">13% Complete</p>
             </div>
           </div>
 
@@ -108,13 +125,31 @@ export function CustomerSurvey() {
 
             <div className="py-6 pt-10 space-y-4 lg:flex-w-full lg:max-w bg-paper lg:px-4">
               <section className="px-20 text-lg text-black">
-                <p className="pl-4">
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
+                <p className="pb-4 pl-4">
+                  <strong>Please Rate your satisfaction with:</strong>
                 </p>
-                <div className="flex pl-4 py-4">
+                <p className="pl-4">The friendlyness of the delivery driver.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Taste of your food.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">The availability of the menu items.</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Speed of service</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">Temperature of food</p>
+                <div className="flex pl-4 pt-2 pb-4">
+                  <RatingRadioButton />
+                </div>
+                <p className="pl-4">The accuracy of order</p>
+                <div className="flex pl-4 pt-2 pb-4">
                   <RatingRadioButton />
                 </div>
               </section>
@@ -122,7 +157,7 @@ export function CustomerSurvey() {
 
             <div className="flex items-center justify-center pb-1">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP4}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
               >
@@ -132,7 +167,7 @@ export function CustomerSurvey() {
               </button>
             </div>
             <div className="flex items-center justify-center pb-6 bg-paper">
-              <p className="">1% Complete</p>
+              <p className="">13% Complete</p>
             </div>
           </div>
         </section>

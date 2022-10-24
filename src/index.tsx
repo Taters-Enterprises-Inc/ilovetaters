@@ -96,6 +96,16 @@ import { BSCLogin } from "features/bsc/presentation/pages";
 import {
   CustomerSurvey,
   CustomerSurveyWalkIn,
+  CustomerSurveyPageTwo,
+  CustomerSurveyPageThree,
+  CustomerSurveyPageFour,
+  CustomerSurveyPageFive,
+  CustomerSurveyPageSix,
+  CustomerSurveyPageSeven,
+  CustomerSurveyPageEight,
+  CustomerSurveyPageNine,
+  CustomerSurveyPageTen,
+  CustomerSurveyComplete,
 } from "features/survey/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -305,6 +315,34 @@ root.render(
                 <Route path="survey">
                   <Route index element={<CustomerSurvey />} />
                   <Route path="walk-in" element={<CustomerSurveyWalkIn />} />
+                  <Route path="page-two" element={<CustomerSurveyPageTwo />} />
+                  <Route
+                    path="page-three"
+                    element={<CustomerSurveyPageThree />}
+                  />
+                  <Route
+                    path="page-four"
+                    element={<CustomerSurveyPageFour />}
+                  />
+                  <Route
+                    path="page-five"
+                    element={<CustomerSurveyPageFive />}
+                  />
+                  <Route path="page-six" element={<CustomerSurveyPageSix />} />
+                  <Route
+                    path="page-seven"
+                    element={<CustomerSurveyPageSeven />}
+                  />
+                  <Route
+                    path="page-eight"
+                    element={<CustomerSurveyPageEight />}
+                  />
+                  <Route
+                    path="page-nine"
+                    element={<CustomerSurveyPageNine />}
+                  />
+                  <Route path="page-ten" element={<CustomerSurveyPageTen />} />
+                  <Route path="complete" element={<CustomerSurveyComplete />} />
                 </Route>
               </Route>
             </Route>

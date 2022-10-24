@@ -8,16 +8,16 @@ import { Helmet } from "react-helmet";
 import * as React from "react";
 import { RatingCustomer } from "../components/customer-survey.rating";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { TextInputWalkIn } from "../components/walk-in.form";
+import { CommentTextInput } from "../components/comment-form";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { RecieptDateTime } from "../components/Date-and-time.picker";
 import Stack from "@mui/material/Stack";
 
-export function CustomerSurveyWalkIn() {
+export function CustomerSurveyPageSeven() {
   const navigate = useNavigate();
-  const navigateToCustomerSurvey = () => {
-    navigate("/survey");
+  const navigateToCustomerSurveyP8 = () => {
+    navigate("/survey/page-eight");
   };
 
   return (
@@ -62,28 +62,33 @@ export function CustomerSurveyWalkIn() {
             </h1>
 
             <p className="px-4 text-sm text-center text-black">
-              Kindly input the following details to proceed.
+              Please tell us in three or more sentences about your experience
+              with Taters.
             </p>
             <div className="space-y-4 lg:flex-w-full  lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] py-6 lg:px-4">
               <section className="px-4 text-black">
                 <form autoComplete="off">
                   <Stack spacing={3}>
-                    <TextInputWalkIn label="Reciept No." />
-                    <RecieptDateTime />
+                    <CommentTextInput label="" />
                   </Stack>
                 </form>
               </section>
-              <div className="flex items-center justify-center py-4">
-                <button
-                  onClick={navigateToCustomerSurvey}
-                  type="submit"
-                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
-                >
-                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    CONTINUE
-                  </span>
-                </button>
-              </div>
+              <section>
+                <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
+                  <button
+                    onClick={navigateToCustomerSurveyP8}
+                    type="submit"
+                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      CONTINUE
+                    </span>
+                  </button>
+                </div>
+                <div className="flex items-center justify-center pb-6 bg-paper text-sm">
+                  <p className="">49% Complete</p>
+                </div>
+              </section>
             </div>
           </div>
 
@@ -93,29 +98,34 @@ export function CustomerSurveyWalkIn() {
             </h1>
 
             <p className="px-2 text-lg text-center text-black">
-              Kindly input the following details to proceed.
+              Please tell us in three or more sentences about your experience
+              with Taters.
             </p>
 
             <div className="py-6 space-y-4 lg:flex-w-full lg:max-w bg-paper lg:px-4">
               <section className="px-4 text-lg text-paper">
                 <form autoComplete="off">
                   <Stack spacing={3}>
-                    <TextInputWalkIn label="Reciept No." />
-                    <RecieptDateTime />
+                    <CommentTextInput label="" />
                   </Stack>
                 </form>
               </section>
-              <div className="flex items-center justify-center py-4">
-                <button
-                  onClick={navigateToCustomerSurvey}
-                  type="submit"
-                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
-                >
-                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    CONTINUE
-                  </span>
-                </button>
-              </div>
+              <section>
+                <div className="flex items-center justify-center pt-4">
+                  <button
+                    onClick={navigateToCustomerSurveyP8}
+                    type="submit"
+                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      CONTINUE
+                    </span>
+                  </button>
+                </div>
+                <div className="flex items-center justify-center pb-6 bg-paper text-md">
+                  <p className="">49% Complete</p>
+                </div>
+              </section>
             </div>
           </div>
         </section>

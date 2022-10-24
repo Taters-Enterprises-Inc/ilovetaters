@@ -10,14 +10,46 @@ import { RatingCustomer } from "../components/customer-survey.rating";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { BranchesList } from "../components/branches.dropdown";
 import { RatingRadioButton } from "../components/radio-button";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-export function CustomerSurvey() {
+export function CustomerSurveyPageTwo() {
   const navigate = useNavigate();
-  const navigateToCustomerSurveyP2 = () => {
-    navigate("/survey/page-two");
+  const navigateToCustomerSurveyP3 = () => {
+    navigate("/survey/page-three");
   };
 
+  function VisitRadioButton() {
+    return (
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="Walk-in"
+          name="radio-buttons-group"
+        >
+          <FormControlLabel
+            value="Delivery"
+            control={<Radio size="small" />}
+            label="Delivery"
+          />
+          <FormControlLabel
+            value="Online order : Pick-up"
+            control={<Radio size="small" />}
+            label="Online order : Pick-up"
+          />
+          <FormControlLabel
+            value="Walk-in"
+            control={<Radio size="small" />}
+            label="Walk-in"
+          />
+        </RadioGroup>
+      </FormControl>
+    );
+  }
   return (
     <>
       <Helmet>
@@ -68,20 +100,17 @@ export function CustomerSurvey() {
             <div className="space-y-4 lg:flex-w-full text-md lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] pt-6 lg:px-4">
               <section className="px-6 text-black">
                 <p>
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
+                  <strong>Please Select your Visit type:</strong>
                 </p>
                 <div className="flex py-2">
-                  <RatingRadioButton />
+                  <VisitRadioButton />
                 </div>
               </section>
             </div>
 
             <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP3}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
               >
@@ -91,7 +120,7 @@ export function CustomerSurvey() {
               </button>
             </div>
             <div className="flex items-center justify-center pb-6 bg-paper text-sm">
-              <p className="">1% Complete</p>
+              <p className="">3% Complete</p>
             </div>
           </div>
 
@@ -115,14 +144,14 @@ export function CustomerSurvey() {
                   </strong>
                 </p>
                 <div className="flex pl-4 py-4">
-                  <RatingRadioButton />
+                  <VisitRadioButton />
                 </div>
               </section>
             </div>
 
             <div className="flex items-center justify-center pb-1">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyP3}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
               >
@@ -132,7 +161,7 @@ export function CustomerSurvey() {
               </button>
             </div>
             <div className="flex items-center justify-center pb-6 bg-paper">
-              <p className="">1% Complete</p>
+              <p className="">3% Complete</p>
             </div>
           </div>
         </section>

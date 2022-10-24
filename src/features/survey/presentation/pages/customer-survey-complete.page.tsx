@@ -12,10 +12,10 @@ import { BranchesList } from "../components/branches.dropdown";
 import { RatingRadioButton } from "../components/radio-button";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-export function CustomerSurvey() {
+export function CustomerSurveyComplete() {
   const navigate = useNavigate();
-  const navigateToCustomerSurveyP2 = () => {
-    navigate("/survey/page-two");
+  const navigateToCustomerSurveyHome = () => {
+    navigate("/");
   };
 
   return (
@@ -59,39 +59,35 @@ export function CustomerSurvey() {
             <h1 className='text-black text-4xl font-["Bebas_Neue"] text-center pt-6 pb-2 px-4 bg-paper '>
               CUSTOMER SATISFACTION SURVEY
             </h1>
-
-            <p className="px-4 text-md text-center text-black bg-paper">
-              Thank you for choosing Taters! It would be great if you would
-              participate in our short survey so that we can improve our
-              service.
+            <p className="px-2 text-md text-center  bg-paper text-black">
+              Form Submitted
             </p>
+
             <div className="space-y-4 lg:flex-w-full text-md lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] pt-6 lg:px-4">
-              <section className="px-6 text-black">
-                <p>
+              <section className="px-6 text-black text-center">
+                <p className="pb-2 text-md text-center  bg-paper text-black">
                   <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
+                    We appreciate your feedback and looking forward to serve you
+                    again soon.
                   </strong>
                 </p>
-                <div className="flex py-2">
-                  <RatingRadioButton />
-                </div>
+                <p className="px-2 text-md text-center  bg-paper text-black">
+                  We are also encouraging you to visit our website for more
+                  information about our deals and information
+                </p>
               </section>
             </div>
 
-            <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
+            <div className="flex items-center justify-center py-4 bg-paper">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyHome}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
               >
                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                  CONTINUE
+                  VISIT SITE
                 </span>
               </button>
-            </div>
-            <div className="flex items-center justify-center pb-6 bg-paper text-sm">
-              <p className="">1% Complete</p>
             </div>
           </div>
 
@@ -101,39 +97,36 @@ export function CustomerSurvey() {
             </h1>
 
             <p className="px-2 text-lg text-center  bg-paper text-black">
-              Thank you for choosing Taters! It would be great if you would
-              participate in our short survey so that we can improve our
-              service.
+              Form Submitted
             </p>
 
             <div className="py-6 pt-10 space-y-4 lg:flex-w-full lg:max-w bg-paper lg:px-4">
-              <section className="px-20 text-lg text-black">
-                <p className="pl-4">
+              <section className="px-2 text-lg text-center  bg-paper text-black">
+                <p>
                   <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
+                    We appreciate your feedback and looking forward to serve you
+                    again soon.
                   </strong>
                 </p>
-                <div className="flex pl-4 py-4">
-                  <RatingRadioButton />
-                </div>
+                <p className="px-2 text-lg text-center  bg-paper text-black">
+                  We are also encouraging you to visit our website for more
+                  information about our deals and information
+                </p>
               </section>
             </div>
 
-            <div className="flex items-center justify-center pb-1">
+            <div className="flex items-center justify-center py-4">
               <button
-                onClick={navigateToCustomerSurveyP2}
+                onClick={navigateToCustomerSurveyHome}
                 type="submit"
                 className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
               >
                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                  CONTINUE
+                  VISIT SITE
                 </span>
               </button>
             </div>
-            <div className="flex items-center justify-center pb-6 bg-paper">
-              <p className="">1% Complete</p>
-            </div>
+            <div className="flex items-center justify-center pb-6 bg-paper"></div>
           </div>
         </section>
       </main>

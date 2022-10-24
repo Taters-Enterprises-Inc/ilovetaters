@@ -22,20 +22,20 @@ export function RecieptDateTime() {
     <TextField {...props} />
   ))(({ theme }) => ({
     "& input": {
-      color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      color: "black !important",
+      "-webkit-text-fill-color": "black !important",
     },
     "& label": {
-      color: "white !important",
+      color: "black !important",
     },
     "& fieldset": {
-      borderColor: "white !important",
+      borderColor: "black !important",
     },
     "&:hover fieldset": {
-      borderColor: "white !important",
+      borderColor: "black !important",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white !important",
+      borderColor: "black !important",
     },
   }));
 
@@ -49,10 +49,10 @@ export function RecieptDateTime() {
           <DateTimeTextField
             {...props}
             sx={{
-              svg: { color: "white" },
-              input: { color: "white" },
-              label: { color: "white" },
-              borderColor: "white !important",
+              svg: { color: "black" },
+              input: { color: "black" },
+              label: { color: "black" },
+              borderColor: "black !important",
             }}
             autoComplete="off"
           />
