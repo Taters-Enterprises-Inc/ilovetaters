@@ -265,6 +265,10 @@ import {
   selectUpdateUserDiscount,
   UpdateUserDiscountState,
 } from "features/profile/presentation/slices/update-user-discount.slice";
+import {
+  LoginBscState,
+  selectLoginBsc,
+} from "features/bsc/presentation/slices/login-bsc.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -408,6 +412,27 @@ export function LoadingAndSnackbarWrapper() {
   );
 
   const updateUserDiscountState = useAppSelector(selectUpdateUserDiscount);
+
+  const loginBscState = useAppSelector(selectLoginBsc);
+
+  useEffect(() => {
+    switch (loginBscState.status) {
+      case LoginBscState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case LoginBscState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case LoginBscState.success:
+        showAlert(setSuccessAlert, loginBscState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case LoginBscState.fail:
+        showAlert(setFailsAlert, loginBscState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [loginBscState]);
 
   useEffect(() => {
     switch (updateUserDiscountState.status) {

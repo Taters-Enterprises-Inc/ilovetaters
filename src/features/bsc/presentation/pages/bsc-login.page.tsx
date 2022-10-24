@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   getBscSession,
   GetBscSessionState,
@@ -12,18 +12,20 @@ import {
   selectLoginBsc,
   LoginBscState,
 } from "../slices/login-bsc.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function BSCLogin() {
   const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
-
-  const navigatetoCreateUser = () => {
-    navigate("create-account");
-  };
   const loginBscState = useAppSelector(selectLoginBsc);
   const getBscSessionState = useAppSelector(selectGetBscSession);
+
+  const [formState, setFormState] = useState<{
+    email: string;
+    password: string;
+  }>({
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     if (loginBscState.status === LoginBscState.success) {
@@ -35,11 +37,22 @@ export function BSCLogin() {
     dispatch(getBscSession());
   }, [dispatch]);
 
-  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  function handleInputChange(evt: any) {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  }
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(loginBsc(formData));
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      loginBsc({
+        identity: formState.email,
+        password: formState.password,
+      })
+    );
+    e.preventDefault();
   };
 
   if (
@@ -64,9 +77,18 @@ export function BSCLogin() {
         </div>
         <div className="pt-4 login-body">
           <form onSubmit={handleOnSubmit}>
-            <p className="text-white">
-              Please login with your email/username and password below.
-            </p>
+            {loginBscState.message ? (
+              <span
+                className="text-white"
+                dangerouslySetInnerHTML={{
+                  __html: loginBscState.message,
+                }}
+              />
+            ) : (
+              <p className="text-white">
+                Please login with your email/username and password below.
+              </p>
+            )}
             <div className="pt-4 space-y-4">
               {/* <BSCEmailTextField />
               <BSCPasswordTextField /> */}
@@ -84,13 +106,12 @@ export function BSCLogin() {
             >
               LOG IN
             </button>
-            <button
-              type="submit"
-              onClick={navigatetoCreateUser}
-              className="w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
+            <Link
+              to={"create-account"}
+              className="block w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
             >
               CREATE ACCOUNT
-            </button>
+            </Link>
           </form>
         </div>
       </div>
