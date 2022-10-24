@@ -80,7 +80,7 @@ export function AdminIdUserDiscountInformation(
   return (
     <div className="pt-1 text-secondary">
       <div className="space-y-1 ">
-        <div className="grid-cols-3 gap-4 lg:grid ">
+        <div className="grid-cols-2 gap-4 lg:grid ">
           <div>
             <strong>ID Number :</strong>{" "}
             <span className="font-semibold">
@@ -115,7 +115,7 @@ export function AdminIdUserDiscountInformation(
 
         <hr />
 
-        <div className="grid-cols-3 gap-4 lg:grid">
+        <div className="grid-cols-2 gap-4 lg:grid">
           <div>
             <strong>Full Name:</strong>{" "}
             <span className="font-semibold">
