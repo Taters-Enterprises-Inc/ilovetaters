@@ -7,7 +7,6 @@ import {
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import TextField from "@mui/material/TextField";
 import {
   getContacts,
   selectGetContacts,
@@ -15,15 +14,10 @@ import {
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
-import { MdDeliveryDining } from "react-icons/md";
+import { FormEvent, useEffect, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
-import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { AddContactModal } from "features/shared/presentation/modals";
 import NumberFormat from "react-number-format";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
@@ -57,7 +51,6 @@ export function CateringCheckout() {
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const getSessionState = useAppSelector(selectGetSession);
-  const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const cateringCheckoutOrdersState = useAppSelector(
     selectCateringCheckoutOrders
