@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { MdLockOutline } from "react-icons/md";
 import {
   changeForgotPasswordStatus,
@@ -13,10 +13,13 @@ import {
   resetForgotPasswordValidateOTP,
   selectForgotPasswordValidateOTP,
 } from "../slices/forgot-password-validate-otp.slice";
-import { MobileForgotPasswordOtpCode } from "./mobile-forgot-password-otpcode";
+import { MaterialInput } from "./material-input";
 
 export function MobileForgotPasswordOtpAuthentication() {
   const dispatch = useAppDispatch();
+
+  const [otpCode, setOtpCode] = useState<string>("");
+
   const changeForgotPasswordStatusState = useAppSelector(
     selectChangeForgotPasswordStatus
   );
@@ -40,11 +43,15 @@ export function MobileForgotPasswordOtpAuthentication() {
   }, [forgotPasswordValidateOTPState, dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (changeForgotPasswordStatusState.phoneNumber) {
+      dispatch(
+        forgotPasswordValidateOTP({
+          phoneNumber: changeForgotPasswordStatusState.phoneNumber,
+          otpCode,
+        })
+      );
+    }
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(forgotPasswordValidateOTP(formData));
   };
   return (
     <>
@@ -64,15 +71,20 @@ export function MobileForgotPasswordOtpAuthentication() {
           <p className="text-white">
             Note: The OTP will expire after 15 minutes
           </p>
-
-          <input
-            name="phoneNumber"
-            value={changeForgotPasswordStatusState.phoneNumber}
-            className="hidden"
-            readOnly
-          />
           <div className="mt-4">
-            <MobileForgotPasswordOtpCode />
+            <MaterialInput
+              colorTheme="white"
+              value={otpCode}
+              onChange={(e) => {
+                setOtpCode(e.target.value);
+              }}
+              name="otpCode"
+              label="Otp Code"
+              size="small"
+              type="text"
+              required
+              fullWidth
+            />
           </div>
 
           <button

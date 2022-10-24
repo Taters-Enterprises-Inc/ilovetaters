@@ -6,7 +6,6 @@ export { AdminShopOrderCustomerInformation } from "./admin-shop-order-customer-i
 export { AdminPopClubRedeems } from "./admin-popclub-redeems";
 export { AdminPopclubRedeemCustomerInformation } from "./admin-popclub-redeem-customer-information";
 export { AdminSettingUsers } from "./admin-setting-users";
-export { AdminPhoneInput } from "./admin-phone-input";
 export { AdminShopOrderCustomerInformationButtons } from "./admin-shop-order-customer-information-buttons";
 export { AdminCateringBookings } from "./admin-catering-bookings";
 export { AdminCateringBookingCustomerInformation } from "./admin-catering-booking-customer-information";

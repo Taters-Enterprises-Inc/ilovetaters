@@ -26,3 +26,4 @@ export { MaterialInputSelect } from "./material-input-select";
 export { MaterialDateInput } from "./material-date-input";
 export { MaterialDateTimeInput } from "./material-date-time-input";
 export { MaterialInputPassword } from "./material-input-password";
+export { MaterialInputAutoComplete } from "./material-input-autocomplete";

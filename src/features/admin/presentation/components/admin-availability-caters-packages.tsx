@@ -4,26 +4,19 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import NumberFormat from "react-number-format";
-import { ADMIN_SNACKSHOP_ORDER_STATUS } from "features/shared/constants";
-import Moment from "react-moment";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FaEye } from "react-icons/fa";
-import { DataList } from "features/shared/presentation/components";
-import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import {
-  getAdminStores,
-  selectGetAdminStores,
-} from "../slices/get-admin-stores.slice";
+  DataList,
+  MaterialInputAutoComplete,
+  MaterialInputSelect,
+} from "features/shared/presentation/components";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -40,8 +33,6 @@ import {
   updateStoreCatersPackage,
 } from "../slices/update-store-caters-packages.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
@@ -168,11 +159,10 @@ export function AdminAvailabilityCatersPackages() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               options={getAdminSessionState.data.admin.user_details.stores}
-              sx={{ width: 328 }}
-              size="small"
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
               }
@@ -198,9 +188,6 @@ export function AdminAvailabilityCatersPackages() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
@@ -210,7 +197,8 @@ export function AdminAvailabilityCatersPackages() {
           <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
-            <Select
+            <MaterialInputSelect
+              colorTheme="black"
               label="Filter by category"
               defaultValue={categoryId ?? "all"}
               onChange={(event) => {
@@ -242,7 +230,7 @@ export function AdminAvailabilityCatersPackages() {
                   <span className="text-xs lg:text-base">{category.name}</span>
                 </MenuItem>
               ))}
-            </Select>
+            </MaterialInputSelect>
           </FormControl>
         ) : null}
       </div>

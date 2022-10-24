@@ -3,7 +3,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
 import { AdminShopOrderCustomerInformation } from "../components";
-import { AdminShopOrderRemarks } from "../components/admin-shop-order-remarks";
 import { AdminShopOrderAudit } from "../components/admin-shop-order-audit";
 
 interface TabPanelProps {

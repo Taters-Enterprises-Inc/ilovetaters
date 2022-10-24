@@ -49,17 +49,19 @@ export function MobileForgotPasswordOtp() {
   }, [forgotPasswordGenerateOTPState, dispatch]);
 
   const handleOnSubmit = (e: FormEvent<ForgotPasswordFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as ForgotPasswordFormElement);
-
-    dispatch(forgotPasswordGenerateOTP(formData));
+    dispatch(
+      forgotPasswordGenerateOTP({
+        phoneNumber,
+      })
+    );
 
     dispatch(
       changeForgotPasswordStatusAddPhoneNumber({
-        phoneNumber: e.currentTarget.elements.phoneNumber.value,
+        phoneNumber: phoneNumber,
       })
     );
+
+    e.preventDefault();
   };
 
   return (
@@ -82,6 +84,9 @@ export function MobileForgotPasswordOtp() {
           <PhoneInput
             colorTheme="white"
             value={phoneNumber}
+            required
+            size="small"
+            fullWidth
             name="phoneNumber"
             onChange={(e) => {
               setPhoneNumber(e.target.value);

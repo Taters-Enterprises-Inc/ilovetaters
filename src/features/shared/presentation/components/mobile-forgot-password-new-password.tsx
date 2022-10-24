@@ -6,18 +6,19 @@ import {
   ChangeForgotPasswordStatusState,
   selectChangeForgotPasswordStatus,
 } from "../slices/change-forgot-password-status.slice";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   forgotPasswordNewPassword,
   ForgotPasswordNewPasswordState,
   resetForgotPasswordNewPassword,
   selectForgotPasswordNewPassword,
 } from "../slices/forgot-password-new-password-otp.slice";
-import { MobileForgotPasswordNewPasswordTextField } from "./mobile-forgot-password-new-password-text-field";
-import { MobileForgotPasswordConfirmPasswordTextField } from "./mobile-forgot-password-confirm-password-text-field";
+import { MaterialInputPassword } from "./material-input-password";
 
 export function MobileForgotPasswordNewPassword() {
   const dispatch = useAppDispatch();
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const changeForgotPasswordStatusState = useAppSelector(
     selectChangeForgotPasswordStatus
   );
@@ -41,11 +42,16 @@ export function MobileForgotPasswordNewPassword() {
   }, [forgotPasswordNewPasswordState, dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (changeForgotPasswordStatusState.phoneNumber) {
+      dispatch(
+        forgotPasswordNewPassword({
+          phoneNumber: changeForgotPasswordStatusState.phoneNumber,
+          password,
+          confirmPassword,
+        })
+      );
+    }
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(forgotPasswordNewPassword(formData));
   };
 
   return (
@@ -65,16 +71,31 @@ export function MobileForgotPasswordNewPassword() {
           </h1>
           <p className="text-white ">Enter your new password</p>
 
-          <input
-            name="phoneNumber"
-            value={changeForgotPasswordStatusState.phoneNumber}
-            className="hidden"
-            readOnly
-          />
-
           <div className="pt-4 space-y-4">
-            <MobileForgotPasswordNewPasswordTextField />
-            <MobileForgotPasswordConfirmPasswordTextField />
+            <MaterialInputPassword
+              required
+              colorTheme="white"
+              label="Password"
+              value={password}
+              name="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              fullWidth
+              size="small"
+            />
+            <MaterialInputPassword
+              colorTheme="white"
+              required
+              label="Confirm Password"
+              value={confirmPassword}
+              name="confirmPassword"
+              fullWidth
+              size="small"
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
+            />
           </div>
 
           <button

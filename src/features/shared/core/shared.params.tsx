@@ -59,3 +59,18 @@ export interface SignUpMobileUserParam {
   lastName: string;
   email: string;
 }
+
+export interface ForgotPasswordGenerateOtpParam {
+  phoneNumber: string;
+}
+
+export interface ForgotPasswordValidateOTPParam {
+  phoneNumber: string;
+  otpCode: string;
+}
+
+export interface ForgotPasswordNewPasswordOtpParam {
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+}

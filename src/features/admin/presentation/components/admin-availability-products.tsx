@@ -11,9 +11,12 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { DataList } from "features/shared/presentation/components";
+import {
+  DataList,
+  MaterialInputAutoComplete,
+  MaterialInputSelect,
+} from "features/shared/presentation/components";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -30,8 +33,6 @@ import {
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
@@ -154,11 +155,10 @@ export function AdminAvailabilityProducts() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               options={getAdminSessionState.data.admin.user_details.stores}
-              sx={{ width: 328 }}
-              size="small"
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
               }
@@ -184,9 +184,6 @@ export function AdminAvailabilityProducts() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
@@ -196,7 +193,8 @@ export function AdminAvailabilityProducts() {
           <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
-            <Select
+            <MaterialInputSelect
+              colorTheme="black"
               label="Filter by category"
               defaultValue={categoryId ?? "all"}
               onChange={(event) => {
@@ -228,7 +226,7 @@ export function AdminAvailabilityProducts() {
                   <span className="text-xs lg:text-base">{category.name}</span>
                 </MenuItem>
               ))}
-            </Select>
+            </MaterialInputSelect>
           </FormControl>
         ) : null}
       </div>

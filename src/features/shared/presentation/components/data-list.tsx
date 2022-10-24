@@ -4,6 +4,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
+import { MaterialInput } from "./material-input";
+import { MaterialInputSelect } from "./material-input-select";
 
 interface DataListProps {
   page: number;
@@ -14,7 +16,7 @@ interface DataListProps {
   totalRows: number;
   perPage: number;
   emptyMessage: string;
-  onRowsPerPageChange: (event: SelectChangeEvent) => void;
+  onRowsPerPageChange: (event: SelectChangeEvent<unknown>) => void;
 }
 
 export function DataList(props: DataListProps) {
@@ -22,17 +24,20 @@ export function DataList(props: DataListProps) {
     <div>
       <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
         <div className="z-0 flex flex-1 space-x-4">
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="Search"
-            variant="outlined"
             size="small"
+            value={props.search}
+            name="search"
             defaultValue={props.search}
             onChange={(e) => {
               props.onSearch(e.target.value);
             }}
           />
-          <Select
+          <MaterialInputSelect
+            colorTheme="black"
             size="small"
             defaultValue={props.perPage.toString()}
             onChange={props.onRowsPerPageChange}
@@ -41,7 +46,7 @@ export function DataList(props: DataListProps) {
             <MenuItem value={25}>25</MenuItem>
             <MenuItem value={50}>50</MenuItem>
             <MenuItem value={100}>100</MenuItem>
-          </Select>
+          </MaterialInputSelect>
         </div>
 
         <Pagination
