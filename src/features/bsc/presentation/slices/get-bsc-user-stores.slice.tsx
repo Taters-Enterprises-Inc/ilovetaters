@@ -1,0 +1,88 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import {
+  GetBscUserStoresRepository,
+  GetBscUserStoresResponse,
+} from "features/bsc/data/repository/bsc.repository";
+import { RootState } from "features/config/store";
+
+export enum GetBscUserStoresState {
+  initial,
+  inProgress,
+  success,
+  fail,
+}
+
+const initialState: {
+  status: GetBscUserStoresState;
+  message: string;
+  data: Array<AdminStoreModel> | undefined;
+} = {
+  status: GetBscUserStoresState.initial,
+  message: "",
+  data: undefined,
+};
+
+export const getBscUserStores = createAsyncThunk(
+  "getBscUserStores",
+  async (userId: string, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: GetBscUserStoresResponse =
+        await GetBscUserStoresRepository(userId);
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
+  }
+);
+
+/* Main Slice */
+export const getBscUserStoresSlice = createSlice({
+  name: "getBscUserStores",
+  initialState,
+  reducers: {
+    getBscUserStoresUpdateStores: (
+      state,
+      action: PayloadAction<{ stores: Array<AdminStoreModel> }>
+    ) => {
+      state.data = action.payload.stores;
+    },
+  },
+  extraReducers: (builder: any) => {
+    builder
+      .addCase(getBscUserStores.pending, (state: any) => {
+        state.status = GetBscUserStoresState.inProgress;
+      })
+      .addCase(
+        getBscUserStores.fulfilled,
+        (
+          state: any,
+          action: PayloadAction<{
+            message: string;
+            data: Array<AdminStoreModel> | null;
+          }>
+        ) => {
+          const { message, data } = action.payload;
+          state.status = GetBscUserStoresState.success;
+          state.message = message;
+          state.data = data;
+        }
+      )
+      .addCase(
+        getBscUserStores.rejected,
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          const { message } = action.payload;
+
+          state.status = GetBscUserStoresState.fail;
+          state.message = message;
+          state.data = null;
+        }
+      );
+  },
+});
+
+export const selectGetBscUserStores = (state: RootState) =>
+  state.getBscUserStores;
+
+export const { getBscUserStoresUpdateStores } = getBscUserStoresSlice.actions;
+export default getBscUserStoresSlice.reducer;

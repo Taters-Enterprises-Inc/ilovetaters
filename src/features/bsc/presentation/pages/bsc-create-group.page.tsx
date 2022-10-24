@@ -1,46 +1,46 @@
-import { AdminHead } from "../components";
+import { BSCHead } from "../components";
 import TextField from "@mui/material/TextField";
 import { FormEvent, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
-  createAdminGroup,
-  CreateAdminGroupState,
-  resetCreateAdminGroup,
-  selectCreateAdminGroup,
-} from "../slices/create-admin-group.slice";
+  createBscGroup,
+  CreateBscGroupState,
+  resetCreateBscGroup,
+  selectCreateBscGroup,
+} from "../slices/bsc-create-group.slice";
 import { useNavigate } from "react-router-dom";
 
-export function AdminSettingCreateGroup() {
+export function BSCCreateGroup() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const createAdminGroupState = useAppSelector(selectCreateAdminGroup);
+  const createBscGroupState = useAppSelector(selectCreateBscGroup);
 
   useEffect(() => {
-    if (createAdminGroupState.status === CreateAdminGroupState.success) {
-      dispatch(resetCreateAdminGroup());
+    if (createBscGroupState.status === CreateBscGroupState.success) {
+      dispatch(resetCreateBscGroup());
       navigate("/admin/setting/user");
     }
-  }, [createAdminGroupState, navigate, dispatch]);
+  }, [createBscGroupState, navigate, dispatch]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    dispatch(createAdminGroup(formData));
+    dispatch(createBscGroup(formData));
   };
   return (
     <>
-      <AdminHead
-        AdminBreadCrumbsProps={{
+      <BSCHead
+        BSCBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/admin",
+            url: "/bsc",
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "User", url: "/admin/setting/user" },
-            { name: "Create User", url: "/admin/setting/user/create-group" },
+            { name: "User", url: "/bsc/users" },
+            { name: "Create User", url: "/bsc/users/create-group" },
           ],
         }}
       />

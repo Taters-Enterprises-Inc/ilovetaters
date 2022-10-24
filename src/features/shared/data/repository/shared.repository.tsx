@@ -13,6 +13,7 @@ import {
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from "../../constants";
+import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -129,6 +130,22 @@ export interface DiscountRegistrationResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAvailableUserDiscountResponse {
+  data: {
+    message: string;
+    data: UserDiscountModel;
+  };
+}
+
+export function GetAvailableUserDiscountRepository(): Promise<GetAvailableUserDiscountResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/shared/available-user-discount`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function ForgotPasswordNewPasswordRepository(

@@ -64,17 +64,19 @@ export function AdminDrawerMobile() {
           {getAdminSessionState.data ? (
             <div>
               <div className="text-base">
-                {getAdminSessionState.data.user_details.first_name}{" "}
-                {getAdminSessionState.data.user_details.last_name}
+                {getAdminSessionState.data.admin.user_details.first_name}{" "}
+                {getAdminSessionState.data.admin.user_details.last_name}
               </div>
 
               <div className="text-xs">
-                {getAdminSessionState.data.user_details.groups.map(
+                {getAdminSessionState.data.admin.user_details.groups.map(
                   (group, i) => (
                     <>
                       {getAdminSessionState.data &&
                       i !==
-                        getAdminSessionState.data.user_details.groups.length - 1
+                        getAdminSessionState.data.admin.user_details.groups
+                          .length -
+                          1
                         ? group.name + ", "
                         : group.name}
                     </>

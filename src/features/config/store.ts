@@ -121,6 +121,19 @@ import getUserDiscount from "features/profile/presentation/slices/get-user-disco
 import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
 import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
 import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
+import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
+import getBscSession from "features/bsc/presentation/slices/get-bsc-session.slice";
+import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
+import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
+import getBscUsers from "features/bsc/presentation/slices/get-bsc-users.slice";
+import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
+import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
+import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
+import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
+import editBscUser from "features/bsc/presentation/slices/bsc-edit-user.slice";
+import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
+import createBscUser from "features/bsc/presentation/slices/bsc-create-user.slice";
+import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 
 export const store = configureStore({
   reducer: {
@@ -245,6 +258,19 @@ export const store = configureStore({
     BSCSideBar,
     adminUserDiscountChangeStatus,
     updateUserDiscount,
+    loginBsc,
+    getBscSession,
+    logoutBsc,
+    getAvailableUserDiscount,
+    getBscUsers,
+    getBscUser,
+    getBscUserStores,
+    getBscStores,
+    updateBscUserStores,
+    editBscUser,
+    getBscGroups,
+    createBscUser,
+    createBscGroup,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

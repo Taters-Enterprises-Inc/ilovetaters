@@ -1,4 +1,5 @@
 import { BSCHead } from "../components/bsc-head";
+import { BSCUser } from "../components/bsc-user";
 
 export function BSCUsers() {
   return (
@@ -13,6 +14,7 @@ export function BSCUsers() {
           pageTitles: [{ name: "Users", url: "/bsc/users" }],
         }}
       />
+      <BSCUser />
     </>
   );
 }
