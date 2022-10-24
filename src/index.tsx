@@ -22,11 +22,8 @@ import {
   ShopCheckout,
   ShopHome,
   ShopOrder,
-  ShopPrivacyPolicy,
   ShopProduct,
   ShopProducts,
-  ShopReturnPolicy,
-  ShopTermsAndConditions,
   ShopEditCartItem,
 } from "features/shop/presentation/pages";
 import {
@@ -175,19 +172,6 @@ root.render(
                     <Route element={<ShopCheckoutGuard />}>
                       <Route path="checkout" element={<ShopCheckout />} />
                     </Route>
-                    <Route
-                      path="terms-and-conditions"
-                      element={<ShopTermsAndConditions />}
-                    />
-
-                    <Route
-                      path="privacy-policy"
-                      element={<ShopPrivacyPolicy />}
-                    />
-                    <Route
-                      path="return-policy"
-                      element={<ShopReturnPolicy />}
-                    />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
