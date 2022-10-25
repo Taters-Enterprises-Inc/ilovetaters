@@ -1,4 +1,3 @@
-
 import React from "react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
@@ -9,20 +8,26 @@ import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { ProfileContainer } from "../components/profile-container";
 
-export function ProfileCsPwd() {
-  const [birthDate, setBirthDate] = useState(moment(Date.now()));
-  const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [cs_pwd_id, set_cs_pwd_id] = useState("");
-  const [imagesFront, setImagesFront] = useState<any>(undefined);
-  const [imagesBack, setImagesBack] = useState<any>(undefined);
-  const [uploadedFileFront, setUploadedFileFront] = useState<any>(undefined);
-  const [uploadedFileBack, setUploadedFileBack] = useState<any>(undefined);
+interface RequiredFileFieldType {
+  errorMessageFileFront: boolean;
+  errorMessageFileBack: boolean;
+}
 
+export function ProfileCsPwd() {
+  const [birthDate, setBirthDate] = useState<any>(moment(Date.now()));
+  const [imagesBack, setImagesBack] = useState<any>(undefined);
+  const [imagesFront, setImagesFront] = useState<any>(undefined);
+  const [requiredFileField, setRequiredFileField] =
+    useState<RequiredFileFieldType>({
+      errorMessageFileFront: false,
+      errorMessageFileBack: false,
+    });
 
   const onDropFrontImage = useCallback((acceptedFiles: any) => {
-    setUploadedFileFront(acceptedFiles);
+    setRequiredFileField((err: RequiredFileFieldType) => ({
+      errorMessageFileFront: false,
+      errorMessageFileBack: err.errorMessageFileBack,
+    }));
     acceptedFiles.map((file: any, index: any) => {
       const reader = new FileReader();
       reader.onload = function (e: any) {
@@ -34,7 +39,10 @@ export function ProfileCsPwd() {
   }, []);
 
   const onDropBackImage = useCallback((acceptedFiles: any) => {
-    setUploadedFileBack(acceptedFiles);
+    setRequiredFileField((err: RequiredFileFieldType) => ({
+      errorMessageFileFront: err.errorMessageFileFront,
+      errorMessageFileBack: false,
+    }));
     acceptedFiles.map((file: any, index: any) => {
       const reader = new FileReader();
       reader.onload = function (e: any) {
@@ -44,8 +52,6 @@ export function ProfileCsPwd() {
       return file;
     });
   }, []);
-
- 
 
   const {
     getRootProps: getRootPropsFrontImage,
@@ -68,18 +74,27 @@ export function ProfileCsPwd() {
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log({
-      firstName,
-      lastName,
-      middleName,
-      birthDate,
-      cs_pwd_id,
-    });
-    console.log(uploadedFileFront);
-    console.log(uploadedFileBack);
-
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    if (imagesFront == undefined) {
+      return setRequiredFileField((err: RequiredFileFieldType) => ({
+        errorMessageFileFront: true,
+        errorMessageFileBack: err.errorMessageFileBack,
+      }));
+    }
+    if (imagesBack == undefined) {
+      return setRequiredFileField((err: RequiredFileFieldType) => ({
+        errorMessageFileBack: true,
+        errorMessageFileFront: err.errorMessageFileFront,
+      }));
+    }
+    console.log(formData.get("firstName"));
+    console.log(formData.get("middlename"));
+    console.log(formData.get("lastName"));
+    console.log(formData.get("birthdate"));
+    console.log(formData.get("sc-pwd-number"));
+    console.log(formData.get("uploaded_file_1"));
+    console.log(formData.get("uploaded_file_2"));
   };
-
   return (
     <form onSubmit={handleSubmitApplication}>
       <ProfileContainer title="My Profile" activeTab="sc-pwd">
@@ -96,10 +111,6 @@ export function ProfileCsPwd() {
               className="flex-1"
               name="firstName"
               type="text"
-              value={firstName}
-              onChange={(e: any) => {
-                setFirstName(e.target.value);
-              }}
             />
           ) : null}
           <TextField
@@ -109,10 +120,6 @@ export function ProfileCsPwd() {
             className={`flex-1 ${"logic" ? "!hidden" : ""}`}
             name="firstName"
             type="text"
-            value={firstName}
-            onChange={(e: any) => {
-              setFirstName(e.target.value);
-            }}
           />
 
           {"logic" ? (
@@ -121,11 +128,7 @@ export function ProfileCsPwd() {
               label="Middle  Name"
               defaultValue={"default value"}
               className="flex-1"
-              name="lastName"
-              value={middleName}
-              onChange={(e: any) => {
-                setMiddleName(e.target.value);
-              }}
+              name="middlename"
             />
           ) : null}
           <TextField
@@ -135,10 +138,6 @@ export function ProfileCsPwd() {
             className={`flex-1 ${"logic" ? "!hidden" : ""}`}
             name="middlename"
             type="text"
-            value={middleName}
-            onChange={(e: any) => {
-              setMiddleName(e.target.value);
-            }}
           />
 
           {"logic" ? (
@@ -148,10 +147,6 @@ export function ProfileCsPwd() {
               defaultValue={"default value"}
               className="flex-1"
               name="lastName"
-              value={lastName}
-              onChange={(e: any) => {
-                setLastName(e.target.value);
-              }}
             />
           ) : null}
           <TextField
@@ -161,10 +156,6 @@ export function ProfileCsPwd() {
             variant="outlined"
             className={`flex-1 ${"logic" ? "!hidden" : ""}`}
             name="lastName"
-            value={lastName}
-            onChange={(e: any) => {
-              setLastName(e.target.value);
-            }}
           />
         </div>
 
@@ -176,12 +167,12 @@ export function ProfileCsPwd() {
                   <DesktopDatePicker
                     maxDate={new Date()}
                     label="Birth Date"
-                    value={birthDate}
-                    onChange={(newValue: any) => {
-                      setBirthDate(newValue);
+                    onChange={(value: any) => {
+                      setBirthDate(value);
                     }}
+                    value={birthDate}
                     renderInput={(params) => (
-                      <TextField fullWidth {...params} />
+                      <TextField name="birthdate" fullWidth {...params} />
                     )}
                   />
                 </LocalizationProvider>
@@ -195,11 +186,11 @@ export function ProfileCsPwd() {
           >
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopDatePicker
-                label="Date desktop"
-                value={birthDate}
-                onChange={(newValue: any) => {
-                  setBirthDate(newValue);
+                onChange={(value: any) => {
+                  setBirthDate(value);
                 }}
+                value={birthDate}
+                label="Date desktop"
                 renderInput={(params) => (
                   <TextField required fullWidth {...params} />
                 )}
@@ -214,10 +205,6 @@ export function ProfileCsPwd() {
               className="w-full flex-1"
               name="sc-pwd-number"
               type="text"
-              value={cs_pwd_id}
-              onChange={(e: any) => {
-                set_cs_pwd_id(e.target.value);
-              }}
             />
           ) : null}
 
@@ -228,16 +215,39 @@ export function ProfileCsPwd() {
             className={`w-full ${"logic" ? "!hidden" : ""}`}
             name="sc-pwd-number"
             type="text"
-            value={cs_pwd_id}
-            onChange={(e: any) => {
-              set_cs_pwd_id(e.target.value);
-            }}
           />
         </div>
         <div>
           <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
-            Upload - SC/PWD ID FRONT 
+            Upload - SC/PWD ID FRONT
           </h2>
+          {requiredFileField.errorMessageFileFront && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-2"
+              role="alert"
+            >
+              <strong className="font-bold">Required Field</strong>
+              <span
+                onClick={() => {
+                  setRequiredFileField((err: RequiredFileFieldType) => ({
+                    errorMessageFileFront:false,
+                    errorMessageFileBack: err.errorMessageFileBack,
+                  }));
+                }}
+                className="absolute top-0 bottom-0 right-0 px-4 py-3"
+              >
+                <svg
+                  className="fill-current h-6 w-6 text-red-500"
+                  role="button"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <title>Close</title>
+                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                </svg>
+              </span>
+            </div>
+          )}
 
           <div>
             <input
@@ -262,9 +272,8 @@ export function ProfileCsPwd() {
               >
                 <input
                   type="file"
-                  name="uploaded_file"
+                  name="uploaded_file_1"
                   {...getInputPropsFrontImage()}
-                  multiple
                 />
 
                 {isDragActiveFrontImage ? (
@@ -308,7 +317,33 @@ export function ProfileCsPwd() {
           <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
             Upload - SC/PWD ID BACK
           </h2>
-
+          {requiredFileField.errorMessageFileBack && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-2"
+              role="alert"
+            >
+              <strong className="font-bold">Required Field</strong>
+              <span
+                onClick={() => {
+                  setRequiredFileField((err: RequiredFileFieldType) => ({
+                    errorMessageFileFront: err.errorMessageFileFront,
+                    errorMessageFileBack: false,
+                  }));
+                }}
+                className="absolute top-0 bottom-0 right-0 px-4 py-3"
+              >
+                <svg
+                  className="fill-current h-6 w-6 text-red-500"
+                  role="button"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <title>Close</title>
+                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                </svg>
+              </span>
+            </div>
+          )}
           <div>
             <input
               type="text"
@@ -332,9 +367,8 @@ export function ProfileCsPwd() {
               >
                 <input
                   type="file"
-                  name="uploaded_file"
+                  name="uploaded_file_2"
                   {...getInputPropsBackImage()}
-                  multiple
                 />
 
                 {isDragActiveBackImage ? (
