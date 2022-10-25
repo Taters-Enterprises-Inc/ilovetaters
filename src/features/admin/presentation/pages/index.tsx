@@ -4,7 +4,7 @@ export { AdminCateringBooking } from "./admin-catering-booking.page";
 export { AdminPopclub } from "./admin-popclub.page";
 export { AdminUserDiscount } from "./admin-user-discount.page";
 export { AdminProduct } from "./admin-product.page";
-export { AdminReport } from "./admin-report.page";
+export { AdminReports } from "./admin-reports.page";
 export { AdminFaq } from "./admin-faqs.page";
 export { AdminCFaq } from "./admin-cfaqs.page";
 export { AdminRaffleSnackshop } from "./admin-raffle-snackshop.page";
