@@ -161,6 +161,7 @@ export function HeaderNav(props: HeaderNavProps) {
   }, [facebookLogoutState, dispatch]);
 
   const handleCart = () => {
+    setopenCartMenu(null);
     switch (props.activeUrl) {
       case "SNACKSHOP":
         setOpenShopCartModal(true);

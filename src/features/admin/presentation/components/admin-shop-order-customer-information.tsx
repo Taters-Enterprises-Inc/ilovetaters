@@ -430,7 +430,7 @@ export function AdminShopOrderCustomerInformation() {
               />
               <Select
                 size="small"
-                name="status"
+                name="to_status_id"
                 sx={{
                   "& fieldset": {
                     borderRadius: "0px",

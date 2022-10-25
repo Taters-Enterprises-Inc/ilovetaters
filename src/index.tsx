@@ -38,7 +38,6 @@ import {
   CateringProducts,
 } from "features/catering/presentation/pages";
 import { Franchising } from "features/franchising/presentation/pages";
-import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
@@ -47,7 +46,7 @@ import {
   AdminPopclub,
   AdminRaffleInstore,
   AdminRaffleSnackshop,
-  AdminReport,
+  AdminReports,
   AdminFaq,
   AdminCFaq,
   AdminSettingCategory,
@@ -223,7 +222,7 @@ root.render(
                         <Route path="popclub" element={<AdminPopclub />} />
                         <Route path="scpwd" element={<ScPwd />} />
                         <Route path="product" element={<AdminProduct />} />
-                        <Route path="report" element={<AdminReport />} />
+                        <Route path="reports" element={<AdminReports />} />
                         <Route path="faq">
                           <Route index element={<AdminFaq />} />
                           <Route path="store" element={<AdminFaq />} />
