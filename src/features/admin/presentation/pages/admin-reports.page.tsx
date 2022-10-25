@@ -66,6 +66,7 @@ export function AdminReports() {
       </div>
       <AdminGenerateReportModal
         open={openGeneratePmixModal}
+        title="Generate PMIX Report"
         onClickGenerate={(startDate, endDate) => {
           window.location.href =
             REACT_APP_DOMAIN_URL +
@@ -88,6 +89,7 @@ export function AdminReports() {
       />
       <AdminGenerateReportModal
         open={openGenerateTransactionModal}
+        title="Generate Transaction Report"
         onClickGenerate={(startDate, endDate) => {
           window.location.href =
             REACT_APP_DOMAIN_URL +
@@ -98,7 +100,7 @@ export function AdminReports() {
           setOpenGenerateTransactionModal(false);
           dispatch(
             popUpSnackBar({
-              message: "Successfully generate PMIX report!",
+              message: "Successfully generate Transaction report!",
               severity: "success",
             })
           );

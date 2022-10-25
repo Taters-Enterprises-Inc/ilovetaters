@@ -8,6 +8,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import moment from "moment";
 
 interface AdminGenerateReportModalProps {
+  title: string;
   open: boolean;
   onClose: () => void;
   onClickGenerate: (startDate: string, endDate: string) => void;
@@ -28,7 +29,7 @@ export function AdminGenerateReportModal(props: AdminGenerateReportModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[400px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-2xl text-white">Generate Report</span>
+          <span className="text-2xl text-white">{props.title}</span>
           <button
             className="text-2xl text-white"
             onClick={() => {
