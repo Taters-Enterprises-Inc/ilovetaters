@@ -36,8 +36,8 @@ export interface AdminCateringBookingModel {
   account_name: string;
   account_email: string;
 
-  fb_user_id: number;
-  mobile_user_id: number;
+  fb_user_id: number | null;
+  mobile_user_id: number | null;
 
   distance_price: string;
   reference_num: string;

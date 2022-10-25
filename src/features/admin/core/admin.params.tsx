@@ -88,3 +88,34 @@ export interface CreateAdminGroupParam {
   groupName: string;
   description: string;
 }
+
+export interface AdminUserDiscountChangeStatusParam {
+  discountUserId: number;
+  status: number;
+}
+
+export interface AdminDeclineRedeemParam {
+  redeemId: number;
+  mobileUserId?: number;
+  fbUserId?: number;
+}
+
+export interface AdminCompleteRedeemParam {
+  redeemId: number;
+  mobileUserId?: number;
+  fbUserId?: number;
+}
+
+export interface AdminCateringBookingUpdateStatusParam {
+  transactionId: number;
+  mobileUserId: number | null;
+  fbUserId: number | null;
+  status: number;
+}
+
+export interface AdminShopOrderUpdateStatusParam {
+  transactionId: number;
+  mobileUserId: number | null;
+  fbUserId: number | null;
+  status: number;
+}

@@ -14,6 +14,11 @@ import {
   ValidateReferenceNumberParam,
   UpdateUserStoresParam,
   CreateAdminGroupParam,
+  AdminUserDiscountChangeStatusParam,
+  AdminDeclineRedeemParam,
+  AdminCompleteRedeemParam,
+  AdminCateringBookingUpdateStatusParam,
+  AdminShopOrderUpdateStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -365,11 +370,11 @@ export interface AdminUserDiscountChangeStatusResponse {
 }
 
 export function AdminUserDiscountChangeStatusRepository(
-  formData: FormData
+  param: AdminUserDiscountChangeStatusParam
 ): Promise<AdminUserDiscountChangeStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/discount/user-discount-change-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -378,9 +383,8 @@ export function AdminUserDiscountChangeStatusRepository(
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
 ) {
-  return axios.put(
+  return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
-    new FormData(),
     {
       withCredentials: true,
     }
@@ -523,11 +527,11 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  formData: FormData
+  param: AdminDeclineRedeemParam
 ): Promise<AdminDeclineRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -603,11 +607,11 @@ export function GetAdminStoreDealsRepository(
 }
 
 export function AdminCateringBookingUpdateStatusRepository(
-  formData: FormData
+  param: AdminCateringBookingUpdateStatusParam
 ): Promise<AdminCateringBookingUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -650,11 +654,11 @@ export function AdminPrivilegeRepository(
 }
 
 export function AdminShopOrderUpdateStatusRepository(
-  formData: FormData
+  param: AdminShopOrderUpdateStatusParam
 ): Promise<AdminShopOrderUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -759,11 +763,11 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  formData: FormData
+  param: AdminCompleteRedeemParam
 ): Promise<AdminCompleteRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
