@@ -6,9 +6,14 @@ import {
   DeleteContactParam,
   DiscountRegistrationParam,
   FacebookLoginPointParam,
+  ForgotPasswordGenerateOtpParam,
+  ForgotPasswordNewPasswordOtpParam,
+  ForgotPasswordValidateOTPParam,
   GetStoresAvailableParam,
   SetSessionParam,
   SetStoreAndAddressParm,
+  SignInMobileUserParam,
+  SignUpMobileUserParam,
   UpdateContactParam,
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
@@ -149,7 +154,7 @@ export function GetAvailableUserDiscountRepository(): Promise<GetAvailableUserDi
 }
 
 export function ForgotPasswordNewPasswordRepository(
-  param: FormData
+  param: ForgotPasswordNewPasswordOtpParam
 ): Promise<ForgotPasswordNewPasswordResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/change_password`,
@@ -161,7 +166,7 @@ export function ForgotPasswordNewPasswordRepository(
 }
 
 export function ForgotPasswordValidateOTPRepository(
-  param: FormData
+  param: ForgotPasswordValidateOTPParam
 ): Promise<ForgotPasswordValidateOTPResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/validate_otp_code`,
@@ -173,7 +178,7 @@ export function ForgotPasswordValidateOTPRepository(
 }
 
 export function ForgotPasswordGenerateOTPRepository(
-  param: FormData
+  param: ForgotPasswordGenerateOtpParam
 ): Promise<ForgotPasswordGenerateOTPResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/mobile_generate_forgot_pass_code`,
@@ -185,7 +190,7 @@ export function ForgotPasswordGenerateOTPRepository(
 }
 
 export function SignUpMobileUserRepository(
-  param: FormData
+  param: SignUpMobileUserParam
 ): Promise<SignUpMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/registration`,
@@ -197,7 +202,7 @@ export function SignUpMobileUserRepository(
 }
 
 export function SignInMobileUserRepository(
-  param: FormData
+  param: SignInMobileUserParam
 ): Promise<SignInMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/login_mobile_user`,

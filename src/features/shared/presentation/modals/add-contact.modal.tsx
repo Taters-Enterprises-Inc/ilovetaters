@@ -1,8 +1,8 @@
 import { useAppDispatch } from "features/config/hooks";
 import { addContact } from "features/shared/presentation/slices/add-contact.slice";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { PhoneInput } from "../components";
+import { MaterialPhoneInput } from "../components";
 
 interface AddContactModalProps {
   open: boolean;
@@ -18,6 +18,7 @@ interface AddContactFormElement extends HTMLFormElement {
 
 export function AddContactModal(props: AddContactModalProps) {
   const dispatch = useAppDispatch();
+  const [contact, setContact] = useState<string>("");
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -27,18 +28,13 @@ export function AddContactModal(props: AddContactModalProps) {
   }
 
   const handleAddContact = (e: FormEvent<AddContactFormElement>) => {
+    dispatch(
+      addContact({
+        contact: contact,
+      })
+    );
+    props.onClose();
     e.preventDefault();
-
-    const phoneNumber: string = e.currentTarget.elements.phoneNumber.value;
-
-    if (phoneNumber.length === 11) {
-      props.onClose();
-      dispatch(
-        addContact({
-          contact: phoneNumber,
-        })
-      );
-    }
   };
 
   return (
@@ -59,7 +55,16 @@ export function AddContactModal(props: AddContactModalProps) {
             <span>Add Contact</span>
           </div>
           <div className="space-y-4">
-            <PhoneInput />
+            <MaterialPhoneInput
+              colorTheme="black"
+              required
+              fullWidth
+              onChange={(e) => {
+                setContact(e.target.value);
+              }}
+              name="contact"
+              value={contact}
+            />
 
             <button
               type="submit"

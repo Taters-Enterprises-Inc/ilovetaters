@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
+import { ForgotPasswordNewPasswordOtpParam } from "features/shared/core/shared.params";
 import {
   ForgotPasswordNewPasswordRepository,
   ForgotPasswordNewPasswordResponse,
@@ -22,7 +23,10 @@ const initialState: {
 
 export const forgotPasswordNewPassword = createAsyncThunk(
   "forgotPasswordNewPassword",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: ForgotPasswordNewPasswordOtpParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: ForgotPasswordNewPasswordResponse =
         await ForgotPasswordNewPasswordRepository(param);

@@ -1,6 +1,5 @@
 import { AdminHead } from "../components";
-import TextField from "@mui/material/TextField";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   createAdminGroup,
@@ -9,10 +8,13 @@ import {
   selectCreateAdminGroup,
 } from "../slices/create-admin-group.slice";
 import { useNavigate } from "react-router-dom";
+import { MaterialInput } from "features/shared/presentation/components";
 
 export function AdminSettingCreateGroup() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [groupName, setGroupName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const createAdminGroupState = useAppSelector(selectCreateAdminGroup);
 
@@ -24,10 +26,13 @@ export function AdminSettingCreateGroup() {
   }, [createAdminGroupState, navigate, dispatch]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      createAdminGroup({
+        groupName,
+        description,
+      })
+    );
     e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(createAdminGroup(formData));
   };
   return (
     <>
@@ -54,8 +59,26 @@ export function AdminSettingCreateGroup() {
           <span>Please enter the group information below.</span>
 
           <form onSubmit={onSubmit} className="flex flex-col space-y-4">
-            <TextField label="Group Name" name="group_name" />
-            <TextField label="Description" name="description" />
+            <MaterialInput
+              colorTheme="black"
+              value={groupName}
+              onChange={(e) => {
+                setGroupName(e.target.value);
+              }}
+              label="Group Name"
+              name="groupName"
+            />
+
+            <MaterialInput
+              colorTheme="black"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              label="Description"
+              name="description"
+            />
+
             <button
               type="submit"
               className="bg-button rounded-lg py-2 px-4 text-white w-fit"

@@ -1,9 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { BSCPasswordTextField } from "../components/bsc-password-text-field";
-import { BSCEmailTextField } from "../components/bsc-email-text-field";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   getBscSession,
   GetBscSessionState,
@@ -14,18 +12,18 @@ import {
   selectLoginBsc,
   LoginBscState,
 } from "../slices/login-bsc.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+} from "features/shared/presentation/components";
 
 export function BSCLogin() {
   const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
-
-  const navigatetoCreateUser = () => {
-    navigate("create-account");
-  };
   const loginBscState = useAppSelector(selectLoginBsc);
   const getBscSessionState = useAppSelector(selectGetBscSession);
+  const [identity, setIdentity] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (loginBscState.status === LoginBscState.success) {
@@ -38,10 +36,13 @@ export function BSCLogin() {
   }, [dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      loginBsc({
+        identity,
+        password,
+      })
+    );
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(loginBsc(formData));
   };
 
   if (
@@ -62,16 +63,45 @@ export function BSCLogin() {
             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/logo/taters-logo.png`}
             alt="Taters Logo"
             className="w-36"
-          ></img>
+          />
         </div>
         <div className="pt-4 login-body">
           <form onSubmit={handleOnSubmit}>
-            <p className="text-white">
-              Please login with your email/username and password below.
-            </p>
+            {loginBscState.message ? (
+              <span
+                className="text-white"
+                dangerouslySetInnerHTML={{
+                  __html: loginBscState.message,
+                }}
+              />
+            ) : (
+              <p className="text-white">
+                Please login with your email/username and password below.
+              </p>
+            )}
             <div className="pt-4 space-y-4">
-              <BSCEmailTextField />
-              <BSCPasswordTextField />
+              <MaterialInput
+                colorTheme="white"
+                type="email"
+                label="Email"
+                size="small"
+                fullWidth
+                name="identity"
+                value={identity}
+                onChange={(e) => {
+                  setIdentity(e.target.value);
+                }}
+              />
+              <MaterialInputPassword
+                label="Password"
+                size="small"
+                name="password"
+                colorTheme="white"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
             </div>
 
             <div className="flex justify-between py-4 text-white">
@@ -86,13 +116,12 @@ export function BSCLogin() {
             >
               LOG IN
             </button>
-            <button
-              type="submit"
-              onClick={navigatetoCreateUser}
-              className="w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
+            <Link
+              to={"create-account"}
+              className="block w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
             >
               CREATE ACCOUNT
-            </button>
+            </Link>
           </form>
         </div>
       </div>

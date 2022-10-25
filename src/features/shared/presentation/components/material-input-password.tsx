@@ -1,39 +1,17 @@
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { MaterialInput, MaterialInputProps } from "./material-input";
 
-interface AdminCreateUserPasswordTextFieldProps {
-  name: string;
-  label: string;
-  required?: boolean;
-}
+export function MaterialInputPassword(props: MaterialInputProps) {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-interface State {
-  password: string;
-  showPassword: boolean;
-}
-
-export function AdminCreateUserPasswordTextField(
-  props: AdminCreateUserPasswordTextFieldProps
-) {
-  const [values, setValues] = useState<State>({
-    password: "",
-    showPassword: false,
-  });
-
-  const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+  const color = props.colorTheme === "black" ? "#22201A" : "white";
 
   const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (
@@ -43,15 +21,12 @@ export function AdminCreateUserPasswordTextField(
   };
 
   return (
-    <TextField
-      type="text"
+    <MaterialInput
+      {...props}
       inputProps={{
-        className: values.showPassword ? "" : "password-mask",
+        className: showPassword ? "" : "password-mask",
         autoComplete: "current-password",
       }}
-      value={values.password}
-      onChange={handleChange("password")}
-      name={props.name}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
@@ -61,10 +36,10 @@ export function AdminCreateUserPasswordTextField(
               onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {values.showPassword ? (
-                <VisibilityOff sx={{ color: "#22201A" }} />
+              {showPassword ? (
+                <VisibilityOff sx={{ color }} />
               ) : (
-                <Visibility sx={{ color: "#22201A" }} />
+                <Visibility sx={{ color }} />
               )}
             </IconButton>
           </InputAdornment>

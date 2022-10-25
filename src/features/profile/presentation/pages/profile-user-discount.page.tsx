@@ -1,8 +1,5 @@
 import { useEffect } from "react";
 import { FormEvent, useCallback, useState } from "react";
-import TextField from "@mui/material/TextField";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { ProfileContainer } from "../components/profile-container";
@@ -20,12 +17,15 @@ import {
   GetUserDiscountState,
   selectGetUserDiscount,
 } from "../slices/get-user-discount.slice";
-import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
 import {
   ADMIN_USER_DISCOUNT_STATUS,
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import { updateUserDiscount } from "../slices/update-user-discount.slice";
+import {
+  MaterialDateInput,
+  MaterialInput,
+} from "features/shared/presentation/components";
 
 export function ProfileUserDiscount() {
   const dispatch = useAppDispatch();
@@ -33,7 +33,6 @@ export function ProfileUserDiscount() {
   const applyUserDiscountState = useAppSelector(selectApplyUserDiscount);
   const [imagesFront, setImagesFront] = useState<any>(undefined);
   const [imagesBack, setImagesBack] = useState<any>(undefined);
-  const [openBirthDateCalendar, setOpenBirthDateCalendar] = useState(false);
 
   const [formState, setFormState] = useState<{
     firstName: string;
@@ -146,6 +145,7 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
+    console.log(formState);
     if (
       formState &&
       formState.firstName &&
@@ -262,7 +262,8 @@ export function ProfileUserDiscount() {
         </FormControl>
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="First Name"
             value={formState.firstName}
@@ -272,7 +273,8 @@ export function ProfileUserDiscount() {
             type="text"
           />
 
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="Middle Name"
             className="flex-1"
@@ -281,7 +283,8 @@ export function ProfileUserDiscount() {
             name="middleName"
           />
 
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="Last Name"
             className="flex-1"
@@ -293,45 +296,29 @@ export function ProfileUserDiscount() {
 
         <div className="flex flex-col space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row ">
           <div className="flex-1">
-            <LocalizationProvider
-              dateAdapter={AdapterDateFns}
-              className="flex-1"
-            >
-              <DesktopDatePicker
-                label="Birthday"
-                openTo="year"
-                views={["year", "month", "day"]}
-                value={formState.birthday ? formState.birthday : null}
-                shouldDisableYear={(year: Date) => {
-                  let currentYear = new Date().getFullYear();
+            <MaterialDateInput
+              colorTheme="black"
+              label="Birthday"
+              openTo="year"
+              views={["year", "month", "day"]}
+              value={formState.birthday ? formState.birthday : null}
+              shouldDisableYear={(year: Date) => {
+                let currentYear = new Date().getFullYear();
 
-                  return formState.discountTypeId === 1
-                    ? year.getFullYear() > currentYear - 60
-                    : year.getFullYear() > currentYear;
-                }}
-                onChange={(newValue: any) => {
-                  setFormState({
-                    ...formState,
-                    birthday: newValue,
-                  });
-                }}
-                open={openBirthDateCalendar}
-                onOpen={() => setOpenBirthDateCalendar(true)}
-                onClose={() => setOpenBirthDateCalendar(false)}
-                renderInput={(params) => (
-                  <TextField
-                    onClick={() => {
-                      setOpenBirthDateCalendar(true);
-                    }}
-                    required
-                    fullWidth
-                    {...params}
-                  />
-                )}
-              />
-            </LocalizationProvider>
+                return formState.discountTypeId === 1
+                  ? year.getFullYear() > currentYear - 60
+                  : year.getFullYear() > currentYear;
+              }}
+              onChange={(newValue: any) => {
+                setFormState({
+                  ...formState,
+                  birthday: newValue,
+                });
+              }}
+            />
           </div>
-          <TextField
+          <MaterialInput
+            colorTheme="black"
             required
             label="ID Number"
             className="flex-1 w-full"
@@ -444,7 +431,8 @@ export function ProfileUserDiscount() {
             </div>
           </div>
         </div>
-        {getUserDiscountState.data === null ? (
+        {getUserDiscountState.data === null ||
+        getUserDiscountState.data === undefined ? (
           <div>
             <button
               type="submit"

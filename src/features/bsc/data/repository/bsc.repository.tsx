@@ -1,4 +1,5 @@
 import axios from "axios";
+import { LoginBscParam } from "features/bsc/core/bsc.params";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
@@ -26,7 +27,9 @@ export function GetBscSessionRepository(): Promise<GetBscSessionResponse> {
   });
 }
 
-export function LoginBscRepository(param: FormData): Promise<LoginBscResponse> {
+export function LoginBscRepository(
+  param: LoginBscParam
+): Promise<LoginBscResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/auth-bsc/login`, param, {
     withCredentials: true,
   });
