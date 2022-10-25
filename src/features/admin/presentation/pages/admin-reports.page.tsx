@@ -73,7 +73,7 @@ export function AdminReports() {
             startDate +
             "/" +
             endDate;
-          setOpenGenerateTransactionModal(false);
+          setOpenGeneratePmixModal(false);
 
           dispatch(
             popUpSnackBar({
