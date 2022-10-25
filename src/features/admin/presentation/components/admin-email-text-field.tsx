@@ -8,9 +8,7 @@ const WhiteOutLinedTextField = styled((props: OutlinedTextFieldProps) => (
     color: "white !important",
     "-webkit-text-fill-color": "white !important",
   },
-  "& label": {
-    color: "white !important",
-  },
+  "& label": {},
   "& fieldset": {
     borderColor: "white !important",
   },

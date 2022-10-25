@@ -82,7 +82,7 @@ export function ShopProducts() {
               </div>
 
               <div
-                className={`flex-1 ${
+                className={`flex-1    ${
                   i % 2 === 0 ? "lg:-mr-1" : "lg:-ml-1"
                 } m-0 ml-[-12px] lg:ml-0`}
               >
