@@ -471,3 +471,9 @@ input[type="number"] {
 
 /* Add Varela Round fonts for admin page */
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+.terms-scroll {
+  width: 95%;
+  height: 425px;
+  scrollbar-width: thin;
+}
