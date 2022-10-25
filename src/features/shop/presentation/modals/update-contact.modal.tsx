@@ -1,6 +1,6 @@
 import { useAppDispatch } from "features/config/hooks";
 import { ContactModel } from "features/shared/core/domain/contact.model";
-import { PhoneInput } from "features/shared/presentation/components";
+import { MaterialPhoneInput } from "features/shared/presentation/components";
 import { updateContact } from "features/shared/presentation/slices/update-contact.slice";
 import { FormEvent, useState } from "react";
 import { IoMdClose } from "react-icons/io";
@@ -64,7 +64,7 @@ export function UpdateContactModal(props: UpdateContactModalProps) {
             <span>Update Contact</span>
           </div>
           <div className="space-y-4">
-            <PhoneInput
+            <MaterialPhoneInput
               colorTheme="black"
               onChange={(e) => {
                 setContact(e.target.value);

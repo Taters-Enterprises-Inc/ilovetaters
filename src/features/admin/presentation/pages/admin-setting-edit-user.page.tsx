@@ -1,5 +1,4 @@
 import { AdminHead } from "../components";
-import TextField from "@mui/material/TextField";
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,9 +22,8 @@ import {
 import {
   MaterialInput,
   MaterialInputPassword,
-  PhoneInput,
+  MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { get } from "http";
 
 export function AdminSettingEditUser() {
   const dispatch = useAppDispatch();
@@ -173,7 +171,7 @@ export function AdminSettingEditUser() {
                 value={formState.company}
                 onChange={handleInputChange}
               />
-              <PhoneInput
+              <MaterialPhoneInput
                 colorTheme="black"
                 onChange={handleInputChange}
                 value={formState.phoneNumber}

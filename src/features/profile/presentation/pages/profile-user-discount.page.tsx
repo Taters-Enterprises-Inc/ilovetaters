@@ -1,8 +1,5 @@
 import { useEffect } from "react";
 import { FormEvent, useCallback, useState } from "react";
-import TextField from "@mui/material/TextField";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { ProfileContainer } from "../components/profile-container";
@@ -20,7 +17,6 @@ import {
   GetUserDiscountState,
   selectGetUserDiscount,
 } from "../slices/get-user-discount.slice";
-import { ApplyUserDiscountParam } from "features/profile/core/profile.params";
 import {
   ADMIN_USER_DISCOUNT_STATUS,
   REACT_APP_DOMAIN_URL,

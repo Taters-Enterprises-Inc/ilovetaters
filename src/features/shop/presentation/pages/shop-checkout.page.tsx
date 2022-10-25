@@ -2,9 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import Select from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getSession,
@@ -37,13 +35,10 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   MaterialInput,
-  PhoneInput,
+  MaterialPhoneInput,
 } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
-import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   getAvailableUserDiscount,
   selectGetAvailableUserDiscount,
@@ -428,7 +423,7 @@ export function ShopCheckout() {
                           </MaterialInput>
                         </FormControl>
                       ) : (
-                        <PhoneInput
+                        <MaterialPhoneInput
                           colorTheme="black"
                           fullWidth
                           onChange={handleInputChange}

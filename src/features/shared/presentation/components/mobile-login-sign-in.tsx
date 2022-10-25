@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { signInMobileUser } from "../slices/sign-in-mobile-user.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { MobileForgotPasswordModal } from "../modals";
-import { PhoneInput } from ".";
+import { MaterialPhoneInput } from ".";
 import { MaterialInputPassword } from "./material-input-password";
 
 export function MobileLoginSignIn() {
@@ -39,7 +39,7 @@ export function MobileLoginSignIn() {
           </p>
 
           <div className="space-y-4">
-            <PhoneInput
+            <MaterialPhoneInput
               required
               colorTheme="white"
               size="small"

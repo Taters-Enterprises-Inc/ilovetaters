@@ -37,7 +37,7 @@ import {
 import { PaymentMethod } from "features/shop/presentation/components";
 import {
   MaterialInput,
-  PhoneInput,
+  MaterialPhoneInput,
 } from "features/shared/presentation/components";
 
 export function CateringCheckout() {
@@ -365,7 +365,7 @@ export function CateringCheckout() {
                     />
                   </div>
                   <div className="flex-1">
-                    <PhoneInput
+                    <MaterialPhoneInput
                       colorTheme="black"
                       onChange={handleInputChange}
                       value={formState.phoneNumber}

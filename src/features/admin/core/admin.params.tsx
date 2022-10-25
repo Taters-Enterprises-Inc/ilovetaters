@@ -1,3 +1,5 @@
+import { AdminStoreModel } from "./domain/admin-store.model";
+
 export interface EditAdminUserParam {
   userId: string;
   body: {
@@ -75,4 +77,14 @@ export interface AdminPrivilegeParam {
 export interface ValidateReferenceNumberParam {
   referenceNumber: string;
   transactionId: number;
+}
+
+export interface UpdateUserStoresParam {
+  userId: string;
+  stores: Array<AdminStoreModel>;
+}
+
+export interface CreateAdminGroupParam {
+  groupName: string;
+  description: string;
 }

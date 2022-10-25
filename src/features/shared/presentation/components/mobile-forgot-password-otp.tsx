@@ -15,7 +15,7 @@ import {
 } from "../slices/forgot-password-generate-otp.slice";
 
 import { useEffect } from "react";
-import { PhoneInput } from "./phone-input";
+import { MaterialPhoneInput } from "./material-phone-input";
 
 interface ForgotPasswordFormElements extends HTMLFormControlsCollection {
   phoneNumber: HTMLInputElement;
@@ -81,7 +81,7 @@ export function MobileForgotPasswordOtp() {
             Please Enter Your Mobile Number To Receive a OTP Code
           </p>
 
-          <PhoneInput
+          <MaterialPhoneInput
             colorTheme="white"
             value={phoneNumber}
             required

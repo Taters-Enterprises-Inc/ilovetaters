@@ -5,7 +5,7 @@ import { FormEvent, useState } from "react";
 import {
   MaterialInput,
   MaterialInputPassword,
-  PhoneInput,
+  MaterialPhoneInput,
 } from "features/shared/presentation/components";
 import { MenuItem } from "@mui/material";
 
@@ -125,7 +125,7 @@ export function BSCCreateAccount() {
                 fullWidth
               />
 
-              <PhoneInput
+              <MaterialPhoneInput
                 colorTheme="white"
                 required
                 name="phoneNumber"

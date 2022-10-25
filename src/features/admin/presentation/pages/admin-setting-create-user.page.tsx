@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {
   MaterialInput,
   MaterialInputPassword,
-  PhoneInput,
+  MaterialPhoneInput,
 } from "features/shared/presentation/components";
 
 export function AdminSettingCreateUser() {
@@ -107,7 +107,7 @@ export function AdminSettingCreateUser() {
               value={formState.email}
               onChange={handleInputChange}
             />
-            <PhoneInput
+            <MaterialPhoneInput
               colorTheme="black"
               onChange={handleInputChange}
               value={formState.phoneNumber}

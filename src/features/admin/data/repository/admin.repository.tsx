@@ -12,6 +12,8 @@ import {
   LoginAdminParam,
   AdminPrivilegeParam,
   ValidateReferenceNumberParam,
+  UpdateUserStoresParam,
+  CreateAdminGroupParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -679,17 +681,17 @@ export function UploadProofOfPaymentAdminRepository(
 }
 
 export function CreateAdminGroupRepository(
-  formData: FormData
+  param: CreateAdminGroupParam
 ): Promise<CreateAdminGroupResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, param, {
     withCredentials: true,
   });
 }
 
 export function UpdateAdminUserStoresRepository(
-  formData: FormData
+  param: UpdateUserStoresParam
 ): Promise<GetAdminUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, param, {
     headers: {
       "Content-Type": "application/json",
     },

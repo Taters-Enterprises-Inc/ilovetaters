@@ -2,7 +2,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FormEvent } from "react";
 import { useAppDispatch } from "features/config/hooks";
 import { signUpMobileUser } from "../slices/sign-up-mobile-user.slice";
-import { PhoneInput } from "./phone-input";
+import { MaterialPhoneInput } from "./material-phone-input";
 import { useState } from "react";
 import { MaterialInput } from ".";
 
@@ -64,7 +64,7 @@ export function MobileLoginSignUp() {
                 fullWidth
               />
             </div>
-            <PhoneInput
+            <MaterialPhoneInput
               required
               colorTheme="white"
               value={formState.phoneNumber}

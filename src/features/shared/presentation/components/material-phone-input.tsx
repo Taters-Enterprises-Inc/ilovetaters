@@ -1,8 +1,7 @@
-import { TextField } from "@mui/material";
 import { useState } from "react";
 import { MaterialInput, MaterialInputProps } from "./material-input";
 
-export function PhoneInput(props: MaterialInputProps) {
+export function MaterialPhoneInput(props: MaterialInputProps) {
   const [error, setError] = useState<string | null>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

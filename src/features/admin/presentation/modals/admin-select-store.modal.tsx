@@ -53,17 +53,19 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
   }
 
   const handleUpdateStore = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     if (
       getAdminUserStoresState.status === GetAdminUserStoresState.success &&
       getAdminUserStoresState.data &&
       userId
     ) {
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
-      formData.append("user_id", userId);
-      formData.append("stores", JSON.stringify(getAdminUserStoresState.data));
-      dispatch(updateAdminUserStores(formData));
+      dispatch(
+        updateAdminUserStores({
+          userId,
+          stores: getAdminUserStoresState.data,
+        })
+      );
     }
+    e.preventDefault();
   };
 
   return (

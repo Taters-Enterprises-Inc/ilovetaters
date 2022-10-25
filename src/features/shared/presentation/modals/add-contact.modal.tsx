@@ -2,7 +2,7 @@ import { useAppDispatch } from "features/config/hooks";
 import { addContact } from "features/shared/presentation/slices/add-contact.slice";
 import { FormEvent, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { PhoneInput } from "../components";
+import { MaterialPhoneInput } from "../components";
 
 interface AddContactModalProps {
   open: boolean;
@@ -55,7 +55,7 @@ export function AddContactModal(props: AddContactModalProps) {
             <span>Add Contact</span>
           </div>
           <div className="space-y-4">
-            <PhoneInput
+            <MaterialPhoneInput
               colorTheme="black"
               required
               fullWidth
