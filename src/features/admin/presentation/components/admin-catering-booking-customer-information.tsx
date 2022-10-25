@@ -820,21 +820,6 @@ export function AdminCateringBookingCustomerInformation() {
           setOpenAdminPasswordStoreChangeModal(false);
         }}
       />
-
-      {/* <AdminPasswordModal
-        open={openAdminPasswordModal.status}
-        onEnterPassword={(password: string) => {
-          if (openAdminPasswordModal.formData) {
-            openAdminPasswordModal.formData.append("password", password);
-            dispatch(adminCateringPrivilege(openAdminPasswordModal.formData));
-          }
-        }}
-        onClose={() => {
-          setOpenAdminPasswordModal({
-            status: false,
-          });
-        }}
-      /> */}
     </div>
   );
 }

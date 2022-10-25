@@ -43,37 +43,34 @@ export function AdminIdUserDiscountInformation(
 
   const handleUnderReview = () => {
     if (getAdminUserDiscountState.data) {
-      const formData = new FormData();
-      formData.append(
-        "discount_users_id",
-        getAdminUserDiscountState.data.id.toString()
+      dispatch(
+        adminUserDiscountChangeStatus({
+          discountUserId: getAdminUserDiscountState.data.id,
+          status: 2,
+        })
       );
-      formData.append("status", "2");
-      dispatch(adminUserDiscountChangeStatus(formData));
     }
   };
 
   const handleApprove = () => {
     if (getAdminUserDiscountState.data) {
-      const formData = new FormData();
-      formData.append(
-        "discount_users_id",
-        getAdminUserDiscountState.data.id.toString()
+      dispatch(
+        adminUserDiscountChangeStatus({
+          discountUserId: getAdminUserDiscountState.data.id,
+          status: 3,
+        })
       );
-      formData.append("status", "3");
-      dispatch(adminUserDiscountChangeStatus(formData));
     }
   };
 
   const handleReject = () => {
     if (getAdminUserDiscountState.data) {
-      const formData = new FormData();
-      formData.append(
-        "discount_users_id",
-        getAdminUserDiscountState.data.id.toString()
+      dispatch(
+        adminUserDiscountChangeStatus({
+          discountUserId: getAdminUserDiscountState.data.id,
+          status: 4,
+        })
       );
-      formData.append("status", "4");
-      dispatch(adminUserDiscountChangeStatus(formData));
     }
   };
 

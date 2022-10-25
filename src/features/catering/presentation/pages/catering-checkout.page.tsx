@@ -430,36 +430,28 @@ export function CateringCheckout() {
                 ) : null}
 
                 <div>
-                  <FormControl className="w-full">
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Event Class
-                    </InputLabel>
-
-                    <MaterialInput
-                      colorTheme="black"
-                      select
-                      className="w-full"
-                      label="Event Class"
-                      name="eventClass"
-                      onChange={(event) => {
-                        if (event.target.value === "corporate") {
-                          setEnableCompanyName(true);
-                        } else {
-                          setEnableCompanyName(false);
-                        }
-                        handleInputChange(event);
-                      }}
-                      value={formState.eventClass}
-                      required
-                      autoComplete="off"
-                    >
-                      <MenuItem value="personal">Personal</MenuItem>
-                      <MenuItem value="corporate">Corporate</MenuItem>
-                      <MenuItem value="party organizer">
-                        Party Organizer
-                      </MenuItem>
-                    </MaterialInput>
-                  </FormControl>
+                  <MaterialInput
+                    colorTheme="black"
+                    select
+                    fullWidth
+                    label="Event Class"
+                    name="eventClass"
+                    onChange={(event) => {
+                      if (event.target.value === "corporate") {
+                        setEnableCompanyName(true);
+                      } else {
+                        setEnableCompanyName(false);
+                      }
+                      handleInputChange(event);
+                    }}
+                    value={formState.eventClass}
+                    required
+                    autoComplete="off"
+                  >
+                    <MenuItem value="personal">Personal</MenuItem>
+                    <MenuItem value="corporate">Corporate</MenuItem>
+                    <MenuItem value="party organizer">Party Organizer</MenuItem>
+                  </MaterialInput>
                 </div>
 
                 {enableCompanyName ? (

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AdminUserDiscountChangeStatusParam } from "features/admin/core/admin.params";
 import {
   AdminUserDiscountChangeStatusRepository,
   AdminUserDiscountChangeStatusResponse,
@@ -22,10 +23,13 @@ const initialState: {
 
 export const adminUserDiscountChangeStatus = createAsyncThunk(
   "adminUserDiscountChangeStatus",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: AdminUserDiscountChangeStatusParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: AdminUserDiscountChangeStatusResponse =
-        await AdminUserDiscountChangeStatusRepository(formData);
+        await AdminUserDiscountChangeStatusRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

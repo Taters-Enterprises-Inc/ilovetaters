@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AdminDeclineRedeemParam } from "features/admin/core/admin.params";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import {
   AdminDeclineRedeemRepository,
@@ -23,10 +24,13 @@ const initialState: {
 
 export const adminDeclineRedeem = createAsyncThunk(
   "adminDeclineRedeem",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: AdminDeclineRedeemParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: AdminDeclineRedeemResponse =
-        await AdminDeclineRedeemRepository(formData);
+        await AdminDeclineRedeemRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

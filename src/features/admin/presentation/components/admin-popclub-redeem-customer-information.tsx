@@ -47,44 +47,25 @@ export function AdminPopclubRedeemCustomerInformation(
 
   const handleComplete = () => {
     if (getAdminPopclubRedeemState.data) {
-      const formData = new FormData();
-      formData.append(
-        "redeem_id",
-        getAdminPopclubRedeemState.data.id.toString()
+      dispatch(
+        adminCompleteRedeem({
+          redeemId: getAdminPopclubRedeemState.data.id,
+          fbUserId: getAdminPopclubRedeemState.data.fb_user_id,
+          mobileUserId: getAdminPopclubRedeemState.data.mobile_user_id,
+        })
       );
-      if (getAdminPopclubRedeemState.data.mobile_user_id)
-        formData.append(
-          "mobile_user_id",
-          getAdminPopclubRedeemState.data.mobile_user_id.toString()
-        );
-      if (getAdminPopclubRedeemState.data.fb_user_id)
-        formData.append(
-          "fb_user_id",
-          getAdminPopclubRedeemState.data.fb_user_id.toString()
-        );
-      dispatch(adminCompleteRedeem(formData));
     }
   };
 
   const handleDecline = () => {
     if (getAdminPopclubRedeemState.data) {
-      const formData = new FormData();
-      formData.append(
-        "redeem_id",
-        getAdminPopclubRedeemState.data.id.toString()
+      dispatch(
+        adminDeclineRedeem({
+          redeemId: getAdminPopclubRedeemState.data.id,
+          fbUserId: getAdminPopclubRedeemState.data.fb_user_id,
+          mobileUserId: getAdminPopclubRedeemState.data.mobile_user_id,
+        })
       );
-      if (getAdminPopclubRedeemState.data.mobile_user_id)
-        formData.append(
-          "mobile_user_id",
-          getAdminPopclubRedeemState.data.mobile_user_id.toString()
-        );
-      if (getAdminPopclubRedeemState.data.fb_user_id)
-        formData.append(
-          "fb_user_id",
-          getAdminPopclubRedeemState.data.fb_user_id.toString()
-        );
-
-      dispatch(adminDeclineRedeem(formData));
     }
   };
 

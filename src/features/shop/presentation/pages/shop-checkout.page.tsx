@@ -400,14 +400,10 @@ export function ShopCheckout() {
                     <div className="flex-1">
                       {getContactsState.data &&
                       getContactsState.data.length > 0 ? (
-                        <FormControl className="w-full">
-                          <InputLabel id="demo-simple-select-helper-label">
-                            Contacts
-                          </InputLabel>
                           <MaterialInput
                             colorTheme="black"
                             select
-                            className="w-full"
+                            fullWidth
                             label="Contacts"
                             name="phoneNumber"
                             onChange={handleInputChange}
@@ -421,7 +417,6 @@ export function ShopCheckout() {
                               </MenuItem>
                             ))}
                           </MaterialInput>
-                        </FormControl>
                       ) : (
                         <MaterialPhoneInput
                           colorTheme="black"
