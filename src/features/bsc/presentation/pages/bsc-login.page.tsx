@@ -13,19 +13,17 @@ import {
   LoginBscState,
 } from "../slices/login-bsc.slice";
 import { useEffect, useState } from "react";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+} from "features/shared/presentation/components";
 
 export function BSCLogin() {
   const dispatch = useAppDispatch();
   const loginBscState = useAppSelector(selectLoginBsc);
   const getBscSessionState = useAppSelector(selectGetBscSession);
-
-  const [formState, setFormState] = useState<{
-    email: string;
-    password: string;
-  }>({
-    email: "",
-    password: "",
-  });
+  const [identity, setIdentity] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     if (loginBscState.status === LoginBscState.success) {
@@ -37,19 +35,11 @@ export function BSCLogin() {
     dispatch(getBscSession());
   }, [dispatch]);
 
-  function handleInputChange(evt: any) {
-    const value = evt.target.value;
-    setFormState({
-      ...formState,
-      [evt.target.name]: value,
-    });
-  }
-
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     dispatch(
       loginBsc({
-        identity: formState.email,
-        password: formState.password,
+        identity,
+        password,
       })
     );
     e.preventDefault();
@@ -73,7 +63,7 @@ export function BSCLogin() {
             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/logo/taters-logo.png`}
             alt="Taters Logo"
             className="w-36"
-          ></img>
+          />
         </div>
         <div className="pt-4 login-body">
           <form onSubmit={handleOnSubmit}>
@@ -90,8 +80,28 @@ export function BSCLogin() {
               </p>
             )}
             <div className="pt-4 space-y-4">
-              {/* <BSCEmailTextField />
-              <BSCPasswordTextField /> */}
+              <MaterialInput
+                colorTheme="white"
+                type="email"
+                label="Email"
+                size="small"
+                fullWidth
+                name="identity"
+                value={identity}
+                onChange={(e) => {
+                  setIdentity(e.target.value);
+                }}
+              />
+              <MaterialInputPassword
+                label="Password"
+                size="small"
+                name="password"
+                colorTheme="white"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
             </div>
 
             <div className="flex justify-between py-4 text-white">

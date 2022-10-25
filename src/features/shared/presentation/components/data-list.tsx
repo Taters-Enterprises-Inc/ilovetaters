@@ -3,9 +3,8 @@ import Pagination from "@mui/material/Pagination";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import { ReactNode } from "react";
+import { ReactNode, ChangeEventHandler } from "react";
 import { MaterialInput } from "./material-input";
-import { MaterialInputSelect } from "./material-input-select";
 
 interface DataListProps {
   page: number;
@@ -16,7 +15,9 @@ interface DataListProps {
   totalRows: number;
   perPage: number;
   emptyMessage: string;
-  onRowsPerPageChange: (event: SelectChangeEvent<unknown>) => void;
+  onRowsPerPageChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  >;
 }
 
 export function DataList(props: DataListProps) {
@@ -36,17 +37,19 @@ export function DataList(props: DataListProps) {
               props.onSearch(e.target.value);
             }}
           />
-          <MaterialInputSelect
+          <MaterialInput
             colorTheme="black"
             size="small"
-            defaultValue={props.perPage.toString()}
+            name="perPage"
+            select
+            value={props.perPage.toString()}
             onChange={props.onRowsPerPageChange}
           >
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={25}>25</MenuItem>
             <MenuItem value={50}>50</MenuItem>
             <MenuItem value={100}>100</MenuItem>
-          </MaterialInputSelect>
+          </MaterialInput>
         </div>
 
         <Pagination

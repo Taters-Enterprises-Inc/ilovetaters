@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import {
   DataList,
+  MaterialInput,
   MaterialInputAutoComplete,
-  MaterialInputSelect,
 } from "features/shared/presentation/components";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -162,6 +162,8 @@ export function AdminAvailabilityCatersPackages() {
             <MaterialInputAutoComplete
               label="Select store"
               colorTheme="black"
+              sx={{ width: 328 }}
+              size="small"
               options={getAdminSessionState.data.admin.user_details.stores}
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
@@ -194,44 +196,44 @@ export function AdminAvailabilityCatersPackages() {
       </div>
       <div className="px-4 py-2">
         {getCatersPackageCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
-            <InputLabel>Filter by category</InputLabel>
+          <MaterialInput
+            colorTheme="black"
+            select
+            label="Filter by category"
+            name="category"
+            className="!min-w-[150px]"
+            size="small"
+            value={categoryId ?? "all"}
+            onChange={(event) => {
+              if (event.target.value !== status) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: status,
+                  store_id: storeId,
+                  category_id:
+                    event.target.value === "all" ? null : event.target.value,
+                  search: search,
+                };
 
-            <MaterialInputSelect
-              colorTheme="black"
-              label="Filter by category"
-              defaultValue={categoryId ?? "all"}
-              onChange={(event) => {
-                if (event.target.value !== status) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    status: status,
-                    store_id: storeId,
-                    category_id:
-                      event.target.value === "all" ? null : event.target.value,
-                    search: search,
-                  };
+                const queryParams = createQueryParams(params);
 
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="all">
-                <span className="text-xs lg:text-base">All</span>
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
+            }}
+          >
+            <MenuItem value="all">
+              <span className="text-xs lg:text-base">All</span>
+            </MenuItem>
+            {getCatersPackageCategoriesState.data?.map((category, index) => (
+              <MenuItem key={index} value={category.id}>
+                <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>
-              {getCatersPackageCategoriesState.data?.map((category, index) => (
-                <MenuItem key={index} value={category.id}>
-                  <span className="text-xs lg:text-base">{category.name}</span>
-                </MenuItem>
-              ))}
-            </MaterialInputSelect>
-          </FormControl>
+            ))}
+          </MaterialInput>
         ) : null}
       </div>
 

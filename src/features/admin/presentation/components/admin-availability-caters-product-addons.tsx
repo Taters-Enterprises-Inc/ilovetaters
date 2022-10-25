@@ -144,6 +144,8 @@ export function AdminAvailabilityCatersProductAddons() {
             <MaterialInputAutoComplete
               label="Select store"
               colorTheme="black"
+              sx={{ width: 328 }}
+              size="small"
               options={getAdminSessionState.data.admin.user_details.stores}
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]

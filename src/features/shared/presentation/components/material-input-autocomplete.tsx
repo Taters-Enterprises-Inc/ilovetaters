@@ -1,3 +1,4 @@
+import { SxProps, Theme } from "@mui/material";
 import Autocomplete, {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
@@ -8,7 +9,9 @@ import { MaterialInput } from "./material-input";
 interface MaterialInputAutoCompleteProps {
   colorTheme: "black" | "white";
   options: readonly any[];
-  defaultValue: any;
+  defaultValue?: any;
+  multiple?: any;
+  value?: any;
   onChange?:
     | ((
         event: React.SyntheticEvent<Element, Event>,
@@ -18,7 +21,10 @@ interface MaterialInputAutoCompleteProps {
       ) => void)
     | undefined;
   getOptionLabel?: ((option: any) => string) | undefined;
+  filterSelectedOptions?: boolean;
   label: string;
+  sx?: SxProps<Theme> | undefined;
+  size?: "small" | "medium" | undefined;
 }
 
 export function MaterialInputAutoComplete(
@@ -27,12 +33,15 @@ export function MaterialInputAutoComplete(
   return (
     <Autocomplete
       disablePortal
+      multiple={props.multiple}
       options={props.options}
-      sx={{ width: 328 }}
-      size="small"
+      sx={props.sx}
+      size={props.size}
+      value={props.value}
       defaultValue={props.defaultValue}
       getOptionLabel={props.getOptionLabel}
       onChange={props.onChange}
+      filterSelectedOptions={props.filterSelectedOptions}
       renderInput={(params) => (
         <MaterialInput
           {...params}

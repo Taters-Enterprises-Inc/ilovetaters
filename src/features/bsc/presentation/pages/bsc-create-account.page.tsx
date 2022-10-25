@@ -2,29 +2,27 @@ import { useAppDispatch } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 
 import { FormEvent, useState } from "react";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+  PhoneInput,
+} from "features/shared/presentation/components";
+import { MenuItem } from "@mui/material";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [formState, setFormState] = useState<{
-    firstName: string;
-    lastName: string;
-    designation: string;
-    company: number | null;
-    store: number | null;
-    email: string;
-    phoneNumber: string;
-    password: string;
-  }>({
+  const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
     designation: "",
-    company: null,
-    store: null,
+    company: "",
+    store: "",
     email: "",
     phoneNumber: "",
     password: "",
+    confirmPassword: "",
   });
 
   function handleInputChange(evt: any) {
@@ -56,15 +54,109 @@ export function BSCCreateAccount() {
             </p>
             <div className="pt-4 space-y-4">
               <div className="flex space-x-2">
-                {/* <BSCFirstNameTextField />
-                <BSCLastNameTextField /> */}
+                <MaterialInput
+                  colorTheme="white"
+                  required
+                  name="firstName"
+                  label="First Name"
+                  size="small"
+                  value={formState.firstName}
+                  onChange={handleInputChange}
+                />
+                <MaterialInput
+                  colorTheme="white"
+                  required
+                  name="lastName"
+                  label="Last Name"
+                  size="small"
+                  value={formState.lastName}
+                  onChange={handleInputChange}
+                />
               </div>
-              {/* <BSCDesignationField />
-              <BSCCompanySelect />
-              <BSCStoreSelect />
-              <BSCEmailTextField />
-              <BSCContactField />
-              <BSCPasswordTextField /> */}
+
+              <MaterialInput
+                colorTheme="white"
+                required
+                name="designation"
+                label="Designation"
+                size="small"
+                value={formState.designation}
+                onChange={handleInputChange}
+                fullWidth
+              />
+              <MaterialInput
+                colorTheme="white"
+                fullWidth
+                select
+                required
+                onChange={handleInputChange}
+                value={formState.company}
+                name="company"
+                size="small"
+                label="Company"
+              >
+                <MenuItem value="test">Test</MenuItem>
+                <MenuItem value="test2">Test2</MenuItem>
+              </MaterialInput>
+
+              <MaterialInput
+                colorTheme="white"
+                fullWidth
+                required
+                select
+                onChange={handleInputChange}
+                value={formState.store}
+                name="store"
+                size="small"
+                label="Store"
+              >
+                <MenuItem value="test">Test</MenuItem>
+                <MenuItem value="test2">Test2</MenuItem>
+              </MaterialInput>
+
+              <MaterialInput
+                colorTheme="white"
+                required
+                name="email"
+                label="E-mail"
+                size="small"
+                value={formState.email}
+                onChange={handleInputChange}
+                fullWidth
+              />
+
+              <PhoneInput
+                colorTheme="white"
+                required
+                name="phoneNumber"
+                label="Phone Number"
+                size="small"
+                value={formState.phoneNumber}
+                onChange={handleInputChange}
+                fullWidth
+              />
+
+              <MaterialInputPassword
+                colorTheme="white"
+                required
+                name="password"
+                label="Password"
+                size="small"
+                value={formState.password}
+                onChange={handleInputChange}
+                fullWidth
+              />
+
+              <MaterialInputPassword
+                colorTheme="white"
+                required
+                name="confirmPassword"
+                label="Confirm Password"
+                size="small"
+                value={formState.confirmPassword}
+                onChange={handleInputChange}
+                fullWidth
+              />
             </div>
 
             <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">

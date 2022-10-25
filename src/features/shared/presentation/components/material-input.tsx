@@ -32,6 +32,13 @@ export const MaterialInput = styled(
     "&.Mui-focused fieldset": {
       borderColor: "white !important",
     },
+    ".MuiSvgIcon-root ": {
+      fill: "white !important",
+    },
+    "& .MuiInputBase-input": {
+      color: "white !important",
+      "-webkit-text-fill-color": "white !important",
+    },
   }),
 
   ...(colorTheme === "black" && {
@@ -50,6 +57,13 @@ export const MaterialInput = styled(
     },
     "&.Mui-focused fieldset": {
       borderColor: "#22201A !important",
+    },
+    ".MuiSvgIcon-root ": {
+      fill: "#22201A !important",
+    },
+    "& .MuiInputBase-input": {
+      color: "#22201A !important",
+      "-webkit-text-fill-color": "#22201A !important",
     },
   }),
 }));

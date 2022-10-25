@@ -37,7 +37,6 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   MaterialInput,
-  MaterialInputSelect,
   PhoneInput,
 } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
@@ -410,8 +409,9 @@ export function ShopCheckout() {
                           <InputLabel id="demo-simple-select-helper-label">
                             Contacts
                           </InputLabel>
-                          <MaterialInputSelect
+                          <MaterialInput
                             colorTheme="black"
+                            select
                             className="w-full"
                             label="Contacts"
                             name="phoneNumber"
@@ -425,7 +425,7 @@ export function ShopCheckout() {
                                 {val.contact}
                               </MenuItem>
                             ))}
-                          </MaterialInputSelect>
+                          </MaterialInput>
                         </FormControl>
                       ) : (
                         <PhoneInput

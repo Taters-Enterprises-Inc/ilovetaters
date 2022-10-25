@@ -31,7 +31,7 @@ import {
 } from "../slices/get-admin-catering-booking.slice";
 import Moment from "react-moment";
 import moment from "moment";
-import { MaterialInputSelect } from "features/shared/presentation/components";
+import { MaterialInput } from "features/shared/presentation/components";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -282,9 +282,10 @@ export function AdminCateringBookingCustomerInformation() {
 
           <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
             <div className="flex flex-col flex-1 lg:flex-row">
-              <MaterialInputSelect
+              <MaterialInput
                 colorTheme="black"
                 size="small"
+                select
                 name="toStatusId"
                 value={status}
                 onChange={(e) => {
@@ -301,7 +302,7 @@ export function AdminCateringBookingCustomerInformation() {
                     </MenuItem>
                   );
                 })}
-              </MaterialInputSelect>
+              </MaterialInput>
               <button
                 onClick={() => {
                   setOpenAdminPasswordStatusChangeModal(true);
@@ -316,9 +317,10 @@ export function AdminCateringBookingCustomerInformation() {
           <hr />
 
           <div className="flex flex-col flex-1 lg:flex-row">
-            <MaterialInputSelect
+            <MaterialInput
               colorTheme="black"
               size="small"
+              select
               value={store}
               onChange={(e) => {
                 setStore(e.target.value as string);
@@ -330,7 +332,7 @@ export function AdminCateringBookingCustomerInformation() {
                   {store.name}
                 </MenuItem>
               ))}
-            </MaterialInputSelect>
+            </MaterialInput>
             <button
               onClick={() => {
                 setOpenAdminPasswordStoreChangeModal(true);

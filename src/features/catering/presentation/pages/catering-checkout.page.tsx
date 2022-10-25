@@ -37,7 +37,6 @@ import {
 import { PaymentMethod } from "features/shop/presentation/components";
 import {
   MaterialInput,
-  MaterialInputSelect,
   PhoneInput,
 } from "features/shared/presentation/components";
 
@@ -436,8 +435,9 @@ export function CateringCheckout() {
                       Event Class
                     </InputLabel>
 
-                    <MaterialInputSelect
+                    <MaterialInput
                       colorTheme="black"
+                      select
                       className="w-full"
                       label="Event Class"
                       name="eventClass"
@@ -458,7 +458,7 @@ export function CateringCheckout() {
                       <MenuItem value="party organizer">
                         Party Organizer
                       </MenuItem>
-                    </MaterialInputSelect>
+                    </MaterialInput>
                   </FormControl>
                 </div>
 

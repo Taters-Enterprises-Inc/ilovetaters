@@ -38,10 +38,7 @@ import {
   selectAdminPrivilege,
   resetAdminPrivilege,
 } from "../slices/admin-privilege.slice";
-import {
-  MaterialInput,
-  MaterialInputSelect,
-} from "features/shared/presentation/components";
+import { MaterialInput } from "features/shared/presentation/components";
 
 export function AdminShopOrderCustomerInformation() {
   const query = useQuery();
@@ -422,9 +419,10 @@ export function AdminShopOrderCustomerInformation() {
               </>
             ) : null}
             <div className="flex flex-col flex-1 lg:flex-row">
-              <MaterialInputSelect
+              <MaterialInput
                 colorTheme="black"
                 size="small"
+                select
                 name="toStatusId"
                 sx={{
                   "& fieldset": {
@@ -446,7 +444,7 @@ export function AdminShopOrderCustomerInformation() {
                     </MenuItem>
                   );
                 })}
-              </MaterialInputSelect>
+              </MaterialInput>
               <button
                 onClick={() => {
                   setOpenAdminPasswordStatusChangeModal(true);
@@ -461,9 +459,10 @@ export function AdminShopOrderCustomerInformation() {
           <hr />
 
           <div className="flex flex-col flex-1 lg:flex-row">
-            <MaterialInputSelect
+            <MaterialInput
               colorTheme="black"
               size="small"
+              select
               sx={{
                 "& fieldset": {
                   borderRadius: "0px",
@@ -480,7 +479,7 @@ export function AdminShopOrderCustomerInformation() {
                   {store.name}
                 </MenuItem>
               ))}
-            </MaterialInputSelect>
+            </MaterialInput>
             <button
               onClick={() => {
                 setOpenAdminPasswordStoreChangeModal(true);
