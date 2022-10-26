@@ -58,11 +58,15 @@ export function BSCCreateAccount() {
 
               <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
-                  <input className="mr-2" type="checkbox" /> 
-                  
-                  I agree to the <span className="hover:underline" onClick={() => {setOpenTermsAndPolicyModal(true); }}> 
-                  Terms of Service and Privacy Policy. 
-                  </span> 
+                  <input className="mr-2" type="checkbox" />I agree to the{" "}
+                  <span
+                    className="cursor-pointer hover:underline"
+                    onClick={() => {
+                      setOpenTermsAndPolicyModal(true);
+                    }}
+                  >
+                    Terms of Service and Privacy Policy.
+                  </span>
                 </p>
               </div>
               <button
@@ -93,7 +97,6 @@ export function BSCCreateAccount() {
           setOpenTermsAndPolicyModal(false);
         }}
       />
-    </>  
+    </>
   );
 }
-
