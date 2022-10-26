@@ -35,18 +35,20 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
       }}
       className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
-      {store.dateadded &&
-      dateadded.getTime() >= currentDate.setDate(currentDate.getMonth() - 1) ? (
-        <>
-          <TiStarburst className="absolute right-1 top-8 md:top-9 text-tertiary text-4xl" />
-          <MdOutlineFiberNew className="absolute right-[10px] top-[38px] md:top-[42px] text-red-600 text-2xl" />
-        </>
-      ) : null}
+      <div className="flex">
+        <div className="flex-1 cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
+          {store.store_name}
+        </div>
 
-      <div className=" cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
-        {store.store_name}
+        {store.dateadded &&
+        dateadded.getTime() >=
+          currentDate.setDate(currentDate.getMonth() - 1) ? (
+          <div className="flex w-5">
+            <TiStarburst className="absolute right-0 text-tertiary text-xl md:text-3xl" />
+            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-sm md:text-xl md:right-[4.5px] md:top-[5px]" />
+          </div>
+        ) : null}
       </div>
-
       {store.store_image ? (
         <img
           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
