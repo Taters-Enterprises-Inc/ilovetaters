@@ -1,12 +1,12 @@
-import React from "react";
 import { FormControl } from "@mui/material";
 import { BSCRatingRadioButton } from "./bsc-rating-radio-button";
+import { LinearProgress } from '@mui/material';
 
 export function BSCScoreCardPage() {
   return (
-    <main className="lg:w-[60%] bg-white mx-auto h-auto font-['Varela_Round'] text-sm rounded my-6 md:w-[70%] w-[80%]">
+    <main className="lg:w-[60%] bg-paper mx-auto h-auto font-['Varela_Round'] text-sm rounded my-6 md:w-[70%] w-[80%]">
       <div
-        className="text-center text-secondary rounded-xl h-[20vh] bg-paper mb-3 
+        className="text-center text-secondary rounded-xl h-[20vh] bg-white mb-3 
             border-t-[16px] border-solid border-secondary flex justify-evenly items-center flex-col"
       >
         <h1 className="text-2xl sm:text-3xl font-['Bebas_Neue'] md:text-4xl w-[85%]">
@@ -20,7 +20,7 @@ export function BSCScoreCardPage() {
       </div>
 
       <FormControl
-        className="block py-10 text-xs font-light md:text-sm bg-paper rounded-xl"
+        className="block py-10 text-xs font-light bg-white md:text-sm rounded-xl"
         sx={{ py: 5 }}
       >
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
@@ -73,9 +73,9 @@ export function BSCScoreCardPage() {
           <BSCRatingRadioButton />
         </div>
 
-        <div className="mx-[10%] flex justify-between items-center mt-4">
+        <div className="mx-[10%] flex justify-between items-center my-4">
           <button
-            className="py-2 text-md text-white border rounded-lg bg-button w-[100px] invisible"
+            className="py-2 text-md text-white border rounded-lg bg-button w-[100px]"
             type="submit"
             value="prev"
           >
@@ -88,6 +88,21 @@ export function BSCScoreCardPage() {
           >
             Next
           </button>
+        </div>
+
+        <div className="w-[40%] ml-[50%] mt-[3%]">
+          <LinearProgress variant="determinate" value={25} className="w-[100%] mx-auto mb-4 h-4" sx={{
+              '& .MuiLinearProgress-bar1Determinate': {
+                color: '#004d00',
+                backgroundColor: '#004d00',
+              },
+              '&.MuiLinearProgress-root': {
+                backgroundColor: 'gray',
+                height: 8,
+              },
+            }}
+          />
+          <p className="text-black text-center text-xs"> Page 1 of 4 </p> 
         </div>
       </FormControl>
     </main>
