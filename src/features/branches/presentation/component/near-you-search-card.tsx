@@ -45,7 +45,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
           currentDate.setDate(currentDate.getMonth() - 1) ? (
           <div className="flex w-5">
             <TiStarburst className="absolute right-0 text-tertiary text-xl md:text-3xl" />
-            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-sm md:text-xl md:right-[4.5px] md:top-[5px]" />
+            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-sm md:text-xl md:right-[4.8px] md:top-[5px]" />
           </div>
         ) : null}
       </div>
