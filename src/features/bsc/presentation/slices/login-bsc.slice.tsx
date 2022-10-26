@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { LoginBscParam } from "features/bsc/core/bsc.params";
 import {
   LoginBscRepository,
   LoginBscResponse,
@@ -22,11 +23,12 @@ const initialState: {
 
 export const loginBsc = createAsyncThunk(
   "loginBsc",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (param: LoginBscParam, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: LoginBscResponse = await LoginBscRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
+      console.log(error.response.data);
       throw rejectWithValue({ message: error.response.data.message });
     }
   }

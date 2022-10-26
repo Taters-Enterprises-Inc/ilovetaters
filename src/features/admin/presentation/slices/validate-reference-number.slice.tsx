@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ValidateReferenceNumberParam } from "features/admin/core/admin.params";
 import {
   ValidateReferenceNumberAdminRepository,
   ValidateReferenceNumberAdminResponse,
@@ -22,10 +23,13 @@ const initialState: {
 
 export const validateReferenceNumberAdmin = createAsyncThunk(
   "validateReferenceNumberAdmin",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: ValidateReferenceNumberParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: ValidateReferenceNumberAdminResponse =
-        await ValidateReferenceNumberAdminRepository(formData);
+        await ValidateReferenceNumberAdminRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

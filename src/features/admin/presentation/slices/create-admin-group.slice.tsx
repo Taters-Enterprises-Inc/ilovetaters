@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CreateAdminGroupParam } from "features/admin/core/admin.params";
 import {
   CreateAdminGroupRepository,
   CreateAdminGroupResponse,
@@ -22,13 +23,15 @@ const initialState: {
 
 export const createAdminGroup = createAsyncThunk(
   "createAdminGroup",
-  async (fromData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: CreateAdminGroupParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: CreateAdminGroupResponse =
-        await CreateAdminGroupRepository(fromData);
+        await CreateAdminGroupRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
-      console.log(error.response.data);
       throw rejectWithValue({ message: error.response.data.message });
     }
   }

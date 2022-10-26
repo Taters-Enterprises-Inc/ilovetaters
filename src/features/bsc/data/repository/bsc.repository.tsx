@@ -1,6 +1,7 @@
 import axios from "axios";
 import { EditBscUserParam } from "features/bsc/core/bsc-params";
 import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
+import { LoginBscParam } from "features/bsc/core/bsc.params";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import { UserModel } from "features/bsc/core/domain/bsc-user.model";
@@ -89,7 +90,9 @@ export function GetBscSessionRepository(): Promise<GetBscSessionResponse> {
   });
 }
 
-export function LoginBscRepository(param: FormData): Promise<LoginBscResponse> {
+export function LoginBscRepository(
+  param: LoginBscParam
+): Promise<LoginBscResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/auth-bsc/login`, param, {
     withCredentials: true,
   });

@@ -1,41 +1,54 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { BSCPasswordTextField } from "../components/bsc-password-text-field";
-import { BSCEmailTextField } from "../components/bsc-email-text-field";
-import { BSCFirstNameTextField } from "../components/bsc-first-name-text-field";
-import { BSCLastNameTextField } from "../components/bsc-last-name-text-field";
-import { BSCDesignationField } from "../components/bsc-designation-field";
+import { useAppDispatch } from "features/config/hooks";
+import { useNavigate } from "react-router-dom";
 
-import { useState } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import BSCStoreSelect from "../components/bsc-store-select";
-import BSCCompanySelect from "../components/bsc-company-select";
-import { BSCContactField } from "../components/bsc-contact-text-field";
+import { FormEvent, useState } from "react";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+  MaterialPhoneInput,
+} from "features/shared/presentation/components";
+import { MenuItem } from "@mui/material";
 
 import { TermsAndPolicyModal } from "../modals/terms-and-policy.modal";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
-  const navigatetoLogin = () => {
-    navigate("/bsc");
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    designation: "",
+    company: "",
+    store: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  function handleInputChange(evt: any) {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  }
+
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
 
   const [openTermsAndPolicyModal, setOpenTermsAndPolicyModal] = useState(false);
-
   return (
     <>
       <main className="flex items-center justify-center h-screen bg-paper">
         <div
           className="bg-secondary w-[90%] sm:w-[400px] mx-auto p-6 px-6 
-            font-['Varela_Round'] text-sm text-center rounded-3xl shadow-md"
+          font-['Varela_Round'] text-sm text-center rounded-3xl shadow-md"
         >
           <div className="pt-1 login-body">
-            <form>
+            <form onSubmit={handleOnSubmit}>
               <p className="mb-3 text-2xl font-bold text-left text-white">
                 Create an Account
               </p>
@@ -45,18 +58,112 @@ export function BSCCreateAccount() {
               </p>
               <div className="pt-4 space-y-4">
                 <div className="flex space-x-2">
-                  <BSCFirstNameTextField />
-                  <BSCLastNameTextField />
+                  <MaterialInput
+                    colorTheme="white"
+                    required
+                    name="firstName"
+                    label="First Name"
+                    size="small"
+                    value={formState.firstName}
+                    onChange={handleInputChange}
+                  />
+                  <MaterialInput
+                    colorTheme="white"
+                    required
+                    name="lastName"
+                    label="Last Name"
+                    size="small"
+                    value={formState.lastName}
+                    onChange={handleInputChange}
+                  />
                 </div>
-                <BSCDesignationField />
-                <BSCCompanySelect />
-                <BSCStoreSelect />
-                <BSCEmailTextField />
-                <BSCContactField />
-                <BSCPasswordTextField />
+
+                <MaterialInput
+                  colorTheme="white"
+                  required
+                  name="designation"
+                  label="Designation"
+                  size="small"
+                  value={formState.designation}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <MaterialInput
+                  colorTheme="white"
+                  fullWidth
+                  select
+                  required
+                  onChange={handleInputChange}
+                  value={formState.company}
+                  name="company"
+                  size="small"
+                  label="Company"
+                >
+                  <MenuItem value="test">Test</MenuItem>
+                  <MenuItem value="test2">Test2</MenuItem>
+                </MaterialInput>
+
+                <MaterialInput
+                  colorTheme="white"
+                  fullWidth
+                  required
+                  select
+                  onChange={handleInputChange}
+                  value={formState.store}
+                  name="store"
+                  size="small"
+                  label="Store"
+                >
+                  <MenuItem value="test">Test</MenuItem>
+                  <MenuItem value="test2">Test2</MenuItem>
+                </MaterialInput>
+
+                <MaterialInput
+                  colorTheme="white"
+                  required
+                  name="email"
+                  label="E-mail"
+                  size="small"
+                  value={formState.email}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+
+                <MaterialPhoneInput
+                  colorTheme="white"
+                  required
+                  name="phoneNumber"
+                  label="Phone Number"
+                  size="small"
+                  value={formState.phoneNumber}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+
+                <MaterialInputPassword
+                  colorTheme="white"
+                  required
+                  name="password"
+                  label="Password"
+                  size="small"
+                  value={formState.password}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+
+                <MaterialInputPassword
+                  colorTheme="white"
+                  required
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  size="small"
+                  value={formState.confirmPassword}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
               </div>
 
-              <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
+              {/* <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
                   <input className="mr-2" type="checkbox" />I agree to the{" "}
                   <span
@@ -68,7 +175,7 @@ export function BSCCreateAccount() {
                     Terms of Service and Privacy Policy.
                   </span>
                 </p>
-              </div>
+              </div> */}
               <button
                 type="submit"
                 className="w-full py-2 my-3 text-white bg-button rounded-3xl"
@@ -79,7 +186,7 @@ export function BSCCreateAccount() {
                 {" "}
                 Already have an account?{" "}
                 <span
-                  onClick={navigatetoLogin}
+                  // onClick={navigatetoLogin}
                   className="cursor-pointer text-button hover:underline"
                 >
                   {" "}

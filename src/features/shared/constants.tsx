@@ -245,170 +245,6 @@ export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
   },
 ];
 
-declare module "@mui/material/styles" {
-  interface Palette {
-    tertiary: Palette["primary"];
-  }
-
-  // allow configuration using `createTheme`
-  interface PaletteOptions {
-    tertiary?: PaletteOptions["primary"];
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Radio" {
-  interface RadioPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Checkbox" {
-  interface CheckboxPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/CircularProgress" {
-  interface CircularProgressPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Tabs" {
-  interface TabsPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#a21013",
-    },
-    secondary: {
-      main: "#22201A",
-    },
-    tertiary: {
-      main: "#ffcd17",
-    },
-  },
-  components: {
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& fieldset": {
-            borderColor: "#22201A",
-          },
-          "&:hover fieldset": {
-            borderColor: "#22201A",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          ".Mui-error .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          // "&.Mui-focused fieldset": {
-          //   borderColor: "blue !important",
-          // },
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: "#22201A",
-          "-webkit-text-fill-color": "#22201A !important",
-        },
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        iconOutlined: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        indicator: {
-          backgroundColor: "#22201A",
-        },
-        root: {
-          "& .MuiTab-root.Mui-selected": {
-            color: "#22201A",
-          },
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTableSortLabel: {
-      styleOverrides: {
-        root: {
-          color: "white !important",
-          "&:hover": {
-            color: "white !important",
-          },
-          "&$active": {
-            color: "white !important",
-          },
-          "& .MuiSvgIcon-root": {
-            color: "white !important",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-  },
-});
-
 export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   name: string;
   color: string;
@@ -798,3 +634,119 @@ export const ORDER_STATUS: Array<{
     color: "#004d00",
   },
 ];
+
+declare module "@mui/material/styles" {
+  interface Palette {
+    tertiary: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    tertiary?: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Radio" {
+  interface RadioPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Checkbox" {
+  interface CheckboxPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/CircularProgress" {
+  interface CircularProgressPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Tabs" {
+  interface TabsPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#a21013",
+    },
+    secondary: {
+      main: "#22201A",
+    },
+    tertiary: {
+      main: "#ffcd17",
+    },
+  },
+  components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "& label.Mui-focused": {
+            color: "#22201A",
+          },
+          "& label": {
+            color: "#22201A !important",
+          },
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#22201A",
+        },
+        root: {
+          "& .MuiTab-root.Mui-selected": {
+            color: "#22201A",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          color: "white !important",
+          "&:hover": {
+            color: "white !important",
+          },
+          "&$active": {
+            color: "white !important",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "white !important",
+          },
+        },
+      },
+    },
+  },
+});

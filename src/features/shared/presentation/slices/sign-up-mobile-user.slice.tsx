@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { AddContactParam } from "features/shared/core/shared.params";
+import {
+  AddContactParam,
+  SignUpMobileUserParam,
+} from "features/shared/core/shared.params";
 import {
   AddContactRepository,
   AddContactResponse,
@@ -27,7 +30,10 @@ const initialState: {
 
 export const signUpMobileUser = createAsyncThunk(
   "signUpMobileUser",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: SignUpMobileUserParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: SignUpMobileUserResponse =
         await SignUpMobileUserRepository(param);

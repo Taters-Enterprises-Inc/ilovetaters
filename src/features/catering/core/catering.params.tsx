@@ -29,8 +29,15 @@ export interface CateringCheckoutOrdersParam {
   lastName: string;
   eMail: string;
   phoneNumber: string;
+  eventStartDate: string;
+  eventEndDate: string;
+  servingTime: string;
+  eventClass: string;
+  companyName: string;
+  otherDetails: string;
+  eventAddress: string;
+  paymentPlan: string;
   payops: string;
-  address: string;
 }
 
 export interface GetCateringOrdersParam {

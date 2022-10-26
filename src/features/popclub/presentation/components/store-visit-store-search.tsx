@@ -1,49 +1,30 @@
 import styled from "@emotion/styled";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   resetStoreSearch,
   searchStores,
   selectGetStoresAvailablePopClubStoreVisit,
 } from "../slices/get-stores-available-popclub-store-visit.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MaterialInput } from "features/shared/presentation/components";
 
-const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
-  <TextField {...props} />
-))(({ theme }) => ({
-  "& input": {
-    color: "white !important",
-    "-webkit-text-fill-color": "white !important",
-  },
-  "& label": {
-    color: "white !important",
-  },
-  "& fieldset": {
-    borderColor: "white !important",
-  },
-  "&:hover fieldset": {
-    borderColor: "white !important",
-  },
-  "&.Mui-focused fieldset": {
-    borderColor: "white !important",
-  },
-}));
 interface StoreVisitStoreSearchProps {
   label: string;
 }
 export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
+  const dispatch = useAppDispatch();
+
   const getStoresAvailablePopClubStoreVisitState = useAppSelector(
     selectGetStoresAvailablePopClubStoreVisit
   );
+
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     dispatch(resetStoreSearch());
   }, []);
 
-  const dispatch = useAppDispatch();
-
-  const handleOnChange = (event: any) => {
-    const search = event.target.value;
+  useEffect(() => {
     if (!search) {
       dispatch(resetStoreSearch());
 
@@ -69,12 +50,17 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
 
       dispatch(searchStores({ stores: search_stores }));
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   return (
-    <WhiteTextFiled
-      variant="outlined"
-      onChange={handleOnChange}
+    <MaterialInput
+      colorTheme="white"
+      value={search}
+      name="search"
+      onChange={(e) => {
+        setSearch(e.target.value);
+      }}
       fullWidth
       label={props.label}
     />

@@ -8,6 +8,17 @@ import {
   UpdateStoreProductParam,
   UpdateStoreCatersPackageAddonParam,
   UpdateStoreCatersProductAddonParam,
+  CreateAdminUserParam,
+  LoginAdminParam,
+  AdminPrivilegeParam,
+  ValidateReferenceNumberParam,
+  UpdateUserStoresParam,
+  CreateAdminGroupParam,
+  AdminUserDiscountChangeStatusParam,
+  AdminDeclineRedeemParam,
+  AdminCompleteRedeemParam,
+  AdminCateringBookingUpdateStatusParam,
+  AdminShopOrderUpdateStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -359,11 +370,11 @@ export interface AdminUserDiscountChangeStatusResponse {
 }
 
 export function AdminUserDiscountChangeStatusRepository(
-  formData: FormData
+  param: AdminUserDiscountChangeStatusParam
 ): Promise<AdminUserDiscountChangeStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/discount/user-discount-change-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -372,9 +383,8 @@ export function AdminUserDiscountChangeStatusRepository(
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
 ) {
-  return axios.put(
+  return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
-    new FormData(),
     {
       withCredentials: true,
     }
@@ -517,11 +527,11 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  formData: FormData
+  param: AdminDeclineRedeemParam
 ): Promise<AdminDeclineRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -597,11 +607,11 @@ export function GetAdminStoreDealsRepository(
 }
 
 export function AdminCateringBookingUpdateStatusRepository(
-  formData: FormData
+  param: AdminCateringBookingUpdateStatusParam
 ): Promise<AdminCateringBookingUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -624,11 +634,11 @@ export function GetAdminCateringBookingsRepository(
 }
 
 export function AdminCateringPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminCateringPrivilegeResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -636,23 +646,19 @@ export function AdminCateringPrivilegeRepository(
 }
 
 export function AdminPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminPrivilegeResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`, param, {
+    withCredentials: true,
+  });
 }
 
 export function AdminShopOrderUpdateStatusRepository(
-  formData: FormData
+  param: AdminShopOrderUpdateStatusParam
 ): Promise<AdminShopOrderUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -660,15 +666,11 @@ export function AdminShopOrderUpdateStatusRepository(
 }
 
 export function ValidateReferenceNumberAdminRepository(
-  formData: FormData
+  param: ValidateReferenceNumberParam
 ): Promise<ValidateReferenceNumberAdminResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/reference-num/`, param, {
+    withCredentials: true,
+  });
 }
 
 export function UploadProofOfPaymentAdminRepository(
@@ -683,17 +685,17 @@ export function UploadProofOfPaymentAdminRepository(
 }
 
 export function CreateAdminGroupRepository(
-  formData: FormData
+  param: CreateAdminGroupParam
 ): Promise<CreateAdminGroupResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, param, {
     withCredentials: true,
   });
 }
 
 export function UpdateAdminUserStoresRepository(
-  formData: FormData
+  param: UpdateUserStoresParam
 ): Promise<GetAdminUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, param, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -723,7 +725,7 @@ export function EditAdminUserRepository(
 ): Promise<EditAdminUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/auth/edit-user/${param.userId}`,
-    param.formData,
+    param.body,
     {
       withCredentials: true,
     }
@@ -745,9 +747,9 @@ export function GetAdminUserRepository(
 }
 
 export function CreateAdminUserRepository(
-  formData: FormData
+  param: CreateAdminUserParam
 ): Promise<CreateAdminUserResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, param, {
     withCredentials: true,
   });
 }
@@ -761,11 +763,11 @@ export function GetAdminUsersRepository(
 }
 
 export function AdminCompleteRedeemRepository(
-  formData: FormData
+  param: AdminCompleteRedeemParam
 ): Promise<AdminCompleteRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -827,7 +829,7 @@ export function GetAdminSessionRepository(): Promise<GetAdminSessionResponse> {
 }
 
 export function LoginAdminRepository(
-  param: FormData
+  param: LoginAdminParam
 ): Promise<LoginAdminResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/login`, param, {
     withCredentials: true,
