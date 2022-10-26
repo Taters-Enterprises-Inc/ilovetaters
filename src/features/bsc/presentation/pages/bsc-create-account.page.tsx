@@ -16,6 +16,12 @@ import {
   getAllCompanies,
   selectGetAllCompanies,
 } from "features/shared/presentation/slices/get-all-companies.slice";
+import {
+  createBscUser,
+  CreateBscUserState,
+  resetCreateUserBscStatus,
+  selectCreateBscUser,
+} from "../slices/create-bsc-user.slice";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
@@ -23,6 +29,14 @@ export function BSCCreateAccount() {
 
   const getAllStoresState = useAppSelector(selectGetAllStores);
   const getAllCompaniesState = useAppSelector(selectGetAllCompanies);
+  const createBscUserState = useAppSelector(selectCreateBscUser);
+
+  useEffect(() => {
+    if (createBscUserState.status === CreateBscUserState.success) {
+      navigate("/bsc");
+      dispatch(resetCreateUserBscStatus());
+    }
+  }, [createBscUserState]);
 
   useEffect(() => {
     dispatch(getAllStores());
@@ -50,8 +64,8 @@ export function BSCCreateAccount() {
   }
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(createBscUser(formState));
     e.preventDefault();
-    console.log(formState);
   };
 
   return (

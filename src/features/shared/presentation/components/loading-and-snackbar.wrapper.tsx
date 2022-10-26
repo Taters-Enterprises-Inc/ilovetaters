@@ -269,6 +269,10 @@ import {
   LoginBscState,
   selectLoginBsc,
 } from "features/bsc/presentation/slices/login-bsc.slice";
+import {
+  CreateBscUserState,
+  selectCreateBscUser,
+} from "features/bsc/presentation/slices/create-bsc-user.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -414,6 +418,27 @@ export function LoadingAndSnackbarWrapper() {
   const updateUserDiscountState = useAppSelector(selectUpdateUserDiscount);
 
   const loginBscState = useAppSelector(selectLoginBsc);
+
+  const createBscUserState = useAppSelector(selectCreateBscUser);
+
+  useEffect(() => {
+    switch (createBscUserState.status) {
+      case CreateBscUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateBscUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateBscUserState.success:
+        showAlert(setSuccessAlert, createBscUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateBscUserState.fail:
+        showAlert(setFailsAlert, createBscUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createBscUserState]);
 
   useEffect(() => {
     switch (loginBscState.status) {
