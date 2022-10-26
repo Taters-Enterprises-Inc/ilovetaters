@@ -163,7 +163,7 @@ export function BSCCreateAccount() {
                 />
               </div>
 
-              {/* <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
+              <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
                   <input className="mr-2" type="checkbox" />I agree to the{" "}
                   <span
@@ -175,7 +175,7 @@ export function BSCCreateAccount() {
                     Terms of Service and Privacy Policy.
                   </span>
                 </p>
-              </div> */}
+              </div>
               <button
                 type="submit"
                 className="w-full py-2 my-3 text-white bg-button rounded-3xl"
