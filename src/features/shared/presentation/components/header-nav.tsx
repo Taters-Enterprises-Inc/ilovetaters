@@ -30,7 +30,7 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
-import { ListItemIcon, ListItemText, Popover } from "@mui/material";
+import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
@@ -475,8 +475,32 @@ export function HeaderNav(props: HeaderNavProps) {
                       }}
                       open={Boolean(openProfileMenu)}
                       onClose={() => setOpenProfileMenu(null)}
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
+                          borderRadius: 0,
+                        },
+                      }}
                     >
-                      {menuList}
+                      <Box
+                        sx={{
+                          position: "relative",
+                          mt: "10px",
+                          "&::before": {
+                            backgroundColor: "white",
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            width: 12,
+                            height: 12,
+                            top: -6,
+                            transform: "rotate(45deg)",
+                            left: "calc(96% - 6px)",
+                          },
+                        }}
+                      />
+                      <div className="bg-white">{menuList}</div>
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
@@ -523,6 +547,13 @@ export function HeaderNav(props: HeaderNavProps) {
                       sx={{
                         pointerEvents: "none",
                       }}
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
+                          borderRadius: 0,
+                        },
+                      }}
                       anchorEl={openCartMenu}
                       anchorOrigin={{
                         vertical: "bottom",
@@ -536,7 +567,24 @@ export function HeaderNav(props: HeaderNavProps) {
                       onClose={() => setopenCartMenu(null)}
                       disableRestoreFocus
                     >
-                      <div className="pointer-events-auto">
+                      <Box
+                        sx={{
+                          position: "relative",
+                          mt: "10px",
+                          "&::before": {
+                            backgroundColor: "white",
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            width: 12,
+                            height: 12,
+                            top: -6,
+                            transform: "rotate(45deg)",
+                            left: "calc(95% - 6px)",
+                          },
+                        }}
+                      />
+                      <div className="pointer-events-auto bg-white">
                         <CartListItem />
                       </div>
                     </Popover>
