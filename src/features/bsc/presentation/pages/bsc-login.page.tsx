@@ -45,8 +45,6 @@ export function BSCLogin() {
     e.preventDefault();
   };
 
-  console.log(getBscSessionState);
-
   if (
     getBscSessionState.data &&
     getBscSessionState.status === GetBscSessionState.success

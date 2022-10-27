@@ -21,9 +21,9 @@ export function BscGuard() {
     getBscSessionState.data &&
     getBscSessionState.status === GetBscSessionState.success
   ) {
-    // if (getBscSessionState.data.bsc.user_status_id === 1) {
-    //   return <BscNotVerifiedUser />;
-    // }
+    if (getBscSessionState.data.bsc.user_status_id === 1) {
+      return <BscNotVerifiedUser />;
+    }
 
     return (
       <>
