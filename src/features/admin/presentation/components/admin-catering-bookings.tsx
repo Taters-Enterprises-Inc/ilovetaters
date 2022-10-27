@@ -147,6 +147,11 @@ export function AdminCateringBookings() {
     if (row.distance_price) {
       calculatedPrice += parseInt(row.distance_price);
     }
+    if (row.discount) {
+      calculatedPrice -= parseInt(row.discount);
+    }
+
+
 
     return (
       <NumberFormat
@@ -157,7 +162,7 @@ export function AdminCateringBookings() {
       />
     );
   };
-
+  console.log(getAdminCateringBookingsState)
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">

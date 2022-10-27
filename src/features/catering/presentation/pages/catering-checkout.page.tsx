@@ -39,6 +39,7 @@ import {
   MaterialInput,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
+import { selectGetAvailableUserDiscount,getAvailableUserDiscount } from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -54,10 +55,13 @@ export function CateringCheckout() {
   const cateringCheckoutOrdersState = useAppSelector(
     selectCateringCheckoutOrders
   );
+  const getAvailableUserDiscountState = useAppSelector(
+    selectGetAvailableUserDiscount
+  );
 
   const [formState, setFormState] = useState({
     firstName: "",
-    lastName: "",
+    lastName: "", 
     eMail: "",
     phoneNumber: "",
     eventStartDate: "",
@@ -70,6 +74,10 @@ export function CateringCheckout() {
     paymentPlan: "",
     payops: "",
   });
+
+  useEffect(() => {
+    dispatch(getAvailableUserDiscount());
+  }, []);
 
   useEffect(() => {
     if (
@@ -214,15 +222,24 @@ export function CateringCheckout() {
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
+    let discount = 0
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
+    
+   
 
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-
-      calculatedPrice += calculatedPrice * service_charge_percentage;
+      if (getAvailableUserDiscountState.data?.percentage) {
+        const percentage = parseFloat(
+          getAvailableUserDiscountState.data.percentage
+        );
+         
+        discount = calculatedPrice * percentage;
+      }
+      calculatedPrice += (calculatedPrice * service_charge_percentage) ;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
@@ -230,10 +247,9 @@ export function CateringCheckout() {
       if (cashOnDelivery) {
         calculatedPrice += cashOnDelivery;
       }
-
       return (
         <NumberFormat
-          value={calculatedPrice.toFixed(2)}
+          value={(calculatedPrice - discount).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -255,6 +271,43 @@ export function CateringCheckout() {
       ...formState,
       [evt.target.name]: value,
     });
+  };
+
+  const calculateAvailableUserDiscount = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+   
+
+    if (getAvailableUserDiscountState.data) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
+      return (
+        <>
+          <span>
+            {percentage * 100}%{" "}
+            {getAvailableUserDiscountState.data.discount_type_name}:
+          </span>
+          <span className="text-end">
+            -{" "}
+            <NumberFormat
+              value={(calculatedPrice * percentage).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -697,6 +750,7 @@ export function CateringCheckout() {
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
+                   {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
                     <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>

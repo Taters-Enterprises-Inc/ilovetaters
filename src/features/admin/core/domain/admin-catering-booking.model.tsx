@@ -11,6 +11,9 @@ export interface AdminCateringBookingModel {
   message: string;
   event_class: string;
   company_name: string;
+  discount:string,
+  discount_id:string
+  discount_name:string
 
   service_fee: number;
   night_diff_fee: number;

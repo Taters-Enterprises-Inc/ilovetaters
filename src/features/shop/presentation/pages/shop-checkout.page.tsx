@@ -768,7 +768,7 @@ export function ShopCheckout() {
                     </div>
 
                     <hr className="mt-1 mb-2 border-secondary" />
-                    <div className="grid grid-cols-2 text-secondary">
+                    <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
                         {calculateSubTotalPrice()}

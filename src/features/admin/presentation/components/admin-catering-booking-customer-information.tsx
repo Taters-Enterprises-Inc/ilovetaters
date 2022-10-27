@@ -107,8 +107,11 @@ export function AdminCateringBookingCustomerInformation() {
 
   const calculateSubTotal = () => {
     let calculatedPrice = 0;
-
+    let discount = 0
     const orders = getAdminCateringBookingState.data?.items;
+    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
+      discount = parseInt(getAdminCateringBookingState?.data.discount)
+    }
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -119,7 +122,7 @@ export function AdminCateringBookingCustomerInformation() {
 
     return (
       <NumberFormat
-        value={calculatedPrice.toFixed(2)}
+        value={(calculatedPrice -discount ).toFixed(2)}
         displayType={"text"}
         thousandSeparator={true}
         prefix={"₱"}
@@ -151,8 +154,11 @@ export function AdminCateringBookingCustomerInformation() {
 
   const calculateGrandTotal = () => {
     let calculatedPrice = 0;
-
+    let discount = 0
     const orders = getAdminCateringBookingState.data?.items;
+    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
+      discount = parseInt(getAdminCateringBookingState?.data.discount)
+    }
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -180,13 +186,14 @@ export function AdminCateringBookingCustomerInformation() {
     }
     return (
       <NumberFormat
-        value={calculatedPrice.toFixed(2)}
+        value={(calculatedPrice - discount).toFixed(2)}
         displayType={"text"}
         thousandSeparator={true}
         prefix={"₱"}
       />
     );
   };
+
 
   return (
     <div>
@@ -588,12 +595,27 @@ export function AdminCateringBookingCustomerInformation() {
                     </td>
                     <td className="px-6 py-2">{calculateOrderTotal()}</td>
                   </tr>
+                  {getAdminCateringBookingState?.data?.discount && (
+                      <tr className="text-end">
+                        <td colSpan={4} className="px-6 py-2 font-bold">
+                          {getAdminCateringBookingState?.data.discount_name}
+                        </td>
+                        <td className="px-6 py-2">
+                          {calculateWithZeroIfNoValue(
+                            parseInt(
+                              getAdminCateringBookingState?.data.discount
+                            )
+                          )}
+                        </td>
+                      </tr>
+                    )}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
                     <td className="px-6 py-2">{calculateSubTotal()}</td>
                   </tr>
+               
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Service Fee:
