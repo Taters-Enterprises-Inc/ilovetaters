@@ -222,7 +222,6 @@ export function AdminShopOrderCustomerInformation() {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     dispatch(uploadProofOfPaymentAdmin(formData));
   };
-  console.log(getAdminShopOrderState?.data )
 
   return (
     <>

@@ -162,7 +162,6 @@ export function AdminCateringBookings() {
       />
     );
   };
-  console.log(getAdminCateringBookingsState)
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
