@@ -150,9 +150,6 @@ export function AdminCateringBookings() {
     if (row.discount) {
       calculatedPrice -= parseInt(row.discount);
     }
-
-
-
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}

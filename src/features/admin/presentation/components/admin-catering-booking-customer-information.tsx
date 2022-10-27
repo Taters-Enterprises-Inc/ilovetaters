@@ -107,12 +107,8 @@ export function AdminCateringBookingCustomerInformation() {
 
   const calculateSubTotal = () => {
     let calculatedPrice = 0;
-    let discount = 0
     const orders = getAdminCateringBookingState.data?.items;
-    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
-      discount = parseInt(getAdminCateringBookingState?.data.discount)
-    }
-
+   
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice +=
@@ -120,9 +116,14 @@ export function AdminCateringBookingCustomerInformation() {
       }
     }
 
+    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
+      calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount)
+    }
+
+
     return (
       <NumberFormat
-        value={(calculatedPrice -discount ).toFixed(2)}
+        value={calculatedPrice.toFixed(2)}
         displayType={"text"}
         thousandSeparator={true}
         prefix={"₱"}
@@ -154,11 +155,7 @@ export function AdminCateringBookingCustomerInformation() {
 
   const calculateGrandTotal = () => {
     let calculatedPrice = 0;
-    let discount = 0
     const orders = getAdminCateringBookingState.data?.items;
-    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
-      discount = parseInt(getAdminCateringBookingState?.data.discount)
-    }
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -184,9 +181,15 @@ export function AdminCateringBookingCustomerInformation() {
     if (getAdminCateringBookingState.data?.night_diff_fee) {
       calculatedPrice += getAdminCateringBookingState.data?.night_diff_fee;
     }
+
+    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
+      calculatedPrice -=  parseInt(getAdminCateringBookingState?.data.discount)
+    }
+    
+
     return (
       <NumberFormat
-        value={(calculatedPrice - discount).toFixed(2)}
+        value={calculatedPrice.toFixed(2)}
         displayType={"text"}
         thousandSeparator={true}
         prefix={"₱"}

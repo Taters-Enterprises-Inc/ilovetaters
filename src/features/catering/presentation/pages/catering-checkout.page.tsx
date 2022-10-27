@@ -226,8 +226,7 @@ export function CateringCheckout() {
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
     
-   
-
+  
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
@@ -236,20 +235,21 @@ export function CateringCheckout() {
         const percentage = parseFloat(
           getAvailableUserDiscountState.data.percentage
         );
-         
         discount = calculatedPrice * percentage;
       }
       calculatedPrice += (calculatedPrice * service_charge_percentage) ;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
+      calculatedPrice -= discount
 
       if (cashOnDelivery) {
         calculatedPrice += cashOnDelivery;
       }
+
       return (
         <NumberFormat
-          value={(calculatedPrice - discount).toFixed(2)}
+          value={calculatedPrice.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -309,6 +309,7 @@ export function CateringCheckout() {
 
     return null;
   };
+
 
   return (
     <main className="bg-paper">
