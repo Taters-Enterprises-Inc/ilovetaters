@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EditBscUserParam } from "features/bsc/core/bsc-params";
+import { EditBscUserParam } from "features/bsc/core/bsc.params";
 import {
   EditBscUserRepository,
   EditBscUserResponse,

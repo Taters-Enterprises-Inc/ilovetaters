@@ -127,6 +127,7 @@ import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
 import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
 import getAllStores from "features/shared/presentation/slices/get-all-stores.slice";
 import getAllCompanies from "features/shared/presentation/slices/get-all-companies.slice";
+import createBscUser from "features/bsc/presentation/slices/create-bsc-user.slice";
 import getBscUsers from "features/bsc/presentation/slices/get-bsc-users.slice";
 import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
 import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
@@ -134,7 +135,6 @@ import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice"
 import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
 import editBscUser from "features/bsc/presentation/slices/bsc-edit-user.slice";
 import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
-import createBscUser from "features/bsc/presentation/slices/bsc-create-user.slice";
 import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 
 export const store = configureStore({

@@ -9,9 +9,9 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   createBscUser,
   CreateBscUserState,
-  resetCreateBscUser,
+  resetCreateUserBscStatus,
   selectCreateBscUser,
-} from "../slices/bsc-create-user.slice";
+} from "../slices/create-bsc-user.slice";
 import { useNavigate } from "react-router-dom";
 
 export function BSCCreateUser() {
@@ -22,7 +22,7 @@ export function BSCCreateUser() {
 
   useEffect(() => {
     if (createBscUserState.status === CreateBscUserState.success) {
-      dispatch(resetCreateBscUser());
+      dispatch(resetCreateUserBscStatus());
       navigate("/bsc/users");
     }
   }, [createBscUserState, navigate, dispatch]);
@@ -32,7 +32,7 @@ export function BSCCreateUser() {
 
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    dispatch(createBscUser(formData));
+    // dispatch(createBscUser(formData));
   };
   return (
     <>

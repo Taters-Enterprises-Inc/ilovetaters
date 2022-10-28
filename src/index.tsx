@@ -97,7 +97,7 @@ import {
   BSCEmployee,
   BSCEditUser,
   BSCCreateUser,
-  BSCUsers,
+  BSCUser,
   BSCCreateGroup,
 } from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
@@ -319,7 +319,7 @@ root.render(
                     <Route element={<BSCSidebarWrapper />}>
                       <Route path="employee" element={<BSCEmployee />} />
                       <Route path="users">
-                        <Route index element={<BSCUsers />} />
+                        <Route index element={<BSCUser />} />
                         <Route path="create-user" element={<BSCCreateUser />} />
                         <Route
                           path="create-group"

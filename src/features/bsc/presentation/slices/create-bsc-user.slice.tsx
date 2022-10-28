@@ -1,13 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  CreateBscUserParam,
-  LoginBscParam,
-} from "features/bsc/core/bsc.params";
+import { CreateBscUserParam } from "features/bsc/core/bsc.params";
 import {
   CreateBscUserRepository,
   CreateBscUserResponse,
-  LoginBscRepository,
-  LoginBscResponse,
 } from "features/bsc/data/repository/bsc.repository";
 import { RootState } from "features/config/store";
 
