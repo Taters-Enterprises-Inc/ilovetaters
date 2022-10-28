@@ -3,6 +3,7 @@ import {
   CreateBscUserParam,
   LoginBscParam,
   EditBscUserParam,
+  UpdateBscUserStatusParam,
 } from "features/bsc/core/bsc.params";
 import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
@@ -92,6 +93,20 @@ export interface GetBscSessionResponse {
     message: string;
     data: BscSessionModel;
   };
+}
+
+export interface UpdateBscUserStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateBscUserStatusRepository(
+  param: UpdateBscUserStatusParam
+): Promise<UpdateBscUserStatusResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/bsc/user/status`, param, {
+    withCredentials: true,
+  });
 }
 
 export function GetBscStoresRepository(): Promise<GetBscStoresResponse> {

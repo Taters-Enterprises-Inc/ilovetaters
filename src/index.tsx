@@ -93,7 +93,7 @@ import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import {
   BSCLogin,
-  BSCCreateAccount,
+  BscSignUp,
   BscDashboard,
   BSCEditUser,
   BSCCreateUser,
@@ -313,7 +313,7 @@ root.render(
 
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
-                  <Route path="create-account" element={<BSCCreateAccount />} />
+                  <Route path="sign-up" element={<BscSignUp />} />
 
                   <Route element={<BscGuard />}>
                     <Route element={<BSCSidebarWrapper />}>

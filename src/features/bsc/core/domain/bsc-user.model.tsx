@@ -11,14 +11,17 @@ export interface BscUserModel {
   designation: string;
 
   groups: Array<{
+    id: number;
     name: string;
   }>;
 
   stores: Array<{
+    id: number;
     name: string;
   }>;
 
   companies: Array<{
+    id: number;
     name: string;
   }>;
 }

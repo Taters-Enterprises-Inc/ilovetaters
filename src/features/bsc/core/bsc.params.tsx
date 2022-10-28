@@ -20,3 +20,8 @@ export interface EditBscUserParam {
   formData: FormData;
   userId: string;
 }
+
+export interface UpdateBscUserStatusParam {
+  user_id: string;
+  status: string;
+}

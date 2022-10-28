@@ -273,6 +273,10 @@ import {
   CreateBscUserState,
   selectCreateBscUser,
 } from "features/bsc/presentation/slices/create-bsc-user.slice";
+import {
+  selectUpdateBscUserStatus,
+  UpdateBscUserStatusState,
+} from "features/bsc/presentation/slices/update-bsc-user-status.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -420,6 +424,27 @@ export function LoadingAndSnackbarWrapper() {
   const loginBscState = useAppSelector(selectLoginBsc);
 
   const createBscUserState = useAppSelector(selectCreateBscUser);
+
+  const updateBscUserStatusState = useAppSelector(selectUpdateBscUserStatus);
+
+  useEffect(() => {
+    switch (updateBscUserStatusState.status) {
+      case UpdateBscUserStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateBscUserStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserStatusState.success:
+        showAlert(setSuccessAlert, updateBscUserStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserStatusState.fail:
+        showAlert(setFailsAlert, updateBscUserStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateBscUserStatusState]);
 
   useEffect(() => {
     switch (createBscUserState.status) {
