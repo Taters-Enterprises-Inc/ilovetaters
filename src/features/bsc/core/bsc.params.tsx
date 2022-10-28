@@ -15,3 +15,8 @@ export interface CreateBscUserParam {
   phoneNumber: string;
   company: string;
 }
+
+export interface EditBscUserParam {
+  formData: FormData;
+  userId: string;
+}

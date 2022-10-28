@@ -206,7 +206,7 @@ export function AdminUserDiscounts() {
                       page_no: pageNo,
                       per_page: perPage,
                       status: status,
-                      id_number: row.id_number,
+                      id: row.id,
                       search: search,
                     };
 
@@ -244,7 +244,7 @@ export function AdminUserDiscounts() {
                   <span className="text-xs text-gray-600">
                     <strong> ID Number:</strong> {row.id_number}
                   </span>
-                  <span className="text-xs">
+                  <span className="text-xs text-gray-600">
                     <strong>Application Date: </strong>
                     <Moment format="lll">{row.dateadded}</Moment>
                   </span>
