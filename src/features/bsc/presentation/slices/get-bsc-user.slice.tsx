@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserModel } from "features/bsc/core/domain/bsc-user.model";
+import { BscUserModel } from "features/bsc/core/domain/bsc-user.model";
 import { RootState } from "features/config/store";
 import {
   GetBscUserResponse,
@@ -16,7 +16,7 @@ export enum GetBscUserState {
 const initialState: {
   status: GetBscUserState;
   message: string;
-  data: UserModel | undefined;
+  data: BscUserModel | undefined;
 } = {
   status: GetBscUserState.initial,
   message: "",
@@ -57,7 +57,7 @@ export const getBscUserSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: UserModel | null;
+            data: BscUserModel | null;
           }>
         ) => {
           const { message, data } = action.payload;

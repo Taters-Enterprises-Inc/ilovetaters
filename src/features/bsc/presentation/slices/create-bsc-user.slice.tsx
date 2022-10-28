@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CreateBscUserParam } from "features/bsc/core/bsc.params";
 import {
   CreateBscUserRepository,
   CreateBscUserResponse,
@@ -22,10 +23,10 @@ const initialState: {
 
 export const createBscUser = createAsyncThunk(
   "createBscUser",
-  async (fromData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (param: CreateBscUserParam, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: CreateBscUserResponse = await CreateBscUserRepository(
-        fromData
+        param
       );
       return fulfillWithValue(response.data);
     } catch (error: any) {
@@ -40,9 +41,9 @@ export const createBscUserSlice = createSlice({
   name: "createBscUser",
   initialState,
   reducers: {
-    resetCreateBscUser: (state) => {
-      state.status = CreateBscUserState.initial;
+    resetCreateUserBscStatus: (state) => {
       state.message = "";
+      state.status = CreateBscUserState.initial;
     },
   },
   extraReducers: (builder: any) => {
@@ -52,15 +53,9 @@ export const createBscUserSlice = createSlice({
       })
       .addCase(
         createBscUser.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
-          const { message } = action.payload;
+        (state: any, action: PayloadAction<{ message: string }>) => {
+          state.message = action.payload.message;
           state.status = CreateBscUserState.success;
-          state.message = message;
         }
       )
       .addCase(
@@ -76,5 +71,7 @@ export const createBscUserSlice = createSlice({
 });
 
 export const selectCreateBscUser = (state: RootState) => state.createBscUser;
-export const { resetCreateBscUser } = createBscUserSlice.actions;
+
+export const { resetCreateUserBscStatus } = createBscUserSlice.actions;
+
 export default createBscUserSlice.reducer;

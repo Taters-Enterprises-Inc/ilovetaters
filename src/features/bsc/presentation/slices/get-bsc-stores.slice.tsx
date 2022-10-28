@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
-import { GroupModel } from "features/admin/core/domain/group.model";
-import { UserModel } from "features/admin/core/domain/user.model";
+import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import {
-  GetAdminStoresRepository,
-  GetAdminStoresResponse,
-} from "features/admin/data/repository/admin.repository";
+  GetBscStoresRepository,
+  GetBscStoresResponse,
+} from "features/bsc/data/repository/bsc.repository";
 import { RootState } from "features/config/store";
 
 export enum GetBscStoresState {
@@ -18,7 +16,7 @@ export enum GetBscStoresState {
 const initialState: {
   status: GetBscStoresState;
   message: string;
-  data: Array<AdminStoreModel> | undefined;
+  data: Array<BscStoreModel> | undefined;
 } = {
   status: GetBscStoresState.initial,
   message: "",
@@ -29,7 +27,7 @@ export const getBscStores = createAsyncThunk(
   "getBscStores",
   async (param, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: GetAdminStoresResponse = await GetAdminStoresRepository();
+      const response: GetBscStoresResponse = await GetBscStoresRepository();
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });
@@ -53,7 +51,7 @@ export const getBscStoresSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: AdminStoreModel | null;
+            data: BscStoreModel | null;
           }>
         ) => {
           const { message, data } = action.payload;

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import {
   GetBscUserStoresRepository,
   GetBscUserStoresResponse,
@@ -16,7 +16,7 @@ export enum GetBscUserStoresState {
 const initialState: {
   status: GetBscUserStoresState;
   message: string;
-  data: Array<AdminStoreModel> | undefined;
+  data: Array<BscStoreModel> | undefined;
 } = {
   status: GetBscUserStoresState.initial,
   message: "",
@@ -43,7 +43,7 @@ export const getBscUserStoresSlice = createSlice({
   reducers: {
     getBscUserStoresUpdateStores: (
       state,
-      action: PayloadAction<{ stores: Array<AdminStoreModel> }>
+      action: PayloadAction<{ stores: Array<BscStoreModel> }>
     ) => {
       state.data = action.payload.stores;
     },
@@ -59,7 +59,7 @@ export const getBscUserStoresSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: Array<AdminStoreModel> | null;
+            data: Array<BscStoreModel> | null;
           }>
         ) => {
           const { message, data } = action.payload;

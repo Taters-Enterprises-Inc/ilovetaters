@@ -635,6 +635,28 @@ export const ORDER_STATUS: Array<{
   },
 ];
 
+export const BSC_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
 declare module "@mui/material/styles" {
   interface Palette {
     tertiary: Palette["primary"];

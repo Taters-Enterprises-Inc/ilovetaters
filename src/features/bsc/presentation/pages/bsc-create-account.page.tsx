@@ -1,19 +1,49 @@
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   MaterialInput,
   MaterialInputPassword,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
 import { MenuItem } from "@mui/material";
+import {
+  getAllStores,
+  selectGetAllStores,
+} from "features/shared/presentation/slices/get-all-stores.slice";
+import {
+  getAllCompanies,
+  selectGetAllCompanies,
+} from "features/shared/presentation/slices/get-all-companies.slice";
+import {
+  createBscUser,
+  CreateBscUserState,
+  resetCreateUserBscStatus,
+  selectCreateBscUser,
+} from "../slices/create-bsc-user.slice";
 
-import { TermsAndPolicyModal } from "../modals/terms-and-policy.modal";
+import { BscTermsAndPolicyModal } from "../modals/bsc-terms-and-policy.modal";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const getAllStoresState = useAppSelector(selectGetAllStores);
+  const getAllCompaniesState = useAppSelector(selectGetAllCompanies);
+  const createBscUserState = useAppSelector(selectCreateBscUser);
+
+  useEffect(() => {
+    if (createBscUserState.status === CreateBscUserState.success) {
+      navigate("/bsc");
+      dispatch(resetCreateUserBscStatus());
+    }
+  }, [createBscUserState]);
+
+  useEffect(() => {
+    dispatch(getAllStores());
+    dispatch(getAllCompanies());
+  }, []);
 
   const [formState, setFormState] = useState({
     firstName: "",
@@ -36,6 +66,7 @@ export function BSCCreateAccount() {
   }
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(createBscUser(formState));
     e.preventDefault();
   };
 
@@ -99,8 +130,9 @@ export function BSCCreateAccount() {
                   size="small"
                   label="Company"
                 >
-                  <MenuItem value="test">Test</MenuItem>
-                  <MenuItem value="test2">Test2</MenuItem>
+                  {getAllCompaniesState.data?.map((company) => (
+                    <MenuItem value={company.id}>{company.name}</MenuItem>
+                  ))}
                 </MaterialInput>
 
                 <MaterialInput
@@ -114,8 +146,9 @@ export function BSCCreateAccount() {
                   size="small"
                   label="Store"
                 >
-                  <MenuItem value="test">Test</MenuItem>
-                  <MenuItem value="test2">Test2</MenuItem>
+                  {getAllStoresState.data?.map((store) => (
+                    <MenuItem value={store.store_id}>{store.name}</MenuItem>
+                  ))}
                 </MaterialInput>
 
                 <MaterialInput
@@ -162,7 +195,6 @@ export function BSCCreateAccount() {
                   fullWidth
                 />
               </div>
-
               <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
                   <input className="mr-2" type="checkbox" />I agree to the{" "}
@@ -198,7 +230,7 @@ export function BSCCreateAccount() {
         </div>
       </main>
 
-      <TermsAndPolicyModal
+      <BscTermsAndPolicyModal
         open={openTermsAndPolicyModal}
         onClose={() => {
           setOpenTermsAndPolicyModal(false);

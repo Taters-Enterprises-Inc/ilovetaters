@@ -49,7 +49,7 @@ export function BSCLogin() {
     getBscSessionState.data &&
     getBscSessionState.status === GetBscSessionState.success
   ) {
-    return <Navigate to={"/bsc/employee"} />;
+    return <Navigate to={"/bsc/dashboard"} />;
   }
 
   return (

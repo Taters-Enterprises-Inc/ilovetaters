@@ -19,6 +19,8 @@ import {
 } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from "../../constants";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
+import { StoreModel } from "features/shared/core/domain/store.model";
+import { CompanyModel } from "features/shared/core/domain/company.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -142,6 +144,36 @@ export interface GetAvailableUserDiscountResponse {
     message: string;
     data: UserDiscountModel;
   };
+}
+
+export interface GetAllStoresResponse {
+  data: {
+    message: string;
+    data: Array<{
+      store_id: number;
+      name: string;
+      menu_name: string;
+    }>;
+  };
+}
+
+export interface GetAllCompaniesResponse {
+  data: {
+    message: string;
+    data: Array<CompanyModel>;
+  };
+}
+
+export function GetAllCompaniesRepository(): Promise<GetAllCompaniesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/companies`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAllStoresRepository(): Promise<GetAllStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/stores`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAvailableUserDiscountRepository(): Promise<GetAvailableUserDiscountResponse> {

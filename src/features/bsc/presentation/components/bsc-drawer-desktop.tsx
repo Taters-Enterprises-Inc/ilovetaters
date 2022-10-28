@@ -2,7 +2,7 @@ import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   selectBSCSideBar,
   toggleBSCSideBar,
@@ -10,6 +10,7 @@ import {
 import { FaBars } from "react-icons/fa";
 import { AdminDrawerTabs } from "features/admin/presentation/components";
 import { BSCDrawerTabs } from "./bsc-drawer-tabs";
+import { selectGetBscSession } from "../slices/get-bsc-session.slice";
 
 const drawerWidth = "16rem";
 
@@ -54,7 +55,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function BSCDrawerDesktop() {
   const BSCSideBarState = useAppSelector(selectBSCSideBar);
   const dispatch = useAppDispatch();
-  //   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getBscSessionState = useAppSelector(selectGetBscSession);
   return (
     <Drawer
       anchor="left"
@@ -90,7 +91,7 @@ export default function BSCDrawerDesktop() {
             "opacity-0 translate-x-28 overflow-hidden"
           }`}
           >
-            Balance Score Card
+            Taters Portal
           </h1>
         </div>
         <div
@@ -100,8 +101,18 @@ export default function BSCDrawerDesktop() {
                   "opacity-0 translate-x-28 overflow-hidden "
                 }`}
         >
-          <h1>San ka punta?</h1>
-          <h2 className="text-xs">To the moon</h2>
+          {getBscSessionState.data ? (
+            <>
+              <div className="text-base">
+                {getBscSessionState.data.bsc.user_details.first_name}{" "}
+                {getBscSessionState.data.bsc.user_details.last_name}
+              </div>
+
+              <h2 className="text-xs">
+                {getBscSessionState.data.bsc.user_details.designation}
+              </h2>
+            </>
+          ) : null}
         </div>
 
         <BSCDrawerTabs />

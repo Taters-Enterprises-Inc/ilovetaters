@@ -94,14 +94,14 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import {
   BSCLogin,
   BSCCreateAccount,
-  BSCEmployee,
+  BscDashboard,
   BSCEditUser,
   BSCCreateUser,
-  BSCUsers,
+  BSCUser,
   BSCCreateGroup,
 } from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
-import { BSCUser } from "features/bsc/presentation/components";
+import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -314,13 +314,19 @@ root.render(
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
                   <Route path="create-account" element={<BSCCreateAccount />} />
-                  <Route element={<BSCSidebarWrapper />}>
-                    <Route path="employee" element={<BSCEmployee />} />
-                    <Route path="users">
-                      <Route index element={<BSCUsers />} />
-                      <Route path="create-user" element={<BSCCreateUser />} />
-                      <Route path="create-group" element={<BSCCreateGroup />} />
-                      <Route path="edit-user/:id" element={<BSCEditUser />} />
+
+                  <Route element={<BscGuard />}>
+                    <Route element={<BSCSidebarWrapper />}>
+                      <Route path="dashboard" element={<BscDashboard />} />
+                      <Route path="users">
+                        <Route index element={<BSCUser />} />
+                        <Route path="create-user" element={<BSCCreateUser />} />
+                        <Route
+                          path="create-group"
+                          element={<BSCCreateGroup />}
+                        />
+                        <Route path="edit-user/:id" element={<BSCEditUser />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
