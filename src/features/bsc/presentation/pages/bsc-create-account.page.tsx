@@ -23,7 +23,7 @@ import {
   selectCreateBscUser,
 } from "../slices/create-bsc-user.slice";
 
-import { TermsAndPolicyModal } from "../modals/terms-and-policy.modal";
+import { BscTermsAndPolicyModal } from "../modals/bsc-terms-and-policy.modal";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
@@ -230,7 +230,7 @@ export function BSCCreateAccount() {
         </div>
       </main>
 
-      <TermsAndPolicyModal
+      <BscTermsAndPolicyModal
         open={openTermsAndPolicyModal}
         onClose={() => {
           setOpenTermsAndPolicyModal(false);

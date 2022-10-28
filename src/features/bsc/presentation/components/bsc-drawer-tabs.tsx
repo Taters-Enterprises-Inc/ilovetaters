@@ -7,18 +7,9 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { NavLink, useNavigate } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-// icons
-import { IoIosArrowForward } from "react-icons/io";
-import { AiOutlineIdcard } from "react-icons/ai";
 import { HiUsers } from "react-icons/hi";
-import { RiUser2Fill } from "react-icons/ri";
+import { MdDashboardCustomize } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
-
-import { useState, useEffect } from "react";
-import { truncate } from "fs";
-import Badge from "@mui/material/Badge";
-
 import { closeBSCSideBar, selectBSCSideBar } from "../slices/bsc-sidebar.slice";
 import {
   logoutBsc,
@@ -30,6 +21,7 @@ import {
   getBscSession,
   selectGetBscSession,
 } from "../slices/get-bsc-session.slice";
+import { useEffect } from "react";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -90,7 +82,7 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
         <ul>
           <li>
             <NavLink
-              to="/bsc/employee"
+              to="/bsc/dashboard"
               onClick={() => {
                 if (props.mobile) dispatch(closeBSCSideBar());
               }}
@@ -100,14 +92,14 @@ export function BSCDrawerTabs(props: BSCDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <RiUser2Fill size={20} />
+                  <MdDashboardCustomize size={20} />
 
                   <span
                     className={`whitespace-pre duration-300 ${
                       !BSCSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    Employees
+                    Dashboard
                   </span>
                 </span>
               </span>

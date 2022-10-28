@@ -1,7 +1,6 @@
 import { BSCHead } from "../components/bsc-head";
-import { BSCScoreCardPage } from "../components/bsc-score-card";
 
-export function BSCEmployee() {
+export function BscDashboard() {
   return (
     <>
       <BSCHead
@@ -11,10 +10,9 @@ export function BSCEmployee() {
             url: "/bsc",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Employees", url: "/bsc/employee" }],
+          pageTitles: [{ name: "Dashboard", url: "/bsc/dashboard" }],
         }}
       />
-      <BSCScoreCardPage />
     </>
   );
 }

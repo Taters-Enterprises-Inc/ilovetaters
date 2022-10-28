@@ -7,7 +7,7 @@ import {
 import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
-import { UserModel } from "features/bsc/core/domain/bsc-user.model";
+import { BscUserModel } from "features/bsc/core/domain/bsc-user.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginBscResponse {
@@ -19,14 +19,14 @@ export interface LoginBscResponse {
 export interface GetBscUsersResponse {
   data: {
     message: string;
-    data: Array<UserModel>;
+    data: Array<BscUserModel>;
   };
 }
 
 export interface GetBscUserResponse {
   data: {
     message: string;
-    data: UserModel;
+    data: BscUserModel;
   };
 }
 
@@ -94,6 +94,12 @@ export interface GetBscSessionResponse {
   };
 }
 
+export function GetBscStoresRepository(): Promise<GetBscStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/stores`, {
+    withCredentials: true,
+  });
+}
+
 export function GetBscSessionRepository(): Promise<GetBscSessionResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/session`, {
     withCredentials: true,
@@ -149,29 +155,23 @@ export function CreateBscGroupRepository(
 export function GetBscUserStoresRepository(
   userId: string
 ): Promise<GetBscUserStoresResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/stores?user_id=${userId}`,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/stores?user_id=${userId}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetBscStoreRepository(
   storeId: string
 ): Promise<GetBscStoresResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/store?store_id=${storeId}`,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/store?store_id=${storeId}`, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateBscUserStoresRepository(
   formData: FormData
 ): Promise<GetBscUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/bsc/stores`, formData, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -192,7 +192,7 @@ export function EditBscUserRepository(
 }
 
 export function GetBscGroupsRepository(): Promise<GetBscGroupsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/groups`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/groups`, {
     withCredentials: true,
   });
 }

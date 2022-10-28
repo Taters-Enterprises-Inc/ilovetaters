@@ -24,12 +24,13 @@ import { getBscUser } from "../slices/get-bsc-user.slice";
 import { createQueryParams } from "features/config/helpers";
 import { BscSelectStoreModal } from "../modals/bsc-select-store.modal";
 import { BSC_STATUS } from "features/shared/constants";
+import { BscUpdateUserStatusModal } from "../modals";
 
 const columns: Array<Column> = [
-  { id: "first_name", label: "First Name" },
-  { id: "last_name", label: "Last Name" },
-  { id: "email", label: "Email" },
-  { id: "groups", label: "Groups" },
+  { id: "name", label: "Name" },
+  { id: "designation", label: "Designation" },
+  { id: "store", label: "Store" },
+  { id: "company", label: "Company" },
   { id: "status", label: "Status" },
   { id: "action", label: "Actions" },
 ];
@@ -46,6 +47,8 @@ export function BSCUsers() {
   const userId = query.get("user_id");
 
   const [openBscSelectStoreModal, setOpenBscSelectStoreModal] = useState(false);
+  const [openBscUpdateUserStatusModal, setOpenBscUpdateUserStatus] =
+    useState(false);
 
   const getBscUsersState = useAppSelector(selectGetBscUsers);
 
@@ -283,27 +286,28 @@ export function BSCUsers() {
                 <>
                   {getBscUsersState.data.users.map((row, i) => (
                     <DataTableRow key={i}>
-                      <DataTableCell>{row.first_name}</DataTableCell>
-                      <DataTableCell>{row.last_name}</DataTableCell>
-                      <DataTableCell>{row.email}</DataTableCell>
                       <DataTableCell>
-                        {row.groups.map((group) => (
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: group.name,
-                            }}
-                          />
-                        ))}
+                        <div>
+                          {row.first_name} {row.last_name}
+                        </div>
+                        <div className="text-gray-700">{row.email}</div>
+                      </DataTableCell>
+                      <DataTableCell>{row.designation}</DataTableCell>
+                      <DataTableCell>
+                        {row.stores.map((store) => store.name)}
                       </DataTableCell>
                       <DataTableCell>
-                        <button
+                        {row.companies.map((company) => company.name)}
+                      </DataTableCell>
+                      <DataTableCell>
+                        <span
                           style={{
                             background: BSC_STATUS[row.user_status_id].color,
                           }}
                           className="px-2 py-1 text-xs text-white font-['Varela_Round'] rounded-full "
                         >
                           {BSC_STATUS[row.user_status_id].name}
-                        </button>
+                        </span>
                       </DataTableCell>
                       <DataTableCell>
                         <Link
@@ -341,6 +345,29 @@ export function BSCUsers() {
             search: queryParams,
           });
           setOpenBscSelectStoreModal(false);
+        }}
+      />
+
+      <BscUpdateUserStatusModal
+        open={openBscUpdateUserStatusModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            order_by: orderBy,
+            order: order,
+            search: search,
+            user_id: null,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+
+          setOpenBscUpdateUserStatus(false);
         }}
       />
     </>

@@ -20,27 +20,16 @@ import {
   updateBscUserStores,
   UpdateBscUserStoresState,
 } from "../slices/bsc-update-user-stores.slice";
-interface BscShopOrdersModalProps {
+
+interface BscUpdateStatusModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function BscSelectStoreModal(props: BscShopOrdersModalProps) {
+export function BscUpdateUserStatusModal(props: BscUpdateStatusModalProps) {
   const dispatch = useAppDispatch();
-  const getBscStoresState = useAppSelector(selectGetBscStores);
-  const getBscUserStoresState = useAppSelector(selectGetBscUserStores);
-  const getBscUserStateState = useAppSelector(selectGetBscUser);
-  const updateBscUserStoresState = useAppSelector(selectUpdateBscUserStores);
-
   const query = useQuery();
   const userId = query.get("user_id");
-
-  useEffect(() => {
-    if (updateBscUserStoresState.status === UpdateBscUserStoresState.success) {
-      props.onClose();
-      dispatch(resetUpdateBscUserStoresStatus());
-    }
-  }, [updateBscUserStoresState, props]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -51,23 +40,13 @@ export function BscSelectStoreModal(props: BscShopOrdersModalProps) {
 
   const handleUpdateStore = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      getBscUserStoresState.status === GetBscUserStoresState.success &&
-      getBscUserStoresState.data &&
-      userId
-    ) {
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
-      formData.append("user_id", userId);
-      formData.append("stores", JSON.stringify(getBscUserStoresState.data));
-      dispatch(updateBscUserStores(formData));
-    }
   };
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-2xl text-white">Select Store</span>
+          <span className="text-2xl text-white">Update User Status</span>
           <button
             className="text-2xl text-white"
             onClick={() => {

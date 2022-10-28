@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
-import { UserModel } from "features/bsc/core/domain/bsc-user.model";
+import { BscUserModel } from "features/bsc/core/domain/bsc-user.model";
 import {
   GetBscGroupsRepository,
   GetBscGroupsResponse,
@@ -52,7 +52,7 @@ export const getBscGroupsSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: UserModel | null;
+            data: BscUserModel | null;
           }>
         ) => {
           const { message, data } = action.payload;

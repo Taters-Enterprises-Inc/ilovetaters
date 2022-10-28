@@ -94,7 +94,7 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import {
   BSCLogin,
   BSCCreateAccount,
-  BSCEmployee,
+  BscDashboard,
   BSCEditUser,
   BSCCreateUser,
   BSCUser,
@@ -317,7 +317,7 @@ root.render(
 
                   <Route element={<BscGuard />}>
                     <Route element={<BSCSidebarWrapper />}>
-                      <Route path="employee" element={<BSCEmployee />} />
+                      <Route path="dashboard" element={<BscDashboard />} />
                       <Route path="users">
                         <Route index element={<BSCUser />} />
                         <Route path="create-user" element={<BSCCreateUser />} />
