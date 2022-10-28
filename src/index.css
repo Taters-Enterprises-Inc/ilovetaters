@@ -477,3 +477,12 @@ input[type="number"] {
   height: 425px;
   scrollbar-width: thin;
 }
+
+@media (orientation: landscape) {
+
+  .add-extra-margin {
+
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  }
+}
