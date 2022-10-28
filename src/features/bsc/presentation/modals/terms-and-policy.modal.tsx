@@ -94,7 +94,7 @@ export function TermsAndPolicyModal( props:TermsAndPolicyModalProps ) {
         <div style={{ display: props.open ? "flex" : "none" }}
             className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
         >
-            <div className="md:w-[80%] w-[90%] bg-paper sm:h-[600px] h-[700px] my-auto add-extra-margin text-secondary rounded-3xl block">
+            <div className="md:w-[80%] w-[90%] bg-paper sm:h-[600px] h-[700px] sm:my-auto my-6 add-extra-margin text-secondary rounded-3xl block">
                 <button
                     className="absolute sm:text-2xl text-xl text-black mt-auto pt-[12px] md:right-[11vw] right-[6vw]"
                     onClick={() => {
