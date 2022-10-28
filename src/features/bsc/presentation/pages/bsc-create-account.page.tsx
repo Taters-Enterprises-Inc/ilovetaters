@@ -130,8 +130,9 @@ export function BSCCreateAccount() {
                   size="small"
                   label="Company"
                 >
-                  <MenuItem value="test">Test</MenuItem>
-                  <MenuItem value="test2">Test2</MenuItem>
+                  {getAllCompaniesState.data?.map((company) => (
+                    <MenuItem value={company.id}>{company.name}</MenuItem>
+                  ))}
                 </MaterialInput>
 
                 <MaterialInput
@@ -145,8 +146,9 @@ export function BSCCreateAccount() {
                   size="small"
                   label="Store"
                 >
-                  <MenuItem value="test">Test</MenuItem>
-                  <MenuItem value="test2">Test2</MenuItem>
+                  {getAllStoresState.data?.map((store) => (
+                    <MenuItem value={store.store_id}>{store.name}</MenuItem>
+                  ))}
                 </MaterialInput>
 
                 <MaterialInput
@@ -193,7 +195,6 @@ export function BSCCreateAccount() {
                   fullWidth
                 />
               </div>
-
               <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
                   <input className="mr-2" type="checkbox" />I agree to the{" "}

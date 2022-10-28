@@ -7,5 +7,12 @@ export interface BscSessionModel {
     last_check: string;
     is_admin: boolean;
     user_status_id: number;
+    user_details: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      designation: string;
+      phone_number: string;
+    };
   };
 }

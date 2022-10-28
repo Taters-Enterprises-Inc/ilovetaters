@@ -125,7 +125,7 @@ export function LogoutBscRepository(): Promise<LogoutBscResponse> {
 export function GetBscUsersRepository(
   query: string
 ): Promise<GetBscUsersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/users${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/users${query}`, {
     withCredentials: true,
   });
 }
@@ -133,7 +133,7 @@ export function GetBscUsersRepository(
 export function GetBscUserRepository(
   userId: string
 ): Promise<GetBscUserResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/user/${userId}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/user/${userId}`, {
     withCredentials: true,
   });
 }

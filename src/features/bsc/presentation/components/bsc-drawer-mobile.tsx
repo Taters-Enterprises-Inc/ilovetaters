@@ -49,7 +49,7 @@ export function BSCDrawerMobile() {
             "opacity-0 translate-x-28 overflow-hidden"
           }`}
           >
-            Balance Score Card
+            Taters Portal
           </h1>
         </div>
 
