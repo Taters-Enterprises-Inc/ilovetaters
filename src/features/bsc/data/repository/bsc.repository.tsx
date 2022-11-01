@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   CreateBscUserParam,
   LoginBscParam,
-  EditBscUserParam,
+  UpdateBscUserParam,
   UpdateBscUserStatusParam,
 } from "features/bsc/core/bsc.params";
 import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
@@ -63,12 +63,6 @@ export interface UpdateBscUserStoresResponse {
   };
 }
 
-export interface EditBscUserResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetBscGroupsResponse {
   data: {
     message: string;
@@ -99,6 +93,20 @@ export interface UpdateBscUserStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface UpdateBscUserResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateBscUserRepository(
+  param: UpdateBscUserParam
+): Promise<UpdateBscUserResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth-bsc/edit-user`, param, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateBscUserStatusRepository(
@@ -193,19 +201,6 @@ export function UpdateBscUserStoresRepository(
     withCredentials: true,
   });
 }
-
-export function EditBscUserRepository(
-  param: EditBscUserParam
-): Promise<EditBscUserResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/auth/edit-user/${param.userId}`,
-    param.formData,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
 export function GetBscGroupsRepository(): Promise<GetBscGroupsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/bsc/groups`, {
     withCredentials: true,

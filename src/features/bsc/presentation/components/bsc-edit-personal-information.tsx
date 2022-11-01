@@ -14,8 +14,9 @@ import {
   getAllStores,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { updateBscUser } from "../slices/bsc-update-user.slice";
 import {
   getBscGroups,
   selectGetBscGroups,
@@ -79,13 +80,13 @@ export function BscEditPersonalInformation() {
       getBscUserState.data
     ) {
       setFormState({
-        firstName: "",
-        lastName: "",
-        designation: "",
-        company: "",
-        store: "none",
-        email: "",
-        phoneNumber: "",
+        firstName: getBscUserState.data.first_name,
+        lastName: getBscUserState.data.last_name,
+        designation: getBscUserState.data.designation,
+        company: getBscUserState.data.companies[0].id.toString(),
+        store: getBscUserState.data.stores[0].store_id.toString(),
+        email: getBscUserState.data.email,
+        phoneNumber: getBscUserState.data.phone_number,
         password: "",
         confirmPassword: "",
         groups: null,
@@ -101,10 +102,23 @@ export function BscEditPersonalInformation() {
     });
   };
 
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (id) {
+      console.log(formState);
+      dispatch(
+        updateBscUser({
+          userId: id,
+          ...formState,
+        })
+      );
+    }
+    e.preventDefault();
+  };
+
   return (
     <>
       {getBscUserState.data && getBscUserState.data ? (
-        <form className="flex flex-col space-y-4">
+        <form onSubmit={handleOnSubmit} className="flex flex-col space-y-4">
           <MaterialInput
             colorTheme="black"
             required
@@ -175,7 +189,6 @@ export function BscEditPersonalInformation() {
           />
           <MaterialInputPassword
             colorTheme="black"
-            required
             onChange={handleInputChange}
             value={formState.password}
             name="password"
@@ -183,7 +196,6 @@ export function BscEditPersonalInformation() {
           />
           <MaterialInputPassword
             colorTheme="black"
-            required
             onChange={handleInputChange}
             value={formState.confirmPassword}
             name="confirmPassword"

@@ -4,10 +4,10 @@ export interface BscUserModel {
   id: number;
   user_status_id: 1 | 2 | 3;
   active: number;
-  first_name: number;
-  last_name: number;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   designation: string;
 
   groups: Array<{
@@ -16,7 +16,7 @@ export interface BscUserModel {
   }>;
 
   stores: Array<{
-    id: number;
+    store_id: number;
     name: string;
   }>;
 

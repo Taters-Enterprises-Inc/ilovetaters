@@ -133,7 +133,7 @@ import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
 import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
 import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
 import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
-import editBscUser from "features/bsc/presentation/slices/bsc-edit-user.slice";
+import updateBscUser from "features/bsc/presentation/slices/bsc-update-user.slice";
 import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
 import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-user-status.slice";
@@ -273,7 +273,7 @@ export const store = configureStore({
     getBscUserStores,
     getBscStores,
     updateBscUserStores,
-    editBscUser,
+    updateBscUser,
     getBscGroups,
     createBscGroup,
     updateBscUserStatus,
