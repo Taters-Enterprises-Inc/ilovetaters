@@ -22,9 +22,7 @@ import { getBscStores } from "../slices/get-bsc-stores.slice";
 import { getBscUserStores } from "../slices/get-bsc-user-stores.slice";
 import { getBscUser } from "../slices/get-bsc-user.slice";
 import { createQueryParams } from "features/config/helpers";
-import { BscSelectStoreModal } from "../modals/bsc-select-store.modal";
 import { BSC_STATUS } from "features/shared/constants";
-import { BscUpdateUserStatusModal } from "../modals";
 
 const columns: Array<Column> = [
   { id: "name", label: "Name" },
@@ -325,51 +323,6 @@ export function BSCUsers() {
           </div>
         </>
       ) : null}
-
-      <BscSelectStoreModal
-        open={openBscSelectStoreModal}
-        onClose={() => {
-          const params = {
-            page_no: pageNo,
-            per_page: perPage,
-            order_by: orderBy,
-            order: order,
-            search: search,
-            user_id: null,
-          };
-
-          const queryParams = createQueryParams(params);
-
-          navigate({
-            pathname: "",
-            search: queryParams,
-          });
-          setOpenBscSelectStoreModal(false);
-        }}
-      />
-
-      <BscUpdateUserStatusModal
-        open={openBscUpdateUserStatusModal}
-        onClose={() => {
-          const params = {
-            page_no: pageNo,
-            per_page: perPage,
-            order_by: orderBy,
-            order: order,
-            search: search,
-            user_id: null,
-          };
-
-          const queryParams = createQueryParams(params);
-
-          navigate({
-            pathname: "",
-            search: queryParams,
-          });
-
-          setOpenBscUpdateUserStatus(false);
-        }}
-      />
     </>
   );
 }

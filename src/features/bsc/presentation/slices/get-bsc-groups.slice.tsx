@@ -52,7 +52,7 @@ export const getBscGroupsSlice = createSlice({
           state: any,
           action: PayloadAction<{
             message: string;
-            data: BscUserModel | null;
+            data: Array<GroupModel> | null;
           }>
         ) => {
           const { message, data } = action.payload;

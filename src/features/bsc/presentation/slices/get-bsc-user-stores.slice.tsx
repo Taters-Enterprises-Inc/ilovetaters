@@ -41,7 +41,7 @@ export const getBscUserStoresSlice = createSlice({
   name: "getBscUserStores",
   initialState,
   reducers: {
-    getBscUserStoresUpdateStores: (
+    getBscUserStoresEditStores: (
       state,
       action: PayloadAction<{ stores: Array<BscStoreModel> }>
     ) => {
@@ -84,5 +84,5 @@ export const getBscUserStoresSlice = createSlice({
 export const selectGetBscUserStores = (state: RootState) =>
   state.getBscUserStores;
 
-export const { getBscUserStoresUpdateStores } = getBscUserStoresSlice.actions;
+export const { getBscUserStoresEditStores } = getBscUserStoresSlice.actions;
 export default getBscUserStoresSlice.reducer;

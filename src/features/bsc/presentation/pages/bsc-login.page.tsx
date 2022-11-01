@@ -117,7 +117,7 @@ export function BSCLogin() {
               LOG IN
             </button>
             <Link
-              to={"create-account"}
+              to={"sign-up"}
               className="block w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
             >
               CREATE ACCOUNT
