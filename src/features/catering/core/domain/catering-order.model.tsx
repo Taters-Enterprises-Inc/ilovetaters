@@ -26,6 +26,8 @@ export interface CateringOrderModel {
       store: number;
       invoice_num: string;
       discount: string;
+      discount_name: string;
+      discount_percentage: string;
       payment_plan: string;
       initial_payment: number;
       final_payment: number;

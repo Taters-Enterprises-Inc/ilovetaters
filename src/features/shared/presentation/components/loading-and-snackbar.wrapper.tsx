@@ -273,6 +273,14 @@ import {
   CreateBscUserState,
   selectCreateBscUser,
 } from "features/bsc/presentation/slices/create-bsc-user.slice";
+import {
+  selectUpdateBscUserStatus,
+  UpdateBscUserStatusState,
+} from "features/bsc/presentation/slices/update-bsc-user-status.slice";
+import {
+  selectUpdateBscUser,
+  UpdateBscUserState,
+} from "features/bsc/presentation/slices/bsc-update-user.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -420,6 +428,48 @@ export function LoadingAndSnackbarWrapper() {
   const loginBscState = useAppSelector(selectLoginBsc);
 
   const createBscUserState = useAppSelector(selectCreateBscUser);
+
+  const updateBscUserStatusState = useAppSelector(selectUpdateBscUserStatus);
+
+  const updateBscUserState = useAppSelector(selectUpdateBscUser);
+
+  useEffect(() => {
+    switch (updateBscUserState.status) {
+      case UpdateBscUserState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateBscUserState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserState.success:
+        showAlert(setSuccessAlert, updateBscUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserState.fail:
+        showAlert(setFailsAlert, updateBscUserState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateBscUserState]);
+
+  useEffect(() => {
+    switch (updateBscUserStatusState.status) {
+      case UpdateBscUserStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateBscUserStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserStatusState.success:
+        showAlert(setSuccessAlert, updateBscUserStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateBscUserStatusState.fail:
+        showAlert(setFailsAlert, updateBscUserStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateBscUserStatusState]);
 
   useEffect(() => {
     switch (createBscUserState.status) {

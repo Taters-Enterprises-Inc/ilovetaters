@@ -25,7 +25,7 @@ import {
 
 import { BscTermsAndPolicyModal } from "../modals/bsc-terms-and-policy.modal";
 
-export function BSCCreateAccount() {
+export function BscSignUp() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export function BSCCreateAccount() {
     lastName: "",
     designation: "",
     company: "",
-    store: "",
+    store: "none",
     email: "",
     phoneNumber: "",
     password: "",
@@ -146,6 +146,7 @@ export function BSCCreateAccount() {
                   size="small"
                   label="Store"
                 >
+                  <MenuItem value="none">None</MenuItem>
                   {getAllStoresState.data?.map((store) => (
                     <MenuItem value={store.store_id}>{store.name}</MenuItem>
                   ))}
