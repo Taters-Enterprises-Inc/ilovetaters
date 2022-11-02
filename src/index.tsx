@@ -16,6 +16,7 @@ import {
   PopClubDeal,
   PopClubHome,
   PopClubIndexPage,
+  PopclubOrder,
 } from "features/popclub/presentation/pages";
 import {
   Shop,
@@ -161,7 +162,9 @@ root.render(
                     <Route element={<PopClubGuard />}>
                       <Route path=":platform" element={<PopClubHome />} />
                       <Route path="deal/:hash" element={<PopClubDeal />} />
+                      <Route path="order/:hash" element={<PopclubOrder />} />
                     </Route>
+
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
