@@ -24,7 +24,6 @@ import {
 } from "../slices/get-admin-popclub-redeems.slice";
 import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
-import { ExtractButton } from "./extract-button";
 import { AdminChipsButton } from "./chips-button";
 import { createQueryParams } from "features/config/helpers";
 
@@ -112,9 +111,6 @@ export function AdminPopClubRedeems() {
           return params;
         }}
       />
-      <div className="px-4 mt-4">
-        <ExtractButton />
-      </div>
 
       {getAdminPopclubRedeemsState.data?.redeems ? (
         <>
