@@ -493,6 +493,7 @@ export function ShopOrder() {
                   Order Summary
                 </h2>
 
+
                 <div className="grid grid-cols-2 text-secondary">
                   <span>Subtotal:</span>
                   <span className="text-end">
@@ -547,6 +548,25 @@ export function ShopOrder() {
                 <hr className="mt-1 border-secondary" />
 
                 <h1 className="text-3xl text-center text-secondary">
+
+              <div className="grid grid-cols-2 text-secondary">
+                <span>Subtotal:</span>
+                <span className="text-end">
+                  <NumberFormat
+                    value={
+                      getOrdersState.data?.subtotal
+                        ? parseInt(getOrdersState.data.subtotal).toFixed(2)
+                        : 0.0
+                    }
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </span>
+                <span>Delivery Fee:</span>
+                <span className="text-end ">
+                  +{" "}
+
                   <NumberFormat
                     value={
                       getOrdersState.data?.grand_total
@@ -585,6 +605,74 @@ export function ShopOrder() {
                         value={getOrdersState.data?.order.clients_info.id}
                         readOnly
                       />
+
+                    </span>
+                  </>
+                ) : null}
+
+                {getOrdersState.data?.order.clients_info.discount_name &&
+                getOrdersState.data?.order.clients_info.discount ? (
+                  <>
+                    <span>
+                      {getOrdersState.data?.order.clients_info.discount_name}:
+                    </span>
+                    <span className="text-end">
+                      -{" "}
+                      <NumberFormat
+                        value={parseInt(
+                          getOrdersState.data?.order.clients_info.discount
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                  </>
+                ) : null}
+              </div>
+
+              <hr className="mt-1 border-secondary" />
+
+              <h1 className="text-3xl text-center text-secondary">
+                <NumberFormat
+                  value={
+                    getOrdersState.data?.grand_total
+                      ? getOrdersState.data.grand_total.toFixed(2)
+                      : 0.0
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h1>
+
+              {/* Upload proof of payment will be deprecated once the payment gate away finished */}
+
+              {getOrdersState.data?.order.clients_info.status === 1 &&
+              getOrdersState.data?.order.clients_info.payops !== 3 ? (
+                <>
+                  <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                    Upload Proof of Payment
+                  </h2>
+
+                  <form onSubmit={handleProofOfPayment}>
+                    <input
+                      type="text"
+                      className="hidden"
+                      name="tracking_no"
+                      value={
+                        getOrdersState.data?.order.clients_info.tracking_no
+                      }
+                      readOnly
+                    />
+                    <input
+                      type="text"
+                      className="hidden"
+                      name="trans_id"
+                      value={getOrdersState.data?.order.clients_info.id}
+                      readOnly
+                    />
+
 
                       <div>
                         <div

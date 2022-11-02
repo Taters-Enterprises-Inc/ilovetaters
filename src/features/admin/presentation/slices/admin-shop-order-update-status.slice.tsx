@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AdminShopOrderUpdateStatusParam } from "features/admin/core/admin.params";
 import {
   AdminShopOrderUpdateStatusRepository,
   AdminShopOrderUpdateStatusResponse,
@@ -22,10 +23,13 @@ const initialState: {
 
 export const adminShopOrderUpdateStatus = createAsyncThunk(
   "adminShopOrderUpdateStatus",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: AdminShopOrderUpdateStatusParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: AdminShopOrderUpdateStatusResponse =
-        await AdminShopOrderUpdateStatusRepository(formData);
+        await AdminShopOrderUpdateStatusRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

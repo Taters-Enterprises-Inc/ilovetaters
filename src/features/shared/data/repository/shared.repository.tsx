@@ -6,13 +6,21 @@ import {
   DeleteContactParam,
   DiscountRegistrationParam,
   FacebookLoginPointParam,
+  ForgotPasswordGenerateOtpParam,
+  ForgotPasswordNewPasswordOtpParam,
+  ForgotPasswordValidateOTPParam,
   GetStoresAvailableParam,
   SetSessionParam,
   SetStoreAndAddressParm,
+  SignInMobileUserParam,
+  SignUpMobileUserParam,
   UpdateContactParam,
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from "../../constants";
+import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
+import { StoreModel } from "features/shared/core/domain/store.model";
+import { CompanyModel } from "features/shared/core/domain/company.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -131,8 +139,54 @@ export interface DiscountRegistrationResponse {
   };
 }
 
+export interface GetAvailableUserDiscountResponse {
+  data: {
+    message: string;
+    data: UserDiscountModel;
+  };
+}
+
+export interface GetAllStoresResponse {
+  data: {
+    message: string;
+    data: Array<{
+      store_id: number;
+      name: string;
+      menu_name: string;
+    }>;
+  };
+}
+
+export interface GetAllCompaniesResponse {
+  data: {
+    message: string;
+    data: Array<CompanyModel>;
+  };
+}
+
+export function GetAllCompaniesRepository(): Promise<GetAllCompaniesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/companies`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAllStoresRepository(): Promise<GetAllStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/stores`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAvailableUserDiscountRepository(): Promise<GetAvailableUserDiscountResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/shared/available-user-discount`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function ForgotPasswordNewPasswordRepository(
-  param: FormData
+  param: ForgotPasswordNewPasswordOtpParam
 ): Promise<ForgotPasswordNewPasswordResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/change_password`,
@@ -144,7 +198,7 @@ export function ForgotPasswordNewPasswordRepository(
 }
 
 export function ForgotPasswordValidateOTPRepository(
-  param: FormData
+  param: ForgotPasswordValidateOTPParam
 ): Promise<ForgotPasswordValidateOTPResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/validate_otp_code`,
@@ -156,7 +210,7 @@ export function ForgotPasswordValidateOTPRepository(
 }
 
 export function ForgotPasswordGenerateOTPRepository(
-  param: FormData
+  param: ForgotPasswordGenerateOtpParam
 ): Promise<ForgotPasswordGenerateOTPResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/mobile_generate_forgot_pass_code`,
@@ -168,7 +222,7 @@ export function ForgotPasswordGenerateOTPRepository(
 }
 
 export function SignUpMobileUserRepository(
-  param: FormData
+  param: SignUpMobileUserParam
 ): Promise<SignUpMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/registration`,
@@ -180,7 +234,7 @@ export function SignUpMobileUserRepository(
 }
 
 export function SignInMobileUserRepository(
-  param: FormData
+  param: SignInMobileUserParam
 ): Promise<SignInMobileUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/mobile_users/login_mobile_user`,

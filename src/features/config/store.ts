@@ -114,7 +114,33 @@ import getCateringTransactionLogs from "features/admin/presentation/slices/get-c
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
+
 import getDealOrder from "features/popclub/presentation/slices/get-deal-order.slice";
+
+import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
+import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
+import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
+import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
+import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
+import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
+import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
+import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
+import getBscSession from "features/bsc/presentation/slices/get-bsc-session.slice";
+import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
+import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
+import getAllStores from "features/shared/presentation/slices/get-all-stores.slice";
+import getAllCompanies from "features/shared/presentation/slices/get-all-companies.slice";
+import createBscUser from "features/bsc/presentation/slices/create-bsc-user.slice";
+import getBscUsers from "features/bsc/presentation/slices/get-bsc-users.slice";
+import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
+import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
+import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
+import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
+import updateBscUser from "features/bsc/presentation/slices/bsc-update-user.slice";
+import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
+import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
+import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-user-status.slice";
+
 
 export const store = configureStore({
   reducer: {
@@ -232,7 +258,33 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     discountRegistration,
+
     getDealOrder,
+
+    getAdminUserDiscounts,
+    getAdminUserDiscount,
+    applyUserDiscount,
+    getUserDiscount,
+    BSCSideBar,
+    adminUserDiscountChangeStatus,
+    updateUserDiscount,
+    loginBsc,
+    getBscSession,
+    logoutBsc,
+    getAvailableUserDiscount,
+    getAllStores,
+    getAllCompanies,
+    createBscUser,
+    getBscUsers,
+    getBscUser,
+    getBscUserStores,
+    getBscStores,
+    updateBscUserStores,
+    updateBscUser,
+    getBscGroups,
+    createBscGroup,
+    updateBscUserStatus,
+
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

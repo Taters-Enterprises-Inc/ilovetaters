@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AdminCateringBookingUpdateStatusParam } from "features/admin/core/admin.params";
 import {
   AdminCateringBookingUpdateStatusRepository,
   AdminCateringBookingUpdateStatusResponse,
@@ -22,10 +23,13 @@ const initialState: {
 
 export const adminCateringBookingUpdateStatus = createAsyncThunk(
   "adminCateringBookingUpdateStatus",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: AdminCateringBookingUpdateStatusParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: AdminCateringBookingUpdateStatusResponse =
-        await AdminCateringBookingUpdateStatusRepository(formData);
+        await AdminCateringBookingUpdateStatusRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

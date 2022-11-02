@@ -39,7 +39,6 @@ import {
   CateringProducts,
 } from "features/catering/presentation/pages";
 import { Franchising } from "features/franchising/presentation/pages";
-import { Reseller } from "features/reseller/presentation/pages";
 import { Branches } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
@@ -48,7 +47,7 @@ import {
   AdminPopclub,
   AdminRaffleInstore,
   AdminRaffleSnackshop,
-  AdminReport,
+  AdminReports,
   AdminFaq,
   AdminCFaq,
   AdminSettingCategory,
@@ -64,7 +63,7 @@ import {
   AdminAvailabilityCatersPackage,
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
-  ScPwd,
+  AdminUserDiscount,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -90,9 +89,10 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
-import { ProfileCsPwd } from "features/profile/presentation/pages";
+import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
+
 import { BSCLogin } from "features/bsc/presentation/pages";
 import {
   CustomerSurvey,
@@ -108,6 +108,20 @@ import {
   CustomerSurveyPageTen,
   CustomerSurveyComplete,
 } from "features/survey/presentation/pages";
+
+import {
+  BSCLogin,
+  BscSignUp,
+  BscDashboard,
+  BSCEditUser,
+  BSCCreateUser,
+  BSCUser,
+  BSCCreateGroup,
+} from "features/bsc/presentation/pages";
+import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
+import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
+
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -152,7 +166,14 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
+
                       <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
+
+                      <Route
+                        path="user-discount"
+                        element={<ProfileUserDiscount />}
+                      />
+
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
@@ -237,9 +258,12 @@ root.render(
                           element={<AdminCateringBooking />}
                         />
                         <Route path="popclub" element={<AdminPopclub />} />
-                        <Route path="scpwd" element={<ScPwd />} />
+                        <Route
+                          path="user-discount"
+                          element={<AdminUserDiscount />}
+                        />
                         <Route path="product" element={<AdminProduct />} />
-                        <Route path="report" element={<AdminReport />} />
+                        <Route path="reports" element={<AdminReports />} />
                         <Route path="faq">
                           <Route index element={<AdminFaq />} />
                           <Route path="store" element={<AdminFaq />} />
@@ -314,6 +338,22 @@ root.render(
 
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
+                  <Route path="sign-up" element={<BscSignUp />} />
+
+                  <Route element={<BscGuard />}>
+                    <Route element={<BSCSidebarWrapper />}>
+                      <Route path="dashboard" element={<BscDashboard />} />
+                      <Route path="users">
+                        <Route index element={<BSCUser />} />
+                        <Route path="create-user" element={<BSCCreateUser />} />
+                        <Route
+                          path="create-group"
+                          element={<BSCCreateGroup />}
+                        />
+                        <Route path="edit-user/:id" element={<BSCEditUser />} />
+                      </Route>
+                    </Route>
+                  </Route>
                 </Route>
                 <Route path="survey">
                   <Route index element={<CustomerSurvey />} />

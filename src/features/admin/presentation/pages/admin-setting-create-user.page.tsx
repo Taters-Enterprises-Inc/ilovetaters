@@ -1,10 +1,5 @@
-import {
-  AdminCreateUserPasswordTextField,
-  AdminHead,
-  AdminPhoneInput,
-} from "../components";
-import TextField from "@mui/material/TextField";
-import { FormEvent, useEffect } from "react";
+import { AdminHead } from "../components";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   createAdminUser,
@@ -13,10 +8,25 @@ import {
   selectCreateAdminUser,
 } from "../slices/create-admin-user.slice";
 import { useNavigate } from "react-router-dom";
+import {
+  MaterialInput,
+  MaterialInputPassword,
+  MaterialPhoneInput,
+} from "features/shared/presentation/components";
 
 export function AdminSettingCreateUser() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    company: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const createAdminUserState = useAppSelector(selectCreateAdminUser);
 
@@ -28,12 +38,18 @@ export function AdminSettingCreateUser() {
   }, [createAdminUserState, navigate, dispatch]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(createAdminUser(formState));
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    dispatch(createAdminUser(formData)).then(() => {});
   };
+
+  const handleInputChange = (evt: any) => {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  };
+
   return (
     <>
       <AdminHead
@@ -55,28 +71,69 @@ export function AdminSettingCreateUser() {
           Create User
         </span>
 
-        <div className="space-y-6 pb-10">
+        <div className="pb-10 space-y-6">
           <span>Please enter the user's information below.</span>
 
           <form onSubmit={onSubmit} className="flex flex-col space-y-4">
-            <TextField label="First Name" name="first_name" required />
-            <TextField label="Last Name" name="last_name" required />
-            <TextField label="Company Name" name="company" required />
-            <TextField label="Email" name="email" required />
-            <AdminPhoneInput label="Phone Number" name="phone" />
-            <AdminCreateUserPasswordTextField
+            <MaterialInput
+              colorTheme="black"
+              required
+              label="First Name"
+              name="firstName"
+              value={formState.firstName}
+              onChange={handleInputChange}
+            />
+            <MaterialInput
+              colorTheme="black"
+              required
+              label="Last Name"
+              name="lastName"
+              value={formState.lastName}
+              onChange={handleInputChange}
+            />
+            <MaterialInput
+              colorTheme="black"
+              required
+              label="Company Name"
+              name="company"
+              value={formState.company}
+              onChange={handleInputChange}
+            />
+            <MaterialInput
+              colorTheme="black"
+              required
+              label="E-mail"
+              name="email"
+              value={formState.email}
+              onChange={handleInputChange}
+            />
+            <MaterialPhoneInput
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.phoneNumber}
+              name="phoneNumber"
+            />
+
+            <MaterialInputPassword
+              colorTheme="black"
+              required
+              onChange={handleInputChange}
+              value={formState.password}
               name="password"
               label="Password"
-              required
             />
-            <AdminCreateUserPasswordTextField
-              name="password_confirm"
+            <MaterialInputPassword
+              colorTheme="black"
+              required
+              onChange={handleInputChange}
+              value={formState.confirmPassword}
+              name="confirmPassword"
               label="Confirm Password"
-              required
             />
+
             <button
               type="submit"
-              className="bg-button rounded-lg py-2 px-4 text-white w-fit"
+              className="px-4 py-2 text-white rounded-lg bg-button w-fit"
             >
               Create User
             </button>

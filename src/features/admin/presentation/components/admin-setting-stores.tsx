@@ -27,7 +27,6 @@ import { AdminStoreEditModal } from "../modals";
 import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
-import { ExtractButton } from "./extract-button";
 
 export function AdminSettingStores() {
   const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
@@ -55,8 +54,8 @@ export function AdminSettingStores() {
   ];
 
   if (
-    !getAdminSessionState.data?.is_admin &&
-    !getAdminSessionState.data?.is_csr_admin
+    !getAdminSessionState.data?.admin.is_admin &&
+    !getAdminSessionState.data?.admin.is_csr_admin
   ) {
     columns = columns.filter(
       (column) =>
@@ -113,9 +112,6 @@ export function AdminSettingStores() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Stores
         </span>
-      </div>
-      <div className="px-4 mt-2">
-        <ExtractButton />
       </div>
       {getAdminSettingStoresState.data?.stores ? (
         <>
@@ -286,8 +282,8 @@ export function AdminSettingStores() {
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>{row.menu_name}</DataTableCell>
 
-                      {getAdminSessionState.data?.is_admin ||
-                      getAdminSessionState.data?.is_csr_admin ? (
+                      {getAdminSessionState.data?.admin.is_admin ||
+                      getAdminSessionState.data?.admin.is_csr_admin ? (
                         <>
                           <DataTableCell>
                             <Checkbox

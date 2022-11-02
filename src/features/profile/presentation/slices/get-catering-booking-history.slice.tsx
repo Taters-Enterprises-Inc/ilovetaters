@@ -24,10 +24,14 @@ const initialState: {
 
 export const getCateringBookingHistory = createAsyncThunk(
   "getCateringBookingHistory",
-  async (query: string) => {
-    const response: GetCateringBookingHistoryResponse =
-      await GetCateringBookingHistoryRepository(query);
-    return response.data;
+  async (query: string, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: GetCateringBookingHistoryResponse =
+        await GetCateringBookingHistoryRepository(query);
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 

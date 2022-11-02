@@ -5,7 +5,7 @@ import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
-import {HiDocumentText} from 'react-icons/hi'
+import { HiDocumentText } from "react-icons/hi";
 import Pusher from "pusher-js";
 
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
@@ -189,7 +189,7 @@ export const ADMIN_FAQ: Array<TabModel> = [
   },
 ];
 
-export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
+export const PROFILE_TABS: Array<TabModel> = [
   {
     name: "My Profile",
     active: "profile",
@@ -215,11 +215,11 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     url: "/profile/popclub-redeems",
   },
   {
-    name: "SC/PWD",
-    active: "sc-pwd",
+    name: "User Discount",
+    active: "user-discount",
     icon: <HiDocumentText />,
-    url: "/profile/popclub-sc-pwd",
-}
+    url: "/profile/user-discount",
+  },
 ];
 
 export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
@@ -244,170 +244,6 @@ export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
     url: "remarks",
   },
 ];
-
-declare module "@mui/material/styles" {
-  interface Palette {
-    tertiary: Palette["primary"];
-  }
-
-  // allow configuration using `createTheme`
-  interface PaletteOptions {
-    tertiary?: PaletteOptions["primary"];
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Radio" {
-  interface RadioPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Checkbox" {
-  interface CheckboxPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/CircularProgress" {
-  interface CircularProgressPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Tabs" {
-  interface TabsPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#a21013",
-    },
-    secondary: {
-      main: "#22201A",
-    },
-    tertiary: {
-      main: "#ffcd17",
-    },
-  },
-  components: {
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& fieldset": {
-            borderColor: "#22201A",
-          },
-          "&:hover fieldset": {
-            borderColor: "#22201A",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          ".Mui-error .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          // "&.Mui-focused fieldset": {
-          //   borderColor: "blue !important",
-          // },
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: "#22201A",
-          "-webkit-text-fill-color": "#22201A !important",
-        },
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        iconOutlined: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        indicator: {
-          backgroundColor: "#22201A",
-        },
-        root: {
-          "& .MuiTab-root.Mui-selected": {
-            color: "#22201A",
-          },
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTableSortLabel: {
-      styleOverrides: {
-        root: {
-          color: "white !important",
-          "&:hover": {
-            color: "white !important",
-          },
-          "&$active": {
-            color: "white !important",
-          },
-          "& .MuiSvgIcon-root": {
-            color: "white !important",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-  },
-});
 
 export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   name: string;
@@ -493,7 +329,7 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   },
 ];
 
-export const ADMIN_SCPWD_VERIFICATION_STATUS: Array<{
+export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   name: string;
   color: string;
 }> = [
@@ -507,15 +343,15 @@ export const ADMIN_SCPWD_VERIFICATION_STATUS: Array<{
   },
   {
     name: "Under Review",
-    color: "#a21013",
+    color: "#cca300",
   },
   {
     name: "Approved",
-    color: "#a21013",
+    color: "#004d00",
   },
   {
     name: "Rejected",
-    color: "#004d00",
+    color: "#a21013",
   },
 ];
 
@@ -798,3 +634,141 @@ export const ORDER_STATUS: Array<{
     color: "#004d00",
   },
 ];
+
+export const BSC_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+declare module "@mui/material/styles" {
+  interface Palette {
+    tertiary: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    tertiary?: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Radio" {
+  interface RadioPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Checkbox" {
+  interface CheckboxPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/CircularProgress" {
+  interface CircularProgressPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Tabs" {
+  interface TabsPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#a21013",
+    },
+    secondary: {
+      main: "#22201A",
+    },
+    tertiary: {
+      main: "#ffcd17",
+    },
+  },
+  components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "& label.Mui-focused": {
+            color: "#22201A",
+          },
+          "& label": {
+            color: "#22201A !important",
+          },
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#22201A",
+        },
+        root: {
+          "& .MuiTab-root.Mui-selected": {
+            color: "#22201A",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          color: "white !important",
+          "&:hover": {
+            color: "white !important",
+          },
+          "&$active": {
+            color: "white !important",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "white !important",
+          },
+        },
+      },
+    },
+  },
+});

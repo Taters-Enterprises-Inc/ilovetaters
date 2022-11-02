@@ -1,12 +1,12 @@
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import TextField from "@mui/material/TextField";
 import {
   getContacts,
   selectGetContacts,
@@ -14,15 +14,10 @@ import {
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
-import { MdDeliveryDining } from "react-icons/md";
+import { FormEvent, useEffect, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
-import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { AddContactModal } from "features/shared/presentation/modals";
 import NumberFormat from "react-number-format";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
@@ -40,7 +35,11 @@ import {
   selectCateringCheckoutOrders,
 } from "../slices/catering-checkout-orders.slice";
 import { PaymentMethod } from "features/shop/presentation/components";
-import { PhoneInput } from "features/shared/presentation/components";
+import {
+  MaterialInput,
+  MaterialPhoneInput,
+} from "features/shared/presentation/components";
+import { selectGetAvailableUserDiscount,getAvailableUserDiscount } from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -49,16 +48,65 @@ export function CateringCheckout() {
 
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
   const [enableCompanyName, setEnableCompanyName] = useState(false);
+  const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const getSessionState = useAppSelector(selectGetSession);
-  const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const cateringCheckoutOrdersState = useAppSelector(
     selectCateringCheckoutOrders
   );
+  const getAvailableUserDiscountState = useAppSelector(
+    selectGetAvailableUserDiscount
+  );
 
-  const phoneNumberRef = useRef(null);
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "", 
+    eMail: "",
+    phoneNumber: "",
+    eventStartDate: "",
+    eventEndDate: "",
+    servingTime: "",
+    eventClass: "",
+    companyName: "",
+    otherDetails: "",
+    eventAddress: "",
+    paymentPlan: "",
+    payops: "",
+  });
 
+  useEffect(() => {
+    dispatch(getAvailableUserDiscount());
+  }, []);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data
+    ) {
+      setFormState({
+        firstName: getSessionState.data.userData.first_name,
+        lastName: getSessionState.data.userData.last_name,
+        eMail: getSessionState.data.userData.email,
+        eventAddress: getSessionState.data.customer_address,
+        payops: "",
+        phoneNumber: "",
+        eventStartDate: moment
+          .unix(parseInt(getSessionState.data.catering_start_date))
+          .format("LLLL"),
+        eventEndDate: moment
+          .unix(parseInt(getSessionState.data.catering_end_date))
+          .format("LLLL"),
+        servingTime: moment
+          .unix(parseInt(getSessionState.data.catering_start_date))
+          .format("LLLL"),
+        eventClass: "",
+        companyName: "",
+        otherDetails: "",
+        paymentPlan: "",
+      });
+    }
+  }, [getSessionState]);
   useEffect(() => {
     if (
       cateringCheckoutOrdersState.status ===
@@ -174,25 +222,30 @@ export function CateringCheckout() {
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
+    let discount = 0
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
-
+    
+  
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
-
-      calculatedPrice += calculatedPrice * service_charge_percentage;
+      if (getAvailableUserDiscountState.data?.percentage) {
+        const percentage = parseFloat(
+          getAvailableUserDiscountState.data.percentage
+        );
+        discount = calculatedPrice * percentage;
+      }
+      calculatedPrice += (calculatedPrice * service_charge_percentage) ;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
+      calculatedPrice -= discount
 
-      console.log(
-        getSessionState.data.distance_rate_price,
-        getSessionState.data.catering_night_differential_fee,
-        getSessionState.data.catering_succeeding_hour_charge,
-        calculatedPrice * service_charge_percentage
-      );
+      if (cashOnDelivery) {
+        calculatedPrice += cashOnDelivery;
+      }
 
       return (
         <NumberFormat
@@ -206,35 +259,57 @@ export function CateringCheckout() {
       return <>₱0.00</>;
     }
   };
+
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(cateringCheckoutOrders(formState));
     e.preventDefault();
-    const responseBody: any = {};
+  };
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
+  const handleInputChange = (evt: any) => {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  };
 
-    formData.forEach(
-      (value, property: string) => (responseBody[property] = value)
-    );
+  const calculateAvailableUserDiscount = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
 
-    responseBody["payops"] = 3;
-
-    if (
-      (responseBody.phoneNumber.match(/63/) &&
-        responseBody.phoneNumber.length === 15) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 14) ||
-      (responseBody.phoneNumber.match(/09/) &&
-        responseBody.phoneNumber.length === 11)
-    ) {
-      dispatch(cateringCheckoutOrders(responseBody));
-    } else {
-      const phoneNumber: any = phoneNumberRef.current;
-
-      if (phoneNumber) {
-        phoneNumber.focus();
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
       }
     }
+   
+
+    if (getAvailableUserDiscountState.data) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
+      return (
+        <>
+          <span>
+            {percentage * 100}%{" "}
+            {getAvailableUserDiscountState.data.discount_type_name}:
+          </span>
+          <span className="text-end">
+            -{" "}
+            <NumberFormat
+              value={(calculatedPrice * percentage).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    }
+
+    return null;
   };
+
 
   return (
     <main className="bg-paper">
@@ -309,71 +384,49 @@ export function CateringCheckout() {
               className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
             >
               <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                {getSessionState.data?.userData.first_name ? (
-                  <TextField
-                    required
-                    defaultValue={getSessionState.data.userData.first_name}
-                    variant="outlined"
-                    label="First Name"
-                    className="w-full"
-                    name="firstName"
-                  />
-                ) : (
-                  <TextField
-                    required
-                    label="First Name"
-                    variant="outlined"
-                    className="w-full"
-                    name="firstName"
-                  />
-                )}
+                <MaterialInput
+                  colorTheme="black"
+                  required
+                  label="First Name"
+                  name="firstName"
+                  value={formState.firstName}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
 
-                {getSessionState.data?.userData.last_name ? (
-                  <TextField
-                    required
-                    label="Last Name"
-                    defaultValue={getSessionState.data.userData.last_name}
-                    variant="outlined"
-                    className="w-full"
-                    name="lastName"
-                  />
-                ) : (
-                  <TextField
-                    required
-                    label="Last Name"
-                    variant="outlined"
-                    className="w-full"
-                    name="lastName"
-                  />
-                )}
+                <MaterialInput
+                  colorTheme="black"
+                  required
+                  label="Last Name"
+                  name="lastName"
+                  value={formState.lastName}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
 
                 <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
                   <div className="flex-1">
-                    {getSessionState.data?.userData.email ? (
-                      <TextField
-                        required
-                        autoComplete="off"
-                        label="E-mail Address"
-                        defaultValue={getSessionState.data.userData.email}
-                        variant="outlined"
-                        className="w-full"
-                        type="email"
-                        name="eMail"
-                      />
-                    ) : (
-                      <TextField
-                        required
-                        autoComplete="off"
-                        label="E-mail Address"
-                        variant="outlined"
-                        className="w-full"
-                        type="email"
-                        name="eMail"
-                      />
-                    )}
+                    <MaterialInput
+                      colorTheme="black"
+                      required
+                      label="E-mail Address"
+                      name="eMail"
+                      value={formState.eMail}
+                      onChange={handleInputChange}
+                      fullWidth
+                      type="email"
+                      autoComplete="off"
+                    />
                   </div>
                   <div className="flex-1">
-                    <PhoneInput />
+                    <MaterialPhoneInput
+                      colorTheme="black"
+                      onChange={handleInputChange}
+                      value={formState.phoneNumber}
+                      name="phoneNumber"
+                      required
+                      fullWidth
+                    />
                   </div>
                 </div>
 
@@ -383,17 +436,15 @@ export function CateringCheckout() {
                       <span className="text-base text-secondary">
                         Event Start Date Time
                       </span>
-                      <TextField
-                        aria-readonly
-                        value={moment
-                          .unix(
-                            parseInt(getSessionState.data.catering_start_date)
-                          )
-                          .format("LLLL")}
-                        variant="outlined"
-                        className="w-full"
-                        name="catering_start_date"
+
+                      <MaterialInput
+                        colorTheme="black"
+                        required
                         autoComplete="off"
+                        name="eventStartDate"
+                        value={formState.eventStartDate}
+                        onChange={() => {}}
+                        fullWidth
                       />
                     </div>
 
@@ -402,17 +453,14 @@ export function CateringCheckout() {
                         Event End Date Time
                       </span>
 
-                      <TextField
-                        aria-readonly
-                        value={moment
-                          .unix(
-                            parseInt(getSessionState.data.catering_end_date)
-                          )
-                          .format("LLLL")}
-                        variant="outlined"
-                        className="w-full"
-                        name="catering_end_date"
+                      <MaterialInput
+                        colorTheme="black"
+                        required
                         autoComplete="off"
+                        name="eventEndDate"
+                        value={formState.eventEndDate}
+                        onChange={() => {}}
+                        fullWidth
                       />
                     </div>
                   </div>
@@ -423,60 +471,55 @@ export function CateringCheckout() {
                     <span className="text-base text-secondary">
                       Serving Time
                     </span>
-
-                    <TextField
-                      aria-readonly
-                      value={moment
-                        .unix(
-                          parseInt(getSessionState.data.catering_start_date)
-                        )
-                        .format("LLLL")}
-                      variant="outlined"
-                      className="w-full"
-                      name="catering_serving_time"
+                    <MaterialInput
+                      required
                       autoComplete="off"
+                      colorTheme="black"
+                      name="servingTime"
+                      value={formState.servingTime}
+                      onChange={() => {}}
+                      fullWidth
                     />
                   </div>
                 ) : null}
 
                 <div>
-                  <FormControl className="w-full">
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Event Class
-                    </InputLabel>
-                    <Select
-                      className="w-full"
-                      label="Event Class"
-                      name="event_class"
-                      required
-                      autoComplete="off"
-                      onChange={(event: SelectChangeEvent) => {
-                        if (event.target.value === "corporate") {
-                          setEnableCompanyName(true);
-                        } else {
-                          setEnableCompanyName(false);
-                        }
-                      }}
-                    >
-                      <MenuItem value="personal">Personal</MenuItem>
-                      <MenuItem value="corporate">Corporate</MenuItem>
-                      <MenuItem value="party organizer">
-                        Party Organizer
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
+                  <MaterialInput
+                    colorTheme="black"
+                    select
+                    fullWidth
+                    label="Event Class"
+                    name="eventClass"
+                    onChange={(event) => {
+                      if (event.target.value === "corporate") {
+                        setEnableCompanyName(true);
+                      } else {
+                        setEnableCompanyName(false);
+                      }
+                      handleInputChange(event);
+                    }}
+                    value={formState.eventClass}
+                    required
+                    autoComplete="off"
+                  >
+                    <MenuItem value="personal">Personal</MenuItem>
+                    <MenuItem value="corporate">Corporate</MenuItem>
+                    <MenuItem value="party organizer">Party Organizer</MenuItem>
+                  </MaterialInput>
                 </div>
 
                 {enableCompanyName ? (
                   <div className="space-y-2">
                     <span className="text-base text-black">Company Name</span>
 
-                    <TextField
-                      variant="outlined"
-                      className="w-full"
-                      name="catering_company_name"
-                      autoComplete="off"
+                    <MaterialInput
                       required
+                      colorTheme="black"
+                      name="companyName"
+                      value={formState.companyName}
+                      onChange={handleInputChange}
+                      autoComplete="off"
+                      fullWidth
                     />
                   </div>
                 ) : null}
@@ -486,11 +529,14 @@ export function CateringCheckout() {
                     Other event details or requests (optional)
                   </span>
 
-                  <TextField
-                    variant="outlined"
-                    className="w-full"
-                    name="other_details"
+                  <MaterialInput
+                    required
+                    colorTheme="black"
+                    name="otherDetails"
+                    value={formState.otherDetails}
+                    onChange={handleInputChange}
                     autoComplete="off"
+                    fullWidth
                     multiline
                     rows={4}
                     maxRows={5}
@@ -502,12 +548,14 @@ export function CateringCheckout() {
                     Event Address
                   </span>
 
-                  <TextField
+                  <MaterialInput
+                    required
                     aria-readonly
-                    value={getSessionState.data?.customer_address}
-                    variant="outlined"
-                    className="w-full"
-                    name="address"
+                    colorTheme="black"
+                    name="eventAddress"
+                    value={formState.eventAddress}
+                    onChange={handleInputChange}
+                    fullWidth
                     autoComplete="off"
                   />
                 </div>
@@ -517,7 +565,9 @@ export function CateringCheckout() {
                   <RadioGroup
                     aria-labelledby="payment_plan"
                     defaultValue="full"
-                    name="payment_plan"
+                    name="paymentPlan"
+                    value={formState.paymentPlan}
+                    onChange={handleInputChange}
                     className="space-y-4"
                   >
                     <FormControlLabel
@@ -557,7 +607,25 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod onChange={(payment) => {}} />
+                  <PaymentMethod
+                    onChange={(payment) => {
+                      setFormState({
+                        ...formState,
+                        payops: payment,
+                      });
+                      if (
+                        getSessionState.data &&
+                        getSessionState.data.cash_delivery &&
+                        payment === "3"
+                      ) {
+                        setCashOnDelivery(
+                          parseInt(getSessionState.data.cash_delivery)
+                        );
+                      } else {
+                        setCashOnDelivery(undefined);
+                      }
+                    }}
+                  />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
@@ -683,6 +751,7 @@ export function CateringCheckout() {
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
+                   {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
                     <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>
