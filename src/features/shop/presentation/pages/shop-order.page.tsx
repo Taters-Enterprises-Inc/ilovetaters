@@ -500,7 +500,7 @@ export function ShopOrder() {
                   />
                 </span>
                 <span>Delivery Fee:</span>
-                <span className="text-end">
+                <span className="text-end ">
                   +{" "}
                   <NumberFormat
                     value={
