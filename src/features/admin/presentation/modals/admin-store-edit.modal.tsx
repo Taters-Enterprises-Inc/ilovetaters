@@ -10,18 +10,14 @@ import {
   GetAdminStoreState,
   selectGetAdminStore,
 } from "../slices/get-admin-store.slice";
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment, { Moment } from "moment";
-import { updateAdminSettingStore } from "../slices/update-setting-store.slice";
 import {
   resetUpdateAdminSettingStoreOperatingHours,
   selectUpdateAdminSettingStoreOperatingHours,
   updateAdminSettingStoreOperatingHours,
   UpdateAdminSettingStoreOperatingHoursState,
 } from "../slices/update-setting-store-operating-hours.slice";
+import { MaterialTimeInput } from "features/shared/presentation/components";
 
 interface AdminStoreEditModalProps {
   open: boolean;
@@ -92,7 +88,9 @@ export function AdminStoreEditModal(props: AdminStoreEditModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[400px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-xl text-white font-['Varela_Round']">Edit Store</span>
+          <span className="text-xl text-white font-['Varela_Round']">
+            Edit Store
+          </span>
           <button className="text-xl text-white" onClick={props.onClose}>
             <IoMdClose />
           </button>
@@ -105,26 +103,24 @@ export function AdminStoreEditModal(props: AdminStoreEditModalProps) {
               {getAdminStoreState.data.menu_name} )
             </span>
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <MobileTimePicker
-                label="Available Start Time"
-                value={availableStartTime}
-                onChange={(newValue) => {
-                  if (newValue)
-                    setAvailableStartTime(moment(newValue, "HH:mm:ss"));
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <MobileTimePicker
-                label="Available End Time"
-                value={availableEndTime}
-                onChange={(newValue) => {
-                  if (newValue)
-                    setAvailableEndTime(moment(newValue, "HH:mm:ss"));
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
+            <MaterialTimeInput
+              colorTheme="black"
+              label="Available Start Time"
+              onChange={(newValue) => {
+                if (newValue)
+                  setAvailableStartTime(moment(newValue, "HH:mm:ss"));
+              }}
+              value={availableStartTime}
+            />
+
+            <MaterialTimeInput
+              colorTheme="black"
+              label="Available End Time"
+              onChange={(newValue) => {
+                if (newValue) setAvailableEndTime(moment(newValue, "HH:mm:ss"));
+              }}
+              value={availableEndTime}
+            />
             <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={props.onClose}

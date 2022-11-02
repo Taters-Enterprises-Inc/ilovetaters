@@ -2,12 +2,11 @@ import { Link, useLocation } from "react-router-dom";
 import { MdDeliveryDining } from "react-icons/md";
 import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import Select from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -34,29 +33,52 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { PhoneInput } from "features/shared/presentation/components";
-import { PaymentMethod } from "../components";
 import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+  MaterialInput,
+  MaterialPhoneInput,
+} from "features/shared/presentation/components";
+import { PaymentMethod } from "../components";
+import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  getAvailableUserDiscount,
+  selectGetAvailableUserDiscount,
+} from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    eMail: "",
+    payops: "",
+    phoneNumber: "",
+    landmarkAddress: "",
+    completeDeliveryAddress: "",
+  });
+
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const isDeliveryApplied = useRef(false);
-
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
   const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
+
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+
+  const getAvailableUserDiscountState = useAppSelector(
+    selectGetAvailableUserDiscount
+  );
+
+  useEffect(() => {
+    dispatch(getAvailableUserDiscount());
+  }, []);
 
   useEffect(() => {
     if (
@@ -77,26 +99,37 @@ export function ShopCheckout() {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
 
-  const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-    const responseBody: any = {};
-
-    formData.forEach(
-      (value, property: string) => (responseBody[property] = value)
-    );
-
-    if (responseBody.phoneNumber.length === 11) {
-      dispatch(checkoutOrders(responseBody));
-    } else {
-      dispatch(
-        popUpSnackBar({
-          message: "Invalid phone number",
-          severity: "error",
-        })
-      );
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data
+    ) {
+      setFormState({
+        firstName: getSessionState.data.userData.first_name,
+        lastName: getSessionState.data.userData.last_name,
+        eMail: getSessionState.data.userData.email,
+        payops: "",
+        phoneNumber:
+          getContactsState.data && getContactsState.data.length > 0
+            ? getContactsState.data[0].contact
+            : "",
+        landmarkAddress: getSessionState.data.customer_address,
+        completeDeliveryAddress: "",
+      });
     }
+  }, [getSessionState, getContactsState]);
+
+  const handleInputChange = (evt: any) => {
+    const value = evt.target.value;
+    setFormState({
+      ...formState,
+      [evt.target.name]: value,
+    });
+  };
+
+  const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(checkoutOrders(formState));
+    e.preventDefault();
   };
 
   const calculateSubTotalPrice = () => {
@@ -194,6 +227,14 @@ export function ShopCheckout() {
       }
     }
 
+    if (getAvailableUserDiscountState.data?.percentage) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
+
+      calculatedPrice -= calculatedPrice * percentage;
+    }
+
     if (cashOnDelivery) {
       calculatedPrice += cashOnDelivery;
     }
@@ -218,6 +259,49 @@ export function ShopCheckout() {
         prefix={"₱"}
       />
     );
+  };
+
+  const calculateAvailableUserDiscount = () => {
+    let calculatedPrice = 0;
+    const orders = getSessionState.data?.orders;
+    const deals = getSessionState.data?.deals;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        calculatedPrice += deals[i].deal_promo_price;
+      }
+    }
+
+    if (getAvailableUserDiscountState.data) {
+      const percentage = parseFloat(
+        getAvailableUserDiscountState.data.percentage
+      );
+      return (
+        <>
+          <span>
+            {percentage * 100}%{" "}
+            {getAvailableUserDiscountState.data.discount_type_name}:
+          </span>
+          <span className="text-end">
+            -{" "}
+            <NumberFormat
+              value={(calculatedPrice * percentage).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -281,81 +365,49 @@ export function ShopCheckout() {
                 className="flex flex-col justify-between w-full py-6 mb-10 lg:flex-row"
               >
                 <div className="space-y-4 lg:flex-[0_0_55%] lg:max-w-[55%] order-2 lg:order-1 lg:mt-0 mt-4">
-                  {getSessionState.data.userData.first_name ? (
-                    <TextField
-                      required
-                      defaultValue={getSessionState.data.userData.first_name}
-                      variant="outlined"
-                      className="w-full"
-                      label="First Name"
-                      name="firstName"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      label="First Name"
-                      variant="outlined"
-                      className="w-full"
-                      name="firstName"
-                    />
-                  )}
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="First Name"
+                    name="firstName"
+                    fullWidth
+                    value={formState.firstName}
+                    onChange={handleInputChange}
+                  />
 
-                  {getSessionState.data.userData.last_name ? (
-                    <TextField
-                      required
-                      defaultValue={getSessionState.data.userData.last_name}
-                      variant="outlined"
-                      className="w-full"
-                      label="Last Name"
-                      name="lastName"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      label="Last Name"
-                      variant="outlined"
-                      className="w-full"
-                      name="lastName"
-                    />
-                  )}
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="Last Name"
+                    name="lastName"
+                    fullWidth
+                    value={formState.lastName}
+                    onChange={handleInputChange}
+                  />
 
                   <div className="flex flex-col space-y-4 lg:space-x-4 lg:flex-row lg:space-y-0">
                     <div className="flex-1">
-                      {getSessionState.data.userData.email ? (
-                        <TextField
-                          autoComplete="off"
-                          required
-                          label="E-mail Address"
-                          defaultValue={getSessionState.data.userData.email}
-                          variant="outlined"
-                          className="w-full"
-                          type="email"
-                          name="eMail"
-                        />
-                      ) : (
-                        <TextField
-                          autoComplete="off"
-                          required
-                          label="E-mail Address"
-                          variant="outlined"
-                          type="email"
-                          className="w-full"
-                          name="eMail"
-                        />
-                      )}
+                      <MaterialInput
+                        colorTheme="black"
+                        required
+                        label="E-mail"
+                        name="eMail"
+                        fullWidth
+                        value={formState.eMail}
+                        onChange={handleInputChange}
+                      />
                     </div>
                     <div className="flex-1">
                       {getContactsState.data &&
                       getContactsState.data.length > 0 ? (
-                        <FormControl className="w-full">
-                          <InputLabel id="demo-simple-select-helper-label">
-                            Contacts
-                          </InputLabel>
-                          <Select
-                            className="w-full"
+                          <MaterialInput
+                            colorTheme="black"
+                            select
+                            fullWidth
                             label="Contacts"
                             name="phoneNumber"
-                            defaultValue={getContactsState.data[0].contact}
+                            onChange={handleInputChange}
+                            value={formState.phoneNumber}
                             required
                             autoComplete="off"
                           >
@@ -364,10 +416,15 @@ export function ShopCheckout() {
                                 {val.contact}
                               </MenuItem>
                             ))}
-                          </Select>
-                        </FormControl>
+                          </MaterialInput>
                       ) : (
-                        <PhoneInput />
+                        <MaterialPhoneInput
+                          colorTheme="black"
+                          fullWidth
+                          onChange={handleInputChange}
+                          value={formState.phoneNumber}
+                          name="phoneNumber"
+                        />
                       )}
                       <button
                         type="button"
@@ -381,40 +438,26 @@ export function ShopCheckout() {
                     </div>
                   </div>
 
-                  {getSessionState.data.customer_address ? (
-                    <TextField
-                      required
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      defaultValue={getSessionState.data?.customer_address}
-                      variant="outlined"
-                      className="w-full"
-                      label="Landmark Address"
-                      name="address"
-                      autoComplete="off"
-                    />
-                  ) : (
-                    <TextField
-                      required
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      label="Landmark Address"
-                      variant="outlined"
-                      className="w-full"
-                      name="address"
-                      autoComplete="off"
-                    />
-                  )}
-
-                  <TextField
+                  <MaterialInput
+                    colorTheme="black"
                     required
-                    variant="outlined"
-                    name="full_address"
-                    className="w-full"
-                    label="Complete Delivery Address"
+                    label="Landmark Address"
+                    name="landmarkAddress"
+                    fullWidth
                     autoComplete="off"
+                    value={formState.landmarkAddress}
+                    onChange={handleInputChange}
+                  />
+
+                  <MaterialInput
+                    colorTheme="black"
+                    required
+                    label="Complete Delivery Address"
+                    name="completeDeliveryAddress"
+                    fullWidth
+                    autoComplete="off"
+                    value={formState.completeDeliveryAddress}
+                    onChange={handleInputChange}
                   />
 
                   {getSessionState.data.cache_data ? (
@@ -471,6 +514,10 @@ export function ShopCheckout() {
                     </h2>
                     <PaymentMethod
                       onChange={(payment) => {
+                        setFormState({
+                          ...formState,
+                          payops: payment,
+                        });
                         if (
                           getSessionState.data &&
                           getSessionState.data.cash_delivery &&
@@ -682,7 +729,7 @@ export function ShopCheckout() {
                             <h3 className="text-white text-sm w-[90%] font-bold leading-4">
                               {getLatestUnexpiredRedeemState.data?.name}
                             </h3>
-                            <h3 className="text-xs mt-2">
+                            <h3 className="mt-2 text-xs">
                               Minumum purchase: {""}
                               <span className="text-tertiary">
                                 {
@@ -721,7 +768,7 @@ export function ShopCheckout() {
                     </div>
 
                     <hr className="mt-1 mb-2 border-secondary" />
-                    <div className="grid grid-cols-2 text-secondary">
+                    <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
                         {calculateSubTotalPrice()}
@@ -741,8 +788,8 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-                      <span>Discount:</span>
-                      <span className="text-end">( ₱ 0.00 )</span>
+
+                      {calculateAvailableUserDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

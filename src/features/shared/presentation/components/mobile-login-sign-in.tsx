@@ -1,21 +1,26 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { MdLockOutline } from "react-icons/md";
 import { FormEvent, useState } from "react";
 import { signInMobileUser } from "../slices/sign-in-mobile-user.slice";
 import { useAppDispatch } from "features/config/hooks";
-import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 import { MobileForgotPasswordModal } from "../modals";
-import { MobilePasswordTextField } from "./mobile-password-textfield";
+import { MaterialPhoneInput } from ".";
+import { MaterialInputPassword } from "./material-input-password";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
 
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      signInMobileUser({
+        phoneNumber,
+        password,
+      })
+    );
     e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    dispatch(signInMobileUser(formData));
   };
 
   return (
@@ -34,8 +39,29 @@ export function MobileLoginSignIn() {
           </p>
 
           <div className="space-y-4">
-            <MobileLoginPhoneInput />
-            <MobilePasswordTextField />
+            <MaterialPhoneInput
+              required
+              colorTheme="white"
+              size="small"
+              value={phoneNumber}
+              name="phoneNumber"
+              fullWidth
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+              }}
+            />
+            <MaterialInputPassword
+              required
+              colorTheme="white"
+              value={password}
+              size="small"
+              fullWidth
+              label="Password"
+              name="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
           </div>
 
           <div className="flex justify-between py-4 text-white">

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { ChangeEventHandler } from "react";
 import styled from "@mui/material/styles/styled";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,12 +9,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
 import { visuallyHidden } from "@mui/utils";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
+import { MaterialInput } from "./material-input";
 
 export const DataTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -61,7 +60,9 @@ interface DataTableProps {
   totalRows: number;
   perPage: number;
   emptyMessage: string;
-  onRowsPerPageChange: (event: SelectChangeEvent) => void;
+  onRowsPerPageChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  >;
 }
 
 export function DataTable(props: DataTableProps) {
@@ -69,26 +70,29 @@ export function DataTable(props: DataTableProps) {
     <div className="space-y-4">
       <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0">
         <div className="flex flex-1 space-x-4">
-          <TextField
-            required
+          <MaterialInput
+            colorTheme="black"
             label="Search"
-            variant="outlined"
             size="small"
-            defaultValue={props.search}
+            name="search"
+            value={props.search}
             onChange={(e) => {
               props.onSearch(e.target.value);
             }}
           />
-          <Select
+          <MaterialInput
+            colorTheme="black"
             size="small"
-            defaultValue={props.perPage.toString()}
+            name="perPage"
+            select
+            value={props.perPage.toString()}
             onChange={props.onRowsPerPageChange}
           >
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={25}>25</MenuItem>
             <MenuItem value={50}>50</MenuItem>
             <MenuItem value={100}>100</MenuItem>
-          </Select>
+          </MaterialInput>
         </div>
 
         <Pagination

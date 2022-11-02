@@ -2,6 +2,11 @@ import axios from "axios";
 import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-popclub-redeems-history.model";
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
+import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
+import {
+  ApplyUserDiscountParam,
+  UpdateUserDiscountParam,
+} from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface GetCateringBookingHistoryResponse {
@@ -23,6 +28,55 @@ export interface GetPopclubRedeemsHistoryResponse {
     message: string;
     data: GetPopclubRedeemsHistoryModel;
   };
+}
+
+export interface ApplyUserDiscountResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetUserDiscountResponse {
+  data: {
+    message: string;
+    data: UserDiscountModel;
+  };
+}
+
+export interface UpdateUserDiscountResponse {
+  data: {
+    message: string;
+  };
+}
+export function UpdateUserDiscountRepository(
+  param: UpdateUserDiscountParam
+): Promise<UpdateUserDiscountResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/update-user-discount`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+export function GetUserDiscountRepository(): Promise<GetUserDiscountResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/user-discount`, {
+    withCredentials: true,
+  });
+}
+
+export function ApplyUserDiscountRepository(
+  param: ApplyUserDiscountParam
+): Promise<ApplyUserDiscountResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/profile/user-discount`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetPopclubRedeemsHistoryRepository(

@@ -30,8 +30,7 @@ import moment from "moment";
 import { AdminCateringBookingModal } from "../modals";
 import { getAdminCateringBooking } from "../slices/get-admin-catering-booking.slice";
 import { selectAdminCateringBookingUpdateStatus } from "../slices/admin-catering-booking-update-status.slice";
-import {  AdminChipsButton } from "./chips-button";
-import { ExtractButton } from "./extract-button";
+import { AdminChipsButton } from "./chips-button";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminNotifications,
@@ -42,7 +41,6 @@ import {
   updateAdminNotificationDateSeen,
 } from "../slices/update-admin-notification-dateseen.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
-
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 250 },
@@ -147,7 +145,9 @@ export function AdminCateringBookings() {
     if (row.distance_price) {
       calculatedPrice += parseInt(row.distance_price);
     }
-
+    if (row.discount) {
+      calculatedPrice -= parseInt(row.discount);
+    }
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -157,7 +157,6 @@ export function AdminCateringBookings() {
       />
     );
   };
-
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
@@ -166,29 +165,25 @@ export function AdminCateringBookings() {
         </span>
       </div>
       <AdminChipsButton
-          createQueryParams={createQueryParams}
-          data={ADMIN_CATERING_BOOKING_STATUS}
-          dispactAction={() => {
-            dispatch(resetGetAdminCateringBookingsStatus());
-          }}
-          status={status}
-          params={(value) => {
-            if (value !== status) {
-             const params = {
+        createQueryParams={createQueryParams}
+        data={ADMIN_CATERING_BOOKING_STATUS}
+        dispactAction={() => {
+          dispatch(resetGetAdminCateringBookingsStatus());
+        }}
+        status={status}
+        params={(value) => {
+          if (value !== status) {
+            const params = {
               page_no: pageNo,
               per_page: perPage,
-              status:value === -1 ? null : value,
+              status: value === -1 ? null : value,
               tracking_no: trackingNo,
               search: search,
             };
-              return params;
-            }
-          }}
-        />
-      <div className="px-4 mt-4">
-        <ExtractButton />
-      </div>
-
+            return params;
+          }
+        }}
+      />
       {getAdminCateringBookingsState.data?.bookings ? (
         <>
           <div className="p-4 lg:hidden">

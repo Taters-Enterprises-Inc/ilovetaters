@@ -20,12 +20,9 @@ import {
 } from "../slices/get-admin-users.slice";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { AdminSelectStoreModal } from "../modals";
-import {
-  getAdminUserStores,
-} from "../slices/get-admin-user-stores.slice";
+import { getAdminUserStores } from "../slices/get-admin-user-stores.slice";
 import { getAdminStores } from "../slices/get-admin-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
-import { ExtractButton } from "./extract-button";
 import { createQueryParams } from "features/config/helpers";
 
 const columns: Array<Column> = [
@@ -100,9 +97,6 @@ export function AdminSettingUsers() {
           </div>
         </div>
       </div>
-      <div className="px-4 m-2">
-          <ExtractButton />
-        </div>
 
       {getAdminUsersState.data ? (
         <>

@@ -1,7 +1,6 @@
 import { IoMdClose } from "react-icons/io";
-import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import { AdminPasswordTextFieldSecondaryColor } from "../components";
+import { MaterialInputPassword } from "features/shared/presentation/components";
 
 interface AdminPasswordModalProps {
   open: boolean;
@@ -10,7 +9,7 @@ interface AdminPasswordModalProps {
 }
 
 export function AdminPasswordModal(props: AdminPasswordModalProps) {
-  let password: string | undefined;
+  const [password, setPassword] = useState<string>("");
 
   if (props.open) {
     const shopOrderModal = document.getElementById("shop-order-modal");
@@ -42,9 +41,14 @@ export function AdminPasswordModal(props: AdminPasswordModalProps) {
         </div>
 
         <div className="px-4 py-2 space-y-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
-          <AdminPasswordTextFieldSecondaryColor
-            onChange={(value) => {
-              password = value;
+          <MaterialInputPassword
+            colorTheme="black"
+            size="small"
+            label="Password"
+            value={password}
+            name="password"
+            onChange={(event) => {
+              setPassword(event.target.value);
             }}
           />
 

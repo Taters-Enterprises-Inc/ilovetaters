@@ -1,4 +1,3 @@
-import TextField from "@mui/material/TextField";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import creditCardType, {
@@ -7,6 +6,7 @@ import creditCardType, {
 } from "credit-card-type";
 import { useEffect, useState } from "react";
 import { kMaxLength } from "buffer";
+import { MaterialInput } from "features/shared/presentation/components";
 
 interface PaymentCardModalProps {
   open: boolean;
@@ -129,19 +129,22 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
                 />
               </div>
             </div>
-            <TextField
+            <MaterialInput
+              colorTheme="black"
               value={cardNumber}
               onChange={formatAndSetCcNumber}
-              type="text"
               autoComplete="off"
-              variant="outlined"
               label="Card Number"
+              name="cardNumber"
               fullWidth
               required
             />
             <div className="flex space-x-2">
-              <TextField
-                variant="outlined"
+              <MaterialInput
+                colorTheme="black"
+                onChange={() => {}}
+                value=""
+                name="expiryDate"
                 label="Expiry Date (MM/YY)"
                 className="flex-[0_0_70%] max-w-[70%]"
                 onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,8 +153,11 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
                 type="number"
                 required
               />
-              <TextField
-                variant="outlined"
+              <MaterialInput
+                colorTheme="black"
+                onChange={() => {}}
+                value=""
+                name="expiryDate"
                 type="number"
                 onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
                   limiter(e, cardCodeSize);
@@ -161,9 +167,11 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
                 required
               />
             </div>
-            <TextField
-              type="text"
-              variant="outlined"
+            <MaterialInput
+              colorTheme="black"
+              onChange={() => {}}
+              name="cardHolderName"
+              value=""
               label="Card holder's name"
               inputProps={{ maxlength: 32 }}
               fullWidth

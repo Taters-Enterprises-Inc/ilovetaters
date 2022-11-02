@@ -30,8 +30,7 @@ import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order
 import { selectUploadProofOfPaymentAdmin } from "../slices/upload-proof-of-payment-admin.slice";
 import { selectAdminShopOrderUpdateStatus } from "../slices/admin-shop-order-update-status.slice";
 import { selectAdminPrivilege } from "../slices/admin-privilege.slice";
-import { ExtractButton } from "./extract-button";
- import {AdminChipsButton} from './chips-button'
+import { AdminChipsButton } from "./chips-button";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminNotifications,
@@ -164,27 +163,24 @@ export function AdminShopOrders() {
         </span>
       </div>
       <AdminChipsButton
-          createQueryParams={createQueryParams}
-          data={ADMIN_SNACKSHOP_ORDER_STATUS}
-          dispactAction={() => {
-            dispatch(resetGetAdminShopOrdersStatus());
-          }}
-          status={status}
-          params={(value) => {
-            const params = {
-              page_no: pageNo,
-              per_page: perPage,
-              status:value === -1 ? null : value,
-              tracking_no: trackingNo,
-              search: search,
-            };
+        createQueryParams={createQueryParams}
+        data={ADMIN_SNACKSHOP_ORDER_STATUS}
+        dispactAction={() => {
+          dispatch(resetGetAdminShopOrdersStatus());
+        }}
+        status={status}
+        params={(value) => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            status: value === -1 ? null : value,
+            tracking_no: trackingNo,
+            search: search,
+          };
 
-            return params;
-          }}
-        />
-      <div className="px-4 mt-4">
-        <ExtractButton />
-      </div>
+          return params;
+        }}
+      />
 
       {getAdminShopOrdersState.data?.orders ? (
         <>

@@ -9,11 +9,10 @@
   background-color: transparent;
 }
 * {
-  -webkit-user-select: none;
-  -moz-user-select: -moz-none;
-  /*IE10*/
-  -ms-user-select: none;
-  user-select: none;
+  /* -webkit-user-select: none;
+  -moz-user-select: -moz-none; */
+  /* -ms-user-select: none;
+  user-select: none; */
 
   /*You just need this if you are only concerned with android and not desktop browsers.*/
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -475,3 +474,11 @@ input[type="number"] {
 
 /* Add Varela Round fonts for admin page */
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
+
+
+.terms-scroll {
+  width: 95%;
+  height: 425px;
+  scrollbar-width: thin;
+}
+

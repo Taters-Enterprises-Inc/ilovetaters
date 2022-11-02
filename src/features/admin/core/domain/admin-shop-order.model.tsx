@@ -6,6 +6,7 @@ export interface AdminShopOrderModel {
   purchase_amount: string;
   distance_price: string;
   discount: string;
+  discount_name: string | null;
   reseller_discount: string;
   giftcard_discount: string;
   cod_fee: string;

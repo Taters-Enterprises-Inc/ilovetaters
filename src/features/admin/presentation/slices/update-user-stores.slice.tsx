@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { UpdateUserStoresParam } from "features/admin/core/admin.params";
 import {
-  CreateAdminUserRepository,
-  CreateAdminUserResponse,
   UpdateAdminUserStoresRepository,
   UpdateAdminUserStoresResponse,
 } from "features/admin/data/repository/admin.repository";
@@ -25,10 +23,13 @@ const initialState: {
 
 export const updateAdminUserStores = createAsyncThunk(
   "updateAdminUserStores",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (
+    param: UpdateUserStoresParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response: UpdateAdminUserStoresResponse =
-        await UpdateAdminUserStoresRepository(formData);
+        await UpdateAdminUserStoresRepository(param);
       console.log(response.data);
       return fulfillWithValue(response.data);
     } catch (error: any) {

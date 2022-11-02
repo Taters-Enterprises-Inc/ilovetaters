@@ -11,6 +11,9 @@ export interface AdminCateringBookingModel {
   message: string;
   event_class: string;
   company_name: string;
+  discount:string,
+  discount_id:string
+  discount_name:string
 
   service_fee: number;
   night_diff_fee: number;
@@ -36,8 +39,8 @@ export interface AdminCateringBookingModel {
   account_name: string;
   account_email: string;
 
-  fb_user_id: number;
-  mobile_user_id: number;
+  fb_user_id: number | null;
+  mobile_user_id: number | null;
 
   distance_price: string;
   reference_num: string;

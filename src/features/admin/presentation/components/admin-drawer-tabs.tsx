@@ -30,7 +30,6 @@ import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
 
-
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
 import {
@@ -44,6 +43,7 @@ import {
   getAdminNotifications,
   selectGetAdminNotifications,
 } from "../slices/get-admin-notifications.slice";
+import { TbReportSearch } from "react-icons/tb";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -143,9 +143,9 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             </NavLink>
           </li>
 
-          {getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_catering_admin ||
-          getAdminSessionState.data?.is_csr_admin ? (
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_catering_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -210,7 +210,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           <li>
             <NavLink
-              to="/admin/scpwd"
+              to="/admin/user-discount"
               onClick={() => {
                 if (props.mobile) dispatch(closeAdminSideBar());
               }}
@@ -227,7 +227,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    SC/PWD
+                    User Discount
                   </span>
                 </span>
               </span>
@@ -427,7 +427,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
-                      {getAdminSessionState.data?.is_admin ? (
+                      {getAdminSessionState.data?.admin.is_admin ? (
                         <li>
                           <NavLink
                             to="/admin/setting/user"
@@ -492,6 +492,32 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </div>
             </div>
           </li>
+          <li>
+            <NavLink
+              to="/admin/reports"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <TbReportSearch size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Reports
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
           <li>
             <NavLink
               to="/admin/faq"
