@@ -539,6 +539,7 @@ export function HeaderNav(props: HeaderNavProps) {
                       <div className="pointer-events-auto">
                         <CartListItem
                           onProcessOrder={() => {
+                            setopenCartMenu(null);
                             if (props.activeUrl === "CATERING") {
                               navigate("/shop/checkout");
                             } else {
