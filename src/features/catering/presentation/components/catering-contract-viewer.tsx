@@ -250,6 +250,35 @@ export function CateringContractViewer() {
                 </td>
               </tr>
 
+              {getCateringOrdersState.data.order.clients_info.discount ? (
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    {parseFloat(
+                      getCateringOrdersState.data.order.clients_info
+                        .discount_percentage
+                    ) * 100}
+                    %{" "}
+                    {
+                      getCateringOrdersState.data.order.clients_info
+                        .discount_name
+                    }
+                    :
+                  </td>
+                  <td style={{ textAlign: "right" }}>
+                    <NumberFormat
+                      value={parseInt(
+                        getCateringOrdersState.data.order.clients_info.discount
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </td>
+                </tr>
+              ) : null}
+
               <tr>
                 <td></td>
                 <td></td>
