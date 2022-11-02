@@ -5,6 +5,7 @@ import { GoLaw } from "react-icons/go";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import Tab, { TabProps } from "@mui/material/Tab";
 import styled from "@mui/material/styles/styled";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -15,21 +16,25 @@ import { PrivacyPolicy } from '../components/privacy-policy';
 
   const StyledTabs = styled((props: TabsProps) => <Tabs {...props} />)(
     ({ theme }) => ({
-      height: 60,
-      "& .MuiTabs-indicator": {
-        backgroundColor: "#22201A",
-        height: 3,
-      },
-      "& .MuiTab-root.Mui-selected": {
-        fontWeight: 'bold',
-      },
-    })
-  );
-  
-  const StyledTab = styled((props: TabProps) => <Tab {...props} />)(
-    ({ theme }) => ({
-      color: "black",
-      height: 60,
+
+        "& .MuiTabs-indicator": {
+          backgroundColor: "#22201A",
+          height: 3,
+        },
+
+        "& .MuiTab-root.Mui-selected": {
+          fontWeight: 'bold',
+        },
+
+        "& .MuiTabs-flexContainerVertical": {
+          height: 150,
+          justifyContent: "space-between",
+          alignItems: "center",
+        },
+
+        "& .MuiButtonBase-root": { 
+          minHeight: "50px"
+        }, 
     })
   );
 
@@ -71,6 +76,7 @@ export function TermsAndPolicyModal( props:TermsAndPolicyModalProps ) {
 
   const [value, setValue] = useState(0);
   const dispatch = useAppDispatch();
+  var width = useMediaQuery("(max-width:640px)");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -88,9 +94,9 @@ export function TermsAndPolicyModal( props:TermsAndPolicyModalProps ) {
         <div style={{ display: props.open ? "flex" : "none" }}
             className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
         >
-            <div className="sm:w-[70%] w-[90%] bg-paper h-[600px] text-secondary my-auto rounded-3xl block">
+            <div className="md:w-[80%] w-[90%] bg-paper sm:h-[600px] h-[700px] sm:my-auto my-6 add-extra-margin text-secondary rounded-3xl block">
                 <button
-                    className="absolute sm:text-2xl text-sm text-black mt-auto pt-[6px] sm:right-[16vw] right-[6vw]"
+                    className="absolute sm:text-2xl text-xl text-black mt-auto pt-[12px] md:right-[11vw] right-[6vw]"
                     onClick={() => {
                         document.body.classList.remove("overflow-hidden");
                         props.onClose();
@@ -99,30 +105,27 @@ export function TermsAndPolicyModal( props:TermsAndPolicyModalProps ) {
                     <IoMdClose />
                 </button>
 
-                <StyledTabs value={value} onChange={handleChange} className="sm:w-[90%] w-[100%] mx-auto">
-                    <StyledTab
+                <StyledTabs value={value} onChange={handleChange} className="sm:w-[90%] w-[85%] mx-auto mb-6" orientation={ width ? "vertical" : "horizontal"} >
+                    <Tab
                         icon={<MdRule />}
                         iconPosition="start"
                         label="Terms and Conditions"
                         {...a11yProps(0)}
-                        className="text-secondary flex w-[33.33%] font-semibold active space-x-2 items-center 
-                        sm:text-base text-xs text-start py-2 lg:py-4 lg:px-6 bg-paper"
+                        className="sm:w-[33.33%] w-[100%]"
                     />
-                    <StyledTab
+                    <Tab
                         icon={<MdPolicy />}
                         iconPosition="start"
                         label="Privacy Policy"
                         {...a11yProps(1)}
-                        className="text-secondary flex w-[33.33%]  font-semibold space-x-2 items-center 
-                        sm:text-base text-xs text-start py-2 lg:py-4 lg:px-6 bg-paper"
+                        className="sm:w-[33.33%] w-[100%]"
                     />
-                    <StyledTab
+                    <Tab
                         icon={<GoLaw />}
                         iconPosition="start"
                         label="Return Policy"
                         {...a11yProps(2)}
-                        className="text-secondary flex w-[33.33%]  font-semibold space-x-2 items-center 
-                        sm:text-base text-xs text-start py-2 lg:py-4 lg:px-6 bg-paper"
+                        className="sm:w-[33.33%] w-[100%]"
                     />
                 </StyledTabs>
 
