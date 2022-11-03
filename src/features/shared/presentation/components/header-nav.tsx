@@ -584,8 +584,18 @@ export function HeaderNav(props: HeaderNavProps) {
                           },
                         }}
                       />
+
                       <div className="pointer-events-auto bg-white">
-                        <CartListItem />
+                        <CartListItem
+                          onProcessOrder={() => {
+                            setopenCartMenu(null);
+                            if (props.activeUrl === "CATERING") {
+                              navigate("/shop/checkout");
+                            } else {
+                              navigate("/delivery/checkout");
+                            }
+                          }}
+                        />
                       </div>
                     </Popover>
                   </div>

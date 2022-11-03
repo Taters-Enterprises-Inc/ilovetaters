@@ -217,6 +217,13 @@ export function CateringHome() {
                 }}
                 onPlaceSelected={(place: string) => {
                   dispatch(setAddressCateringHomePage({ address: place }));
+
+                  dispatch(
+                    getStoresAvailableCatering({
+                      address: place,
+                      service: "CATERING",
+                    })
+                  );
                 }}
               />
               <span>Search Address</span>
