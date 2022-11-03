@@ -1,5 +1,6 @@
 import { useAppDispatch } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { FormEvent, useState } from "react";
 import {
@@ -9,7 +10,7 @@ import {
 } from "features/shared/presentation/components";
 import { MenuItem } from "@mui/material";
 
-import { TermsAndPolicyModal } from "../modals/terms-and-policy.modal";
+import { TermsAndConditionModal } from "../modals/bsc-terms-and-condition.modal";
 
 export function BSCCreateAccount() {
   const dispatch = useAppDispatch();
@@ -39,7 +40,9 @@ export function BSCCreateAccount() {
     e.preventDefault();
   };
 
-  const [openTermsAndPolicyModal, setOpenTermsAndPolicyModal] = useState(false);
+  const [openTermsAndConditionModal, setOpenTermsAndConditionModal] =
+    useState(false);
+
   return (
     <>
       <main className="flex items-center justify-center h-screen bg-paper">
@@ -166,14 +169,12 @@ export function BSCCreateAccount() {
               <div className="flex justify-between mt-6 mb-2 text-white text-[12px]">
                 <p className="mx-auto">
                   <input className="mr-2" type="checkbox" />I agree to the{" "}
-                  <span
+                  <Link
                     className="cursor-pointer hover:underline"
-                    onClick={() => {
-                      setOpenTermsAndPolicyModal(true);
-                    }}
+                    to={"/bsc/terms-and-condition"}
                   >
-                    Terms of Service and Privacy Policy.
-                  </span>
+                    Terms of Service and Privacy Policy
+                  </Link>
                 </p>
               </div>
               <button
@@ -197,13 +198,6 @@ export function BSCCreateAccount() {
           </div>
         </div>
       </main>
-
-      <TermsAndPolicyModal
-        open={openTermsAndPolicyModal}
-        onClose={() => {
-          setOpenTermsAndPolicyModal(false);
-        }}
-      />
     </>
   );
 }

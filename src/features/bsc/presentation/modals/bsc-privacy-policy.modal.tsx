@@ -1,22 +1,37 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Tab } from "features/shared/presentation/components";
+import { BSC_TERMS_AND_POLICY_TABS } from "features/shared/constants";
+import { Link } from "react-router-dom";
 
-export function PrivacyPolicy() {
-  const location = useLocation();
+import { IoMdClose } from "react-icons/io";
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { BsLink45Deg } from "react-icons/bs";
 
-    return (
-        <div className="w-[90%] mx-auto mt-[2%] mb-[3.5%]">
-            <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] lg:text-3xl md:text-2xl text-xl">
-                Privacy Policy
-            </h1>
+export function PrivacyPolicyModal() {
 
-            <hr className="mt-2 mb-4 border-secondary" />
+  return (
+    <>
+      <div
+        style={{ display: "flex" }}
+        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
+      >
+        <div className="md:w-[70%] w-[80%] bg-paper sm:h-[500px] h-[700px] mt-[3%] mb-[3%] add-extra-margin text-secondary">
+          <Tab tabs={BSC_TERMS_AND_POLICY_TABS} activeTab="bsc-privacy-policy">
+            <Link
+              className="absolute sm:text-2xl text-xl text-black lg:top-[-9%] top-[-23%] md:right-[1vw] right-[2vw]"
+              to={"/bsc/create-account"}
+            >
+              <IoMdClose />
+            </Link>
 
-            <div className="space-y-4 text-secondary w-[95%] mx-auto h-[425px] overflow-y-scroll terms-scroll md:text-base text-sm">
+            <div className="lg:w-[95%] w-[90%] mx-auto lg:mt-[1%] mt-[0.5%] sm:mb-[2.5%] mb-[1.75%]">
+              <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] lg:text-3xl md:text-2xl text-xl">
+                  Privacy Policy
+              </h1>
+
+              <hr className="mt-2 mb-4 border-secondary" />
+
+              <div className="space-y-4 text-secondary w-[95%] mx-auto h-[425px] overflow-y-scroll terms-scroll md:text-base text-sm">
                 <p> Taters Enterprises Inc., its subsidiaries and affiliates (“Company,” “We,” “Us,” “Our”), is committed 
                     to protecting the privacy and security of all personal and/or sensitive information (“Personal Data”) 
                     related to its employees, customers, business partners, suppliers, contractors, and other parties that 
@@ -129,7 +144,11 @@ export function PrivacyPolicy() {
                 <p className="mb-0">Taters Snack Shop</p>
 
                 <p className="mb-0"> Contact No: (+63) 949-889-9558 from Monday to Friday (9:30AM to 7:30PM) </p>
+              </div>
             </div>
+          </Tab>
         </div>
-    );
+      </div>
+    </>
+  );
 }

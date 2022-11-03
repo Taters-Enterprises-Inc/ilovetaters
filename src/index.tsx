@@ -100,6 +100,12 @@ import {
   BSCUsers,
   BSCCreateGroup,
 } from "features/bsc/presentation/pages";
+import { 
+  TermsAndConditionModal,
+  ReturnPolicyModal,
+  PrivacyPolicyModal,
+} from "features/bsc/presentation/modals";
+
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BSCUser } from "features/bsc/presentation/components";
 
@@ -314,7 +320,10 @@ root.render(
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
                   <Route path="create-account" element={<BSCCreateAccount />} />
-                  <Route element={<BSCSidebarWrapper />}>
+                  <Route path="terms-and-condition" element={<TermsAndConditionModal />} />
+                  <Route path="privacy-policy" element={<PrivacyPolicyModal  />} />
+                  <Route path="return-policy" element={<ReturnPolicyModal />} />
+                  <Route element={<BSCSidebarWrapper />} />
                     <Route path="employee" element={<BSCEmployee />} />
                     <Route path="users">
                       <Route index element={<BSCUsers />} />
@@ -323,7 +332,6 @@ root.render(
                       <Route path="edit-user/:id" element={<BSCEditUser />} />
                     </Route>
                   </Route>
-                </Route>
               </Route>
             </Route>
           </Routes>
