@@ -547,7 +547,16 @@ export function HeaderNav(props: HeaderNavProps) {
                       disableRestoreFocus
                     >
                       <div className="pointer-events-auto">
-                        <CartListItem />
+                        <CartListItem
+                          onProcessOrder={() => {
+                            setopenCartMenu(null);
+                            if (props.activeUrl === "CATERING") {
+                              navigate("/shop/checkout");
+                            } else {
+                              navigate("/delivery/checkout");
+                            }
+                          }}
+                        />
                       </div>
                     </Popover>
                   </div>
