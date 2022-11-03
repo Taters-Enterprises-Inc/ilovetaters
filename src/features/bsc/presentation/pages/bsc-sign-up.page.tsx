@@ -24,7 +24,6 @@ import {
   selectCreateBscUser,
 } from "../slices/create-bsc-user.slice";
 
-import { BscTermsAndPolicyModal } from "../modals/bsc-terms-and-policy.modal";
 import { TermsAndConditionModal } from "../modals/bsc-terms-and-condition.modal";
 
 export function BscSignUp() {
