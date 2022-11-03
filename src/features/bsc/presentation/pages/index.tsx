@@ -1,3 +1,5 @@
+export { TermsAndConditionModal } from "../modals/bsc-terms-and-condition.modal";
+export { ReturnPolicyModal } from "../modals/bsc-return-policy.modal";
 export { BSCLogin } from "./bsc-login.page";
 
 export { BSCCreateAccount } from "./bsc-create-account.page";
