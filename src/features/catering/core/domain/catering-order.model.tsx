@@ -146,7 +146,7 @@ export interface CateringOrderModel {
     category: number;
     product_label: string;
     freebie_prod_name: null;
-    flavors: Array<{
+    flavors?: Array<{
       name: string;
       quantity: number;
     }>;

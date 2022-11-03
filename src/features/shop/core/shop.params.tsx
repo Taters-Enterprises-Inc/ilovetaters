@@ -15,6 +15,7 @@ export interface AddToCartShopParam {
   prod_sku?: number;
   prod_discount?: number;
   prod_category: number;
+  prod_type: "main" | "addon";
 }
 
 export interface GetProductSkuParam {

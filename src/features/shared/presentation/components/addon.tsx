@@ -123,6 +123,7 @@ export function Addon(props: AddonProps) {
         flavors_details: "",
         prod_sku_id: -1,
         prod_sku: -1,
+        prod_type: "addon",
       })
     );
   };

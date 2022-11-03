@@ -15,6 +15,7 @@ export interface AddToCartCateringParam {
   prod_sku?: number;
   prod_discount?: number;
   prod_category: number;
+  prod_type: "main";
   is_free_item?: boolean;
 }
 export interface GetCateringProductDetailsParam {

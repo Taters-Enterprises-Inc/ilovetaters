@@ -84,7 +84,7 @@ export function CateringSignedContractIsRequired() {
         <CateringContractViewer />
       </div>
       {getCateringOrdersState.data &&
-      getCateringOrdersState.data.order.order_details ? (
+      getCateringOrdersState.data.package_selection ? (
         <div className="lg:flex-[0_0_40%] lg:max-w-[40%] order-1 space-y-4  lg:order-2">
           <div
             className="px-4 py-3 mb-4 text-blue-900 bg-blue-100 border-t-4 border-blue-500 rounded-b shadow-md lg:hidden"
@@ -114,7 +114,7 @@ export function CateringSignedContractIsRequired() {
           </h2>
 
           <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-            {getCateringOrdersState.data.order.order_details.map((order, i) => (
+            {getCateringOrdersState.data.package_selection.map((order, i) => (
               <div
                 key={i}
                 className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px]"
