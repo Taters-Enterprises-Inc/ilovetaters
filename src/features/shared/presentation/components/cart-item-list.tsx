@@ -13,7 +13,11 @@ import NumberFormat from "react-number-format";
 import { useNavigate } from "react-router-dom";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 
-export function CartListItem() {
+export interface CartListItemProps {
+  onProcessOrder: () => void;
+}
+
+export function CartListItem(props: CartListItemProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -223,8 +227,7 @@ export function CartListItem() {
                 </div>
                 <button
                   onClick={() => {
-                    // props.onClose();
-                    navigate("/delivery/checkout");
+                    props.onProcessOrder();
                   }}
                   className="w-full py-2 text-lg text-white border rounded-lg bg-button border-secondary"
                 >

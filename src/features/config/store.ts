@@ -114,6 +114,9 @@ import getCateringTransactionLogs from "features/admin/presentation/slices/get-c
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
+
+import getDealOrder from "features/popclub/presentation/slices/get-deal-order.slice";
+
 import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
@@ -137,6 +140,7 @@ import updateBscUser from "features/bsc/presentation/slices/bsc-update-user.slic
 import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
 import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-user-status.slice";
+
 
 export const store = configureStore({
   reducer: {
@@ -254,6 +258,9 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     discountRegistration,
+
+    getDealOrder,
+
     getAdminUserDiscounts,
     getAdminUserDiscount,
     applyUserDiscount,
@@ -277,6 +284,7 @@ export const store = configureStore({
     getBscGroups,
     createBscGroup,
     updateBscUserStatus,
+
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

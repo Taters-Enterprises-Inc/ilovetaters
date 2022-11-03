@@ -16,6 +16,7 @@ import {
   PopClubDeal,
   PopClubHome,
   PopClubIndexPage,
+  PopclubOrder,
 } from "features/popclub/presentation/pages";
 import {
   Shop,
@@ -91,6 +92,23 @@ import {
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
+
+import { BSCLogin } from "features/bsc/presentation/pages";
+import {
+  CustomerSurvey,
+  CustomerSurveyWalkIn,
+  CustomerSurveyPageTwo,
+  CustomerSurveyPageThree,
+  CustomerSurveyPageFour,
+  CustomerSurveyPageFive,
+  CustomerSurveyPageSix,
+  CustomerSurveyPageSeven,
+  CustomerSurveyPageEight,
+  CustomerSurveyPageNine,
+  CustomerSurveyPageTen,
+  CustomerSurveyComplete,
+} from "features/survey/presentation/pages";
+
 import {
   BSCLogin,
   BscSignUp,
@@ -102,6 +120,7 @@ import {
 } from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -147,10 +166,14 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
+
+                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
+
                       <Route
                         path="user-discount"
                         element={<ProfileUserDiscount />}
                       />
+
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
@@ -160,7 +183,9 @@ root.render(
                     <Route element={<PopClubGuard />}>
                       <Route path=":platform" element={<PopClubHome />} />
                       <Route path="deal/:hash" element={<PopClubDeal />} />
+                      <Route path="order/:hash" element={<PopclubOrder />} />
                     </Route>
+
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
@@ -329,6 +354,38 @@ root.render(
                       </Route>
                     </Route>
                   </Route>
+                </Route>
+                <Route path="survey">
+                  <Route index element={<CustomerSurvey />} />
+                  <Route path="walk-in" element={<CustomerSurveyWalkIn />} />
+                  <Route path="page-two" element={<CustomerSurveyPageTwo />} />
+                  <Route
+                    path="page-three"
+                    element={<CustomerSurveyPageThree />}
+                  />
+                  <Route
+                    path="page-four"
+                    element={<CustomerSurveyPageFour />}
+                  />
+                  <Route
+                    path="page-five"
+                    element={<CustomerSurveyPageFive />}
+                  />
+                  <Route path="page-six" element={<CustomerSurveyPageSix />} />
+                  <Route
+                    path="page-seven"
+                    element={<CustomerSurveyPageSeven />}
+                  />
+                  <Route
+                    path="page-eight"
+                    element={<CustomerSurveyPageEight />}
+                  />
+                  <Route
+                    path="page-nine"
+                    element={<CustomerSurveyPageNine />}
+                  />
+                  <Route path="page-ten" element={<CustomerSurveyPageTen />} />
+                  <Route path="complete" element={<CustomerSurveyComplete />} />
                 </Route>
               </Route>
             </Route>
