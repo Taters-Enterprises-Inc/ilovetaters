@@ -93,7 +93,6 @@ import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
-import { BSCLogin } from "features/bsc/presentation/pages";
 import {
   CustomerSurvey,
   CustomerSurveyWalkIn,
@@ -120,7 +119,6 @@ import {
 } from "features/bsc/presentation/pages";
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
-
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -166,14 +164,10 @@ root.render(
                         element={<ProfilePopclubRedeems />}
                       />
 
-
-                      <Route path="popclub-sc-pwd" element={<ProfileCsPwd />} />
-
                       <Route
                         path="user-discount"
                         element={<ProfileUserDiscount />}
                       />
-
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
