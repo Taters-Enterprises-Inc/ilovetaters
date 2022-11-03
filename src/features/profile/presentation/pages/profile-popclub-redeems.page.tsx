@@ -33,6 +33,7 @@ const columns: Array<Column> = [
   { id: "redeem_code", label: "Redeem Code" },
   { id: "purchase_amount", label: "Purchase Amount" },
   { id: "status", label: "Redeem Status" },
+  { id: "view", label: "View" },
 ];
 
 export function ProfilePopclubRedeems() {
@@ -310,6 +311,11 @@ export function ProfilePopclubRedeems() {
                             {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
                           </span>
                         )}
+                      </DataTableCell>
+                      <DataTableCell align="left">
+                        <Link to={`/popclub/order/${row.hash_key}`}>
+                          <FaEye className="text-lg" />
+                        </Link>
                       </DataTableCell>
                     </DataTableRow>
                   ))}

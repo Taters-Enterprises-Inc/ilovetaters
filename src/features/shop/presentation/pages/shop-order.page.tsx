@@ -19,6 +19,7 @@ import {
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -153,6 +154,12 @@ export function ShopOrder() {
       formData.append("uploaded_file", uploadedFile);
       dispatch(uploadProofOfPayment({ formData }));
     }
+  };
+
+  const navigate = useNavigate();
+
+  const navigateToCustomerSurvey = () => {
+    navigate("/survey");
   };
 
   return (
@@ -480,10 +487,67 @@ export function ShopOrder() {
               </div>
             </div>
 
-            <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
-              <h2 className="font-['Bebas_Neue'] text-4xl text-secondary tracking-[3px] text-center">
-                Order Summary
-              </h2>
+            <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%]  py-6 lg:px-4">
+              <div className="space-y-4 lg:flex-w-full lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+                <h2 className="font-['Bebas_Neue'] text-4xl text-secondary tracking-[3px] text-center">
+                  Order Summary
+                </h2>
+
+
+                <div className="grid grid-cols-2 text-secondary">
+                  <span>Subtotal:</span>
+                  <span className="text-end">
+                    <NumberFormat
+                      value={
+                        getOrdersState.data?.subtotal
+                          ? parseInt(getOrdersState.data.subtotal).toFixed(2)
+                          : 0.0
+                      }
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </span>
+                  <span>Delivery Fee:</span>
+                  <span className="text-end">
+                    +{" "}
+                    <NumberFormat
+                      value={
+                        getOrdersState.data?.delivery_fee
+                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
+                              2
+                            )
+                          : 0.0
+                      }
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </span>
+
+                  {getOrdersState.data?.cod_fee !== "0" ? (
+                    <>
+                      <span>Cash on Delivery charge:</span>
+                      <span className="text-end">
+                        +{" "}
+                        <NumberFormat
+                          value={
+                            getOrdersState.data?.cod_fee
+                              ? parseInt(getOrdersState.data.cod_fee).toFixed(2)
+                              : 0.0
+                          }
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
+                </div>
+
+                <hr className="mt-1 border-secondary" />
+
+                <h1 className="text-3xl text-center text-secondary">
 
               <div className="grid grid-cols-2 text-secondary">
                 <span>Subtotal:</span>
@@ -502,33 +566,46 @@ export function ShopOrder() {
                 <span>Delivery Fee:</span>
                 <span className="text-end ">
                   +{" "}
+
                   <NumberFormat
                     value={
-                      getOrdersState.data?.delivery_fee
-                        ? parseInt(getOrdersState.data.delivery_fee).toFixed(2)
+                      getOrdersState.data?.grand_total
+                        ? getOrdersState.data.grand_total.toFixed(2)
                         : 0.0
                     }
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={"₱"}
                   />
-                </span>
+                </h1>
 
-                {getOrdersState.data?.cod_fee !== "0" ? (
+                {/* Upload proof of payment will be deprecated once the payment gate away finished */}
+
+                {getOrdersState.data?.order.clients_info.status === 1 &&
+                getOrdersState.data?.order.clients_info.payops !== 3 ? (
                   <>
-                    <span>Cash on Delivery charge:</span>
-                    <span className="text-end">
-                      +{" "}
-                      <NumberFormat
+                    <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                      Upload Proof of Payment
+                    </h2>
+
+                    <form onSubmit={handleProofOfPayment}>
+                      <input
+                        type="text"
+                        className="hidden"
+                        name="tracking_no"
                         value={
-                          getOrdersState.data?.cod_fee
-                            ? parseInt(getOrdersState.data.cod_fee).toFixed(2)
-                            : 0.0
+                          getOrdersState.data?.order.clients_info.tracking_no
                         }
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
+                        readOnly
                       />
+                      <input
+                        type="text"
+                        className="hidden"
+                        name="trans_id"
+                        value={getOrdersState.data?.order.clients_info.id}
+                        readOnly
+                      />
+
                     </span>
                   </>
                 ) : null}
@@ -596,67 +673,79 @@ export function ShopOrder() {
                       readOnly
                     />
 
-                    <div>
-                      <div
-                        {...getRootProps()}
-                        className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
-                      >
-                        <input
-                          type="file"
-                          name="uploaded_file"
-                          {...getInputProps()}
-                        />
 
-                        {isDragActive ? (
-                          <span className="text-lg text-secondary">
-                            Drop the files here ...
-                          </span>
-                        ) : (
-                          <>
-                            {images ? (
-                              <img
-                                src={images.src}
-                                className="object-contain h-[150px] w-[150px]"
-                                alt="upload file"
-                              />
-                            ) : (
-                              <>
-                                <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                                <span className="text-lg text-secondary">
-                                  Drag and drop here to upload
-                                </span>
-                                <button
-                                  type="button"
-                                  className="px-3 py-1 text-lg text-white rounded-lg bg-secondary"
-                                >
-                                  Or select file
-                                </button>
-                              </>
-                            )}
-                          </>
-                        )}
+                      <div>
+                        <div
+                          {...getRootProps()}
+                          className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
+                        >
+                          <input
+                            type="file"
+                            name="uploaded_file"
+                            {...getInputProps()}
+                          />
+
+                          {isDragActive ? (
+                            <span className="text-lg text-secondary">
+                              Drop the files here ...
+                            </span>
+                          ) : (
+                            <>
+                              {images ? (
+                                <img
+                                  src={images.src}
+                                  className="object-contain h-[150px] w-[150px]"
+                                  alt="upload file"
+                                />
+                              ) : (
+                                <>
+                                  <AiOutlineCloudUpload className="text-5xl text-secondary" />
+                                  <span className="text-lg text-secondary">
+                                    Drag and drop here to upload
+                                  </span>
+                                  <button
+                                    type="button"
+                                    className="px-3 py-1 text-lg text-white rounded-lg bg-secondary"
+                                  >
+                                    Or select file
+                                  </button>
+                                </>
+                              )}
+                            </>
+                          )}
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                        >
+                          Upload
+                        </button>
+
+                        <h4 className="mt-1 text-sm leading-5 text-secondary">
+                          <strong>Note:</strong> Supported file types: JPG,
+                          JPEG, PNG and GIF. Maximum file size is 2MB.
+                        </h4>
                       </div>
-
-                      <button
-                        type="submit"
-                        className="bg-button border-2 border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
-                      >
-                        Upload
-                      </button>
-
-                      <h4 className="mt-1 text-sm leading-5 text-secondary">
-                        <strong>Note:</strong> Supported file types: JPG, JPEG,
-                        PNG and GIF. Maximum file size is 2MB.
-                      </h4>
-                    </div>
-                  </form>
-                </>
-              ) : getOrdersState.data?.order.clients_info.status === 2 ? (
-                <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
-                  <AiFillCheckCircle className="text-2xl" />
-                  <span>Proof of Payment Uploaded</span>
-                </h2>
-              ) : null}
+                    </form>
+                  </>
+                ) : getOrdersState.data?.order.clients_info.status === 2 ? (
+                  <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
+                    <AiFillCheckCircle className="text-2xl" />
+                    <span>Proof of Payment Uploaded</span>
+                  </h2>
+                ) : null}
+              </div>
+              <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
+                <button
+                  onClick={navigateToCustomerSurvey}
+                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                >
+                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                    RATE US
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,12 @@
+export { CustomerSurvey } from "./customer-survey.page";
+export { CustomerSurveyPageTwo } from "./customer-surveyP2.page";
+export { CustomerSurveyPageThree } from "./customer-surveyP3.page";
+export { CustomerSurveyPageFour } from "./customer-surveyP4.page";
+export { CustomerSurveyPageFive } from "./customer-surveyP5.page";
+export { CustomerSurveyPageSix } from "./customer-surveyP6.page";
+export { CustomerSurveyPageSeven } from "./customer-surveyP7.page";
+export { CustomerSurveyPageEight } from "./customer-surveyP8.page";
+export { CustomerSurveyPageNine } from "./customer-surveyP9.page";
+export { CustomerSurveyPageTen } from "./customer-surveyP10.page";
+export { CustomerSurveyComplete } from "./customer-survey-complete.page";
+export { CustomerSurveyWalkIn } from "./customer-walk-in.page";
