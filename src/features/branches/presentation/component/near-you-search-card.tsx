@@ -12,8 +12,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
   const [resize, setResize] = useState<number>(window.innerWidth);
   const textLenght = 40;
   const sliceText = store.address.slice(0, textLenght);
-  const dateadded = new Date(store.dateadded);
-  const currentDate = new Date();
+  const dateadded = moment(store.dateadded);
+  const currentDate = moment();
   const navigate = useNavigate();
   useEffect(() => {
     const resizeFunc = () => {
@@ -28,6 +28,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
     store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5
   );
 
+  console.log();
+
   return (
     <div
       onClick={() => {
@@ -41,11 +43,10 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
         </div>
 
         {store.dateadded &&
-        dateadded.getTime() >=
-          currentDate.setDate(currentDate.getMonth() - 1) ? (
+        dateadded.isAfter(currentDate.subtract(3, "months")) ? (
           <div className="flex w-5">
-            <TiStarburst className="absolute right-0 text-tertiary text-xl md:text-3xl" />
-            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-sm md:text-xl md:right-[4.8px] md:top-[5px]" />
+            <TiStarburst className="absolute right-[-17px] top-[-12px] text-tertiary text-6xl" />
+            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-4xl right-[-5px] top-[0px]" />
           </div>
         ) : null}
       </div>
