@@ -105,54 +105,6 @@ export function AdminCateringBookingCustomerInformation() {
     return "₱0.00";
   };
 
-  const calculateSubTotal = () => {
-    let calculatedPrice = 0;
-    const orders = getAdminCateringBookingState.data?.items;
-   
-    if (orders) {
-      for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
-      }
-    }
-
-    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
-      calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount)
-    }
-
-
-    return (
-      <NumberFormat
-        value={calculatedPrice.toFixed(2)}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={"₱"}
-      />
-    );
-  };
-
-  const calculateOrderTotal = () => {
-    let calculatedPrice = 0;
-
-    const orders = getAdminCateringBookingState.data?.items;
-
-    if (orders) {
-      for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
-      }
-    }
-
-    return (
-      <NumberFormat
-        value={calculatedPrice.toFixed(2)}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={"₱"}
-      />
-    );
-  };
-
   const calculateGrandTotal = () => {
     let calculatedPrice = 0;
     const orders = getAdminCateringBookingState.data?.items;
@@ -182,10 +134,12 @@ export function AdminCateringBookingCustomerInformation() {
       calculatedPrice += getAdminCateringBookingState.data?.night_diff_fee;
     }
 
-    if(getAdminCateringBookingState.data && getAdminCateringBookingState.data.discount){
-      calculatedPrice -=  parseInt(getAdminCateringBookingState?.data.discount)
+    if (
+      getAdminCateringBookingState.data &&
+      getAdminCateringBookingState.data.discount
+    ) {
+      calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount);
     }
-    
 
     return (
       <NumberFormat
@@ -196,7 +150,6 @@ export function AdminCateringBookingCustomerInformation() {
       />
     );
   };
-
 
   return (
     <div>
@@ -596,29 +549,45 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">{calculateOrderTotal()}</td>
+                    <td className="px-6 py-2">
+                      <NumberFormat
+                        value={parseInt(
+                          getAdminCateringBookingState.data.purchase_amount
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </td>
                   </tr>
                   {getAdminCateringBookingState?.data?.discount && (
-                      <tr className="text-end">
-                        <td colSpan={4} className="px-6 py-2 font-bold">
-                          {getAdminCateringBookingState?.data.discount_name}
-                        </td>
-                        <td className="px-6 py-2">
-                          {calculateWithZeroIfNoValue(
-                            parseInt(
-                              getAdminCateringBookingState?.data.discount
-                            )
-                          )}
-                        </td>
-                      </tr>
-                    )}
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold">
+                        {getAdminCateringBookingState?.data.discount_name}
+                      </td>
+                      <td className="px-6 py-2">
+                        {calculateWithZeroIfNoValue(
+                          parseInt(getAdminCateringBookingState?.data.discount)
+                        )}
+                      </td>
+                    </tr>
+                  )}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">{calculateSubTotal()}</td>
+                    <td className="px-6 py-2">
+                      <NumberFormat
+                        value={parseInt(
+                          getAdminCateringBookingState.data.purchase_amount
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </td>
                   </tr>
-               
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Service Fee:
@@ -727,13 +696,27 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
-                    {calculateOrderTotal()}
+                    <NumberFormat
+                      value={parseInt(
+                        getAdminCateringBookingState.data.purchase_amount
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
-                    {calculateSubTotal()}
+                    <NumberFormat
+                      value={parseInt(
+                        getAdminCateringBookingState.data.purchase_amount
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">

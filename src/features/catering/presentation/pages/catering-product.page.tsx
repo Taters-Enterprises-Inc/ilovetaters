@@ -326,6 +326,7 @@ export function CateringProduct() {
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
+          prod_type: "main",
           prod_sku: -1,
         })
       );
