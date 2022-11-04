@@ -23,10 +23,17 @@ const initialState: {
 
 export const addToCartCatering = createAsyncThunk(
   "addToCartCatering",
-  async (param: AddToCartCateringParam) => {
-    const response: AddToCartCateringResponse =
-      await AddToCartCateringRepository(param);
-    return response.data;
+  async (
+    param: AddToCartCateringParam,
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const response: AddToCartCateringResponse =
+        await AddToCartCateringRepository(param);
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 

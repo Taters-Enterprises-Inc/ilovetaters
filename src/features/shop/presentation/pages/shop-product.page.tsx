@@ -315,6 +315,7 @@ export function ShopProduct() {
           flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
+          prod_type: "main",
         })
       );
     }
@@ -364,6 +365,7 @@ export function ShopProduct() {
           flavors_details: flavors_details,
           prod_sku_id: -1,
           prod_sku: -1,
+          prod_type: "main",
         })
       );
     }

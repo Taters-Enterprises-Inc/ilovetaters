@@ -41,6 +41,7 @@ export function CateringAddon(props: AddonProps) {
         prod_sku_id: -1,
         prod_sku: -1,
         is_free_item: props.isFreeItem,
+        prod_type: "main",
       })
     );
   };
