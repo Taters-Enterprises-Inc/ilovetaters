@@ -19,7 +19,7 @@ export function PrivacyPolicyModal() {
           <Tab tabs={BSC_TERMS_AND_POLICY_TABS} activeTab="bsc-privacy-policy">
             <Link
               className="absolute sm:text-2xl text-xl text-black lg:top-[-9%] top-[-23%] md:right-[1vw] right-[2vw]"
-              to={"/bsc/create-account"}
+              to={"/bsc/sign-up"}
             >
               <IoMdClose />
             </Link>
