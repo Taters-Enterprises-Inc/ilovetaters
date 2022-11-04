@@ -16,6 +16,7 @@ import {
   GetProductDetailsParam,
   GetProductSkuParam,
   AddToCartShopParam,
+  CardPaymentParams,
 } from "features/shop/core/shop.params";
 
 export interface GetCategoryProductsResponse {
@@ -76,6 +77,12 @@ export interface GetCartItemResponse {
   };
 }
 export interface GetEditCartItemResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CardPaymentResponse {
   data: {
     message: string;
   };
@@ -200,6 +207,14 @@ export function GetEditCartItemRepository(
 
 export function GetUserSessionRepository(): Promise<GetUserSessionResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/session`, {
+    withCredentials: true,
+  });
+}
+
+export function CardPaymentRepository(
+  params: CardPaymentParams
+): Promise<CardPaymentResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/branches/test`, params, {
     withCredentials: true,
   });
 }

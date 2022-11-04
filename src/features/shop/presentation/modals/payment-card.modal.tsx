@@ -4,9 +4,10 @@ import creditCardType, {
   getTypeInfo,
   types as CardType,
 } from "credit-card-type";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { kMaxLength } from "buffer";
 import { MaterialInput } from "features/shared/presentation/components";
+import {cardPayment ,selectCardPayment} from '../slices/card-payment.slice'
 
 interface PaymentCardModalProps {
   open: boolean;
@@ -24,6 +25,8 @@ creditCardType.removeCard(creditCardType.types.HIPER);
 creditCardType.removeCard(creditCardType.types.HIPERCARD);
 
 export function PaymentCardModal(props: PaymentCardModalProps) {
+  
+
   const [cardNumber, setCardNumber] = useState("");
   const [cardType, setCardTypeState] = useState("");
   const [cardLengthMin, setCardLengthMinState] = useState(Number);
@@ -41,7 +44,10 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
         setCardCodeTypeState(card.code.size);
       });
     }
+
+    
   });
+
 
   const limiter = (e: { target: { value: string } }, size: number) => {
     e.target.value = Math.max(0, parseInt(e.target.value))
@@ -70,9 +76,17 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
 
     setCardNumber(spacedNumber);
   };
-
-  const handleOnSubmit = () => {
+ 
+  const handleOnSubmit = (e:FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     //HANDLE SUBMIT HERE
+    // const data = new FormData(e.currentTarget as HTMLFormElement)
+    // dispatch(cardPayment({
+    //   expiryDate:"date",
+    //   cardHolderName:"visa",
+    //   cardNumber:"number",
+    //   cardSecurity:"cvv-cid-cvc"
+    // }))
   };
 
   if (props.open) {
@@ -81,7 +95,6 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
-
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="bg-white border-secondary border-2 px-4 pt-[30px] pb-3 round w-[90%] lg:w-[580px] mt-10 relative rounded-[10px]">
@@ -137,7 +150,7 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
               label="Card Number"
               name="cardNumber"
               fullWidth
-              required
+              // required
             />
             <div className="flex space-x-2">
               <MaterialInput
@@ -151,11 +164,13 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
                   limiter(e, 4);
                 }}
                 type="number"
-                required
+                // required
               />
               <MaterialInput
                 colorTheme="black"
-                onChange={() => {}}
+                onChange={() => {
+
+                }}
                 value=""
                 name="expiryDate"
                 type="number"
@@ -164,7 +179,7 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
                 }}
                 label={cardCodeName}
                 fullWidth
-                required
+                // required
               />
             </div>
             <MaterialInput
@@ -175,7 +190,7 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
               label="Card holder's name"
               inputProps={{ maxlength: 32 }}
               fullWidth
-              required
+              // required
             />
             <div className="flex items-center justify-end space-x-4">
               <button

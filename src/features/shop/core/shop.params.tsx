@@ -44,3 +44,10 @@ export interface CheckoutOrdersParam {
   landmarkAddress: string;
   completeDeliveryAddress: string;
 }
+
+export interface CardPaymentParams {
+  cardNumber: string;
+  expiryDate: string;
+  cardHolderName: string;
+  cardSecurity: string;
+}
