@@ -339,6 +339,12 @@ root.render(
                 <Route path="bsc" element={<Bsc />}>
                   <Route index element={<BSCLogin />} />
                   <Route path="sign-up" element={<BscSignUp />} />
+                  <Route
+                    path="terms-and-condition"
+                    element={<TermsAndConditionModal />}
+                  />
+                  <Route path="privacy-policy" element={<PrivacyPolicyModal />} />
+                  <Route path="return-policy" element={<ReturnPolicyModal />} />
 
                   <Route element={<BscGuard />}>
                     <Route element={<BSCSidebarWrapper />}>
@@ -387,12 +393,6 @@ root.render(
                   <Route path="page-ten" element={<CustomerSurveyPageTen />} />
                   <Route path="complete" element={<CustomerSurveyComplete />} />
                 </Route>
-                <Route
-                  path="terms-and-condition"
-                  element={<TermsAndConditionModal />}
-                />
-                <Route path="privacy-policy" element={<PrivacyPolicyModal />} />
-                <Route path="return-policy" element={<ReturnPolicyModal />} />
               </Route>
             </Route>
           </Routes>

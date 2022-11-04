@@ -1,6 +1,6 @@
 import { FormControl } from "@mui/material";
-import { BSCRatingRadioButton } from "./bsc-rating-radio-button";
 import { LinearProgress } from '@mui/material';
+import { BSCSentenceRadioButton } from './bsc-sentence-radio-button';
 
 export function BSCScoreCardPage() {
   return (
@@ -30,7 +30,7 @@ export function BSCScoreCardPage() {
             since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book?
           </p>
-          <BSCRatingRadioButton />
+          <BSCSentenceRadioButton />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
@@ -40,7 +40,7 @@ export function BSCScoreCardPage() {
             since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book?
           </p>
-          <BSCRatingRadioButton />
+          <BSCSentenceRadioButton />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
@@ -50,7 +50,7 @@ export function BSCScoreCardPage() {
             since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book?
           </p>
-          <BSCRatingRadioButton />
+          <BSCSentenceRadioButton />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
@@ -60,7 +60,7 @@ export function BSCScoreCardPage() {
             since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book?
           </p>
-          <BSCRatingRadioButton />
+          <BSCSentenceRadioButton />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
@@ -70,7 +70,7 @@ export function BSCScoreCardPage() {
             since the 1500s, when an unknown printer took a galley of type and
             scrambled it to make a type specimen book?
           </p>
-          <BSCRatingRadioButton />
+          <BSCSentenceRadioButton />
         </div>
 
         <div className="mx-[10%] flex justify-between items-center my-4">
@@ -102,7 +102,7 @@ export function BSCScoreCardPage() {
               },
             }}
           />
-          <p className="text-black text-center text-xs"> Page 1 of 4 </p> 
+          <p className="text-xs text-center text-black"> Page 1 of 4 </p> 
         </div>
       </FormControl>
     </main>
