@@ -508,14 +508,12 @@ export function ShopOrder() {
                     />
                   </span>
                   <span>Delivery Fee:</span>
-                  <span className="text-end">
+                  <span className="text-end ">
                     +{" "}
                     <NumberFormat
                       value={
-                        getOrdersState.data?.delivery_fee
-                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
-                              2
-                            )
+                        getOrdersState.data?.grand_total
+                          ? getOrdersState.data.grand_total.toFixed(2)
                           : 0.0
                       }
                       displayType={"text"}
@@ -524,17 +522,48 @@ export function ShopOrder() {
                     />
                   </span>
 
-                  {getOrdersState.data?.cod_fee !== "0" ? (
+                  {/* Upload proof of payment will be deprecated once the payment gate away finished */}
+
+                  {getOrdersState.data?.order.clients_info.status === 1 &&
+                  getOrdersState.data?.order.clients_info.payops !== 3 ? (
                     <>
-                      <span>Cash on Delivery charge:</span>
-                      <span className="text-end">
-                        +{" "}
-                        <NumberFormat
+                      <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
+                        Upload Proof of Payment
+                      </h2>
+
+                      <form onSubmit={handleProofOfPayment}>
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="tracking_no"
                           value={
-                            getOrdersState.data?.cod_fee
-                              ? parseInt(getOrdersState.data.cod_fee).toFixed(2)
-                              : 0.0
+                            getOrdersState.data?.order.clients_info.tracking_no
                           }
+                          readOnly
+                        />
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="trans_id"
+                          value={getOrdersState.data?.order.clients_info.id}
+                          readOnly
+                        />
+                      </form>
+                    </>
+                  ) : null}
+
+                  {getOrdersState.data?.order.clients_info.discount_name &&
+                  getOrdersState.data?.order.clients_info.discount ? (
+                    <>
+                      <span>
+                        {getOrdersState.data?.order.clients_info.discount_name}:
+                      </span>
+                      <span className="text-end">
+                        -{" "}
+                        <NumberFormat
+                          value={parseInt(
+                            getOrdersState.data?.order.clients_info.discount
+                          ).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
