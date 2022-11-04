@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { StoreModel } from "features/shared/core/domain/store.model";
 import moment from "moment";
+import { MdOutlineFiberNew } from "react-icons/md";
+import { TiStarburst } from "react-icons/ti";
 export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
   store,
 }): JSX.Element => {
@@ -10,6 +12,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
   const [resize, setResize] = useState<number>(window.innerWidth);
   const textLenght = 40;
   const sliceText = store.address.slice(0, textLenght);
+  const dateadded = moment(store.dateadded);
+  const currentDate = moment();
   const navigate = useNavigate();
   useEffect(() => {
     const resizeFunc = () => {
@@ -24,6 +28,8 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
     store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5
   );
 
+  console.log();
+
   return (
     <div
       onClick={() => {
@@ -31,10 +37,19 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
       }}
       className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
-      <div className=" cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
-        {store.store_name}
-      </div>
+      <div className="flex">
+        <div className="flex-1 cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
+          {store.store_name}
+        </div>
 
+        {store.dateadded &&
+        dateadded.isAfter(currentDate.subtract(3, "months")) ? (
+          <div className="flex w-5">
+            <TiStarburst className="absolute right-[-17px] top-[-12px] text-tertiary text-6xl" />
+            <MdOutlineFiberNew className="absolute right-[2.5px] top-[3px] text-red-600 text-4xl right-[-5px] top-[0px]" />
+          </div>
+        ) : null}
+      </div>
       {store.store_image ? (
         <img
           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
