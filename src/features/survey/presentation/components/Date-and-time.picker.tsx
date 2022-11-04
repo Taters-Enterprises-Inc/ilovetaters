@@ -1,5 +1,4 @@
 import * as React from "react";
-import dayjs, { Dayjs } from "dayjs";
 import Stack from "@mui/material/Stack";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -12,9 +11,9 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { styled } from "@mui/material/styles";
 
 export function RecieptDateTime() {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs(new Date()));
+  const [value, setValue] = React.useState<Date | null>(new Date());
 
-  const handleChange = (newValue: Dayjs | null) => {
+  const handleChange = (newValue: Date | null) => {
     setValue(newValue);
   };
 

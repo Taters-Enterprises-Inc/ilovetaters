@@ -20,27 +20,6 @@ export function CateringSignedContractVerified() {
     }
   }, [dispatch, hash]);
 
-  const calculateSubTotalPrice = () => {
-    let calculatedPrice = 0;
-    const orders = getCateringOrdersState.data?.order.order_details;
-
-    if (orders) {
-      for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += parseInt(orders[i].calc_price);
-      }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return <>₱0.00</>;
-    }
-  };
-
   return (
     <div className="container flex flex-col justify-between space-y-4 lg:flex-row lg:py-16">
       <div className="lg:flex-[0_0_57%] lg:max-w-[57%] order-2 lg:order-1 lg:mt-0 mt-4">
@@ -77,7 +56,7 @@ export function CateringSignedContractVerified() {
         <CateringContractViewer />
       </div>
       {getCateringOrdersState.data &&
-      getCateringOrdersState.data.order.order_details ? (
+      getCateringOrdersState.data.package_selection ? (
         <div className="lg:flex-[0_0_40%] lg:max-w-[40%] order-1 space-y-4  lg:order-2">
           <div
             className="flex flex-col justify-between flex-1 px-4 py-3 mb-4 text-green-900 bg-green-100 border-t-4 border-green-500 rounded-b shadow-md lg:hidden lg:items-start lg:flex-row"
@@ -114,7 +93,7 @@ export function CateringSignedContractVerified() {
           </h2>
 
           <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-            {getCateringOrdersState.data.order.order_details.map((order, i) => (
+            {getCateringOrdersState.data.package_selection.map((order, i) => (
               <div
                 key={i}
                 className="flex bg-secondary shadow-md rounded-[10px]"
@@ -161,7 +140,16 @@ export function CateringSignedContractVerified() {
           <hr className="mt-1 mb-2" />
           <div className="grid grid-cols-2 text-secondary">
             <span>Subtotal:</span>
-            <span className="text-end">{calculateSubTotalPrice()}</span>
+            <span className="text-end">
+              <NumberFormat
+                value={parseInt(
+                  getCateringOrdersState.data.order.clients_info.purchase_amount
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </span>
             {getCateringOrdersState.data.service_fee ? (
               <>
                 <span>10% Service Charge:</span>

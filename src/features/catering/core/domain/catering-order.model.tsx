@@ -26,6 +26,8 @@ export interface CateringOrderModel {
       store: number;
       invoice_num: string;
       discount: string;
+      discount_name: string;
+      discount_percentage: string;
       payment_plan: string;
       initial_payment: number;
       final_payment: number;
@@ -146,7 +148,7 @@ export interface CateringOrderModel {
     category: number;
     product_label: string;
     freebie_prod_name: null;
-    flavors: Array<{
+    flavors?: Array<{
       name: string;
       quantity: number;
     }>;

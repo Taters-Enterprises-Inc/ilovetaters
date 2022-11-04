@@ -71,27 +71,6 @@ export function CateringOrder() {
     }
   };
 
-  const calculateSubTotalPrice = () => {
-    let calculatedPrice = 0;
-    const orders = getCateringOrdersState.data?.order.order_details;
-
-    if (orders) {
-      for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += parseInt(orders[i].calc_price);
-      }
-      return (
-        <NumberFormat
-          value={calculatedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
-    } else {
-      return <>₱0.00</>;
-    }
-  };
-
   return (
     <>
       <PageTitleAndBreadCrumbs
@@ -335,7 +314,7 @@ export function CateringOrder() {
                 <hr className="mt-1 mb-4 border-secondary" />
 
                 <div className="space-y-6">
-                  {getCateringOrdersState.data?.order.order_details.map(
+                  {getCateringOrdersState.data?.package_selection.map(
                     (order, index) => (
                       <div
                         key={index}
@@ -449,14 +428,24 @@ export function CateringOrder() {
             </div>
 
             {getCateringOrdersState.data &&
-            getCateringOrdersState.data.order.order_details ? (
+            getCateringOrdersState.data.package_selection ? (
               <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
                 <h2 className="font-['Bebas_Neue'] text-4xl  text-secondary tracking-[3px] text-center">
                   Order Summary
                 </h2>
                 <div className="grid grid-cols-2 text-secondary">
                   <span>Subtotal:</span>
-                  <span className="text-end">{calculateSubTotalPrice()}</span>
+                  <span className="text-end">
+                    <NumberFormat
+                      value={parseInt(
+                        getCateringOrdersState.data.order.clients_info
+                          .purchase_amount
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </span>
                   {getCateringOrdersState.data.service_fee ? (
                     <>
                       <span>10% Service Charge:</span>

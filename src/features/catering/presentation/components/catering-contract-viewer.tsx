@@ -179,40 +179,49 @@ export function CateringContractViewer() {
                       </td>
                     </tr>
 
-                    {package_product.flavors.length > 0 ? (
-                      <tr>
-                        <td></td>
-                        <td
-                          style={{
-                            color: "rgb(0, 110, 255)",
-                            fontWeight: "bold",
-                            textAlign: "center",
-                          }}
-                        >
-                          Available Flavors:
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    ) : null}
+                    {package_product.flavors ? (
+                      <>
+                        {package_product.flavors.length > 0 ? (
+                          <tr>
+                            <td></td>
+                            <td
+                              style={{
+                                color: "rgb(0, 110, 255)",
+                                fontWeight: "bold",
+                                textAlign: "center",
+                              }}
+                            >
+                              Available Flavors:
+                            </td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        ) : null}
 
-                    {package_product.flavors.map((flavor) => (
-                      <tr>
-                        <td style={{ textAlign: "center", fontWeight: "bold" }}>
-                          {flavor.quantity}
-                        </td>
-                        <td
-                          style={{
-                            textAlign: "center",
-                            color: "rgb(0, 110, 255)",
-                          }}
-                        >
-                          {flavor.name}
-                        </td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    ))}
+                        {package_product.flavors.map((flavor) => (
+                          <tr>
+                            <td
+                              style={{
+                                textAlign: "center",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {flavor.quantity}
+                            </td>
+                            <td
+                              style={{
+                                textAlign: "center",
+                                color: "rgb(0, 110, 255)",
+                              }}
+                            >
+                              {flavor.name}
+                            </td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : null}
 
                     <tr>
                       <td style={{ height: 40 }}></td>
@@ -249,6 +258,35 @@ export function CateringContractViewer() {
                   />
                 </td>
               </tr>
+
+              {getCateringOrdersState.data.order.clients_info.discount ? (
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    {parseFloat(
+                      getCateringOrdersState.data.order.clients_info
+                        .discount_percentage
+                    ) * 100}
+                    %{" "}
+                    {
+                      getCateringOrdersState.data.order.clients_info
+                        .discount_name
+                    }
+                    :
+                  </td>
+                  <td style={{ textAlign: "right" }}>
+                    <NumberFormat
+                      value={parseInt(
+                        getCateringOrdersState.data.order.clients_info.discount
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </td>
+                </tr>
+              ) : null}
 
               <tr>
                 <td></td>

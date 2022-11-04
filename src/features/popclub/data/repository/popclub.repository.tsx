@@ -18,6 +18,7 @@ import {
 import { REACT_APP_DOMAIN_URL } from "../../../shared/constants";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import { RedeemValidatorsModel } from "features/popclub/core/domain/redeem_validators.model";
+import { DealOrderModel } from "features/popclub/core/domain/deal_order.model";
 
 export interface GetAllPlatformCategoriesRepositoryResponse {
   data: {
@@ -113,6 +114,25 @@ export interface RedeemValidatorsResponse {
     data: RedeemValidatorsModel;
   };
 }
+
+export interface GetDealOrderResponse {
+  data: {
+    message: string;
+    data: DealOrderModel;
+  };
+}
+
+export function GetDealOrderRepository(
+  hash: string
+): Promise<GetDealOrderResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/orders?hash=${hash}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}
+
 export function RedeemValidatorsRepository(): Promise<RedeemValidatorsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/popclub/redeem-validators`, {
     headers: {
