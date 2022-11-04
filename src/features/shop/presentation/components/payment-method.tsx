@@ -20,15 +20,14 @@ const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
     name: "E-Wallet",
     value: "E-WALLET",
   },
-  {
-    name: "Bank Account",
-    value: "BANK-ACCOUNT",
-  },
-  // To be implemented.....
   // {
-  //   name: "Credit / Debit Card",
-  //   value: "CARD",
+  //   name: "Bank Account",
+  //   value: "BANK-ACCOUNT",
   // },
+  {
+    name: "Union Bank",
+    value: "CARD",
+  },
 ];
 
 type PaymentMethodType = "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT";
@@ -118,7 +117,7 @@ export function PaymentMethod(props: PaymentMethodProps) {
             </>
           ) : null}
 
-          {paymentSelected === "BANK-ACCOUNT" ? (
+          {/* {paymentSelected === "BANK-ACCOUNT" ? (
             <>
               {getSessionState.data?.payops_list.map((payops, i) => (
                 <>
@@ -137,7 +136,7 @@ export function PaymentMethod(props: PaymentMethodProps) {
                 </>
               ))}
             </>
-          ) : null}
+          ) : null} */}
 
           {paymentSelected === "E-WALLET" ? (
             <>
