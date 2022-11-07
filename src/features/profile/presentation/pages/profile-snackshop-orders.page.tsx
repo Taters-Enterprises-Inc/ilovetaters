@@ -23,6 +23,8 @@ import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
+import { VscCircleFilled } from "react-icons/vsc";
+import { updateIndicatorOrder } from "../slices/update-indicator.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -78,6 +80,15 @@ export function ProfileSnackshopOrders() {
         thousandSeparator={true}
         prefix={"₱"}
       />
+    );
+  };
+
+  const handleOnclick = (trackNo: any) => {
+    console.log(trackNo);
+    dispatch(
+      updateIndicatorOrder({
+        trackingNo: trackNo,
+      })
     );
   };
 
@@ -153,14 +164,18 @@ export function ProfileSnackshopOrders() {
               <hr className="mt-4" />
               {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
                 <Link
+                  onClick={() => handleOnclick(row.tracking_no)}
                   to={`/delivery/order/${row.hash_key}`}
                   className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                  <span className="flex justify-between items-center space-x-1 text-xl">
                     <span className="text-lg text-gray-600">
                       #{row.tracking_no}
                     </span>
+                    {row.seen === 0 ? (
+                      <VscCircleFilled className=" text-blue-400" />
+                    ) : null}
                   </span>
                   <div className="flex justify-between">
                     <span className="text-xs">
@@ -275,8 +290,15 @@ export function ProfileSnackshopOrders() {
                       <DataTableCell>N/A</DataTableCell>
                       <DataTableCell>N/A</DataTableCell>
                       <DataTableCell align="left">
-                        <Link to={`/delivery/order/${row.hash_key}`}>
-                          <FaEye className="text-lg" />
+                        <Link
+                          onClick={() => handleOnclick(row.tracking_no)}
+                          to={`/delivery/order/${row.hash_key}`}
+                        >
+                          <FaEye
+                            className={`text-lg ${
+                              row.seen === 0 ? "text-blue-400" : null
+                            }`}
+                          />
                         </Link>
                       </DataTableCell>
                     </DataTableRow>
