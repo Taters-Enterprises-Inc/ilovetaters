@@ -7,9 +7,10 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { ChangeEvent, useState } from "react";
 import { PaymentCardModal } from "../modals";
+import { PaymentRealTimeModal } from "../modals/payment-realtime";
 interface PaymentMethodOption {
   name: string;
-  value: "COD" | "E-WALLET" | "BANK-ACCOUNT" | "CARD";
+  value: "COD" | "E-WALLET" | "BANK-ACCOUNT" | "CARD" | "REALTIME";
 }
 const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
   {
@@ -24,14 +25,22 @@ const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
     name: "Bank Account",
     value: "BANK-ACCOUNT",
   },
-  // To be implemented.....
-  // {
-  //   name: "Credit / Debit Card",
-  //   value: "CARD",
-  // },
+  {
+    name: "Credit Card",
+    value: "CARD",
+  },
+  {
+    name: "REAL-TIME PAYMENT",
+    value: "REALTIME",
+  },
 ];
 
-type PaymentMethodType = "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT";
+type PaymentMethodType =
+  | "COD"
+  | "E-WALLET"
+  | "CARD"
+  | "BANK-ACCOUNT"
+  | "REALTIME";
 
 interface PaymentMethodProps {
   onChange: (payment: string) => void;
@@ -40,6 +49,7 @@ interface PaymentMethodProps {
 export function PaymentMethod(props: PaymentMethodProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const [openPaymentCardModal, setOpenPaymentCardModal] = useState(false);
+  const [openRealTimeModal, setOpenRealTimeModal] = useState(false);
   const [paymentSelected, setPaymentSelected] =
     useState<PaymentMethodType>("COD");
 
@@ -47,19 +57,23 @@ export function PaymentMethod(props: PaymentMethodProps) {
     if (option.value === "CARD") {
       setOpenPaymentCardModal(true);
       return;
+    } else if (option.value === "REALTIME") {
+      setOpenRealTimeModal(true);
+      return;
     }
+
     setPaymentSelected(option.value);
   };
 
   return (
     <>
-      <ul className="flex space-x-2">
+      <ul className="flex flex-wrap space-x-2">
         {PAYMENT_OPTIONS.map((option) => (
           <li>
             <button
               type="button"
               onClick={() => handlePaymentMethodChange(option)}
-              className={`relative px-4 py-3 font-semibold border w-full text-sm lg:text-base lg:w-fit ${
+              className={`relative px-4 py-3 font-semibold border w-full mt-2 text-sm lg:text-base lg:w-fit ${
                 option.value === paymentSelected
                   ? "text-green-900 border-green-900"
                   : " text-secondary border-secondary"
@@ -139,6 +153,8 @@ export function PaymentMethod(props: PaymentMethodProps) {
             </>
           ) : null}
 
+          {paymentSelected === "REALTIME" ? <></> : null}
+
           {paymentSelected === "E-WALLET" ? (
             <>
               {getSessionState.data?.payops_list.map((payops, i) => (
@@ -166,6 +182,13 @@ export function PaymentMethod(props: PaymentMethodProps) {
         open={openPaymentCardModal}
         onClose={() => {
           setOpenPaymentCardModal(false);
+        }}
+      />
+
+      <PaymentRealTimeModal
+        open={openRealTimeModal}
+        onClose={() => {
+          setOpenRealTimeModal(false);
         }}
       />
     </>

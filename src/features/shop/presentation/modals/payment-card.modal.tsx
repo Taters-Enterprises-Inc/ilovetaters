@@ -41,7 +41,7 @@ export function PaymentCardModal(props: PaymentCardModalProps) {
         setCardCodeTypeState(card.code.size);
       });
     }
-  });
+  }, [cardNumber]);
 
   const limiter = (e: { target: { value: string } }, size: number) => {
     e.target.value = Math.max(0, parseInt(e.target.value))
