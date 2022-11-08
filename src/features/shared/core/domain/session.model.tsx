@@ -55,14 +55,18 @@ export interface SessionModel {
   }>;
 
   deals?: Array<{
+    id: number;
     deal_id: number;
     deal_image_name: string;
     deal_name: string;
     description: string;
     deal_qty: number;
-    deal_original_price: number;
-    deal_promo_price: number;
+    redeem_code: string;
     deal_remarks: string;
+    promo_discount_percentage: string | null;
+    minimum_purchase: number | null;
+    deal_original_price: number | null;
+    deal_promo_price: number | null;
   }>;
 
   km_radius: string;

@@ -62,14 +62,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       props.onClose();
       dispatch(resetRedeemDeal());
     }
-  }, [
-    getSessionState,
-    navigate,
-    redeemDealState,
-    getRedeemsState,
-    dispatch,
-    props,
-  ]);
+  }, [getSessionState, navigate, redeemDealState, getRedeemsState, props]);
 
   const onSubmit = (event: any) => {
     event.preventDefault();

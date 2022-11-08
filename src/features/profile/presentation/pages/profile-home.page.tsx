@@ -44,7 +44,7 @@ export function ProfileHome() {
   useEffect(() => {
     dispatch(getContacts());
     dispatch(getSession());
-  }, [addContactState, deleteContactState, updateContactState, dispatch]);
+  }, [addContactState, deleteContactState]);
 
   const location = useLocation();
 

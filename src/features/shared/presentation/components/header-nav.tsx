@@ -154,7 +154,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
   useEffect(() => {
     dispatch(getSession());
-  }, [facebookLogoutState, dispatch]);
+  }, [facebookLogoutState]);
 
   const handleCart = () => {
     setopenCartMenu(null);
@@ -201,7 +201,9 @@ export function HeaderNav(props: HeaderNavProps) {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 

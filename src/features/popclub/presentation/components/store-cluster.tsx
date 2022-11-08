@@ -37,7 +37,6 @@ export function StoreCluster(props: StoreClusterProps) {
 
   useEffect(() => {
     dispatch(getSession());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {
@@ -62,7 +61,6 @@ export function StoreCluster(props: StoreClusterProps) {
       }
       document.body.classList.remove("overflow-hidden");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getSessionState]);
 
   const storeClicked = (storeId: number, regionId: number) => {

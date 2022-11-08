@@ -47,7 +47,6 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
   useEffect(() => {
     dispatch(getSession());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
       document.body.classList.remove("overflow-hidden");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getSessionState]);
 
   return (

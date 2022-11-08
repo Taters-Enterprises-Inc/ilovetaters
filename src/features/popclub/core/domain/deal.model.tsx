@@ -4,8 +4,12 @@ export interface DealModel {
   name: string;
   description: string;
   delivery_details: string;
-  promo_price?: number;
-  original_price?: number;
+
+  promo_price: number | null;
+  promo_discount_percentage: string | null;
+  minimum_purchase: number | null;
+  original_price: number | null;
+
   discounted_price: number;
   uom: string;
   add_details: string;
@@ -23,7 +27,6 @@ export interface DealModel {
   available_end_time?: string;
   available_days?: string;
   seconds_before_expiration: string;
-  minimum_purchase?: number;
 
   deal_id: number;
   category_name: string;

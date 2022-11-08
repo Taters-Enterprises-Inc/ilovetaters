@@ -100,20 +100,23 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
-          if (getDealState.data.minimum_purchase) {
+          if (
+            getDealState.data.minimum_purchase ||
+            getDealState.data.promo_discount_percentage
+          ) {
             navigate("/delivery/products");
           }
         }
       }
       dispatch(resetGetDealProductVariantsState());
     }
-  }, [getDealProductVariantsState, navigate, dispatch, getDealState]);
+  }, [getDealProductVariantsState, navigate, getDealState]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());
     dispatch(getLatestUnexpiredRedeem());
     dispatch(redeemValidators());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -128,7 +131,7 @@ export function PopClubDeal() {
       );
       dispatch(redeemValidators());
     }
-  }, [dispatch, getDealState, forfeitRedeemState]);
+  }, [getDealState, forfeitRedeemState]);
 
   useEffect(() => {
     if (
@@ -142,7 +145,7 @@ export function PopClubDeal() {
         })
       );
     }
-  }, [redeemDealState, dispatch, getDealState, forfeitRedeemState]);
+  }, [redeemDealState, getDealState, forfeitRedeemState]);
 
   useEffect(() => {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
@@ -152,7 +155,7 @@ export function PopClubDeal() {
 
       dispatch(resetFacebookLogout());
     }
-  }, [facebookLogoutState, navigate, dispatch, getSessionState]);
+  }, [facebookLogoutState, navigate, getSessionState]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -168,11 +171,11 @@ export function PopClubDeal() {
         })
       );
     }
-  }, [getDealState, dispatch, getRedeemState]);
+  }, [getDealState, getRedeemState]);
 
   useEffect(() => {
     dispatch(getSession());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (hash) {
@@ -182,7 +185,7 @@ export function PopClubDeal() {
       dispatch(getLatestUnexpiredRedeem());
       dispatch(redeemValidators());
     }
-  }, [dispatch, hash]);
+  }, [hash]);
 
   const handleRedeem = () => {
     if (hash) {
@@ -293,7 +296,8 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ? (
+              {getRedeemState.data.minimum_purchase ||
+              getRedeemState.data.promo_discount_percentage ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");

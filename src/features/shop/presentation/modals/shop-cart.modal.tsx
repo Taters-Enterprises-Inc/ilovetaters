@@ -36,7 +36,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartShop());
     }
-  }, [removeItemFromCartShopState, dispatch]);
+  }, [removeItemFromCartShopState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -58,7 +58,9 @@ export function ShopCartModal(props: ShopCartModalProps) {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -207,15 +209,16 @@ export function ShopCartModal(props: ShopCartModalProps) {
                             />
                           </h3>
                         ) : null}
-
-                        <h3 className="flex items-end justify-end flex-1 text-base">
-                          <NumberFormat
-                            value={deal.deal_promo_price.toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
-                        </h3>
+                        {deal.deal_promo_price ? (
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={deal.deal_promo_price.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
+                        ) : null}
                       </div>
                       <button
                         className="absolute text-white top-2 right-4 "

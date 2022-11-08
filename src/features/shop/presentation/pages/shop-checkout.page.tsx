@@ -112,7 +112,9 @@ export function ShopCheckout() {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -139,7 +141,9 @@ export function ShopCheckout() {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -190,7 +194,9 @@ export function ShopCheckout() {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -629,15 +635,16 @@ export function ShopCheckout() {
                                   />
                                 </h3>
                               ) : null}
-
-                              <h3 className="flex items-end justify-end flex-1 text-base">
-                                <NumberFormat
-                                  value={deal.deal_promo_price.toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
+                              {deal.deal_promo_price ? (
+                                <h3 className="flex items-end justify-end flex-1 text-base">
+                                  <NumberFormat
+                                    value={deal.deal_promo_price.toFixed(2)}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"₱"}
+                                  />
+                                </h3>
+                              ) : null}
                             </div>
                             <button
                               type="button"
@@ -682,7 +689,7 @@ export function ShopCheckout() {
                             <h3 className="text-white text-sm w-[90%] font-bold leading-4">
                               {getLatestUnexpiredRedeemState.data?.name}
                             </h3>
-                            <h3 className="text-xs mt-2">
+                            <h3 className="mt-2 text-xs">
                               Minumum purchase: {""}
                               <span className="text-tertiary">
                                 {

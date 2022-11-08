@@ -36,7 +36,7 @@ export function Addon(props: AddonProps) {
     if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [addToCartShopState, dispatch]);
+  }, [addToCartShopState]);
 
   function handleonClick() {
     if (isLongPress.current === true) {

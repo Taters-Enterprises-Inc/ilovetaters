@@ -14,7 +14,7 @@ export function ProfileGuard() {
 
   useEffect(() => {
     dispatch(getSession());
-  }, [dispatch]);
+  }, []);
 
   if (
     getSessionState.status === GetSessionState.fail ||

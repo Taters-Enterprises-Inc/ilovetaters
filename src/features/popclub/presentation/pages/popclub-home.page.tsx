@@ -56,7 +56,6 @@ export function PopClubHome() {
         getDeals({ platform_url_name: platform, category_url_name: category })
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [platform, query, category, setPopClubDataState]);
 
   return (
