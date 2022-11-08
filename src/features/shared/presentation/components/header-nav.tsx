@@ -449,14 +449,39 @@ export function HeaderNav(props: HeaderNavProps) {
                     >
                       {getSessionState.data?.userData.login_type ===
                       "mobile" ? (
-                        <FaUserCircle className="text-2xl text-white" />
+                        <>
+                          <span className="relative inline-block">
+                            <FaUserCircle className="text-2xl text-white w-6 h-6 fill-current" />
+
+                            {getSessionState.data.userData.notification ? (
+                              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {
+                                  getSessionState.data.userData.notification
+                                    .Snackshop
+                                }
+                              </span>
+                            ) : null}
+                          </span>
+                        </>
                       ) : (
-                        <img
-                          src={getSessionState.data?.userData.picture}
-                          alt="Profile pic"
-                          className="rounded-full mt-[2px]"
-                          width={30}
-                        />
+                        <>
+                          <span className="relative inline-block">
+                            <img
+                              src={getSessionState.data?.userData.picture}
+                              alt="Profile pic"
+                              className="rounded-full mt-[2px] w-6 h-6 fill-current"
+                              width={30}
+                            />
+                            {getSessionState.data.userData.notification ? (
+                              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {
+                                  getSessionState.data.userData.notification
+                                    .Snackshop
+                                }
+                              </span>
+                            ) : null}
+                          </span>
+                        </>
                       )}
                       {/* <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
