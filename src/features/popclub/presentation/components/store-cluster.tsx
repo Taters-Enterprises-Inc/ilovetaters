@@ -36,7 +36,12 @@ export function StoreCluster(props: StoreClusterProps) {
   let { platform } = useParams();
 
   useEffect(() => {
-    dispatch(getSession());
+    if (
+      setStoreAndAddressPopClubState.status ===
+      SetStoreAndAddressPopClubState.success
+    ) {
+      dispatch(getSession());
+    }
   }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {

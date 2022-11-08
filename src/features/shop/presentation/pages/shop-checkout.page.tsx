@@ -28,7 +28,10 @@ import {
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
@@ -69,8 +72,10 @@ export function ShopCheckout() {
   }, [checkoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
+    if (addContactState.status === AddContactState.success) {
+      dispatch(getSession());
+      dispatch(getContacts());
+    }
   }, [addContactState, dispatch]);
 
   useEffect(() => {

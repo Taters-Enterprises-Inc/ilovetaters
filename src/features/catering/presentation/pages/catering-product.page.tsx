@@ -310,8 +310,6 @@ export function CateringProduct() {
 
       let flavors_details = createFlavorDetails();
 
-      if (callBackSuccess) callBackSuccess();
-
       dispatch(
         addToCartCatering({
           prod_id: getCateringProductDetailsState.data.product.id,
@@ -329,7 +327,9 @@ export function CateringProduct() {
           prod_type: "main",
           prod_sku: -1,
         })
-      );
+      ).then(() => {
+        if (callBackSuccess) callBackSuccess();
+      });
     }
   };
 

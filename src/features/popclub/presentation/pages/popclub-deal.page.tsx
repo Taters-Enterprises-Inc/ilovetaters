@@ -20,6 +20,7 @@ import {
   redeemDeal,
   RedeemDealState,
   selectRedeemDeal,
+  resetRedeemDeal,
 } from "../slices/redeem-deal.slice";
 import {
   getRedeem,
@@ -100,12 +101,6 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
-          if (
-            getDealState.data.minimum_purchase ||
-            getDealState.data.promo_discount_percentage
-          ) {
-            navigate("/delivery/products");
-          }
         }
       }
       dispatch(resetGetDealProductVariantsState());
@@ -144,6 +139,15 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
+
+      if (
+        getDealState.data.minimum_purchase ||
+        getDealState.data.promo_discount_percentage
+      ) {
+        navigate("/delivery/products");
+      }
+
+      dispatch(resetRedeemDeal());
     }
   }, [redeemDealState, getDealState, forfeitRedeemState]);
 
@@ -172,10 +176,6 @@ export function PopClubDeal() {
       );
     }
   }, [getDealState, getRedeemState]);
-
-  useEffect(() => {
-    dispatch(getSession());
-  }, []);
 
   useEffect(() => {
     if (hash) {

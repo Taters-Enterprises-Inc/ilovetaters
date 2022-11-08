@@ -2,6 +2,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   getLatestUnexpiredRedeem,
+  GetLatestUnexpiredRedeemState,
   selectGetLatestUnexpiredRedeem,
 } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
@@ -36,7 +37,12 @@ export function UnExpiredRedeem() {
   );
 
   useEffect(() => {
-    dispatch(getSession());
+    if (
+      getLatestUnexpiredRedeemState.status ===
+      GetLatestUnexpiredRedeemState.success
+    ) {
+      dispatch(getSession());
+    }
   }, [dispatch, getLatestUnexpiredRedeemState]);
 
   useEffect(() => {

@@ -99,7 +99,6 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
-      dispatch(getSession());
     }
   }, [location, dispatch, hash]);
 

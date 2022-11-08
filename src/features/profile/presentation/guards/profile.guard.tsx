@@ -12,10 +12,6 @@ export function ProfileGuard() {
 
   const getSessionState = useAppSelector(selectGetSession);
 
-  useEffect(() => {
-    dispatch(getSession());
-  }, []);
-
   if (
     getSessionState.status === GetSessionState.fail ||
     getSessionState.data === null ||

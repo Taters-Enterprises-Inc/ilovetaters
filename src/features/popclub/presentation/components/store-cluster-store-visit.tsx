@@ -46,7 +46,12 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
   };
 
   useEffect(() => {
-    dispatch(getSession());
+    if (
+      setStoreAndAddressPopClubState.status ===
+      SetStoreAndAddressPopClubState.success
+    ) {
+      dispatch(getSession());
+    }
   }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {

@@ -34,10 +34,6 @@ export function ShopProducts() {
   }, [location]);
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data &&

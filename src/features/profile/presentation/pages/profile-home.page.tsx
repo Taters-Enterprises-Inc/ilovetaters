@@ -2,9 +2,13 @@ import TextField from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { ContactModel } from "features/shared/core/domain/contact.model";
 import { AddContactModal } from "features/shared/presentation/modals";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import {
   deleteContact,
+  DeleteContactState,
   selectDeleteContact,
 } from "features/shared/presentation/slices/delete-contact.slice";
 import {
@@ -42,8 +46,13 @@ export function ProfileHome() {
   });
 
   useEffect(() => {
-    dispatch(getContacts());
-    dispatch(getSession());
+    if (
+      addContactState.status === AddContactState.success ||
+      deleteContactState.status === DeleteContactState.success
+    ) {
+      dispatch(getContacts());
+      dispatch(getSession());
+    }
   }, [addContactState, deleteContactState]);
 
   const location = useLocation();

@@ -49,7 +49,6 @@ export function ShopOrder() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
-    dispatch(getSession());
   }, [dispatch]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

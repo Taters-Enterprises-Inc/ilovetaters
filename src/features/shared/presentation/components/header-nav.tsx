@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {
   facebookLogout,
+  FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
@@ -153,7 +154,9 @@ export function HeaderNav(props: HeaderNavProps) {
   };
 
   useEffect(() => {
-    dispatch(getSession());
+    if (facebookLogoutState.status === FacebookLogoutState.success) {
+      dispatch(getSession());
+    }
   }, [facebookLogoutState]);
 
   const handleCart = () => {
@@ -587,7 +590,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         }}
                       />
 
-                      <div className="pointer-events-auto bg-white">
+                      <div className="bg-white pointer-events-auto">
                         <CartListItem
                           onProcessOrder={() => {
                             setopenCartMenu(null);
