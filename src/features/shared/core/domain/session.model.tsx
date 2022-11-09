@@ -31,7 +31,20 @@ export interface SessionModel {
     platform: string;
   };
 
-  redeem_data: RedeemDealModel;
+  redeem_data?: {
+    id: number;
+    deal_id: number;
+    deal_image_name: string;
+    deal_name: string;
+    description: string;
+    deal_qty: number;
+    redeem_code: string;
+    deal_remarks: string;
+    promo_discount_percentage: string | null;
+    minimum_purchase: number | null;
+    deal_original_price: number | null;
+    deal_promo_price: number | null;
+  };
 
   orders?: Array<{
     prod_id: number;

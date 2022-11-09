@@ -604,48 +604,15 @@ export function ShopCheckout() {
                     ) : null}
                     {getSessionState.data.redeem_data ? (
                       <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
-                          Popclub Deal
-                        </h2>
                         <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
                           <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.product_image}`}
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
                             className="rounded-[10px] w-[92px] h-[92px]"
                             alt=""
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
                             <h3 className="text-sm w-[90%] font-bold leading-4">
-                              {getSessionState.data.redeem_data.name}
-                            </h3>
-                          </div>
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {getLatestUnexpiredRedeemState.data &&
-                    isDeliveryApplied.current ? (
-                      <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
-                          Popclub Deal
-                        </h2>
-                        <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getLatestUnexpiredRedeemState.data?.product_image}`}
-                            className="rounded-[10px] w-[92px] h-[92px]"
-                            alt=""
-                          />
-                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-white text-sm w-[90%] font-bold leading-4">
-                              {getLatestUnexpiredRedeemState.data?.name}
-                            </h3>
-                            <h3 className="mt-2 text-xs">
-                              Minumum purchase: {""}
-                              <span className="text-tertiary">
-                                {
-                                  getLatestUnexpiredRedeemState.data
-                                    ?.minimum_purchase
-                                }
-                              </span>
+                              {getSessionState.data.redeem_data.deal_name}
                             </h3>
                           </div>
                         </div>
