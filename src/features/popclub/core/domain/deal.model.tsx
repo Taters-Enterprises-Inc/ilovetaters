@@ -23,9 +23,13 @@ export interface DealModel {
   product_code: string;
   report_status: number;
 
-  available_start_time?: string;
-  available_end_time?: string;
-  available_days?: string;
+  available_start_time: string | null;
+  available_end_time: string | null;
+
+  available_start_datetime: string | null;
+  available_end_datetime: string | null;
+
+  available_days: string | null;
   seconds_before_expiration: string;
 
   deal_id: number;

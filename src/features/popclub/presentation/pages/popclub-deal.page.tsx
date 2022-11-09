@@ -206,6 +206,30 @@ export function PopClubDeal() {
   };
 
   const redeemButton = () => {
+    let isAvailableStartDateTime = false;
+    let availableStartDateTimeInDate: any;
+
+    if (
+      getDealState.data?.available_start_datetime &&
+      getDealState.data?.available_end_datetime
+    ) {
+      const currentTime = moment();
+
+      const availableStartDateTime = moment(
+        getDealState.data?.available_start_datetime
+      );
+      const availableEndDateTime = moment(
+        getDealState.data?.available_end_datetime
+      );
+
+      isAvailableStartDateTime = currentTime.isBetween(
+        availableStartDateTime,
+        availableEndDateTime
+      );
+
+      availableStartDateTimeInDate = availableStartDateTime.toDate();
+    }
+
     if (
       getSessionState.data?.userData &&
       redeemValidatorsState.data &&
@@ -291,6 +315,77 @@ export function PopClubDeal() {
             />
           </div>
         );
+    } else if (!isAvailableStartDateTime) {
+      const pad = (number: number) => ("0" + number).slice(-2);
+
+      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+        if (completed) {
+          if (
+            getDealState.status === GetDealState.success &&
+            getDealState.data
+          ) {
+            dispatch(
+              getRedeem({
+                deal_id: getDealState.data.id,
+              })
+            );
+          }
+          dispatch(getLatestUnexpiredRedeem());
+        } else if (!completed) {
+          let timeName = "";
+
+          if (hours > 0) {
+            if (hours === 1) {
+              timeName = "hour";
+            } else {
+              timeName = "hours";
+            }
+          } else if (minutes > 0) {
+            if (minutes === 1) {
+              timeName = "minute";
+            } else {
+              timeName = "minutes";
+            }
+          } else if (seconds > 0) {
+            if (seconds === 1) {
+              timeName = "second";
+            } else {
+              timeName = "seconds";
+            }
+          }
+
+          return (
+            <>
+              <div className="flex items-center justify-center px-4 text-xl text-white ">
+                <AiOutlineFieldTime className="mr-3 text-4xl" />
+                <div className="font-['Bebas_Neue'] tracking-[4px]">
+                  <span>
+                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                  </span>
+                  <span className="ml-2 text-sm">{timeName}</span>
+                </div>
+              </div>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          );
+        }
+      };
+
+      return (
+        <div className="w-full py-3 text-white bg-secondary">
+          <span className="mt-3">You can redeem this deal after </span>
+          <Countdown renderer={renderer} date={availableStartDateTimeInDate} />
+        </div>
+      );
     } else if (
       getSessionState.data?.userData &&
       getRedeemState.status === GetRedeemState.success &&
