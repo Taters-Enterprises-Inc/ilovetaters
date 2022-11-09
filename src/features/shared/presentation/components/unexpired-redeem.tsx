@@ -13,6 +13,8 @@ import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { selectFacebookLogout } from "../slices/facebook-logout.slice";
 import {
   forfeitRedeem,
+  ForfeitRedeemState,
+  resetForfeitRedeemStateStatus,
   selectForfeitRedeem,
 } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { IoMdClose } from "react-icons/io";
@@ -35,6 +37,12 @@ export function UnExpiredRedeem() {
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+
+  useEffect(() => {
+    if (forfeitRedeemState.status === ForfeitRedeemState.success) {
+      dispatch(resetForfeitRedeemStateStatus());
+    }
+  }, [forfeitRedeemState, dispatch]);
 
   useEffect(() => {
     if (

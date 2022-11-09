@@ -26,12 +26,15 @@ const initialState: {
 
 export const getProductSku = createAsyncThunk(
   "getProductSku",
-  async (param: GetProductSkuParam) => {
-    const response: GetProductSkuResponse = await GetProductSkuRepository(
-      param
-    );
-    console.log(response.data);
-    return response.data;
+  async (param: GetProductSkuParam, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response: GetProductSkuResponse = await GetProductSkuRepository(
+        param
+      );
+      return fulfillWithValue(response.data);
+    } catch (error: any) {
+      throw rejectWithValue({ message: error.response.data.message });
+    }
   }
 );
 

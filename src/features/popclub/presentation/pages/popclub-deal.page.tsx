@@ -47,6 +47,7 @@ import {
 import {
   forfeitRedeem,
   ForfeitRedeemState,
+  resetForfeitRedeemStateStatus,
   selectForfeitRedeem,
 } from "../slices/forfeit-redeem.slice";
 import { MessageModal } from "features/shared/presentation/modals";
@@ -125,8 +126,9 @@ export function PopClubDeal() {
         })
       );
       dispatch(redeemValidators());
+      dispatch(resetForfeitRedeemStateStatus());
     }
-  }, [getDealState, forfeitRedeemState]);
+  }, [getDealState, forfeitRedeemState, dispatch]);
 
   useEffect(() => {
     if (

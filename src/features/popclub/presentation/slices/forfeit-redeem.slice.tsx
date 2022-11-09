@@ -40,7 +40,12 @@ export const forfeitRedeem = createAsyncThunk(
 export const forfeitRedeemSlice = createSlice({
   name: "forfeitRedeem",
   initialState,
-  reducers: {},
+  reducers: {
+    resetForfeitRedeemStateStatus: (state) => {
+      state.status = ForfeitRedeemState.initial;
+      state.message = "";
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(forfeitRedeem.pending, (state: any) => {
@@ -68,5 +73,7 @@ export const forfeitRedeemSlice = createSlice({
 });
 
 export const selectForfeitRedeem = (state: RootState) => state.forfeitRedeem;
+
+export const { resetForfeitRedeemStateStatus } = forfeitRedeemSlice.actions;
 
 export default forfeitRedeemSlice.reducer;

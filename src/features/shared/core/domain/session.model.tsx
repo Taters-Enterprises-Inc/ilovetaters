@@ -31,7 +31,7 @@ export interface SessionModel {
     platform: string;
   };
 
-  redeem_data: Array<RedeemDealModel>;
+  redeem_data: RedeemDealModel;
 
   orders?: Array<{
     prod_id: number;

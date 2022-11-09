@@ -443,7 +443,7 @@ export function CateringCheckout() {
                 ) : null}
 
                 <div>
-                  <FormControl className="w-full">
+                  <FormControl className="w-full ">
                     <InputLabel id="demo-simple-select-helper-label">
                       Event Class
                     </InputLabel>
