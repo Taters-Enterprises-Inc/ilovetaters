@@ -29,12 +29,16 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
-import Stack from "@mui/material/Stack";
 import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
 import { CartListItem } from "./cart-item-list";
+import {
+  getUnreadNotifications,
+  selectGetUnreadNotifications,
+} from "../slices/unread-notification.slice";
+import { VscCircleFilled } from "react-icons/vsc";
 
 interface HeaderNavProps {
   className?: string;
@@ -65,6 +69,8 @@ export function HeaderNav(props: HeaderNavProps) {
   const currentLocation = useLocation();
 
   const getSessionState = useAppSelector(selectGetSession);
+  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const dispatch = useAppDispatch();
 
@@ -89,6 +95,10 @@ export function HeaderNav(props: HeaderNavProps) {
     status: false,
     message: "",
   });
+
+  useEffect(() => {
+    dispatch(getUnreadNotifications());
+  }, []);
 
   const handleSwitchTab = (param: {
     url?: string;
@@ -288,7 +298,14 @@ export function HeaderNav(props: HeaderNavProps) {
     return (
       <div>
         <MenuItem onClick={action} className="bg-secondary">
-          <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
+          <ListItemIcon className="text-[20px] sm:text-xl">
+            {icon}
+            {(id === 2 && getUnreadNotification.data?.Snackshop) ||
+            (id === 3 && getUnreadNotification.data?.Catering) ? (
+              <VscCircleFilled className=" text-xs text-red-600" />
+            ) : null}
+          </ListItemIcon>
+
           <ListItemText primary={text} />
         </MenuItem>
         {id === 1 || id === 4 ? <hr /> : null}
@@ -453,12 +470,13 @@ export function HeaderNav(props: HeaderNavProps) {
                           <span className="relative inline-block">
                             <FaUserCircle className="text-2xl text-white w-6 h-6 fill-current" />
 
-                            {getSessionState.data.userData.notification ? (
+                            {getUnreadNotification.data &&
+                            getUnreadNotification.data.Snackshop +
+                              getUnreadNotification.data.Catering !==
+                              0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {
-                                  getSessionState.data.userData.notification
-                                    .Snackshop
-                                }
+                                {getUnreadNotification.data.Snackshop +
+                                  getUnreadNotification.data.Catering}
                               </span>
                             ) : null}
                           </span>
@@ -472,12 +490,13 @@ export function HeaderNav(props: HeaderNavProps) {
                               className="rounded-full mt-[2px] w-6 h-6 fill-current"
                               width={30}
                             />
-                            {getSessionState.data.userData.notification ? (
+                            {getUnreadNotification.data &&
+                            getUnreadNotification.data.Snackshop +
+                              getUnreadNotification.data.Catering !==
+                              0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {
-                                  getSessionState.data.userData.notification
-                                    .Snackshop
-                                }
+                                {getUnreadNotification.data.Snackshop +
+                                  getUnreadNotification.data.Catering}
                               </span>
                             ) : null}
                           </span>

@@ -113,7 +113,9 @@ import adminCateringPrivilege from "features/admin/presentation/slices/admin-cat
 import getCateringTransactionLogs from "features/admin/presentation/slices/get-catering-transaction-logs.slice";
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
-import updateIndicatorOrder from "features/profile/presentation/slices/update-indicator.slice";
+import updateIndicatorOrder from "features/profile/presentation/slices/update-snackshop-indicator.slice";
+import updateIndicatorCatering from "features/profile/presentation/slices/update-catering-indicator.slice";
+import getUnreadNotifications from "features/shared/presentation/slices/unread-notification.slice";
 
 export const store = configureStore({
   reducer: {
@@ -231,6 +233,8 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     updateIndicatorOrder,
+    updateIndicatorCatering,
+    getUnreadNotifications,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

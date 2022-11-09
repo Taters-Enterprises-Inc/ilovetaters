@@ -4,7 +4,11 @@ import { Tab } from "features/shared/presentation/components";
 export function ShopReturnPolicy() {
   return (
     <section className="container py-6">
-      <Tab tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS} activeTab="return-policy">
+      <Tab
+        tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
+        activeTab="return-policy"
+        badge={null}
+      >
         <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl">
           Return Policy
         </h1>

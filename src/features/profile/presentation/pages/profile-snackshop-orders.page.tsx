@@ -24,7 +24,7 @@ import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-orde
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import { VscCircleFilled } from "react-icons/vsc";
-import { updateIndicatorOrder } from "../slices/update-indicator.slice";
+import { updateIndicatorOrder } from "../slices/update-snackshop-indicator.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -83,11 +83,10 @@ export function ProfileSnackshopOrders() {
     );
   };
 
-  const handleOnclick = (trackNo: any) => {
-    console.log(trackNo);
+  const handleOnclick = (notificationId: any) => {
     dispatch(
       updateIndicatorOrder({
-        trackingNo: trackNo,
+        notificationId: notificationId,
       })
     );
   };
@@ -164,7 +163,7 @@ export function ProfileSnackshopOrders() {
               <hr className="mt-4" />
               {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
                 <Link
-                  onClick={() => handleOnclick(row.tracking_no)}
+                  onClick={() => handleOnclick(row.notification_id)}
                   to={`/delivery/order/${row.hash_key}`}
                   className="flex flex-col px-4 py-2 border-b"
                   key={i}
@@ -173,8 +172,8 @@ export function ProfileSnackshopOrders() {
                     <span className="text-lg text-gray-600">
                       #{row.tracking_no}
                     </span>
-                    {row.seen === 0 ? (
-                      <VscCircleFilled className=" text-blue-400" />
+                    {row.dateseen === null ? (
+                      <VscCircleFilled className=" text-red-600 " />
                     ) : null}
                   </span>
                   <div className="flex justify-between">
@@ -291,12 +290,12 @@ export function ProfileSnackshopOrders() {
                       <DataTableCell>N/A</DataTableCell>
                       <DataTableCell align="left">
                         <Link
-                          onClick={() => handleOnclick(row.tracking_no)}
+                          onClick={() => handleOnclick(row.notification_id)}
                           to={`/delivery/order/${row.hash_key}`}
                         >
                           <FaEye
                             className={`text-lg ${
-                              row.seen === 0 ? "text-blue-400" : null
+                              row.dateseen === null ? "text-red-600" : null
                             }`}
                           />
                         </Link>

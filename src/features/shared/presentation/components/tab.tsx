@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { VscCircleFilled } from "react-icons/vsc";
 import { Link } from "react-router-dom";
 
 export interface TabModel {
@@ -12,6 +13,7 @@ interface TabProps {
   activeTab: string;
   children?: ReactNode;
   tabs: Array<TabModel>;
+  badge: string | null;
 }
 
 export function Tab(props: TabProps) {
@@ -32,7 +34,16 @@ export function Tab(props: TabProps) {
                   : "text-secondary"
               } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
-              {tab.icon} <span>{tab.name}</span>
+              {tab.icon}{" "}
+              {props.badge !== null ? (
+                (props.badge === "snackshop" && tab.active === "snackshop") ||
+                (props.badge === "catering" && tab.active === "catering") ||
+                (props.badge === "both" &&
+                  (tab.active === "catering" || tab.active === "snackshop")) ? (
+                  <VscCircleFilled className=" absolute self-start left-5 text-xs text-red-600" />
+                ) : null
+              ) : null}
+              <span>{tab.name}</span>
             </Link>
           </li>
         ))}

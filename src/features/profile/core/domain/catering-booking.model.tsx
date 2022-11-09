@@ -1,4 +1,5 @@
 export interface CateringBookingModel {
+  seen: number;
   dateadded: string;
   tracking_no: string;
 
@@ -11,4 +12,7 @@ export interface CateringBookingModel {
 
   status: number;
   hash_key: string;
+
+  notification_id: string;
+  dateseen: any;
 }

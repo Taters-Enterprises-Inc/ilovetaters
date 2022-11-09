@@ -12,6 +12,7 @@ import {
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from "../../constants";
+import { GetUnreadNotificationModel } from "features/shared/core/domain/getUnreadNotification.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -121,6 +122,13 @@ export interface ForgotPasswordValidateOTPResponse {
 export interface ForgotPasswordNewPasswordResponse {
   data: {
     message: string;
+  };
+}
+
+export interface GetUnreadNotificationsResponse {
+  data: {
+    message: string;
+    data: GetUnreadNotificationModel;
   };
 }
 
@@ -344,4 +352,10 @@ export function SetSessionRepository(
       withCredentials: true,
     }
   );
+}
+
+export function GetUnreadNotificationssRepository() {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/notifications`, {
+    withCredentials: true,
+  });
 }

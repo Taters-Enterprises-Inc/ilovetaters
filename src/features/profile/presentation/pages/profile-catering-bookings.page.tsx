@@ -24,6 +24,8 @@ import {
 import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { CATERING_BOOKING_STATUS } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
+import { updateIndicatorCatering } from "../slices/update-catering-indicator.slice";
+import { VscCircleFilled } from "react-icons/vsc";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -92,7 +94,15 @@ export function ProfileCateringBookings() {
       />
     );
   };
-  console.log(getCateringBookingHistoryState.data);
+
+  const handleOnclick = (notificationId: any) => {
+    dispatch(
+      updateIndicatorCatering({
+        notificationId: notificationId,
+      })
+    );
+  };
+
   return (
     <ProfileContainer title="Catering Bookings" activeTab="catering">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
@@ -164,16 +174,18 @@ export function ProfileCateringBookings() {
               <hr className="mt-4" />
               {getCateringBookingHistoryState.data.bookings.map((row, i) => (
                 <Link
+                  onClick={() => handleOnclick(row.notification_id)}
                   to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
                     row.hash_key
                   }`}
                   className="flex flex-col px-4 py-2 border-b"
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                  <span className="flex justify-between items-center space-x-1 text-xl">
                     <span className="text-lg text-gray-600">
                       #{row.tracking_no}
                     </span>
+
                     <span
                       className="px-2 py-1 text-xs rounded-full "
                       style={{
@@ -184,6 +196,9 @@ export function ProfileCateringBookings() {
                     >
                       {CATERING_BOOKING_STATUS[row.status].name}
                     </span>
+                    {row.dateseen === null ? (
+                      <VscCircleFilled className=" text-red-600" />
+                    ) : null}
                   </span>
                   <div className="flex justify-between">
                     <span className="text-xs">
@@ -310,11 +325,16 @@ export function ProfileCateringBookings() {
                         </DataTableCell>
                         <DataTableCell align="left">
                           <Link
+                            onClick={() => handleOnclick(row.notification_id)}
                             to={`/shop/${
                               row.status <= 3 ? "contract" : "order"
                             }/${row.hash_key}`}
                           >
-                            <FaEye className="text-lg" />
+                            <FaEye
+                              className={`text-lg ${
+                                row.dateseen === null ? "text-red-600" : null
+                              }`}
+                            />
                           </Link>
                         </DataTableCell>
                       </DataTableRow>

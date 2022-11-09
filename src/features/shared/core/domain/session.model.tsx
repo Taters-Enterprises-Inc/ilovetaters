@@ -25,7 +25,6 @@ export interface SessionModel {
     mobile_user_id: number;
     fb_user_id: number;
     mobile_number: string;
-    notification: { Snackshop: number };
   };
 
   popclub_data: {
