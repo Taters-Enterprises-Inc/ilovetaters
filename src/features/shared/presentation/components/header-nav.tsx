@@ -198,7 +198,11 @@ export function HeaderNav(props: HeaderNavProps) {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 

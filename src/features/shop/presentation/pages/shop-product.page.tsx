@@ -121,7 +121,6 @@ export function ShopProduct() {
   }, [location, dispatch, hash, forfeitRedeemState]);
 
   useEffect(() => {
-    console.log(getProductSkuState.data);
     if (
       getProductSkuState.status === GetProductSkuState.success &&
       getProductSkuState.data
@@ -129,8 +128,6 @@ export function ShopProduct() {
       dispatch(
         changeProductPrice({
           price: getProductSkuState.data.price,
-          discounted_original_price:
-            getProductSkuState.data.discounted_original_price,
         })
       );
     }
@@ -335,6 +332,8 @@ export function ShopProduct() {
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
+          promo_discount_percentage:
+            getProductDetailsState.data.product.promo_discount_percentage,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -386,6 +385,8 @@ export function ShopProduct() {
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
+          promo_discount_percentage:
+            getProductDetailsState.data.product.promo_discount_percentage,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -819,13 +820,12 @@ export function ShopProduct() {
                   </div>
                 </div>
                 {getProductDetailsState.data?.product
-                  .discounted_original_price ? (
+                  .promo_discount_percentage ? (
                   <div>
-                    <h2 className="mt-4 text-2xl line-through text-white">
+                    <h2 className="mt-4 text-2xl text-white line-through">
                       <NumberFormat
                         value={(
-                          getProductDetailsState.data?.product
-                            .discounted_original_price * quantity
+                          getProductDetailsState.data?.product.price * quantity
                         ).toFixed(2)}
                         displayType={"text"}
                         thousandSeparator={true}
@@ -836,7 +836,13 @@ export function ShopProduct() {
                       <h2 className="text-4xl text-white">
                         <NumberFormat
                           value={(
-                            getProductDetailsState.data.product.price * quantity
+                            (getProductDetailsState.data.product.price -
+                              getProductDetailsState.data.product.price *
+                                parseFloat(
+                                  getProductDetailsState.data.product
+                                    .promo_discount_percentage
+                                )) *
+                            quantity
                           ).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}

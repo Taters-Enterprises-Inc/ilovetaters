@@ -20,5 +20,6 @@ export interface ProductModel {
   report_status: number;
   to_gc_value: number;
   free_threshold?: number;
-  discounted_original_price?: number;
+
+  promo_discount_percentage: string | null;
 }

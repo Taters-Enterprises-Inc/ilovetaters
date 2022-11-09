@@ -35,5 +35,6 @@ export interface AdminShopOrderModel {
     alias?: string;
 
     deal_name?: string;
+    promo_discount_percentage?: string;
   }>;
 }

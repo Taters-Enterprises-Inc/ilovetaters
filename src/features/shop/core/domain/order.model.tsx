@@ -67,6 +67,8 @@ export interface OrderModel {
       addon_butter: string;
       addon_base_product: null;
       freebie_prod_name: null;
+      deal_name?: string;
+      promo_discount_percentage?: string;
     }>;
     deals_details: Array<{
       name: string;

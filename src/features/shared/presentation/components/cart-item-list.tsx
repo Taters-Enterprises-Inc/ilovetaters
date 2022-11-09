@@ -32,7 +32,6 @@ export function CartListItem(props: CartListItemProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartShop());
     }
-    
   }, [removeItemFromCartShopState]);
 
   const calculateOrdersPrice = () => {
@@ -42,7 +41,11 @@ export function CartListItem(props: CartListItemProps) {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
@@ -135,15 +138,39 @@ export function CartListItem(props: CartListItemProps) {
                               />
                             </h3>
                           ) : null}
-
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={order.prod_calc_amount.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {order.promo_discount_percentage ? (
+                            <div>
+                              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                                <NumberFormat
+                                  value={order.prod_calc_amount.toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={(
+                                    order.prod_calc_amount -
+                                    order.prod_calc_amount *
+                                      order.promo_discount_percentage
+                                  ).toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            </div>
+                          ) : (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          )}
                         </div>
                         <button
                           className="absolute text-white top-2 right-4 "

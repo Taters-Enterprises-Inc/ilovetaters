@@ -65,6 +65,7 @@ export interface SessionModel {
     prod_category: number;
     is_free_item?: number;
     free_threshold?: number;
+    promo_discount_percentage: number | null;
   }>;
 
   deals?: Array<{
