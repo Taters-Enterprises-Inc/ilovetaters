@@ -15,4 +15,5 @@ export interface StoreModel {
   address: string;
   available_start_time: string;
   available_end_time: string;
+  dateadded: string;
 }
