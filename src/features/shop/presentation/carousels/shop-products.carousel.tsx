@@ -59,14 +59,36 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                     <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="font-bold text-white">
-                      <NumberFormat
-                        value={product.price.toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h3>
+                    {product.discounted_price ? (
+                      <div>
+                        <h3 className="font-bold text-sm text-white line-through">
+                          <NumberFormat
+                            value={product.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+
+                        <h3 className="font-bold text-white ">
+                          <NumberFormat
+                            value={product.discounted_price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+                      </div>
+                    ) : (
+                      <h3 className="font-bold text-white">
+                        <NumberFormat
+                          value={product.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h3>
+                    )}
                   </div>
                 </Link>
               ))}
@@ -100,14 +122,36 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                     <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="font-bold text-white">
-                      <NumberFormat
-                        value={product.price.toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h3>
+                    {product.discounted_price ? (
+                      <div>
+                        <h3 className="font-bold text-sm text-white line-through">
+                          <NumberFormat
+                            value={product.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+
+                        <h3 className="font-bold text-white ">
+                          <NumberFormat
+                            value={product.discounted_price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+                      </div>
+                    ) : (
+                      <h3 className="font-bold text-white">
+                        <NumberFormat
+                          value={product.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h3>
+                    )}
                   </div>
                 </Link>
               ))}
@@ -134,14 +178,36 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                     <h2 className="text-sm leading-4 text-white">
                       {product.name}
                     </h2>
-                    <h3 className="font-bold text-white">
-                      <NumberFormat
-                        value={product.price.toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h3>
+                    {product.discounted_price ? (
+                      <div>
+                        <h3 className="font-bold text-sm text-white line-through">
+                          <NumberFormat
+                            value={product.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+
+                        <h3 className="font-bold text-white ">
+                          <NumberFormat
+                            value={product.discounted_price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+                      </div>
+                    ) : (
+                      <h3 className="font-bold text-white">
+                        <NumberFormat
+                          value={product.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h3>
+                    )}
                   </div>
                 </Link>
               ))}

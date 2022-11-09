@@ -11,6 +11,7 @@ export interface CategoryProductsModel {
     image: string;
     description: string;
     price: number;
+    discounted_price: number | null;
     hash: string;
   }>;
 }

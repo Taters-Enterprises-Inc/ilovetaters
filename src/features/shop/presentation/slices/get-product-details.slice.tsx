@@ -38,11 +38,19 @@ export const getProductDetailsSlice = createSlice({
   name: "getProductDetails",
   initialState,
   reducers: {
-    changeProductPrice: (state, action: PayloadAction<{ price: number }>) => {
-      const { price } = action.payload;
+    changeProductPrice: (
+      state,
+      action: PayloadAction<{
+        price: number;
+        discounted_original_price?: number;
+      }>
+    ) => {
+      const { price, discounted_original_price } = action.payload;
 
       if (state.data) {
         state.data.product.price = price;
+        state.data.product.discounted_original_price =
+          discounted_original_price;
       }
     },
   },

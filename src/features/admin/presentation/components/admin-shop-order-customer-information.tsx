@@ -106,8 +106,7 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        calculatedPrice += parseInt(orders[i].price) * orders[i].quantity;
       }
     }
 
@@ -138,8 +137,7 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        calculatedPrice += parseInt(orders[i].price);
       }
     }
 
@@ -160,8 +158,7 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        calculatedPrice += parseInt(orders[i].price);
       }
     }
 
@@ -588,6 +585,19 @@ export function AdminShopOrderCustomerInformation() {
                                   : ""),
                           }}
                         />
+                        {item.deal_name ? (
+                          <>
+                            <br />
+                            <br />
+                            <span className=" !text-green-700 font-bold">
+                              Deal Applied:{" "}
+                            </span>
+                            <br />
+                            <span className="whitespace-pre-wrap">
+                              {item.deal_name}
+                            </span>
+                          </>
+                        ) : null}
                       </th>
                       <td className="px-6 py-4">
                         <span
@@ -607,9 +617,7 @@ export function AdminShopOrderCustomerInformation() {
                       </td>
                       <td className="px-6 py-4 text-end">
                         <NumberFormat
-                          value={(
-                            parseInt(item.product_price) * item.quantity
-                          ).toFixed(2)}
+                          value={parseInt(item.price).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -699,6 +707,19 @@ export function AdminShopOrderCustomerInformation() {
                                 : ""),
                         }}
                       />
+                      {item.deal_name ? (
+                        <>
+                          <br />
+                          <br />
+                          <span className=" !text-green-700 font-bold">
+                            Deal Applied:{" "}
+                          </span>
+                          <br />
+                          <span className="whitespace-pre-wrap">
+                            {item.deal_name}
+                          </span>
+                        </>
+                      ) : null}
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Remarks:</span>
@@ -729,9 +750,7 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={(
-                            parseInt(item.product_price) * item.quantity
-                          ).toFixed(2)}
+                          value={parseInt(item.price).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}

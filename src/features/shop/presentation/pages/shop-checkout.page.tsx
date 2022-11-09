@@ -602,79 +602,23 @@ export function ShopCheckout() {
                         ))}
                       </div>
                     ) : null}
-                    {getSessionState.data.deals ? (
+                    {getSessionState.data.redeem_data ? (
                       <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
                         <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                           Popclub Deal
                         </h2>
-                        {getSessionState.data.deals.map((deal, i) => (
-                          <div
-                            key={i}
-                            className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                          >
-                            <img
-                              src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
-                              className="rounded-[10px] w-[92px] h-[92px]"
-                              alt=""
-                            />
-                            <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                              <h3 className="text-sm w-[90%] font-bold leading-4">
-                                {deal.deal_name}
-                              </h3>
-                              <h3 className="text-xs">
-                                Quantity:{" "}
-                                <span className="text-tertiary">
-                                  {deal.deal_qty}
-                                </span>
-                              </h3>
-
-                              {deal.deal_remarks ? (
-                                <h3 className="text-xs">
-                                  Flavor:
-                                  <br />
-                                  <span
-                                    className="text-tertiary"
-                                    dangerouslySetInnerHTML={{
-                                      __html: deal.deal_remarks,
-                                    }}
-                                  />
-                                </h3>
-                              ) : null}
-                              {deal.deal_promo_price ? (
-                                <h3 className="flex items-end justify-end flex-1 text-base">
-                                  <NumberFormat
-                                    value={deal.deal_promo_price.toFixed(2)}
-                                    displayType={"text"}
-                                    thousandSeparator={true}
-                                    prefix={"₱"}
-                                  />
-                                </h3>
-                              ) : null}
-                            </div>
-                            <button
-                              type="button"
-                              className="absolute text-white top-2 right-4 "
-                              onClick={() => {
-                                if (
-                                  getSessionState.data &&
-                                  getSessionState.data.orders &&
-                                  getSessionState.data.orders.length > 1
-                                ) {
-                                  dispatch(removeItemFromCartShop(i));
-                                } else {
-                                  dispatch(
-                                    popUpSnackBar({
-                                      message: "You cannot delete this item",
-                                      severity: "error",
-                                    })
-                                  );
-                                }
-                              }}
-                            >
-                              <IoMdClose />
-                            </button>
+                        <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.product_image}`}
+                            className="rounded-[10px] w-[92px] h-[92px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {getSessionState.data.redeem_data.name}
+                            </h3>
                           </div>
-                        ))}
+                        </div>
                       </div>
                     ) : null}
 

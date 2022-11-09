@@ -121,12 +121,17 @@ export function ShopProduct() {
   }, [location, dispatch, hash, forfeitRedeemState]);
 
   useEffect(() => {
+    console.log(getProductSkuState.data);
     if (
       getProductSkuState.status === GetProductSkuState.success &&
       getProductSkuState.data
     ) {
       dispatch(
-        changeProductPrice({ price: parseInt(getProductSkuState.data.price) })
+        changeProductPrice({
+          price: getProductSkuState.data.price,
+          discounted_original_price:
+            getProductSkuState.data.discounted_original_price,
+        })
       );
     }
   }, [getProductSkuState, dispatch]);
@@ -813,19 +818,49 @@ export function ShopProduct() {
                     </div>
                   </div>
                 </div>
-
-                {getProductDetailsState.data?.product.price ? (
-                  <h2 className="mt-4 text-4xl text-white">
-                    <NumberFormat
-                      value={(
-                        getProductDetailsState.data.product.price * quantity
-                      ).toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </h2>
-                ) : null}
+                {getProductDetailsState.data?.product
+                  .discounted_original_price ? (
+                  <div>
+                    <h2 className="mt-4 text-2xl line-through text-white">
+                      <NumberFormat
+                        value={(
+                          getProductDetailsState.data?.product
+                            .discounted_original_price * quantity
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h2>
+                    {getProductDetailsState.data?.product.price ? (
+                      <h2 className="text-4xl text-white">
+                        <NumberFormat
+                          value={(
+                            getProductDetailsState.data.product.price * quantity
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h2>
+                    ) : null}
+                  </div>
+                ) : (
+                  <>
+                    {getProductDetailsState.data?.product.price ? (
+                      <h2 className="mt-4 text-4xl text-white">
+                        <NumberFormat
+                          value={(
+                            getProductDetailsState.data.product.price * quantity
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h2>
+                    ) : null}
+                  </>
+                )}
 
                 <div className="space-y-4">
                   <button

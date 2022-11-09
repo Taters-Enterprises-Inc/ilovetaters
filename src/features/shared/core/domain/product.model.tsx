@@ -14,10 +14,11 @@ export interface ProductModel {
   add_remarks: number;
   product_hash: string;
   note: string;
-  tags: string ;
+  tags: string;
   dateadded: string;
   product_code: string;
   report_status: number;
   to_gc_value: number;
   free_threshold?: number;
+  discounted_original_price?: number;
 }

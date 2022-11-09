@@ -24,6 +24,7 @@ export interface AdminShopOrderModel {
   fb_user_id: number | null;
   mobile_user_id: number | null;
   items: Array<{
+    price: string;
     product_price: string;
     quantity: number;
     remarks: string;
@@ -32,5 +33,7 @@ export interface AdminShopOrderModel {
     add_details: string;
     product_label?: string;
     alias?: string;
+
+    deal_name?: string;
   }>;
 }
