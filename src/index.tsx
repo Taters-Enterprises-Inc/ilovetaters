@@ -87,7 +87,6 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
 } from "features/profile/presentation/pages";
-import { PopClubGuard } from "features/popclub/presentation/guards";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
@@ -141,10 +140,8 @@ root.render(
 
                     <Route path="popclub" element={<PopClub />}>
                       <Route index element={<PopClubIndexPage />} />
-                      <Route element={<PopClubGuard />}>
-                        <Route path=":platform" element={<PopClubHome />} />
-                        <Route path="deal/:hash" element={<PopClubDeal />} />
-                      </Route>
+                      <Route path=":platform" element={<PopClubHome />} />
+                      <Route path="deal/:hash" element={<PopClubDeal />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
 

@@ -31,10 +31,7 @@ import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import {
   FacebookLogoutState,
   resetFacebookLogout,
@@ -56,6 +53,8 @@ import {
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
 import moment from "moment";
+import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
+import { StoreChooserModal } from "../modals/store-chooser.modal";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -80,6 +79,9 @@ export function PopClubDeal() {
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
   const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
+  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
+    useState(false);
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -106,13 +108,13 @@ export function PopClubDeal() {
       }
       dispatch(resetGetDealProductVariantsState());
     }
-  }, [getDealProductVariantsState, navigate, getDealState]);
+  }, [getDealProductVariantsState, navigate, getDealState, dispatch]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());
     dispatch(getLatestUnexpiredRedeem());
     dispatch(redeemValidators());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (
@@ -151,7 +153,7 @@ export function PopClubDeal() {
 
       dispatch(resetRedeemDeal());
     }
-  }, [redeemDealState, getDealState, forfeitRedeemState]);
+  }, [redeemDealState, getDealState, forfeitRedeemState, dispatch, navigate]);
 
   useEffect(() => {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
@@ -161,7 +163,7 @@ export function PopClubDeal() {
 
       dispatch(resetFacebookLogout());
     }
-  }, [facebookLogoutState, navigate, getSessionState]);
+  }, [facebookLogoutState, navigate, getSessionState, dispatch]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -177,7 +179,7 @@ export function PopClubDeal() {
         })
       );
     }
-  }, [getDealState, getRedeemState]);
+  }, [getDealState, getRedeemState, dispatch]);
 
   useEffect(() => {
     if (hash) {
@@ -187,7 +189,7 @@ export function PopClubDeal() {
       dispatch(getLatestUnexpiredRedeem());
       dispatch(redeemValidators());
     }
-  }, [hash]);
+  }, [hash, dispatch]);
 
   const handleRedeem = () => {
     if (hash) {
@@ -389,14 +391,14 @@ export function PopClubDeal() {
           </button>
         </>
       );
-    } else if (getSessionState.data?.userData) {
+    } else if (getSessionState.data?.userData === null) {
       return (
         <>
           <button
-            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
-            onClick={handleRedeem}
+            className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
+            onClick={loginToRedeem}
           >
-            Redeem
+            Login to Redeem
           </button>
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
@@ -410,14 +412,49 @@ export function PopClubDeal() {
           </button>
         </>
       );
-    } else if (getSessionState.data?.userData === null) {
+    } else if (
+      getSessionState.data?.popclub_data === null ||
+      getSessionState.data?.cache_data === null ||
+      (getDealState.data?.platform_id === 2 &&
+        getSessionState.data?.customer_address === null)
+    ) {
       return (
         <>
           <button
             className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
-            onClick={loginToRedeem}
+            onClick={() => {
+              switch (getDealState.data?.platform_id) {
+                case 1:
+                  setOpenStoreVisitStoreChooserModal(true);
+                  break;
+                case 2:
+                  setOpenStoreChooserModal(true);
+                  break;
+              }
+            }}
           >
-            Login to Redeem
+            Choose a store
+          </button>
+          <button
+            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+            onClick={() => {
+              navigate(
+                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+              );
+            }}
+          >
+            Go Back
+          </button>
+        </>
+      );
+    } else if (getSessionState.data?.userData) {
+      return (
+        <>
+          <button
+            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
+            onClick={handleRedeem}
+          >
+            Redeem
           </button>
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
@@ -493,6 +530,30 @@ export function PopClubDeal() {
         open={openVariantChooserModal}
         onClose={() => {
           setOpenVariantChooserModal(false);
+        }}
+      />
+
+      <StoreVisitStoreChooserModal
+        open={openStoreVisitStoreChooserModal}
+        onClose={() => {
+          setOpenStoreVisitStoreChooserModal(false);
+        }}
+        onDefaultStoreSelectHandler={() => {
+          if (hash) {
+            dispatch(getDeal(hash));
+          }
+        }}
+      />
+
+      <StoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+        onDefaultStoreSelectHandler={() => {
+          if (hash) {
+            dispatch(getDeal(hash));
+          }
         }}
       />
 

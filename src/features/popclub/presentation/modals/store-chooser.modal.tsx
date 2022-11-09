@@ -11,6 +11,9 @@ import {
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreChooserModal(props: StoreChooserModalProps) {
@@ -96,6 +99,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <StoreCluster
           onClose={props.onClose}
           address={storeChooserModalState.address}
+          onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
         />
       </div>
     </div>

@@ -20,6 +20,9 @@ import {
 interface StoreClusterProps {
   onClose: any;
   address: string | null;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreCluster(props: StoreClusterProps) {
@@ -55,15 +58,20 @@ export function StoreCluster(props: StoreClusterProps) {
 
       dispatch(setPopClubData({ platform: "online-delivery" }));
 
-      if (platform) {
-        if (platform === "store-visit") {
-          navigate(`/popclub/online-delivery?category=all`);
+      if (props.onDefaultStoreSelectHandler === undefined) {
+        if (platform) {
+          if (platform === "store-visit") {
+            navigate(`/popclub/online-delivery?category=all`);
+          } else {
+            navigate(`?category=all`);
+          }
         } else {
-          navigate(`?category=all`);
+          navigate(`/popclub/online-delivery?category=all`);
         }
       } else {
-        navigate(`/popclub/online-delivery?category=all`);
+        props.onDefaultStoreSelectHandler();
       }
+
       document.body.classList.remove("overflow-hidden");
     }
   }, [getSessionState]);

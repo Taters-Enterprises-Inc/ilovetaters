@@ -20,6 +20,9 @@ import {
 interface StoreClusterProps {
   onClose: any;
   address: string | null;
+  
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: ()=> void;
 }
 
 export function StoreClusterStoreVisit(props: StoreClusterProps) {
@@ -65,14 +68,20 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
       dispatch(setPopClubData({ platform: "store-visit" }));
 
-      if (platform) {
-        if (platform === "online-delivery") {
-          navigate(`/popclub/store-visit?category=all`);
+      if(props.onDefaultStoreSelectHandler === undefined){
+
+        if (platform) {
+          if (platform === "online-delivery") {
+            navigate(`/popclub/store-visit?category=all`);
+          } else {
+            navigate(`?category=all`);
+          }
         } else {
-          navigate(`?category=all`);
+          navigate(`/popclub/store-visit?category=all`);
         }
-      } else {
-        navigate(`/popclub/store-visit?category=all`);
+  
+      }else{
+        props.onDefaultStoreSelectHandler();
       }
 
       document.body.classList.remove("overflow-hidden");
