@@ -38,7 +38,12 @@ export const getProductDetailsSlice = createSlice({
   name: "getProductDetails",
   initialState,
   reducers: {
-    changeProductPrice: (state, action: PayloadAction<{ price: number }>) => {
+    changeProductPrice: (
+      state,
+      action: PayloadAction<{
+        price: number;
+      }>
+    ) => {
       const { price } = action.payload;
 
       if (state.data) {

@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StoreCluster } from "../components";
 import { SearchAddress } from "../../../shared/presentation/components/search-address";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { getStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
 import {
@@ -16,15 +11,14 @@ import {
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreChooserModal(props: StoreChooserModalProps) {
   const dispatch = useAppDispatch();
   const storeChooserModalState = useAppSelector(selectStoreChooserModal);
-
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -105,6 +99,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <StoreCluster
           onClose={props.onClose}
           address={storeChooserModalState.address}
+          onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
         />
       </div>
     </div>

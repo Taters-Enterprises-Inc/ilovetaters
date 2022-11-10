@@ -310,8 +310,6 @@ export function CateringProduct() {
 
       let flavors_details = createFlavorDetails();
 
-      if (callBackSuccess) callBackSuccess();
-
       dispatch(
         addToCartCatering({
           prod_id: getCateringProductDetailsState.data.product.id,
@@ -329,24 +327,19 @@ export function CateringProduct() {
           prod_type: "main",
           prod_sku: -1,
         })
-      );
+      ).then(() => {
+        if (callBackSuccess) callBackSuccess();
+      });
     }
   };
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
-      }
-    }
-
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
       }
     }
 

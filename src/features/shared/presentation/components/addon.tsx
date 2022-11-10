@@ -36,7 +36,7 @@ export function Addon(props: AddonProps) {
     if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [addToCartShopState, dispatch]);
+  }, [addToCartShopState]);
 
   function handleonClick() {
     if (isLongPress.current === true) {
@@ -119,6 +119,7 @@ export function Addon(props: AddonProps) {
         prod_price: props.product.price,
         prod_calc_amount: props.product.price * quantity,
         prod_category: props.product.category,
+        promo_discount_percentage: props.product.promo_discount_percentage,
         prod_with_drinks: -1,
         flavors_details: "",
         prod_sku_id: -1,

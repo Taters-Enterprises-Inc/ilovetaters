@@ -10,9 +10,13 @@ import {
 import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
 import { useEffect } from "react";
 import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
+
 interface StoreVisitStoreChooserModalProps {
   open: boolean;
   onClose: () => void;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreVisitStoreChooserModal(
@@ -64,6 +68,7 @@ export function StoreVisitStoreChooserModal(
 
         <StoreClusterStoreVisit
           onClose={props.onClose}
+          onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
           address={
             storeVisitStoreChooserModalState.address
               ? storeVisitStoreChooserModalState.address

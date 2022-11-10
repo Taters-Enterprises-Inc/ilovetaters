@@ -32,7 +32,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import {
   cateringCheckoutOrders,
   CateringCheckoutOrdersState,
@@ -71,8 +74,10 @@ export function CateringCheckout() {
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
+    if (addContactState.status == AddContactState.success) {
+      dispatch(getSession());
+      dispatch(getContacts());
+    }
   }, [addContactState, dispatch]);
 
   useEffect(() => {
@@ -438,7 +443,7 @@ export function CateringCheckout() {
                 ) : null}
 
                 <div>
-                  <FormControl className="w-full">
+                  <FormControl className="w-full ">
                     <InputLabel id="demo-simple-select-helper-label">
                       Event Class
                     </InputLabel>

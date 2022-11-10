@@ -36,7 +36,6 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -56,7 +55,6 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -79,7 +77,6 @@ export function AdminNotificationWrapper() {
         }
       }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

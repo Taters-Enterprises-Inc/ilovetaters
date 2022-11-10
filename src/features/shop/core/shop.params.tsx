@@ -16,6 +16,7 @@ export interface AddToCartShopParam {
   prod_discount?: number;
   prod_category: number;
   prod_type: "main" | "addon";
+  promo_discount_percentage: string | null;
 }
 
 export interface GetProductSkuParam {

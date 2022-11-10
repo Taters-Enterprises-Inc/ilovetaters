@@ -1,12 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
-import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
-import { GetRedeemParam } from "features/popclub/core/popclub.params";
 import {
   ForfeitRedeemRepository,
   ForfeitRedeemResponse,
-  GetRedeemRepository,
-  GetRedeemResponse,
 } from "features/popclub/data/repository/popclub.repository";
 
 export enum ForfeitRedeemState {
@@ -40,7 +36,12 @@ export const forfeitRedeem = createAsyncThunk(
 export const forfeitRedeemSlice = createSlice({
   name: "forfeitRedeem",
   initialState,
-  reducers: {},
+  reducers: {
+    resetForfeitRedeemStateStatus: (state) => {
+      state.status = ForfeitRedeemState.initial;
+      state.message = "";
+    },
+  },
   extraReducers: (builder: any) => {
     builder
       .addCase(forfeitRedeem.pending, (state: any) => {
@@ -68,5 +69,7 @@ export const forfeitRedeemSlice = createSlice({
 });
 
 export const selectForfeitRedeem = (state: RootState) => state.forfeitRedeem;
+
+export const { resetForfeitRedeemStateStatus } = forfeitRedeemSlice.actions;
 
 export default forfeitRedeemSlice.reducer;

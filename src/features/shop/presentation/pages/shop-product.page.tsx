@@ -14,7 +14,7 @@ import {
   GetProductDetailsState,
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { Addon } from "../../../shared/presentation/components/addon";
 import NumberFormat from "react-number-format";
 
@@ -53,6 +53,14 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { removeItemFromCartShop } from "../slices/remove-item-from-cart-shop.slice";
 import { IoMdClose } from "react-icons/io";
+import {
+  ForfeitRedeemState,
+  resetForfeitRedeemStateStatus,
+  selectForfeitRedeem,
+} from "features/popclub/presentation/slices/forfeit-redeem.slice";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 let quantityId: any;
 
@@ -66,6 +74,8 @@ export function ShopProduct() {
   const addToCartCheckoutShopState = useAppSelector(
     selectAddToCartCheckoutShop
   );
+  const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [setDisabled] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -97,11 +107,47 @@ export function ShopProduct() {
   }, [resetMultiFlavors]);
 
   useEffect(() => {
+    if (forfeitRedeemState.status === ForfeitRedeemState.success) {
+      setCurrentSize(undefined);
+      setCurrentFlavor(undefined);
+      dispatch(resetForfeitRedeemStateStatus());
+    }
+  }, [dispatch, forfeitRedeemState]);
+
+  useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
+    }
+  }, [location, dispatch, hash, forfeitRedeemState]);
+
+  useEffect(() => {
+    if (
+      getProductSkuState.status === GetProductSkuState.success &&
+      getProductSkuState.data
+    ) {
+      dispatch(
+        changeProductPrice({
+          price: getProductSkuState.data.price,
+        })
+      );
+    }
+  }, [getProductSkuState, dispatch]);
+
+  useEffect(() => {
+    if (addToCartShopState.status === AddToCartShopState.success) {
       dispatch(getSession());
     }
-  }, [location, dispatch, hash]);
+  }, [addToCartShopState, dispatch]);
+
+  useEffect(() => {
+    if (
+      addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
+    ) {
+      dispatch(getSession());
+      navigate("/delivery/checkout");
+      dispatch(resetAddToCartCheckout());
+    }
+  }, [addToCartCheckoutShopState, navigate, dispatch]);
 
   useEffect(() => {
     if (
@@ -130,33 +176,6 @@ export function ShopProduct() {
     }
   }, [getProductDetailsState, currentFlavor, hash]);
 
-  useEffect(() => {
-    if (
-      getProductSkuState.status === GetProductSkuState.success &&
-      getProductSkuState.data
-    ) {
-      dispatch(
-        changeProductPrice({ price: parseInt(getProductSkuState.data.price) })
-      );
-    }
-  }, [getProductSkuState, dispatch]);
-
-  useEffect(() => {
-    if (addToCartShopState.status === AddToCartShopState.success) {
-      dispatch(getSession());
-    }
-  }, [addToCartShopState, dispatch]);
-
-  useEffect(() => {
-    if (
-      addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
-    ) {
-      dispatch(getSession());
-      navigate("/delivery/checkout");
-      dispatch(resetAddToCartCheckout());
-    }
-  }, [addToCartCheckoutShopState, navigate, dispatch]);
-
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
@@ -170,7 +189,9 @@ export function ShopProduct() {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -311,6 +332,8 @@ export function ShopProduct() {
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
+          promo_discount_percentage:
+            getProductDetailsState.data.product.promo_discount_percentage,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -320,6 +343,7 @@ export function ShopProduct() {
       );
     }
   };
+
   const handleAddToCart = () => {
     if (
       getSessionState.data?.userData == null ||
@@ -361,6 +385,8 @@ export function ShopProduct() {
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
+          promo_discount_percentage:
+            getProductDetailsState.data.product.promo_discount_percentage,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -546,36 +572,41 @@ export function ShopProduct() {
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Size
                     </h2>
-
-                    <ul>
-                      {getProductDetailsState.data?.product_size.map(
-                        (size, i) => {
-                          return (
-                            <li key={i} className="flex items-center">
-                              <Radio
-                                id={size.id.toString()}
-                                color="tertiary"
-                                sx={{ color: "white" }}
-                                checked={size.id === currentSize}
-                                onChange={() => {
-                                  setCurrentSize(size.id);
-                                  handleSizeAndFlavorChange(
-                                    size.id,
-                                    currentFlavor
-                                  );
-                                }}
-                              />
-                              <label
-                                htmlFor={size.id.toString()}
-                                className="text-white"
-                              >
-                                {size.name}
-                              </label>
-                            </li>
+                    <FormControl>
+                      <RadioGroup
+                        value={currentSize ?? ""}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                          const sizeId = parseInt(
+                            (event.target as HTMLInputElement).value
                           );
-                        }
-                      )}
-                    </ul>
+
+                          setCurrentSize(sizeId);
+                          handleSizeAndFlavorChange(sizeId, currentFlavor);
+                        }}
+                      >
+                        {getProductDetailsState.data?.product_size.map(
+                          (size, i) => {
+                            return (
+                              <FormControlLabel
+                                key={i}
+                                value={size.id}
+                                control={
+                                  <Radio
+                                    color="tertiary"
+                                    sx={{ color: "white" }}
+                                  />
+                                }
+                                label={
+                                  <span className="!text-white">
+                                    {size.name}
+                                  </span>
+                                }
+                              />
+                            );
+                          }
+                        )}
+                      </RadioGroup>
+                    </FormControl>
                   </div>
                 ) : null}
 
@@ -587,84 +618,99 @@ export function ShopProduct() {
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Flavor
                     </h2>
-                    <ul>
-                      {getProductDetailsState.data.product_flavor.map(
-                        (flavor, i) => {
-                          if (getProductDetailsState.data) {
-                            return (
-                              <>
-                                {getProductDetailsState.data.product
-                                  .num_flavor > 1 ? (
-                                  <li key={i}>
-                                    <span className="text-sm text-white">
-                                      {flavor.name}
-                                    </span>
-                                    <QuantityInput
-                                      reset={resetMultiFlavors}
-                                      min={0}
-                                      disableAdd={
-                                        getProductDetailsState.data.product
-                                          .num_flavor *
-                                          quantity -
-                                          totalMultiFlavorsQuantity ===
-                                        0
+                    {getProductDetailsState.data.product.num_flavor > 1 ? (
+                      <ul>
+                        {getProductDetailsState.data.product_flavor.map(
+                          (flavor, i) => {
+                            if (getProductDetailsState.data) {
+                              return (
+                                <li key={i}>
+                                  <span className="text-sm text-white">
+                                    {flavor.name}
+                                  </span>
+                                  <QuantityInput
+                                    reset={resetMultiFlavors}
+                                    min={0}
+                                    disableAdd={
+                                      getProductDetailsState.data.product
+                                        .num_flavor *
+                                        quantity -
+                                        totalMultiFlavorsQuantity ===
+                                      0
+                                    }
+                                    onChange={(val, action) => {
+                                      if (currentMultiFlavors) {
+                                        currentMultiFlavors[flavor.id] = {
+                                          name: flavor.name,
+                                          quantity: val,
+                                        };
+
+                                        setCurrentMultiFlavors(
+                                          currentMultiFlavors
+                                        );
+                                      } else {
+                                        const temp: any = {};
+                                        temp[flavor.id] = {
+                                          name: flavor.name,
+                                          quantity: val,
+                                        };
+                                        setCurrentMultiFlavors(temp);
                                       }
-                                      onChange={(val, action) => {
-                                        if (currentMultiFlavors) {
-                                          currentMultiFlavors[flavor.id] = {
-                                            name: flavor.name,
-                                            quantity: val,
-                                          };
+                                      setTotalMultiFlavorsQuantity(
+                                        totalMultiFlavorsQuantity +
+                                          (action === "plus" ? +1 : -1)
+                                      );
+                                    }}
+                                  />
+                                </li>
+                              );
+                            }
 
-                                          setCurrentMultiFlavors(
-                                            currentMultiFlavors
-                                          );
-                                        } else {
-                                          const temp: any = {};
-                                          temp[flavor.id] = {
-                                            name: flavor.name,
-                                            quantity: val,
-                                          };
-                                          setCurrentMultiFlavors(temp);
-                                        }
-                                        setTotalMultiFlavorsQuantity(
-                                          totalMultiFlavorsQuantity +
-                                            (action === "plus" ? +1 : -1)
-                                        );
-                                      }}
-                                    />
-                                  </li>
-                                ) : (
-                                  <li key={i} className="flex items-center">
-                                    <Radio
-                                      id={flavor.id.toString()}
-                                      color="tertiary"
-                                      sx={{ color: "white" }}
-                                      checked={flavor.id === currentFlavor}
-                                      onChange={() => {
-                                        setCurrentFlavor(flavor.id);
-                                        handleSizeAndFlavorChange(
-                                          currentSize,
-                                          flavor.id
-                                        );
-                                      }}
-                                    />
-                                    <label
-                                      htmlFor={flavor.id.toString()}
-                                      className="text-white"
-                                    >
-                                      {flavor.name}
-                                    </label>
-                                  </li>
-                                )}
-                              </>
-                            );
+                            return null;
                           }
+                        )}
+                      </ul>
+                    ) : (
+                      <FormControl>
+                        <RadioGroup
+                          value={currentFlavor ?? ""}
+                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            const flavorId = parseInt(
+                              (event.target as HTMLInputElement).value
+                            );
 
-                          return null;
-                        }
-                      )}
-                    </ul>
+                            setCurrentFlavor(flavorId);
+                            handleSizeAndFlavorChange(currentSize, flavorId);
+                          }}
+                        >
+                          {getProductDetailsState.data.product_flavor.map(
+                            (flavor, i) => {
+                              if (getProductDetailsState.data) {
+                                return (
+                                  <FormControlLabel
+                                    key={i}
+                                    value={flavor.id}
+                                    control={
+                                      <Radio
+                                        color="tertiary"
+                                        sx={{ color: "white" }}
+                                      />
+                                    }
+                                    label={
+                                      <span className="!text-white">
+                                        {flavor.name}
+                                      </span>
+                                    }
+                                  />
+                                );
+                              }
+
+                              return null;
+                            }
+                          )}
+                        </RadioGroup>
+                      </FormControl>
+                    )}
                   </div>
                 ) : null}
 
@@ -773,19 +819,54 @@ export function ShopProduct() {
                     </div>
                   </div>
                 </div>
-
-                {getProductDetailsState.data?.product.price ? (
-                  <h2 className="mt-4 text-4xl text-white">
-                    <NumberFormat
-                      value={(
-                        getProductDetailsState.data.product.price * quantity
-                      ).toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </h2>
-                ) : null}
+                {getProductDetailsState.data?.product
+                  .promo_discount_percentage ? (
+                  <div>
+                    <h2 className="mt-4 text-2xl text-white line-through">
+                      <NumberFormat
+                        value={(
+                          getProductDetailsState.data?.product.price * quantity
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h2>
+                    {getProductDetailsState.data?.product.price ? (
+                      <h2 className="text-4xl text-white">
+                        <NumberFormat
+                          value={(
+                            (getProductDetailsState.data.product.price -
+                              getProductDetailsState.data.product.price *
+                                parseFloat(
+                                  getProductDetailsState.data.product
+                                    .promo_discount_percentage
+                                )) *
+                            quantity
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h2>
+                    ) : null}
+                  </div>
+                ) : (
+                  <>
+                    {getProductDetailsState.data?.product.price ? (
+                      <h2 className="mt-4 text-4xl text-white">
+                        <NumberFormat
+                          value={(
+                            getProductDetailsState.data.product.price * quantity
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h2>
+                    ) : null}
+                  </>
+                )}
 
                 <div className="space-y-4">
                   <button
