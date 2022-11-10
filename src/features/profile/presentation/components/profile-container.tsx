@@ -18,12 +18,23 @@ export function ProfileContainer(props: ProfileContainerProps) {
 
   useEffect(() => {
     if (getUnreadNotification.data) {
-      if (getUnreadNotification.data.Snackshop === 0) {
+      if (
+        getUnreadNotification.data.Snackshop === 0 &&
+        getUnreadNotification.data.Catering !== 0
+      ) {
         setNotificationBadge("catering");
-      } else if (getUnreadNotification.data.Catering === 0) {
+      } else if (
+        getUnreadNotification.data.Snackshop !== 0 &&
+        getUnreadNotification.data.Catering === 0
+      ) {
         setNotificationBadge("snackshop");
-      } else {
+      } else if (
+        getUnreadNotification.data.Snackshop !== 0 &&
+        getUnreadNotification.data.Catering !== 0
+      ) {
         setNotificationBadge("both");
+      } else {
+        setNotificationBadge("");
       }
     }
   }, [notificationBadge, getUnreadNotification]);
