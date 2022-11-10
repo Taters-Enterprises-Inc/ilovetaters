@@ -206,7 +206,7 @@ export function PopClubDeal() {
   };
 
   const redeemButton = () => {
-    let isAvailableStartDateTime = false;
+    let isAvailableStartDateTime = true;
     let availableStartDateTimeInDate: any;
 
     if (

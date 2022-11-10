@@ -108,9 +108,9 @@ export function AdminShopOrderCustomerInformation() {
       for (let i = 0; i < orders.length; i++) {
         const discountPercentage = orders[i].promo_discount_percentage;
         const discount = discountPercentage
-          ? parseInt(orders[i].price) * parseFloat(discountPercentage)
+          ? orders[i].price * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += parseInt(orders[i].price) - discount;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -143,9 +143,9 @@ export function AdminShopOrderCustomerInformation() {
       for (let i = 0; i < orders.length; i++) {
         const discountPercentage = orders[i].promo_discount_percentage;
         const discount = discountPercentage
-          ? parseInt(orders[i].price) * parseFloat(discountPercentage)
+          ? orders[i].price * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += parseInt(orders[i].price) - discount;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -168,9 +168,9 @@ export function AdminShopOrderCustomerInformation() {
       for (let i = 0; i < orders.length; i++) {
         const discountPercentage = orders[i].promo_discount_percentage;
         const discount = discountPercentage
-          ? parseInt(orders[i].price) * parseFloat(discountPercentage)
+          ? orders[i].price * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += parseInt(orders[i].price) - discount;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -607,6 +607,7 @@ export function AdminShopOrderCustomerInformation() {
                             <br />
                             <span className="whitespace-pre-wrap">
                               {item.deal_name}
+                              {item.deal_description}
                             </span>
                           </>
                         ) : null}
@@ -624,7 +625,7 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={parseInt(item.product_price).toFixed(2)}
+                                value={item.product_price.toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -634,8 +635,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  parseInt(item.product_price) -
-                                  parseInt(item.product_price) *
+                                  item.product_price -
+                                  item.product_price *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -646,7 +647,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={parseInt(item.product_price).toFixed(2)}
+                            value={item.product_price.toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -658,7 +659,7 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={parseInt(item.price).toFixed(2)}
+                                value={item.price.toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -668,8 +669,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  parseInt(item.price) -
-                                  parseInt(item.price) *
+                                  item.price -
+                                  item.price *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -680,7 +681,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={parseInt(item.price).toFixed(2)}
+                            value={item.price.toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -805,7 +806,7 @@ export function AdminShopOrderCustomerInformation() {
                           <span className="text-xs font-bold">Price:</span>
                           <span className="text-xs line-through">
                             <NumberFormat
-                              value={parseInt(item.product_price).toFixed(2)}
+                              value={item.product_price.toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -820,8 +821,8 @@ export function AdminShopOrderCustomerInformation() {
                           <span className="text-xs">
                             <NumberFormat
                               value={(
-                                parseInt(item.product_price) -
-                                parseInt(item.product_price) *
+                                item.product_price -
+                                item.product_price *
                                   parseFloat(item.promo_discount_percentage)
                               ).toFixed(2)}
                               displayType={"text"}
@@ -836,7 +837,7 @@ export function AdminShopOrderCustomerInformation() {
                         <span className="text-xs font-bold">Price:</span>
                         <span className="text-xs">
                           <NumberFormat
-                            value={parseInt(item.product_price).toFixed(2)}
+                            value={item.product_price.toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -849,7 +850,7 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={parseInt(item.price).toFixed(2)}
+                          value={item.price.toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}

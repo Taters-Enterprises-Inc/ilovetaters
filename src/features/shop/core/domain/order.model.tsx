@@ -49,8 +49,8 @@ export interface OrderModel {
       promo_price: string;
       sku: null;
       sku_id: null;
-      calc_price: string;
-      product_price: string;
+      calc_price: number;
+      product_price: number;
       product_image: string;
       name: string;
       description: string;
@@ -68,6 +68,7 @@ export interface OrderModel {
       addon_base_product: null;
       freebie_prod_name: null;
       deal_name?: string;
+      deal_description?: string;
       promo_discount_percentage?: string;
     }>;
     deals_details: Array<{

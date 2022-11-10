@@ -24,8 +24,8 @@ export interface AdminShopOrderModel {
   fb_user_id: number | null;
   mobile_user_id: number | null;
   items: Array<{
-    price: string;
-    product_price: string;
+    price: number;
+    product_price: number;
     quantity: number;
     remarks: string;
     name: string;
@@ -35,6 +35,7 @@ export interface AdminShopOrderModel {
     alias?: string;
 
     deal_name?: string;
+    deal_description?: string;
     promo_discount_percentage?: string;
   }>;
 }

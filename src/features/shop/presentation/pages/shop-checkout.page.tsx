@@ -652,6 +652,23 @@ export function ShopCheckout() {
                             <h3 className="text-sm w-[90%] font-bold leading-4">
                               {getSessionState.data.redeem_data.deal_name}
                             </h3>
+
+                            {getSessionState.data.redeem_data
+                              .promo_discount_percentage ? (
+                              <>
+                                <span className="text-xs leading-4">
+                                  {getSessionState.data.redeem_data.description}
+                                </span>
+                              </>
+                            ) : null}
+
+                            <span
+                              className="text-xs"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  getSessionState.data.redeem_data.deal_remarks,
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
