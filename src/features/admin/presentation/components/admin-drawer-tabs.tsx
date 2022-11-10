@@ -17,6 +17,7 @@ import {
   FaRegListAlt,
   FaCartArrowDown,
   FaQuestionCircle,
+  FaUserCheck,
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -228,6 +229,32 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                     }`}
                   >
                     User Discount
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/admin/user-verification"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <FaUserCheck size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    User Verification
                   </span>
                 </span>
               </span>
