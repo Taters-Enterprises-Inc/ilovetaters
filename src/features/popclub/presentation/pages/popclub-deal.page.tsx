@@ -599,7 +599,7 @@ export function PopClubDeal() {
                   <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                     {getDealState.data.name}
                   </h1>
-                  <h1 className="text-lg text-white">
+                  <h1 className="text-lg text-white whitespace-pre-wrap">
                     {getDealState.data.description}
                   </h1>
 
