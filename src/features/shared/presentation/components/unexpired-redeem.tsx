@@ -84,8 +84,8 @@ export function UnExpiredRedeem() {
               : ""
           }`}
         >
-          <div className="container flex items-start justify-end h-full">
-            <div className="text-white block w-full sm:w-[400px]">
+          <div className="container flex items-start justify-end h-1">
+            <div className="text-white block w-full sm:w-[400px] h-1">
               <div className="flex items-start justify-start h-full">
                 {showInfo ? (
                   <Link
@@ -126,7 +126,7 @@ export function UnExpiredRedeem() {
                     </div>
                   </Link>
                 ) : (
-                  <div className="flex flex-col items-stretch  flex-1  max-h-[75px] sm:max-h-fit min-h-[75px]  rounded-l-xl "></div>
+                  <div className="flex flex-col items-stretch  flex-1 "></div>
                 )}
                 <div className="relative">
                   <button

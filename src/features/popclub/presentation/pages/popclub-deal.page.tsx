@@ -530,16 +530,6 @@ export function PopClubDeal() {
           >
             Choose a store
           </button>
-          <button
-            className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
-            onClick={() => {
-              navigate(
-                `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
-              );
-            }}
-          >
-            Go Back
-          </button>
         </>
       );
     } else if (getSessionState.data?.userData) {
