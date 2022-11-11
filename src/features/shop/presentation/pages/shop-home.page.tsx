@@ -19,7 +19,6 @@ export function ShopHome() {
   const shopHomePageState = useAppSelector(selectShopHomePage);
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 

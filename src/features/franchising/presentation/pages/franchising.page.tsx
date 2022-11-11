@@ -11,7 +11,6 @@ export function Franchising() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 
