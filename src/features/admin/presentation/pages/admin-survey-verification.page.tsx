@@ -1,6 +1,6 @@
-import { AdminHead } from "../components";
+import { AdminHead, AdminSurveyVerifications } from "../components";
 
-export function AdminUserVerification() {
+export function AdminSurveyVerification() {
   return (
     <>
       <AdminHead
@@ -11,10 +11,11 @@ export function AdminUserVerification() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "User Verification", url: "/admin/user-verification" },
+            { name: "Survey Verification", url: "/admin/survey-verification" },
           ],
         }}
       />
+      <AdminSurveyVerifications />
     </>
   );
 }

@@ -237,7 +237,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
           <li>
             <NavLink
-              to="/admin/user-verification"
+              to="/admin/survey-verification"
               onClick={() => {
                 if (props.mobile) dispatch(closeAdminSideBar());
               }}
@@ -254,7 +254,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                       !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
-                    User Verification
+                    Survey Verification
                   </span>
                 </span>
               </span>

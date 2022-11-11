@@ -64,7 +64,7 @@ import {
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
   AdminUserDiscount,
-  AdminUserVerification,
+  AdminSurveyVerification,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -258,8 +258,8 @@ root.render(
                           element={<AdminUserDiscount />}
                         />
                         <Route
-                          path="user-verification"
-                          element={<AdminUserVerification />}
+                          path="survey-verification"
+                          element={<AdminSurveyVerification />}
                         />
                         <Route path="product" element={<AdminProduct />} />
                         <Route path="reports" element={<AdminReports />} />
