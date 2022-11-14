@@ -27,7 +27,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import {
   cateringCheckoutOrders,
   CateringCheckoutOrdersState,
@@ -39,7 +42,10 @@ import {
   MaterialInput,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { selectGetAvailableUserDiscount,getAvailableUserDiscount } from "features/shared/presentation/slices/get-available-user-discount.slice";
+import {
+  selectGetAvailableUserDiscount,
+  getAvailableUserDiscount,
+} from "features/shared/presentation/slices/get-available-user-discount.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -61,7 +67,7 @@ export function CateringCheckout() {
 
   const [formState, setFormState] = useState({
     firstName: "",
-    lastName: "", 
+    lastName: "",
     eMail: "",
     phoneNumber: "",
     eventStartDate: "",
@@ -119,8 +125,10 @@ export function CateringCheckout() {
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
+    if (addContactState.status == AddContactState.success) {
+      dispatch(getSession());
+      dispatch(getContacts());
+    }
   }, [addContactState, dispatch]);
 
   useEffect(() => {
@@ -222,11 +230,10 @@ export function CateringCheckout() {
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
-    let discount = 0
+    let discount = 0;
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
-    
-  
+
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
@@ -237,11 +244,11 @@ export function CateringCheckout() {
         );
         discount = calculatedPrice * percentage;
       }
-      calculatedPrice += (calculatedPrice * service_charge_percentage) ;
+      calculatedPrice += calculatedPrice * service_charge_percentage;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
-      calculatedPrice -= discount
+      calculatedPrice -= discount;
 
       if (cashOnDelivery) {
         calculatedPrice += cashOnDelivery;
@@ -282,7 +289,6 @@ export function CateringCheckout() {
         calculatedPrice += orders[i].prod_calc_amount;
       }
     }
-   
 
     if (getAvailableUserDiscountState.data) {
       const percentage = parseFloat(
@@ -309,7 +315,6 @@ export function CateringCheckout() {
 
     return null;
   };
-
 
   return (
     <main className="bg-paper">
@@ -751,7 +756,7 @@ export function CateringCheckout() {
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
-                   {calculateAvailableUserDiscount()}
+                    {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
                     <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>

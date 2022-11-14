@@ -16,7 +16,6 @@ export function Home() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 

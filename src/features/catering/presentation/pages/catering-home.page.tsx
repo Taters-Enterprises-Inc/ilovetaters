@@ -40,13 +40,13 @@ export function CateringHome() {
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+      dispatch(getSession());
       navigate("products");
       document.body.classList.remove("overflow-hidden");
     }
   }, [setStoreAndAddressState, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 
