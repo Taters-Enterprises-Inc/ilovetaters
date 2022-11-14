@@ -1,6 +1,7 @@
 import { FormControl } from "@mui/material";
 import { LinearProgress } from '@mui/material';
 import { BSCSentenceRadioButton } from './bsc-sentence-radio-button';
+import { BSCRatingRadioButton } from "./bsc-rating-radio-button";
 
 export function BSCScoreCardPage() {
   return (
