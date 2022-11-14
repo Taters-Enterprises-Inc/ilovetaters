@@ -23,7 +23,7 @@ import {
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
-import { AdminUserDiscountModal } from "../modals";
+import { AdminSurveyVerificationModal } from "../modals";
 import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
 import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
 
@@ -403,7 +403,7 @@ export function AdminSurveyVerifications() {
         </>
       ) : null}
 
-      <AdminUserDiscountModal
+      <AdminSurveyVerificationModal
         open={openAdminUserDiscountModal}
         onClose={() => {
           const params = {
