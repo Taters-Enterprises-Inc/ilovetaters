@@ -429,7 +429,7 @@ export function AdminCateringBookingCustomerInformation() {
 
             {getAdminCateringBookingState.data.uploaded_contract ? (
               <div className="mt-1">
-                <strong>Uploaded Contract:</strong>{" "}
+                <strong>Uploaded Signed Contract:</strong>{" "}
                 <span className="font-semibold">
                   <a
                     className="text-blue-600 underline"
