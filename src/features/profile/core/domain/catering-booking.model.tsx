@@ -1,5 +1,4 @@
 export interface CateringBookingModel {
-  seen: number;
   dateadded: string;
   tracking_no: string;
 

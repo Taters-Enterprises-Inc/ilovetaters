@@ -178,7 +178,9 @@ export function ProfileCateringBookings() {
                   to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
                     row.hash_key
                   }`}
-                  className="flex flex-col px-4 py-2 border-b"
+                  className={`flex flex-col px-4 py-2 border-b ${
+                    row.dateseen === null ? "bg-gray-200" : ""
+                  } `}
                   key={i}
                 >
                   <span className="flex justify-between items-center space-x-1 text-xl">
@@ -303,7 +305,12 @@ export function ProfileCateringBookings() {
                 <>
                   {getCateringBookingHistoryState.data.bookings.map(
                     (row, i) => (
-                      <DataTableRow key={i}>
+                      <DataTableRow
+                        className={`${
+                          row.dateseen === null ? "bg-gray-200" : ""
+                        }`}
+                        key={i}
+                      >
                         <DataTableCell>
                           <Moment format="LLL">{row.dateadded}</Moment>
                         </DataTableCell>
