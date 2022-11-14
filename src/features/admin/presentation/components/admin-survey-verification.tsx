@@ -91,7 +91,7 @@ export function AdminSurveyVerifications() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          User Discount
+          Survey Verification
         </span>
         <div className="flex">
           <Select
