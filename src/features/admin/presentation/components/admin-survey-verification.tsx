@@ -11,7 +11,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import { ADMIN_USER_DISCOUNT_STATUS } from "features/shared/constants";
+import { ADMIN_SURVEY_VERIFICATION_STATUS } from "features/shared/constants";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
@@ -117,7 +117,7 @@ export function AdminSurveyVerifications() {
             }}
           >
             <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_USER_DISCOUNT_STATUS.map((value, index) => {
+            {ADMIN_SURVEY_VERIFICATION_STATUS.map((value, index) => {
               if (index === 0) {
                 return null;
               }
@@ -232,18 +232,18 @@ export function AdminSurveyVerifications() {
                       style={{
                         color: "white",
                         backgroundColor:
-                          ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                          ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
                       }}
                     >
-                      {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
+                      {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
                     </span>
                   </span>
-                  {/* 
+
                   <span className="text-xs text-gray-600">
-                    <strong> ID Number:</strong> {row.id_number}
-                  </span> */}
+                    <strong> Receipt Number:</strong> {row.id_number}
+                  </span>
                   <span className="text-xs text-gray-600">
-                    <strong>Application Date: </strong>
+                    <strong>Date and Time: </strong>
                     <Moment format="lll">{row.dateadded}</Moment>
                   </span>
                 </div>
@@ -351,23 +351,24 @@ export function AdminSurveyVerifications() {
                           style={{
                             color: "white",
                             backgroundColor:
-                              ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                              ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
+                                .color,
                           }}
                         >
-                          {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
+                          {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
                         </span>
                       </DataTableCell>
                       <DataTableCell>
                         <Moment format="lll">{row.dateadded}</Moment>
                       </DataTableCell>
-                      <DataTableCell>{row.discount_type_name}</DataTableCell>
+                      <DataTableCell>{row.id_number}</DataTableCell>
                       <DataTableCell>
                         {row.first_name} {row.middle_name} {row.last_name}
                       </DataTableCell>
-                      <DataTableCell>
+                      {/* <DataTableCell>
                         <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
+                      </DataTableCell> */}
+                      {/* <DataTableCell>{row.discount_type_name}</DataTableCell> */}
 
                       <DataTableCell align="left">
                         <button
