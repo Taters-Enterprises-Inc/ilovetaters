@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GetAdminUserDiscountsModel } from "features/admin/core/domain/get-admin-user-discounts.model";
+import { GetAdminSurveyVerificationModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import {
   GetAdminUserDiscountsRepository,
   GetAdminUserDiscountsResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetAdminUserDiscountsState {
+export enum GetAdminSurveyVerificationState {
   initial,
   inProgress,
   success,
@@ -14,17 +14,17 @@ export enum GetAdminUserDiscountsState {
 }
 
 const initialState: {
-  status: GetAdminUserDiscountsState;
+  status: GetAdminSurveyVerificationState;
   message: string;
-  data: GetAdminUserDiscountsModel | undefined;
+  data: GetAdminSurveyVerificationModel | undefined;
 } = {
-  status: GetAdminUserDiscountsState.initial,
+  status: GetAdminSurveyVerificationState.initial,
   message: "",
   data: undefined,
 };
 
-export const getAdminUserDiscounts = createAsyncThunk(
-  "getAdminUserDiscounts",
+export const getAdminSurveyVerification = createAsyncThunk(
+  "getAdminSurveyVerification",
   async (query: string, { rejectWithValue, fulfillWithValue }) => {
     try {
       const response: GetAdminUserDiscountsResponse =
@@ -37,40 +37,40 @@ export const getAdminUserDiscounts = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getAdminUserDiscountsSlice = createSlice({
-  name: "getAdminUserDiscounts",
+export const getAdminSurveyVerificationSlice = createSlice({
+  name: "getAdminSurveyVerification",
   initialState,
   reducers: {
-    resetGetAdminUserDiscountsStatus: (state) => {
-      state.status = GetAdminUserDiscountsState.inProgress;
+    resetGetAdminSurveyVerificationStatus: (state) => {
+      state.status = GetAdminSurveyVerificationState.inProgress;
     },
   },
   extraReducers: (builder: any) => {
     builder
-      .addCase(getAdminUserDiscounts.pending, (state: any) => {
-        state.status = GetAdminUserDiscountsState.inProgress;
+      .addCase(getAdminSurveyVerification.pending, (state: any) => {
+        state.status = GetAdminSurveyVerificationState.inProgress;
       })
       .addCase(
-        getAdminUserDiscounts.fulfilled,
+        getAdminSurveyVerification.fulfilled,
         (
           state: any,
           action: PayloadAction<{
             message: string;
-            data: GetAdminUserDiscountsModel | null;
+            data: GetAdminSurveyVerificationModel | null;
           }>
         ) => {
           const { message, data } = action.payload;
-          state.status = GetAdminUserDiscountsState.success;
+          state.status = GetAdminSurveyVerificationState.success;
           state.message = message;
           state.data = data;
         }
       )
       .addCase(
-        getAdminUserDiscounts.rejected,
+        getAdminSurveyVerification.rejected,
         (state: any, action: PayloadAction<{ message: string }>) => {
           const { message } = action.payload;
 
-          state.status = GetAdminUserDiscountsState.fail;
+          state.status = GetAdminSurveyVerificationState.fail;
           state.message = message;
           state.data = null;
         }
@@ -78,10 +78,10 @@ export const getAdminUserDiscountsSlice = createSlice({
   },
 });
 
-export const selectGetAdminUserDiscounts = (state: RootState) =>
-  state.getAdminUserDiscounts;
+export const selectGetAdminSurveyVerification = (state: RootState) =>
+  state.getAdminSurveyVerification;
 
-export const { resetGetAdminUserDiscountsStatus } =
-  getAdminUserDiscountsSlice.actions;
+export const { resetGetAdminSurveyVerificationStatus } =
+  getAdminSurveyVerificationSlice.actions;
 
-export default getAdminUserDiscountsSlice.reducer;
+export default getAdminSurveyVerificationSlice.reducer;
