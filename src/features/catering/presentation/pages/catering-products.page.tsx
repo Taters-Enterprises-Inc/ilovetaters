@@ -31,10 +31,6 @@ export function CateringProducts() {
   }, [location]);
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data

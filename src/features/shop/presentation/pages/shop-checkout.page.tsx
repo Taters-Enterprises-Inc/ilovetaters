@@ -27,7 +27,10 @@ import {
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
@@ -91,8 +94,10 @@ export function ShopCheckout() {
   }, [checkoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
+    if (addContactState.status === AddContactState.success) {
+      dispatch(getSession());
+      dispatch(getContacts());
+    }
   }, [addContactState, dispatch]);
 
   useEffect(() => {
@@ -139,13 +144,19 @@ export function ShopCheckout() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -166,13 +177,19 @@ export function ShopCheckout() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -217,13 +234,19 @@ export function ShopCheckout() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -274,7 +297,10 @@ export function ShopCheckout() {
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const dealPromoPrice = deals[i].deal_promo_price;
+        if (dealPromoPrice) {
+          calculatedPrice += dealPromoPrice;
+        }
       }
     }
 
@@ -400,23 +426,23 @@ export function ShopCheckout() {
                     <div className="flex-1">
                       {getContactsState.data &&
                       getContactsState.data.length > 0 ? (
-                          <MaterialInput
-                            colorTheme="black"
-                            select
-                            fullWidth
-                            label="Contacts"
-                            name="phoneNumber"
-                            onChange={handleInputChange}
-                            value={formState.phoneNumber}
-                            required
-                            autoComplete="off"
-                          >
-                            {getContactsState.data.map((val) => (
-                              <MenuItem value={val.contact}>
-                                {val.contact}
-                              </MenuItem>
-                            ))}
-                          </MaterialInput>
+                        <MaterialInput
+                          colorTheme="black"
+                          select
+                          fullWidth
+                          label="Contacts"
+                          name="phoneNumber"
+                          onChange={handleInputChange}
+                          value={formState.phoneNumber}
+                          required
+                          autoComplete="off"
+                        >
+                          {getContactsState.data.map((val) => (
+                            <MenuItem value={val.contact}>
+                              {val.contact}
+                            </MenuItem>
+                          ))}
+                        </MaterialInput>
                       ) : (
                         <MaterialPhoneInput
                           colorTheme="black"
@@ -616,14 +642,40 @@ export function ShopCheckout() {
                                   />
                                 </h3>
                               ) : null}
-                              <h3 className="flex items-end justify-end flex-1 text-base">
-                                <NumberFormat
-                                  value={order.prod_calc_amount.toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
+
+                              {order.promo_discount_percentage ? (
+                                <div>
+                                  <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                                    <NumberFormat
+                                      value={order.prod_calc_amount.toFixed(2)}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"₱"}
+                                    />
+                                  </h3>
+                                  <h3 className="flex items-end justify-end flex-1 text-base">
+                                    <NumberFormat
+                                      value={(
+                                        order.prod_calc_amount -
+                                        order.prod_calc_amount *
+                                          order.promo_discount_percentage
+                                      ).toFixed(2)}
+                                      displayType={"text"}
+                                      thousandSeparator={true}
+                                      prefix={"₱"}
+                                    />
+                                  </h3>
+                                </div>
+                              ) : (
+                                <h3 className="flex items-end justify-end flex-1 text-base">
+                                  <NumberFormat
+                                    value={order.prod_calc_amount.toFixed(2)}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"₱"}
+                                  />
+                                </h3>
+                              )}
                             </div>
                             <button
                               type="button"
@@ -638,106 +690,35 @@ export function ShopCheckout() {
                         ))}
                       </div>
                     ) : null}
-                    {getSessionState.data.deals ? (
+                    {getSessionState.data.redeem_data ? (
                       <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
-                          Popclub Deal
-                        </h2>
-                        {getSessionState.data.deals.map((deal, i) => (
-                          <div
-                            key={i}
-                            className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                          >
-                            <img
-                              src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
-                              className="rounded-[10px] w-[92px] h-[92px]"
-                              alt=""
-                            />
-                            <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                              <h3 className="text-sm w-[90%] font-bold leading-4">
-                                {deal.deal_name}
-                              </h3>
-                              <h3 className="text-xs">
-                                Quantity:{" "}
-                                <span className="text-tertiary">
-                                  {deal.deal_qty}
-                                </span>
-                              </h3>
-
-                              {deal.deal_remarks ? (
-                                <h3 className="text-xs">
-                                  Flavor:
-                                  <br />
-                                  <span
-                                    className="text-tertiary"
-                                    dangerouslySetInnerHTML={{
-                                      __html: deal.deal_remarks,
-                                    }}
-                                  />
-                                </h3>
-                              ) : null}
-
-                              <h3 className="flex items-end justify-end flex-1 text-base">
-                                <NumberFormat
-                                  value={deal.deal_promo_price.toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
-                            </div>
-                            <button
-                              type="button"
-                              className="absolute text-white top-2 right-4 "
-                              onClick={() => {
-                                if (
-                                  getSessionState.data &&
-                                  getSessionState.data.orders &&
-                                  getSessionState.data.orders.length > 1
-                                ) {
-                                  dispatch(removeItemFromCartShop(i));
-                                } else {
-                                  dispatch(
-                                    popUpSnackBar({
-                                      message: "You cannot delete this item",
-                                      severity: "error",
-                                    })
-                                  );
-                                }
-                              }}
-                            >
-                              <IoMdClose />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    {getLatestUnexpiredRedeemState.data &&
-                    isDeliveryApplied.current ? (
-                      <div className="max-h-[400px] overflow-y-auto space-y-4 px-[4px] py-[10px]">
-                        <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
-                          Popclub Deal
-                        </h2>
                         <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
                           <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getLatestUnexpiredRedeemState.data?.product_image}`}
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
                             className="rounded-[10px] w-[92px] h-[92px]"
                             alt=""
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-white text-sm w-[90%] font-bold leading-4">
-                              {getLatestUnexpiredRedeemState.data?.name}
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {getSessionState.data.redeem_data.deal_name}
                             </h3>
-                            <h3 className="mt-2 text-xs">
-                              Minumum purchase: {""}
-                              <span className="text-tertiary">
-                                {
-                                  getLatestUnexpiredRedeemState.data
-                                    ?.minimum_purchase
-                                }
-                              </span>
-                            </h3>
+
+                            {getSessionState.data.redeem_data
+                              .promo_discount_percentage ? (
+                              <>
+                                <span className="text-xs leading-4">
+                                  {getSessionState.data.redeem_data.description}
+                                </span>
+                              </>
+                            ) : null}
+
+                            <span
+                              className="text-xs"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  getSessionState.data.redeem_data.deal_remarks,
+                              }}
+                            />
                           </div>
                         </div>
                       </div>

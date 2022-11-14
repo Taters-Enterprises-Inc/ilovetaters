@@ -102,7 +102,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
       dispatch(resetLogoutAdmin());
       navigate("/admin");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoutAdminState]);
 
   return (

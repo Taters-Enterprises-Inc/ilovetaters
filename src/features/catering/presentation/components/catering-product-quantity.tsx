@@ -11,6 +11,8 @@ export type CateringProductQuantityActionType =
 
 interface CateringProductQuantityProps {
   onChange: (action: CateringProductQuantityActionType, value: number) => void;
+  quantity: number;
+  quantityChange: (value: string) => void;
 }
 
 let timeout: any;
@@ -18,7 +20,6 @@ let interval: any;
 
 export function CateringProductQuantity(props: CateringProductQuantityProps) {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [quantity, setQuantity] = useState<string>("1");
   const getSessionState = useAppSelector(selectGetSession);
 
   const quantityOnPressed = (
@@ -35,13 +36,11 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
     if (isTouch === false) {
       switch (action) {
         case "plus":
-          props.onChange(action, parseInt(quantity) + 1);
-          setQuantity((parseInt(quantity) + 1).toString());
+          props.onChange(action, props.quantity + 1);
           break;
         case "minus":
-          if (parseInt(quantity) > 1) {
-            props.onChange(action, parseInt(quantity) - 1);
-            setQuantity((parseInt(quantity) - 1).toString());
+          if (props.quantity > 1) {
+            props.onChange(action, props.quantity - 1);
           } else {
             return;
           }
@@ -50,14 +49,13 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
     }
 
     timeout = setTimeout(function () {
-      let counter = parseInt(quantity);
+      let counter = props.quantity;
 
       interval = setInterval(function () {
         counter = counter + (action === "plus" ? +1 : -1);
 
         if (counter >= 1) {
           props.onChange(action, counter);
-          setQuantity(counter.toString());
         } else {
           clearTimeout(timeout);
           clearInterval(interval);
@@ -81,7 +79,7 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             onTouchStart={() => quantityOnPressed("minus", true)}
             onTouchEnd={quantityOffPressed}
             className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
-              quantity === "1" ? "opacity-30 cursor-not-allowed" : ""
+              props.quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
             }`}
           >
             <AiOutlineMinus className="text-3xl" />
@@ -89,7 +87,7 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
 
           <input
             onWheel={(event) => event.currentTarget.blur()}
-            value={quantity}
+            value={props.quantity}
             type="number"
             onChange={(e) => {
               if (
@@ -100,7 +98,7 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
                 return;
               }
 
-              setQuantity(e.target.value);
+              props.quantityChange(e.target.value);
 
               if (e.target.value) {
                 const value = parseInt(e.target.value);

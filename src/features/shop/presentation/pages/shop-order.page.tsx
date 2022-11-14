@@ -50,7 +50,6 @@ export function ShopOrder() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
-    dispatch(getSession());
   }, [dispatch]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -376,14 +375,52 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={parseInt(order.calc_price).toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {order.promo_discount_percentage ? (
+                            <div>
+                              <br />
+                              <span className=" !text-green-400 font-bold text-sm">
+                                Deal Applied:{" "}
+                              </span>
+                              <br />
+                              <span className="text-xs leading-3 whitespace-pre-wrap">
+                                {order.deal_name}
+                                {order.deal_description}
+                              </span>
+                              <br />
+
+                              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                                <NumberFormat
+                                  value={order.calc_price.toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={(
+                                    order.calc_price -
+                                    order.calc_price *
+                                      parseFloat(
+                                        order.promo_discount_percentage
+                                      )
+                                  ).toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            </div>
+                          ) : (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.calc_price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          )}
                         </div>
                       </div>
                     )
@@ -522,118 +559,6 @@ export function ShopOrder() {
                     />
                   </span>
 
-                  {/* Upload proof of payment will be deprecated once the payment gate away finished */}
-
-                  {getOrdersState.data?.order.clients_info.status === 1 &&
-                  getOrdersState.data?.order.clients_info.payops !== 3 ? (
-                    <>
-                      <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
-                        Upload Proof of Payment
-                      </h2>
-
-                      <form onSubmit={handleProofOfPayment}>
-                        <input
-                          type="text"
-                          className="hidden"
-                          name="tracking_no"
-                          value={
-                            getOrdersState.data?.order.clients_info.tracking_no
-                          }
-                          readOnly
-                        />
-                        <input
-                          type="text"
-                          className="hidden"
-                          name="trans_id"
-                          value={getOrdersState.data?.order.clients_info.id}
-                          readOnly
-                        />
-                      </form>
-                    </>
-                  ) : null}
-
-                  {getOrdersState.data?.order.clients_info.discount_name &&
-                  getOrdersState.data?.order.clients_info.discount ? (
-                    <>
-                      <span>
-                        {getOrdersState.data?.order.clients_info.discount_name}:
-                      </span>
-                      <span className="text-end">
-                        -{" "}
-                        <NumberFormat
-                          value={parseInt(
-                            getOrdersState.data?.order.clients_info.discount
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </>
-                  ) : null}
-                </div>
-
-                <hr className="mt-1 border-secondary" />
-
-                <div className="grid grid-cols-2 text-secondary">
-                  <span>Subtotal:</span>
-                  <span className="text-end">
-                    <NumberFormat
-                      value={
-                        getOrdersState.data?.subtotal
-                          ? parseInt(getOrdersState.data.subtotal).toFixed(2)
-                          : 0.0
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  <span>Delivery Fee:</span>
-                  <span className="text-end ">
-                    +{" "}
-                    <NumberFormat
-                      value={
-                        getOrdersState.data?.grand_total
-                          ? getOrdersState.data.grand_total.toFixed(2)
-                          : 0.0
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-
-                  {/* Upload proof of payment will be deprecated once the payment gate away finished */}
-
-                  {getOrdersState.data?.order.clients_info.status === 1 &&
-                  getOrdersState.data?.order.clients_info.payops !== 3 ? (
-                    <>
-                      <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
-                        Upload Proof of Payment
-                      </h2>
-
-                      <form onSubmit={handleProofOfPayment}>
-                        <input
-                          type="text"
-                          className="hidden"
-                          name="tracking_no"
-                          value={
-                            getOrdersState.data?.order.clients_info.tracking_no
-                          }
-                          readOnly
-                        />
-                        <input
-                          type="text"
-                          className="hidden"
-                          name="trans_id"
-                          value={getOrdersState.data?.order.clients_info.id}
-                          readOnly
-                        />
-                      </form>
-                    </>
-                  ) : null}
-
                   {getOrdersState.data?.order.clients_info.discount_name &&
                   getOrdersState.data?.order.clients_info.discount ? (
                     <>
@@ -669,8 +594,6 @@ export function ShopOrder() {
                     prefix={"₱"}
                   />
                 </h1>
-
-                {/* Upload proof of payment will be deprecated once the payment gate away finished */}
 
                 {getOrdersState.data?.order.clients_info.status === 1 &&
                 getOrdersState.data?.order.clients_info.payops !== 3 ? (

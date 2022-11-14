@@ -117,7 +117,6 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCateringOrdersState]);
 
   useEffect(() => {
@@ -184,7 +183,6 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getOrdersState]);
 
   useEffect(() => {
@@ -254,7 +252,6 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getDealState]);
 
   return (

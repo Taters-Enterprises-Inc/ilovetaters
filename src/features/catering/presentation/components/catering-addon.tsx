@@ -3,13 +3,16 @@ import { LoginChooserModal } from "features/popclub/presentation/modals/login-ch
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { useState } from "react";
 import { BsFillCartPlusFill, BsCheckLg } from "react-icons/bs";
 import NumberFormat from "react-number-format";
 import { addToCartCatering } from "../slices/add-to-cart-catering.slice";
+
 interface AddonProps {
   isFreeItem: boolean;
   isFreeItemClaimed: boolean;
+  isFreeItemButAddToCartFirst: boolean;
   product: ProductModel;
 }
 
@@ -100,6 +103,29 @@ export function CateringAddon(props: AddonProps) {
               </span>
             </button>
           )
+        ) : props.isFreeItemButAddToCartFirst ? (
+          <button
+            onClick={() => {
+              dispatch(
+                popUpSnackBar({
+                  message:
+                    "Add to cart your package before claiming this free item.",
+                  severity: "error",
+                })
+              );
+            }}
+            className="w-full py-2 space-x-4 font-light bg-orange-700 rounded-b-xl"
+          >
+            <div className="flex items-center justify-center space-x-2 ">
+              <BsFillCartPlusFill className="text-2xl" />
+              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                Claim for free
+              </span>
+            </div>
+            <span className="text-xs font-light ">
+              Add to cart your package before claiming this free item
+            </span>
+          </button>
         ) : (
           <button
             onClick={handleAddToCart}
