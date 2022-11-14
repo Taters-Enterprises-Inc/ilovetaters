@@ -49,7 +49,6 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
-import { AnyAaaaRecord } from "dns";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -513,6 +512,7 @@ export function CateringProduct() {
                       Note: base price varies on order qty
                     </span>
                     <CateringProductQuantity
+                      quantity={quantity}
                       onChange={(action, value) => {
                         switch (action) {
                           case "plus":
@@ -528,6 +528,9 @@ export function CateringProduct() {
                             break;
                         }
                         setQuantity(value);
+                      }}
+                      quantityChange={(value) => {
+                        setQuantity(parseInt(value));
                       }}
                     />
                     {getCateringProductDetailsState.data ? (
@@ -614,7 +617,10 @@ export function CateringProduct() {
 
                   <button
                     onClick={() => {
-                      dispatchAddToCartCatering();
+                      dispatchAddToCartCatering(() => {
+                        setQuantity(1);
+                        setCurrentMultiFlavors({});
+                      });
                     }}
                     className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
@@ -675,18 +681,26 @@ export function CateringProduct() {
                             }
 
                             let isFreeItem = product.free_threshold
-                              ? getCateringProductDetailsState.data.product
-                                  .price *
-                                  quantity +
-                                  calculatedPrice >=
-                                product.free_threshold
+                              ? calculatedPrice >= product.free_threshold
                               : false;
+
+                            let isFreeItemButAddToCartFirst =
+                              product.free_threshold
+                                ? getCateringProductDetailsState.data.product
+                                    .price *
+                                    quantity +
+                                    calculatedPrice >=
+                                  product.free_threshold
+                                : false;
 
                             return (
                               <CateringAddon
                                 key={i}
                                 product={product}
                                 isFreeItem={isFreeItem}
+                                isFreeItemButAddToCartFirst={
+                                  isFreeItemButAddToCartFirst
+                                }
                                 isFreeItemClaimed={isFreeItemClaimed}
                               />
                             );
