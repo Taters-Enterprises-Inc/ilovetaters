@@ -16,10 +16,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
 import {
-  getAdminUserDiscounts,
-  resetGetAdminUserDiscountsStatus,
-  selectGetAdminUserDiscounts,
-} from "../slices/get-admin-user-discounts.slice";
+  getAdminSurveyVerification,
+  resetGetAdminSurveyVerificationStatus,
+  selectGetAdminSurveyVerification,
+} from "../slices/get-admin-survey-verification.slice";
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
@@ -47,11 +47,13 @@ export function AdminSurveyVerifications() {
   const order = query.get("order");
   const search = query.get("search");
 
-  const [openAdminUserDiscountModal, setOpenAdminUserDiscountModal] =
-    useState(false);
+  const [
+    openAdminSurveyVerificationModal,
+    setOpenAdminSurveyVerificationModal,
+  ] = useState(false);
 
-  const getAdminUserDiscountsStates = useAppSelector(
-    selectGetAdminUserDiscounts
+  const getAdminSurveyVerificationStates = useAppSelector(
+    selectGetAdminSurveyVerification
   );
 
   const adminUserDicountChangeStatusState = useAppSelector(
@@ -60,8 +62,8 @@ export function AdminSurveyVerifications() {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminUserDiscount(id)).then(() => {
-        setOpenAdminUserDiscountModal(true);
+      dispatch(getAdminSurveyVerification(id)).then(() => {
+        setOpenAdminSurveyVerificationModal(true);
       });
     }
   }, [dispatch, id]);
@@ -75,7 +77,7 @@ export function AdminSurveyVerifications() {
       order: order,
       search: search,
     });
-    dispatch(getAdminUserDiscounts(query));
+    dispatch(getAdminSurveyVerification(query));
   }, [
     dispatch,
     pageNo,
@@ -108,7 +110,7 @@ export function AdminSurveyVerifications() {
 
                 const queryParams = createQueryParams(params);
 
-                dispatch(resetGetAdminUserDiscountsStatus());
+                dispatch(resetGetAdminSurveyVerificationStatus());
                 navigate({
                   pathname: "",
                   search: queryParams,
@@ -131,7 +133,7 @@ export function AdminSurveyVerifications() {
         </div>
       </div>
 
-      {getAdminUserDiscountsStates.data?.discounts ? (
+      {getAdminSurveyVerificationStates.data?.discounts ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -165,7 +167,7 @@ export function AdminSurveyVerifications() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminUserDiscountsStatus());
+                  dispatch(resetGetAdminSurveyVerificationStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -184,20 +186,24 @@ export function AdminSurveyVerifications() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminUserDiscountsStatus());
+                  dispatch(resetGetAdminSurveyVerificationStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
-              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
+              totalRows={
+                getAdminSurveyVerificationStates.data.pagination.total_rows
+              }
+              perPage={
+                getAdminSurveyVerificationStates.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
+              {getAdminSurveyVerificationStates.data.discounts.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -288,7 +294,7 @@ export function AdminSurveyVerifications() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminUserDiscountsStatus());
+                  dispatch(resetGetAdminSurveyVerificationStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -309,7 +315,7 @@ export function AdminSurveyVerifications() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminUserDiscountsStatus());
+                  dispatch(resetGetAdminSurveyVerificationStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -330,72 +336,78 @@ export function AdminSurveyVerifications() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminUserDiscountsStatus());
+                  dispatch(resetGetAdminSurveyVerificationStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
-              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
+              totalRows={
+                getAdminSurveyVerificationStates.data.pagination.total_rows
+              }
+              perPage={
+                getAdminSurveyVerificationStates.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminUserDiscountsStates.data.discounts !== undefined ? (
+              {getAdminSurveyVerificationStates.data.discounts !== undefined ? (
                 <>
-                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
-                                .color,
-                          }}
-                        >
-                          {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="lll">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
-                      <DataTableCell>
-                        {row.first_name} {row.middle_name} {row.last_name}
-                      </DataTableCell>
-                      {/* <DataTableCell>
+                  {getAdminSurveyVerificationStates.data.discounts.map(
+                    (row, i) => (
+                      <DataTableRow key={i}>
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
+                                  .color,
+                            }}
+                          >
+                            {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="lll">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.id_number}</DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
+                        {/* <DataTableCell>
                         <Moment format="ll">{row.birthday}</Moment>
                       </DataTableCell> */}
-                      {/* <DataTableCell>{row.discount_type_name}</DataTableCell> */}
+                        {/* <DataTableCell>{row.discount_type_name}</DataTableCell> */}
 
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              id: row.id,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                id: row.id,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    )
+                  )}
                 </>
               ) : null}
             </DataTable>
@@ -404,7 +416,7 @@ export function AdminSurveyVerifications() {
       ) : null}
 
       <AdminSurveyVerificationModal
-        open={openAdminUserDiscountModal}
+        open={openAdminSurveyVerificationModal}
         onClose={() => {
           const params = {
             page_no: pageNo,
@@ -422,7 +434,7 @@ export function AdminSurveyVerifications() {
             pathname: "",
             search: queryParams,
           });
-          setOpenAdminUserDiscountModal(false);
+          setOpenAdminSurveyVerificationModal(false);
         }}
       />
     </>

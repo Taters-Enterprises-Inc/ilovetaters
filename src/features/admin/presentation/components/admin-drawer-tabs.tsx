@@ -30,7 +30,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
-import { GrDocumentVerified } from "react-icons/gr";
+import { TbFileCheck } from "react-icons/tb";
 
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
@@ -247,7 +247,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <GrDocumentVerified size={20} />
+                  <TbFileCheck size={20} />
 
                   <span
                     className={`whitespace-pre duration-300 ${
