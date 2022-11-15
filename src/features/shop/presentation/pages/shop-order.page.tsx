@@ -54,7 +54,6 @@ export function ShopOrder() {
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
-    dispatch(getSession());
   }, [dispatch]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -374,14 +373,52 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={parseInt(order.calc_price).toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {order.promo_discount_percentage ? (
+                            <div>
+                              <br />
+                              <span className=" !text-green-400 font-bold text-sm">
+                                Deal Applied:{" "}
+                              </span>
+                              <br />
+                              <span className="text-xs leading-3 whitespace-pre-wrap">
+                                {order.deal_name}
+                                {order.deal_description}
+                              </span>
+                              <br />
+
+                              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                                <NumberFormat
+                                  value={order.calc_price.toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={(
+                                    order.calc_price -
+                                    order.calc_price *
+                                      parseFloat(
+                                        order.promo_discount_percentage
+                                      )
+                                  ).toFixed(2)}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            </div>
+                          ) : (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={order.calc_price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          )}
                         </div>
                       </div>
                     )

@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {
   facebookLogout,
+  FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
@@ -163,8 +164,10 @@ export function HeaderNav(props: HeaderNavProps) {
   };
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [facebookLogoutState, dispatch]);
+    if (facebookLogoutState.status === FacebookLogoutState.success) {
+      dispatch(getSession());
+    }
+  }, [facebookLogoutState]);
 
   const handleCart = () => {
     setopenCartMenu(null);
@@ -205,13 +208,19 @@ export function HeaderNav(props: HeaderNavProps) {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -629,7 +638,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         }}
                       />
 
-                      <div className="pointer-events-auto bg-white">
+                      <div className="bg-white pointer-events-auto">
                         <CartListItem
                           onProcessOrder={() => {
                             setopenCartMenu(null);

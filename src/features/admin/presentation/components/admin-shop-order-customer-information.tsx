@@ -106,8 +106,11 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].price * parseFloat(discountPercentage)
+          : 0;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -138,8 +141,11 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].price * parseFloat(discountPercentage)
+          : 0;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -160,8 +166,11 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice +=
-          parseInt(orders[i].product_price) * orders[i].quantity;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].price * parseFloat(discountPercentage)
+          : 0;
+        calculatedPrice += orders[i].price - discount;
       }
     }
 
@@ -588,6 +597,20 @@ export function AdminShopOrderCustomerInformation() {
                                   : ""),
                           }}
                         />
+                        {item.deal_name ? (
+                          <>
+                            <br />
+                            <br />
+                            <span className=" !text-green-700 font-bold">
+                              Deal Applied:{" "}
+                            </span>
+                            <br />
+                            <span className="whitespace-pre-wrap">
+                              {item.deal_name}
+                              {item.deal_description}
+                            </span>
+                          </>
+                        ) : null}
                       </th>
                       <td className="px-6 py-4">
                         <span
@@ -598,22 +621,72 @@ export function AdminShopOrderCustomerInformation() {
                       </td>
                       <td className="px-6 py-4">{item.quantity}</td>
                       <td className="px-6 py-4 text-end">
-                        <NumberFormat
-                          value={parseInt(item.product_price).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        {item.promo_discount_percentage ? (
+                          <>
+                            <span className="text-sm line-through">
+                              <NumberFormat
+                                value={item.product_price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                            <br />
+                            <span>
+                              <NumberFormat
+                                value={(
+                                  item.product_price -
+                                  item.product_price *
+                                    parseFloat(item.promo_discount_percentage)
+                                ).toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                          </>
+                        ) : (
+                          <NumberFormat
+                            value={item.product_price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        )}
                       </td>
                       <td className="px-6 py-4 text-end">
-                        <NumberFormat
-                          value={(
-                            parseInt(item.product_price) * item.quantity
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        {item.promo_discount_percentage ? (
+                          <>
+                            <span className="text-sm line-through">
+                              <NumberFormat
+                                value={item.price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                            <br />
+                            <span>
+                              <NumberFormat
+                                value={(
+                                  item.price -
+                                  item.price *
+                                    parseFloat(item.promo_discount_percentage)
+                                ).toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                          </>
+                        ) : (
+                          <NumberFormat
+                            value={item.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -699,6 +772,19 @@ export function AdminShopOrderCustomerInformation() {
                                 : ""),
                         }}
                       />
+                      {item.deal_name ? (
+                        <>
+                          <br />
+                          <br />
+                          <span className=" !text-green-700 font-bold">
+                            Deal Applied:{" "}
+                          </span>
+                          <br />
+                          <span className="whitespace-pre-wrap">
+                            {item.deal_name}
+                          </span>
+                        </>
+                      ) : null}
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Remarks:</span>
@@ -714,24 +800,57 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Quantity:</span>
                       <span className="text-xs">{item.quantity}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-xs font-bold">Price:</span>
-                      <span className="text-xs">
-                        <NumberFormat
-                          value={parseInt(item.product_price).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </div>
+                    {item.promo_discount_percentage ? (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-xs font-bold">Price:</span>
+                          <span className="text-xs line-through">
+                            <NumberFormat
+                              value={item.product_price.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </span>
+                        </div>
+
+                        <div className="flex justify-between">
+                          <span className="text-xs font-bold">
+                            Discounted Price:
+                          </span>
+                          <span className="text-xs">
+                            <NumberFormat
+                              value={(
+                                item.product_price -
+                                item.product_price *
+                                  parseFloat(item.promo_discount_percentage)
+                              ).toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex justify-between">
+                        <span className="text-xs font-bold">Price:</span>
+                        <span className="text-xs">
+                          <NumberFormat
+                            value={item.product_price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </div>
+                    )}
+
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={(
-                            parseInt(item.product_price) * item.quantity
-                          ).toFixed(2)}
+                          value={item.price.toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}

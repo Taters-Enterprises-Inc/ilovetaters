@@ -539,6 +539,7 @@ export function CateringOrder() {
                       <span
                         className={`text-end uppercase ${
                           getCateringOrdersState.data.status === 6 ||
+                          getCateringOrdersState.data.status === 7 ||
                           getCateringOrdersState.data.status === 8
                             ? "line-through"
                             : ""
@@ -571,9 +572,9 @@ export function CateringOrder() {
                         }`}
                       >
                         <NumberFormat
-                          value={getCateringOrdersState.data.grand_total.toFixed(
-                            2
-                          )}
+                          value={(
+                            getCateringOrdersState.data.grand_total / 2
+                          ).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}

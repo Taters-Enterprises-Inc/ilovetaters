@@ -18,6 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
+import Dispatcher from "pusher-js/types/src/core/events/dispatcher";
 
 export function ShopProducts() {
   const getSessionState = useAppSelector(selectGetSession);
@@ -33,10 +34,6 @@ export function ShopProducts() {
   }, [location]);
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data &&
@@ -48,7 +45,7 @@ export function ShopProducts() {
         })
       );
     }
-  }, [dispatch, getSessionState]);
+  }, [getSessionState, dispatch]);
 
   return (
     <main className="min-h-screen bg-primary">

@@ -61,10 +61,6 @@ export function CateringPaymentAccordion() {
   const getSessionState = useAppSelector(selectGetSession);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
   return (
     <FormControl className="w-full">
       <RadioGroup aria-labelledby="payops aria label" name="payops">

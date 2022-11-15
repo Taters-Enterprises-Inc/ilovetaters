@@ -36,7 +36,7 @@ export function ShopCartModal(props: ShopCartModalProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartShop());
     }
-  }, [removeItemFromCartShopState, dispatch]);
+  }, [removeItemFromCartShopState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -52,13 +52,19 @@ export function ShopCartModal(props: ShopCartModalProps) {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -150,14 +156,39 @@ export function ShopCartModal(props: ShopCartModalProps) {
                           </h3>
                         ) : null}
 
-                        <h3 className="flex items-end justify-end flex-1 text-base">
-                          <NumberFormat
-                            value={order.prod_calc_amount.toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
-                        </h3>
+                        {order.promo_discount_percentage ? (
+                          <div>
+                            <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                              <NumberFormat
+                                value={order.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={(
+                                  order.prod_calc_amount -
+                                  order.prod_calc_amount *
+                                    order.promo_discount_percentage
+                                ).toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          </div>
+                        ) : (
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={order.prod_calc_amount.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
+                        )}
                       </div>
                       <button
                         className="absolute text-white top-2 right-4 "
@@ -207,15 +238,16 @@ export function ShopCartModal(props: ShopCartModalProps) {
                             />
                           </h3>
                         ) : null}
-
-                        <h3 className="flex items-end justify-end flex-1 text-base">
-                          <NumberFormat
-                            value={deal.deal_promo_price.toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
-                        </h3>
+                        {deal.deal_promo_price ? (
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={deal.deal_promo_price.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
+                        ) : null}
                       </div>
                       <button
                         className="absolute text-white top-2 right-4 "

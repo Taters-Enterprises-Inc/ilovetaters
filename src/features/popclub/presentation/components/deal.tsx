@@ -55,6 +55,26 @@ export function Deal(props: DealProps) {
   let availableStartTimeInDate: any;
   let isDealAvailable = true;
 
+  let availableStartDateTime;
+  let availableEndDateTime;
+  let availableStartDateTimeInDate: any;
+
+  if (
+    props.deal.available_start_datetime &&
+    props.deal.available_end_datetime
+  ) {
+    const currentTime = moment();
+
+    availableStartDateTime = moment(props.deal.available_start_datetime);
+    availableEndDateTime = moment(props.deal.available_end_datetime);
+
+    isDealAvailable = currentTime.isBetween(
+      availableStartDateTime,
+      availableEndDateTime
+    );
+    availableStartDateTimeInDate = availableStartDateTime.toDate();
+  }
+
   if (props.deal.available_start_time && props.deal.available_end_time) {
     const currentTime = moment(moment().format("HH:mm:ss"), "HH:mm:ss");
     availableStartTime = moment(props.deal.available_start_time, "HH:mm:ss");
@@ -132,6 +152,15 @@ export function Deal(props: DealProps) {
             Available after
           </span>
           <Countdown renderer={renderer} date={availableStartTimeInDate} />
+        </>
+      );
+    } else if (availableStartDateTimeInDate) {
+      return (
+        <>
+          <span className="text-xs font-bold lg:text-base">
+            Available after
+          </span>
+          <Countdown renderer={renderer} date={availableStartDateTimeInDate} />
         </>
       );
     } else if (props.deal.available_days) {
@@ -213,6 +242,18 @@ export function Deal(props: DealProps) {
                 <span className="text-[10px] lg:text-xs text-white">
                   {availableStartTime.format("LT")} -{" "}
                   {availableEndTime.format("LT")}
+                </span>
+              </div>
+            </>
+          ) : null}
+
+          {availableStartDateTime && availableEndDateTime ? (
+            <>
+              <div className="flex items-center pt-2 space-x-1">
+                <HiClock className="text-base text-white" />
+                <span className="text-[10px] lg:text-xs text-white">
+                  {availableStartDateTime.format("ll")} -{" "}
+                  {availableEndDateTime.format("ll")}
                 </span>
               </div>
             </>
