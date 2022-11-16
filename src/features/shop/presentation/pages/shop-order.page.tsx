@@ -407,7 +407,7 @@ export function ShopOrder() {
                           ) : (
                             <h3 className="flex items-end justify-end flex-1 text-base">
                               <NumberFormat
-                                value={order.calc_price.toFixed(2)}
+                                value={Number(order.calc_price).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
