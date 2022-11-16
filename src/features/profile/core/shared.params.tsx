@@ -1,7 +1,7 @@
 export interface UpdateIndicatorOrderParam {
-  notificationId: String;
+  notificationId: Number;
 }
 
 export interface UpdateIndicatorCateringParam {
-  notificationId: String;
+  notificationId: Number;
 }

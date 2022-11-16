@@ -309,8 +309,10 @@ export function HeaderNav(props: HeaderNavProps) {
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">
             {icon}
-            {(id === 2 && getUnreadNotification.data?.Snackshop) ||
-            (id === 3 && getUnreadNotification.data?.Catering) ? (
+            {(id === 2 &&
+              getUnreadNotification.data?.Total_Notifications.Snackshop) ||
+            (id === 3 &&
+              getUnreadNotification.data?.Total_Notifications.Catering) ? (
               <VscCircleFilled className=" text-xs text-red-600" />
             ) : null}
           </ListItemIcon>
@@ -480,12 +482,16 @@ export function HeaderNav(props: HeaderNavProps) {
                             <FaUserCircle className="text-2xl text-white w-6 h-6 fill-current" />
 
                             {getUnreadNotification.data &&
-                            getUnreadNotification.data.Snackshop +
-                              getUnreadNotification.data.Catering !==
+                            getUnreadNotification.data.Total_Notifications
+                              .Snackshop +
+                              getUnreadNotification.data.Total_Notifications
+                                .Catering !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getUnreadNotification.data.Snackshop +
-                                  getUnreadNotification.data.Catering}
+                                {getUnreadNotification.data.Total_Notifications
+                                  .Snackshop +
+                                  getUnreadNotification.data.Total_Notifications
+                                    .Catering}
                               </span>
                             ) : null}
                           </span>
@@ -500,12 +506,16 @@ export function HeaderNav(props: HeaderNavProps) {
                               width={30}
                             />
                             {getUnreadNotification.data &&
-                            getUnreadNotification.data.Snackshop +
-                              getUnreadNotification.data.Catering !==
+                            getUnreadNotification.data.Total_Notifications
+                              .Snackshop +
+                              getUnreadNotification.data.Total_Notifications
+                                .Catering !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getUnreadNotification.data.Snackshop +
-                                  getUnreadNotification.data.Catering}
+                                {getUnreadNotification.data.Total_Notifications
+                                  .Snackshop +
+                                  getUnreadNotification.data.Total_Notifications
+                                    .Catering}
                               </span>
                             ) : null}
                           </span>

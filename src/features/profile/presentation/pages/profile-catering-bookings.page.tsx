@@ -12,7 +12,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { DataList } from "features/shared/presentation/components";
@@ -26,6 +26,7 @@ import { CATERING_BOOKING_STATUS } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
 import { updateIndicatorCatering } from "../slices/update-catering-indicator.slice";
 import { VscCircleFilled } from "react-icons/vsc";
+import { selectGetUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -42,6 +43,10 @@ export function ProfileCateringBookings() {
   const getCateringBookingHistoryState = useAppSelector(
     selectGetCateringBookingHistory
   );
+
+  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+  const isUnread = useRef(false);
+
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const orderBy = query.get("order_by");
@@ -95,12 +100,28 @@ export function ProfileCateringBookings() {
     );
   };
 
-  const handleOnclick = (notificationId: any) => {
-    dispatch(
-      updateIndicatorCatering({
-        notificationId: notificationId,
-      })
-    );
+  const handleOnclick = (tracking_no: any) => {
+    getUnreadNotification.data?.Catering.map((items, i) => {
+      if (items.catering_tracking_no === tracking_no) {
+        dispatch(
+          updateIndicatorCatering({
+            notificationId: items.id,
+          })
+        );
+      }
+    });
+  };
+
+  const unreadCheck = (tracking_no: string) => {
+    isUnread.current = false;
+    getUnreadNotification.data?.Catering.map((items, i) => {
+      if (items.catering_tracking_no === tracking_no) {
+        if (items.dateseen === null) {
+          isUnread.current = true;
+        }
+      }
+    });
+    return isUnread.current;
   };
 
   return (
@@ -174,12 +195,12 @@ export function ProfileCateringBookings() {
               <hr className="mt-4" />
               {getCateringBookingHistoryState.data.bookings.map((row, i) => (
                 <Link
-                  onClick={() => handleOnclick(row.notification_id)}
+                  onClick={() => handleOnclick(row.tracking_no)}
                   to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
                     row.hash_key
                   }`}
                   className={`flex flex-col px-4 py-2 border-b ${
-                    row.dateseen === null ? "bg-gray-200" : ""
+                    unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
                   } `}
                   key={i}
                 >
@@ -198,7 +219,7 @@ export function ProfileCateringBookings() {
                     >
                       {CATERING_BOOKING_STATUS[row.status].name}
                     </span>
-                    {row.dateseen === null ? (
+                    {unreadCheck(row.tracking_no) ? (
                       <VscCircleFilled className=" text-red-600" />
                     ) : null}
                   </span>
@@ -307,7 +328,7 @@ export function ProfileCateringBookings() {
                     (row, i) => (
                       <DataTableRow
                         className={`${
-                          row.dateseen === null ? "bg-gray-200" : ""
+                          unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
                         }`}
                         key={i}
                       >
@@ -332,14 +353,16 @@ export function ProfileCateringBookings() {
                         </DataTableCell>
                         <DataTableCell align="left">
                           <Link
-                            onClick={() => handleOnclick(row.notification_id)}
+                            onClick={() => handleOnclick(row.tracking_no)}
                             to={`/shop/${
                               row.status <= 3 ? "contract" : "order"
                             }/${row.hash_key}`}
                           >
                             <FaEye
                               className={`text-lg ${
-                                row.dateseen === null ? "text-red-600" : null
+                                unreadCheck(row.tracking_no)
+                                  ? "text-red-600"
+                                  : null
                               }`}
                             />
                           </Link>
