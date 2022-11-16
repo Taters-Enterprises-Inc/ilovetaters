@@ -11,7 +11,4 @@ export interface CateringBookingModel {
 
   status: number;
   hash_key: string;
-
-  notification_id: string;
-  dateseen: any;
 }
