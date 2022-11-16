@@ -2,7 +2,7 @@ import { IoMdClose } from "react-icons/io";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
-import { AdminIdUserDiscountInformation } from "../components";
+import { AdminSurveyVerificationIDInformation } from "../components/admin-survey-verification-id-information";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,13 +33,13 @@ function a11yProps(index: number) {
   };
 }
 
-interface AdminUserDiscountModalProps {
+interface AdminSurveyVerificationModalProps {
   open: boolean;
   onClose: () => void;
 }
 
 export function AdminSurveyVerificationModal(
-  props: AdminUserDiscountModalProps
+  props: AdminSurveyVerificationModalProps
 ) {
   const [value, setValue] = useState(0);
 
@@ -81,7 +81,7 @@ export function AdminSurveyVerificationModal(
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
-            <AdminIdUserDiscountInformation onClose={props.onClose} />
+            <AdminSurveyVerificationIDInformation onClose={props.onClose} />
           </TabPanel>
         </div>
       </div>

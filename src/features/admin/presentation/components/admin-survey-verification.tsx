@@ -52,7 +52,7 @@ export function AdminSurveyVerifications() {
     setOpenAdminSurveyVerificationModal,
   ] = useState(false);
 
-  const getAdminUserDiscountsStates = useAppSelector(
+  const getAdminSurveyVerificationStates = useAppSelector(
     selectGetAdminSurveyVerification
   );
 
@@ -133,7 +133,7 @@ export function AdminSurveyVerifications() {
         </div>
       </div>
 
-      {getAdminUserDiscountsStates.data?.discounts ? (
+      {getAdminSurveyVerificationStates.data?.discounts ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -193,13 +193,17 @@ export function AdminSurveyVerifications() {
                   });
                 }
               }}
-              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
-              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
+              totalRows={
+                getAdminSurveyVerificationStates.data.pagination.total_rows
+              }
+              perPage={
+                getAdminSurveyVerificationStates.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
+              {getAdminSurveyVerificationStates.data.discounts.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -242,7 +246,7 @@ export function AdminSurveyVerifications() {
                   </span>
 
                   <span className="text-xs text-gray-600">
-                    <strong> Receipt Number:</strong> {row.id_number}
+                    <strong> Receipt Number:</strong> {row.receipt_number}
                   </span>
                   <span className="text-xs text-gray-600">
                     <strong>Date and Time: </strong>
@@ -339,65 +343,67 @@ export function AdminSurveyVerifications() {
                   });
                 }
               }}
-              totalRows={getAdminUserDiscountsStates.data.pagination.total_rows}
-              perPage={getAdminUserDiscountsStates.data.pagination.per_page}
+              totalRows={
+                getAdminSurveyVerificationStates.data.pagination.total_rows
+              }
+              perPage={
+                getAdminSurveyVerificationStates.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminUserDiscountsStates.data.discounts !== undefined ? (
+              {getAdminSurveyVerificationStates.data.discounts !== undefined ? (
                 <>
-                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
-                                .color,
-                          }}
-                        >
-                          {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="lll">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
-                      <DataTableCell>
-                        {row.first_name} {row.middle_name} {row.last_name}
-                      </DataTableCell>
-                      {/* <DataTableCell>
-                        <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell> */}
-                      {/* <DataTableCell>{row.discount_type_name}</DataTableCell> */}
+                  {getAdminSurveyVerificationStates.data.discounts.map(
+                    (row, i) => (
+                      <DataTableRow key={i}>
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
+                                  .color,
+                            }}
+                          >
+                            {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="lll">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.receipt_number}</DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
 
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              id: row.id,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                id: row.id,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    )
+                  )}
                 </>
               ) : null}
             </DataTable>
