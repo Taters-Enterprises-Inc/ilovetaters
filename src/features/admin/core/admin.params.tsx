@@ -94,6 +94,11 @@ export interface AdminUserDiscountChangeStatusParam {
   status: number;
 }
 
+export interface AdminSurveyVerificationChangeStatusParam {
+  discountUserId: number;
+  status: number;
+}
+
 export interface AdminDeclineRedeemParam {
   redeemId: number;
   mobileUserId?: number;

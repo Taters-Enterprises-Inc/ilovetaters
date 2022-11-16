@@ -24,8 +24,8 @@ import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminSurveyVerificationModal } from "../modals";
-import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
-import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
+import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -56,13 +56,13 @@ export function AdminSurveyVerifications() {
     selectGetAdminSurveyVerification
   );
 
-  const adminUserDicountChangeStatusState = useAppSelector(
-    selectAdminUserDiscountChangeStatus
+  const adminSurveyVerificationChangeStatusState = useAppSelector(
+    selectAdminSurveyVerificationChangeStatus
   );
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminSurveyVerification(id)).then(() => {
+      dispatch(getAdminSurveyVerifications(id)).then(() => {
         setOpenAdminSurveyVerificationModal(true);
       });
     }
@@ -86,7 +86,7 @@ export function AdminSurveyVerifications() {
     orderBy,
     order,
     search,
-    adminUserDicountChangeStatusState,
+    adminSurveyVerificationChangeStatusState,
   ]);
 
   return (
@@ -246,7 +246,7 @@ export function AdminSurveyVerifications() {
                   </span>
 
                   <span className="text-xs text-gray-600">
-                    <strong> Receipt Number:</strong> {row.id_number}
+                    <strong> Receipt Number:</strong> {row.receipt_number}
                   </span>
                   <span className="text-xs text-gray-600">
                     <strong>Date and Time: </strong>
@@ -372,14 +372,10 @@ export function AdminSurveyVerifications() {
                         <DataTableCell>
                           <Moment format="lll">{row.dateadded}</Moment>
                         </DataTableCell>
-                        <DataTableCell>{row.id_number}</DataTableCell>
+                        <DataTableCell>{row.receipt_number}</DataTableCell>
                         <DataTableCell>
                           {row.first_name} {row.middle_name} {row.last_name}
                         </DataTableCell>
-                        {/* <DataTableCell>
-                        <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell> */}
-                        {/* <DataTableCell>{row.discount_type_name}</DataTableCell> */}
 
                         <DataTableCell align="left">
                           <button
