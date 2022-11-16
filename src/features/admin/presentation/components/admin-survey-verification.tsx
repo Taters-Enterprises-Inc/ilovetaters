@@ -24,8 +24,8 @@ import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminSurveyVerificationModal } from "../modals";
-import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
-import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
+import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -56,13 +56,13 @@ export function AdminSurveyVerifications() {
     selectGetAdminSurveyVerification
   );
 
-  const adminUserDicountChangeStatusState = useAppSelector(
-    selectAdminUserDiscountChangeStatus
+  const adminSurveyVerificationChangeStatusState = useAppSelector(
+    selectAdminSurveyVerificationChangeStatus
   );
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminUserDiscount(id)).then(() => {
+      dispatch(getAdminSurveyVerifications(id)).then(() => {
         setOpenAdminSurveyVerificationModal(true);
       });
     }
@@ -86,7 +86,7 @@ export function AdminSurveyVerifications() {
     orderBy,
     order,
     search,
-    adminUserDicountChangeStatusState,
+    adminSurveyVerificationChangeStatusState,
   ]);
 
   return (
