@@ -898,41 +898,62 @@ export function ShopProduct() {
 
                 {getSessionState.data?.cache_data ||
                 getSessionState.data?.customer_address ? (
-                  <div className="space-y-4">
-                    <button
-                      onClick={() =>
-                        isQuantityNull.current
-                          ? setDisabled
-                          : handleAddToCartCheckout()
-                      }
-                      className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                        isQuantityNull.current
-                          ? "opacity-30 cursor-not-allowed"
-                          : ""
-                      }`}
-                    >
-                      <BsFillBagCheckFill className="text-3xl" />
-                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                        Checkout
-                      </span>
-                    </button>
+                  <>
+                    <div className="space-y-4">
+                      <button
+                        onClick={() =>
+                          isQuantityNull.current
+                            ? setDisabled
+                            : handleAddToCartCheckout()
+                        }
+                        className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                          isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <BsFillBagCheckFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Checkout
+                        </span>
+                      </button>
 
-                    <button
-                      onClick={() =>
-                        isQuantityNull.current ? setDisabled : handleAddToCart()
-                      }
-                      className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                        isQuantityNull.current
-                          ? "opacity-30 cursor-not-allowed"
-                          : ""
-                      }`}
-                    >
-                      <BsFillCartPlusFill className="text-3xl" />
-                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                        Add to cart
-                      </span>
-                    </button>
-                  </div>
+                      <button
+                        onClick={() =>
+                          isQuantityNull.current
+                            ? setDisabled
+                            : handleAddToCart()
+                        }
+                        className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                          isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <BsFillCartPlusFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Add to cart
+                        </span>
+                      </button>
+                    </div>
+
+                    {getProductDetailsState.data?.addons ? (
+                      <ProductDetailsAccordion
+                        title={{
+                          name: "Product Add-ons",
+                          prefixIcon: <MdFastfood className="text-3xl" />,
+                        }}
+                      >
+                        <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                          {getProductDetailsState.data?.addons.map(
+                            (product, i) => (
+                              <Addon key={i} product={product} />
+                            )
+                          )}
+                        </div>
+                      </ProductDetailsAccordion>
+                    ) : null}
+                  </>
                 ) : (
                   <div className="space-y-4">
                     <button
@@ -948,34 +969,24 @@ export function ShopProduct() {
                     </button>
                   </div>
                 )}
-
-                {getProductDetailsState.data?.addons ? (
-                  <ProductDetailsAccordion
-                    title={{
-                      name: "Product Add-ons",
-                      prefixIcon: <MdFastfood className="text-3xl" />,
-                    }}
-                  >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getProductDetailsState.data?.addons.map((product, i) => (
-                        <Addon key={i} product={product} />
-                      ))}
-                    </div>
-                  </ProductDetailsAccordion>
-                ) : null}
               </div>
             </div>
 
-            {getProductDetailsState.data?.suggested_products &&
-            getProductDetailsState.data?.suggested_products.length > 0 ? (
-              <div className="container space-y-3">
-                <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">
-                  People Also Bought
-                </h1>
-                <ShopPeopleAlsoBoughtCarousel
-                  products={getProductDetailsState.data?.suggested_products}
-                />
-              </div>
+            {getSessionState.data?.cache_data ||
+            getSessionState.data?.customer_address ? (
+              <>
+                {getProductDetailsState.data?.suggested_products &&
+                getProductDetailsState.data?.suggested_products.length > 0 ? (
+                  <div className="container space-y-3">
+                    <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">
+                      People Also Bought
+                    </h1>
+                    <ShopPeopleAlsoBoughtCarousel
+                      products={getProductDetailsState.data?.suggested_products}
+                    />
+                  </div>
+                ) : null}
+              </>
             ) : null}
           </div>
         </div>
