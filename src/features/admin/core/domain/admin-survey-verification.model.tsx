@@ -3,13 +3,8 @@ export interface AdminSurveyVerificationModel {
   first_name: string;
   middle_name: string;
   last_name: string;
-  birthday: string;
   receipt_number: string;
-  id_front: string;
-  id_back: string;
   dateadded: string;
-  discount_type_id: number;
-  discount_type_name: string;
   status: number;
 
   fb_first_name: string;

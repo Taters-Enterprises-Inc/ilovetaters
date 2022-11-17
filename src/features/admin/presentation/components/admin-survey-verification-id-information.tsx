@@ -136,40 +136,8 @@ export function AdminSurveyVerificationIDInformation(
         <hr />
 
         <hr />
-
-        <div className="grid-cols-2 gap-4 lg:grid">
-          <div>
-            <strong>Profile Account Name:</strong>{" "}
-            <span className="font-semibold">
-              {getAdminSurveyVerificationState.data?.fb_first_name ||
-                getAdminSurveyVerificationState.data?.mobile_first_name}{" "}
-              {getAdminSurveyVerificationState.data?.fb_last_name ||
-                getAdminSurveyVerificationState.data?.mobile_last_name}
-            </span>
-          </div>
-        </div>
       </div>
 
-      <hr className="mt-1" />
-
-      {/* <div className="flex flex-col pt-2 pb-4 lg:flex-row">
-        <div className="flex flex-col items-center flex-1">
-          <span className="font-semibold">Front</span>
-          <img
-            src={`${REACT_APP_DOMAIN_URL}api/load-image-user-discount/${getAdminSurveyVerificationState.data?.id_front}`}
-            alt="id front"
-          />
-        </div>
-
-        <div className="flex flex-col items-center flex-1">
-          <span className="font-semibold">Back</span>
-
-          <img
-            src={`${REACT_APP_DOMAIN_URL}api/load-image-user-discount/${getAdminSurveyVerificationState.data?.id_back}`}
-            alt="id back"
-          />
-        </div>
-      </div> */}
       {getAdminSurveyVerificationState.data?.status === 1 ? (
         <div className="flex items-start justify-end py-3 space-x-2">
           <button
