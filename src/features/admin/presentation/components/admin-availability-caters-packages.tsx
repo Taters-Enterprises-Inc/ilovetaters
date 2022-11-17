@@ -80,11 +80,13 @@ export function AdminAvailabilityCatersPackages() {
   }, [dispatch]);
 
   useEffect(() => {
+    const defaultStoreId =
+      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
       status: status,
-      store_id: storeId ?? 3,
+      store_id: storeId ?? defaultStoreId,
       category_id: categoryId,
       order_by: orderBy,
       order: order,
@@ -102,6 +104,7 @@ export function AdminAvailabilityCatersPackages() {
     storeId,
     categoryId,
     updateStoreCatersPackageState,
+    getAdminSessionState,
   ]);
 
   return (
