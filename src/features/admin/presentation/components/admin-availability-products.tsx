@@ -68,7 +68,7 @@ export function AdminAvailabilityProducts() {
 
   useEffect(() => {
     const defaultStoreId =
-      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
+      getAdminSessionState.data?.admin.user_details.stores[0].store_id ?? 3;
 
     const query = createQueryParams({
       page_no: pageNo,
