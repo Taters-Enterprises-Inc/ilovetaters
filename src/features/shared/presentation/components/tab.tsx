@@ -17,7 +17,7 @@ interface TabProps {
 export function Tab(props: TabProps) {
   return (
     <div className="flex flex-col items-start justify-start">
-      <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)]">
+      <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] lg:ml-[0%] ml-[5%]">
         {props.tabs.map((tab, i) => (
           <li
             key={i}

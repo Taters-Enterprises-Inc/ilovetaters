@@ -117,6 +117,12 @@ import {
   BSCUser,
   BSCCreateGroup,
 } from "features/bsc/presentation/pages";
+import {
+  TermsAndConditionModal,
+  ReturnPolicyModal,
+  PrivacyPolicyModal,
+} from "features/bsc/presentation/modals";
+
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
@@ -342,6 +348,19 @@ root.render(
                   <Route path="bsc" element={<Bsc />}>
                     <Route index element={<BSCLogin />} />
                     <Route path="sign-up" element={<BscSignUp />} />
+
+                    <Route
+                      path="terms-and-condition"
+                      element={<TermsAndConditionModal />}
+                    />
+                    <Route
+                      path="privacy-policy"
+                      element={<PrivacyPolicyModal />}
+                    />
+                    <Route
+                      path="return-policy"
+                      element={<ReturnPolicyModal />}
+                    />
 
                     <Route element={<BscGuard />}>
                       <Route element={<BSCSidebarWrapper />}>
