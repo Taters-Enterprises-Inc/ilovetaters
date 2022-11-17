@@ -972,21 +972,16 @@ export function ShopProduct() {
               </div>
             </div>
 
-            {getSessionState.data?.cache_data ||
-            getSessionState.data?.customer_address ? (
-              <>
-                {getProductDetailsState.data?.suggested_products &&
-                getProductDetailsState.data?.suggested_products.length > 0 ? (
-                  <div className="container space-y-3">
-                    <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">
-                      People Also Bought
-                    </h1>
-                    <ShopPeopleAlsoBoughtCarousel
-                      products={getProductDetailsState.data?.suggested_products}
-                    />
-                  </div>
-                ) : null}
-              </>
+            {getProductDetailsState.data?.suggested_products &&
+            getProductDetailsState.data?.suggested_products.length > 0 ? (
+              <div className="container space-y-3">
+                <h1 className="font-['Bebas_Neue'] tracking-[2px] text-xl text-white text-center ">
+                  People Also Bought
+                </h1>
+                <ShopPeopleAlsoBoughtCarousel
+                  products={getProductDetailsState.data?.suggested_products}
+                />
+              </div>
             ) : null}
           </div>
         </div>

@@ -10,3 +10,4 @@ export { CateringSignedContractIsRequired } from "./catering-signed-contract-is-
 export { CateringContractTermsAndConditions } from "./catering-contract-terms-and-conditions";
 export { CateringSignedContractIsOnVerification } from "./catering-signed-contract-is-on-verification";
 export { CateringSignedContractVerified } from "./catering-signed-contract-verified";
+export { CateringSelectStore } from "./catering-select-store";

@@ -50,6 +50,7 @@ import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-cate
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
+import { CateringSelectStoreModal } from "../modals";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -77,7 +78,8 @@ export function CateringProduct() {
   const [quantity, setQuantity] = useState(1);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [openCateringSelectStoreModal, setOpenCateringSelectStoreModal] =
+    useState(false);
 
   const getCateringProductDetailsState = useAppSelector(
     selectGetCateringProductDetails
@@ -640,7 +642,7 @@ export function CateringProduct() {
                   <div className="space-y-4">
                     <button
                       onClick={() => {
-                        setOpenStoreChooserModal(true);
+                        setOpenCateringSelectStoreModal(true);
                       }}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
@@ -652,7 +654,8 @@ export function CateringProduct() {
                   </div>
                 )}
 
-                {getCateringProductDetailsState.data?.product_addons ? (
+                {getCateringProductDetailsState.data?.product_addons &&
+                getCateringProductDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
@@ -669,7 +672,8 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data?.addons ? (
+                {getCateringProductDetailsState.data?.addons &&
+                getCateringProductDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
@@ -744,15 +748,10 @@ export function CateringProduct() {
         }}
       />
 
-      <StoreChooserModal
-        open={openStoreChooserModal}
+      <CateringSelectStoreModal
+        open={openCateringSelectStoreModal}
         onClose={() => {
-          setOpenStoreChooserModal(false);
-        }}
-        onDefaultStoreSelectHandler={() => {
-          if (hash) {
-            dispatch(getCateringProductDetails({ hash }));
-          }
+          setOpenCateringSelectStoreModal(false);
         }}
       />
     </main>
