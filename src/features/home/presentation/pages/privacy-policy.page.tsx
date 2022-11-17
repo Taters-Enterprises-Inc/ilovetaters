@@ -37,6 +37,7 @@ export function PrivacyPolicy() {
             },
           ]}
           activeTab="privacy-policy"
+          badge={null}
         >
           <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
             Corporate Website Privacy Policy

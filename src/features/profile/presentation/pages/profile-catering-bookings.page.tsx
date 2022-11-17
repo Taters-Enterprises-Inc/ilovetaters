@@ -12,7 +12,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { DataList } from "features/shared/presentation/components";
@@ -24,6 +24,9 @@ import {
 import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { CATERING_BOOKING_STATUS } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
+import { updateIndicatorCatering } from "../slices/update-catering-indicator.slice";
+import { VscCircleFilled } from "react-icons/vsc";
+import { selectGetUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -40,6 +43,10 @@ export function ProfileCateringBookings() {
   const getCateringBookingHistoryState = useAppSelector(
     selectGetCateringBookingHistory
   );
+
+  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+  const isUnread = useRef(false);
+
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const orderBy = query.get("order_by");
@@ -92,7 +99,31 @@ export function ProfileCateringBookings() {
       />
     );
   };
-  console.log(getCateringBookingHistoryState.data);
+
+  const handleOnclick = (tracking_no: any) => {
+    getUnreadNotification.data?.Catering.map((items, i) => {
+      if (items.catering_tracking_no === tracking_no) {
+        dispatch(
+          updateIndicatorCatering({
+            notificationId: items.id,
+          })
+        );
+      }
+    });
+  };
+
+  const unreadCheck = (tracking_no: string) => {
+    isUnread.current = false;
+    getUnreadNotification.data?.Catering.map((items, i) => {
+      if (items.catering_tracking_no === tracking_no) {
+        if (items.dateseen === null) {
+          isUnread.current = true;
+        }
+      }
+    });
+    return isUnread.current;
+  };
+
   return (
     <ProfileContainer title="Catering Bookings" activeTab="catering">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
@@ -164,16 +195,20 @@ export function ProfileCateringBookings() {
               <hr className="mt-4" />
               {getCateringBookingHistoryState.data.bookings.map((row, i) => (
                 <Link
+                  onClick={() => handleOnclick(row.tracking_no)}
                   to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
                     row.hash_key
                   }`}
-                  className="flex flex-col px-4 py-2 border-b"
+                  className={`flex flex-col px-4 py-2 border-b ${
+                    unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
+                  } `}
                   key={i}
                 >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                  <span className="flex justify-between items-center space-x-1 text-xl">
                     <span className="text-lg text-gray-600">
                       #{row.tracking_no}
                     </span>
+
                     <span
                       className="px-2 py-1 text-xs rounded-full "
                       style={{
@@ -184,6 +219,9 @@ export function ProfileCateringBookings() {
                     >
                       {CATERING_BOOKING_STATUS[row.status].name}
                     </span>
+                    {unreadCheck(row.tracking_no) ? (
+                      <VscCircleFilled className=" text-red-600" />
+                    ) : null}
                   </span>
                   <div className="flex justify-between">
                     <span className="text-xs">
@@ -288,7 +326,12 @@ export function ProfileCateringBookings() {
                 <>
                   {getCateringBookingHistoryState.data.bookings.map(
                     (row, i) => (
-                      <DataTableRow key={i}>
+                      <DataTableRow
+                        className={`${
+                          unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
+                        }`}
+                        key={i}
+                      >
                         <DataTableCell>
                           <Moment format="LLL">{row.dateadded}</Moment>
                         </DataTableCell>
@@ -310,11 +353,18 @@ export function ProfileCateringBookings() {
                         </DataTableCell>
                         <DataTableCell align="left">
                           <Link
+                            onClick={() => handleOnclick(row.tracking_no)}
                             to={`/shop/${
                               row.status <= 3 ? "contract" : "order"
                             }/${row.hash_key}`}
                           >
-                            <FaEye className="text-lg" />
+                            <FaEye
+                              className={`text-lg ${
+                                unreadCheck(row.tracking_no)
+                                  ? "text-red-600"
+                                  : null
+                              }`}
+                            />
                           </Link>
                         </DataTableCell>
                       </DataTableRow>

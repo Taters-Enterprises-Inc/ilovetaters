@@ -16,6 +16,7 @@ export function ShopTermsAndConditions() {
         <Tab
           tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
           activeTab="terms-and-conditions"
+          badge={null}
         >
           <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] leading-8 text-3xl">
             Taters Snack Shop (Terms and Conditions)

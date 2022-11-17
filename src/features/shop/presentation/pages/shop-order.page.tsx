@@ -19,6 +19,7 @@ import {
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { getUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -46,6 +47,10 @@ export function ShopOrder() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
+
+  useEffect(() => {
+    dispatch(getUnreadNotifications());
+  }, []);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -407,7 +412,7 @@ export function ShopOrder() {
                           ) : (
                             <h3 className="flex items-end justify-end flex-1 text-base">
                               <NumberFormat
-                                value={order.calc_price.toFixed(2)}
+                                value={Number(order.calc_price).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
