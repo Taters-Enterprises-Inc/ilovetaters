@@ -355,6 +355,32 @@ export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   },
 ];
 
+export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
 export const CATERING_BOOKING_STATUS: Array<{
   name: string;
   color: string;
