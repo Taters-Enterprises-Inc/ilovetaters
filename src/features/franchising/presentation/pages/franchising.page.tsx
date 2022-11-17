@@ -18,7 +18,6 @@ export function Franchising() {
     <main className="bg-primary">
       <HeaderNav
         activeUrl="FRANCHISING"
-        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
