@@ -72,7 +72,10 @@ export function CateringHome(props: CateringHomeProps) {
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setStoreAndAddressState.status === SetStoreAndAddressState.success &&
+      !props.shared
+    ) {
       dispatch(getSession());
       navigate("products");
       document.body.classList.remove("overflow-hidden");
