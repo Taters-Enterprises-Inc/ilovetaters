@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect } from "react";
-import { selectBranchesNearYouComponent } from "../slices/branches-near-you-component.slice";
 import {
   resetBranchesSearch,
   searchBranches,
