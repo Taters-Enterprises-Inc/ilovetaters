@@ -8,7 +8,7 @@ import { storeReset } from "features/shared/presentation/slices/store-reset.slic
 import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CateringSelectStore } from "../components";
+import { CateringHome } from "../pages/catering-home.page";
 
 interface cateringSelectStoreModalProps {
   open: boolean;
@@ -48,7 +48,7 @@ export function CateringSelectStoreModal(props: cateringSelectStoreModalProps) {
         >
           <IoMdClose />
         </button>
-        <CateringSelectStore />
+        <CateringHome shared={true} />
       </div>
     </div>
   );
