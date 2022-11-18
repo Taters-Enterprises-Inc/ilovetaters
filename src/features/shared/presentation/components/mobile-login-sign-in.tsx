@@ -6,6 +6,7 @@ import { useAppDispatch } from "features/config/hooks";
 import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 import { MobileForgotPasswordModal } from "../modals";
 import { MobilePasswordTextField } from "./mobile-password-textfield";
+import { getUnreadNotifications } from "../slices/unread-notification.slice";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ export function MobileLoginSignIn() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     dispatch(signInMobileUser(formData));
+    dispatch(getUnreadNotifications());
   };
 
   return (

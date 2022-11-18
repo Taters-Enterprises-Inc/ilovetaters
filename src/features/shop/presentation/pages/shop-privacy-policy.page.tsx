@@ -7,6 +7,7 @@ export function ShopPrivacyPolicy() {
       <Tab
         tabs={SNACKSHOP_TERMS_AND_CONDITIONS_TABS}
         activeTab="privacy-policy"
+        badge={null}
       >
         <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl">
           Privacy Policy

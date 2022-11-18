@@ -1,4 +1,6 @@
+import { Tabs } from "@mui/material";
 import { ReactNode } from "react";
+import { VscCircleFilled } from "react-icons/vsc";
 import { Link } from "react-router-dom";
 
 export interface TabModel {
@@ -12,6 +14,7 @@ interface TabProps {
   activeTab: string;
   children?: ReactNode;
   tabs: Array<TabModel>;
+  badge: string | null;
 }
 
 export function Tab(props: TabProps) {
@@ -30,9 +33,24 @@ export function Tab(props: TabProps) {
                 props.activeTab === tab.active
                   ? "profile-tab-active lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] text-primary lg:text-secondary"
                   : "text-secondary"
-              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
+              } flex w-full font-semibold active space-x-2 ${
+                tab.active === "catering" || tab.active === "snackshop"
+                  ? "sm:space-x-0"
+                  : null
+              }  items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
-              {tab.icon} <span>{tab.name}</span>
+              {tab.icon}{" "}
+              {props.badge !== null ? (
+                (props.badge === "snackshop" && tab.active === "snackshop") ||
+                (props.badge === "catering" && tab.active === "catering") ||
+                (props.badge === "both" &&
+                  (tab.active === "catering" || tab.active === "snackshop")) ? (
+                  <>
+                    <VscCircleFilled className=" absolute md:static self-start left-5 text-xs text-red-600" />
+                  </>
+                ) : null
+              ) : null}
+              <span>{tab.name}</span>
             </Link>
           </li>
         ))}

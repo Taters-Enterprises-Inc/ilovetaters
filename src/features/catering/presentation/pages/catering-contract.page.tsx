@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { getUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
@@ -25,6 +26,10 @@ export function CateringContract() {
   const dispatch = useAppDispatch();
   const getCateringOrdersState = useAppSelector(selectGetCateringOrders);
   const uploadContractState = useAppSelector(selectUploadContract);
+
+  useEffect(() => {
+    dispatch(getUnreadNotifications());
+  }, []);
 
   useEffect(() => {
     if (hash !== undefined) {
