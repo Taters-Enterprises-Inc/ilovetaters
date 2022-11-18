@@ -46,7 +46,7 @@ export function AdminSurveyVerificationIDInformation(
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
-          discountUserId: getAdminSurveyVerificationState.data.id,
+          surveyverificationId: getAdminSurveyVerificationState.data.id,
           status: 2,
         })
       );
@@ -57,7 +57,7 @@ export function AdminSurveyVerificationIDInformation(
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
-          discountUserId: getAdminSurveyVerificationState.data.id,
+          surveyverificationId: getAdminSurveyVerificationState.data.id,
           status: 3,
         })
       );
@@ -68,7 +68,7 @@ export function AdminSurveyVerificationIDInformation(
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
-          discountUserId: getAdminSurveyVerificationState.data.id,
+          surveyverificationId: getAdminSurveyVerificationState.data.id,
           status: 4,
         })
       );

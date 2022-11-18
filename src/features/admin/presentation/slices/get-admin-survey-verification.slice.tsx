@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GetAdminSurveyVerificationModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import {
-  GetAdminUserDiscountsRepository,
-  GetAdminUserDiscountsResponse,
+  GetAdminSurveyVerificationRepository,
+  GetAdminSurveyVerificationResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
@@ -27,8 +27,8 @@ export const getAdminSurveyVerification = createAsyncThunk(
   "getAdminSurveyVerification",
   async (query: string, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const response: GetAdminUserDiscountsResponse =
-        await GetAdminUserDiscountsRepository(query);
+      const response: GetAdminSurveyVerificationResponse =
+        await GetAdminSurveyVerificationRepository(query);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

@@ -95,7 +95,7 @@ export interface AdminUserDiscountChangeStatusParam {
 }
 
 export interface AdminSurveyVerificationChangeStatusParam {
-  discountUserId: number;
+  surveyverificationId: number;
   status: number;
 }
 

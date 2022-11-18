@@ -133,12 +133,12 @@ export function AdminSurveyVerifications() {
         </div>
       </div>
 
-      {getAdminSurveyVerificationStates.data?.discounts ? (
+      {getAdminSurveyVerificationStates.data?.surveyverification ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No survey verification yet."
+              emptyMessage="No survey verifications yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -203,57 +203,53 @@ export function AdminSurveyVerifications() {
             >
               <hr className="mt-4" />
 
-              {getAdminSurveyVerificationStates.data.discounts.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      id: row.id,
-                      search: search,
-                    };
+              {getAdminSurveyVerificationStates.data.surveyverification.map(
+                (row, i) => (
+                  <div
+                    onClick={() => {
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        id: row.id,
+                        search: search,
+                      };
 
-                    const queryParams = createQueryParams(params);
+                      const queryParams = createQueryParams(params);
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>
-                      {row.first_name +
-                        " " +
-                        row.middle_name +
-                        " " +
-                        row.last_name}
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className="flex flex-col px-4 py-2 border-b"
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>{row.first_name + " " + row.last_name}</span>
+
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                      </span>
                     </span>
 
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                    <span className="text-xs text-gray-600">
+                      <strong> Receipt Number:</strong> {row.receipt_number}
                     </span>
-                  </span>
-
-                  <span className="text-xs text-gray-600">
-                    <strong> Receipt Number:</strong> {row.receipt_number}
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    <strong>Date and Time: </strong>
-                    <Moment format="lll">{row.dateadded}</Moment>
-                  </span>
-                </div>
-              ))}
+                    <span className="text-xs text-gray-600">
+                      <strong>Date and Time: </strong>
+                      <Moment format="lll">{row.dateadded}</Moment>
+                    </span>
+                  </div>
+                )
+              )}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -351,9 +347,10 @@ export function AdminSurveyVerifications() {
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminSurveyVerificationStates.data.discounts !== undefined ? (
+              {getAdminSurveyVerificationStates.data.surveyverification !==
+              undefined ? (
                 <>
-                  {getAdminSurveyVerificationStates.data.discounts.map(
+                  {getAdminSurveyVerificationStates.data.surveyverification.map(
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>
@@ -374,7 +371,7 @@ export function AdminSurveyVerifications() {
                         </DataTableCell>
                         <DataTableCell>{row.receipt_number}</DataTableCell>
                         <DataTableCell>
-                          {row.first_name} {row.middle_name} {row.last_name}
+                          {row.first_name} {row.last_name}
                         </DataTableCell>
 
                         <DataTableCell align="left">

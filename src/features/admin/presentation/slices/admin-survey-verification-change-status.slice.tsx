@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AdminSurveyVerificationChangeStatusParam } from "features/admin/core/admin.params";
 import {
-  AdminUserDiscountChangeStatusRepository,
-  AdminUserDiscountChangeStatusResponse,
+  AdminSurveyVerificationChangeStatusRepository,
+  AdminSurveyVerificationChangeStatusResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
@@ -28,8 +28,8 @@ export const adminSurveyVerificationChangeStatus = createAsyncThunk(
     { rejectWithValue, fulfillWithValue }
   ) => {
     try {
-      const response: AdminUserDiscountChangeStatusResponse =
-        await AdminUserDiscountChangeStatusRepository(param);
+      const response: AdminSurveyVerificationChangeStatusResponse =
+        await AdminSurveyVerificationChangeStatusRepository(param);
       return fulfillWithValue(response.data);
     } catch (error: any) {
       throw rejectWithValue({ message: error.response.data.message });

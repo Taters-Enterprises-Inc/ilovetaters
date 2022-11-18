@@ -5,5 +5,5 @@ export interface GetAdminSurveyVerificationModel {
     total_rows: number;
     per_page: number;
   };
-  discounts: Array<AdminSurveyVerificationModel>;
+  surveyverification: Array<AdminSurveyVerificationModel>;
 }

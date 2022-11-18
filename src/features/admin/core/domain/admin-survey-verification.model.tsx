@@ -6,10 +6,4 @@ export interface AdminSurveyVerificationModel {
   receipt_number: string;
   dateadded: string;
   status: number;
-
-  fb_first_name: string;
-  fb_last_name: string;
-
-  mobile_first_name: string;
-  mobile_last_name: string;
 }
