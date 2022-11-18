@@ -102,7 +102,6 @@ import {
 } from "features/popclub/presentation/slices/redeem-deal.slice";
 import {
   selectSignUpMobileUser,
-  signUpMobileUser,
   SignUpMobileUserState,
 } from "../slices/sign-up-mobile-user.slice";
 import {
@@ -145,10 +144,6 @@ import {
   LoginAdminState,
   selectLoginAdmin,
 } from "features/admin/presentation/slices/login-admin.slice";
-import {
-  GetAdminSessionState,
-  selectGetAdminSession,
-} from "features/admin/presentation/slices/get-admin-session.slice";
 import {
   GetAdminPopclubRedeemState,
   selectGetAdminPopclubRedeem,
@@ -331,7 +326,6 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
   const loginAdminState = useAppSelector(selectLoginAdmin);
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getAdminPopclubRedeemState = useAppSelector(
     selectGetAdminPopclubRedeem
   );
@@ -872,23 +866,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [getAdminPopclubRedeemState, dispatch]);
-
-  useEffect(() => {
-    switch (getAdminSessionState.status) {
-      case GetAdminSessionState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case GetAdminSessionState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminSessionState.success:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminSessionState.fail:
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [getAdminSessionState, dispatch]);
 
   useEffect(() => {
     switch (loginAdminState.status) {
