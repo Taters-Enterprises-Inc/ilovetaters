@@ -98,7 +98,7 @@ export function StoreCluster(props: StoreClusterProps) {
 
   return (
     <section className="text-white ">
-      {getStoresAvailablePopClubState.data.map((store_cluster, index) => (
+      {getStoresAvailablePopClubState.data?.map((store_cluster, index) => (
         <div key={index}>
           <h1 className="pl-2 text-sm font-normal">
             {store_cluster.region_name}

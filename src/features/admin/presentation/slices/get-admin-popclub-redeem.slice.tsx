@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
 import {
   GetAdminPopclubRedeemRepository,
@@ -13,11 +14,13 @@ export enum GetAdminPopclubRedeemState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminPopclubRedeemState;
   message: string;
   data: AdminPopclubRedeemModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminPopclubRedeemState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,18 @@ const initialState: {
 
 export const getAdminPopclubRedeem = createAsyncThunk(
   "getAdminPopclubRedeem",
-  async (trackingNo: string, { rejectWithValue, fulfillWithValue }) => {
+  async (trackingNo: string, { rejectWithValue }) => {
     try {
       const response: GetAdminPopclubRedeemResponse =
         await GetAdminPopclubRedeemRepository(trackingNo);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +49,24 @@ export const getAdminPopclubRedeemSlice = createSlice({
   name: "getAdminPopclubRedeem",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminPopclubRedeem.pending, (state: any) => {
+      .addCase(getAdminPopclubRedeem.pending, (state) => {
         state.status = GetAdminPopclubRedeemState.inProgress;
       })
-      .addCase(
-        getAdminPopclubRedeem.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: AdminPopclubRedeemModel | null;
-          }>
-        ) => {
+      .addCase(getAdminPopclubRedeem.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminPopclubRedeemState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminPopclubRedeem.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminPopclubRedeemState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminPopclubRedeem.rejected, (state, action) => {
+        state.status = GetAdminPopclubRedeemState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

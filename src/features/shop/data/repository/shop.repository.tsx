@@ -17,6 +17,7 @@ import {
   GetProductSkuParam,
   AddToCartShopParam,
 } from "features/shop/core/shop.params";
+import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -34,6 +35,7 @@ export interface GetProductDetailsResponse {
 
 export interface CheckoutOrdersResponse {
   data: {
+    data: CheckoutOrdersModel;
     message: string;
   };
 }
@@ -78,6 +80,7 @@ export interface GetCartItemResponse {
 export interface GetEditCartItemResponse {
   data: {
     message: string;
+    data: GetEditCartItemResponse;
   };
 }
 

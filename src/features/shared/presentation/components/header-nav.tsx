@@ -36,9 +36,9 @@ import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
 import { CartListItem } from "./cart-item-list";
 import {
-  getUnreadNotifications,
-  selectGetUnreadNotifications,
-} from "../slices/unread-notification.slice";
+  getNotifications,
+  selectGetNotifications,
+} from "../slices/get-notifications.slice";
 import { VscCircleFilled } from "react-icons/vsc";
 
 interface HeaderNavProps {
@@ -65,12 +65,12 @@ export function HeaderNav(props: HeaderNavProps) {
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
-  const [openCartMenu, setopenCartMenu] = useState<null | HTMLElement>(null);
+  const [openCartMenu, setOpenCartMenu] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const currentLocation = useLocation();
 
   const getSessionState = useAppSelector(selectGetSession);
-  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+  const getNotificationsState = useAppSelector(selectGetNotifications);
 
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const dispatch = useAppDispatch();
@@ -96,10 +96,6 @@ export function HeaderNav(props: HeaderNavProps) {
     status: false,
     message: "",
   });
-
-  useEffect(() => {
-    dispatch(getUnreadNotifications());
-  }, []);
 
   const handleSwitchTab = (param: {
     url?: string;
@@ -170,7 +166,7 @@ export function HeaderNav(props: HeaderNavProps) {
   }, [facebookLogoutState]);
 
   const handleCart = () => {
-    setopenCartMenu(null);
+    setOpenCartMenu(null);
     switch (props.activeUrl) {
       case "SNACKSHOP":
         setOpenShopCartModal(true);
@@ -295,11 +291,11 @@ export function HeaderNav(props: HeaderNavProps) {
   ];
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setopenCartMenu(event.currentTarget);
+    setOpenCartMenu(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
-    setopenCartMenu(null);
+    setOpenCartMenu(null);
   };
   const menuList = profileMenu.map((item) => {
     const { text, icon, action, id } = item;
@@ -309,11 +305,9 @@ export function HeaderNav(props: HeaderNavProps) {
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">
             {icon}
-            {(id === 2 &&
-              getUnreadNotification.data?.Total_Notifications.Snackshop) ||
-            (id === 3 &&
-              getUnreadNotification.data?.Total_Notifications.Catering) ? (
-              <VscCircleFilled className=" text-xs text-red-600" />
+            {(id === 2 && getNotificationsState.data?.snackshop.count) ||
+            (id === 3 && getNotificationsState.data?.catering.count) ? (
+              <VscCircleFilled className="text-xs text-red-600 " />
             ) : null}
           </ListItemIcon>
 
@@ -479,19 +473,15 @@ export function HeaderNav(props: HeaderNavProps) {
                       "mobile" ? (
                         <>
                           <span className="relative inline-block">
-                            <FaUserCircle className="text-2xl text-white w-6 h-6 fill-current" />
+                            <FaUserCircle className="w-6 h-6 text-2xl text-white fill-current" />
 
-                            {getUnreadNotification.data &&
-                            getUnreadNotification.data.Total_Notifications
-                              .Snackshop +
-                              getUnreadNotification.data.Total_Notifications
-                                .Catering !==
+                            {getNotificationsState.data &&
+                            getNotificationsState.data.snackshop.count +
+                              getNotificationsState.data.catering.count !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getUnreadNotification.data.Total_Notifications
-                                  .Snackshop +
-                                  getUnreadNotification.data.Total_Notifications
-                                    .Catering}
+                                {getNotificationsState.data.snackshop.count +
+                                  getNotificationsState.data.catering.count}
                               </span>
                             ) : null}
                           </span>
@@ -505,17 +495,13 @@ export function HeaderNav(props: HeaderNavProps) {
                               className="rounded-full mt-[2px] w-6 h-6 fill-current"
                               width={30}
                             />
-                            {getUnreadNotification.data &&
-                            getUnreadNotification.data.Total_Notifications
-                              .Snackshop +
-                              getUnreadNotification.data.Total_Notifications
-                                .Catering !==
+                            {getNotificationsState.data &&
+                            getNotificationsState.data.snackshop.count +
+                              getNotificationsState.data.catering.count !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getUnreadNotification.data.Total_Notifications
-                                  .Snackshop +
-                                  getUnreadNotification.data.Total_Notifications
-                                    .Catering}
+                                {getNotificationsState.data.snackshop.count +
+                                  getNotificationsState.data.catering.count}
                               </span>
                             ) : null}
                           </span>
@@ -627,7 +613,7 @@ export function HeaderNav(props: HeaderNavProps) {
                         horizontal: "right",
                       }}
                       open={Boolean(openCartMenu)}
-                      onClose={() => setopenCartMenu(null)}
+                      onClose={() => setOpenCartMenu(null)}
                       disableRestoreFocus
                     >
                       <Box
@@ -651,7 +637,7 @@ export function HeaderNav(props: HeaderNavProps) {
                       <div className="bg-white pointer-events-auto">
                         <CartListItem
                           onProcessOrder={() => {
-                            setopenCartMenu(null);
+                            setOpenCartMenu(null);
                             if (props.activeUrl === "CATERING") {
                               navigate("/shop/checkout");
                             } else {

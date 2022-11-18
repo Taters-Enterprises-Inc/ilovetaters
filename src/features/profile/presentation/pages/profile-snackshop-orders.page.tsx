@@ -24,8 +24,7 @@ import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-orde
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import { VscCircleFilled } from "react-icons/vsc";
-import { updateIndicatorOrder } from "../slices/update-snackshop-indicator.slice";
-import { selectGetUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
+import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -44,7 +43,7 @@ export function ProfileSnackshopOrders() {
     selectGetSnackShopOrderHistory
   );
 
-  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+  const getNotificationsState = useAppSelector(selectGetNotifications);
   const isUnread = useRef(false);
 
   const pageNo = query.get("page_no");
@@ -89,20 +88,20 @@ export function ProfileSnackshopOrders() {
   };
 
   const handleOnclick = (tracking_no: any) => {
-    getUnreadNotification.data?.Snackshop.map((items, i) => {
+    getNotificationsState.data?.snackshop.notifications.map((items, i) => {
       if (items.tracking_no === tracking_no) {
-        dispatch(
-          updateIndicatorOrder({
-            notificationId: items.id,
-          })
-        );
+        // dispatch(
+        //   updateIndicatorOrder({
+        //     notificationId: items.id,
+        //   })
+        // );
       }
     });
   };
 
-  const unreadCheck = (tracking_no: string) => {
+  const Check = (tracking_no: string) => {
     isUnread.current = false;
-    getUnreadNotification.data?.Snackshop.map((items, i) => {
+    getNotificationsState.data?.snackshop.notifications.map((items, i) => {
       if (items.tracking_no === tracking_no) {
         if (items.dateseen === null) {
           isUnread.current = true;
@@ -188,16 +187,16 @@ export function ProfileSnackshopOrders() {
                     onClick={() => handleOnclick(row.tracking_no)}
                     to={`/delivery/order/${row.hash_key}`}
                     className={`flex flex-col px-4 py-2 border-b ${
-                      unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
+                      Check(row.tracking_no) ? "bg-gray-200" : ""
                     }`}
                     key={i}
                   >
-                    <span className="flex justify-between items-center space-x-1 text-xl">
+                    <span className="flex items-center justify-between space-x-1 text-xl">
                       <span className="text-lg text-gray-600">
                         #{row.tracking_no}
                       </span>
-                      {unreadCheck(row.tracking_no) ? (
-                        <VscCircleFilled className=" text-red-600 " />
+                      {Check(row.tracking_no) ? (
+                        <VscCircleFilled className="text-red-600 " />
                       ) : null}
                     </span>
                     <div className="flex justify-between">
@@ -305,7 +304,7 @@ export function ProfileSnackshopOrders() {
                   {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
                     <DataTableRow
                       className={`${
-                        unreadCheck(row.tracking_no) ? "bg-gray-200" : ""
+                        Check(row.tracking_no) ? "bg-gray-200" : ""
                       }`}
                       key={i}
                     >
@@ -325,9 +324,7 @@ export function ProfileSnackshopOrders() {
                         >
                           <FaEye
                             className={`text-lg ${
-                              unreadCheck(row.tracking_no)
-                                ? "text-red-600"
-                                : null
+                              Check(row.tracking_no) ? "text-red-600" : null
                             }`}
                           />
                         </Link>

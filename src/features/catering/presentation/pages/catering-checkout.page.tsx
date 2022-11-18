@@ -7,22 +7,15 @@ import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import TextField from "@mui/material/TextField";
-import {
-  getContacts,
-  selectGetContacts,
-} from "features/shared/presentation/slices/get-contacts.slice";
+import { getContacts } from "features/shared/presentation/slices/get-contacts.slice";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { CateringPaymentAccordion } from "../components/catering-payment-accordion";
-import { MdDeliveryDining } from "react-icons/md";
 import Checkbox from "@mui/material/Checkbox";
-import { FaMapMarkerAlt, FaStore } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { AddContactModal } from "features/shared/presentation/modals";
 import NumberFormat from "react-number-format";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
@@ -44,6 +37,7 @@ import {
 } from "../slices/catering-checkout-orders.slice";
 import { PaymentMethod } from "features/shop/presentation/components";
 import { PhoneInput } from "features/shared/presentation/components";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -54,7 +48,6 @@ export function CateringCheckout() {
   const [enableCompanyName, setEnableCompanyName] = useState(false);
 
   const getSessionState = useAppSelector(selectGetSession);
-  const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const cateringCheckoutOrdersState = useAppSelector(
     selectCateringCheckoutOrders
@@ -68,13 +61,14 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
+      dispatch(getNotifications());
       navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());
     }
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    if (addContactState.status == AddContactState.success) {
+    if (addContactState.status === AddContactState.success) {
       dispatch(getSession());
       dispatch(getContacts());
     }

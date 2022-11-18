@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   AdminCateringPrivilegeRepository,
   AdminCateringPrivilegeResponse,
@@ -12,24 +13,32 @@ export enum AdminCateringPrivilegeState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminCateringPrivilegeState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminCateringPrivilegeState.initial,
   message: "",
 };
 
 export const adminCateringPrivilege = createAsyncThunk(
   "adminCateringPrivilege",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (formData: FormData, { rejectWithValue }) => {
     try {
       const response: AdminCateringPrivilegeResponse =
         await AdminCateringPrivilegeRepository(formData);
 
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -44,29 +53,23 @@ export const adminCateringPrivilegeSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminCateringPrivilege.pending, (state: any) => {
+      .addCase(adminCateringPrivilege.pending, (state) => {
         state.status = AdminCateringPrivilegeState.inProgress;
       })
-      .addCase(
-        adminCateringPrivilege.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(adminCateringPrivilege.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = AdminCateringPrivilegeState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminCateringPrivilege.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminCateringPrivilegeState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminCateringPrivilege.rejected, (state, action) => {
+        state.status = AdminCateringPrivilegeState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

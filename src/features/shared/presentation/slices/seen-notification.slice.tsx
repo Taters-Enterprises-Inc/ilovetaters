@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import {
-  StoreResetRepository,
-  StoreResetResponse,
+  SeenNotificationRepository,
+  SeenNotificationResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum StoreResetState {
+export enum SeenNotificationState {
   initial,
   inProgress,
   success,
@@ -14,57 +14,59 @@ export enum StoreResetState {
 }
 
 interface InitialState {
-  status: StoreResetState;
+  status: SeenNotificationState;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: StoreResetState.initial,
+  status: SeenNotificationState.initial,
   message: "",
 };
 
-export const storeReset = createAsyncThunk(
-  "storeReset",
+export const seenNotification = createAsyncThunk(
+  "seenNotification",
   async (_, { rejectWithValue }) => {
     try {
-      const response: StoreResetResponse = await StoreResetRepository();
+      const response: SeenNotificationResponse =
+        await SeenNotificationRepository();
+
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {
           throw error;
         }
-
         throw rejectWithValue(error.response.data.message);
       }
     }
   }
 );
 
-/* Main Slice */
-export const storeResetSlice = createSlice({
-  name: "storeResetSlice",
+export const seenNotificationSlice = createSlice({
+  name: "seenNotification",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(storeReset.pending, (state) => {
-        state.status = StoreResetState.inProgress;
+      .addCase(seenNotification.pending, (state) => {
+        state.status = SeenNotificationState.inProgress;
       })
-      .addCase(storeReset.fulfilled, (state, action) => {
+      .addCase(seenNotification.fulfilled, (state, action) => {
         if (action.payload) {
           const { message } = action.payload;
-          state.status = StoreResetState.success;
+
+          state.status = SeenNotificationState.success;
           state.message = message;
         }
       })
-      .addCase(storeReset.rejected, (state, action) => {
-        state.status = StoreResetState.fail;
+      .addCase(seenNotification.rejected, (state, action) => {
+        state.status = SeenNotificationState.fail;
         state.message = action.payload as string;
       });
   },
 });
 
-export const selectStoreReset = (state: RootState) => state.storeReset;
+export const selectSeenNotification = (state: RootState) =>
+  state.seenNotification;
 
-export default storeResetSlice.reducer;
+export default seenNotificationSlice.reducer;

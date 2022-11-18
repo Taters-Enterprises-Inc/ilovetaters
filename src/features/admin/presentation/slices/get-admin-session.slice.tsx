@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminSessionModel } from "features/admin/core/domain/admin-session.model";
 import {
   GetAdminSessionRepository,
@@ -12,12 +13,13 @@ export enum GetAdminSessionState {
   success,
   fail,
 }
-
-const initialState: {
+interface InitialState {
   status: GetAdminSessionState;
   message: string;
   data: AdminSessionModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminSessionState.initial,
   message: "",
   data: undefined,
@@ -25,13 +27,18 @@ const initialState: {
 
 export const getAdminSession = createAsyncThunk(
   "getAdminSession",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetAdminSessionResponse =
         await GetAdminSessionRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +48,24 @@ export const getAdminSessionSlice = createSlice({
   name: "getAdminSession",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminSession.pending, (state: any) => {
+      .addCase(getAdminSession.pending, (state) => {
         state.status = GetAdminSessionState.inProgress;
       })
-      .addCase(
-        getAdminSession.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: AdminSessionModel | null;
-          }>
-        ) => {
+      .addCase(getAdminSession.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminSessionState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminSession.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminSessionState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminSession.rejected, (state, action) => {
+        state.status = GetAdminSessionState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

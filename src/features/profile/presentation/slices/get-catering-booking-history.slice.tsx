@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import {
   GetCateringBookingHistoryRepository,
@@ -14,20 +14,34 @@ export enum GetCateringBookingHistoryState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetCateringBookingHistoryState;
+  message: string;
   data: GetCateringBookingHistoryModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetCateringBookingHistoryState.initial,
+  message: "",
   data: undefined,
 };
 
 export const getCateringBookingHistory = createAsyncThunk(
   "getCateringBookingHistory",
-  async (query: string) => {
-    const response: GetCateringBookingHistoryResponse =
-      await GetCateringBookingHistoryRepository(query);
-    return response.data;
+  async (query: string, { rejectWithValue }) => {
+    try {
+      const response: GetCateringBookingHistoryResponse =
+        await GetCateringBookingHistoryRepository(query);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -40,36 +54,24 @@ export const getCateringBookingHistorySlice = createSlice({
       state.status = GetCateringBookingHistoryState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCateringBookingHistory.pending, (state: any) => {
+      .addCase(getCateringBookingHistory.pending, (state) => {
         state.status = GetCateringBookingHistoryState.inProgress;
       })
-      .addCase(
-        getCateringBookingHistory.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: GetCateringBookingHistoryModel | null;
-          }>
-        ) => {
+      .addCase(getCateringBookingHistory.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetCateringBookingHistoryState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getCateringBookingHistory.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetCateringBookingHistoryState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getCateringBookingHistory.rejected, (state, action) => {
+        state.status = GetCateringBookingHistoryState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

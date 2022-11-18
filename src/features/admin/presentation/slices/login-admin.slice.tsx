@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   LoginAdminRepository,
   LoginAdminResponse,
@@ -12,22 +13,28 @@ export enum LoginAdminState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: LoginAdminState;
   message: string;
-} = {
+}
+const initialState: InitialState = {
   status: LoginAdminState.initial,
   message: "",
 };
 
 export const loginAdmin = createAsyncThunk(
   "loginAdmin",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (param: FormData, { rejectWithValue }) => {
     try {
       const response: LoginAdminResponse = await LoginAdminRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -37,27 +44,22 @@ export const loginAdminSlice = createSlice({
   name: "loginAdmin",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(loginAdmin.pending, (state: any) => {
+      .addCase(loginAdmin.pending, (state) => {
         state.status = LoginAdminState.inProgress;
       })
-      .addCase(
-        loginAdmin.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
+      .addCase(loginAdmin.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+          state.message = message;
           state.status = LoginAdminState.success;
         }
-      )
-      .addCase(
-        loginAdmin.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = LoginAdminState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(loginAdmin.rejected, (state, action) => {
+        state.status = LoginAdminState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

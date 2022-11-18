@@ -1,8 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { EditAdminUserParam } from "features/admin/core/admin.params";
 import {
-  CreateAdminUserRepository,
-  CreateAdminUserResponse,
   EditAdminUserRepository,
   EditAdminUserResponse,
 } from "features/admin/data/repository/admin.repository";
@@ -25,14 +24,19 @@ const initialState: {
 
 export const editAdminUser = createAsyncThunk(
   "editAdminUser",
-  async (param: EditAdminUserParam, { rejectWithValue, fulfillWithValue }) => {
+  async (param: EditAdminUserParam, { rejectWithValue }) => {
     try {
       const response: EditAdminUserResponse = await EditAdminUserRepository(
         param
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,33 +51,22 @@ export const editAdminUserSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(editAdminUser.pending, (state: any) => {
+      .addCase(editAdminUser.pending, (state) => {
         state.status = EditAdminUserState.inProgress;
       })
-      .addCase(
-        editAdminUser.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(editAdminUser.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = EditAdminUserState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        editAdminUser.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = EditAdminUserState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(editAdminUser.rejected, (state, action) => {
+        state.status = EditAdminUserState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

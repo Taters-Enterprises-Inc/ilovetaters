@@ -1,15 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CateringUploadProofOfPaymentParam } from "features/catering/core/catering.params";
 import {
   CateringUploadProofOfPaymentRepository,
   CateringUploadProofOfPaymentResponse,
 } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
-import { UploadProofOfPaymentParam } from "features/shared/core/shared.params";
-import {
-  UploadProofOfPaymentRepository,
-  UploadProofOfPaymentResponse,
-} from "features/shared/data/repository/shared.repository";
 
 export enum CateringUploadProofOfPaymentState {
   initial,
@@ -18,26 +14,30 @@ export enum CateringUploadProofOfPaymentState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CateringUploadProofOfPaymentState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CateringUploadProofOfPaymentState.initial,
   message: "",
 };
 
 export const cateringUploadProofOfPayment = createAsyncThunk(
   "cateringUploadProofOfPayment",
-  async (
-    param: CateringUploadProofOfPaymentParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: CateringUploadProofOfPaymentParam, { rejectWithValue }) => {
     try {
       const response: CateringUploadProofOfPaymentResponse =
         await CateringUploadProofOfPaymentRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,29 +47,23 @@ export const cateringUploadProofOfPaymentSlice = createSlice({
   name: "cateringUploadProofOfPayment",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(cateringUploadProofOfPayment.pending, (state: any) => {
+      .addCase(cateringUploadProofOfPayment.pending, (state) => {
         state.status = CateringUploadProofOfPaymentState.inProgress;
       })
-      .addCase(
-        cateringUploadProofOfPayment.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(cateringUploadProofOfPayment.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = CateringUploadProofOfPaymentState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        cateringUploadProofOfPayment.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = CateringUploadProofOfPaymentState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(cateringUploadProofOfPayment.rejected, (state, action) => {
+        state.status = CateringUploadProofOfPaymentState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

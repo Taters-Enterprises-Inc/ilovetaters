@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   AdminDeclineRedeemRepository,
   AdminDeclineRedeemResponse,
@@ -13,23 +13,30 @@ export enum AdminDeclineRedeemState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminDeclineRedeemState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminDeclineRedeemState.initial,
   message: "",
 };
 
 export const adminDeclineRedeem = createAsyncThunk(
   "adminDeclineRedeem",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (formData: FormData, { rejectWithValue }) => {
     try {
       const response: AdminDeclineRedeemResponse =
         await AdminDeclineRedeemRepository(formData);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -43,33 +50,22 @@ export const adminDeclineRedeemSlice = createSlice({
       state.status = AdminDeclineRedeemState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminDeclineRedeem.pending, (state: any) => {
+      .addCase(adminDeclineRedeem.pending, (state) => {
         state.status = AdminDeclineRedeemState.inProgress;
       })
-      .addCase(
-        adminDeclineRedeem.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(adminDeclineRedeem.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = AdminDeclineRedeemState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminDeclineRedeem.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminDeclineRedeemState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminDeclineRedeem.rejected, (state, action) => {
+        state.status = AdminDeclineRedeemState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

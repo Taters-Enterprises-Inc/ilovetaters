@@ -18,6 +18,7 @@ import {
 import { REACT_APP_DOMAIN_URL } from "../../../shared/constants";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import { RedeemValidatorsModel } from "features/popclub/core/domain/redeem_validators.model";
+import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
 
 export interface GetAllPlatformCategoriesRepositoryResponse {
   data: {
@@ -67,7 +68,7 @@ export interface GetDealResponse {
 
 export interface GetDealProductVariantsResponse {
   data: {
-    data: Array<ProductVariantModel>;
+    data: Array<DealProductVariantsModel>;
     message: string;
   };
 }
@@ -96,7 +97,8 @@ export interface GetRedeemResponse {
 export interface GetLatestUnexpiredRedeemResponse {
   data: {
     data: RedeemDealModel;
-    next_avialable_redeem?: string;
+    next_avialable_redeem: string;
+    redeem_cooldown: string;
     message: string;
   };
 }
@@ -110,7 +112,7 @@ export interface ForfeitRedeemResponse {
 export interface RedeemValidatorsResponse {
   data: {
     message: string;
-    data: RedeemValidatorsModel;
+    data: Array<RedeemValidatorsModel>;
   };
 }
 export function RedeemValidatorsRepository(): Promise<RedeemValidatorsResponse> {

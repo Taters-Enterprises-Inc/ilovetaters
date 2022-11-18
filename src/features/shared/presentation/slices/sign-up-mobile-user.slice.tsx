@@ -1,11 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { AddContactParam } from "features/shared/core/shared.params";
 import {
-  AddContactRepository,
-  AddContactResponse,
-  SignInMobileUserRepository,
-  SignInMobileUserResponse,
   SignUpMobileUserRepository,
   SignUpMobileUserResponse,
 } from "features/shared/data/repository/shared.repository";
@@ -17,26 +13,31 @@ export enum SignUpMobileUserState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: SignUpMobileUserState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: SignUpMobileUserState.initial,
   message: "",
 };
 
 export const signUpMobileUser = createAsyncThunk(
   "signUpMobileUser",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (param: FormData, { rejectWithValue }) => {
     try {
       const response: SignUpMobileUserResponse =
         await SignUpMobileUserRepository(param);
 
-      console.log(response.data);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      console.log(error.response.data.message);
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -51,25 +52,23 @@ export const signUpMobileUserSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(signUpMobileUser.pending, (state: any) => {
+      .addCase(signUpMobileUser.pending, (state) => {
         state.status = SignUpMobileUserState.inProgress;
       })
-      .addCase(
-        signUpMobileUser.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
+      .addCase(signUpMobileUser.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
           state.status = SignUpMobileUserState.success;
+          state.message = message;
         }
-      )
-      .addCase(
-        signUpMobileUser.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = SignUpMobileUserState.fail;
-        }
-      );
+      })
+      .addCase(signUpMobileUser.rejected, (state, action) => {
+        state.status = SignUpMobileUserState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

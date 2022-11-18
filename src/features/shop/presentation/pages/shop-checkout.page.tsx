@@ -39,10 +39,10 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { PhoneInput } from "features/shared/presentation/components";
 import { PaymentMethod } from "../components";
-import {
-  getLatestUnexpiredRedeem,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+
+import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -66,6 +66,7 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
+      dispatch(getNotifications());
       navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
     }

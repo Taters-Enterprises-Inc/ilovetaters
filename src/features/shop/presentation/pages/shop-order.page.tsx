@@ -11,7 +11,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+
 import {
   selectUploadProofOfPayment,
   uploadProofOfPayment,
@@ -19,7 +19,6 @@ import {
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
-import { getUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
 
 export function ShopOrder() {
   const getOrdersState = useAppSelector(selectGetOrders);
@@ -47,10 +46,6 @@ export function ShopOrder() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
-
-  useEffect(() => {
-    dispatch(getUnreadNotifications());
-  }, []);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());

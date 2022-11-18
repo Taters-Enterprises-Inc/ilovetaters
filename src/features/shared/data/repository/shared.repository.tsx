@@ -12,7 +12,8 @@ import {
   UploadProofOfPaymentParam,
 } from "features/shared/core/shared.params";
 import { REACT_APP_DOMAIN_URL } from "../../constants";
-import { GetUnreadNotificationModel } from "features/shared/core/domain/getUnreadNotification.model";
+import { GetNotificationsModel } from "features/shared/core/domain/get-notifications.model";
+import { ContactModel } from "features/shared/core/domain/contact.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -42,6 +43,7 @@ export interface SetSessionResponse {
 
 export interface FacebookLoginResponse {
   data: {
+    message: string;
     url: string;
     result: boolean;
   };
@@ -74,6 +76,7 @@ export interface UploadProofOfPaymentResponse {
 export interface GetContactsResponse {
   data: {
     message: string;
+    data: Array<ContactModel>;
   };
 }
 
@@ -125,11 +128,29 @@ export interface ForgotPasswordNewPasswordResponse {
   };
 }
 
-export interface GetUnreadNotificationsResponse {
+export interface GetNotificationsResponse {
   data: {
     message: string;
-    data: GetUnreadNotificationModel;
+    data: GetNotificationsModel;
   };
+}
+
+export interface SeenNotificationResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function SeenNotificationRepository(): Promise<SeenNotificationResponse> {
+  return axios.put(`${REACT_APP_DOMAIN_URL}api/notification`, {
+    withCredentials: true,
+  });
+}
+
+export function GetNotificationsRepository(): Promise<GetNotificationsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/notification`, {
+    withCredentials: true,
+  });
 }
 
 export function ForgotPasswordNewPasswordRepository(
@@ -352,10 +373,4 @@ export function SetSessionRepository(
       withCredentials: true,
     }
   );
-}
-
-export function GetUnreadNotificationssRepository() {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/shared/notifications`, {
-    withCredentials: true,
-  });
 }

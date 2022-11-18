@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GroupModel } from "features/admin/core/domain/group.model";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CategoryModel } from "features/admin/core/domain/category.model";
-import { UserModel } from "features/admin/core/domain/user.model";
 import {
   GetCatersPackageCategoriesRepository,
   GetCatersPackageCategoriesResponse,
@@ -15,11 +14,13 @@ export enum GetCatersPackageCategoriesState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetCatersPackageCategoriesState;
   message: string;
   data: Array<CategoryModel> | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetCatersPackageCategoriesState.initial,
   message: "",
   data: undefined,
@@ -27,13 +28,18 @@ const initialState: {
 
 export const getCatersPackageCategories = createAsyncThunk(
   "getCatersPackageCategories",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetCatersPackageCategoriesResponse =
         await GetCatersPackageCategoriesRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -43,36 +49,24 @@ export const getCatersPackageCategoriesSlice = createSlice({
   name: "getCatersPackageCategories",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCatersPackageCategories.pending, (state: any) => {
+      .addCase(getCatersPackageCategories.pending, (state) => {
         state.status = GetCatersPackageCategoriesState.inProgress;
       })
-      .addCase(
-        getCatersPackageCategories.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: CategoryModel | null;
-          }>
-        ) => {
+      .addCase(getCatersPackageCategories.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetCatersPackageCategoriesState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getCatersPackageCategories.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetCatersPackageCategoriesState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getCatersPackageCategories.rejected, (state, action) => {
+        state.status = GetCatersPackageCategoriesState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

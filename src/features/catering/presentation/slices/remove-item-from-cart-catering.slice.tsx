@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   RemoveItemFromCartCateringRepository,
   RemoveItemFromCartCateringResponse,
@@ -12,20 +13,31 @@ export enum RemoveItemFromCartCateringState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: RemoveItemFromCartCateringState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: RemoveItemFromCartCateringState.initial,
   message: "",
 };
 
 export const removeItemFromCartCatering = createAsyncThunk(
   "removeItemFromCartCatering",
-  async (param: number) => {
-    const response: RemoveItemFromCartCateringResponse =
-      await RemoveItemFromCartCateringRepository(param);
-    return response.data;
+  async (param: number, { rejectWithValue }) => {
+    try {
+      const response: RemoveItemFromCartCateringResponse =
+        await RemoveItemFromCartCateringRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -39,29 +51,23 @@ export const removeItemFromCartCateringSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(removeItemFromCartCatering.pending, (state: any) => {
+      .addCase(removeItemFromCartCatering.pending, (state) => {
         state.status = RemoveItemFromCartCateringState.inProgress;
       })
-      .addCase(
-        removeItemFromCartCatering.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(removeItemFromCartCatering.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = RemoveItemFromCartCateringState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        removeItemFromCartCatering.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = RemoveItemFromCartCateringState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(removeItemFromCartCatering.rejected, (state, action) => {
+        state.status = RemoveItemFromCartCateringState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

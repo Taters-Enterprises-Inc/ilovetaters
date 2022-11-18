@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { SetStoreAndAddressParm } from "features/shared/core/shared.params";
 import {
@@ -13,21 +14,33 @@ export enum SetStoreAndAddressPopClubState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: SetStoreAndAddressPopClubState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: SetStoreAndAddressPopClubState.initial,
   message: "",
 };
 
 export const setStoreAndAddressPopClub = createAsyncThunk(
   "setStoreAndAddressPopClub",
-  async (param: SetStoreAndAddressParm) => {
-    const response: SetStoreAndAddressResponse =
-      await SetStoreAndAddressRepository(param);
+  async (param: SetStoreAndAddressParm, { rejectWithValue }) => {
+    try {
+      const response: SetStoreAndAddressResponse =
+        await SetStoreAndAddressRepository(param);
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 export const setStoreAndAddressPopClubSlice = createSlice({
@@ -39,19 +52,23 @@ export const setStoreAndAddressPopClubSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(setStoreAndAddressPopClub.pending, (state: any) => {
+      .addCase(setStoreAndAddressPopClub.pending, (state) => {
         state.status = SetStoreAndAddressPopClubState.inProgress;
       })
-      .addCase(
-        setStoreAndAddressPopClub.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const message = action.payload.message;
-          state.message = message;
+      .addCase(setStoreAndAddressPopClub.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
           state.status = SetStoreAndAddressPopClubState.success;
+          state.message = message;
         }
-      );
+      })
+      .addCase(setStoreAndAddressPopClub.rejected, (state, action) => {
+        state.status = SetStoreAndAddressPopClubState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

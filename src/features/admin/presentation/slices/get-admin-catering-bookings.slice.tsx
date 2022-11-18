@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-admin-catering-bookings.model";
 import {
   GetAdminCateringBookingsRepository,
@@ -13,11 +14,13 @@ export enum GetAdminCateringBookingsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminCateringBookingsState;
   message: string;
   data: GetAdminCateringBookingsModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminCateringBookingsState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,18 @@ const initialState: {
 
 export const getAdminCateringBookings = createAsyncThunk(
   "getAdminCateringBookings",
-  async (query: string, { rejectWithValue, fulfillWithValue }) => {
+  async (query: string, { rejectWithValue }) => {
     try {
       const response: GetAdminCateringBookingsResponse =
         await GetAdminCateringBookingsRepository(query);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -45,36 +53,24 @@ export const getAdminCateringBookingsSlice = createSlice({
       state.status = GetAdminCateringBookingsState.inProgress;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminCateringBookings.pending, (state: any) => {
+      .addCase(getAdminCateringBookings.pending, (state) => {
         state.status = GetAdminCateringBookingsState.inProgress;
       })
-      .addCase(
-        getAdminCateringBookings.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: GetAdminCateringBookingsModel | null;
-          }>
-        ) => {
+      .addCase(getAdminCateringBookings.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminCateringBookingsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminCateringBookings.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminCateringBookingsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminCateringBookings.rejected, (state, action) => {
+        state.status = GetAdminCateringBookingsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

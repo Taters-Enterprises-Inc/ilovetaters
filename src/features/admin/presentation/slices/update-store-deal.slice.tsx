@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { UpdateStoreDealParam } from "features/admin/core/admin.params";
 import {
   UpdateStoreDealRepository,
@@ -13,27 +14,32 @@ export enum UpdateStoreDealState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateStoreDealState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateStoreDealState.initial,
   message: "",
 };
 
 export const updateStoreDeal = createAsyncThunk(
   "updateStoreDeal",
-  async (
-    param: UpdateStoreDealParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UpdateStoreDealParam, { rejectWithValue }) => {
     try {
       const response: UpdateStoreDealResponse = await UpdateStoreDealRepository(
         param
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -48,33 +54,22 @@ export const updateStoreDealSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateStoreDeal.pending, (state: any) => {
+      .addCase(updateStoreDeal.pending, (state) => {
         state.status = UpdateStoreDealState.inProgress;
       })
-      .addCase(
-        updateStoreDeal.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateStoreDeal.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateStoreDealState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateStoreDeal.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateStoreDealState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateStoreDeal.rejected, (state, action) => {
+        state.status = UpdateStoreDealState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

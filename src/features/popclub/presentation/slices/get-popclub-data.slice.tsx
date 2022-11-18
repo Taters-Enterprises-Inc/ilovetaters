@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { PopClubDataModel } from "features/popclub/core/domain/popclub-data.model";
 import {
@@ -13,43 +14,62 @@ export enum GetPopClubDataState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetPopClubDataState;
+  message: string;
   data: PopClubDataModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetPopClubDataState.initial,
+  message: "",
   data: undefined,
 };
 
-export const getPopClubData = createAsyncThunk("getPopClubData", async () => {
-  const response: GetPopClubDataRepositoryResponse =
-    await GetPopClubDataRepository();
+export const getPopClubData = createAsyncThunk(
+  "getPopClubData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: GetPopClubDataRepositoryResponse =
+        await GetPopClubDataRepository();
 
-  return response.data;
-});
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const getPopClubDataSlice = createSlice({
   name: "getPopClubData",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getPopClubData.pending, (state: any) => {
+      .addCase(getPopClubData.pending, (state) => {
         state.status = GetPopClubDataState.inProgress;
       })
-      .addCase(
-        getPopClubData.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: PopClubDataModel }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getPopClubData.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetPopClubDataState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getPopClubData.rejected, (state, action) => {
+        state.status = GetPopClubDataState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

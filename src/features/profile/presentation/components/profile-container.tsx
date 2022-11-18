@@ -4,8 +4,7 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { ReactNode, useEffect, useState } from "react";
 import { ShopProfileTabsProps } from "../../../shop/presentation/components/shop-profile-tabs";
 import { useAppSelector } from "features/config/hooks";
-import { selectGetUnreadNotifications } from "features/shared/presentation/slices/unread-notification.slice";
-import { RiNotificationBadgeFill } from "react-icons/ri";
+import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 interface ProfileContainerProps extends ShopProfileTabsProps {
   title: string;
@@ -13,31 +12,31 @@ interface ProfileContainerProps extends ShopProfileTabsProps {
 }
 
 export function ProfileContainer(props: ProfileContainerProps) {
-  const getUnreadNotification = useAppSelector(selectGetUnreadNotifications);
+  const getNotificationsState = useAppSelector(selectGetNotifications);
   const [notificationBadge, setNotificationBadge] = useState("");
 
   useEffect(() => {
-    if (getUnreadNotification.data) {
+    if (getNotificationsState.data) {
       if (
-        getUnreadNotification.data.Total_Notifications.Snackshop === 0 &&
-        getUnreadNotification.data.Total_Notifications.Catering !== 0
+        getNotificationsState.data.snackshop.count === 0 &&
+        getNotificationsState.data.catering.count !== 0
       ) {
         setNotificationBadge("catering");
       } else if (
-        getUnreadNotification.data.Total_Notifications.Snackshop !== 0 &&
-        getUnreadNotification.data.Total_Notifications.Catering === 0
+        getNotificationsState.data.snackshop.count !== 0 &&
+        getNotificationsState.data.catering.count === 0
       ) {
         setNotificationBadge("snackshop");
       } else if (
-        getUnreadNotification.data.Total_Notifications.Snackshop !== 0 &&
-        getUnreadNotification.data.Total_Notifications.Catering !== 0
+        getNotificationsState.data.snackshop.count !== 0 &&
+        getNotificationsState.data.catering.count !== 0
       ) {
         setNotificationBadge("both");
       } else {
         setNotificationBadge("");
       }
     }
-  }, [notificationBadge, getUnreadNotification]);
+  }, [notificationBadge, getNotificationsState]);
 
   return (
     <main className="bg-paper">

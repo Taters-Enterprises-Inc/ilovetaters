@@ -30,6 +30,7 @@ import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domai
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
+import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -93,7 +94,7 @@ export interface AdminDeclineRedeemResponse {
 export interface GetAdminUsersResponse {
   data: {
     message: string;
-    data: Array<UserModel>;
+    data: GetAdminUsersModel;
   };
 }
 
