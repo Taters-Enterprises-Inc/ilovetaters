@@ -25,6 +25,8 @@ import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import { VscCircleFilled } from "react-icons/vsc";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -39,12 +41,11 @@ export function ProfileSnackshopOrders() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
+
   const getSnackshopOrderHistoryState = useAppSelector(
     selectGetSnackShopOrderHistory
   );
-
   const getNotificationsState = useAppSelector(selectGetNotifications);
-  const isUnread = useRef(false);
 
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
@@ -85,30 +86,6 @@ export function ProfileSnackshopOrders() {
         prefix={"₱"}
       />
     );
-  };
-
-  const handleOnclick = (tracking_no: any) => {
-    getNotificationsState.data?.snackshop.notifications.map((items, i) => {
-      if (items.tracking_no === tracking_no) {
-        // dispatch(
-        //   updateIndicatorOrder({
-        //     notificationId: items.id,
-        //   })
-        // );
-      }
-    });
-  };
-
-  const Check = (tracking_no: string) => {
-    isUnread.current = false;
-    getNotificationsState.data?.snackshop.notifications.map((items, i) => {
-      if (items.tracking_no === tracking_no) {
-        if (items.dateseen === null) {
-          isUnread.current = true;
-        }
-      }
-    });
-    return isUnread.current;
   };
 
   return (
@@ -181,35 +158,47 @@ export function ProfileSnackshopOrders() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
-                <>
-                  <Link
-                    onClick={() => handleOnclick(row.tracking_no)}
-                    to={`/delivery/order/${row.hash_key}`}
-                    className={`flex flex-col px-4 py-2 border-b ${
-                      Check(row.tracking_no) ? "bg-gray-200" : ""
-                    }`}
-                    key={i}
-                  >
-                    <span className="flex items-center justify-between space-x-1 text-xl">
-                      <span className="text-lg text-gray-600">
-                        #{row.tracking_no}
+              {getSnackshopOrderHistoryState.data.orders.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getNotificationsState.data?.snackshop_order.unseen_notifications.find(
+                    (notification) =>
+                      notification.tracking_no === row.tracking_no
+                  );
+
+                return (
+                  <>
+                    <Link
+                      onClick={() => {
+                        if (notification) {
+                          dispatch(seenNotification(notification.id));
+                        }
+                      }}
+                      to={`/delivery/order/${row.hash_key}`}
+                      className={`flex flex-col px-4 py-2 border-b ${
+                        notification ? "bg-gray-200" : ""
+                      }`}
+                      key={i}
+                    >
+                      <span className="flex items-center justify-between space-x-1 text-xl">
+                        <span className="text-lg text-gray-600">
+                          #{row.tracking_no}
+                        </span>
+                        {notification ? (
+                          <VscCircleFilled className="text-red-600 " />
+                        ) : null}
                       </span>
-                      {Check(row.tracking_no) ? (
-                        <VscCircleFilled className="text-red-600 " />
-                      ) : null}
-                    </span>
-                    <div className="flex justify-between">
-                      <span className="text-xs">
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </span>
-                      <span className="text-lg font-semibold">
-                        {calculatePurchaseAmount(row)}
-                      </span>
-                    </div>
-                  </Link>
-                </>
-              ))}
+                      <div className="flex justify-between">
+                        <span className="text-xs">
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </span>
+                        <span className="text-lg font-semibold">
+                          {calculatePurchaseAmount(row)}
+                        </span>
+                      </div>
+                    </Link>
+                  </>
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden lg:block">
@@ -301,36 +290,46 @@ export function ProfileSnackshopOrders() {
             >
               {getSnackshopOrderHistoryState.data.orders !== undefined ? (
                 <>
-                  {getSnackshopOrderHistoryState.data.orders.map((row, i) => (
-                    <DataTableRow
-                      className={`${
-                        Check(row.tracking_no) ? "bg-gray-200" : ""
-                      }`}
-                      key={i}
-                    >
-                      <DataTableCell>
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.tracking_no}</DataTableCell>
-                      <DataTableCell>
-                        {calculatePurchaseAmount(row)}
-                      </DataTableCell>
-                      <DataTableCell>N/A</DataTableCell>
-                      <DataTableCell>N/A</DataTableCell>
-                      <DataTableCell align="left">
-                        <Link
-                          onClick={() => handleOnclick(row.tracking_no)}
-                          to={`/delivery/order/${row.hash_key}`}
-                        >
-                          <FaEye
-                            className={`text-lg ${
-                              Check(row.tracking_no) ? "text-red-600" : null
-                            }`}
-                          />
-                        </Link>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                  {getSnackshopOrderHistoryState.data.orders.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getNotificationsState.data?.snackshop_order.unseen_notifications.find(
+                        (notification) =>
+                          notification.tracking_no === row.tracking_no
+                      );
+
+                    return (
+                      <DataTableRow
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                        key={i}
+                      >
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.tracking_no}</DataTableCell>
+                        <DataTableCell>
+                          {calculatePurchaseAmount(row)}
+                        </DataTableCell>
+                        <DataTableCell>N/A</DataTableCell>
+                        <DataTableCell>N/A</DataTableCell>
+                        <DataTableCell align="left">
+                          <Link
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(seenNotification(notification.id));
+                              }
+                            }}
+                            to={`/delivery/order/${row.hash_key}`}
+                          >
+                            <FaEye
+                              className={`text-lg ${
+                                notification ? "text-red-600" : null
+                              }`}
+                            />
+                          </Link>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

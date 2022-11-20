@@ -1,7 +1,12 @@
 import { Tabs } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { VscCircleFilled } from "react-icons/vsc";
 import { Link } from "react-router-dom";
+import {
+  selectGetNotifications,
+  getNotifications,
+} from "../slices/get-notifications.slice";
+import { useAppSelector } from "features/config/hooks";
 
 export interface TabModel {
   name: string;
@@ -14,10 +19,11 @@ interface TabProps {
   activeTab: string;
   children?: ReactNode;
   tabs: Array<TabModel>;
-  badge: string | null;
 }
 
 export function Tab(props: TabProps) {
+  const getNotificationsState = useAppSelector(selectGetNotifications);
+
   return (
     <div className="flex flex-col items-start justify-start">
       <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)]">
@@ -33,23 +39,26 @@ export function Tab(props: TabProps) {
                 props.activeTab === tab.active
                   ? "profile-tab-active lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] text-primary lg:text-secondary"
                   : "text-secondary"
-              } flex w-full font-semibold active space-x-2 ${
-                tab.active === "catering" || tab.active === "snackshop"
-                  ? "sm:space-x-0"
-                  : null
-              }  items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
+              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
-              {tab.icon}{" "}
-              {props.badge !== null ? (
-                (props.badge === "snackshop" && tab.active === "snackshop") ||
-                (props.badge === "catering" && tab.active === "catering") ||
-                (props.badge === "both" &&
-                  (tab.active === "catering" || tab.active === "snackshop")) ? (
-                  <>
-                    <VscCircleFilled className=" absolute md:static self-start left-5 text-xs text-red-600" />
-                  </>
-                ) : null
-              ) : null}
+              <div className="relative">
+                {tab.icon}
+
+                {tab.active === "snackshop" &&
+                getNotificationsState.data &&
+                getNotificationsState.data.snackshop_order
+                  .unseen_notifications_count > 0 ? (
+                  <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
+                ) : null}
+
+                {tab.active === "catering" &&
+                getNotificationsState.data &&
+                getNotificationsState.data.catering_booking
+                  .unseen_notifications_count > 0 ? (
+                  <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
+                ) : null}
+              </div>
+
               <span>{tab.name}</span>
             </Link>
           </li>

@@ -141,10 +141,15 @@ export interface SeenNotificationResponse {
   };
 }
 
-export function SeenNotificationRepository(): Promise<SeenNotificationResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/notification`, {
-    withCredentials: true,
-  });
+export function SeenNotificationRepository(
+  notificationId: number
+): Promise<SeenNotificationResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/notification/${notificationId}/seen`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetNotificationsRepository(): Promise<GetNotificationsResponse> {

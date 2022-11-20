@@ -1,12 +1,19 @@
 import { NotificationModel } from "./notification.model";
 
 export interface GetNotificationsModel {
-  snackshop: {
+  all: {
     notifications: Array<NotificationModel>;
-    count: number;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
   };
-  catering: {
+  snackshop_order: {
     notifications: Array<NotificationModel>;
-    count: number;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
+  };
+  catering_booking: {
+    notifications: Array<NotificationModel>;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
   };
 }

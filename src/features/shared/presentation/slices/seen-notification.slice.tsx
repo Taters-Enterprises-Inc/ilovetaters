@@ -25,10 +25,10 @@ const initialState: InitialState = {
 
 export const seenNotification = createAsyncThunk(
   "seenNotification",
-  async (_, { rejectWithValue }) => {
+  async (notificationId: number, { rejectWithValue }) => {
     try {
       const response: SeenNotificationResponse =
-        await SeenNotificationRepository();
+        await SeenNotificationRepository(notificationId);
 
       return response.data;
     } catch (error) {

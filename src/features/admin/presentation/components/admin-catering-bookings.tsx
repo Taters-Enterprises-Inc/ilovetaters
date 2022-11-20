@@ -274,7 +274,7 @@ export function AdminCateringBookings() {
               <hr className="mt-4" />
               {getAdminCateringBookingsState.data.bookings.map((row, i) => {
                 const notification: NotificationModel | undefined =
-                  getAdminNotificationsState.data?.catering_order.unseen_notifications.find(
+                  getAdminNotificationsState.data?.catering_booking.unseen_notifications.find(
                     (notification) =>
                       notification.catering_tracking_no === row.tracking_no
                   );
@@ -440,7 +440,7 @@ export function AdminCateringBookings() {
                 <>
                   {getAdminCateringBookingsState.data.bookings.map((row, i) => {
                     const notification: NotificationModel | undefined =
-                      getAdminNotificationsState.data?.catering_order.unseen_notifications.find(
+                      getAdminNotificationsState.data?.catering_booking.unseen_notifications.find(
                         (notification) =>
                           notification.catering_tracking_no === row.tracking_no
                       );

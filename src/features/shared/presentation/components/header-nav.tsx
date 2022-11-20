@@ -40,6 +40,10 @@ import {
   selectGetNotifications,
 } from "../slices/get-notifications.slice";
 import { VscCircleFilled } from "react-icons/vsc";
+import {
+  selectSeenNotification,
+  SeenNotificationState,
+} from "../slices/seen-notification.slice";
 
 interface HeaderNavProps {
   className?: string;
@@ -70,6 +74,7 @@ export function HeaderNav(props: HeaderNavProps) {
   const currentLocation = useLocation();
 
   const getSessionState = useAppSelector(selectGetSession);
+  const seenNotificationState = useAppSelector(selectSeenNotification);
   const getNotificationsState = useAppSelector(selectGetNotifications);
 
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -164,6 +169,12 @@ export function HeaderNav(props: HeaderNavProps) {
       dispatch(getSession());
     }
   }, [facebookLogoutState]);
+
+  useEffect(() => {
+    if (seenNotificationState.status === SeenNotificationState.success) {
+      dispatch(getNotifications());
+    }
+  }, [seenNotificationState, dispatch]);
 
   const handleCart = () => {
     setOpenCartMenu(null);
@@ -305,8 +316,12 @@ export function HeaderNav(props: HeaderNavProps) {
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">
             {icon}
-            {(id === 2 && getNotificationsState.data?.snackshop.count) ||
-            (id === 3 && getNotificationsState.data?.catering.count) ? (
+            {(id === 2 &&
+              getNotificationsState.data?.snackshop_order
+                .unseen_notifications_count) ||
+            (id === 3 &&
+              getNotificationsState.data?.catering_booking
+                .unseen_notifications_count) ? (
               <VscCircleFilled className="text-xs text-red-600 " />
             ) : null}
           </ListItemIcon>
@@ -476,12 +491,16 @@ export function HeaderNav(props: HeaderNavProps) {
                             <FaUserCircle className="w-6 h-6 text-2xl text-white fill-current" />
 
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop.count +
-                              getNotificationsState.data.catering.count !==
+                            getNotificationsState.data.snackshop_order
+                              .unseen_notifications_count +
+                              getNotificationsState.data.catering_booking
+                                .unseen_notifications_count !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop.count +
-                                  getNotificationsState.data.catering.count}
+                                {getNotificationsState.data.snackshop_order
+                                  .unseen_notifications_count +
+                                  getNotificationsState.data.catering_booking
+                                    .unseen_notifications_count}
                               </span>
                             ) : null}
                           </span>
@@ -496,12 +515,16 @@ export function HeaderNav(props: HeaderNavProps) {
                               width={30}
                             />
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop.count +
-                              getNotificationsState.data.catering.count !==
+                            getNotificationsState.data.snackshop_order
+                              .unseen_notifications_count +
+                              getNotificationsState.data.catering_booking
+                                .unseen_notifications_count !==
                               0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop.count +
-                                  getNotificationsState.data.catering.count}
+                                {getNotificationsState.data.snackshop_order
+                                  .unseen_notifications_count +
+                                  getNotificationsState.data.catering_booking
+                                    .unseen_notifications_count}
                               </span>
                             ) : null}
                           </span>
