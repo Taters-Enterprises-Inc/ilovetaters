@@ -17,8 +17,8 @@ import {
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CateringStoreList } from "../components";
-import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
+import { CateringStoreClusterModal } from ".";
+import { getStoresAvailableCateringModal } from "../slices/get-stores-available-catering-modal.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
 import {
@@ -29,7 +29,7 @@ import {
 } from "../slices/catering-home-page.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { styled } from "@mui/material/styles";
-import { CateringHeroCarousel } from "../components/catering-hero.carousel";
+import { CateringHeroCarousel } from "./catering-hero.carousel";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
@@ -52,7 +52,7 @@ const DateTimeTextField = styled((props: TextFieldProps) => (
   },
 }));
 
-export function CateringHome() {
+export function CateringStoreChooserModalHome() {
   const dispatch = useAppDispatch();
   const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
@@ -70,7 +70,6 @@ export function CateringHome() {
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
       dispatch(getSession());
-      navigate("products");
       document.body.classList.remove("overflow-hidden");
     }
   }, [setStoreAndAddressState, navigate, dispatch]);
@@ -189,7 +188,7 @@ export function CateringHome() {
                 }
                 onDenied={() => {
                   dispatch(
-                    getStoresAvailableCatering({
+                    getStoresAvailableCateringModal({
                       address: null,
                       service: "CATERING",
                     })
@@ -197,7 +196,7 @@ export function CateringHome() {
                 }}
                 onPrompt={() => {
                   dispatch(
-                    getStoresAvailableCatering({
+                    getStoresAvailableCateringModal({
                       address: null,
                       service: "CATERING",
                     })
@@ -206,7 +205,7 @@ export function CateringHome() {
                 onLocateCurrentAddress={(place: string) => {
                   dispatch(setAddressCateringHomePage({ address: place }));
                   dispatch(
-                    getStoresAvailableCatering({
+                    getStoresAvailableCateringModal({
                       address: place,
                       service: "CATERING",
                     })
@@ -219,7 +218,7 @@ export function CateringHome() {
                   dispatch(setAddressCateringHomePage({ address: place }));
 
                   dispatch(
-                    getStoresAvailableCatering({
+                    getStoresAvailableCateringModal({
                       address: place,
                       service: "CATERING",
                     })
@@ -325,7 +324,7 @@ export function CateringHome() {
               }
 
               dispatch(
-                getStoresAvailableCatering({
+                getStoresAvailableCateringModal({
                   address: cateringHomePageState.address,
                   service: "CATERING",
                 })
@@ -337,7 +336,7 @@ export function CateringHome() {
             <span>Check Availability</span>
           </button>
 
-          <CateringStoreList
+          <CateringStoreClusterModal
             onClickStore={(storeId: number, regionId: number) => {
               if (
                 cateringHomePageState &&

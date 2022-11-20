@@ -248,6 +248,14 @@ import {
   AdminCateringPrivilegeState,
   selectAdminCateringPrivilege,
 } from "features/admin/presentation/slices/admin-catering-privilege.slice";
+import {
+  GetStoresAvailableSnackshopModalState,
+  selectGetStoresAvailableSnackshopModal,
+} from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
+import {
+  GetStoresAvailableCateringModalState,
+  selectGetStoresAvailableCateringModal,
+} from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -382,6 +390,48 @@ export function LoadingAndSnackbarWrapper() {
   const adminCateringPrivilegeState = useAppSelector(
     selectAdminCateringPrivilege
   );
+
+  const getStoresAvailableSnackshopModalState = useAppSelector(
+    selectGetStoresAvailableSnackshopModal
+  );
+  const getStoresAvailableCateringModalState = useAppSelector(
+    selectGetStoresAvailableCateringModal
+  );
+
+  useEffect(() => {
+    switch (getStoresAvailableCateringModalState.status) {
+      case GetStoresAvailableCateringModalState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStoresAvailableCateringModalState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringModalState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringModalState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStoresAvailableCateringModalState]);
+
+  useEffect(() => {
+    switch (getStoresAvailableSnackshopModalState.status) {
+      case GetStoresAvailableSnackshopModalState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStoresAvailableSnackshopModalState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableSnackshopModalState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableSnackshopModalState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStoresAvailableSnackshopModalState]);
+
   useEffect(() => {
     switch (adminCateringPrivilegeState.status) {
       case AdminCateringPrivilegeState.inProgress:

@@ -4,22 +4,20 @@ import {
   selectSetStoreAndAddress,
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
-import { useNavigate, useLocation } from "react-router-dom";
-import { CateringHome } from "../pages/catering-home.page";
+import { useNavigate } from "react-router-dom";
+import { CateringStoreChooserModalHome } from "../components/catering-store-chooser-modal-home";
 
-interface cateringSelectStoreModalProps {
+interface CateringSelectStoreModalProps {
   open: boolean;
   onClose: () => void;
 }
-export function CateringSelectStoreModal(props: cateringSelectStoreModalProps) {
+export function CateringSelectStoreModal(props: CateringSelectStoreModalProps) {
   const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
@@ -27,7 +25,7 @@ export function CateringSelectStoreModal(props: cateringSelectStoreModalProps) {
       props.onClose();
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate]);
+  }, [setStoreAndAddressState, navigate, dispatch, props]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -40,7 +38,7 @@ export function CateringSelectStoreModal(props: cateringSelectStoreModalProps) {
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="bg-primary pt-[30px] pb-16 round w-[90%] lg:w-[80%] mt-10 relative rounded-[10px]">
         <button
-          className="absolute text-2xl text-secondary top-2 right-4 "
+          className="absolute text-2xl text-white top-2 right-4 "
           onClick={() => {
             document.body.classList.remove("overflow-hidden");
             props.onClose();
@@ -48,7 +46,8 @@ export function CateringSelectStoreModal(props: cateringSelectStoreModalProps) {
         >
           <IoMdClose />
         </button>
-        <CateringHome shared={true} />
+
+        <CateringStoreChooserModalHome />
       </div>
     </div>
   );

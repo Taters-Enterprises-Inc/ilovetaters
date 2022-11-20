@@ -113,6 +113,9 @@ import getAdminNotifications from "features/admin/presentation/slices/get-admin-
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import getNotifications from "features/shared/presentation/slices/get-notifications.slice";
 import seenNotification from "features/shared/presentation/slices/seen-notification.slice";
+import shopStoreChooserModal from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
+import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
+import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -229,6 +232,9 @@ export const store = configureStore({
     updateAdminNotificationDateSeen,
     getNotifications,
     seenNotification,
+    shopStoreChooserModal,
+    getStoresAvailableSnackshopModal,
+    getStoresAvailableCateringModal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

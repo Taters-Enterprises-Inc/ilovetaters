@@ -32,7 +32,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
       });
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate]);
+  }, [setStoreAndAddressState, navigate, dispatch]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     if (props.address) {
@@ -97,7 +97,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     }
                   }}
                   className={`bg-secondary ${
-                    isStoreAvailable == false ? "cursor-not-allowed" : ""
+                    isStoreAvailable === false ? "cursor-not-allowed" : ""
                   } h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
                   {isStoreFar &&
@@ -106,7 +106,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
-                  ) : isStoreOperating == false ? (
+                  ) : isStoreOperating === false ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store will be available at{" "}
                       {moment(store.available_start_time, "HH:mm:ss").format(

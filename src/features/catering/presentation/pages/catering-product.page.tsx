@@ -358,6 +358,19 @@ export function CateringProduct() {
     );
   };
 
+  const pageTitles: Array<{
+    name?: string;
+    url?: string;
+  }> = [];
+
+  if (
+    getSessionState.data?.cache_data ||
+    getSessionState.data?.customer_address
+  ) {
+    pageTitles.push({ name: "Products", url: "/shop/products" });
+  }
+  pageTitles.push({ name: getCateringProductDetailsState.data?.product.name });
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
@@ -366,10 +379,7 @@ export function CateringProduct() {
           url: "/shop",
         }}
         title={getCateringProductDetailsState.data?.product.name}
-        pageTitles={[
-          { name: "Products", url: "/shop/products" },
-          { name: getCateringProductDetailsState.data?.product.name },
-        ]}
+        pageTitles={pageTitles}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">
         <div className=" lg:space-y-10 lg:container">

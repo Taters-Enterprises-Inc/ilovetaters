@@ -37,6 +37,14 @@ export function CateringHeroCarousel() {
             }
             alt="The best pop corn in town"
           />
+          <img
+            className="hidden sm:block"
+            src={
+              REACT_APP_DOMAIN_URL +
+              "api/assets/images/catering/instructions/catering_instructions.jpg"
+            }
+            alt="The best pop corn in town"
+          />
         </SwiperSlide>
       </Swiper>
     </section>

@@ -61,7 +61,7 @@ import {
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
+import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 
 let quantityId: any;
 
@@ -91,7 +91,8 @@ export function ShopProduct() {
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
     useState<number>(0);
 
-  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
+    useState(false);
 
   const navigate = useNavigate();
 
@@ -414,6 +415,19 @@ export function ShopProduct() {
     }
   };
 
+  const pageTitles: Array<{
+    name?: string;
+    url?: string;
+  }> = [];
+
+  if (
+    getSessionState.data?.cache_data ||
+    getSessionState.data?.customer_address
+  ) {
+    pageTitles.push({ name: "Products", url: "/delivery/products" });
+  }
+  pageTitles.push({ name: getProductDetailsState.data?.product.name, url: "" });
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
@@ -422,10 +436,7 @@ export function ShopProduct() {
           url: "/delivery",
         }}
         title={getProductDetailsState.data?.product.name}
-        pageTitles={[
-          { name: "Products", url: "/delivery/products" },
-          { name: getProductDetailsState.data?.product.name, url: "" },
-        ]}
+        pageTitles={pageTitles}
       />
 
       <section className="min-h-screen lg:space-x-4 pb-36">
@@ -958,7 +969,7 @@ export function ShopProduct() {
                   <div className="space-y-4">
                     <button
                       onClick={() => {
-                        setOpenStoreChooserModal(true);
+                        setShopOpenStoreChooserModal(true);
                       }}
                       className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
@@ -994,10 +1005,10 @@ export function ShopProduct() {
         }}
       />
 
-      <StoreChooserModal
-        open={openStoreChooserModal}
+      <ShopStoreChooserModal
+        open={shopOpenStoreChooserModal}
         onClose={() => {
-          setOpenStoreChooserModal(false);
+          setShopOpenStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {

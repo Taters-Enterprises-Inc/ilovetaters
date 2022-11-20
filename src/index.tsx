@@ -189,7 +189,7 @@ root.render(
                       element={<Navigate to={"/admin"} />}
                     />
                     <Route path="shop" element={<Catering />}>
-                      <Route index element={<CateringHome shared={false} />} />
+                      <Route index element={<CateringHome />} />
                       <Route
                         path="products/:hash"
                         element={<CateringProduct />}
