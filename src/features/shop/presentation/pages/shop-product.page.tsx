@@ -4,7 +4,7 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
-import { MdFastfood } from "react-icons/md";
+import { MdFastfood, MdStore } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -61,6 +61,7 @@ import {
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 
 let quantityId: any;
 
@@ -89,6 +90,8 @@ export function ShopProduct() {
   const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
     useState<number>(0);
+
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -893,56 +896,79 @@ export function ShopProduct() {
                   </>
                 )}
 
-                <div className="space-y-4">
-                  <button
-                    onClick={() =>
-                      isQuantityNull.current
-                        ? setDisabled
-                        : handleAddToCartCheckout()
-                    }
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isQuantityNull.current
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
-                  >
-                    <BsFillBagCheckFill className="text-3xl" />
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Checkout
-                    </span>
-                  </button>
+                {getSessionState.data?.cache_data ||
+                getSessionState.data?.customer_address ? (
+                  <>
+                    <div className="space-y-4">
+                      <button
+                        onClick={() =>
+                          isQuantityNull.current
+                            ? setDisabled
+                            : handleAddToCartCheckout()
+                        }
+                        className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                          isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <BsFillBagCheckFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Checkout
+                        </span>
+                      </button>
 
-                  <button
-                    onClick={() =>
-                      isQuantityNull.current ? setDisabled : handleAddToCart()
-                    }
-                    className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
-                      isQuantityNull.current
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
-                  >
-                    <BsFillCartPlusFill className="text-3xl" />
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Add to cart
-                    </span>
-                  </button>
-                </div>
-
-                {getProductDetailsState.data?.addons ? (
-                  <ProductDetailsAccordion
-                    title={{
-                      name: "Product Add-ons",
-                      prefixIcon: <MdFastfood className="text-3xl" />,
-                    }}
-                  >
-                    <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getProductDetailsState.data?.addons.map((product, i) => (
-                        <Addon key={i} product={product} />
-                      ))}
+                      <button
+                        onClick={() =>
+                          isQuantityNull.current
+                            ? setDisabled
+                            : handleAddToCart()
+                        }
+                        className={`text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg ${
+                          isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <BsFillCartPlusFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Add to cart
+                        </span>
+                      </button>
                     </div>
-                  </ProductDetailsAccordion>
-                ) : null}
+
+                    {getProductDetailsState.data?.addons ? (
+                      <ProductDetailsAccordion
+                        title={{
+                          name: "Product Add-ons",
+                          prefixIcon: <MdFastfood className="text-3xl" />,
+                        }}
+                      >
+                        <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
+                          {getProductDetailsState.data?.addons.map(
+                            (product, i) => (
+                              <Addon key={i} product={product} />
+                            )
+                          )}
+                        </div>
+                      </ProductDetailsAccordion>
+                    ) : null}
+                  </>
+                ) : (
+                  <div className="space-y-4">
+                    <button
+                      onClick={() => {
+                        setOpenStoreChooserModal(true);
+                      }}
+                      className="text-white border border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    >
+                      <MdStore className="text-3xl" />
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        Select Store
+                      </span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -965,6 +991,18 @@ export function ShopProduct() {
         open={openLoginChooserModal}
         onClose={() => {
           setOpenLoginChooserModal(false);
+        }}
+      />
+
+      <StoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+        onDefaultStoreSelectHandler={() => {
+          if (hash) {
+            dispatch(getProductDetails({ hash }));
+          }
         }}
       />
     </main>

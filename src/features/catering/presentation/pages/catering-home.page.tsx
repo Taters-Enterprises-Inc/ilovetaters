@@ -52,7 +52,11 @@ const DateTimeTextField = styled((props: TextFieldProps) => (
   },
 }));
 
-export function CateringHome() {
+interface CateringHomeProps {
+  shared: boolean;
+}
+
+export function CateringHome(props: CateringHomeProps) {
   const dispatch = useAppDispatch();
   const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
@@ -68,7 +72,10 @@ export function CateringHome() {
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setStoreAndAddressState.status === SetStoreAndAddressState.success &&
+      !props.shared
+    ) {
       dispatch(getSession());
       navigate("products");
       document.body.classList.remove("overflow-hidden");
@@ -168,7 +175,9 @@ export function CateringHome() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <CateringHeroCarousel />
+      <div className={`${props.shared ? "hidden" : ""}`}>
+        <CateringHeroCarousel />
+      </div>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
           Thank you for considering Taters for your celebration.{" "}
