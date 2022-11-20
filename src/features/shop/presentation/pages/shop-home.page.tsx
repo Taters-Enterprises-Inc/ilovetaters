@@ -13,7 +13,7 @@ import {
   selectShopHomePage,
   setAddressShopHomePage,
 } from "../slices/shop-home-page.slice";
-import { ShopHeroCarousel } from "../components";
+import { ShopHeroCarousel } from "../carousels";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();

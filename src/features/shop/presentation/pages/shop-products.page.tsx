@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ShopProductsCarousel } from "../carousels";
-import { ShopHeroCarousel } from "../carousels/shop-hero.carousel";
+import { ShopHeroCarousel } from "../carousels";
 import {
   getCategoryProducts,
   selectGetCategoryProducts,
@@ -49,7 +49,9 @@ export function ShopProducts() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <ShopHeroCarousel />
+      <section className="lg:container">
+        <ShopHeroCarousel />
+      </section>
 
       <section className="space-y-10 pb-36 lg:pb-10">
         {getCategoryProductsState.data?.map((category: any, i: number) => {

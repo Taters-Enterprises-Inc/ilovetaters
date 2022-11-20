@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { ShopHeroCarousel, ShopStoreCluster } from "../components";
+import { ShopStoreCluster } from "../components";
 import { SearchAddress } from "../../../shared/presentation/components/search-address";
 import { IoMdClose } from "react-icons/io";
 import {
@@ -7,6 +7,7 @@ import {
   setAddressShopStoreChooserModal,
 } from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
 import { getStoresAvailableSnackshopModal } from "../slices/get-stores-available-snackshop-modal.slice";
+import { ShopHeroCarousel } from "../carousels";
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
@@ -44,7 +45,9 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
           <IoMdClose />
         </button>
 
-        <ShopHeroCarousel />
+        <div className="mt-4">
+          <ShopHeroCarousel />
+        </div>
 
         <h1 className='text-white text-sm lg:text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px]'>
           Please search your address for delivery

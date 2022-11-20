@@ -29,7 +29,6 @@ import {
 } from "../slices/catering-home-page.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { styled } from "@mui/material/styles";
-import { CateringHeroCarousel } from "./catering-hero.carousel";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
@@ -167,8 +166,7 @@ export function CateringStoreChooserModalHome() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <CateringHeroCarousel />
-      <section className="container pb-96">
+      <section className=" pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
           Thank you for considering Taters for your celebration.{" "}
           <span className="block lg:inline">
