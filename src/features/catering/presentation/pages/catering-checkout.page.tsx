@@ -320,6 +320,22 @@ export function CateringCheckout() {
     return null;
   };
 
+  const handlePaymentMethodChange = (payment: string) => {
+    setFormState({
+      ...formState,
+      payops: payment,
+    });
+    if (
+      getSessionState.data &&
+      getSessionState.data.cash_delivery &&
+      payment === "3"
+    ) {
+      setCashOnDelivery(parseInt(getSessionState.data.cash_delivery));
+    } else {
+      setCashOnDelivery(undefined);
+    }
+  };
+
   return (
     <main className="bg-paper">
       <PageTitleAndBreadCrumbs
@@ -616,25 +632,7 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod
-                    onChange={(payment) => {
-                      setFormState({
-                        ...formState,
-                        payops: payment,
-                      });
-                      if (
-                        getSessionState.data &&
-                        getSessionState.data.cash_delivery &&
-                        payment === "3"
-                      ) {
-                        setCashOnDelivery(
-                          parseInt(getSessionState.data.cash_delivery)
-                        );
-                      } else {
-                        setCashOnDelivery(undefined);
-                      }
-                    }}
-                  />
+                  <PaymentMethod onChange={handlePaymentMethodChange} />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
