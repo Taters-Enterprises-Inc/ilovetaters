@@ -136,7 +136,7 @@ export function PopClubHome() {
                 All
               </span>
             </Link>
-            {getAllPlatformCategoriesState.data.map((category, i) => (
+            {getAllPlatformCategoriesState.data?.map((category, i) => (
               <li key={i}>
                 <Link
                   to={`?category=${category.url_name}`}
@@ -158,25 +158,27 @@ export function PopClubHome() {
         </div>
       </section>
 
-      <section className="container pb-96">
-        {getDealsState.data.length <= 0 ? (
-          <div className="flex flex-col items-center justify-center">
-            <img
-              src={`${REACT_APP_DOMAIN_URL}api/assets/images/popclub/mr_poppy/Poppie_Surprised.png`}
-              alt="Taters Mr Poppy Suprised"
-              width={300}
-            />
-            <span className="text-white text-3xl font-['Bebas_Neue'] tracking-[3px]">
-              Oops.. No Deals Found
-            </span>
+      {getDealsState.data ? (
+        <section className="container pb-96">
+          {getDealsState.data.length <= 0 ? (
+            <div className="flex flex-col items-center justify-center">
+              <img
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/popclub/mr_poppy/Poppie_Surprised.png`}
+                alt="Taters Mr Poppy Suprised"
+                width={300}
+              />
+              <span className="text-white text-3xl font-['Bebas_Neue'] tracking-[3px]">
+                Oops.. No Deals Found
+              </span>
+            </div>
+          ) : null}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:grid-cols-5">
+            {getDealsState.data.map((deal, i) => (
+              <Deal key={i} deal={deal} />
+            ))}
           </div>
-        ) : null}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:grid-cols-5">
-          {getDealsState.data.map((deal, i) => (
-            <Deal key={i} deal={deal} />
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <PlatformChooserModal
         hasCloseButton={true}

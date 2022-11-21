@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
-import { UserModel } from "features/admin/core/domain/user.model";
 import {
   GetAdminNotificationsRepository,
   GetAdminNotificationsResponse,
@@ -14,11 +14,13 @@ export enum GetAdminNotificationsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminNotificationsState;
   message: string;
   data: GetAdminNotificationModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminNotificationsState.initial,
   message: "",
   data: undefined,
@@ -26,13 +28,18 @@ const initialState: {
 
 export const getAdminNotifications = createAsyncThunk(
   "getAdminNotifications",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetAdminNotificationsResponse =
         await GetAdminNotificationsRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -42,36 +49,24 @@ export const getAdminNotificationsSlice = createSlice({
   name: "getAdminNotifications",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminNotifications.pending, (state: any) => {
+      .addCase(getAdminNotifications.pending, (state) => {
         state.status = GetAdminNotificationsState.inProgress;
       })
-      .addCase(
-        getAdminNotifications.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: UserModel | null;
-          }>
-        ) => {
+      .addCase(getAdminNotifications.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminNotificationsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminNotifications.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminNotificationsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminNotifications.rejected, (state, action) => {
+        state.status = GetAdminNotificationsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import {
   ForfeitRedeemRepository,
@@ -12,22 +13,29 @@ export enum ForfeitRedeemState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: ForfeitRedeemState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: ForfeitRedeemState.initial,
   message: "",
 };
 
 export const forfeitRedeem = createAsyncThunk(
   "forfeitRedeem",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: ForfeitRedeemResponse = await ForfeitRedeemRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -42,29 +50,23 @@ export const forfeitRedeemSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(forfeitRedeem.pending, (state: any) => {
+      .addCase(forfeitRedeem.pending, (state) => {
         state.status = ForfeitRedeemState.inProgress;
       })
-      .addCase(
-        forfeitRedeem.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(forfeitRedeem.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = ForfeitRedeemState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        forfeitRedeem.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = ForfeitRedeemState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(forfeitRedeem.rejected, (state, action) => {
+        state.status = ForfeitRedeemState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import { GetRedeemParam } from "features/popclub/core/popclub.params";
@@ -6,6 +6,7 @@ import {
   GetRedeemRepository,
   GetRedeemResponse,
 } from "features/popclub/data/repository/popclub.repository";
+import { AxiosError } from "axios";
 
 export enum GetRedeemState {
   initial,
@@ -14,11 +15,13 @@ export enum GetRedeemState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetRedeemState;
   message: string;
   data: RedeemDealModel | undefined | null;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetRedeemState.initial,
   message: "",
   data: undefined,
@@ -26,10 +29,20 @@ const initialState: {
 
 export const getRedeem = createAsyncThunk(
   "getRedeem",
-  async (param: GetRedeemParam) => {
-    const response: GetRedeemResponse = await GetRedeemRepository(param);
+  async (param: GetRedeemParam, { rejectWithValue }) => {
+    try {
+      const response: GetRedeemResponse = await GetRedeemRepository(param);
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -43,23 +56,25 @@ export const getRedeemSlice = createSlice({
       state.data = undefined;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getRedeem.pending, (state: any) => {
+      .addCase(getRedeem.pending, (state) => {
         state.status = GetRedeemState.inProgress;
       })
-      .addCase(
-        getRedeem.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: RedeemDealModel }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getRedeem.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetRedeemState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getRedeem.rejected, (state, action) => {
+        state.status = GetRedeemState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

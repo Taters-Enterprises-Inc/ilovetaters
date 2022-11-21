@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CreateAdminGroupParam } from "features/admin/core/admin.params";
+import { AxiosError } from "axios";
 import {
   CreateAdminGroupRepository,
   CreateAdminGroupResponse,
@@ -13,26 +14,31 @@ export enum CreateAdminGroupState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CreateAdminGroupState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CreateAdminGroupState.initial,
   message: "",
 };
 
 export const createAdminGroup = createAsyncThunk(
   "createAdminGroup",
-  async (
-    param: CreateAdminGroupParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: CreateAdminGroupParam, { rejectWithValue }) => {
     try {
       const response: CreateAdminGroupResponse =
         await CreateAdminGroupRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,33 +53,22 @@ export const createAdminGroupSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(createAdminGroup.pending, (state: any) => {
+      .addCase(createAdminGroup.pending, (state) => {
         state.status = CreateAdminGroupState.inProgress;
       })
-      .addCase(
-        createAdminGroup.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(createAdminGroup.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = CreateAdminGroupState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        createAdminGroup.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = CreateAdminGroupState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(createAdminGroup.rejected, (state, action) => {
+        state.status = CreateAdminGroupState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

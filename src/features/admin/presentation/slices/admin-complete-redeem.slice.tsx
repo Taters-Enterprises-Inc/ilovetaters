@@ -1,11 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AdminCompleteRedeemParam } from "features/admin/core/admin.params";
-import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
+import { AxiosError } from "axios";
 import {
   AdminCompleteRedeemRepository,
   AdminCompleteRedeemResponse,
-  GetAdminPopclubRedeemRepository,
-  GetAdminPopclubRedeemResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
@@ -16,26 +14,31 @@ export enum AdminCompleteRedeemState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminCompleteRedeemState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminCompleteRedeemState.initial,
   message: "",
 };
 
 export const adminCompleteRedeem = createAsyncThunk(
   "adminCompleteRedeem",
-  async (
-    param: AdminCompleteRedeemParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: AdminCompleteRedeemParam, { rejectWithValue }) => {
     try {
       const response: AdminCompleteRedeemResponse =
         await AdminCompleteRedeemRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -49,33 +52,22 @@ export const adminCompleteRedeemSlice = createSlice({
       state.status = AdminCompleteRedeemState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminCompleteRedeem.pending, (state: any) => {
+      .addCase(adminCompleteRedeem.pending, (state) => {
         state.status = AdminCompleteRedeemState.inProgress;
       })
-      .addCase(
-        adminCompleteRedeem.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(adminCompleteRedeem.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = AdminCompleteRedeemState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminCompleteRedeem.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminCompleteRedeemState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminCompleteRedeem.rejected, (state, action) => {
+        state.status = AdminCompleteRedeemState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

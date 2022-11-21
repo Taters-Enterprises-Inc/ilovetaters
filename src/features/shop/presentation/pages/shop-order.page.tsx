@@ -11,7 +11,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+
 import {
   selectUploadProofOfPayment,
   uploadProofOfPayment,
@@ -414,7 +414,7 @@ export function ShopOrder() {
                           ) : (
                             <h3 className="flex items-end justify-end flex-1 text-base">
                               <NumberFormat
-                                value={order.calc_price.toFixed(2)}
+                                value={Number(order.calc_price).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}

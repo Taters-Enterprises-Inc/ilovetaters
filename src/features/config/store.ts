@@ -17,7 +17,6 @@ import getLatestUnexpiredRedeem from "../popclub/presentation/slices/get-latest-
 import getCategoryProducts from "../shop/presentation/slices/get-category-products.slice";
 import getProductDetails from "../shop/presentation/slices/get-product-details.slice";
 import addToCartShop from "../shop/presentation/slices/add-to-cart-shop.slice";
-import getBranchesStore from "../branches/presentation/slices/get-branches-store";
 import checkoutOrders from "../shop/presentation/slices/checkout-orders.slice";
 import getOrders from "../shop/presentation/slices/get-orders.slice";
 import getSnackShopOrderHistory from "../profile/presentation/slices/get-snackshop-order-history.slice";
@@ -47,7 +46,6 @@ import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
 import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
 import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
-import branchesNearYouComponent from "../branches/presentation/slices/branches-near-you-component.slice";
 import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
 import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
 import uploadContract from "../catering/presentation/slices/upload-contract.slice";
@@ -143,6 +141,11 @@ import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-use
 import getAdminSurveyVerification from "features/admin/presentation/slices/get-admin-survey-verification.slice";
 import getAdminSurveyVerifications from "features/admin/presentation/slices/get-admin-survey-verifications.slice";
 import adminSurveyVerificationChangeStatus from "features/admin/presentation/slices/admin-survey-verification-change-status.slice";
+import getNotifications from "features/shared/presentation/slices/get-notifications.slice";
+import seenNotification from "features/shared/presentation/slices/seen-notification.slice";
+import shopStoreChooserModal from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
+import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
+import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -170,7 +173,6 @@ export const store = configureStore({
     editCartItem,
     addToCartShop,
     addToCartCheckoutShop,
-    getBranchesStore,
     checkoutOrders,
     getOrders,
     getSnackShopOrderHistory,
@@ -194,7 +196,6 @@ export const store = configureStore({
     cateringCheckoutOrders,
     cateringHomePage,
     shopHomePage,
-    branchesNearYouComponent,
     storeChooserModal,
     getCateringOrders,
     uploadContract,
@@ -260,9 +261,7 @@ export const store = configureStore({
     getAdminNotifications,
     updateAdminNotificationDateSeen,
     discountRegistration,
-
     getDealOrder,
-
     getAdminUserDiscounts,
     getAdminUserDiscount,
     applyUserDiscount,
@@ -289,6 +288,11 @@ export const store = configureStore({
     getAdminSurveyVerification,
     getAdminSurveyVerifications,
     adminSurveyVerificationChangeStatus,
+    getNotifications,
+    seenNotification,
+    shopStoreChooserModal,
+    getStoresAvailableSnackshopModal,
+    getStoresAvailableCateringModal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

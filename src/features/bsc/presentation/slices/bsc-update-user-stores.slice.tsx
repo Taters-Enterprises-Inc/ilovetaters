@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import {
   UpdateBscUserStoresRepository,
@@ -13,24 +14,31 @@ export enum UpdateBscUserStoresState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateBscUserStoresState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateBscUserStoresState.initial,
   message: "",
 };
 
 export const updateBscUserStores = createAsyncThunk(
   "updateBscUserStores",
-  async (formData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (formData: FormData, { rejectWithValue }) => {
     try {
       const response: UpdateBscUserStoresResponse =
         await UpdateBscUserStoresRepository(formData);
-      console.log(response.data);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -44,33 +52,22 @@ export const updateBscUserStoresSlice = createSlice({
       state.status = UpdateBscUserStoresState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateBscUserStores.pending, (state: any) => {
+      .addCase(updateBscUserStores.pending, (state) => {
         state.status = UpdateBscUserStoresState.inProgress;
       })
-      .addCase(
-        updateBscUserStores.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateBscUserStores.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateBscUserStoresState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateBscUserStores.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateBscUserStoresState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateBscUserStores.rejected, (state, action) => {
+        state.status = UpdateBscUserStoresState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

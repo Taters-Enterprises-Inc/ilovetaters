@@ -14,7 +14,9 @@ import {
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import { FormEvent, useEffect, useState } from "react";
+import TextField from "@mui/material/TextField";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +48,7 @@ import {
   selectGetAvailableUserDiscount,
   getAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -119,13 +122,14 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
+      dispatch(getNotifications());
       navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());
     }
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    if (addContactState.status == AddContactState.success) {
+    if (addContactState.status === AddContactState.success) {
       dispatch(getSession());
       dispatch(getContacts());
     }

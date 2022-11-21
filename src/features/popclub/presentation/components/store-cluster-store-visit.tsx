@@ -20,9 +20,9 @@ import {
 interface StoreClusterProps {
   onClose: any;
   address: string | null;
-  
+
   // If this function exist it will not navigate to default
-  onDefaultStoreSelectHandler?: ()=> void;
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreClusterStoreVisit(props: StoreClusterProps) {
@@ -68,8 +68,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
       dispatch(setPopClubData({ platform: "store-visit" }));
 
-      if(props.onDefaultStoreSelectHandler === undefined){
-
+      if (props.onDefaultStoreSelectHandler === undefined) {
         if (platform) {
           if (platform === "online-delivery") {
             navigate(`/popclub/store-visit?category=all`);
@@ -79,8 +78,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         } else {
           navigate(`/popclub/store-visit?category=all`);
         }
-  
-      }else{
+      } else {
         props.onDefaultStoreSelectHandler();
       }
 
@@ -172,7 +170,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         </>
       ) : (
         <>
-          {getStoresAvailablePopClubStoreVisitState.data.map(
+          {getStoresAvailablePopClubStoreVisitState.data?.map(
             (store_cluster, index) => (
               <div key={index}>
                 <h1 className="pl-2 text-sm font-normal">

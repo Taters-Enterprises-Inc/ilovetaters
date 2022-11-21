@@ -102,7 +102,6 @@ import {
 } from "features/popclub/presentation/slices/redeem-deal.slice";
 import {
   selectSignUpMobileUser,
-  signUpMobileUser,
   SignUpMobileUserState,
 } from "../slices/sign-up-mobile-user.slice";
 import {
@@ -145,10 +144,6 @@ import {
   LoginAdminState,
   selectLoginAdmin,
 } from "features/admin/presentation/slices/login-admin.slice";
-import {
-  GetAdminSessionState,
-  selectGetAdminSession,
-} from "features/admin/presentation/slices/get-admin-session.slice";
 import {
   GetAdminPopclubRedeemState,
   selectGetAdminPopclubRedeem,
@@ -281,6 +276,14 @@ import {
   selectUpdateBscUser,
   UpdateBscUserState,
 } from "features/bsc/presentation/slices/bsc-update-user.slice";
+import {
+  GetStoresAvailableSnackshopModalState,
+  selectGetStoresAvailableSnackshopModal,
+} from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
+import {
+  GetStoresAvailableCateringModalState,
+  selectGetStoresAvailableCateringModal,
+} from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -359,7 +362,6 @@ export function LoadingAndSnackbarWrapper() {
   const getAdminShopOrdersState = useAppSelector(selectGetAdminShopOrders);
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
   const loginAdminState = useAppSelector(selectLoginAdmin);
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getAdminPopclubRedeemState = useAppSelector(
     selectGetAdminPopclubRedeem
   );
@@ -432,6 +434,13 @@ export function LoadingAndSnackbarWrapper() {
   const updateBscUserStatusState = useAppSelector(selectUpdateBscUserStatus);
 
   const updateBscUserState = useAppSelector(selectUpdateBscUser);
+
+  const getStoresAvailableSnackshopModalState = useAppSelector(
+    selectGetStoresAvailableSnackshopModal
+  );
+  const getStoresAvailableCateringModalState = useAppSelector(
+    selectGetStoresAvailableCateringModal
+  );
 
   useEffect(() => {
     switch (updateBscUserState.status) {
@@ -584,6 +593,40 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [applyUserDiscountState]);
+
+  useEffect(() => {
+    switch (getStoresAvailableCateringModalState.status) {
+      case GetStoresAvailableCateringModalState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStoresAvailableCateringModalState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringModalState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableCateringModalState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStoresAvailableCateringModalState]);
+
+  useEffect(() => {
+    switch (getStoresAvailableSnackshopModalState.status) {
+      case GetStoresAvailableSnackshopModalState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetStoresAvailableSnackshopModalState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableSnackshopModalState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetStoresAvailableSnackshopModalState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getStoresAvailableSnackshopModalState]);
 
   useEffect(() => {
     switch (adminCateringPrivilegeState.status) {
@@ -1069,23 +1112,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [getAdminPopclubRedeemState]);
-
-  useEffect(() => {
-    switch (getAdminSessionState.status) {
-      case GetAdminSessionState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case GetAdminSessionState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminSessionState.success:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminSessionState.fail:
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [getAdminSessionState]);
 
   useEffect(() => {
     switch (loginAdminState.status) {

@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import {
   GetAdminSurveyVerificationsRepository,
   GetAdminSurveyVerificationsResponse,
@@ -12,12 +13,13 @@ export enum GetAdminSurveyVerificationsState {
   success,
   fail,
 }
-
-const initialState: {
+interface InitialState {
   status: GetAdminSurveyVerificationsState;
   message: string;
-  data: AdminSurveyVerificationModel | undefined;
-} = {
+  data: GetAdminSurveyVerificationsModel | undefined;
+}
+
+const initialState: InitialState = {
   status: GetAdminSurveyVerificationsState.initial,
   message: "",
   data: undefined,
@@ -25,13 +27,18 @@ const initialState: {
 
 export const getAdminSurveyVerifications = createAsyncThunk(
   "getAdminSurveyVerifications",
-  async (id: string, { rejectWithValue, fulfillWithValue }) => {
+  async (query: string, { rejectWithValue }) => {
     try {
       const response: GetAdminSurveyVerificationsResponse =
-        await GetAdminSurveyVerificationsRepository(id);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+        await GetAdminSurveyVerificationsRepository(query);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +48,25 @@ export const getAdminSurveyVerificationsSlice = createSlice({
   name: "getAdminSurveyVerifications",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminSurveyVerifications.pending, (state: any) => {
+      .addCase(getAdminSurveyVerifications.pending, (state) => {
         state.status = GetAdminSurveyVerificationsState.inProgress;
       })
-      .addCase(
-        getAdminSurveyVerifications.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: AdminSurveyVerificationModel | null;
-          }>
-        ) => {
+      .addCase(getAdminSurveyVerifications.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
+
           state.status = GetAdminSurveyVerificationsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminSurveyVerifications.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminSurveyVerificationsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminSurveyVerifications.rejected, (state, action) => {
+        state.status = GetAdminSurveyVerificationsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

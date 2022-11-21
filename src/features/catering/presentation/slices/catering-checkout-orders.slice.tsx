@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CateringCheckoutOrdersParam } from "features/catering/core/catering.params";
 import {
   CateringCheckoutOrdersRepository,
@@ -14,29 +15,33 @@ export enum CateringCheckoutOrdersState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CateringCheckoutOrdersState;
   data: CheckoutOrdersModel | undefined;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CateringCheckoutOrdersState.initial,
-  data: undefined,
   message: "",
+  data: undefined,
 };
 
 export const cateringCheckoutOrders = createAsyncThunk(
   "cateringCheckoutOrders",
-  async (
-    param: CateringCheckoutOrdersParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: CateringCheckoutOrdersParam, { rejectWithValue }) => {
     try {
       const response: CateringCheckoutOrdersResponse =
         await CateringCheckoutOrdersRepository(param);
 
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -52,37 +57,25 @@ export const cateringCheckoutOrdersSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(cateringCheckoutOrders.pending, (state: any) => {
+      .addCase(cateringCheckoutOrders.pending, (state) => {
         state.status = CateringCheckoutOrdersState.inProgress;
       })
-      .addCase(
-        cateringCheckoutOrders.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: CheckoutOrdersModel | undefined;
-          }>
-        ) => {
+      .addCase(cateringCheckoutOrders.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
 
           state.data = data;
           state.message = message;
           state.status = CateringCheckoutOrdersState.success;
         }
-      )
-      .addCase(
-        cateringCheckoutOrders.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = CateringCheckoutOrdersState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(cateringCheckoutOrders.rejected, (state, action) => {
+        state.status = CateringCheckoutOrdersState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

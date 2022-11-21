@@ -5,6 +5,7 @@ import {
   GetSessionRepository,
   GetSessionResponse,
 } from "features/shared/data/repository/shared.repository";
+import { AxiosError } from "axios";
 
 export enum GetSessionState {
   initial,
@@ -13,41 +14,59 @@ export enum GetSessionState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetSessionState;
   data: SessionModel | undefined;
-} = {
+  message: string;
+}
+
+const initialState: InitialState = {
   status: GetSessionState.initial,
   data: undefined,
+  message: "",
 };
 
-export const getSession = createAsyncThunk("getSession", async () => {
-  const response: GetSessionResponse = await GetSessionRepository();
-  return response.data;
-});
+export const getSession = createAsyncThunk(
+  "getSession",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: GetSessionResponse = await GetSessionRepository();
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const getSessionSlice = createSlice({
   name: "getStoresAvailable",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getSession.pending, (state: any) => {
+      .addCase(getSession.pending, (state) => {
         state.status = GetSessionState.inProgress;
       })
-      .addCase(
-        getSession.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: SessionModel }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getSession.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
+          state.status = GetSessionState.success;
 
           state.data = data;
-          state.status = GetSessionState.success;
+          state.message = message;
         }
-      );
+      })
+      .addCase(getSession.rejected, (state, action) => {
+        state.status = GetSessionState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

@@ -16,7 +16,7 @@ export function CateringStoreList(props: StoreListProps) {
 
   return (
     <section className="text-white">
-      {getStoresAvailableCateringState.data.map((store_cluster, index) => (
+      {getStoresAvailableCateringState.data?.map((store_cluster, index) => (
         <div key={index} className="space-y-3">
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">

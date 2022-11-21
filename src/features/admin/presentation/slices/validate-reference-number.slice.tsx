@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ValidateReferenceNumberParam } from "features/admin/core/admin.params";
+import { AxiosError } from "axios";
 import {
   ValidateReferenceNumberAdminRepository,
   ValidateReferenceNumberAdminResponse,
@@ -13,26 +14,30 @@ export enum ValidateReferenceNumberAdminState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: ValidateReferenceNumberAdminState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: ValidateReferenceNumberAdminState.initial,
   message: "",
 };
 
 export const validateReferenceNumberAdmin = createAsyncThunk(
   "validateReferenceNumberAdmin",
-  async (
-    param: ValidateReferenceNumberParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: ValidateReferenceNumberParam, { rejectWithValue }) => {
     try {
       const response: ValidateReferenceNumberAdminResponse =
         await ValidateReferenceNumberAdminRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -42,29 +47,23 @@ export const validateReferenceNumberAdminSlice = createSlice({
   name: "validateReferenceNumberAdmin",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(validateReferenceNumberAdmin.pending, (state: any) => {
+      .addCase(validateReferenceNumberAdmin.pending, (state) => {
         state.status = ValidateReferenceNumberAdminState.inProgress;
       })
-      .addCase(
-        validateReferenceNumberAdmin.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(validateReferenceNumberAdmin.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = ValidateReferenceNumberAdminState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        validateReferenceNumberAdmin.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = ValidateReferenceNumberAdminState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(validateReferenceNumberAdmin.rejected, (state, action) => {
+        state.status = ValidateReferenceNumberAdminState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

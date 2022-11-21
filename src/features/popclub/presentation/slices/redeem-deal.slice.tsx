@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { RedeemDealModel } from "features/shared/core/domain/redeem_deal.model";
 import { RedeemDealParam } from "features/popclub/core/popclub.params";
@@ -6,6 +6,7 @@ import {
   RedeemDealRepository,
   RedeemDealResponse,
 } from "features/popclub/data/repository/popclub.repository";
+import { AxiosError } from "axios";
 
 export enum RedeemDealState {
   initial,
@@ -16,17 +17,29 @@ export enum RedeemDealState {
 
 const initialState: {
   status: RedeemDealState;
+  message: string;
   data: RedeemDealModel | undefined | null;
 } = {
   status: RedeemDealState.initial,
+  message: "",
   data: undefined,
 };
 
 export const redeemDeal = createAsyncThunk(
   "redeemDeal",
-  async (param: RedeemDealParam) => {
-    const response: RedeemDealResponse = await RedeemDealRepository(param);
-    return response.data;
+  async (param: RedeemDealParam, { rejectWithValue }) => {
+    try {
+      const response: RedeemDealResponse = await RedeemDealRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -39,23 +52,24 @@ export const redeemDealSlice = createSlice({
       state.status = RedeemDealState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(redeemDeal.pending, (state: any) => {
+      .addCase(redeemDeal.pending, (state) => {
         state.status = RedeemDealState.inProgress;
       })
-      .addCase(
-        redeemDeal.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: RedeemDealModel }>
-        ) => {
-          const data = action.payload.data;
-
-          state.data = data;
+      .addCase(redeemDeal.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
           state.status = RedeemDealState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(redeemDeal.rejected, (state, action) => {
+        state.status = RedeemDealState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

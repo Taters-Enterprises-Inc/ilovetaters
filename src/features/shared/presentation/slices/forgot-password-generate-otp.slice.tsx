@@ -1,18 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
+import { ForgotPasswordGenerateOtpParam } from "features/shared/core/shared.params";
 import {
-  AddContactParam,
-  ForgotPasswordGenerateOtpParam,
-} from "features/shared/core/shared.params";
-import {
-  AddContactRepository,
-  AddContactResponse,
   ForgotPasswordGenerateOTPRepository,
   ForgotPasswordGenerateOTPResponse,
-  SignInMobileUserRepository,
-  SignInMobileUserResponse,
-  SignUpMobileUserRepository,
-  SignUpMobileUserResponse,
 } from "features/shared/data/repository/shared.repository";
 
 export enum ForgotPasswordGenerateOTPState {
@@ -22,29 +14,31 @@ export enum ForgotPasswordGenerateOTPState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: ForgotPasswordGenerateOTPState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: ForgotPasswordGenerateOTPState.initial,
   message: "",
 };
 
 export const forgotPasswordGenerateOTP = createAsyncThunk(
   "forgotPasswordGenerateOTP",
-  async (
-    param: ForgotPasswordGenerateOtpParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: ForgotPasswordGenerateOtpParam, { rejectWithValue }) => {
     try {
       const response: ForgotPasswordGenerateOTPResponse =
         await ForgotPasswordGenerateOTPRepository(param);
 
-      console.log(response.data);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      console.log(error.response.data.message);
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -59,25 +53,23 @@ export const forgotPasswordGenerateOTPSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(forgotPasswordGenerateOTP.pending, (state: any) => {
+      .addCase(forgotPasswordGenerateOTP.pending, (state) => {
         state.status = ForgotPasswordGenerateOTPState.inProgress;
       })
-      .addCase(
-        forgotPasswordGenerateOTP.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
+      .addCase(forgotPasswordGenerateOTP.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
           state.status = ForgotPasswordGenerateOTPState.success;
+          state.message = message;
         }
-      )
-      .addCase(
-        forgotPasswordGenerateOTP.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = ForgotPasswordGenerateOTPState.fail;
-        }
-      );
+      })
+      .addCase(forgotPasswordGenerateOTP.rejected, (state, action) => {
+        state.status = ForgotPasswordGenerateOTPState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

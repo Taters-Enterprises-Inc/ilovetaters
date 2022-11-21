@@ -7,7 +7,7 @@ import {
 import moment from "moment";
 import NumberFormat from "react-number-format";
 import Moment from "react-moment";
-import { selectGetAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import { selectGetAdminSurveyVerification } from "../slices/get-admin-survey-verification.slice";
 import {
   adminSurveyVerificationChangeStatus,
   AdminSurveyVerificationChangeStatusState,
@@ -26,7 +26,7 @@ export function AdminSurveyVerificationIDInformation(
   const dispatch = useAppDispatch();
 
   const getAdminSurveyVerificationState = useAppSelector(
-    selectGetAdminSurveyVerifications
+    selectGetAdminSurveyVerification
   );
   const adminSurveyVerificationChangeStatusState = useAppSelector(
     selectAdminSurveyVerificationChangeStatus

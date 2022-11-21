@@ -24,7 +24,10 @@ import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminSurveyVerificationModal } from "../modals";
-import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import {
+  getAdminSurveyVerifications,
+  selectGetAdminSurveyVerifications,
+} from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 
 const columns: Array<Column> = [
@@ -52,8 +55,8 @@ export function AdminSurveyVerifications() {
     setOpenAdminSurveyVerificationModal,
   ] = useState(false);
 
-  const getAdminSurveyVerificationStates = useAppSelector(
-    selectGetAdminSurveyVerification
+  const getAdminSurveyVerificationsStates = useAppSelector(
+    selectGetAdminSurveyVerifications
   );
 
   const adminSurveyVerificationChangeStatusState = useAppSelector(
@@ -62,7 +65,7 @@ export function AdminSurveyVerifications() {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminSurveyVerifications(id)).then(() => {
+      dispatch(getAdminSurveyVerification(id)).then(() => {
         setOpenAdminSurveyVerificationModal(true);
       });
     }
@@ -77,7 +80,7 @@ export function AdminSurveyVerifications() {
       order: order,
       search: search,
     });
-    dispatch(getAdminSurveyVerification(query));
+    dispatch(getAdminSurveyVerifications(query));
   }, [
     dispatch,
     pageNo,
@@ -133,7 +136,7 @@ export function AdminSurveyVerifications() {
         </div>
       </div>
 
-      {getAdminSurveyVerificationStates.data?.surveyverification ? (
+      {getAdminSurveyVerificationsStates.data?.surveys ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -194,69 +197,67 @@ export function AdminSurveyVerifications() {
                 }
               }}
               totalRows={
-                getAdminSurveyVerificationStates.data.pagination.total_rows
+                getAdminSurveyVerificationsStates.data.pagination.total_rows
               }
               perPage={
-                getAdminSurveyVerificationStates.data.pagination.per_page
+                getAdminSurveyVerificationsStates.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminSurveyVerificationStates.data.surveyverification.map(
-                (row, i) => (
-                  <div
-                    onClick={() => {
-                      const params = {
-                        page_no: pageNo,
-                        per_page: perPage,
-                        status: status,
-                        id: row.id,
-                        search: search,
-                      };
+              {getAdminSurveyVerificationsStates.data.surveys.map((row, i) => (
+                <div
+                  onClick={() => {
+                    const params = {
+                      page_no: pageNo,
+                      per_page: perPage,
+                      status: status,
+                      id: row.id,
+                      search: search,
+                    };
 
-                      const queryParams = createQueryParams(params);
+                    const queryParams = createQueryParams(params);
 
-                      navigate({
-                        pathname: "",
-                        search: queryParams,
-                      });
-                    }}
-                    className="flex flex-col px-4 py-2 border-b"
-                    key={i}
-                  >
-                    <span className="flex flex-wrap items-center space-x-1 text-xl">
-                      <span>{row.first_name + " " + row.last_name}</span>
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }}
+                  className="flex flex-col px-4 py-2 border-b"
+                  key={i}
+                >
+                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                    <span>{row.first_name + " " + row.last_name}</span>
 
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
-                        }}
-                      >
-                        {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
-                      </span>
+                    <span
+                      className="px-2 py-1 text-xs rounded-full "
+                      style={{
+                        color: "white",
+                        backgroundColor:
+                          ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
+                      }}
+                    >
+                      {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
                     </span>
+                  </span>
 
-                    <span className="text-xs text-gray-600">
-                      <strong> Receipt Number:</strong> {row.reciept_no}
-                    </span>
-                    <span className="text-xs text-gray-600">
-                      <strong>Date and Time: </strong>
-                      <Moment format="lll">{row.dateadded}</Moment>
-                    </span>
-                  </div>
-                )
-              )}
+                  <span className="text-xs text-gray-600">
+                    <strong> Receipt Number:</strong> {row.reciept_no}
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    <strong>Date and Time: </strong>
+                    <Moment format="lll">{row.dateadded}</Moment>
+                  </span>
+                </div>
+              ))}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
-              emptyMessage="No user discounts yet."
+              emptyMessage="No user surveys yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -340,17 +341,16 @@ export function AdminSurveyVerifications() {
                 }
               }}
               totalRows={
-                getAdminSurveyVerificationStates.data.pagination.total_rows
+                getAdminSurveyVerificationsStates.data.pagination.total_rows
               }
               perPage={
-                getAdminSurveyVerificationStates.data.pagination.per_page
+                getAdminSurveyVerificationsStates.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminSurveyVerificationStates.data.surveyverification !==
-              undefined ? (
+              {getAdminSurveyVerificationsStates.data.surveys !== undefined ? (
                 <>
-                  {getAdminSurveyVerificationStates.data.surveyverification.map(
+                  {getAdminSurveyVerificationsStates.data.surveys.map(
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>

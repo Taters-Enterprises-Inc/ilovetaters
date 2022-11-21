@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 import { CheckoutOrdersParam } from "features/shop/core/shop.params";
@@ -14,11 +15,13 @@ export enum CheckoutOrdersState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CheckoutOrdersState;
   data: CheckoutOrdersModel | undefined;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CheckoutOrdersState.initial,
   data: undefined,
   message: "",
@@ -26,14 +29,20 @@ const initialState: {
 
 export const checkoutOrders = createAsyncThunk(
   "checkoutOrders",
-  async (param: CheckoutOrdersParam, { rejectWithValue, fulfillWithValue }) => {
+  async (param: CheckoutOrdersParam, { rejectWithValue }) => {
     try {
       const response: CheckoutOrdersResponse = await CheckoutOrdersRepository(
         param
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -49,37 +58,25 @@ export const checkoutOrdersSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(checkoutOrders.pending, (state: any) => {
+      .addCase(checkoutOrders.pending, (state) => {
         state.status = CheckoutOrdersState.inProgress;
       })
-      .addCase(
-        checkoutOrders.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: CheckoutOrdersModel | undefined;
-          }>
-        ) => {
+      .addCase(checkoutOrders.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
 
+          state.status = CheckoutOrdersState.success;
           state.data = data;
           state.message = message;
-          state.status = CheckoutOrdersState.success;
         }
-      )
-      .addCase(
-        checkoutOrders.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = CheckoutOrdersState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(checkoutOrders.rejected, (state, action) => {
+        state.status = CheckoutOrdersState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

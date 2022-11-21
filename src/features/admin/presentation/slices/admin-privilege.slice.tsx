@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminPrivilegeParam } from "features/admin/core/admin.params";
 import {
   AdminPrivilegeRepository,
@@ -13,25 +14,32 @@ export enum AdminPrivilegeState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminPrivilegeState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminPrivilegeState.initial,
   message: "",
 };
 
 export const adminPrivilege = createAsyncThunk(
   "adminPrivilege",
-  async (param: AdminPrivilegeParam, { rejectWithValue, fulfillWithValue }) => {
+  async (param: AdminPrivilegeParam, { rejectWithValue }) => {
     try {
       const response: AdminPrivilegeResponse = await AdminPrivilegeRepository(
         param
       );
 
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -46,29 +54,23 @@ export const adminPrivilegeSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminPrivilege.pending, (state: any) => {
+      .addCase(adminPrivilege.pending, (state) => {
         state.status = AdminPrivilegeState.inProgress;
       })
-      .addCase(
-        adminPrivilege.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(adminPrivilege.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = AdminPrivilegeState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminPrivilege.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminPrivilegeState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminPrivilege.rejected, (state, action) => {
+        state.status = AdminPrivilegeState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

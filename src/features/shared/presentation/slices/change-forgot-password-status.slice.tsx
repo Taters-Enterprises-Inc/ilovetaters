@@ -8,10 +8,11 @@ export enum ChangeForgotPasswordStatusState {
   finish,
 }
 
-const initialState: {
+interface InitialState {
   status: ChangeForgotPasswordStatusState;
   phoneNumber: string | undefined;
-} = {
+}
+const initialState: InitialState = {
   status: ChangeForgotPasswordStatusState.sendOtp,
   phoneNumber: undefined,
 };

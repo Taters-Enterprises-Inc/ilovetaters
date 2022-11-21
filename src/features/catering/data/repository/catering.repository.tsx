@@ -12,6 +12,7 @@ import {
 } from "features/catering/core/catering.params";
 import { CateringProductDetailsModel } from "features/catering/core/domain/catering-product-details.model";
 import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
+import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -42,6 +43,7 @@ export interface RemoveItemFromCartCateringResponse {
 export interface CateringCheckoutOrdersResponse {
   data: {
     message: string;
+    data: CheckoutOrdersModel;
   };
 }
 export interface GetCateringOrdersResponse {
