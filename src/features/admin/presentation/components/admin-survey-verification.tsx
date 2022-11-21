@@ -29,8 +29,8 @@ import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-surve
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
-  { id: "date_time", label: "Date and Time" },
-  { id: "receipt_number", label: "Receipt Number" },
+  { id: "dateadded", label: "Date and Time" },
+  { id: "reciept_no", label: "Receipt Number" },
   { id: "full_name", label: "Full Name" },
   { id: "action", label: "Action" },
 ];
@@ -241,7 +241,7 @@ export function AdminSurveyVerifications() {
                     </span>
 
                     <span className="text-xs text-gray-600">
-                      <strong> Receipt Number:</strong> {row.receipt_number}
+                      <strong> Receipt Number:</strong> {row.reciept_no}
                     </span>
                     <span className="text-xs text-gray-600">
                       <strong>Date and Time: </strong>
@@ -369,7 +369,7 @@ export function AdminSurveyVerifications() {
                         <DataTableCell>
                           <Moment format="lll">{row.dateadded}</Moment>
                         </DataTableCell>
-                        <DataTableCell>{row.receipt_number}</DataTableCell>
+                        <DataTableCell>{row.reciept_no}</DataTableCell>
                         <DataTableCell>
                           {row.first_name} {row.last_name}
                         </DataTableCell>

@@ -82,7 +82,7 @@ export function AdminSurveyVerificationIDInformation(
           <div>
             <strong>Receipt Number :</strong>{" "}
             <span className="font-semibold">
-              {getAdminSurveyVerificationState.data?.receipt_number ?? "N/A"}
+              {getAdminSurveyVerificationState.data?.reciept_no ?? "N/A"}
             </span>
           </div>
           <div>
@@ -118,8 +118,6 @@ export function AdminSurveyVerificationIDInformation(
             <strong>Full Name:</strong>{" "}
             <span className="font-semibold">
               {getAdminSurveyVerificationState.data?.first_name +
-                " " +
-                getAdminSurveyVerificationState.data?.middle_name +
                 " " +
                 getAdminSurveyVerificationState.data?.last_name ?? "N/A"}
             </span>
