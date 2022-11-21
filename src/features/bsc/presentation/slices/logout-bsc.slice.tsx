@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   LogoutBscRepository,
   LogoutBscResponse,
@@ -12,10 +12,12 @@ export enum LogoutBscState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: LogoutBscState;
   message: string | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: LogoutBscState.initial,
   message: undefined,
 };
@@ -35,20 +37,22 @@ export const logoutBscSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(logoutBsc.pending, (state: any) => {
+      .addCase(logoutBsc.pending, (state) => {
         state.status = LogoutBscState.inProgress;
       })
-      .addCase(
-        logoutBsc.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
+      .addCase(logoutBsc.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
           state.status = LogoutBscState.success;
+          state.message = message;
         }
-      )
-      .addCase(logoutBsc.rejected, (state: any) => {
+      })
+      .addCase(logoutBsc.rejected, (state, action) => {
         state.status = LogoutBscState.fail;
+        state.message = action.payload as string;
       });
   },
 });

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { DealOrderModel } from "features/popclub/core/domain/deal_order.model";
 import {
@@ -13,22 +14,32 @@ export enum GetDealOrderState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetDealOrderState;
+  message: string;
   data: DealOrderModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetDealOrderState.initial,
+  message: "",
   data: undefined,
 };
 
 export const getDealOrder = createAsyncThunk(
   "getDealOrder",
-  async (hash: string, { rejectWithValue, fulfillWithValue }) => {
+  async (hash: string, { rejectWithValue }) => {
     try {
       const response: GetDealOrderResponse = await GetDealOrderRepository(hash);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,37 +50,29 @@ export const getDealOrderSlice = createSlice({
   initialState,
   reducers: {
     resetGetDealOrder: (state) => {
-      state.status = GetDealOrderState.inProgress;
+      state.status = GetDealOrderState.initial;
+      state.message = "";
       state.data = undefined;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getDealOrder.pending, (state: any) => {
+      .addCase(getDealOrder.pending, (state) => {
         state.status = GetDealOrderState.inProgress;
       })
-      .addCase(
-        getDealOrder.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: DealOrderModel }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getDealOrder.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data } = action.payload;
 
           state.data = data;
           state.status = GetDealOrderState.success;
         }
-      )
-      .addCase(
-        getDealOrder.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetDealOrderState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getDealOrder.rejected, (state, action) => {
+        state.status = GetDealOrderState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

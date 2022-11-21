@@ -83,7 +83,7 @@ export interface RedeemDealResponse {
 
 export interface GetRedeemsResponse {
   data: {
-    data: RedeemDealModel;
+    data: Array<RedeemDealModel>;
     message: string;
   };
 }

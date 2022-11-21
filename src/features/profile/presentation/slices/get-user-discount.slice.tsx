@@ -1,10 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
   GetUserDiscountRepository,
   GetUserDiscountResponse,
 } from "features/profile/data/repository/profile.repository";
+import { AxiosError } from "axios";
 
 export enum GetUserDiscountState {
   initial,
@@ -13,23 +14,33 @@ export enum GetUserDiscountState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetUserDiscountState;
+  message: string;
   data: UserDiscountModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetUserDiscountState.initial,
+  message: "",
   data: undefined,
 };
 
 export const getUserDiscount = createAsyncThunk(
   "getUserDiscount",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (param, { rejectWithValue }) => {
     try {
       const response: GetUserDiscountResponse =
         await GetUserDiscountRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,35 +50,24 @@ export const getUserDiscountSlice = createSlice({
   name: "getUserDiscount",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getUserDiscount.pending, (state: any) => {
+      .addCase(getUserDiscount.pending, (state) => {
         state.status = GetUserDiscountState.inProgress;
       })
-      .addCase(
-        getUserDiscount.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: UserDiscountModel | null;
-          }>
-        ) => {
+      .addCase(getUserDiscount.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetUserDiscountState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getUserDiscount.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetUserDiscountState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(getUserDiscount.rejected, (state, action) => {
+        state.status = GetUserDiscountState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

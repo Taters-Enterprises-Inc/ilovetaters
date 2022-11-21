@@ -1,12 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { GetCateringBookingHistoryModel } from "features/profile/core/domain/get-catering-booking-history.model";
 import { UpdateUserDiscountParam } from "features/profile/core/profile.params";
 import {
   UpdateUserDiscountRepository,
   UpdateUserDiscountResponse,
-  GetCateringBookingHistoryRepository,
-  GetCateringBookingHistoryResponse,
 } from "features/profile/data/repository/profile.repository";
 
 export enum UpdateUserDiscountState {
@@ -16,26 +14,31 @@ export enum UpdateUserDiscountState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateUserDiscountState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateUserDiscountState.initial,
   message: "",
 };
 
 export const updateUserDiscount = createAsyncThunk(
   "updateUserDiscount",
-  async (
-    param: UpdateUserDiscountParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UpdateUserDiscountParam, { rejectWithValue }) => {
     try {
       const response: UpdateUserDiscountResponse =
         await UpdateUserDiscountRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -49,33 +52,22 @@ export const updateUserDiscountSlice = createSlice({
       state.status = UpdateUserDiscountState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateUserDiscount.pending, (state: any) => {
+      .addCase(updateUserDiscount.pending, (state) => {
         state.status = UpdateUserDiscountState.inProgress;
       })
-      .addCase(
-        updateUserDiscount.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateUserDiscount.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateUserDiscountState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateUserDiscount.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateUserDiscountState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateUserDiscount.rejected, (state, action) => {
+        state.status = UpdateUserDiscountState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 
