@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { UpdateStoreProductParam } from "features/admin/core/admin.params";
 import {
   UpdateStoreProductRepository,
@@ -13,26 +14,30 @@ export enum UpdateStoreProductState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateStoreProductState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateStoreProductState.initial,
   message: "",
 };
 
 export const updateStoreProduct = createAsyncThunk(
   "updateStoreProduct",
-  async (
-    param: UpdateStoreProductParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UpdateStoreProductParam, { rejectWithValue }) => {
     try {
       const response: UpdateStoreProductResponse =
         await UpdateStoreProductRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,33 +52,22 @@ export const updateStoreProductSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateStoreProduct.pending, (state: any) => {
+      .addCase(updateStoreProduct.pending, (state) => {
         state.status = UpdateStoreProductState.inProgress;
       })
-      .addCase(
-        updateStoreProduct.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateStoreProduct.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateStoreProductState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateStoreProduct.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateStoreProductState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateStoreProduct.rejected, (state, action) => {
+        state.status = UpdateStoreProductState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

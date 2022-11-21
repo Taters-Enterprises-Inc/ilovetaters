@@ -161,7 +161,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                     <Badge
                       badgeContent={
-                        getAdminNotificationsState.data?.catering_order
+                        getAdminNotificationsState.data?.catering_booking
                           .unseen_notifications_count
                       }
                       color="primary"

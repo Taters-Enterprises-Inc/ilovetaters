@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { UserModel } from "features/admin/core/domain/user.model";
 import {
   GetAdminUserRepository,
@@ -13,11 +14,13 @@ export enum GetAdminUserState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminUserState;
   message: string;
   data: UserModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminUserState.initial,
   message: "",
   data: undefined,
@@ -25,14 +28,19 @@ const initialState: {
 
 export const getAdminUser = createAsyncThunk(
   "getAdminUser",
-  async (userId: string, { rejectWithValue, fulfillWithValue }) => {
+  async (userId: string, { rejectWithValue }) => {
     try {
       const response: GetAdminUserResponse = await GetAdminUserRepository(
         userId
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -48,36 +56,24 @@ export const getAdminUserSlice = createSlice({
       state.data = undefined;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminUser.pending, (state: any) => {
+      .addCase(getAdminUser.pending, (state) => {
         state.status = GetAdminUserState.inProgress;
       })
-      .addCase(
-        getAdminUser.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: UserModel | null;
-          }>
-        ) => {
+      .addCase(getAdminUser.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminUserState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminUser.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminUserState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminUser.rejected, (state, action) => {
+        state.status = GetAdminUserState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

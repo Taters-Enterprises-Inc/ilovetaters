@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   UpdateAdminNotificationDateSeenRepository,
   UpdateAdminNotificationDateSeenResponse,
@@ -12,23 +13,30 @@ export enum UpdateAdminNotificationDateSeenState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateAdminNotificationDateSeenState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateAdminNotificationDateSeenState.initial,
   message: "",
 };
 
 export const updateAdminNotificationDateSeen = createAsyncThunk(
   "updateAdminNotificationDateSeen",
-  async (notificationId: number, { rejectWithValue, fulfillWithValue }) => {
+  async (notificationId: number, { rejectWithValue }) => {
     try {
       const response: UpdateAdminNotificationDateSeenResponse =
         await UpdateAdminNotificationDateSeenRepository(notificationId);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -43,33 +51,22 @@ export const updateAdminNotificationDateSeenSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateAdminNotificationDateSeen.pending, (state: any) => {
+      .addCase(updateAdminNotificationDateSeen.pending, (state) => {
         state.status = UpdateAdminNotificationDateSeenState.inProgress;
       })
-      .addCase(
-        updateAdminNotificationDateSeen.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateAdminNotificationDateSeen.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateAdminNotificationDateSeenState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateAdminNotificationDateSeen.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateAdminNotificationDateSeenState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateAdminNotificationDateSeen.rejected, (state, action) => {
+        state.status = UpdateAdminNotificationDateSeenState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

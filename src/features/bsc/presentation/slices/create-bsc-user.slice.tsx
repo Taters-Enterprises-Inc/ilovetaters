@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CreateBscUserParam } from "features/bsc/core/bsc.params";
 import {
   CreateBscUserRepository,
@@ -13,25 +14,31 @@ export enum CreateBscUserState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CreateBscUserState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CreateBscUserState.initial,
   message: "",
 };
 
 export const createBscUser = createAsyncThunk(
   "createBscUser",
-  async (param: CreateBscUserParam, { rejectWithValue, fulfillWithValue }) => {
+  async (param: CreateBscUserParam, { rejectWithValue }) => {
     try {
       const response: CreateBscUserResponse = await CreateBscUserRepository(
         param
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      console.log(error.response.data);
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -46,27 +53,23 @@ export const createBscUserSlice = createSlice({
       state.status = CreateBscUserState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(createBscUser.pending, (state: any) => {
+      .addCase(createBscUser.pending, (state) => {
         state.status = CreateBscUserState.inProgress;
       })
-      .addCase(
-        createBscUser.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = CreateBscUserState.success;
-        }
-      )
-      .addCase(
-        createBscUser.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(createBscUser.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
-          state.status = CreateBscUserState.fail;
+          state.status = CreateBscUserState.success;
           state.message = message;
         }
-      );
+      })
+      .addCase(createBscUser.rejected, (state, action) => {
+        state.status = CreateBscUserState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

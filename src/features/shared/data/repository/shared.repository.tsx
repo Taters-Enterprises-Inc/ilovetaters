@@ -21,6 +21,8 @@ import { REACT_APP_DOMAIN_URL } from "../../constants";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import { StoreModel } from "features/shared/core/domain/store.model";
 import { CompanyModel } from "features/shared/core/domain/company.model";
+import { GetNotificationsModel } from "features/shared/core/domain/get-notifications.model";
+import { ContactModel } from "features/shared/core/domain/contact.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -50,6 +52,7 @@ export interface SetSessionResponse {
 
 export interface FacebookLoginResponse {
   data: {
+    message: string;
     url: string;
     result: boolean;
   };
@@ -82,6 +85,7 @@ export interface UploadProofOfPaymentResponse {
 export interface GetContactsResponse {
   data: {
     message: string;
+    data: Array<ContactModel>;
   };
 }
 
@@ -138,6 +142,18 @@ export interface DiscountRegistrationResponse {
     message: string;
   };
 }
+export interface GetNotificationsResponse {
+  data: {
+    message: string;
+    data: GetNotificationsModel;
+  };
+}
+
+export interface SeenNotificationResponse {
+  data: {
+    message: string;
+  };
+}
 
 export interface GetAvailableUserDiscountResponse {
   data: {
@@ -183,6 +199,23 @@ export function GetAvailableUserDiscountRepository(): Promise<GetAvailableUserDi
       withCredentials: true,
     }
   );
+}
+
+export function SeenNotificationRepository(
+  notificationId: number
+): Promise<SeenNotificationResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/notification/${notificationId}/seen`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetNotificationsRepository(): Promise<GetNotificationsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/notification`, {
+    withCredentials: true,
+  });
 }
 
 export function ForgotPasswordNewPasswordRepository(

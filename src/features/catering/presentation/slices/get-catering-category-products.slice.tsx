@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { GetCateringCategoryProductsRepository } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
@@ -12,11 +13,13 @@ export enum GetCateringCategoryProductsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetCateringCategoryProductsState;
   data: Array<CategoryProductsModel> | undefined;
-  message: "";
-} = {
+  message: string;
+}
+
+const initialState: InitialState = {
   status: GetCateringCategoryProductsState.initial,
   data: undefined,
   message: "",
@@ -24,10 +27,20 @@ const initialState: {
 
 export const getCateringCategoryProducts = createAsyncThunk(
   "getCateringCategoryProducts",
-  async (param: GetCategoryProductsParam) => {
-    const response: GetCategoryProductsResponse =
-      await GetCateringCategoryProductsRepository(param);
-    return response.data;
+  async (param: GetCategoryProductsParam, { rejectWithValue }) => {
+    try {
+      const response: GetCategoryProductsResponse =
+        await GetCateringCategoryProductsRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -36,34 +49,24 @@ export const getCateringCategoryProductsSlice = createSlice({
   name: "getCateringCategoryProducts",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCateringCategoryProducts.pending, (state: any) => {
+      .addCase(getCateringCategoryProducts.pending, (state) => {
         state.status = GetCateringCategoryProductsState.inProgress;
       })
-      .addCase(
-        getCateringCategoryProducts.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<CategoryProductsModel> | null;
-          }>
-        ) => {
+      .addCase(getCateringCategoryProducts.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
           state.status = GetCateringCategoryProductsState.success;
 
           state.data = data;
           state.message = message;
         }
-      )
-      .addCase(
-        getCateringCategoryProducts.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.status = GetCateringCategoryProductsState.fail;
-          state.message = action.payload.message;
-        }
-      );
+      })
+      .addCase(getCateringCategoryProducts.rejected, (state, action) => {
+        state.status = GetCateringCategoryProductsState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

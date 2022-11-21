@@ -44,7 +44,7 @@ export function CateringHome() {
       navigate("products");
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate]);
+  }, [setStoreAndAddressState, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(storeReset());
@@ -139,7 +139,9 @@ export function CateringHome() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <CateringHeroCarousel />
+      <section className="lg:container">
+        <CateringHeroCarousel />
+      </section>
       <section className="container pb-96">
         <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
           Thank you for considering Taters for your celebration.{" "}

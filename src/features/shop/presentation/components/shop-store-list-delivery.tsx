@@ -32,7 +32,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
       });
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate]);
+  }, [setStoreAndAddressState, navigate, dispatch]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     if (props.address) {
@@ -56,7 +56,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
 
   return (
     <section className="text-white">
-      {getStoresAvailableSnackshopState.data.map((store_cluster, index) => (
+      {getStoresAvailableSnackshopState.data?.map((store_cluster, index) => (
         <div key={index} className="space-y-3">
           <h1 className="text-sm font-normal">{store_cluster.region_name}</h1>
           <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
@@ -97,7 +97,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     }
                   }}
                   className={`bg-secondary ${
-                    isStoreAvailable == false ? "cursor-not-allowed" : ""
+                    isStoreAvailable === false ? "cursor-not-allowed" : ""
                   } h-full shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative`}
                 >
                   {isStoreFar &&
@@ -106,7 +106,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store not within reach
                     </span>
-                  ) : isStoreOperating == false ? (
+                  ) : isStoreOperating === false ? (
                     <span className="p-1 text-center not-available-overlay rounded-[10px]">
                       Store will be available at{" "}
                       {moment(store.available_start_time, "HH:mm:ss").format(

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { CartItemModel } from "features/shop/core/domain/cart-item.model";
 import {
@@ -13,53 +14,63 @@ export enum EditCartState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: EditCartState;
   message: string;
   data: CartItemModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: EditCartState.initial,
   message: "",
   data: undefined,
 };
 
-export const getCartItem = createAsyncThunk("getCartItem", async (param:string | undefined) => {
-  const response: GetCartItemResponse = await GetCartItemRepository(param);
-  return response.data;
-});
+export const getCartItem = createAsyncThunk(
+  "getCartItem",
+  async (param: string | undefined, { rejectWithValue }) => {
+    try {
+      const response: GetCartItemResponse = await GetCartItemRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const getCartItemSlice = createSlice({
   name: "getCartItem",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCartItem.pending, (state: any) => {
+      .addCase(getCartItem.pending, (state) => {
         state.status = EditCartState.inProgress;
       })
-      .addCase(
-        getCartItem.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: CartItemModel }>
-        ) => {
+      .addCase(getCartItem.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
+
           state.status = EditCartState.success;
-          state.data = data;
           state.message = message;
+          state.data = data;
         }
-      )
-      .addCase(
-        getCartItem.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = EditCartState.success;
-        }
-      );
+      })
+      .addCase(getCartItem.rejected, (state, action) => {
+        state.status = EditCartState.fail;
+
+        state.message = action.payload as string;
+      });
   },
 });
 
-export const selectGetCartItem = (state: RootState) =>state.getCartItem;
+export const selectGetCartItem = (state: RootState) => state.getCartItem;
 
 export default getCartItemSlice.reducer;

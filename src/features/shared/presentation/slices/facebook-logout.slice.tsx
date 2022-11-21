@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import {
   FacebookLogoutRepository,
@@ -12,16 +13,33 @@ export enum FacebookLogoutState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: FacebookLogoutState;
-} = {
+  message: string;
+}
+
+const initialState: InitialState = {
   status: FacebookLogoutState.initial,
+  message: "",
 };
 
-export const facebookLogout = createAsyncThunk("facebookLogout", async () => {
-  const response: FacebookLogoutResponse = await FacebookLogoutRepository();
-  return response.data;
-});
+export const facebookLogout = createAsyncThunk(
+  "facebookLogout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: FacebookLogoutResponse = await FacebookLogoutRepository();
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const facebookLogoutSlice = createSlice({
@@ -32,16 +50,22 @@ export const facebookLogoutSlice = createSlice({
       state.status = FacebookLogoutState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(facebookLogout.pending, (state: any) => {
+      .addCase(facebookLogout.pending, (state) => {
         state.status = FacebookLogoutState.inProgress;
       })
-      .addCase(facebookLogout.fulfilled, (state: any) => {
-        state.status = FacebookLogoutState.success;
+      .addCase(facebookLogout.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
+          state.status = FacebookLogoutState.success;
+          state.message = message;
+        }
       })
-      .addCase(facebookLogout.rejected, (state: any) => {
+      .addCase(facebookLogout.rejected, (state, action) => {
         state.status = FacebookLogoutState.fail;
+        state.message = action.payload as string;
       });
   },
 });

@@ -43,6 +43,9 @@ import { CateringTransactionLogsModel } from "features/admin/core/domain/caterin
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
 import { GetAdminUserDiscountsModel } from "features/admin/core/domain/get-admin-user-discounts.model";
 import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
+import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
+import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
+import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -120,7 +123,7 @@ export interface AdminDeclineRedeemResponse {
 export interface GetAdminUsersResponse {
   data: {
     message: string;
-    data: Array<UserModel>;
+    data: GetAdminUsersModel;
   };
 }
 
@@ -367,6 +370,42 @@ export interface AdminUserDiscountChangeStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSurveyVerificationResponse {
+  data: {
+    message: string;
+    data: AdminSurveyVerificationModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminSurveyVerificationsModel;
+  };
+}
+
+export function GetAdminSurveyVerificationsRepository(
+  query: string
+): Promise<GetAdminSurveyVerificationsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verifications${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSurveyVerificationRepository(
+  id: string
+): Promise<GetAdminSurveyVerificationResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verification/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminUserDiscountChangeStatusRepository(

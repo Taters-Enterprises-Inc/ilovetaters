@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { DealModel } from "features/popclub/core/domain/deal.model";
 import { GetDealsParam } from "features/popclub/core/popclub.params";
@@ -14,22 +15,35 @@ export enum GetDealsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetDealsState;
-  data: Array<DealModel>;
-} = {
+  message: string;
+  data: Array<DealModel> | undefined;
+}
+
+const initialState: InitialState = {
   status: GetDealsState.initial,
-  data: [],
+  message: "",
+  data: undefined,
 };
 
 export const getDeals = createAsyncThunk(
   "getDeals",
-  async (param: GetDealsParam) => {
-    const response: GetDealsRepositoryResponse = await GetDealsRepository(
-      param
-    );
+  async (param: GetDealsParam, { rejectWithValue }) => {
+    try {
+      const response: GetDealsRepositoryResponse = await GetDealsRepository(
+        param
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -38,23 +52,25 @@ export const getDealsSlice = createSlice({
   name: "getDeals",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getDeals.pending, (state: any) => {
+      .addCase(getDeals.pending, (state) => {
         state.status = GetDealsState.inProgress;
       })
-      .addCase(
-        getDeals.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: Array<DealModel> }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getDeals.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetDealsState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getDeals.rejected, (state, action) => {
+        state.status = GetDealsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

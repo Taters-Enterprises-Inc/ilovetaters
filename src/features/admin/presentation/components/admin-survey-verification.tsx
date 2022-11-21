@@ -24,7 +24,10 @@ import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
 import { AdminSurveyVerificationModal } from "../modals";
-import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import {
+  getAdminSurveyVerifications,
+  selectGetAdminSurveyVerifications,
+} from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 
 const columns: Array<Column> = [
@@ -52,8 +55,8 @@ export function AdminSurveyVerifications() {
     setOpenAdminSurveyVerificationModal,
   ] = useState(false);
 
-  const getAdminSurveyVerificationStates = useAppSelector(
-    selectGetAdminSurveyVerification
+  const getAdminSurveyVerificationsStates = useAppSelector(
+    selectGetAdminSurveyVerifications
   );
 
   const adminSurveyVerificationChangeStatusState = useAppSelector(
@@ -62,7 +65,7 @@ export function AdminSurveyVerifications() {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminSurveyVerifications(id)).then(() => {
+      dispatch(getAdminSurveyVerification(id)).then(() => {
         setOpenAdminSurveyVerificationModal(true);
       });
     }
@@ -77,7 +80,7 @@ export function AdminSurveyVerifications() {
       order: order,
       search: search,
     });
-    dispatch(getAdminSurveyVerification(query));
+    dispatch(getAdminSurveyVerifications(query));
   }, [
     dispatch,
     pageNo,
@@ -133,7 +136,7 @@ export function AdminSurveyVerifications() {
         </div>
       </div>
 
-      {getAdminSurveyVerificationStates.data?.discounts ? (
+      {getAdminSurveyVerificationsStates.data?.surveys ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -194,16 +197,16 @@ export function AdminSurveyVerifications() {
                 }
               }}
               totalRows={
-                getAdminSurveyVerificationStates.data.pagination.total_rows
+                getAdminSurveyVerificationsStates.data.pagination.total_rows
               }
               perPage={
-                getAdminSurveyVerificationStates.data.pagination.per_page
+                getAdminSurveyVerificationsStates.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminSurveyVerificationStates.data.discounts.map((row, i) => (
+              {getAdminSurveyVerificationsStates.data.surveys.map((row, i) => (
                 <div
                   onClick={() => {
                     const params = {
@@ -260,7 +263,7 @@ export function AdminSurveyVerifications() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "dateadded"}
-              emptyMessage="No user discounts yet."
+              emptyMessage="No user surveys yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -344,16 +347,16 @@ export function AdminSurveyVerifications() {
                 }
               }}
               totalRows={
-                getAdminSurveyVerificationStates.data.pagination.total_rows
+                getAdminSurveyVerificationsStates.data.pagination.total_rows
               }
               perPage={
-                getAdminSurveyVerificationStates.data.pagination.per_page
+                getAdminSurveyVerificationsStates.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminSurveyVerificationStates.data.discounts !== undefined ? (
+              {getAdminSurveyVerificationsStates.data.surveys !== undefined ? (
                 <>
-                  {getAdminSurveyVerificationStates.data.discounts.map(
+                  {getAdminSurveyVerificationsStates.data.surveys.map(
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>

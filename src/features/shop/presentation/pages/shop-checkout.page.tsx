@@ -25,8 +25,6 @@ import {
   selectGetContacts,
 } from "features/shared/presentation/slices/get-contacts.slice";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 import {
   AddContactState,
   selectAddContact,
@@ -46,6 +44,7 @@ import {
   getAvailableUserDiscount,
   selectGetAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -88,6 +87,7 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
+      dispatch(getNotifications());
       navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
     }

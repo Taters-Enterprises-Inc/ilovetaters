@@ -27,7 +27,7 @@ import {
   BsFillBagCheckFill,
   BsFillCartPlusFill,
 } from "react-icons/bs";
-import { MdFastfood } from "react-icons/md";
+import { MdFastfood, MdStore } from "react-icons/md";
 import {
   CateringAddon,
   CateringFlavors,
@@ -49,6 +49,8 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
+import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
+import { CateringSelectStoreModal } from "../modals";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -76,6 +78,8 @@ export function CateringProduct() {
   const [quantity, setQuantity] = useState(1);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const [openCateringSelectStoreModal, setOpenCateringSelectStoreModal] =
+    useState(false);
 
   const getCateringProductDetailsState = useAppSelector(
     selectGetCateringProductDetails
@@ -170,11 +174,13 @@ export function CateringProduct() {
         dispatch(removeItemFromCartCatering(existingFreeOrder.index));
       }
 
-      for (let i = 0; i < addons.length; i++) {
-        const freeThreshold = addons[i].free_threshold;
-        if (freeThreshold) {
-          if (totalPrice >= freeThreshold) {
-            freeItem.push(addons[i]);
+      if (addons) {
+        for (let i = 0; i < addons.length; i++) {
+          const freeThreshold = addons[i].free_threshold;
+          if (freeThreshold) {
+            if (totalPrice >= freeThreshold) {
+              freeItem.push(addons[i]);
+            }
           }
         }
       }
@@ -352,6 +358,19 @@ export function CateringProduct() {
     );
   };
 
+  const pageTitles: Array<{
+    name?: string;
+    url?: string;
+  }> = [];
+
+  if (
+    getSessionState.data?.cache_data ||
+    getSessionState.data?.customer_address
+  ) {
+    pageTitles.push({ name: "Products", url: "/shop/products" });
+  }
+  pageTitles.push({ name: getCateringProductDetailsState.data?.product.name });
+
   return (
     <main className="bg-secondary">
       <PageTitleAndBreadCrumbs
@@ -360,10 +379,7 @@ export function CateringProduct() {
           url: "/shop",
         }}
         title={getCateringProductDetailsState.data?.product.name}
-        pageTitles={[
-          { name: "Products", url: "/shop/products" },
-          { name: getCateringProductDetailsState.data?.product.name },
-        ]}
+        pageTitles={pageTitles}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">
         <div className=" lg:space-y-10 lg:container">
@@ -600,38 +616,56 @@ export function CateringProduct() {
                   </div>
                 ) : null}
 
-                <div className="space-y-4">
-                  <button
-                    onClick={() => {
-                      dispatchAddToCartCatering(() => {
-                        navigate("/shop/checkout");
-                      });
-                    }}
-                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                  >
-                    <BsFillBagCheckFill className="text-3xl" />
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Checkout
-                    </span>
-                  </button>
+                {getSessionState.data?.cache_data ||
+                getSessionState.data?.customer_address ? (
+                  <div className="space-y-4">
+                    <button
+                      onClick={() => {
+                        dispatchAddToCartCatering(() => {
+                          navigate("/shop/checkout");
+                        });
+                      }}
+                      className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    >
+                      <BsFillBagCheckFill className="text-3xl" />
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        Checkout
+                      </span>
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      dispatchAddToCartCatering(() => {
-                        setQuantity(1);
-                        setCurrentMultiFlavors({});
-                      });
-                    }}
-                    className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                  >
-                    <BsFillCartPlusFill className="text-3xl" />
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Add to cart
-                    </span>
-                  </button>
-                </div>
+                    <button
+                      onClick={() => {
+                        dispatchAddToCartCatering(() => {
+                          setQuantity(1);
+                          setCurrentMultiFlavors({});
+                        });
+                      }}
+                      className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    >
+                      <BsFillCartPlusFill className="text-3xl" />
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        Add to cart
+                      </span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <button
+                      onClick={() => {
+                        setOpenCateringSelectStoreModal(true);
+                      }}
+                      className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                    >
+                      <MdStore className="text-3xl" />
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        Select Store
+                      </span>
+                    </button>
+                  </div>
+                )}
 
-                {getCateringProductDetailsState.data?.product_addons ? (
+                {getCateringProductDetailsState.data?.product_addons &&
+                getCateringProductDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
@@ -648,7 +682,8 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data ? (
+                {getCateringProductDetailsState.data?.addons &&
+                getCateringProductDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
@@ -720,6 +755,13 @@ export function CateringProduct() {
         open={openLoginChooserModal}
         onClose={() => {
           setOpenLoginChooserModal(false);
+        }}
+      />
+
+      <CateringSelectStoreModal
+        open={openCateringSelectStoreModal}
+        onClose={() => {
+          setOpenCateringSelectStoreModal(false);
         }}
       />
     </main>

@@ -93,9 +93,11 @@ export function PopClubDeal() {
   useEffect(() => {
     if (
       getDealState.status === GetDealState.success &&
-      getDealProductVariantsState.status === GetDealProductVariantsState.success
+      getDealProductVariantsState.status ===
+        GetDealProductVariantsState.success &&
+      getDealProductVariantsState.data
     ) {
-      if (getDealProductVariantsState.data?.length > 0) {
+      if (getDealProductVariantsState.data.length > 0) {
         setOpenVariantChooserModal(true);
       } else {
         if (getDealState.data?.hash) {

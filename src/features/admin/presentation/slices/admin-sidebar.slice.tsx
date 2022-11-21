@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 
-const initialState: {
+interface InitialState {
   status: boolean;
-} = {
+}
+
+const initialState: InitialState = {
   status: true,
 };
 

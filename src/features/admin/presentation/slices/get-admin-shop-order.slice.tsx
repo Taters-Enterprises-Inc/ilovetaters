@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import {
   GetAdminShopOrderRepository,
@@ -13,11 +14,13 @@ export enum GetAdminShopOrderState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminShopOrderState;
   message: string;
   data: AdminShopOrderModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminShopOrderState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,19 @@ const initialState: {
 
 export const getAdminShopOrder = createAsyncThunk(
   "getAdminShopOrder",
-  async (trackingNo: string, { rejectWithValue, fulfillWithValue }) => {
+  async (trackingNo: string, { rejectWithValue }) => {
     try {
       const response: GetAdminShopOrderResponse =
         await GetAdminShopOrderRepository(trackingNo);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +50,24 @@ export const getAdminShopOrderSlice = createSlice({
   name: "getAdminShopOrder",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminShopOrder.pending, (state: any) => {
+      .addCase(getAdminShopOrder.pending, (state) => {
         state.status = GetAdminShopOrderState.inProgress;
       })
-      .addCase(
-        getAdminShopOrder.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: AdminShopOrderModel | null;
-          }>
-        ) => {
+      .addCase(getAdminShopOrder.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminShopOrderState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminShopOrder.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminShopOrderState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminShopOrder.rejected, (state, action) => {
+        state.status = GetAdminShopOrderState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

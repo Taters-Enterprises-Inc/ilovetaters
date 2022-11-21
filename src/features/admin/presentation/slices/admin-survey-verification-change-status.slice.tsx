@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminSurveyVerificationChangeStatusParam } from "features/admin/core/admin.params";
 import {
   AdminUserDiscountChangeStatusRepository,
@@ -13,10 +14,12 @@ export enum AdminSurveyVerificationChangeStatusState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminSurveyVerificationChangeStatusState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminSurveyVerificationChangeStatusState.initial,
   message: "",
 };
@@ -25,14 +28,19 @@ export const adminSurveyVerificationChangeStatus = createAsyncThunk(
   "adminSurveyVerificationChangeStatus",
   async (
     param: AdminSurveyVerificationChangeStatusParam,
-    { rejectWithValue, fulfillWithValue }
+    { rejectWithValue }
   ) => {
     try {
       const response: AdminUserDiscountChangeStatusResponse =
         await AdminUserDiscountChangeStatusRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -46,31 +54,26 @@ export const adminSurveyVerificationChangeStatusSlice = createSlice({
       state.status = AdminSurveyVerificationChangeStatusState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminSurveyVerificationChangeStatus.pending, (state: any) => {
+      .addCase(adminSurveyVerificationChangeStatus.pending, (state) => {
         state.status = AdminSurveyVerificationChangeStatusState.inProgress;
       })
       .addCase(
         adminSurveyVerificationChangeStatus.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
-          const { message } = action.payload;
-          state.status = AdminSurveyVerificationChangeStatusState.success;
-          state.message = message;
+        (state, action) => {
+          if (action.payload) {
+            const { message } = action.payload;
+            state.status = AdminSurveyVerificationChangeStatusState.success;
+            state.message = message;
+          }
         }
       )
       .addCase(
         adminSurveyVerificationChangeStatus.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
+        (state, action) => {
           state.status = AdminSurveyVerificationChangeStatusState.fail;
-          state.message = message;
+          state.message = action.payload as string;
         }
       );
   },

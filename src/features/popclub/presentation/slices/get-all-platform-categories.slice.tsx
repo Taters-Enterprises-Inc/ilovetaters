@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { PlatformCategoryModel } from "features/popclub/core/domain/platform-category.model";
 import { GetAllPlatformCategoriesParam } from "features/popclub/core/popclub.params";
@@ -14,20 +15,34 @@ export enum GetAllPlatformCategoriesState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAllPlatformCategoriesState;
-  data: Array<PlatformCategoryModel>;
-} = {
+  data: Array<PlatformCategoryModel> | undefined;
+  message: string;
+}
+
+const initialState: InitialState = {
   status: GetAllPlatformCategoriesState.initial,
-  data: [],
+  data: undefined,
+  message: "",
 };
 
 export const getAllPlatformCategories = createAsyncThunk(
   "getAllPlatformCategories",
-  async (param: GetAllPlatformCategoriesParam) => {
-    const response: GetAllPlatformCategoriesRepositoryResponse =
-      await GetAllPlatformCategoriesRepository(param);
-    return response.data;
+  async (param: GetAllPlatformCategoriesParam, { rejectWithValue }) => {
+    try {
+      const response: GetAllPlatformCategoriesRepositoryResponse =
+        await GetAllPlatformCategoriesRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -36,26 +51,25 @@ export const getAllPlatformCategoriesSlice = createSlice({
   name: "getAllPlatformCategories",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAllPlatformCategories.pending, (state: any) => {
+      .addCase(getAllPlatformCategories.pending, (state) => {
         state.status = GetAllPlatformCategoriesState.inProgress;
       })
-      .addCase(
-        getAllPlatformCategories.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<PlatformCategoryModel>;
-          }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getAllPlatformCategories.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetAllPlatformCategoriesState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getAllPlatformCategories.rejected, (state, action) => {
+        state.status = GetAllPlatformCategoriesState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   CreateBscGroupRepository,
   CreateBscGroupResponse,
@@ -12,25 +13,31 @@ export enum CreateBscGroupState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: CreateBscGroupState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: CreateBscGroupState.initial,
   message: "",
 };
 
 export const createBscGroup = createAsyncThunk(
   "createBscGroup",
-  async (fromData: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (fromData: FormData, { rejectWithValue }) => {
     try {
       const response: CreateBscGroupResponse = await CreateBscGroupRepository(
         fromData
       );
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      console.log(error.response.data);
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -45,33 +52,22 @@ export const createBscGroupSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(createBscGroup.pending, (state: any) => {
+      .addCase(createBscGroup.pending, (state) => {
         state.status = CreateBscGroupState.inProgress;
       })
-      .addCase(
-        createBscGroup.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(createBscGroup.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = CreateBscGroupState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        createBscGroup.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = CreateBscGroupState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(createBscGroup.rejected, (state, action) => {
+        state.status = CreateBscGroupState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 
