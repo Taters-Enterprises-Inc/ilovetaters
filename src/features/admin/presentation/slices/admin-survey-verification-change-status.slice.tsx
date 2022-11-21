@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { AdminSurveyVerificationChangeStatusParam } from "features/admin/core/admin.params";
 import {
-  AdminUserDiscountChangeStatusRepository,
-  AdminUserDiscountChangeStatusResponse,
+  AdminSurveyVerificationChangeStatusRepository,
+  AdminSurveyVerificationChangeStatusResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
@@ -31,8 +31,8 @@ export const adminSurveyVerificationChangeStatus = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response: AdminUserDiscountChangeStatusResponse =
-        await AdminUserDiscountChangeStatusRepository(param);
+      const response: AdminSurveyVerificationChangeStatusResponse =
+        await AdminSurveyVerificationChangeStatusRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

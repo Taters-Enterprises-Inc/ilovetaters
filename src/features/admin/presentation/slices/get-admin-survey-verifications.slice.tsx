@@ -4,8 +4,6 @@ import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get
 import {
   GetAdminSurveyVerificationsRepository,
   GetAdminSurveyVerificationsResponse,
-  GetAdminUserDiscountRepository,
-  GetAdminUserDiscountResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 

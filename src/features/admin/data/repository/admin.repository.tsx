@@ -19,6 +19,7 @@ import {
   AdminCompleteRedeemParam,
   AdminCateringBookingUpdateStatusParam,
   AdminShopOrderUpdateStatusParam,
+  AdminSurveyVerificationChangeStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -105,6 +106,20 @@ export interface GetAdminUserDiscountResponse {
   data: {
     message: string;
     data: AdminUserDiscountModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationResponse {
+  data: {
+    message: string;
+    data: AdminSurveyVerificationModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminSurveyVerificationsModel;
   };
 }
 
@@ -367,6 +382,12 @@ export interface UpdateAdminNotificationDateSeenResponse {
   };
 }
 export interface AdminUserDiscountChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface AdminSurveyVerificationChangeStatusResponse {
   data: {
     message: string;
   };
@@ -843,6 +864,18 @@ export function GetAdminUserDiscountsRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discounts${query}`, {
     withCredentials: true,
   });
+}
+
+export function AdminSurveyVerificationChangeStatusRepository(
+  param: AdminSurveyVerificationChangeStatusParam
+): Promise<AdminSurveyVerificationChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verification/survey-verification-change-status`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminShopOrderRepository(
