@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { DealProductVariantsModel } from "features/popclub/core/domain/deal_product_variants.model";
 import { GetDealProductVariantsParam } from "features/popclub/core/popclub.params";
@@ -14,20 +15,34 @@ export enum GetDealProductVariantsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetDealProductVariantsState;
-  data: Array<DealProductVariantsModel>;
-} = {
+  message: string;
+  data: Array<DealProductVariantsModel> | undefined;
+}
+
+const initialState: InitialState = {
   status: GetDealProductVariantsState.initial,
-  data: [],
+  message: "",
+  data: undefined,
 };
 
 export const getDealProductVariants = createAsyncThunk(
   "getDealProductVariants",
-  async (param: GetDealProductVariantsParam) => {
-    const response: GetDealProductVariantsResponse =
-      await GetDealProductVariantsRepository(param);
-    return response.data;
+  async (param: GetDealProductVariantsParam, { rejectWithValue }) => {
+    try {
+      const response: GetDealProductVariantsResponse =
+        await GetDealProductVariantsRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -40,26 +55,25 @@ export const getDealProductVariantsSlice = createSlice({
       state.status = GetDealProductVariantsState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getDealProductVariants.pending, (state: any) => {
+      .addCase(getDealProductVariants.pending, (state) => {
         state.status = GetDealProductVariantsState.inProgress;
       })
-      .addCase(
-        getDealProductVariants.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<DealProductVariantsModel>;
-          }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getDealProductVariants.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetDealProductVariantsState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getDealProductVariants.rejected, (state, action) => {
+        state.status = GetDealProductVariantsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

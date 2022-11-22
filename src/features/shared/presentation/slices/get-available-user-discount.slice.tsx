@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
@@ -13,23 +14,33 @@ export enum GetAvailableUserDiscountState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAvailableUserDiscountState;
+  message: string;
   data: UserDiscountModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAvailableUserDiscountState.initial,
+  message: "",
   data: undefined,
 };
 
 export const getAvailableUserDiscount = createAsyncThunk(
   "getAvailableUserDiscount",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetAvailableUserDiscountResponse =
         await GetAvailableUserDiscountRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,35 +50,25 @@ export const getAvailableUserDiscountSlice = createSlice({
   name: "getAvailableUserDiscount",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAvailableUserDiscount.pending, (state: any) => {
+      .addCase(getAvailableUserDiscount.pending, (state) => {
         state.status = GetAvailableUserDiscountState.inProgress;
       })
-      .addCase(
-        getAvailableUserDiscount.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: UserDiscountModel | null;
-          }>
-        ) => {
+      .addCase(getAvailableUserDiscount.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
+
           state.status = GetAvailableUserDiscountState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAvailableUserDiscount.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAvailableUserDiscountState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(getAvailableUserDiscount.rejected, (state, action) => {
+        state.status = GetAvailableUserDiscountState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

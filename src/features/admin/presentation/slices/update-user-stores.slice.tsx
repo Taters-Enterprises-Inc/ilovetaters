@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UpdateUserStoresParam } from "features/admin/core/admin.params";
+import { AxiosError } from "axios";
 import {
   UpdateAdminUserStoresRepository,
   UpdateAdminUserStoresResponse,
@@ -13,27 +14,31 @@ export enum UpdateAdminUserStoresState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateAdminUserStoresState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateAdminUserStoresState.initial,
   message: "",
 };
 
 export const updateAdminUserStores = createAsyncThunk(
   "updateAdminUserStores",
-  async (
-    param: UpdateUserStoresParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UpdateUserStoresParam, { rejectWithValue }) => {
     try {
       const response: UpdateAdminUserStoresResponse =
         await UpdateAdminUserStoresRepository(param);
-      console.log(response.data);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,33 +52,22 @@ export const updateAdminUserStoresSlice = createSlice({
       state.status = UpdateAdminUserStoresState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateAdminUserStores.pending, (state: any) => {
+      .addCase(updateAdminUserStores.pending, (state) => {
         state.status = UpdateAdminUserStoresState.inProgress;
       })
-      .addCase(
-        updateAdminUserStores.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateAdminUserStores.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateAdminUserStoresState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateAdminUserStores.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateAdminUserStoresState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateAdminUserStores.rejected, (state, action) => {
+        state.status = UpdateAdminUserStoresState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

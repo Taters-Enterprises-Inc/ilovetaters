@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import {
   LogoutAdminRepository,
   LogoutAdminResponse,
@@ -12,18 +13,32 @@ export enum LogoutAdminState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: LogoutAdminState;
   message: string | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: LogoutAdminState.initial,
   message: undefined,
 };
 
-export const logoutAdmin = createAsyncThunk("logoutAdmin", async () => {
-  const response: LogoutAdminResponse = await LogoutAdminRepository();
-  return response.data;
-});
+export const logoutAdmin = createAsyncThunk(
+  "logoutAdmin",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: LogoutAdminResponse = await LogoutAdminRepository();
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const logoutAdminSlice = createSlice({
@@ -35,20 +50,22 @@ export const logoutAdminSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(logoutAdmin.pending, (state: any) => {
+      .addCase(logoutAdmin.pending, (state) => {
         state.status = LogoutAdminState.inProgress;
       })
-      .addCase(
-        logoutAdmin.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
+      .addCase(logoutAdmin.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+
           state.status = LogoutAdminState.success;
+          state.message = message;
         }
-      )
-      .addCase(logoutAdmin.rejected, (state: any) => {
+      })
+      .addCase(logoutAdmin.rejected, (state, action) => {
         state.status = LogoutAdminState.fail;
+        state.message = action.payload as string;
       });
   },
 });

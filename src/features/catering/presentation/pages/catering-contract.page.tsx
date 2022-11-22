@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
 import { AiOutlineCheckCircle, AiOutlineCreditCard } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
@@ -29,6 +30,7 @@ export function CateringContract() {
     if (hash !== undefined) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
       dispatch(getCateringOrders({ hash }));
+      dispatch(getSession());
     }
   }, [dispatch, hash, uploadContractState]);
 

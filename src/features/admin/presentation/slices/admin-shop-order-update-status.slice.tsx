@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AdminShopOrderUpdateStatusParam } from "features/admin/core/admin.params";
+import { AxiosError } from "axios";
 import {
   AdminShopOrderUpdateStatusRepository,
   AdminShopOrderUpdateStatusResponse,
@@ -13,26 +14,30 @@ export enum AdminShopOrderUpdateStatusState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminShopOrderUpdateStatusState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminShopOrderUpdateStatusState.initial,
   message: "",
 };
 
 export const adminShopOrderUpdateStatus = createAsyncThunk(
   "adminShopOrderUpdateStatus",
-  async (
-    param: AdminShopOrderUpdateStatusParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: AdminShopOrderUpdateStatusParam, { rejectWithValue }) => {
     try {
       const response: AdminShopOrderUpdateStatusResponse =
         await AdminShopOrderUpdateStatusRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -42,29 +47,23 @@ export const adminShopOrderUpdateStatusSlice = createSlice({
   name: "adminShopOrderUpdateStatus",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminShopOrderUpdateStatus.pending, (state: any) => {
+      .addCase(adminShopOrderUpdateStatus.pending, (state) => {
         state.status = AdminShopOrderUpdateStatusState.inProgress;
       })
-      .addCase(
-        adminShopOrderUpdateStatus.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(adminShopOrderUpdateStatus.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = AdminShopOrderUpdateStatusState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminShopOrderUpdateStatus.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminShopOrderUpdateStatusState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminShopOrderUpdateStatus.rejected, (state, action) => {
+        state.status = AdminShopOrderUpdateStatusState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

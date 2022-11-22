@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GroupModel } from "features/admin/core/domain/group.model";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CategoryModel } from "features/admin/core/domain/category.model";
-import { UserModel } from "features/admin/core/domain/user.model";
 import {
   GetProductCategoriesRepository,
   GetProductCategoriesResponse,
@@ -15,11 +14,13 @@ export enum GetProductCategoriesState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetProductCategoriesState;
   message: string;
   data: Array<CategoryModel> | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetProductCategoriesState.initial,
   message: "",
   data: undefined,
@@ -27,13 +28,18 @@ const initialState: {
 
 export const getProductCategories = createAsyncThunk(
   "getProductCategories",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetProductCategoriesResponse =
         await GetProductCategoriesRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -43,36 +49,24 @@ export const getProductCategoriesSlice = createSlice({
   name: "getProductCategories",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getProductCategories.pending, (state: any) => {
+      .addCase(getProductCategories.pending, (state) => {
         state.status = GetProductCategoriesState.inProgress;
       })
-      .addCase(
-        getProductCategories.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: CategoryModel | null;
-          }>
-        ) => {
+      .addCase(getProductCategories.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetProductCategoriesState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getProductCategories.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetProductCategoriesState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getProductCategories.rejected, (state, action) => {
+        state.status = GetProductCategoriesState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

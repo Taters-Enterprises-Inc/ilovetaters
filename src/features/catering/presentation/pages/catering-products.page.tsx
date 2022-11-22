@@ -31,10 +31,6 @@ export function CateringProducts() {
   }, [location]);
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data
@@ -51,7 +47,9 @@ export function CateringProducts() {
 
   return (
     <main className="min-h-screen bg-primary">
-      <CateringHeroCarousel />
+      <section className="lg:container">
+        <CateringHeroCarousel />
+      </section>
       <section className="container space-y-10 pb-[90px]">
         {getCateringCategoryProductsState.data?.map((category, i) => (
           <section key={i}>

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminUserDiscountChangeStatusParam } from "features/admin/core/admin.params";
 import {
   AdminUserDiscountChangeStatusRepository,
@@ -13,26 +14,30 @@ export enum AdminUserDiscountChangeStatusState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AdminUserDiscountChangeStatusState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AdminUserDiscountChangeStatusState.initial,
   message: "",
 };
 
 export const adminUserDiscountChangeStatus = createAsyncThunk(
   "adminUserDiscountChangeStatus",
-  async (
-    param: AdminUserDiscountChangeStatusParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: AdminUserDiscountChangeStatusParam, { rejectWithValue }) => {
     try {
       const response: AdminUserDiscountChangeStatusResponse =
         await AdminUserDiscountChangeStatusRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -46,33 +51,22 @@ export const adminUserDiscountChangeStatusSlice = createSlice({
       state.status = AdminUserDiscountChangeStatusState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(adminUserDiscountChangeStatus.pending, (state: any) => {
+      .addCase(adminUserDiscountChangeStatus.pending, (state) => {
         state.status = AdminUserDiscountChangeStatusState.inProgress;
       })
-      .addCase(
-        adminUserDiscountChangeStatus.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(adminUserDiscountChangeStatus.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = AdminUserDiscountChangeStatusState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        adminUserDiscountChangeStatus.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = AdminUserDiscountChangeStatusState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(adminUserDiscountChangeStatus.rejected, (state, action) => {
+        state.status = AdminUserDiscountChangeStatusState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

@@ -56,7 +56,6 @@ export function PopClubHome() {
         getDeals({ platform_url_name: platform, category_url_name: category })
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [platform, query, category, setPopClubDataState]);
 
   return (
@@ -122,7 +121,7 @@ export function PopClubHome() {
         </div>
 
         <div className="overflow-y-auto w-full hide-scrollbar font-['Bebas_Neue'] mb-[13px] mt-[4px] sm:mt-[10px] md:mt-[23px] lg:mt-[10px]">
-          <ul className="flex items-start justify-start space-x-6 mt-2 w-[500px] lg:w-full">
+          <ul className="flex items-start justify-start space-x-6 mt-2 w-[600px] lg:w-full">
             <Link
               to={`?category=all`}
               className="flex items-center justify-center space-x-1 text-lg tracking-[3px] text-gray-500 lg:px-2 font-semi-bold "
@@ -137,7 +136,7 @@ export function PopClubHome() {
                 All
               </span>
             </Link>
-            {getAllPlatformCategoriesState.data.map((category, i) => (
+            {getAllPlatformCategoriesState.data?.map((category, i) => (
               <li key={i}>
                 <Link
                   to={`?category=${category.url_name}`}
@@ -159,25 +158,27 @@ export function PopClubHome() {
         </div>
       </section>
 
-      <section className="container pb-96">
-        {getDealsState.data.length <= 0 ? (
-          <div className="flex flex-col items-center justify-center">
-            <img
-              src={`${REACT_APP_DOMAIN_URL}api/assets/images/popclub/mr_poppy/Poppie_Surprised.png`}
-              alt="Taters Mr Poppy Suprised"
-              width={300}
-            />
-            <span className="text-white text-3xl font-['Bebas_Neue'] tracking-[3px]">
-              Oops.. No Deals Found
-            </span>
+      {getDealsState.data ? (
+        <section className="container pb-96">
+          {getDealsState.data.length <= 0 ? (
+            <div className="flex flex-col items-center justify-center">
+              <img
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/popclub/mr_poppy/Poppie_Surprised.png`}
+                alt="Taters Mr Poppy Suprised"
+                width={300}
+              />
+              <span className="text-white text-3xl font-['Bebas_Neue'] tracking-[3px]">
+                Oops.. No Deals Found
+              </span>
+            </div>
+          ) : null}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:grid-cols-5">
+            {getDealsState.data.map((deal, i) => (
+              <Deal key={i} deal={deal} />
+            ))}
           </div>
-        ) : null}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:grid-cols-5">
-          {getDealsState.data.map((deal, i) => (
-            <Deal key={i} deal={deal} />
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <PlatformChooserModal
         hasCloseButton={true}

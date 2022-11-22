@@ -11,7 +11,7 @@ export interface GetAdminNotificationModel {
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;
   };
-  catering_order: {
+  catering_booking: {
     notifications: Array<NotificationModel>;
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;

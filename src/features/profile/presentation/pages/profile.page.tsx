@@ -15,7 +15,7 @@ export function Profile() {
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
-            "api/assets/images/shared/logo/taters-snackshop-logo.png",
+            "api/assets/images/shared/logo/taters-logo.png",
           alt: "Taters Logo",
           className: "w-[90px] lg:w-[100px]",
         }}

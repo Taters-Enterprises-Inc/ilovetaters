@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { FacebookLoginPointParam } from "features/shared/core/shared.params";
 import {
@@ -13,18 +14,31 @@ export enum FacebookLoginPointState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: FacebookLoginPointState;
-} = {
+  message: string;
+}
+
+const initialState: InitialState = {
   status: FacebookLoginPointState.initial,
+  message: "",
 };
 
 export const facebookLoginPoint = createAsyncThunk(
   "facebookLoginPoint",
-  async (param: FacebookLoginPointParam) => {
-    const response: FacebookLoginPointResponse =
-      await FacebookLoginPointRepository(param);
-    return response.data;
+  async (param: FacebookLoginPointParam, { rejectWithValue }) => {
+    try {
+      const response: FacebookLoginPointResponse =
+        await FacebookLoginPointRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -33,16 +47,21 @@ export const facebookLoginPointSlice = createSlice({
   name: "facebookLoginPoint",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(facebookLoginPoint.pending, (state: any) => {
+      .addCase(facebookLoginPoint.pending, (state) => {
         state.status = FacebookLoginPointState.inProgress;
       })
-      .addCase(facebookLoginPoint.fulfilled, (state: any) => {
-        state.status = FacebookLoginPointState.success;
+      .addCase(facebookLoginPoint.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { message } = action.payload;
+          state.status = FacebookLoginPointState.success;
+          state.message = message;
+        }
       })
-      .addCase(facebookLoginPoint.rejected, (state: any) => {
+      .addCase(facebookLoginPoint.rejected, (state, action) => {
         state.status = FacebookLoginPointState.fail;
+        state.message = action.payload as string;
       });
   },
 });

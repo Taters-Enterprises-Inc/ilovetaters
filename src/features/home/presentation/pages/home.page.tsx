@@ -16,7 +16,6 @@ export function Home() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 
@@ -32,7 +31,6 @@ export function Home() {
       <main className="min-h-screen bg-primary">
         <HeaderNav
           activeUrl="HOME"
-          className="hidden lg:block"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +
@@ -47,6 +45,7 @@ export function Home() {
             backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg')`,
             backgroundSize: "contain",
             backgroundPositionX: "center",
+            backgroundPositionY: 45,
             backgroundRepeat: "no-repeat",
             backgroundAttachment: "fixed",
           }}

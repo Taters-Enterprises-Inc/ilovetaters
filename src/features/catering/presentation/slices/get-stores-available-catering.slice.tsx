@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { RegionModel } from "features/shared/core/domain/region.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
@@ -14,22 +15,34 @@ export enum GetStoresAvailableCateringState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetStoresAvailableCateringState;
-  data: Array<RegionModel>;
+  data: Array<RegionModel> | undefined;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetStoresAvailableCateringState.initial,
-  data: [],
+  data: undefined,
   message: "",
 };
 
 export const getStoresAvailableCatering = createAsyncThunk(
   "getStoresAvailableCatering",
-  async (param: GetStoresAvailableParam) => {
-    const response: GetStoresAvailableResponse =
-      await GetStoresAvailableRepository(param);
-    return response.data;
+  async (param: GetStoresAvailableParam, { rejectWithValue }) => {
+    try {
+      const response: GetStoresAvailableResponse =
+        await GetStoresAvailableRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -38,31 +51,25 @@ export const getStoresAvailableCateringSlice = createSlice({
   name: "getStoresAvailableCatering",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getStoresAvailableCatering.pending, (state: any) => {
+      .addCase(getStoresAvailableCatering.pending, (state) => {
         state.status = GetStoresAvailableCateringState.inProgress;
       })
-      .addCase(
-        getStoresAvailableCatering.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: Array<RegionModel> }>
-        ) => {
+      .addCase(getStoresAvailableCatering.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
-          state.status = GetStoresAvailableCateringState.success;
 
-          state.data = data;
+          state.status = GetStoresAvailableCateringState.success;
           state.message = message;
+          state.data = data;
         }
-      )
-      .addCase(
-        getStoresAvailableCatering.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.status = GetStoresAvailableCateringState.fail;
-          state.message = action.payload.message;
-        }
-      );
+      })
+      .addCase(getStoresAvailableCatering.rejected, (state, action) => {
+        state.status = GetStoresAvailableCateringState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

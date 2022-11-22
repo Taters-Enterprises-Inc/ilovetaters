@@ -145,7 +145,7 @@ export const TABS: Array<{ name: string; url: string }> = [
   },
   {
     name: "CATERING",
-    url: "/shop",
+    url: "/shop", 
   },
   {
     name: "FRANCHISING",
@@ -170,6 +170,27 @@ export const SNACKSHOP_TERMS_AND_CONDITIONS_TABS: Array<TabModel> = [
     name: "Return Policy",
     active: "return-policy",
     url: "/delivery/return-policy",
+    icon: <GoLaw />,
+  },
+];
+
+export const BSC_TERMS_AND_POLICY_TABS: Array<TabModel> = [
+  {
+    name: "Terms And Conditions",
+    active: "bsc-terms-and-conditions",
+    url: "/bsc/terms-and-condition",
+    icon: <MdRule />,
+  },
+  {
+    name: "Privacy Policy",
+    active: "bsc-privacy-policy",
+    url: "/bsc/privacy-policy",
+    icon: <MdPolicy />,
+  },
+  {
+    name: "Return Policy",
+    active: "bsc-return-policy",
+    url: "/bsc/return-policy",
     icon: <GoLaw />,
   },
 ];
@@ -347,6 +368,32 @@ export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   },
   {
     name: "Approved",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
     color: "#004d00",
   },
   {

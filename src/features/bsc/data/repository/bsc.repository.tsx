@@ -9,6 +9,7 @@ import { GroupModel } from "features/bsc/core/domain/bsc-group.model";
 import { BscSessionModel } from "features/bsc/core/domain/bsc-session.model";
 import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import { BscUserModel } from "features/bsc/core/domain/bsc-user.model";
+import { GetBscUsersModel } from "features/bsc/core/domain/get-bsc-users.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export interface LoginBscResponse {
@@ -20,7 +21,7 @@ export interface LoginBscResponse {
 export interface GetBscUsersResponse {
   data: {
     message: string;
-    data: Array<BscUserModel>;
+    data: GetBscUsersModel;
   };
 }
 

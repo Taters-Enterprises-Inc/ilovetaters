@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {
   facebookLogout,
+  FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
@@ -29,12 +30,21 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
-import { ListItemIcon, ListItemText, Popover } from "@mui/material";
+import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
 import { BiLogOut } from "react-icons/bi";
 import { RiShoppingBag3Fill } from "react-icons/ri";
 import { GiPopcorn } from "react-icons/gi";
 import { CartListItem } from "./cart-item-list";
 import { HiDocumentText } from "react-icons/hi";
+import {
+  getNotifications,
+  selectGetNotifications,
+} from "../slices/get-notifications.slice";
+import { VscCircleFilled } from "react-icons/vsc";
+import {
+  selectSeenNotification,
+  SeenNotificationState,
+} from "../slices/seen-notification.slice";
 
 interface HeaderNavProps {
   className?: string;
@@ -60,11 +70,14 @@ export function HeaderNav(props: HeaderNavProps) {
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
     null
   );
-  const [openCartMenu, setopenCartMenu] = useState<null | HTMLElement>(null);
+  const [openCartMenu, setOpenCartMenu] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const currentLocation = useLocation();
 
   const getSessionState = useAppSelector(selectGetSession);
+  const seenNotificationState = useAppSelector(selectSeenNotification);
+  const getNotificationsState = useAppSelector(selectGetNotifications);
+
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
   const dispatch = useAppDispatch();
 
@@ -157,11 +170,19 @@ export function HeaderNav(props: HeaderNavProps) {
   };
 
   useEffect(() => {
-    dispatch(getSession());
-  }, [facebookLogoutState, dispatch]);
+    if (facebookLogoutState.status === FacebookLogoutState.success) {
+      dispatch(getSession());
+    }
+  }, [facebookLogoutState]);
+
+  useEffect(() => {
+    if (seenNotificationState.status === SeenNotificationState.success) {
+      dispatch(getNotifications());
+    }
+  }, [seenNotificationState, dispatch]);
 
   const handleCart = () => {
-    setopenCartMenu(null);
+    setOpenCartMenu(null);
     switch (props.activeUrl) {
       case "SNACKSHOP":
         setOpenShopCartModal(true);
@@ -199,13 +220,19 @@ export function HeaderNav(props: HeaderNavProps) {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        calculatedPrice += orders[i].prod_calc_amount;
+        const discountPercentage = orders[i].promo_discount_percentage;
+        const discount = discountPercentage
+          ? orders[i].prod_calc_amount * discountPercentage
+          : 0;
+        calculatedPrice += orders[i].prod_calc_amount - discount;
       }
     }
 
     if (deals) {
       for (let i = 0; i < deals.length; i++) {
-        calculatedPrice += deals[i].deal_promo_price;
+        const deal_promo_price = deals[i].deal_promo_price;
+
+        if (deal_promo_price) calculatedPrice += deal_promo_price;
       }
     }
 
@@ -286,11 +313,11 @@ export function HeaderNav(props: HeaderNavProps) {
   ];
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setopenCartMenu(event.currentTarget);
+    setOpenCartMenu(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
-    setopenCartMenu(null);
+    setOpenCartMenu(null);
   };
   const menuList = profileMenu.map((item) => {
     const { text, icon, action, id } = item;
@@ -298,7 +325,18 @@ export function HeaderNav(props: HeaderNavProps) {
     return (
       <div>
         <MenuItem onClick={action} className="bg-secondary">
-          <ListItemIcon className="text-[20px] sm:text-xl">{icon}</ListItemIcon>
+          <ListItemIcon className="text-[20px] sm:text-xl">
+            {icon}
+            {(id === 2 &&
+              getNotificationsState.data?.snackshop_order
+                .unseen_notifications_count) ||
+            (id === 3 &&
+              getNotificationsState.data?.catering_booking
+                .unseen_notifications_count) ? (
+              <VscCircleFilled className="text-xs text-red-600 " />
+            ) : null}
+          </ListItemIcon>
+
           <ListItemText primary={text} />
         </MenuItem>
         {id === 1 || id === 5 ? <hr /> : null}
@@ -459,14 +497,49 @@ export function HeaderNav(props: HeaderNavProps) {
                     >
                       {getSessionState.data?.userData.login_type ===
                       "mobile" ? (
-                        <FaUserCircle className="text-2xl text-white" />
+                        <>
+                          <span className="relative inline-block">
+                            <FaUserCircle className="w-6 h-6 text-2xl text-white fill-current" />
+
+                            {getNotificationsState.data &&
+                            getNotificationsState.data.snackshop_order
+                              .unseen_notifications_count +
+                              getNotificationsState.data.catering_booking
+                                .unseen_notifications_count !==
+                              0 ? (
+                              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {getNotificationsState.data.snackshop_order
+                                  .unseen_notifications_count +
+                                  getNotificationsState.data.catering_booking
+                                    .unseen_notifications_count}
+                              </span>
+                            ) : null}
+                          </span>
+                        </>
                       ) : (
-                        <img
-                          src={getSessionState.data?.userData.picture}
-                          alt="Profile pic"
-                          className="rounded-full mt-[2px]"
-                          width={30}
-                        />
+                        <>
+                          <span className="relative inline-block">
+                            <img
+                              src={getSessionState.data?.userData.picture}
+                              alt="Profile pic"
+                              className="rounded-full mt-[2px] w-6 h-6 fill-current"
+                              width={30}
+                            />
+                            {getNotificationsState.data &&
+                            getNotificationsState.data.snackshop_order
+                              .unseen_notifications_count +
+                              getNotificationsState.data.catering_booking
+                                .unseen_notifications_count !==
+                              0 ? (
+                              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {getNotificationsState.data.snackshop_order
+                                  .unseen_notifications_count +
+                                  getNotificationsState.data.catering_booking
+                                    .unseen_notifications_count}
+                              </span>
+                            ) : null}
+                          </span>
+                        </>
                       )}
                       {/* <span className="text-xs font-light text-white">
                         {getSessionState.data?.userData.first_name}{" "}
@@ -485,8 +558,32 @@ export function HeaderNav(props: HeaderNavProps) {
                       }}
                       open={Boolean(openProfileMenu)}
                       onClose={() => setOpenProfileMenu(null)}
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
+                          borderRadius: 0,
+                        },
+                      }}
                     >
-                      {menuList}
+                      <Box
+                        sx={{
+                          position: "relative",
+                          mt: "10px",
+                          "&::before": {
+                            backgroundColor: "white",
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            width: 12,
+                            height: 12,
+                            top: -6,
+                            transform: "rotate(45deg)",
+                            left: "calc(96% - 6px)",
+                          },
+                        }}
+                      />
+                      <div className="bg-white">{menuList}</div>
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
@@ -533,6 +630,13 @@ export function HeaderNav(props: HeaderNavProps) {
                       sx={{
                         pointerEvents: "none",
                       }}
+                      PaperProps={{
+                        style: {
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
+                          borderRadius: 0,
+                        },
+                      }}
                       anchorEl={openCartMenu}
                       anchorOrigin={{
                         vertical: "bottom",
@@ -543,13 +647,31 @@ export function HeaderNav(props: HeaderNavProps) {
                         horizontal: "right",
                       }}
                       open={Boolean(openCartMenu)}
-                      onClose={() => setopenCartMenu(null)}
+                      onClose={() => setOpenCartMenu(null)}
                       disableRestoreFocus
                     >
-                      <div className="pointer-events-auto">
+                      <Box
+                        sx={{
+                          position: "relative",
+                          mt: "10px",
+                          "&::before": {
+                            backgroundColor: "white",
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            width: 12,
+                            height: 12,
+                            top: -6,
+                            transform: "rotate(45deg)",
+                            left: "calc(95% - 6px)",
+                          },
+                        }}
+                      />
+
+                      <div className="bg-white pointer-events-auto">
                         <CartListItem
                           onProcessOrder={() => {
-                            setopenCartMenu(null);
+                            setOpenCartMenu(null);
                             if (props.activeUrl === "CATERING") {
                               navigate("/shop/checkout");
                             } else {

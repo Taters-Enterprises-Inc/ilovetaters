@@ -14,7 +14,9 @@ import {
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import { FormEvent, useEffect, useState } from "react";
+import TextField from "@mui/material/TextField";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +29,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { CateringFaqsModal } from "../modals/catering-faqs-modal";
 import { FaFileContract } from "react-icons/fa";
-import { selectAddContact } from "features/shared/presentation/slices/add-contact.slice";
+import {
+  AddContactState,
+  selectAddContact,
+} from "features/shared/presentation/slices/add-contact.slice";
 import {
   cateringCheckoutOrders,
   CateringCheckoutOrdersState,
@@ -39,7 +44,11 @@ import {
   MaterialInput,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { selectGetAvailableUserDiscount,getAvailableUserDiscount } from "features/shared/presentation/slices/get-available-user-discount.slice";
+import {
+  selectGetAvailableUserDiscount,
+  getAvailableUserDiscount,
+} from "features/shared/presentation/slices/get-available-user-discount.slice";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -61,7 +70,7 @@ export function CateringCheckout() {
 
   const [formState, setFormState] = useState({
     firstName: "",
-    lastName: "", 
+    lastName: "",
     eMail: "",
     phoneNumber: "",
     eventStartDate: "",
@@ -113,14 +122,17 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
+      dispatch(getNotifications());
       navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());
     }
   }, [cateringCheckoutOrdersState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getSession());
-    dispatch(getContacts());
+    if (addContactState.status === AddContactState.success) {
+      dispatch(getSession());
+      dispatch(getContacts());
+    }
   }, [addContactState, dispatch]);
 
   useEffect(() => {
@@ -222,11 +234,10 @@ export function CateringCheckout() {
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
-    let discount = 0
+    let discount = 0;
     const orders = getSessionState.data?.orders;
     const service_charge_percentage = 0.1;
-    
-  
+
     if (orders && getSessionState.data?.distance_rate_price) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
@@ -237,11 +248,11 @@ export function CateringCheckout() {
         );
         discount = calculatedPrice * percentage;
       }
-      calculatedPrice += (calculatedPrice * service_charge_percentage) ;
+      calculatedPrice += calculatedPrice * service_charge_percentage;
       calculatedPrice += getSessionState.data.distance_rate_price;
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
-      calculatedPrice -= discount
+      calculatedPrice -= discount;
 
       if (cashOnDelivery) {
         calculatedPrice += cashOnDelivery;
@@ -282,7 +293,6 @@ export function CateringCheckout() {
         calculatedPrice += orders[i].prod_calc_amount;
       }
     }
-   
 
     if (getAvailableUserDiscountState.data) {
       const percentage = parseFloat(
@@ -310,6 +320,21 @@ export function CateringCheckout() {
     return null;
   };
 
+  const handlePaymentMethodChange = (payment: string) => {
+    setFormState({
+      ...formState,
+      payops: payment,
+    });
+    if (
+      getSessionState.data &&
+      getSessionState.data.cash_delivery &&
+      payment === "3"
+    ) {
+      setCashOnDelivery(parseInt(getSessionState.data.cash_delivery));
+    } else {
+      setCashOnDelivery(undefined);
+    }
+  };
 
   return (
     <main className="bg-paper">
@@ -607,25 +632,7 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod
-                    onChange={(payment) => {
-                      setFormState({
-                        ...formState,
-                        payops: payment,
-                      });
-                      if (
-                        getSessionState.data &&
-                        getSessionState.data.cash_delivery &&
-                        payment === "3"
-                      ) {
-                        setCashOnDelivery(
-                          parseInt(getSessionState.data.cash_delivery)
-                        );
-                      } else {
-                        setCashOnDelivery(undefined);
-                      }
-                    }}
-                  />
+                  <PaymentMethod onChange={handlePaymentMethodChange} />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
@@ -751,7 +758,7 @@ export function CateringCheckout() {
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
                     <span className="text-end">{calculateSubTotalPrice()}</span>
-                   {calculateAvailableUserDiscount()}
+                    {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
                     <span className="text-end">{calculateServiceCharge()}</span>
                     <span>Transportation Fee:</span>

@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "features/config/store";
 
-const initialState: {
+interface InitialState {
   address: string | null;
   eventStartDate: Date | null;
   eventEndDate: Date | null;
-} = {
+}
+
+const initialState: InitialState = {
   address: null,
   eventStartDate: null,
   eventEndDate: null,

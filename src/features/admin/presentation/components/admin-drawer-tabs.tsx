@@ -17,6 +17,7 @@ import {
   FaRegListAlt,
   FaCartArrowDown,
   FaQuestionCircle,
+  FaUserCheck,
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -29,6 +30,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { truncate } from "fs";
 import { AiOutlineIdcard } from "react-icons/ai";
+import { TbFileCheck } from "react-icons/tb";
 
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
@@ -102,7 +104,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
       dispatch(resetLogoutAdmin());
       navigate("/admin");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoutAdminState]);
 
   return (
@@ -160,7 +161,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                     <Badge
                       badgeContent={
-                        getAdminNotificationsState.data?.catering_order
+                        getAdminNotificationsState.data?.catering_booking
                           .unseen_notifications_count
                       }
                       color="primary"
@@ -228,6 +229,32 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                     }`}
                   >
                     User Discount
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/admin/survey-verification"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <TbFileCheck size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Survey Verification
                   </span>
                 </span>
               </span>

@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { DiscountRegistrationParam } from "features/shared/core/shared.params";
 import {
   DiscountRegistrationRepository,
   DiscountRegistrationResponse,
@@ -13,23 +13,31 @@ export enum DiscountRegistrationState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: DiscountRegistrationState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: DiscountRegistrationState.initial,
   message: "",
 };
 
 export const discountRegistration = createAsyncThunk(
   "discountRegistration",
-  async (param: FormData, { rejectWithValue, fulfillWithValue }) => {
+  async (param: FormData, { rejectWithValue }) => {
     try {
       const response: DiscountRegistrationResponse =
         await DiscountRegistrationRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,29 +47,23 @@ export const discountRegistrationSlice = createSlice({
   name: "discountRegistration",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(discountRegistration.pending, (state: any) => {
+      .addCase(discountRegistration.pending, (state) => {
         state.status = DiscountRegistrationState.inProgress;
       })
-      .addCase(
-        discountRegistration.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(discountRegistration.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = DiscountRegistrationState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        discountRegistration.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = DiscountRegistrationState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(discountRegistration.rejected, (state, action) => {
+        state.status = DiscountRegistrationState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 
