@@ -39,6 +39,7 @@ export const adminSurveyVerificationChangeStatus = createAsyncThunk(
         if (!error.response) {
           throw error;
         }
+        console.log(param);
         throw rejectWithValue(error.response.data.message);
       }
     }

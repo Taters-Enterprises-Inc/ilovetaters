@@ -145,7 +145,7 @@ export const TABS: Array<{ name: string; url: string }> = [
   },
   {
     name: "CATERING",
-    url: "/shop", 
+    url: "/shop",
   },
   {
     name: "FRANCHISING",
@@ -386,10 +386,6 @@ export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
   },
   {
     name: "Pending",
-    color: "#cca300",
-  },
-  {
-    name: "Under Review",
     color: "#cca300",
   },
   {
