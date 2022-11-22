@@ -140,7 +140,7 @@ import updateBscUser from "features/bsc/presentation/slices/bsc-update-user.slic
 import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
 import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
 import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-user-status.slice";
-
+import getSurvey from "features/survey/presentation/slices/get-survey.slice";
 
 export const store = configureStore({
   reducer: {
@@ -285,6 +285,7 @@ export const store = configureStore({
     createBscGroup,
     updateBscUserStatus,
 
+    getSurvey,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
