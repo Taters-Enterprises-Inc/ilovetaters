@@ -7,6 +7,7 @@ import {
   selectStoreChooserModal,
   setAddressStoreChooserModal,
 } from "../slices/store-chooser-modal.slice";
+import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
 interface StoreChooserModalProps {
   open: boolean;
@@ -42,6 +43,10 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         >
           <IoMdClose />
         </button>
+
+        <div className="mt-4">
+          <PopclubHeroCarousel />
+        </div>
 
         <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store do you want to have your snacks delivered?

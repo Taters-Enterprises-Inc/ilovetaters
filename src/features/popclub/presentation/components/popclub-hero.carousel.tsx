@@ -12,42 +12,40 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function PopclubHeroCarousel() {
   return (
-    <section className="lg:container">
-      <Swiper
-        // modules={[Navigation, EffectFade]}
-        // navigation
-        // speed={800}
-        slidesPerView={1}
-        // loop
-      >
-        <SwiperSlide>
-          <img
-            className="lg:hidden"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/popclub/hero/mobile/popclub.jpg"
-            }
-            alt="The best pop corn in town"
-          />
-          <img
-            className="hidden lg:block"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/popclub/hero/desktop/popclub_black.jpg"
-            }
-            alt="The best pop corn in town"
-          />
+    <Swiper
+      // modules={[Navigation, EffectFade]}
+      // navigation
+      // speed={800}
+      slidesPerView={1}
+      // loop
+    >
+      <SwiperSlide>
+        <img
+          className="lg:hidden"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/mobile/popclub.jpg"
+          }
+          alt="The best pop corn in town"
+        />
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/hero/desktop/popclub_black.jpg"
+          }
+          alt="The best pop corn in town"
+        />
 
-          <img
-            className="hidden lg:block"
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/popclub/banner/popclub_instruction.jpg"
-            }
-            alt="The best pop corn in town"
-          />
-        </SwiperSlide>
-      </Swiper>
-    </section>
+        <img
+          className="hidden lg:block"
+          src={
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/popclub/banner/popclub_instruction.jpg"
+          }
+          alt="The best pop corn in town"
+        />
+      </SwiperSlide>
+    </Swiper>
   );
 }
