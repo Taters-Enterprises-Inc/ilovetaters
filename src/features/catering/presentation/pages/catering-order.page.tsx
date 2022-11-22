@@ -126,14 +126,14 @@ export function CateringOrder() {
         <div className="flex-1">
           <div
             className={`${
-              getCateringOrdersState.data?.order.clients_info.status === 8
+              getCateringOrdersState.data?.order.clients_info.status === 9
                 ? "bg-green-700"
                 : "bg-[#424242]"
             } h-[0.25rem] relative`}
           >
             <div
               className={`absolute rounded-[50%] text-white font-bold ${
-                getCateringOrdersState.data?.order.clients_info.status === 8
+                getCateringOrdersState.data?.order.clients_info.status === 9
                   ? "bg-green-700"
                   : "bg-[#424242]"
               } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
@@ -193,7 +193,7 @@ export function CateringOrder() {
                   <div
                     className={`${
                       getCateringOrdersState.data?.order.clients_info.status ===
-                      8
+                      9
                         ? "bg-green-700"
                         : "bg-[#424242]"
                     } h-[0.25rem] relative`}
@@ -201,7 +201,7 @@ export function CateringOrder() {
                     <div
                       className={`absolute rounded-[50%] text-white font-bold ${
                         getCateringOrdersState.data?.order.clients_info
-                          .status === 8
+                          .status === 9
                           ? "bg-green-700"
                           : "bg-[#424242]"
                       } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
@@ -529,7 +529,8 @@ export function CateringOrder() {
                       <span
                         className={`${
                           getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -539,8 +540,8 @@ export function CateringOrder() {
                       <span
                         className={`text-end uppercase ${
                           getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 7 ||
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -557,7 +558,8 @@ export function CateringOrder() {
 
                       <span
                         className={`${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -566,7 +568,8 @@ export function CateringOrder() {
                       </span>
                       <span
                         className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -600,7 +603,8 @@ export function CateringOrder() {
                     <>
                       <span
                         className={`${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -609,7 +613,8 @@ export function CateringOrder() {
                       </span>
                       <span
                         className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -634,21 +639,21 @@ export function CateringOrder() {
                   23 ? (
                   <>
                     <h2 className="font-['Bebas_Neue'] text-xl  text-white tracking-[3px] text-center">
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                        4 &&
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 4 &&
                       getCateringOrdersState.data.order.clients_info
                         .payment_plan === "half"
                         ? "Upload Initial Proof of Payment"
                         : ""}
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                        4 &&
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 4 &&
                       getCateringOrdersState.data.order.clients_info
                         .payment_plan === "full"
                         ? "Upload Proof of Payment"
                         : ""}
 
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                      6
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 6
                         ? "Upload Final Proof of Payment"
                         : ""}
                     </h2>

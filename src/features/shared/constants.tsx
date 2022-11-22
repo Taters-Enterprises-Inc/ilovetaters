@@ -496,39 +496,39 @@ export const CATERING_BOOKING_STATUS: Array<{
   },
   {
     name: "Waiting for booking confirmation",
-    color: "#004d00",
+    color: "#cca300",
   },
   {
     name: "Upload Signed Contract",
-    color: "#004d00",
+    color: "#42032C",
   },
   {
     name: "Contract under verification",
-    color: "#004d00",
+    color: "#541212",
   },
   {
     name: "Upload Initial proof of payment",
-    color: "#004d00",
+    color: "#C84B31",
   },
   {
     name: "Initial proof of payment under verification",
-    color: "#004d00",
+    color: "#153B44",
   },
   {
     name: "Upload Final proof of payment",
-    color: "#004d00",
+    color: "#152A38",
   },
   {
     name: "Final proof of payment under verification",
-    color: "#004d00",
+    color: "#1E5128",
   },
   {
     name: "Payment Verified",
-    color: "#004d00",
+    color: "#4E9F3D",
   },
   {
-    name: "",
-    color: "",
+    name: "Catering booking completed",
+    color: "#004d00",
   },
   {
     name: "",
@@ -598,39 +598,39 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
   },
   {
     name: "Waiting for booking confirmation",
-    color: "#004d00",
+    color: "#cca300",
   },
   {
     name: "Booking Confirmed",
-    color: "#004d00",
+    color: "#42032C",
   },
   {
     name: "Contract Uploaded",
-    color: "#004d00",
+    color: "#541212",
   },
   {
     name: "Contract Verified",
-    color: "#004d00",
+    color: "#C84B31",
   },
   {
     name: "Initial Payment Uploaded",
-    color: "#004d00",
+    color: "#153B44",
   },
   {
     name: "Initial Payment Verified",
-    color: "#004d00",
+    color: "#152A38",
   },
   {
     name: "Final Payment Uploaded",
-    color: "#004d00",
+    color: "#1E5128",
   },
   {
     name: "Final payment verified",
-    color: "#004d00",
+    color: "#4E9F3D",
   },
   {
-    name: "",
-    color: "",
+    name: "Catering booking completed",
+    color: "#004d00",
   },
   {
     name: "",
