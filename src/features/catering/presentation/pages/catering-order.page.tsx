@@ -497,20 +497,45 @@ export function CateringOrder() {
                 </div>
                 <hr className="mt-1 border-secondary" />
 
-                <div className="flex flex-col items-center justify-center">
-                  <h1 className="text-4xl text-center text-secondary">
-                    <NumberFormat
-                      value={getCateringOrdersState.data.grand_total.toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </h1>
+                {getCateringOrdersState.data.order.clients_info.payment_plan ===
+                "full" ? (
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl text-center text-secondary">
+                      <NumberFormat
+                        value={getCateringOrdersState.data.grand_total.toFixed(
+                          2
+                        )}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h1>
 
-                  <span className="text-lg text-center text-secondary">
-                    Final Payment
-                  </span>
-                </div>
+                    <span className="text-lg text-center text-secondary">
+                      Final Payment
+                    </span>
+                  </div>
+                ) : null}
+
+                {getCateringOrdersState.data.order.clients_info.payment_plan ===
+                "half" ? (
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl text-center text-secondary">
+                      <NumberFormat
+                        value={(
+                          getCateringOrdersState.data.grand_total / 2
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h1>
+
+                    <span className="text-lg text-center text-secondary">
+                      Initial Payment
+                    </span>
+                  </div>
+                ) : null}
 
                 <hr className="mt-1 border-secondary" />
 
@@ -638,7 +663,7 @@ export function CateringOrder() {
                 getCateringOrdersState.data?.order.clients_info.status ===
                   23 ? (
                   <>
-                    <h2 className="font-['Bebas_Neue'] text-xl  text-white tracking-[3px] text-center">
+                    <h2 className="font-['Bebas_Neue'] text-xl  text-secondary tracking-[3px] text-center">
                       {getCateringOrdersState.data?.order.clients_info
                         .status === 4 &&
                       getCateringOrdersState.data.order.clients_info
