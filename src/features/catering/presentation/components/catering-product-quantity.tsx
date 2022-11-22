@@ -79,7 +79,9 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             onTouchStart={() => quantityOnPressed("minus", true)}
             onTouchEnd={quantityOffPressed}
             className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
-              props.quantity === 1 ? "opacity-30 cursor-not-allowed" : ""
+              props.quantity === 1 || isNaN(props.quantity)
+                ? "opacity-30 cursor-not-allowed"
+                : ""
             }`}
           >
             <AiOutlineMinus className="text-3xl" />
@@ -103,11 +105,16 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
               if (e.target.value) {
                 const value = parseInt(e.target.value);
                 if (value >= 1) {
-                  props.onChange("manual-input", value);
+                  value >= 99999
+                    ? props.onChange("manual-input", 99999)
+                    : props.onChange("manual-input", value);
+                } else {
+                  props.onChange("manual-input", 1);
                 }
               }
             }}
             min="1"
+            max="99999"
             className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
           />
 
@@ -116,7 +123,10 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
             onMouseUp={quantityOffPressed}
             onTouchStart={() => quantityOnPressed("plus", true)}
             onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] rounded-r flex justify-center items-center bg-primary`}
+            className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
+              props.quantity === 99999 ? "opacity-30 cursor-not-allowed" : ""
+            }`}
+            disabled={props.quantity === 99999 ? true : false}
           >
             <AiOutlinePlus className="text-3xl" />
           </button>
