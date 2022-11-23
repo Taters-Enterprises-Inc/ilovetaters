@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import {
   GetCateringTransactionLogsRepository,
@@ -12,12 +13,12 @@ export enum GetCateringTransactionLogsState {
   success,
   fail,
 }
-
-const initialState: {
+interface InitialState {
   status: GetCateringTransactionLogsState;
   message: string;
   data: Array<CateringTransactionLogsModel> | undefined;
-} = {
+}
+const initialState: InitialState = {
   status: GetCateringTransactionLogsState.initial,
   message: "",
   data: undefined,
@@ -25,13 +26,18 @@ const initialState: {
 
 export const getCateringTransactionLogs = createAsyncThunk(
   "getCateringTransactionLogs",
-  async (transactionId: number, { rejectWithValue, fulfillWithValue }) => {
+  async (transactionId: number, { rejectWithValue }) => {
     try {
       const response: GetCateringTransactionLogsResponse =
         await GetCateringTransactionLogsRepository(transactionId);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +47,24 @@ export const getCateringTransactionLogsSlice = createSlice({
   name: "getCateringTransactionLogs",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCateringTransactionLogs.pending, (state: any) => {
+      .addCase(getCateringTransactionLogs.pending, (state) => {
         state.status = GetCateringTransactionLogsState.inProgress;
       })
-      .addCase(
-        getCateringTransactionLogs.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<CateringTransactionLogsModel> | null;
-          }>
-        ) => {
+      .addCase(getCateringTransactionLogs.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetCateringTransactionLogsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getCateringTransactionLogs.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetCateringTransactionLogsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getCateringTransactionLogs.rejected, (state, action) => {
+        state.status = GetCateringTransactionLogsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

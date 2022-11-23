@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { UpdateAdminSettingStoreOperatingHoursParam } from "features/admin/core/admin.params";
 import {
   UpdateAdminSettingStoreOperatingHoursRepository,
@@ -13,10 +14,12 @@ export enum UpdateAdminSettingStoreOperatingHoursState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateAdminSettingStoreOperatingHoursState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateAdminSettingStoreOperatingHoursState.initial,
   message: "",
 };
@@ -25,14 +28,19 @@ export const updateAdminSettingStoreOperatingHours = createAsyncThunk(
   "updateAdminSettingStoreOperatingHours",
   async (
     param: UpdateAdminSettingStoreOperatingHoursParam,
-    { rejectWithValue, fulfillWithValue }
+    { rejectWithValue }
   ) => {
     try {
       const response: UpdateAdminSettingStoreOperatingHoursResponse =
         await UpdateAdminSettingStoreOperatingHoursRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,31 +55,26 @@ export const updateAdminSettingStoreOperatingHoursSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateAdminSettingStoreOperatingHours.pending, (state: any) => {
+      .addCase(updateAdminSettingStoreOperatingHours.pending, (state) => {
         state.status = UpdateAdminSettingStoreOperatingHoursState.inProgress;
       })
       .addCase(
         updateAdminSettingStoreOperatingHours.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
-          const { message } = action.payload;
-          state.status = UpdateAdminSettingStoreOperatingHoursState.success;
-          state.message = message;
+        (state, action) => {
+          if (action.payload) {
+            const { message } = action.payload;
+            state.status = UpdateAdminSettingStoreOperatingHoursState.success;
+            state.message = message;
+          }
         }
       )
       .addCase(
         updateAdminSettingStoreOperatingHours.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
+        (state, action) => {
           state.status = UpdateAdminSettingStoreOperatingHoursState.fail;
-          state.message = message;
+          state.message = action.payload as string;
         }
       );
   },

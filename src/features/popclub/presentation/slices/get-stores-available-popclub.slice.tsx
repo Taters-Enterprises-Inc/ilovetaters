@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { RegionModel } from "features/shared/core/domain/region.model";
 import { GetStoresAvailableParam } from "features/shared/core/shared.params";
@@ -14,22 +15,33 @@ export enum GetStoresAvailablePopClubState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetStoresAvailablePopClubState;
-  data: Array<RegionModel>;
+  data: Array<RegionModel> | undefined;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetStoresAvailablePopClubState.initial,
-  data: [],
+  data: undefined,
   message: "",
 };
 
 export const getStoresAvailablePopClub = createAsyncThunk(
   "getStoresAvailablePopClub",
-  async (param: GetStoresAvailableParam) => {
-    const response: GetStoresAvailableResponse =
-      await GetStoresAvailableRepository(param);
-    return response.data;
+  async (param: GetStoresAvailableParam, { rejectWithValue }) => {
+    try {
+      const response: GetStoresAvailableResponse =
+        await GetStoresAvailableRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -38,31 +50,24 @@ export const getStoresAvailablePopClubSlice = createSlice({
   name: "getStoresAvailablePopClub",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getStoresAvailablePopClub.pending, (state: any) => {
+      .addCase(getStoresAvailablePopClub.pending, (state) => {
         state.status = GetStoresAvailablePopClubState.inProgress;
       })
-      .addCase(
-        getStoresAvailablePopClub.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: Array<RegionModel> }>
-        ) => {
+      .addCase(getStoresAvailablePopClub.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
           state.status = GetStoresAvailablePopClubState.success;
-
-          state.data = data;
           state.message = message;
+          state.data = data;
         }
-      )
-      .addCase(
-        getStoresAvailablePopClub.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.status = GetStoresAvailablePopClubState.fail;
-          state.message = action.payload.message;
-        }
-      );
+      })
+      .addCase(getStoresAvailablePopClub.rejected, (state, action) => {
+        state.status = GetStoresAvailablePopClubState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

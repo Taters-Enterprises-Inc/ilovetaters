@@ -10,7 +10,6 @@ export function Branches() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 
@@ -18,7 +17,6 @@ export function Branches() {
     <>
       <HeaderNav
         activeUrl="BRANCHES"
-        className="hidden lg:block"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

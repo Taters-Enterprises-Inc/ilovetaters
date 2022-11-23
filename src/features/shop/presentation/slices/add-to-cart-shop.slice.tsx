@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { AddToCartShopParam } from "features/shop/core/shop.params";
 import {
@@ -13,21 +14,33 @@ export enum AddToCartShopState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: AddToCartShopState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: AddToCartShopState.initial,
   message: "",
 };
 
 export const addToCartShop = createAsyncThunk(
   "addToCartShop",
-  async (param: AddToCartShopParam) => {
-    const response: AddToCartShopResponse = await AddToCartShopRepository(
-      param
-    );
-    return response.data;
+  async (param: AddToCartShopParam, { rejectWithValue }) => {
+    try {
+      const response: AddToCartShopResponse = await AddToCartShopRepository(
+        param
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -36,27 +49,23 @@ export const addToCartShopSlice = createSlice({
   name: "addToCartShop",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(addToCartShop.pending, (state: any) => {
+      .addCase(addToCartShop.pending, (state) => {
         state.status = AddToCartShopState.inProgress;
       })
-      .addCase(
-        addToCartShop.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(addToCartShop.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
-          state.status = AddToCartShopState.success;
 
+          state.status = AddToCartShopState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        addToCartShop.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = AddToCartShopState.success;
-        }
-      );
+      })
+      .addCase(addToCartShop.rejected, (state, action) => {
+        state.status = AddToCartShopState.success;
+        state.message = action.payload as string;
+      });
   },
 });
 

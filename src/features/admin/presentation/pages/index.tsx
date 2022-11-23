@@ -22,3 +22,4 @@ export { AdminSettingCreateUser } from "./admin-setting-create-user.page";
 export { AdminSettingCreateGroup } from "./admin-setting-create-group.page";
 export { AdminSettingEditUser } from "./admin-setting-edit-user.page";
 export { AdminAvailabilityDeal } from "./admin-availability-deal.page";
+export { AdminSurveyVerification } from "./admin-survey-verification.page";

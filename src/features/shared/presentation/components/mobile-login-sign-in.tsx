@@ -1,17 +1,29 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent, useState } from "react";
-import { signInMobileUser } from "../slices/sign-in-mobile-user.slice";
-import { useAppDispatch } from "features/config/hooks";
-import { MobileForgotPasswordModal } from "../modals";
 import { MaterialPhoneInput } from ".";
 import { MaterialInputPassword } from "./material-input-password";
+import { FormEvent, useEffect, useState } from "react";
+import {
+  selectSignInMobileUser,
+  signInMobileUser,
+  SignInMobileUserState,
+} from "../slices/sign-in-mobile-user.slice";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { MobileForgotPasswordModal } from "../modals";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
+  const signInMobileUserState = useAppSelector(selectSignInMobileUser);
 
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  useEffect(() => {
+    if (signInMobileUserState.status === SignInMobileUserState.success) {
+      dispatch(getNotifications());
+    }
+  }, [signInMobileUserState, dispatch]);
 
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
     dispatch(

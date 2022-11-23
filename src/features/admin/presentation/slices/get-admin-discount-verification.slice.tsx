@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
 import {
   GetAdminUserDiscountRepository,
@@ -13,11 +14,13 @@ export enum GetAdminUserDiscountState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminUserDiscountState;
   message: string;
   data: AdminUserDiscountModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminUserDiscountState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,18 @@ const initialState: {
 
 export const getAdminUserDiscount = createAsyncThunk(
   "getAdminUserDiscount",
-  async (id: string, { rejectWithValue, fulfillWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const response: GetAdminUserDiscountResponse =
         await GetAdminUserDiscountRepository(id);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +49,24 @@ export const getAdminUserDiscountSlice = createSlice({
   name: "getAdminUserDiscount",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminUserDiscount.pending, (state: any) => {
+      .addCase(getAdminUserDiscount.pending, (state) => {
         state.status = GetAdminUserDiscountState.inProgress;
       })
-      .addCase(
-        getAdminUserDiscount.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: AdminUserDiscountModel | null;
-          }>
-        ) => {
+      .addCase(getAdminUserDiscount.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminUserDiscountState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminUserDiscount.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminUserDiscountState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminUserDiscount.rejected, (state, action) => {
+        state.status = GetAdminUserDiscountState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

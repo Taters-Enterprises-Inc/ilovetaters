@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
 import { BSCHead } from "../components/bsc-head";
+import { RiSurveyLine } from "react-icons/ri";
+import { Dashboard } from "../components";
 
 export function BscDashboard() {
   return (
@@ -13,6 +16,7 @@ export function BscDashboard() {
           pageTitles: [{ name: "Dashboard", url: "/bsc/dashboard" }],
         }}
       />
+      <Dashboard />
     </>
   );
 }

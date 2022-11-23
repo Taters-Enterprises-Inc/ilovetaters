@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { GetProductDetailsParam } from "features/shop/core/shop.params";
@@ -14,11 +15,13 @@ export enum GetProductDetailsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetProductDetailsState;
   data: ProductDetailsModel | undefined;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetProductDetailsState.initial,
   data: undefined,
   message: "",
@@ -26,10 +29,20 @@ const initialState: {
 
 export const getProductDetails = createAsyncThunk(
   "getProductDetails",
-  async (param: GetProductDetailsParam) => {
-    const response: GetProductDetailsResponse =
-      await GetProductDetailsRepository(param);
-    return response.data;
+  async (param: GetProductDetailsParam, { rejectWithValue }) => {
+    try {
+      const response: GetProductDetailsResponse =
+        await GetProductDetailsRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -38,7 +51,12 @@ export const getProductDetailsSlice = createSlice({
   name: "getProductDetails",
   initialState,
   reducers: {
-    changeProductPrice: (state, action: PayloadAction<{ price: number }>) => {
+    changeProductPrice: (
+      state,
+      action: PayloadAction<{
+        price: number;
+      }>
+    ) => {
       const { price } = action.payload;
 
       if (state.data) {
@@ -46,34 +64,25 @@ export const getProductDetailsSlice = createSlice({
       }
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getProductDetails.pending, (state: any) => {
+      .addCase(getProductDetails.pending, (state) => {
         state.status = GetProductDetailsState.inProgress;
       })
-      .addCase(
-        getProductDetails.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: ProductDetailsModel | null;
-          }>
-        ) => {
+      .addCase(getProductDetails.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
-          state.status = GetProductDetailsState.success;
 
-          state.data = data;
+          state.status = GetProductDetailsState.success;
           state.message = message;
+          state.data = data;
         }
-      )
-      .addCase(
-        getProductDetails.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.status = GetProductDetailsState.fail;
-          state.message = action.payload.message;
-        }
-      );
+      })
+      .addCase(getProductDetails.rejected, (state, action) => {
+        state.status = GetProductDetailsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

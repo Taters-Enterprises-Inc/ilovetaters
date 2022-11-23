@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import { GetCategoryProductsParam } from "features/shop/core/shop.params";
@@ -14,11 +15,13 @@ export enum GetCategoryProductsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetCategoryProductsState;
   data: Array<CategoryProductsModel> | undefined;
-  message: "";
-} = {
+  message: string;
+}
+
+const initialState: InitialState = {
   status: GetCategoryProductsState.initial,
   data: undefined,
   message: "",
@@ -26,10 +29,20 @@ const initialState: {
 
 export const getCategoryProducts = createAsyncThunk(
   "getCategoryProducts",
-  async (param: GetCategoryProductsParam) => {
-    const response: GetCategoryProductsResponse =
-      await GetCategoryProductsRepository(param);
-    return response.data;
+  async (param: GetCategoryProductsParam, { rejectWithValue }) => {
+    try {
+      const response: GetCategoryProductsResponse =
+        await GetCategoryProductsRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -38,34 +51,25 @@ export const getCategoryProductsSlice = createSlice({
   name: "getCategoryProducts",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getCategoryProducts.pending, (state: any) => {
+      .addCase(getCategoryProducts.pending, (state) => {
         state.status = GetCategoryProductsState.inProgress;
       })
-      .addCase(
-        getCategoryProducts.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<CategoryProductsModel> | null;
-          }>
-        ) => {
+      .addCase(getCategoryProducts.fulfilled, (state, action) => {
+        if (action.payload) {
           const { data, message } = action.payload;
           state.status = GetCategoryProductsState.success;
 
           state.data = data;
           state.message = message;
         }
-      )
-      .addCase(
-        getCategoryProducts.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.status = GetCategoryProductsState.fail;
-          state.message = action.payload.message;
-        }
-      );
+      })
+      .addCase(getCategoryProducts.rejected, (state, action) => {
+        state.status = GetCategoryProductsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

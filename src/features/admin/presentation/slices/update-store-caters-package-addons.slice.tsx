@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { UpdateStoreCatersPackageAddonParam } from "features/admin/core/admin.params";
 import {
   UpdateStoreCatersPackageAddonRepository,
@@ -13,26 +14,30 @@ export enum UpdateStoreCatersPackageAddonState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UpdateStoreCatersPackageAddonState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UpdateStoreCatersPackageAddonState.initial,
   message: "",
 };
 
 export const updateStoreCatersPackageAddon = createAsyncThunk(
   "updateStoreCatersPackageAddon",
-  async (
-    param: UpdateStoreCatersPackageAddonParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UpdateStoreCatersPackageAddonParam, { rejectWithValue }) => {
     try {
       const response: UpdateStoreCatersPackageAddonResponse =
         await UpdateStoreCatersPackageAddonRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -47,33 +52,22 @@ export const updateStoreCatersPackageAddonSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(updateStoreCatersPackageAddon.pending, (state: any) => {
+      .addCase(updateStoreCatersPackageAddon.pending, (state) => {
         state.status = UpdateStoreCatersPackageAddonState.inProgress;
       })
-      .addCase(
-        updateStoreCatersPackageAddon.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-          }>
-        ) => {
+      .addCase(updateStoreCatersPackageAddon.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
           state.status = UpdateStoreCatersPackageAddonState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        updateStoreCatersPackageAddon.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UpdateStoreCatersPackageAddonState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(updateStoreCatersPackageAddon.rejected, (state, action) => {
+        state.status = UpdateStoreCatersPackageAddonState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

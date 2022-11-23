@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { LoginBscParam } from "features/bsc/core/bsc.params";
 import {
   LoginBscRepository,
@@ -13,23 +14,29 @@ export enum LoginBscState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: LoginBscState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: LoginBscState.initial,
   message: "",
 };
 
 export const loginBsc = createAsyncThunk(
   "loginBsc",
-  async (param: LoginBscParam, { rejectWithValue, fulfillWithValue }) => {
+  async (param: LoginBscParam, { rejectWithValue }) => {
     try {
       const response: LoginBscResponse = await LoginBscRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      console.log(error.response.data);
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,27 +46,23 @@ export const loginBscSlice = createSlice({
   name: "loginBsc",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(loginBsc.pending, (state: any) => {
+      .addCase(loginBsc.pending, (state) => {
         state.status = LoginBscState.inProgress;
       })
-      .addCase(
-        loginBsc.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          state.message = action.payload.message;
-          state.status = LoginBscState.success;
-        }
-      )
-      .addCase(
-        loginBsc.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(loginBsc.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
-          state.status = LoginBscState.fail;
+          state.status = LoginBscState.success;
           state.message = message;
         }
-      );
+      })
+      .addCase(loginBsc.rejected, (state, action) => {
+        state.status = LoginBscState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

@@ -12,10 +12,6 @@ export function ShopProductsGuard() {
 
   const getSessionState = useAppSelector(selectGetSession);
 
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
-
   if (
     getSessionState.status === GetSessionState.success &&
     getSessionState.data &&

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import {
   GetShopTransactionLogsRepository,
@@ -12,12 +13,13 @@ export enum GetShopTransactionLogsState {
   success,
   fail,
 }
-
-const initialState: {
+interface InitialState {
   status: GetShopTransactionLogsState;
   message: string;
   data: Array<ShopTransactionLogsModel> | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetShopTransactionLogsState.initial,
   message: "",
   data: undefined,
@@ -25,13 +27,18 @@ const initialState: {
 
 export const getShopTransactionLogs = createAsyncThunk(
   "getShopTransactionLogs",
-  async (transactionId: number, { rejectWithValue, fulfillWithValue }) => {
+  async (transactionId: number, { rejectWithValue }) => {
     try {
       const response: GetShopTransactionLogsResponse =
         await GetShopTransactionLogsRepository(transactionId);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -41,36 +48,24 @@ export const getShopTransactionLogsSlice = createSlice({
   name: "getShopTransactionLogs",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getShopTransactionLogs.pending, (state: any) => {
+      .addCase(getShopTransactionLogs.pending, (state) => {
         state.status = GetShopTransactionLogsState.inProgress;
       })
-      .addCase(
-        getShopTransactionLogs.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<ShopTransactionLogsModel> | null;
-          }>
-        ) => {
+      .addCase(getShopTransactionLogs.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetShopTransactionLogsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getShopTransactionLogs.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetShopTransactionLogsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getShopTransactionLogs.rejected, (state, action) => {
+        state.status = GetShopTransactionLogsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

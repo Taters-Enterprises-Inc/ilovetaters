@@ -12,7 +12,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { DataList } from "features/shared/presentation/components";
@@ -24,6 +24,10 @@ import {
 import { CateringBookingModel } from "features/profile/core/domain/catering-booking.model";
 import { CATERING_BOOKING_STATUS } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
+import { VscCircleFilled } from "react-icons/vsc";
+import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 
 const columns: Array<Column> = [
   { id: "date", label: "Date" },
@@ -40,6 +44,9 @@ export function ProfileCateringBookings() {
   const getCateringBookingHistoryState = useAppSelector(
     selectGetCateringBookingHistory
   );
+
+  const getNotificationsState = useAppSelector(selectGetNotifications);
+
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const orderBy = query.get("order_by");
@@ -161,39 +168,58 @@ export function ProfileCateringBookings() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getCateringBookingHistoryState.data.bookings.map((row, i) => (
-                <Link
-                  to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
-                    row.hash_key
-                  }`}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-lg text-gray-600">
-                      #{row.tracking_no}
+              {getCateringBookingHistoryState.data.bookings.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getNotificationsState.data?.catering_booking.unseen_notifications.find(
+                    (notification) =>
+                      notification.catering_tracking_no === row.tracking_no
+                  );
+
+                return (
+                  <Link
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(seenNotification(notification.id));
+                      }
+                    }}
+                    to={`/shop/${row.status <= 3 ? "contract" : "order"}/${
+                      row.hash_key
+                    }`}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    } `}
+                    key={i}
+                  >
+                    <span className="flex items-center justify-between space-x-1 text-xl">
+                      <span className="text-lg text-gray-600">
+                        #{row.tracking_no}
+                      </span>
+
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            CATERING_BOOKING_STATUS[row.status].color,
+                        }}
+                      >
+                        {CATERING_BOOKING_STATUS[row.status].name}
+                      </span>
+                      {notification ? (
+                        <VscCircleFilled className="text-red-600 " />
+                      ) : null}
                     </span>
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          CATERING_BOOKING_STATUS[row.status].color,
-                      }}
-                    >
-                      {CATERING_BOOKING_STATUS[row.status].name}
-                    </span>
-                  </span>
-                  <div className="flex justify-between">
-                    <span className="text-xs">
-                      <Moment format="LLL">{row.dateadded}</Moment>
-                    </span>
-                    <span className="text-lg font-semibold">
-                      {calculateGrandTotal(row)}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                    <div className="flex justify-between">
+                      <span className="text-xs">
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {calculateGrandTotal(row)}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden lg:block">
@@ -286,38 +312,59 @@ export function ProfileCateringBookings() {
               {getCateringBookingHistoryState.data.bookings !== undefined ? (
                 <>
                   {getCateringBookingHistoryState.data.bookings.map(
-                    (row, i) => (
-                      <DataTableRow key={i}>
-                        <DataTableCell>
-                          <Moment format="LLL">{row.dateadded}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>{row.tracking_no}</DataTableCell>
-                        <DataTableCell>
-                          {calculateGrandTotal(row)}
-                        </DataTableCell>
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                CATERING_BOOKING_STATUS[row.status].color,
-                            }}
-                          >
-                            {CATERING_BOOKING_STATUS[row.status].name}
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell align="left">
-                          <Link
-                            to={`/shop/${
-                              row.status <= 3 ? "contract" : "order"
-                            }/${row.hash_key}`}
-                          >
-                            <FaEye className="text-lg" />
-                          </Link>
-                        </DataTableCell>
-                      </DataTableRow>
-                    )
+                    (row, i) => {
+                      const notification: NotificationModel | undefined =
+                        getNotificationsState.data?.catering_booking.unseen_notifications.find(
+                          (notification) =>
+                            notification.catering_tracking_no ===
+                            row.tracking_no
+                        );
+
+                      return (
+                        <DataTableRow
+                          className={`${notification ? "bg-gray-200" : ""}`}
+                          key={i}
+                        >
+                          <DataTableCell>
+                            <Moment format="LLL">{row.dateadded}</Moment>
+                          </DataTableCell>
+                          <DataTableCell>{row.tracking_no}</DataTableCell>
+                          <DataTableCell>
+                            {calculateGrandTotal(row)}
+                          </DataTableCell>
+                          <DataTableCell>
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  CATERING_BOOKING_STATUS[row.status].color,
+                              }}
+                            >
+                              {CATERING_BOOKING_STATUS[row.status].name}
+                            </span>
+                          </DataTableCell>
+                          <DataTableCell align="left">
+                            <Link
+                              onClick={() => {
+                                if (notification) {
+                                  dispatch(seenNotification(notification.id));
+                                }
+                              }}
+                              to={`/shop/${
+                                row.status <= 3 ? "contract" : "order"
+                              }/${row.hash_key}`}
+                            >
+                              <FaEye
+                                className={`text-lg ${
+                                  notification ? "text-red-600" : null
+                                }`}
+                              />
+                            </Link>
+                          </DataTableCell>
+                        </DataTableRow>
+                      );
+                    }
                   )}
                 </>
               ) : null}

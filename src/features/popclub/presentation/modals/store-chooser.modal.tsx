@@ -1,30 +1,25 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StoreCluster } from "../components";
 import { SearchAddress } from "../../../shared/presentation/components/search-address";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { getStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
 import {
   selectStoreChooserModal,
   setAddressStoreChooserModal,
 } from "../slices/store-chooser-modal.slice";
+import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreChooserModal(props: StoreChooserModalProps) {
   const dispatch = useAppDispatch();
   const storeChooserModalState = useAppSelector(selectStoreChooserModal);
-
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -48,6 +43,10 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         >
           <IoMdClose />
         </button>
+
+        <div className="mt-4">
+          <PopclubHeroCarousel />
+        </div>
 
         <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store do you want to have your snacks delivered?
@@ -105,6 +104,7 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <StoreCluster
           onClose={props.onClose}
           address={storeChooserModalState.address}
+          onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
         />
       </div>
     </div>

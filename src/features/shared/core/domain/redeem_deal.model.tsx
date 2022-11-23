@@ -10,8 +10,12 @@ export interface RedeemDealModel {
   name: string;
   product_image: string;
   description: string;
-  original_price: string;
-  promo_price: string;
 
-  minimum_purchase?: number;
+  original_price: number | null;
+  promo_price: number | null;
+  promo_discount_percentage: string | null;
+  minimum_purchase: number | null;
+  deal_products_promo_exclude: Array<{
+    product_id: number;
+  }>;
 }

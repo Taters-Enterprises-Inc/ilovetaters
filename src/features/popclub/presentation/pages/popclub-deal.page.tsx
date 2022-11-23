@@ -20,6 +20,7 @@ import {
   redeemDeal,
   RedeemDealState,
   selectRedeemDeal,
+  resetRedeemDeal,
 } from "../slices/redeem-deal.slice";
 import {
   getRedeem,
@@ -30,10 +31,7 @@ import { resetGetRedeem } from "../slices/get-redeem.slice";
 import { LoginChooserModal } from "../modals/login-chooser.modal";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import {
   FacebookLogoutState,
   resetFacebookLogout,
@@ -46,6 +44,7 @@ import {
 import {
   forfeitRedeem,
   ForfeitRedeemState,
+  resetForfeitRedeemStateStatus,
   selectForfeitRedeem,
 } from "../slices/forfeit-redeem.slice";
 import { MessageModal } from "features/shared/presentation/modals";
@@ -54,6 +53,8 @@ import {
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
 import moment from "moment";
+import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
+import { StoreChooserModal } from "../modals/store-chooser.modal";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -78,6 +79,9 @@ export function PopClubDeal() {
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
   const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
+  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
+    useState(false);
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -89,9 +93,11 @@ export function PopClubDeal() {
   useEffect(() => {
     if (
       getDealState.status === GetDealState.success &&
-      getDealProductVariantsState.status === GetDealProductVariantsState.success
+      getDealProductVariantsState.status ===
+        GetDealProductVariantsState.success &&
+      getDealProductVariantsState.data
     ) {
-      if (getDealProductVariantsState.data?.length > 0) {
+      if (getDealProductVariantsState.data.length > 0) {
         setOpenVariantChooserModal(true);
       } else {
         if (getDealState.data?.hash) {
@@ -100,14 +106,11 @@ export function PopClubDeal() {
               hash: getDealState.data?.hash,
             })
           );
-          if (getDealState.data.minimum_purchase) {
-            navigate("/delivery/products");
-          }
         }
       }
       dispatch(resetGetDealProductVariantsState());
     }
-  }, [getDealProductVariantsState, navigate, dispatch, getDealState]);
+  }, [getDealProductVariantsState, navigate, getDealState, dispatch]);
 
   useEffect(() => {
     dispatch(resetGetRedeem());
@@ -127,8 +130,9 @@ export function PopClubDeal() {
         })
       );
       dispatch(redeemValidators());
+      dispatch(resetForfeitRedeemStateStatus());
     }
-  }, [dispatch, getDealState, forfeitRedeemState]);
+  }, [getDealState, forfeitRedeemState, dispatch]);
 
   useEffect(() => {
     if (
@@ -141,8 +145,17 @@ export function PopClubDeal() {
           deal_id: getDealState.data.id,
         })
       );
+
+      if (
+        getDealState.data.minimum_purchase ||
+        getDealState.data.promo_discount_percentage
+      ) {
+        navigate("/delivery/products");
+      }
+
+      dispatch(resetRedeemDeal());
     }
-  }, [redeemDealState, dispatch, getDealState, forfeitRedeemState]);
+  }, [redeemDealState, getDealState, forfeitRedeemState, dispatch, navigate]);
 
   useEffect(() => {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
@@ -152,7 +165,7 @@ export function PopClubDeal() {
 
       dispatch(resetFacebookLogout());
     }
-  }, [facebookLogoutState, navigate, dispatch, getSessionState]);
+  }, [facebookLogoutState, navigate, getSessionState, dispatch]);
 
   useEffect(() => {
     dispatch(getLatestUnexpiredRedeem());
@@ -168,11 +181,7 @@ export function PopClubDeal() {
         })
       );
     }
-  }, [getDealState, dispatch, getRedeemState]);
-
-  useEffect(() => {
-    dispatch(getSession());
-  }, [dispatch]);
+  }, [getDealState, getRedeemState, dispatch]);
 
   useEffect(() => {
     if (hash) {
@@ -182,7 +191,7 @@ export function PopClubDeal() {
       dispatch(getLatestUnexpiredRedeem());
       dispatch(redeemValidators());
     }
-  }, [dispatch, hash]);
+  }, [hash, dispatch]);
 
   const handleRedeem = () => {
     if (hash) {
@@ -199,6 +208,30 @@ export function PopClubDeal() {
   };
 
   const redeemButton = () => {
+    let isAvailableStartDateTime = true;
+    let availableStartDateTimeInDate: any;
+
+    if (
+      getDealState.data?.available_start_datetime &&
+      getDealState.data?.available_end_datetime
+    ) {
+      const currentTime = moment();
+
+      const availableStartDateTime = moment(
+        getDealState.data?.available_start_datetime
+      );
+      const availableEndDateTime = moment(
+        getDealState.data?.available_end_datetime
+      );
+
+      isAvailableStartDateTime = currentTime.isBetween(
+        availableStartDateTime,
+        availableEndDateTime
+      );
+
+      availableStartDateTimeInDate = availableStartDateTime.toDate();
+    }
+
     if (
       getSessionState.data?.userData &&
       redeemValidatorsState.data &&
@@ -284,6 +317,77 @@ export function PopClubDeal() {
             />
           </div>
         );
+    } else if (!isAvailableStartDateTime) {
+      const pad = (number: number) => ("0" + number).slice(-2);
+
+      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+        if (completed) {
+          if (
+            getDealState.status === GetDealState.success &&
+            getDealState.data
+          ) {
+            dispatch(
+              getRedeem({
+                deal_id: getDealState.data.id,
+              })
+            );
+          }
+          dispatch(getLatestUnexpiredRedeem());
+        } else if (!completed) {
+          let timeName = "";
+
+          if (hours > 0) {
+            if (hours === 1) {
+              timeName = "hour";
+            } else {
+              timeName = "hours";
+            }
+          } else if (minutes > 0) {
+            if (minutes === 1) {
+              timeName = "minute";
+            } else {
+              timeName = "minutes";
+            }
+          } else if (seconds > 0) {
+            if (seconds === 1) {
+              timeName = "second";
+            } else {
+              timeName = "seconds";
+            }
+          }
+
+          return (
+            <>
+              <div className="flex items-center justify-center px-4 text-xl text-white ">
+                <AiOutlineFieldTime className="mr-3 text-4xl" />
+                <div className="font-['Bebas_Neue'] tracking-[4px]">
+                  <span>
+                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                  </span>
+                  <span className="ml-2 text-sm">{timeName}</span>
+                </div>
+              </div>
+              <button
+                className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
+                onClick={() => {
+                  navigate(
+                    `/popclub/${getSessionState.data?.popclub_data.platform}?category=all`
+                  );
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          );
+        }
+      };
+
+      return (
+        <div className="w-full py-3 text-white bg-secondary">
+          <span className="mt-3">You can redeem this deal after </span>
+          <Countdown renderer={renderer} date={availableStartDateTimeInDate} />
+        </div>
+      );
     } else if (
       getSessionState.data?.userData &&
       getRedeemState.status === GetRedeemState.success &&
@@ -293,7 +397,8 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ? (
+              {getRedeemState.data.minimum_purchase ||
+              getRedeemState.data.promo_discount_percentage ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");
@@ -383,14 +488,14 @@ export function PopClubDeal() {
           </button>
         </>
       );
-    } else if (getSessionState.data?.userData) {
+    } else if (getSessionState.data?.userData === null) {
       return (
         <>
           <button
-            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
-            onClick={handleRedeem}
+            className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
+            onClick={loginToRedeem}
           >
-            Redeem
+            Login to Redeem
           </button>
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
@@ -404,14 +509,39 @@ export function PopClubDeal() {
           </button>
         </>
       );
-    } else if (getSessionState.data?.userData === null) {
+    } else if (
+      getSessionState.data?.popclub_data === null ||
+      getSessionState.data?.cache_data === null ||
+      (getDealState.data?.platform_id === 2 &&
+        getSessionState.data?.customer_address === null)
+    ) {
       return (
         <>
           <button
             className="bg-[#CC5801] font-bold text-white py-3 w-full uppercase border border-white rounded-xl"
-            onClick={loginToRedeem}
+            onClick={() => {
+              switch (getDealState.data?.platform_id) {
+                case 1:
+                  setOpenStoreVisitStoreChooserModal(true);
+                  break;
+                case 2:
+                  setOpenStoreChooserModal(true);
+                  break;
+              }
+            }}
           >
-            Login to Redeem
+            Choose a store
+          </button>
+        </>
+      );
+    } else if (getSessionState.data?.userData) {
+      return (
+        <>
+          <button
+            className="w-full py-3 font-bold text-white uppercase border border-white bg-button rounded-xl"
+            onClick={handleRedeem}
+          >
+            Redeem
           </button>
           <button
             className="w-full py-3 mt-4 font-bold text-black uppercase bg-white border border-white rounded-xl"
@@ -471,7 +601,7 @@ export function PopClubDeal() {
                   <h1 className="text-white whitespace-pre-wrap font-['Bebas_Neue'] tracking-[3px] text-3xl ">
                     {getDealState.data.name}
                   </h1>
-                  <h1 className="text-lg text-white">
+                  <h1 className="text-lg text-white whitespace-pre-wrap">
                     {getDealState.data.description}
                   </h1>
 
@@ -487,6 +617,30 @@ export function PopClubDeal() {
         open={openVariantChooserModal}
         onClose={() => {
           setOpenVariantChooserModal(false);
+        }}
+      />
+
+      <StoreVisitStoreChooserModal
+        open={openStoreVisitStoreChooserModal}
+        onClose={() => {
+          setOpenStoreVisitStoreChooserModal(false);
+        }}
+        onDefaultStoreSelectHandler={() => {
+          if (hash) {
+            dispatch(getDeal(hash));
+          }
+        }}
+      />
+
+      <StoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+        onDefaultStoreSelectHandler={() => {
+          if (hash) {
+            dispatch(getDeal(hash));
+          }
         }}
       />
 

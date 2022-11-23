@@ -6,13 +6,15 @@ export enum PopSnackBarState {
   success,
 }
 
-const initialState: {
+interface InitialState {
   status: PopSnackBarState;
   data: {
     message: string;
     severity: "success" | "error";
   };
-} = {
+}
+
+const initialState: InitialState = {
   status: PopSnackBarState.initial,
   data: {
     message: "",

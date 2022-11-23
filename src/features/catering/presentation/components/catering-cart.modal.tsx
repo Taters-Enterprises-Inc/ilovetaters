@@ -37,7 +37,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartCatering());
     }
-  }, [removeItemFromCartCateringState, dispatch]);
+  }, [removeItemFromCartCateringState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -88,7 +88,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-paper px-4 pt-[30px] pb-3 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
+      <div className="bg-paper px-4 pt-[30px] pb-3 mb-[200px] lg:mb-0 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
         <button
           className="absolute text-2xl text-secondary top-2 right-4 "
           onClick={() => {

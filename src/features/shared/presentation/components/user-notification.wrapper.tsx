@@ -3,9 +3,8 @@ import { Outlet } from "react-router-dom";
 import { UnExpiredRedeem } from "./unexpired-redeem";
 import "react-toastify/dist/ReactToastify.css";
 import { SnackbarAlert } from "./snackbar-alert";
-import { GetSessionState, selectGetSession } from "../slices/get-session.slice";
+import { selectGetSession } from "../slices/get-session.slice";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import Pusher from "pusher-js";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
@@ -13,12 +12,7 @@ import {
   selectGetDeal,
 } from "features/popclub/presentation/slices/get-deal.slice";
 import { getRedeem } from "features/popclub/presentation/slices/get-redeem.slice";
-import {
-  ORDER_STATUS,
-  pusher,
-  REACT_APP_PUSHER_CLUSTER,
-  REACT_APP_PUSHER_KEY,
-} from "features/shared/constants";
+import { ORDER_STATUS, pusher } from "features/shared/constants";
 import {
   getOrders,
   GetOrdersState,
@@ -29,6 +23,7 @@ import {
   GetCateringOrdersState,
   selectGetCateringOrders,
 } from "features/catering/presentation/slices/get-catering-orders.slice";
+import { getNotifications } from "../slices/get-notifications.slice";
 
 export function UserNotificationWrapper() {
   const dispatch = useAppDispatch();
@@ -117,7 +112,6 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCateringOrdersState]);
 
   useEffect(() => {
@@ -184,7 +178,6 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getOrdersState]);
 
   useEffect(() => {
@@ -254,8 +247,11 @@ export function UserNotificationWrapper() {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getDealState]);
+
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, []);
 
   return (
     <>

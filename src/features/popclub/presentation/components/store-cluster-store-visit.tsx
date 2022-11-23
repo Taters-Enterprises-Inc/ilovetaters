@@ -20,6 +20,9 @@ import {
 interface StoreClusterProps {
   onClose: any;
   address: string | null;
+
+  // If this function exist it will not navigate to default
+  onDefaultStoreSelectHandler?: () => void;
 }
 
 export function StoreClusterStoreVisit(props: StoreClusterProps) {
@@ -46,8 +49,12 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
   };
 
   useEffect(() => {
-    dispatch(getSession());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (
+      setStoreAndAddressPopClubState.status ===
+      SetStoreAndAddressPopClubState.success
+    ) {
+      dispatch(getSession());
+    }
   }, [setStoreAndAddressPopClubState]);
 
   useEffect(() => {
@@ -61,19 +68,22 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
       dispatch(setPopClubData({ platform: "store-visit" }));
 
-      if (platform) {
-        if (platform === "online-delivery") {
-          navigate(`/popclub/store-visit?category=all`);
+      if (props.onDefaultStoreSelectHandler === undefined) {
+        if (platform) {
+          if (platform === "online-delivery") {
+            navigate(`/popclub/store-visit?category=all`);
+          } else {
+            navigate(`?category=all`);
+          }
         } else {
-          navigate(`?category=all`);
+          navigate(`/popclub/store-visit?category=all`);
         }
       } else {
-        navigate(`/popclub/store-visit?category=all`);
+        props.onDefaultStoreSelectHandler();
       }
 
       document.body.classList.remove("overflow-hidden");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getSessionState]);
 
   return (
@@ -160,7 +170,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         </>
       ) : (
         <>
-          {getStoresAvailablePopClubStoreVisitState.data.map(
+          {getStoresAvailablePopClubStoreVisitState.data?.map(
             (store_cluster, index) => (
               <div key={index}>
                 <h1 className="pl-2 text-sm font-normal">

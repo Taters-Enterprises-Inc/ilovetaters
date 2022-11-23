@@ -5,6 +5,7 @@ import {
   GetRedeemsRepository,
   GetRedeemsResponse,
 } from "features/popclub/data/repository/popclub.repository";
+import { AxiosError } from "axios";
 
 export enum GetRedeemsState {
   initial,
@@ -13,18 +14,35 @@ export enum GetRedeemsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetRedeemsState;
-  data: Array<RedeemDealModel>;
-} = {
+  message: string;
+  data: Array<RedeemDealModel> | undefined;
+}
+
+const initialState: InitialState = {
   status: GetRedeemsState.initial,
-  data: [],
+  message: "",
+  data: undefined,
 };
 
-export const getRedeems = createAsyncThunk("getRedeems", async () => {
-  const response: GetRedeemsResponse = await GetRedeemsRepository();
-  return response.data;
-});
+export const getRedeems = createAsyncThunk(
+  "getRedeems",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: GetRedeemsResponse = await GetRedeemsRepository();
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
+  }
+);
 
 /* Main Slice */
 export const getRedeemsSlice = createSlice({
@@ -35,23 +53,25 @@ export const getRedeemsSlice = createSlice({
       state.status = GetRedeemsState.initial;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getRedeems.pending, (state: any) => {
+      .addCase(getRedeems.pending, (state) => {
         state.status = GetRedeemsState.inProgress;
       })
-      .addCase(
-        getRedeems.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{ message: string; data: RedeemDealModel }>
-        ) => {
-          const data = action.payload.data;
+      .addCase(getRedeems.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-          state.data = data;
           state.status = GetRedeemsState.success;
+          state.message = message;
+          state.data = data;
         }
-      );
+      })
+      .addCase(getRedeems.rejected, (state, action) => {
+        state.status = GetRedeemsState.fail;
+        state.message = "";
+        state.data = undefined;
+      });
   },
 });
 

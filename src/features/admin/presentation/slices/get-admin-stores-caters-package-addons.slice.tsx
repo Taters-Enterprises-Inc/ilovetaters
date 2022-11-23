@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { GetAdminStoreCatersPackageAddonsModel } from "features/admin/core/domain/get-admin-store-caters-package-addons.model";
 import {
   GetAdminStoreCatersPackageAddonsRepository,
@@ -13,11 +14,13 @@ export enum GetAdminStoreCatersPackageAddonsState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAdminStoreCatersPackageAddonsState;
   message: string;
   data: GetAdminStoreCatersPackageAddonsModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAdminStoreCatersPackageAddonsState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,19 @@ const initialState: {
 
 export const getAdminStoreCatersPackageAddons = createAsyncThunk(
   "getAdminStoreCatersPackageAddons",
-  async (query: string, { rejectWithValue, fulfillWithValue }) => {
+  async (query: string, { rejectWithValue }) => {
     try {
       const response: GetAdminStoreCatersPackageAddonsResponse =
         await GetAdminStoreCatersPackageAddonsRepository(query);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -45,36 +54,24 @@ export const getAdminStoreCatersPackageAddonsSlice = createSlice({
       state.status = GetAdminStoreCatersPackageAddonsState.inProgress;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAdminStoreCatersPackageAddons.pending, (state: any) => {
+      .addCase(getAdminStoreCatersPackageAddons.pending, (state) => {
         state.status = GetAdminStoreCatersPackageAddonsState.inProgress;
       })
-      .addCase(
-        getAdminStoreCatersPackageAddons.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: GetAdminStoreCatersPackageAddonsModel | null;
-          }>
-        ) => {
+      .addCase(getAdminStoreCatersPackageAddons.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAdminStoreCatersPackageAddonsState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAdminStoreCatersPackageAddons.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAdminStoreCatersPackageAddonsState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getAdminStoreCatersPackageAddons.rejected, (state, action) => {
+        state.status = GetAdminStoreCatersPackageAddonsState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

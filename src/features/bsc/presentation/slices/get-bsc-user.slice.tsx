@@ -1,10 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BscUserModel } from "features/bsc/core/domain/bsc-user.model";
 import { RootState } from "features/config/store";
 import {
   GetBscUserResponse,
   GetBscUserRepository,
 } from "features/bsc/data/repository/bsc.repository";
+import { AxiosError } from "axios";
 
 export enum GetBscUserState {
   initial,
@@ -13,11 +14,13 @@ export enum GetBscUserState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetBscUserState;
   message: string;
   data: BscUserModel | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetBscUserState.initial,
   message: "",
   data: undefined,
@@ -25,12 +28,17 @@ const initialState: {
 
 export const getBscUser = createAsyncThunk(
   "getBscUser",
-  async (userId: string, { rejectWithValue, fulfillWithValue }) => {
+  async (userId: string, { rejectWithValue }) => {
     try {
       const response: GetBscUserResponse = await GetBscUserRepository(userId);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -46,36 +54,24 @@ export const getBscUserSlice = createSlice({
       state.data = undefined;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getBscUser.pending, (state: any) => {
+      .addCase(getBscUser.pending, (state) => {
         state.status = GetBscUserState.inProgress;
       })
-      .addCase(
-        getBscUser.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: BscUserModel | null;
-          }>
-        ) => {
+      .addCase(getBscUser.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetBscUserState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getBscUser.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetBscUserState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getBscUser.rejected, (state, action) => {
+        state.status = GetBscUserState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

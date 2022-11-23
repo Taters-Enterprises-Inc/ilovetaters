@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { UploadProofOfPaymentParam } from "features/shared/core/shared.params";
 import {
@@ -13,26 +14,30 @@ export enum UploadProofOfPaymentState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: UploadProofOfPaymentState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: UploadProofOfPaymentState.initial,
   message: "",
 };
 
 export const uploadProofOfPayment = createAsyncThunk(
   "uploadProofOfPayment",
-  async (
-    param: UploadProofOfPaymentParam,
-    { rejectWithValue, fulfillWithValue }
-  ) => {
+  async (param: UploadProofOfPaymentParam, { rejectWithValue }) => {
     try {
       const response: UploadProofOfPaymentResponse =
         await UploadProofOfPaymentRepository(param);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -42,29 +47,23 @@ export const uploadProofOfPaymentSlice = createSlice({
   name: "uploadProofOfPayment",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(uploadProofOfPayment.pending, (state: any) => {
+      .addCase(uploadProofOfPayment.pending, (state) => {
         state.status = UploadProofOfPaymentState.inProgress;
       })
-      .addCase(
-        uploadProofOfPayment.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(uploadProofOfPayment.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = UploadProofOfPaymentState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        uploadProofOfPayment.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = UploadProofOfPaymentState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(uploadProofOfPayment.rejected, (state, action) => {
+        state.status = UploadProofOfPaymentState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import {
   RemoveItemFromCartShopRepository,
@@ -12,20 +13,32 @@ export enum RemoveItemFromCartShopState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: RemoveItemFromCartShopState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: RemoveItemFromCartShopState.initial,
   message: "",
 };
 
 export const removeItemFromCartShop = createAsyncThunk(
   "removeItemFromCartShop",
-  async (param: number) => {
-    const response: RemoveItemFromCartShopResponse =
-      await RemoveItemFromCartShopRepository(param);
-    return response.data;
+  async (param: number, { rejectWithValue }) => {
+    try {
+      const response: RemoveItemFromCartShopResponse =
+        await RemoveItemFromCartShopRepository(param);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
+    }
   }
 );
 
@@ -39,29 +52,23 @@ export const removeItemFromCartShopSlice = createSlice({
       state.message = "";
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(removeItemFromCartShop.pending, (state: any) => {
+      .addCase(removeItemFromCartShop.pending, (state) => {
         state.status = RemoveItemFromCartShopState.inProgress;
       })
-      .addCase(
-        removeItemFromCartShop.fulfilled,
-        (state: any, action: PayloadAction<{ message: string }>) => {
+      .addCase(removeItemFromCartShop.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message } = action.payload;
 
           state.status = RemoveItemFromCartShopState.success;
           state.message = message;
         }
-      )
-      .addCase(
-        removeItemFromCartShop.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = RemoveItemFromCartShopState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(removeItemFromCartShop.rejected, (state, action) => {
+        state.status = RemoveItemFromCartShopState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 

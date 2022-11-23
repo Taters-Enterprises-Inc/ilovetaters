@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { BscStoreModel } from "features/bsc/core/domain/bsc-store.model";
 import {
   GetBscUserStoresRepository,
@@ -13,11 +14,13 @@ export enum GetBscUserStoresState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetBscUserStoresState;
   message: string;
   data: Array<BscStoreModel> | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetBscUserStoresState.initial,
   message: "",
   data: undefined,
@@ -25,13 +28,18 @@ const initialState: {
 
 export const getBscUserStores = createAsyncThunk(
   "getBscUserStores",
-  async (userId: string, { rejectWithValue, fulfillWithValue }) => {
+  async (userId: string, { rejectWithValue }) => {
     try {
       const response: GetBscUserStoresResponse =
         await GetBscUserStoresRepository(userId);
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -48,36 +56,24 @@ export const getBscUserStoresSlice = createSlice({
       state.data = action.payload.stores;
     },
   },
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getBscUserStores.pending, (state: any) => {
+      .addCase(getBscUserStores.pending, (state) => {
         state.status = GetBscUserStoresState.inProgress;
       })
-      .addCase(
-        getBscUserStores.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<BscStoreModel> | null;
-          }>
-        ) => {
+      .addCase(getBscUserStores.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetBscUserStoresState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getBscUserStores.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetBscUserStoresState.fail;
-          state.message = message;
-          state.data = null;
-        }
-      );
+      })
+      .addCase(getBscUserStores.rejected, (state, action) => {
+        state.status = GetBscUserStoresState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

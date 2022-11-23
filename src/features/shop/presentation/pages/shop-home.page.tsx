@@ -13,43 +13,20 @@ import {
   selectShopHomePage,
   setAddressShopHomePage,
 } from "../slices/shop-home-page.slice";
+import { ShopHeroCarousel } from "../carousels";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
   const shopHomePageState = useAppSelector(selectShopHomePage);
 
   useEffect(() => {
-    dispatch(getSession());
     dispatch(storeReset());
   }, [dispatch]);
 
   return (
     <main className="min-h-screen bg-primary">
       <section className="lg:container">
-        <img
-          className="sm:hidden"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/mobile/snackshop_delivered.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/hero/desktop/snackshop_delivered_black.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
-        <img
-          className="hidden sm:block"
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/shop/instructions/snackshop_instructions.jpg"
-          }
-          alt="The best pop corn in town"
-        ></img>
+        <ShopHeroCarousel />
       </section>
 
       <section className="container pb-64">

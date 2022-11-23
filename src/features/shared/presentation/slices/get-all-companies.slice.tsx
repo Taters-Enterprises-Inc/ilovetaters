@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
 import { CompanyModel } from "features/shared/core/domain/company.model";
-import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
   GetAllCompaniesRepository,
   GetAllCompaniesResponse,
@@ -14,23 +14,33 @@ export enum GetAllCompaniesState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: GetAllCompaniesState;
+  message: string;
   data: Array<CompanyModel> | undefined;
-} = {
+}
+
+const initialState: InitialState = {
   status: GetAllCompaniesState.initial,
+  message: "",
   data: undefined,
 };
 
 export const getAllCompanies = createAsyncThunk(
   "getAllCompanies",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetAllCompaniesResponse =
         await GetAllCompaniesRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -40,35 +50,24 @@ export const getAllCompaniesSlice = createSlice({
   name: "getAllCompanies",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getAllCompanies.pending, (state: any) => {
+      .addCase(getAllCompanies.pending, (state) => {
         state.status = GetAllCompaniesState.inProgress;
       })
-      .addCase(
-        getAllCompanies.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: UserDiscountModel | null;
-          }>
-        ) => {
+      .addCase(getAllCompanies.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
           state.status = GetAllCompaniesState.success;
           state.message = message;
           state.data = data;
         }
-      )
-      .addCase(
-        getAllCompanies.rejected,
-        (state: any, action: PayloadAction<{ message: string }>) => {
-          const { message } = action.payload;
-
-          state.status = GetAllCompaniesState.fail;
-          state.message = message;
-        }
-      );
+      })
+      .addCase(getAllCompanies.rejected, (state, action) => {
+        state.status = GetAllCompaniesState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 
