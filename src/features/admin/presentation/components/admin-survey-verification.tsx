@@ -12,8 +12,6 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_SURVEY_VERIFICATION_STATUS } from "features/shared/constants";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSurveyVerification,
@@ -29,6 +27,7 @@ import {
   selectGetAdminSurveyVerifications,
 } from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
+import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -94,46 +93,27 @@ export function AdminSurveyVerifications() {
 
   return (
     <>
-      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
-        <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
+      <div className="flex flex-col  lg:flex-row lg:items-end">
+        <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Survey Verification
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminSurveyVerificationStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_SURVEY_VERIFICATION_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_SURVEY_VERIFICATION_STATUS}
+          dispactAction={() => {
+            dispatch(resetGetAdminSurveyVerificationStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminSurveyVerificationsStates.data?.surveys ? (
