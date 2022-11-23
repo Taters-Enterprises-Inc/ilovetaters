@@ -43,14 +43,14 @@ export function AdminSettingStores() {
   const storeId = query.get("store_id");
 
   let columns: Array<Column> = [
-    { id: "name", label: "Name" },
-    { id: "menu", label: "Menu" },
+    { id: "name", label: "Name", minWidth: 250 },
+    { id: "menu", label: "Menu", minWidth: 150 },
     { id: "snackshop", label: "Snackshop" },
     { id: "catering", label: "Catering" },
     { id: "popclub-walk-in", label: "Popclub Store Visit" },
     { id: "popclub-online-delivery", label: "Popclub Online Delivery" },
     { id: "branches", label: "Branches" },
-    { id: "operating-hours", label: "Operating Hours" },
+    { id: "operating-hours", label: "Operating Hours", minWidth: 180 },
   ];
 
   if (
@@ -377,7 +377,7 @@ export function AdminSettingStores() {
                           onClick={() => {
                             navigate("?store_id=" + row.store_id);
                           }}
-                          className="px-2 py-1 font-semibold text-white bg-green-700 rounded-full"
+                          className="px-2 py-1 text-xs font-semibold text-white bg-green-700 rounded-full"
                         >
                           {moment(row.available_start_time, "HH:mm:ss").format(
                             "LT"
