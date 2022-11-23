@@ -60,7 +60,9 @@ export function PopClubHome() {
 
   return (
     <>
-      <PopclubHeroCarousel />
+      <section className="lg:container">
+        <PopclubHeroCarousel />
+      </section>
       <section className="container ">
         <div className="flex flex-col items-start justify-start text-xs leading-4 lg:leading-5 sm:text-sm md:text-base lg:mt-2">
           {getSessionState.data?.popclub_data ? (
