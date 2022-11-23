@@ -121,7 +121,7 @@ export function AdminSurveyVerifications() {
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No survey verifications yet."
+              emptyMessage="No user surveys yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,

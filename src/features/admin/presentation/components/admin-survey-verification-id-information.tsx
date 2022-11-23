@@ -14,7 +14,7 @@ import {
   resetAdminSurveyVerificationChangeStatusSliceStatus,
   selectAdminSurveyVerificationChangeStatus,
 } from "../slices/admin-survey-verification-change-status.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface AdminSurveyVerificationIDInformationProps {
   onClose: () => void;
@@ -42,7 +42,18 @@ export function AdminSurveyVerificationIDInformation(
     }
   }, [adminSurveyVerificationChangeStatusState, dispatch]);
 
-  const handleUnderReview = () => {
+  // const handleUnderReview = () => {
+  //   if (getAdminSurveyVerificationState.data) {
+  //     dispatch(
+  //       adminSurveyVerificationChangeStatus({
+  //         surveyverificationId: getAdminSurveyVerificationState.data.id,
+  //         status: 2,
+  //       })
+  //     );
+  //   }
+  // };
+
+  const handleApprove = () => {
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
@@ -53,23 +64,12 @@ export function AdminSurveyVerificationIDInformation(
     }
   };
 
-  const handleApprove = () => {
-    if (getAdminSurveyVerificationState.data) {
-      dispatch(
-        adminSurveyVerificationChangeStatus({
-          surveyverificationId: getAdminSurveyVerificationState.data.id,
-          status: 3,
-        })
-      );
-    }
-  };
-
   const handleReject = () => {
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
           surveyverificationId: getAdminSurveyVerificationState.data.id,
-          status: 4,
+          status: 3,
         })
       );
     }
@@ -122,36 +122,12 @@ export function AdminSurveyVerificationIDInformation(
                 getAdminSurveyVerificationState.data?.last_name ?? "N/A"}
             </span>
           </div>
-          {/* <div>
-            <strong>Discount Type:</strong>{" "}
-            <span className="font-semibold">
-              {getAdminSurveyVerificationState.data?.discount_type_name ??
-                "N/A"}
-            </span>
-          </div> */}
         </div>
-
-        <hr />
 
         <hr />
       </div>
 
       {getAdminSurveyVerificationState.data?.status === 1 ? (
-        <div className="flex items-start justify-end py-3 space-x-2">
-          <button
-            onClick={handleReject}
-            className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
-          >
-            Reject
-          </button>
-          <button
-            onClick={handleUnderReview}
-            className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
-          >
-            Under Review
-          </button>
-        </div>
-      ) : getAdminSurveyVerificationState.data?.status === 2 ? (
         <div className="flex items-start justify-end py-3 space-x-2">
           <button
             onClick={handleReject}
