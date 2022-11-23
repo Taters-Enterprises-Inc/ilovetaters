@@ -41,7 +41,10 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
     if (isTouch === false) {
       switch (action) {
         case "plus":
-          props.onChange(action, props.quantity + 1);
+          props.onChange(
+            action,
+            isNaN(props.quantity) ? 1 : props.quantity + 1
+          );
           break;
         case "minus":
           if (props.quantity > 1) {
@@ -54,9 +57,10 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
     }
 
     timeout = setTimeout(function () {
-      let counter = props.quantity;
+      let counter = isNaN(props.quantity) ? 1 : props.quantity;
 
       interval = setInterval(function () {
+        console.log(counter);
         counter = counter + (action === "plus" ? +1 : -1);
 
         if (counter >= 1) {
@@ -113,8 +117,6 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
                   value >= 99999
                     ? props.onChange("manual-input", 99999)
                     : props.onChange("manual-input", value);
-                } else {
-                  props.onChange("manual-input", 1);
                 }
               }
             }}
