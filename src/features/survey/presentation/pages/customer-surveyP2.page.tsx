@@ -92,7 +92,7 @@ export function CustomerSurveyPageTwo() {
               CUSTOMER SATISFACTION SURVEY
             </h1>
 
-            <p className="px-4 text-md text-center text-black bg-paper">
+            <p className="px-4 text-center text-black text-md bg-paper">
               Thank you for choosing Taters! It would be great if you would
               participate in our short survey so that we can improve our
               service.
@@ -119,17 +119,17 @@ export function CustomerSurveyPageTwo() {
                 </span>
               </button>
             </div>
-            <div className="flex items-center justify-center pb-6 bg-paper text-sm">
+            <div className="flex items-center justify-center pb-6 text-sm bg-paper">
               <p className="">3% Complete</p>
             </div>
           </div>
 
-          <div className="hidden sm:block pl-10">
+          <div className="hidden pl-10 sm:block">
             <h1 className='text-tertiary text-5xl font-["Bebas_Neue"] text-center pt-6 pb-4 bg-paper text-black '>
               CUSTOMER SATISFACTION SURVEY
             </h1>
 
-            <p className="px-2 text-lg text-center  bg-paper text-black">
+            <p className="px-2 text-lg text-center text-black bg-paper">
               Thank you for choosing Taters! It would be great if you would
               participate in our short survey so that we can improve our
               service.
@@ -138,12 +138,9 @@ export function CustomerSurveyPageTwo() {
             <div className="py-6 pt-10 space-y-4 lg:flex-w-full lg:max-w bg-paper lg:px-4">
               <section className="px-20 text-lg text-black">
                 <p className="pl-4">
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
+                  <strong>Please select your Visit Type.</strong>
                 </p>
-                <div className="flex pl-4 py-4">
+                <div className="flex py-4 pl-4">
                   <VisitRadioButton />
                 </div>
               </section>
