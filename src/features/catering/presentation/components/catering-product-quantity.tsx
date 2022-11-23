@@ -33,6 +33,11 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
       setOpenLoginChooserModal(true);
       return;
     }
+
+    // if (isNaN(props.quantity)) {
+    //   props.onChange(action, 0);
+    // }
+
     if (isTouch === false) {
       switch (action) {
         case "plus":
