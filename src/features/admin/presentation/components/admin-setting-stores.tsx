@@ -43,8 +43,8 @@ export function AdminSettingStores() {
   const storeId = query.get("store_id");
 
   let columns: Array<Column> = [
-    { id: "name", label: "Name", minWidth: 250 },
-    { id: "menu", label: "Menu", minWidth: 150 },
+    { id: "name", label: "Name", minWidth: 220 },
+    { id: "menu", label: "Menu", minWidth: 125 },
     { id: "snackshop", label: "Snackshop" },
     { id: "catering", label: "Catering" },
     { id: "popclub-walk-in", label: "Popclub Store Visit" },
