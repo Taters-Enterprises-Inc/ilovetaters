@@ -14,7 +14,7 @@ import {
   resetAdminSurveyVerificationChangeStatusSliceStatus,
   selectAdminSurveyVerificationChangeStatus,
 } from "../slices/admin-survey-verification-change-status.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface AdminSurveyVerificationIDInformationProps {
   onClose: () => void;
@@ -121,12 +121,6 @@ export function AdminSurveyVerificationIDInformation(
                 " " +
                 getAdminSurveyVerificationState.data?.last_name ?? "N/A"}
             </span>
-          </div>
-          <div className="grid-cols-2 gap-4 lg:grid">
-            <div>
-              <strong>Survey Response:</strong>{" "}
-              <span className="font-semibold"></span>
-            </div>
           </div>
         </div>
 
