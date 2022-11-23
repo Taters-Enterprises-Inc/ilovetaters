@@ -114,7 +114,7 @@ export function CateringAddon(props: AddonProps) {
                 })
               );
             }}
-            className="w-full py-2 space-x-4 font-light bg-orange-700 rounded-b-xl"
+            className="w-full p-2 font-light bg-orange-700 sm:space-x-4 rounded-b-xl"
           >
             <div className="flex items-center justify-center space-x-2 ">
               <BsFillCartPlusFill className="text-2xl" />
@@ -123,7 +123,7 @@ export function CateringAddon(props: AddonProps) {
               </span>
             </div>
             <span className="text-xs font-light ">
-              Add to cart your package before claiming this free item
+              Add to cart the package, before claiming this free item
             </span>
           </button>
         ) : (

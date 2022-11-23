@@ -126,14 +126,14 @@ export function CateringOrder() {
         <div className="flex-1">
           <div
             className={`${
-              getCateringOrdersState.data?.order.clients_info.status === 8
+              getCateringOrdersState.data?.order.clients_info.status === 9
                 ? "bg-green-700"
                 : "bg-[#424242]"
             } h-[0.25rem] relative`}
           >
             <div
               className={`absolute rounded-[50%] text-white font-bold ${
-                getCateringOrdersState.data?.order.clients_info.status === 8
+                getCateringOrdersState.data?.order.clients_info.status === 9
                   ? "bg-green-700"
                   : "bg-[#424242]"
               } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
@@ -193,7 +193,7 @@ export function CateringOrder() {
                   <div
                     className={`${
                       getCateringOrdersState.data?.order.clients_info.status ===
-                      8
+                      9
                         ? "bg-green-700"
                         : "bg-[#424242]"
                     } h-[0.25rem] relative`}
@@ -201,7 +201,7 @@ export function CateringOrder() {
                     <div
                       className={`absolute rounded-[50%] text-white font-bold ${
                         getCateringOrdersState.data?.order.clients_info
-                          .status === 8
+                          .status === 9
                           ? "bg-green-700"
                           : "bg-[#424242]"
                       } h-[1.625rem] w-[1.625rem] text-center top-[-0.75rem] left-[50%] ml-[-0.8125rem]`}
@@ -497,20 +497,45 @@ export function CateringOrder() {
                 </div>
                 <hr className="mt-1 border-secondary" />
 
-                <div className="flex flex-col items-center justify-center">
-                  <h1 className="text-4xl text-center text-secondary">
-                    <NumberFormat
-                      value={getCateringOrdersState.data.grand_total.toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </h1>
+                {getCateringOrdersState.data.order.clients_info.payment_plan ===
+                "full" ? (
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl text-center text-secondary">
+                      <NumberFormat
+                        value={getCateringOrdersState.data.grand_total.toFixed(
+                          2
+                        )}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h1>
 
-                  <span className="text-lg text-center text-secondary">
-                    Final Payment
-                  </span>
-                </div>
+                    <span className="text-lg text-center text-secondary">
+                      Final Payment
+                    </span>
+                  </div>
+                ) : null}
+
+                {getCateringOrdersState.data.order.clients_info.payment_plan ===
+                "half" ? (
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl text-center text-secondary">
+                      <NumberFormat
+                        value={(
+                          getCateringOrdersState.data.grand_total / 2
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </h1>
+
+                    <span className="text-lg text-center text-secondary">
+                      Initial Payment
+                    </span>
+                  </div>
+                ) : null}
 
                 <hr className="mt-1 border-secondary" />
 
@@ -529,7 +554,8 @@ export function CateringOrder() {
                       <span
                         className={`${
                           getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -539,8 +565,8 @@ export function CateringOrder() {
                       <span
                         className={`text-end uppercase ${
                           getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 7 ||
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -557,7 +583,8 @@ export function CateringOrder() {
 
                       <span
                         className={`${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -566,7 +593,8 @@ export function CateringOrder() {
                       </span>
                       <span
                         className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -600,7 +628,8 @@ export function CateringOrder() {
                     <>
                       <span
                         className={`${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -609,7 +638,8 @@ export function CateringOrder() {
                       </span>
                       <span
                         className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8
+                          getCateringOrdersState.data.status === 8 ||
+                          getCateringOrdersState.data.status === 9
                             ? "line-through"
                             : ""
                         }`}
@@ -633,22 +663,22 @@ export function CateringOrder() {
                 getCateringOrdersState.data?.order.clients_info.status ===
                   23 ? (
                   <>
-                    <h2 className="font-['Bebas_Neue'] text-xl  text-white tracking-[3px] text-center">
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                        4 &&
+                    <h2 className="font-['Bebas_Neue'] text-xl  text-secondary tracking-[3px] text-center">
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 4 &&
                       getCateringOrdersState.data.order.clients_info
                         .payment_plan === "half"
                         ? "Upload Initial Proof of Payment"
                         : ""}
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                        4 &&
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 4 &&
                       getCateringOrdersState.data.order.clients_info
                         .payment_plan === "full"
                         ? "Upload Proof of Payment"
                         : ""}
 
-                      {getCateringOrdersState.data?.order.clients_info.status ==
-                      6
+                      {getCateringOrdersState.data?.order.clients_info
+                        .status === 6
                         ? "Upload Final Proof of Payment"
                         : ""}
                     </h2>
