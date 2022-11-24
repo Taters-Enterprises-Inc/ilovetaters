@@ -35,7 +35,7 @@ export const getSurvey = createAsyncThunk(
   }
 );
 
-export const getSurveySlice = createSlice({
+const getSurveySlice = createSlice({
   name: "getSurvey",
   initialState,
   reducers: {},

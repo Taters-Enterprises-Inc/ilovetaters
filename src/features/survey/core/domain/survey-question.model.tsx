@@ -3,7 +3,7 @@ export interface SurveyQuestionModel {
   description: string;
   is_comment: boolean;
   answers: Array<{
-    offered_answer_id: number;
+    survey_question_offered_answer_id: number;
     text: string;
   }>;
 }

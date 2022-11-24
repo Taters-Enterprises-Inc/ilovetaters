@@ -112,9 +112,7 @@ import getCateringTransactionLogs from "features/admin/presentation/slices/get-c
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
 import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
-
 import getDealOrder from "features/popclub/presentation/slices/get-deal-order.slice";
-
 import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
 import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
 import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
@@ -147,6 +145,7 @@ import shopStoreChooserModal from "features/shop/presentation/slices/shop-store-
 import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
 import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 import getSurvey from "features/survey/presentation/slices/get-survey.slice";
+import insertCustomerSurveyResponse from "features/survey/presentation/slices/insert-customer-survey-response.slice";
 
 export const store = configureStore({
   reducer: {
@@ -295,6 +294,7 @@ export const store = configureStore({
     getStoresAvailableSnackshopModal,
     getStoresAvailableCateringModal,
     getSurvey,
+    insertCustomerSurveyResponse,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
