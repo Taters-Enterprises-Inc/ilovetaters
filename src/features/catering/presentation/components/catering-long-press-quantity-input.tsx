@@ -57,6 +57,9 @@ export function CateringLongPressQuantityInput(
   const remainingNumberOfFlavor =
     props.productQuantity - totalMultiFlavorsQuantity;
 
+  const remainingNumberOfFlavorWithoutCurrentInput =
+    props.productQuantity - totalMultiFlavorsQuantityWithoutCurrentInput;
+
   const quantityOnPressed = (
     action: CateringFlavorQuantityActionType,
     isTouch = false
@@ -73,8 +76,14 @@ export function CateringLongPressQuantityInput(
       switch (action) {
         case "plus":
           if (remainingNumberOfFlavor > 0) {
-            props.onChange(parseInt(quantity) + 1);
-            setQuantity((parseInt(quantity) + 1).toString());
+            props.onChange(
+              isNaN(parseInt(quantity)) ? 1 : parseInt(quantity) + 1
+            );
+            setQuantity(
+              isNaN(parseInt(quantity))
+                ? "1"
+                : (parseInt(quantity) + 1).toString()
+            );
           } else {
             return;
           }
@@ -93,11 +102,8 @@ export function CateringLongPressQuantityInput(
       }
     }
 
-    const remainingNumberOfFlavorWithoutCurrentInput =
-      props.productQuantity - totalMultiFlavorsQuantityWithoutCurrentInput;
-
     timeout = setTimeout(function () {
-      let counter = parseInt(quantity);
+      let counter = isNaN(parseInt(quantity)) ? 1 : parseInt(quantity);
       interval = setInterval(function () {
         counter = counter + (action === "plus" ? +1 : -1);
         if (
@@ -122,6 +128,8 @@ export function CateringLongPressQuantityInput(
     clearInterval(interval);
   };
 
+  console.log(currentMultiFlavors);
+
   return (
     <>
       <div className="w-full sm:w-[200px] h-12">
@@ -132,7 +140,9 @@ export function CateringLongPressQuantityInput(
             onTouchStart={() => quantityOnPressed("minus", true)}
             onTouchEnd={quantityOffPressed}
             className={`w-[150px] h-full flex justify-center items-center rounded-l outline-none bg-primary ${
-              quantity === "0" ? "opacity-30 cursor-not-allowed" : ""
+              quantity === "0" || quantity === ""
+                ? "opacity-30 cursor-not-allowed"
+                : ""
             }`}
           >
             <AiOutlineMinus className="text-2xl font-thin" />
@@ -150,7 +160,12 @@ export function CateringLongPressQuantityInput(
                 return;
               }
 
-              if (e.target.value === "") setQuantity(e.target.value);
+              if (e.target.value === "") {
+                props.onChange(0);
+
+                setQuantity(e.target.value);
+                return;
+              }
 
               if (e.target.value) {
                 const value = parseInt(e.target.value);
