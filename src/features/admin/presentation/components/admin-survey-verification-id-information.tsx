@@ -1,4 +1,8 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { selectGetAdminPopclubRedeem } from "../slices/get-admin-popclub-redeem.slice";
 import {
   ADMIN_SURVEY_VERIFICATION_STATUS,
@@ -14,7 +18,10 @@ import {
   resetAdminSurveyVerificationChangeStatusSliceStatus,
   selectAdminSurveyVerificationChangeStatus,
 } from "../slices/admin-survey-verification-change-status.slice";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { AdminSurveyVerificationResponseModal } from "../modals";
+import { createQueryParams } from "features/config/helpers";
+import { useNavigate } from "react-router-dom";
 
 interface AdminSurveyVerificationIDInformationProps {
   onClose: () => void;
@@ -42,17 +49,6 @@ export function AdminSurveyVerificationIDInformation(
     }
   }, [adminSurveyVerificationChangeStatusState, dispatch]);
 
-  // const handleUnderReview = () => {
-  //   if (getAdminSurveyVerificationState.data) {
-  //     dispatch(
-  //       adminSurveyVerificationChangeStatus({
-  //         surveyverificationId: getAdminSurveyVerificationState.data.id,
-  //         status: 2,
-  //       })
-  //     );
-  //   }
-  // };
-
   const handleApprove = () => {
     if (getAdminSurveyVerificationState.data) {
       dispatch(
@@ -73,6 +69,14 @@ export function AdminSurveyVerificationIDInformation(
         })
       );
     }
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -122,10 +126,16 @@ export function AdminSurveyVerificationIDInformation(
                 getAdminSurveyVerificationState.data?.last_name ?? "N/A"}
             </span>
           </div>
+          <div className="grid-cols-2 gap-4 lg:grid">
+            <div>
+              <AdminSurveyVerificationResponseModal />
+            </div>
+          </div>
         </div>
-
         <hr />
       </div>
+
+      {/* <AdminSurveyVerificationResponseModal open={open} onClose={handleClose} /> */}
 
       {getAdminSurveyVerificationState.data?.status === 1 ? (
         <div className="flex items-start justify-end py-3 space-x-2">
