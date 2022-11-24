@@ -31,8 +31,6 @@ export const insertCustomerSurveyResponse = createAsyncThunk(
       const response: InsertCustomerSurveyResponseResponse =
         await InsertCustomerSurveyResponseRepository(param);
 
-      console.log(response.data);
-
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -48,7 +46,12 @@ export const insertCustomerSurveyResponse = createAsyncThunk(
 const insertCustomerSurveyResponseSlice = createSlice({
   name: "insertCustomerSurveyResponse",
   initialState,
-  reducers: {},
+  reducers: {
+    resetInsertCustomerSurveyResponse: (state) => {
+      state.status = InsertCustomerSurveyResponseState.initial;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(insertCustomerSurveyResponse.pending, (state) => {
@@ -71,4 +74,8 @@ const insertCustomerSurveyResponseSlice = createSlice({
 
 export const selectInsertCustomerSurveyResponse = (state: RootState) =>
   state.insertCustomerSurveyResponse;
+
+export const { resetInsertCustomerSurveyResponse } =
+  insertCustomerSurveyResponseSlice.actions;
+
 export default insertCustomerSurveyResponseSlice.reducer;
