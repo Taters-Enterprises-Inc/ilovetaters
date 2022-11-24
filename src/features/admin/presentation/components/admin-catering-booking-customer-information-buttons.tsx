@@ -182,7 +182,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
-            handleUpdateStatus("9");
+            handleUpdateStatus(9);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >
