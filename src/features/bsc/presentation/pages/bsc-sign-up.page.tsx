@@ -5,16 +5,19 @@ import { Link } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 import {
   MaterialInput,
+  MaterialInputAutoComplete,
   MaterialInputPassword,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
 import { MenuItem } from "@mui/material";
 import {
   getAllStores,
+  GetAllStoresState,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
 import {
   getAllCompanies,
+  GetAllCompaniesState,
   selectGetAllCompanies,
 } from "features/shared/presentation/slices/get-all-companies.slice";
 import {
@@ -23,8 +26,6 @@ import {
   resetCreateUserBscStatus,
   selectCreateBscUser,
 } from "../slices/create-bsc-user.slice";
-
-import { TermsAndConditionModal } from "../modals/bsc-terms-and-condition.modal";
 
 export function BscSignUp() {
   const dispatch = useAppDispatch();
@@ -39,12 +40,12 @@ export function BscSignUp() {
       navigate("/bsc");
       dispatch(resetCreateUserBscStatus());
     }
-  }, [createBscUserState]);
+  }, [createBscUserState, dispatch, navigate]);
 
   useEffect(() => {
     dispatch(getAllStores());
     dispatch(getAllCompanies());
-  }, []);
+  }, [dispatch]);
 
   const [formState, setFormState] = useState({
     firstName: "",
@@ -70,9 +71,6 @@ export function BscSignUp() {
     dispatch(createBscUser(formState));
     e.preventDefault();
   };
-
-  const [openTermsAndConditionModal, setOpenTermsAndConditionModal] =
-    useState(false);
 
   return (
     <>
@@ -122,38 +120,50 @@ export function BscSignUp() {
                   onChange={handleInputChange}
                   fullWidth
                 />
-                <MaterialInput
-                  colorTheme="white"
-                  fullWidth
-                  select
-                  required
-                  onChange={handleInputChange}
-                  value={formState.company}
-                  name="company"
-                  size="small"
-                  label="Company"
-                >
-                  {getAllCompaniesState.data?.map((company) => (
-                    <MenuItem value={company.id}>{company.name}</MenuItem>
-                  ))}
-                </MaterialInput>
 
-                <MaterialInput
-                  colorTheme="white"
-                  fullWidth
-                  required
-                  select
-                  onChange={handleInputChange}
-                  value={formState.store}
-                  name="store"
-                  size="small"
-                  label="Store"
-                >
-                  <MenuItem value="none">None</MenuItem>
-                  {getAllStoresState.data?.map((store) => (
-                    <MenuItem value={store.store_id}>{store.name}</MenuItem>
-                  ))}
-                </MaterialInput>
+                {getAllCompaniesState.status === GetAllCompaniesState.success &&
+                getAllCompaniesState.data ? (
+                  <MaterialInputAutoComplete
+                    label="Select store"
+                    colorTheme="white"
+                    size="small"
+                    fullWidth
+                    required
+                    options={getAllCompaniesState.data}
+                    defaultValue={getAllCompaniesState.data[0]}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, value) => {
+                      if (value) {
+                        setFormState({
+                          ...formState,
+                          company: value.id,
+                        });
+                      }
+                    }}
+                  />
+                ) : null}
+
+                {getAllStoresState.status === GetAllStoresState.success &&
+                getAllStoresState.data ? (
+                  <MaterialInputAutoComplete
+                    label="Select store"
+                    colorTheme="white"
+                    size="small"
+                    fullWidth
+                    required
+                    options={getAllStoresState.data}
+                    defaultValue={getAllStoresState.data[0]}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, value) => {
+                      if (value) {
+                        setFormState({
+                          ...formState,
+                          store: value.store_id,
+                        });
+                      }
+                    }}
+                  />
+                ) : null}
 
                 <MaterialInput
                   colorTheme="white"
@@ -219,10 +229,7 @@ export function BscSignUp() {
               <p className="my-1 text-xs text-center text-white">
                 {" "}
                 Already have an account?{" "}
-                <span
-                  // onClick={navigatetoLogin}
-                  className="cursor-pointer text-button hover:underline"
-                >
+                <span className="cursor-pointer text-button hover:underline">
                   {" "}
                   Log in here.{" "}
                 </span>

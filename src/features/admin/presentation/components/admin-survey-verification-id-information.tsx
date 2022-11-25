@@ -84,9 +84,9 @@ export function AdminSurveyVerificationIDInformation(
       <div className="space-y-1 ">
         <div className="grid-cols-2 gap-4 lg:grid ">
           <div>
-            <strong>Receipt Number :</strong>{" "}
+            <strong>Order Number :</strong>{" "}
             <span className="font-semibold">
-              {getAdminSurveyVerificationState.data?.reciept_no ?? "N/A"}
+              {getAdminSurveyVerificationState.data?.order_no ?? "N/A"}
             </span>
           </div>
           <div>
@@ -120,11 +120,7 @@ export function AdminSurveyVerificationIDInformation(
         <div className="grid-cols-2 gap-4 lg:grid">
           <div>
             <strong>Full Name:</strong>{" "}
-            <span className="font-semibold">
-              {getAdminSurveyVerificationState.data?.first_name +
-                " " +
-                getAdminSurveyVerificationState.data?.last_name ?? "N/A"}
-            </span>
+            <span className="font-semibold">Walk-in</span>
           </div>
           <div className="grid-cols-2 gap-4 lg:grid">
             <div>

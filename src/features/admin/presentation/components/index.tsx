@@ -20,4 +20,4 @@ export { AdminAvailabilityCatersProductAddons } from "./admin-availability-cater
 export { AdminCateringBookingAudit } from "./admin-catering-booking-audit";
 export { AdminUserDiscounts } from "./admin-user-discounts";
 export { AdminIdUserDiscountInformation } from "./admin-user-discount-id-information";
-export { AdminSurveyVerifications } from "./admin-survey-verification";
+export { AdminSurveyVerifications } from "./admin-survey-verifications";

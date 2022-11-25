@@ -85,7 +85,7 @@ export function AdminShopOrders() {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, [updateAdminNotificationDateSeenState]);
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (trackingNo) {
@@ -165,7 +165,7 @@ export function AdminShopOrders() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_SNACKSHOP_ORDER_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminShopOrdersStatus());
         }}
         status={status}

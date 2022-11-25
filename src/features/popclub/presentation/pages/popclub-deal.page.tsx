@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import {
   getDeal,
   GetDealState,
@@ -444,6 +444,16 @@ export function PopClubDeal() {
                   {getRedeemState.data.redeem_code}
                 </span>
               </div>
+              <button
+                onClick={() => {
+                  navigate(
+                    `/survey?service=POPCLUB-STORE-VISIT&hash=${getRedeemState.data?.redeem_hash}`
+                  );
+                }}
+                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-button rounded-xl"
+              >
+                RATE US
+              </button>
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {

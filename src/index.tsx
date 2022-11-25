@@ -39,7 +39,7 @@ import {
   CateringProducts,
 } from "features/catering/presentation/pages";
 import { Franchising } from "features/franchising/presentation/pages";
-import { Branches } from "features/branches/presentation/pages";
+import { Branches, BranchesHome } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
   AdminLogin,
@@ -95,16 +95,6 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
 import {
   CustomerSurvey,
-  CustomerSurveyWalkIn,
-  CustomerSurveyPageTwo,
-  CustomerSurveyPageThree,
-  CustomerSurveyPageFour,
-  CustomerSurveyPageFive,
-  CustomerSurveyPageSix,
-  CustomerSurveyPageSeven,
-  CustomerSurveyPageEight,
-  CustomerSurveyPageNine,
-  CustomerSurveyPageTen,
   CustomerSurveyComplete,
 } from "features/survey/presentation/pages";
 
@@ -151,7 +141,10 @@ root.render(
                 <Route element={<LoadingAndSnackbarWrapper />}>
                   <Route element={<UserNotificationWrapper />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="branches" element={<Branches />} />
+                    <Route path="branches" element={<Branches />}>
+                      <Route index element={<BranchesHome />} />
+                    </Route>
+
                     <Route path="franchising" element={<Franchising />} />
                     <Route path="privacy-policy" element={<PrivacyPolicy />} />
 
@@ -183,6 +176,7 @@ root.render(
                       <Route index element={<PopClubIndexPage />} />
                       <Route path=":platform" element={<PopClubHome />} />
                       <Route path="deal/:hash" element={<PopClubDeal />} />
+                      <Route path="order/:hash" element={<PopclubOrder />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
 
@@ -386,43 +380,6 @@ root.render(
 
                   <Route path="survey">
                     <Route index element={<CustomerSurvey />} />
-                    <Route path="walk-in" element={<CustomerSurveyWalkIn />} />
-                    <Route
-                      path="page-two"
-                      element={<CustomerSurveyPageTwo />}
-                    />
-                    <Route
-                      path="page-three"
-                      element={<CustomerSurveyPageThree />}
-                    />
-                    <Route
-                      path="page-four"
-                      element={<CustomerSurveyPageFour />}
-                    />
-                    <Route
-                      path="page-five"
-                      element={<CustomerSurveyPageFive />}
-                    />
-                    <Route
-                      path="page-six"
-                      element={<CustomerSurveyPageSix />}
-                    />
-                    <Route
-                      path="page-seven"
-                      element={<CustomerSurveyPageSeven />}
-                    />
-                    <Route
-                      path="page-eight"
-                      element={<CustomerSurveyPageEight />}
-                    />
-                    <Route
-                      path="page-nine"
-                      element={<CustomerSurveyPageNine />}
-                    />
-                    <Route
-                      path="page-ten"
-                      element={<CustomerSurveyPageTen />}
-                    />
                     <Route
                       path="complete"
                       element={<CustomerSurveyComplete />}

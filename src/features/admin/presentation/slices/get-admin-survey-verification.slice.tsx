@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import {

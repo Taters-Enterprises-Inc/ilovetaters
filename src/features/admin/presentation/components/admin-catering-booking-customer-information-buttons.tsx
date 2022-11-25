@@ -178,6 +178,17 @@ export function AdminCateringBookingCustomerInformationButtons() {
           Final Payment Verified
         </button>
       );
+    } else if (getAdminCateringBookingState.data.status === 8) {
+      return (
+        <button
+          onClick={() => {
+            handleUpdateStatus(9);
+          }}
+          className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+        >
+          Complete
+        </button>
+      );
     }
   }
 

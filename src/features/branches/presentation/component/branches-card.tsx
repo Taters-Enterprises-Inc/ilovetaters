@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { StoreModel } from "features/shared/core/domain/store.model";
 import moment from "moment";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { TiStarburst } from "react-icons/ti";
-export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
-  store,
-}): JSX.Element => {
+
+interface BranchesCardProps {
+  store: StoreModel;
+}
+
+export function BranchesCard(props: BranchesCardProps) {
   const [showText, setShowText] = useState<boolean>(false);
   const [resize, setResize] = useState<number>(window.innerWidth);
-  const textLenght = 40;
-  const sliceText = store.address.slice(0, textLenght);
-  const dateadded = moment(store.dateadded);
+  const sliceText = props.store.address.slice(0, 40);
+  const dateadded = moment(props.store.dateadded);
   const currentDate = moment();
-  const navigate = useNavigate();
+
   useEffect(() => {
     const resizeFunc = () => {
       setResize(window.innerWidth);
@@ -24,25 +26,21 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
     return () => window.removeEventListener("resize", resizeFunc);
   }, []);
 
-  const distance_in_km = Math.ceil(
-    store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5
-  );
-
   console.log();
 
   return (
     <div
       onClick={() => {
-        window.location.href = `https://maps.google.com/?q=${store.store_name}`;
+        window.location.href = `https://maps.google.com/?q=${props.store.store_name}`;
       }}
       className={`cursor-pointer z-0  bg-secondary h-auto shadow-tertiary flex items-center justify-start flex-col shadow-md rounded-[10px] relative `}
     >
       <div className="flex">
         <div className="flex-1 cursor-pointer md:text-[13px] text-[10px] h-auto  uppercase py-2 font-['Bebas_Neue'] tracking-[2px] text-center">
-          {store.store_name}
+          {props.store.store_name}
         </div>
 
-        {store.dateadded &&
+        {props.store.dateadded &&
         dateadded.isAfter(currentDate.subtract(3, "months")) ? (
           <div className="flex w-5">
             <TiStarburst className="absolute right-[-17px] top-[-12px] text-tertiary text-6xl" />
@@ -50,9 +48,9 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
           </div>
         ) : null}
       </div>
-      {store.store_image ? (
+      {props.store.store_image ? (
         <img
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${props.store.store_image}`}
           alt=""
           className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
         />
@@ -95,10 +93,10 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
           <div
             className={` text-[#fff] md:text-[12px] text-[10px] font-normal cursor-pointer pr-2.5`}
           >
-            {resize < 768 && store.address.length > textLenght && !showText
+            {resize < 768 && props.store.address.length > 40 && !showText
               ? sliceText + " . . . "
-              : store.address}
-            {resize < 768 && store.address.length > textLenght && (
+              : props.store.address}
+            {resize < 768 && props.store.address.length > 40 && (
               <button
                 className={`cursor-pointer hover:text-blue-300  text-white md:text-[13px] text-[10px] p-1 z-[100]  ${
                   showText && "block text w-full mt-2"
@@ -117,7 +115,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
       <div
         onClick={(e: any) => {
           e.stopPropagation();
-          window.location.href = `tel:${store.contactno}`;
+          window.location.href = `tel:${props.store.contactno}`;
         }}
         className="cursor-pointer flex border-b border-[#7b7982] w-full pb-2"
       >
@@ -140,7 +138,7 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
         <div className="block py-2 text-left ">
           <p className="text-[.7125rem] text-[#bcd2d6] pb-1 ">Call us</p>
           <p className="text-[#fff] md:text-[13px] text-[10px] font-normal ">
-            {store.contactno}
+            {props.store.contactno}
           </p>
         </div>
       </div>
@@ -165,11 +163,11 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
         <div className="block py-2 text-left">
           <p className="text-[.7125rem] text-[#bcd2d6] pb-1">Operating Hours</p>
           <div className="  md:text-[13px] text-[10px] font-normal  text-[#fff] ">
-            {moment(store.available_start_time, "HH:mm:ss").format("LT")} -{" "}
-            {moment(store.available_end_time, "HH:mm:ss").format("LT")}
+            {moment(props.store.available_start_time, "HH:mm:ss").format("LT")}{" "}
+            - {moment(props.store.available_end_time, "HH:mm:ss").format("LT")}
           </div>
         </div>
       </div>
     </div>
   );
-};
+}

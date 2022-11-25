@@ -1,11 +1,8 @@
-import React from "react";
 import { selectGetStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
-import { NearyouSearchCard } from "./near-you-search-card";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styled from "@mui/material/styles/styled";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
-import Radio from "@mui/material/Radio";
 
 import MuiAccordionSummary, {
   AccordionSummaryProps,
@@ -13,6 +10,8 @@ import MuiAccordionSummary, {
 
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { useAppSelector } from "features/config/hooks";
+import { BranchesCard } from "./branches-card";
+
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -50,7 +49,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   color: "white",
 }));
 
-export function NearyouSearchStore() {
+export function BranchesCluster() {
   const getStoresAvailableBranchesState = useAppSelector(
     selectGetStoresAvailableBranches
   );
@@ -63,7 +62,7 @@ export function NearyouSearchStore() {
             <>
               <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {getStoresAvailableBranchesState.search.map((store, index) => {
-                  return <NearyouSearchCard store={store} key={index} />;
+                  return <BranchesCard store={store} key={index} />;
                 })}
               </section>
             </>
@@ -76,7 +75,7 @@ export function NearyouSearchStore() {
         </>
       ) : (
         <>
-          {getStoresAvailableBranchesState.data.map((store_cluster, index) => (
+          {getStoresAvailableBranchesState.data?.map((store_cluster, index) => (
             <Accordion defaultExpanded={true}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white" />}
@@ -89,7 +88,7 @@ export function NearyouSearchStore() {
               <AccordionDetails>
                 <section className="grid grid-cols-2 gap-4 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                   {store_cluster.stores.map((store, index) => {
-                    return <NearyouSearchCard store={store} key={index} />;
+                    return <BranchesCard store={store} key={index} />;
                   })}
                 </section>
               </AccordionDetails>

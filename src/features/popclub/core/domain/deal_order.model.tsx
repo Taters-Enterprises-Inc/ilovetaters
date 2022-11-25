@@ -9,7 +9,7 @@ export interface DealOrderModel {
     type_of_service: string;
     status: number;
   };
-  client_info: {
+  clients_info: {
     add_name: string;
     add_contact: string;
     add_address: string;

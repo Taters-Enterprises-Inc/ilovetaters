@@ -12,13 +12,10 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_SURVEY_VERIFICATION_STATUS } from "features/shared/constants";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSurveyVerification,
   resetGetAdminSurveyVerificationStatus,
-  selectGetAdminSurveyVerification,
 } from "../slices/get-admin-survey-verification.slice";
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
@@ -29,12 +26,18 @@ import {
   selectGetAdminSurveyVerifications,
 } from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
+import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
-  { id: "dateadded", label: "Date and Time" },
-  { id: "reciept_no", label: "Receipt Number" },
-  { id: "full_name", label: "Full Name" },
+  { id: "order_date", label: "Order Date" },
+  { id: "dateadded", label: "Survey Date" },
+  {
+    id: "reference_number",
+    label: "Order Number",
+  },
+  { id: "order_type", label: "Order Type" },
+  { id: "store", label: "Store" },
   { id: "action", label: "Action" },
 ];
 
@@ -94,46 +97,27 @@ export function AdminSurveyVerifications() {
 
   return (
     <>
-      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
-        <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
+      <div className="flex flex-col  lg:flex-row lg:items-end">
+        <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Survey Verification
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminSurveyVerificationStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_SURVEY_VERIFICATION_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_SURVEY_VERIFICATION_STATUS}
+          dispatchAction={() => {
+            dispatch(resetGetAdminSurveyVerificationStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminSurveyVerificationsStates.data?.surveys ? (
@@ -228,7 +212,7 @@ export function AdminSurveyVerifications() {
                   key={i}
                 >
                   <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>{row.first_name + " " + row.last_name}</span>
+                    <span>Walk-in</span>
 
                     <span
                       className="px-2 py-1 text-xs rounded-full "
@@ -243,7 +227,7 @@ export function AdminSurveyVerifications() {
                   </span>
 
                   <span className="text-xs text-gray-600">
-                    <strong> Receipt Number:</strong> {row.reciept_no}
+                    <strong> Order Number:</strong> {row.order_no}
                   </span>
                   <span className="text-xs text-gray-600">
                     <strong>Date and Time: </strong>
@@ -369,10 +353,17 @@ export function AdminSurveyVerifications() {
                         <DataTableCell>
                           <Moment format="lll">{row.dateadded}</Moment>
                         </DataTableCell>
-                        <DataTableCell>{row.reciept_no}</DataTableCell>
                         <DataTableCell>
-                          {row.first_name} {row.last_name}
+                          <Moment format="lll">{row.order_date}</Moment>
                         </DataTableCell>
+                        <DataTableCell>
+                          {row.order_no}
+                          {row.snackshop_tracking_no}
+                          {row.catering_tracking_no}
+                          {row.popclub_redeem_code}
+                        </DataTableCell>
+                        <DataTableCell>{row.order_type}</DataTableCell>
+                        <DataTableCell>{row.store_name}</DataTableCell>
 
                         <DataTableCell align="left">
                           <button

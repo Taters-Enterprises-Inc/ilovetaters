@@ -1,21 +1,127 @@
-import { useAppDispatch } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
-import { useEffect } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import {
+  MaterialDateInput,
+  MaterialInput,
+} from "features/shared/presentation/components";
+import { useEffect, useState, FormEvent, ChangeEvent } from "react";
 import { Helmet } from "react-helmet";
-import * as React from "react";
-import { RatingCustomer } from "../components/customer-survey.rating";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
-import { BranchesList } from "../components/branches.dropdown";
-import { RatingRadioButton } from "../components/radio-button";
-import { Routes, Route, useNavigate } from "react-router-dom";
+
+import {
+  selectGetSurvey,
+  getSurvey,
+  GetSurveyState,
+} from "features/survey/presentation/slices/get-survey.slice";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import {
+  insertCustomerSurveyResponse,
+  InsertCustomerSurveyResponseState,
+  resetInsertCustomerSurveyResponse,
+  selectInsertCustomerSurveyResponse,
+} from "../slices/insert-customer-survey-response.slice";
+import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
+import { useNavigate } from "react-router-dom";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { MaterialInputAutoComplete } from "features/shared/presentation/components";
+import {
+  getAllStores,
+  GetAllStoresState,
+  selectGetAllStores,
+} from "features/shared/presentation/slices/get-all-stores.slice";
 
 export function CustomerSurvey() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const navigateToCustomerSurveyP2 = () => {
-    navigate("/survey/page-two");
+  const query = useQuery();
+
+  const service = query.get("service");
+  const hash = query.get("hash");
+
+  const [formState, setFormState] =
+    useState<CustomerSurveyQuestionResponseAnswer>({});
+
+  const [surveyNumber, setSurveyNumber] = useState(service && hash ? 0 : -1);
+
+  const [orderedDate, setOrderedDate] = useState("");
+  const [orderedNo, setOrderedNo] = useState("");
+  const [selectedStore, setSelectedStore] = useState<
+    | {
+        store_id: number;
+        name: string;
+        menu_name: string;
+      }
+    | undefined
+  >();
+
+  const getSurveyState = useAppSelector(selectGetSurvey);
+  const insertCustomerSurveyResponseState = useAppSelector(
+    selectInsertCustomerSurveyResponse
+  );
+
+  const getAllStoresState = useAppSelector(selectGetAllStores);
+
+  useEffect(() => {
+    dispatch(getSurvey());
+    dispatch(getAllStores());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      getAllStoresState.status === GetAllStoresState.success &&
+      getAllStoresState.data &&
+      getAllStoresState.data.length > 0
+    ) {
+      setSelectedStore(getAllStoresState.data[0]);
+    }
+  }, [getAllStoresState]);
+
+  useEffect(() => {
+    if (
+      insertCustomerSurveyResponseState.status ===
+      InsertCustomerSurveyResponseState.success
+    ) {
+      navigate("complete");
+      dispatch(resetInsertCustomerSurveyResponse());
+      dispatch(
+        popUpSnackBar({
+          message: "Survey submitted!",
+          severity: "success",
+        })
+      );
+    }
+  }, [insertCustomerSurveyResponseState, dispatch, navigate]);
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const increasedSurveyNumber = surveyNumber + 1;
+
+    if (
+      getSurveyState.status === GetSurveyState.success &&
+      getSurveyState.data &&
+      getSurveyState.data.length > 0
+    ) {
+      if (increasedSurveyNumber < getSurveyState.data.length) {
+        setSurveyNumber(increasedSurveyNumber);
+      } else {
+        dispatch(
+          insertCustomerSurveyResponse({
+            service,
+            answers: formState,
+            orderedDate,
+            orderedNo,
+            storeId: selectedStore?.store_id,
+            orderHash: hash,
+          })
+        );
+      }
+    }
   };
 
   return (
@@ -25,117 +131,203 @@ export function CustomerSurvey() {
       </Helmet>
 
       <main className="min-h-screen bg-paper">
-        <section
-          style={{
-            backgroundImage: `url('${REACT_APP_DOMAIN_URL}api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg')`,
-            backgroundSize: "contain",
-            backgroundPositionX: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundAttachment: "fixed",
-          }}
-          className="relative items-end justify-center sm:hidden "
-        >
-          <img
-            src={
-              REACT_APP_DOMAIN_URL +
-              "api/assets/images/home/hero/mobile/taters_entertainment_snacks.jpg"
-            }
-            alt="The best pop corn in town"
-            style={{ visibility: "hidden" }}
-          ></img>
-        </section>
+        {getSurveyState.data && getSurveyState.data.length > 0 ? (
+          <section className="container py-4 mx-auto">
+            <form onSubmit={handleFormSubmit}>
+              <h1 className='text-secondary text-6xl font-["Bebas_Neue"]'>
+                Taters CUSTOMER SATISFACTION SURVEY
+              </h1>
 
-        <img
-          src={
-            REACT_APP_DOMAIN_URL +
-            "api/assets/images/home/hero/desktop/taters_entertainment_snacks_black.jpg"
-          }
-          className="hidden w-full sm:block"
-          alt="The best pop corn in town"
-        ></img>
+              <p className="text-base text-secondary ">
+                Thank you for choosing Taters! It would be great if you would
+                participate in our short survey so that we can improve our
+                service.
+              </p>
 
-        <section className=" bg-paper">
-          <div className="sm:hidden">
-            <h1 className='text-black text-4xl font-["Bebas_Neue"] text-center pt-6 pb-2 px-4 bg-paper '>
-              CUSTOMER SATISFACTION SURVEY
-            </h1>
+              {surveyNumber === -1 && service === null && hash === null ? (
+                <div className="py-4 space-y-4">
+                  {getAllStoresState.status === GetAllStoresState.success &&
+                  getAllStoresState.data ? (
+                    <MaterialInputAutoComplete
+                      label="Select store"
+                      colorTheme="black"
+                      size="small"
+                      required
+                      options={getAllStoresState.data}
+                      value={selectedStore ?? ""}
+                      getOptionLabel={(option) =>
+                        option.name + " (" + option.menu_name + ") "
+                      }
+                      onChange={(event, value) => {
+                        if (value) {
+                          setSelectedStore(value);
+                        }
+                      }}
+                    />
+                  ) : null}
 
-            <p className="px-4 text-md text-center text-black bg-paper">
-              Thank you for choosing Taters! It would be great if you would
-              participate in our short survey so that we can improve our
-              service.
-            </p>
-            <div className="space-y-4 lg:flex-w-full text-md lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[15px] pt-6 lg:px-4">
-              <section className="px-6 text-black">
-                <p>
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
-                </p>
-                <div className="flex py-2">
-                  <RatingRadioButton />
+                  <MaterialDateInput
+                    colorTheme="black"
+                    label="Order Date"
+                    openTo="year"
+                    size="small"
+                    required
+                    views={["year", "month", "day"]}
+                    value={orderedDate}
+                    onChange={(newValue: any) => {
+                      setOrderedDate(newValue);
+                    }}
+                  />
+                  <MaterialInput
+                    colorTheme="black"
+                    label="Order Number"
+                    value={orderedNo}
+                    required
+                    onChange={(event) => {
+                      setOrderedNo(event.target.value);
+                    }}
+                    size="small"
+                    fullWidth
+                    name="orderNumber"
+                  />
                 </div>
-              </section>
-            </div>
+              ) : null}
 
-            <div className="flex items-center justify-center pt-4 pb-1 bg-paper">
-              <button
-                onClick={navigateToCustomerSurveyP2}
-                type="submit"
-                className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[200px] rounded-lg shadow-lg`}
-              >
-                <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                  CONTINUE
-                </span>
-              </button>
-            </div>
-            <div className="flex items-center justify-center pb-6 bg-paper text-sm">
-              <p className="">1% Complete</p>
-            </div>
-          </div>
+              {surveyNumber >= 0 ? (
+                <>
+                  <h1 className="text-lg font-bold text-end text-secondary">
+                    {surveyNumber + 1}/{getSurveyState.data.length}
+                  </h1>
 
-          <div className="hidden sm:block pl-10">
-            <h1 className='text-tertiary text-5xl font-["Bebas_Neue"] text-center pt-6 pb-4 bg-paper text-black '>
-              CUSTOMER SATISFACTION SURVEY
-            </h1>
+                  <div className="pb-4 text-lg text-secondary">
+                    <strong>
+                      {getSurveyState.data[surveyNumber].description}
+                    </strong>
+                    <div className="flex">
+                      {getSurveyState.data[surveyNumber].answers.length > 0 ? (
+                        <FormControl>
+                          <RadioGroup
+                            value={
+                              formState[
+                                getSurveyState.data[surveyNumber].id.toString()
+                              ]?.surveyQuestionOfferedAnswerId ?? ""
+                            }
+                            name={getSurveyState.data[
+                              surveyNumber
+                            ].id.toString()}
+                            onChange={(e) => {
+                              if (getSurveyState.data) {
+                                const surveyQuestionOfferedAnswerId =
+                                  e.target.value;
+                                const surveyQuestionId =
+                                  getSurveyState.data[surveyNumber].id;
 
-            <p className="px-2 text-lg text-center  bg-paper text-black">
-              Thank you for choosing Taters! It would be great if you would
-              participate in our short survey so that we can improve our
-              service.
-            </p>
+                                setFormState({
+                                  ...formState,
+                                  [e.target.name]: {
+                                    surveyQuestionOfferedAnswerId,
+                                    surveyQuestionId,
+                                  },
+                                });
+                              }
+                            }}
+                          >
+                            {getSurveyState.data[surveyNumber].answers.map(
+                              (answer) => (
+                                <FormControlLabel
+                                  value={
+                                    answer.survey_question_offered_answer_id
+                                  }
+                                  control={
+                                    <Radio
+                                      required
+                                      size="small"
+                                      color="secondary"
+                                    />
+                                  }
+                                  label={answer.text}
+                                />
+                              )
+                            )}
+                          </RadioGroup>
+                        </FormControl>
+                      ) : null}
+                      {getSurveyState.data[surveyNumber].is_comment ? (
+                        <MaterialInput
+                          colorTheme="black"
+                          value={
+                            formState[
+                              getSurveyState.data[surveyNumber].id.toString()
+                            ]?.otherText ?? ""
+                          }
+                          onChange={(e) => {
+                            if (getSurveyState.data) {
+                              const otherText = e.target.value;
+                              const surveyQuestionId =
+                                getSurveyState.data[surveyNumber].id;
+                              setFormState({
+                                ...formState,
+                                [e.target.name]: {
+                                  otherText,
+                                  surveyQuestionId,
+                                },
+                              });
+                            }
+                          }}
+                          name={getSurveyState.data[surveyNumber].id.toString()}
+                          multiline
+                          rows={4}
+                          fullWidth
+                          required
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                </>
+              ) : null}
 
-            <div className="py-6 pt-10 space-y-4 lg:flex-w-full lg:max-w bg-paper lg:px-4">
-              <section className="px-20 text-lg text-black">
-                <p className="pl-4">
-                  <strong>
-                    Please rate your overall satisfaction with your Taters
-                    Experience.
-                  </strong>
-                </p>
-                <div className="flex pl-4 py-4">
-                  <RatingRadioButton />
-                </div>
-              </section>
-            </div>
+              <div className="flex flex-col items-center justify-end pb-1 space-y-2 lg:space-y-0 lg:flex-row">
+                <button
+                  type="submit"
+                  className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
+                >
+                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                    {getSurveyState.data.length - 1 === surveyNumber
+                      ? "Submit"
+                      : "Continue"}
+                  </span>
+                </button>
+                {surveyNumber >= 0 && service === null && hash === null ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSurveyNumber(surveyNumber - 1);
+                    }}
+                    className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      Go Back
+                    </span>
+                  </button>
+                ) : null}
 
-            <div className="flex items-center justify-center pb-1">
-              <button
-                onClick={navigateToCustomerSurveyP2}
-                type="submit"
-                className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
-              >
-                <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                  CONTINUE
-                </span>
-              </button>
-            </div>
-            <div className="flex items-center justify-center pb-6 bg-paper">
-              <p className="">1% Complete</p>
-            </div>
-          </div>
-        </section>
+                {surveyNumber > 0 && service && hash ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSurveyNumber(surveyNumber - 1);
+                    }}
+                    className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      Go Back
+                    </span>
+                  </button>
+                ) : null}
+              </div>
+            </form>
+          </section>
+        ) : null}
       </main>
     </>
   );

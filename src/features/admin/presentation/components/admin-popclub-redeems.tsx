@@ -96,7 +96,7 @@ export function AdminPopClubRedeems() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_POPCLUB_REDEEM_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminPopclubRedeemsStatus());
         }}
         status={status}

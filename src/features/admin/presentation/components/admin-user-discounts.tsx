@@ -12,8 +12,6 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_USER_DISCOUNT_STATUS } from "features/shared/constants";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminUserDiscounts,
@@ -26,6 +24,7 @@ import { FaEye } from "react-icons/fa";
 import { AdminUserDiscountModal } from "../modals";
 import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
 import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
+import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -91,46 +90,27 @@ export function AdminUserDiscounts() {
 
   return (
     <>
-      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
-        <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
+      <div className="flex flex-col  lg:flex-row lg:items-end">
+        <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           User Discount
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminUserDiscountsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_USER_DISCOUNT_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_USER_DISCOUNT_STATUS}
+          dispatchAction={() => {
+            dispatch(resetGetAdminUserDiscountsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminUserDiscountsStates.data?.discounts ? (
