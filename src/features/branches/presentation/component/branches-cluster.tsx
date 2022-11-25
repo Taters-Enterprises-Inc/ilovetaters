@@ -75,7 +75,7 @@ export function BranchesCluster() {
         </>
       ) : (
         <>
-          {getStoresAvailableBranchesState.data.map((store_cluster, index) => (
+          {getStoresAvailableBranchesState.data?.map((store_cluster, index) => (
             <Accordion defaultExpanded={true}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white" />}

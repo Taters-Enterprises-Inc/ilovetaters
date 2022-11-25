@@ -146,6 +146,7 @@ import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/
 import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 import getSurvey from "features/survey/presentation/slices/get-survey.slice";
 import insertCustomerSurveyResponse from "features/survey/presentation/slices/insert-customer-survey-response.slice";
+import getStoresAvailableSurvey from "features/survey/presentation/slices/get-stores-available-survey.slice";
 
 export const store = configureStore({
   reducer: {
@@ -295,6 +296,7 @@ export const store = configureStore({
     getStoresAvailableCateringModal,
     getSurvey,
     insertCustomerSurveyResponse,
+    getStoresAvailableSurvey,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

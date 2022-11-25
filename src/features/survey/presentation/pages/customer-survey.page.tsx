@@ -21,6 +21,7 @@ import {
 import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
 import { useNavigate } from "react-router-dom";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { selectGetStoresAvailableSurvey } from "../slices/get-stores-available-survey.slice";
 
 export function CustomerSurvey() {
   const dispatch = useAppDispatch();
@@ -36,6 +37,10 @@ export function CustomerSurvey() {
   const getSurveyState = useAppSelector(selectGetSurvey);
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
+  );
+
+  const getStoresAvailableSurvey = useAppSelector(
+    selectGetStoresAvailableSurvey
   );
 
   useEffect(() => {
