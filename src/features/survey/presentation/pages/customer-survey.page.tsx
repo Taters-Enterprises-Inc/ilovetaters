@@ -30,6 +30,8 @@ export function CustomerSurvey() {
     useState<CustomerSurveyQuestionResponseAnswer>({});
 
   const [surveyNumber, setSurveyNumber] = useState(0);
+  const [receiptNumber, setReceiptNumber] = useState("");
+  const [selectedStore, setSelectedStore] = useState("");
 
   const getSurveyState = useAppSelector(selectGetSurvey);
   const insertCustomerSurveyResponseState = useAppSelector(
@@ -81,7 +83,26 @@ export function CustomerSurvey() {
       </Helmet>
 
       <main className="min-h-screen bg-paper">
-        {getSurveyState.data && getSurveyState.data.length > 0 ? (
+        {receiptNumber === "" || selectedStore === "" ? (
+          <section className="container py-4 mx-auto">
+            <h1 className='text-secondary text-6xl font-["Bebas_Neue"]'>
+              Taters CUSTOMER SATISFACTION SURVEY
+            </h1>
+
+            <p className="text-base text-secondary ">
+              Thank you for choosing Taters! It would be great if you would
+              participate in our short survey so that we can improve our
+              service.
+            </p>
+
+            <div></div>
+          </section>
+        ) : null}
+
+        {getSurveyState.data &&
+        getSurveyState.data.length > 0 &&
+        receiptNumber &&
+        selectedStore ? (
           <section className="container py-4 mx-auto">
             <form onSubmit={handleFormSubmit}>
               <h1 className='text-secondary text-6xl font-["Bebas_Neue"]'>

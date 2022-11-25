@@ -85,7 +85,7 @@ export function AdminShopOrders() {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, [updateAdminNotificationDateSeenState]);
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (trackingNo) {

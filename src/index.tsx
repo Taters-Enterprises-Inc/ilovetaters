@@ -38,7 +38,7 @@ import {
   CateringProducts,
 } from "features/catering/presentation/pages";
 import { Franchising } from "features/franchising/presentation/pages";
-import { Branches } from "features/branches/presentation/pages";
+import { Branches, BranchesHome } from "features/branches/presentation/pages";
 import {
   AdminShopOrder,
   AdminLogin,
@@ -141,7 +141,10 @@ root.render(
                 <Route element={<LoadingAndSnackbarWrapper />}>
                   <Route element={<UserNotificationWrapper />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="branches" element={<Branches />} />
+                    <Route path="branches" element={<Branches />}>
+                      <Route index element={<BranchesHome />} />
+                    </Route>
+
                     <Route path="franchising" element={<Franchising />} />
                     <Route path="privacy-policy" element={<PrivacyPolicy />} />
 
