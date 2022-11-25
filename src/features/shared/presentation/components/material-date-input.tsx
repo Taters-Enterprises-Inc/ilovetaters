@@ -54,13 +54,12 @@ export interface MaterialDateInputProps {
   value: string | null;
   label: string;
   colorTheme: "white" | "black";
-  openTo?: CalendarPickerView | undefined;
-  views?: readonly CalendarPickerView[] | undefined;
-  shouldDisableYear: ((year: Date) => boolean) | undefined;
-  onChange: (
-    value: Date | null,
-    keyboardInputValue?: string | undefined
-  ) => void;
+  openTo?: CalendarPickerView;
+  required?: boolean;
+  views?: readonly CalendarPickerView[];
+  shouldDisableYear?: (year: Date) => boolean;
+  onChange: (value: Date | null, keyboardInputValue?: string) => void;
+  size?: string;
 }
 
 export function MaterialDateInput(props: MaterialDateInputProps) {
@@ -81,10 +80,11 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
         renderInput={(params) => (
           <MaterialInput
             colorTheme={props.colorTheme}
+            size={props.size}
             onClick={() => {
               setOpenBirthDateCalendar(true);
             }}
-            required
+            required={props.required}
             fullWidth
             {...params}
           />

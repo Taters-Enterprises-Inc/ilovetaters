@@ -206,18 +206,18 @@ export function PopclubOrder() {
                     From:{" "}
                   </h2>
                   <h3 className="text-xs font-semibold">
-                    {getDealOrderState.data?.client_info.store_name}
+                    {getDealOrderState.data?.clients_info.store_name}
                   </h3>
                   <h3 className="text-xs">
-                    {getDealOrderState.data?.client_info.store_address}
+                    {getDealOrderState.data?.clients_info.store_address}
                   </h3>
                   <div className="text-xs">
                     <strong>Contact #</strong>{" "}
-                    {getDealOrderState.data?.client_info.store_contact_number}
+                    {getDealOrderState.data?.clients_info.store_contact_number}
                   </div>
                   <div className="text-xs">
                     <strong>Email :</strong>{" "}
-                    {getDealOrderState.data?.client_info.store_email}
+                    {getDealOrderState.data?.clients_info.store_email}
                   </div>
                 </div>
 

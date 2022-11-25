@@ -1,8 +1,12 @@
 export interface AdminSurveyVerificationModel {
   id: number;
-  first_name: string;
-  last_name: string;
-  reciept_no: string;
+  order_date: string;
   dateadded: string;
   status: number;
+  store_name: string;
+  order_no: string | null;
+  snackshop_tracking_no: string | null;
+  catering_tracking_no: string | null;
+  popclub_redeem_code: string | null;
+  order_type: string;
 }

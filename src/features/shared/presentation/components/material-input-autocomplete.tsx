@@ -3,7 +3,6 @@ import Autocomplete, {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
 } from "@mui/material/Autocomplete";
-import { ChangeEvent } from "react";
 import { MaterialInput } from "./material-input";
 
 interface MaterialInputAutoCompleteProps {
@@ -25,6 +24,8 @@ interface MaterialInputAutoCompleteProps {
   label: string;
   sx?: SxProps<Theme> | undefined;
   size?: "small" | "medium" | undefined;
+  fullWidth?: boolean;
+  required?: boolean;
 }
 
 export function MaterialInputAutoComplete(
@@ -38,6 +39,7 @@ export function MaterialInputAutoComplete(
       sx={props.sx}
       size={props.size}
       value={props.value}
+      fullWidth={props.fullWidth}
       defaultValue={props.defaultValue}
       getOptionLabel={props.getOptionLabel}
       onChange={props.onChange}
@@ -48,6 +50,7 @@ export function MaterialInputAutoComplete(
           colorTheme={props.colorTheme}
           onChange={() => {}}
           value=""
+          required={props.required}
           name=""
           label={props.label}
         />

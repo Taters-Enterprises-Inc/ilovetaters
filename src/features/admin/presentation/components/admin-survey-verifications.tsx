@@ -16,7 +16,6 @@ import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSurveyVerification,
   resetGetAdminSurveyVerificationStatus,
-  selectGetAdminSurveyVerification,
 } from "../slices/get-admin-survey-verification.slice";
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
@@ -31,9 +30,14 @@ import { AdminChipsButton } from "./chips-button";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
-  { id: "dateadded", label: "Date and Time" },
-  { id: "reciept_no", label: "Receipt Number" },
-  { id: "full_name", label: "Full Name" },
+  { id: "order_date", label: "Order Date" },
+  { id: "dateadded", label: "Survey Date" },
+  {
+    id: "reference_number",
+    label: "Order Number",
+  },
+  { id: "order_type", label: "Order Type" },
+  { id: "store", label: "Store" },
   { id: "action", label: "Action" },
 ];
 
@@ -100,7 +104,7 @@ export function AdminSurveyVerifications() {
         <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_SURVEY_VERIFICATION_STATUS}
-          dispactAction={() => {
+          dispatchAction={() => {
             dispatch(resetGetAdminSurveyVerificationStatus());
           }}
           status={status}
@@ -208,7 +212,7 @@ export function AdminSurveyVerifications() {
                   key={i}
                 >
                   <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>{row.first_name + " " + row.last_name}</span>
+                    <span>Walk-in</span>
 
                     <span
                       className="px-2 py-1 text-xs rounded-full "
@@ -223,7 +227,7 @@ export function AdminSurveyVerifications() {
                   </span>
 
                   <span className="text-xs text-gray-600">
-                    <strong> Receipt Number:</strong> {row.reciept_no}
+                    <strong> Order Number:</strong> {row.order_no}
                   </span>
                   <span className="text-xs text-gray-600">
                     <strong>Date and Time: </strong>
@@ -349,10 +353,17 @@ export function AdminSurveyVerifications() {
                         <DataTableCell>
                           <Moment format="lll">{row.dateadded}</Moment>
                         </DataTableCell>
-                        <DataTableCell>{row.reciept_no}</DataTableCell>
                         <DataTableCell>
-                          {row.first_name} {row.last_name}
+                          <Moment format="lll">{row.order_date}</Moment>
                         </DataTableCell>
+                        <DataTableCell>
+                          {row.order_no}
+                          {row.snackshop_tracking_no}
+                          {row.catering_tracking_no}
+                          {row.popclub_redeem_code}
+                        </DataTableCell>
+                        <DataTableCell>{row.order_type}</DataTableCell>
+                        <DataTableCell>{row.store_name}</DataTableCell>
 
                         <DataTableCell align="left">
                           <button

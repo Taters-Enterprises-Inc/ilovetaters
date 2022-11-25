@@ -167,7 +167,7 @@ export function AdminCateringBookings() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_CATERING_BOOKING_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminCateringBookingsStatus());
         }}
         status={status}

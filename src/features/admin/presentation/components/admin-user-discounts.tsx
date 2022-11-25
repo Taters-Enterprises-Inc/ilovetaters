@@ -95,22 +95,22 @@ export function AdminUserDiscounts() {
           User Discount
         </span>
         <AdminChipsButton
-        createQueryParams={createQueryParams}
-        data={ADMIN_USER_DISCOUNT_STATUS}
-        dispactAction={() => {
-          dispatch(resetGetAdminUserDiscountsStatus());
-        }}
-        status={status}
-        params={(value) => {
-          const params = {
-            page_no: pageNo,
-            per_page: perPage,
-            status:value === -1 ? null :value,
-            search: search,
-          };
-          return params;
-        }}
-      />
+          createQueryParams={createQueryParams}
+          data={ADMIN_USER_DISCOUNT_STATUS}
+          dispatchAction={() => {
+            dispatch(resetGetAdminUserDiscountsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminUserDiscountsStates.data?.discounts ? (

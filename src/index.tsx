@@ -16,6 +16,7 @@ import {
   PopClubDeal,
   PopClubHome,
   PopClubIndexPage,
+  PopclubOrder,
 } from "features/popclub/presentation/pages";
 import {
   Shop,
@@ -94,7 +95,6 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
 import {
   CustomerSurvey,
-  CustomerSurveyWalkIn,
   CustomerSurveyComplete,
 } from "features/survey/presentation/pages";
 
@@ -176,6 +176,7 @@ root.render(
                       <Route index element={<PopClubIndexPage />} />
                       <Route path=":platform" element={<PopClubHome />} />
                       <Route path="deal/:hash" element={<PopClubDeal />} />
+                      <Route path="order/:hash" element={<PopclubOrder />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
 
@@ -379,7 +380,6 @@ root.render(
 
                   <Route path="survey">
                     <Route index element={<CustomerSurvey />} />
-                    <Route path="walk-in" element={<CustomerSurveyWalkIn />} />
                     <Route
                       path="complete"
                       element={<CustomerSurveyComplete />}
