@@ -8,3 +8,8 @@ export interface InsertCustomerSurveyResponseParam {
   orderHash: string | null;
   answers: CustomerSurveyQuestionResponseAnswer;
 }
+
+export interface GetCustomerSurveyResponseParam {
+  hash: string;
+  service: "SNACKSHOP" | "CATERING" | "POPCLUB-STORE-VISIT";
+}

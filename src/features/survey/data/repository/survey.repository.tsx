@@ -1,7 +1,11 @@
 import { SurveyQuestionModel } from "features/survey/core/domain/survey-question.model";
-import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { InsertCustomerSurveyResponseParam } from "features/survey/core/survey.params";
+import {
+  GetCustomerSurveyResponseParam,
+  InsertCustomerSurveyResponseParam,
+} from "features/survey/core/survey.params";
+import { GetCustomerSurveyResponseModel } from "features/survey/core/domain/get-customer-survey-response.model";
+import axios from "axios";
 
 export interface GetSurveyResponse {
   data: {
@@ -14,6 +18,27 @@ export interface InsertCustomerSurveyResponseResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetCustomerSurveyResponseResponse {
+  data: {
+    message: string;
+    data: GetCustomerSurveyResponseModel;
+  };
+}
+
+export function GetCustomerSurveyResponseRepository(
+  param: GetCustomerSurveyResponseParam
+): Promise<GetCustomerSurveyResponseResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/survey/answer?service=${param.service}&hash=${param.hash}`,
+    {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function InsertCustomerSurveyResponseRepository(
