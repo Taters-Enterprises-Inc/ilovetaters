@@ -7,7 +7,7 @@ import {
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   getDealOrder,
   selectGetDealOrder,
@@ -76,12 +76,6 @@ export function PopclubOrder() {
       formData.append("uploaded_file", uploadedFile);
       dispatch(uploadProofOfPayment({ formData }));
     }
-  };
-
-  const navigate = useNavigate();
-
-  const navigateToCustomerSurvey = () => {
-    navigate("/survey/walk-in");
   };
 
   return (
@@ -353,14 +347,14 @@ export function PopclubOrder() {
                 </h1>
               </div>
               <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                <button
-                  onClick={navigateToCustomerSurvey}
+                <Link
+                  to={`/survey?service=POPCLUB-STORE-VISIT&hash=${getDealOrderState.data?.clients_info.hash_key}`}
                   className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                 >
                   <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                     RATE US
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

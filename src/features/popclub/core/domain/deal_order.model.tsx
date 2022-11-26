@@ -20,6 +20,7 @@ export interface DealOrderModel {
     store_address: string;
     store_contact_number: string;
     store_email: string;
+    hash_key: string;
   };
   deal_order_items: [
     {
