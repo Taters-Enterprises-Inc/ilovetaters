@@ -247,7 +247,11 @@ export function ShopProduct() {
   function pressTimer(action: string) {
     isLongPress.current = false;
 
-    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    action === "add"
+      ? setQuantity(() => {
+          return isNaN(quantity) ? 1 : quantity + 1;
+        })
+      : setQuantity(quantity - 1);
 
     timerRef.current = window.setTimeout(() => {
       handleOnLongPress(action);
@@ -804,16 +808,9 @@ export function ShopProduct() {
                             clearInterval(quantityId);
                             setOpenLoginChooserModal(true);
                           } else {
-                            if (isNaN(parseInt(value))) {
+                            if (isNaN(parseInt(value)) || value === "0") {
                               isQuantityNull.current = true;
                             }
-
-                            setTimeout(() => {
-                              if (isQuantityNull.current) {
-                                setQuantity(0);
-                              }
-                            }, 1000);
-
                             if (parseInt(value) >= 10) {
                               setQuantity(10);
                             } else if (parseInt(value) < 0) {

@@ -14,6 +14,7 @@ import {
   setAddressShopHomePage,
 } from "../slices/shop-home-page.slice";
 import { ShopHeroCarousel } from "../carousels";
+import { useLocation } from "react-router-dom";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,12 @@ export function ShopHome() {
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   return (
     <main className="min-h-screen bg-primary">

@@ -5,6 +5,7 @@ import { getSession } from "features/shared/presentation/slices/get-session.slic
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
 import ReactPlayer from "react-player";
+import { useLocation } from "react-router-dom";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
@@ -13,6 +14,12 @@ export function Franchising() {
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   return (
     <main className="bg-primary">

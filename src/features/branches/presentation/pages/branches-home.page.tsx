@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "features/config/hooks";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 import { BranchesCluster, BranchesSearch } from "../component";
+import { useLocation } from "react-router-dom";
 
 export function BranchesHome() {
   const dispatch = useAppDispatch();
@@ -15,6 +16,12 @@ export function BranchesHome() {
       })
     );
   }, [dispatch]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   return (
     <main className="min-h-screen bg-primary">
