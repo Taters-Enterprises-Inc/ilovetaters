@@ -5,6 +5,7 @@ import { contactData, ContactDataType } from "../pages/data/contact-data";
 import { getStoresAvailableBranches } from "../slices/get-stores-available-branches.slice";
 import { NearyouSearchStore } from "./near-you-search-store";
 import { BranchesSearch } from "./branches-search";
+import { useLocation } from "react-router-dom";
 
 export function BranchesList() {
   const dispatch = useAppDispatch();
@@ -17,6 +18,12 @@ export function BranchesList() {
       })
     );
   }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   return (
     <main className="min-h-screen bg-primary">
