@@ -11,5 +11,5 @@ export interface InsertCustomerSurveyResponseParam {
 
 export interface GetCustomerSurveyResponseParam {
   hash: string;
-  service: "SNACKSHOP" | "CATERING" | "POPCLUB-STORE-VISIT";
+  service: string;
 }

@@ -73,7 +73,7 @@ const getCustomerSurveyResponseSlice = createSlice({
   },
 });
 
-export const selectGetCustomerSurveyResponsen = (state: RootState) =>
-  state.getCustomerSurveyRespose;
+export const selectGetCustomerSurveyResponse = (state: RootState) =>
+  state.getCustomerSurveyResponse;
 
 export default getCustomerSurveyResponseSlice.reducer;
