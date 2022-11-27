@@ -5,13 +5,15 @@ import {
   SERVICES_DESKTOP,
   SERVICES_MOBILE,
 } from "features/shared/constants";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch } from "features/config/hooks";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { Helmet } from "react-helmet";
 
 export function Home() {
   const dispatch = useAppDispatch();
+
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(storeReset());

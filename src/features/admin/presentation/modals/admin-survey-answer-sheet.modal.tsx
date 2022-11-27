@@ -54,7 +54,7 @@ export function AdminSurveyAnswerSheetModal(
               <span className="font-bold">{survey.question}</span>
               <br />
               <span>
-                <strong>Answer:</strong> {survey.answer}
+                <strong>Answer:</strong> {survey.answer} {survey.other_text}
               </span>
             </div>
           ))}
