@@ -55,7 +55,10 @@ export function AdminSurveyVerificationModal(
   }
 
   return (
-    <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
+    <div
+      id="survey-verification-modal"
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+    >
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
           <span className="text-2xl text-white">Survey Verification Form</span>

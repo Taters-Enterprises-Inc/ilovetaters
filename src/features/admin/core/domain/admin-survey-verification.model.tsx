@@ -9,4 +9,11 @@ export interface AdminSurveyVerificationModel {
   catering_tracking_no: string | null;
   popclub_redeem_code: string | null;
   order_type: string;
+  answers: Array<{
+    id: number;
+    other_text: string | null;
+    customer_survey_response_id: number;
+    question: string;
+    answer: string | null;
+  }>;
 }
