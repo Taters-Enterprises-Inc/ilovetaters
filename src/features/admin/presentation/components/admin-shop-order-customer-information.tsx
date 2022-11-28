@@ -132,10 +132,6 @@ export function AdminShopOrderCustomerInformation() {
       }
     }
 
-    if (getAdminShopOrderState.data?.discount) {
-      calculatedPrice -= parseInt(getAdminShopOrderState.data?.discount);
-    }
-
     if (getAdminShopOrderState.data?.reseller_discount) {
       calculatedPrice -= parseInt(
         getAdminShopOrderState.data?.reseller_discount
