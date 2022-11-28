@@ -542,8 +542,10 @@ export function ShopOrder() {
                     +{" "}
                     <NumberFormat
                       value={
-                        getOrdersState.data?.grand_total
-                          ? getOrdersState.data.grand_total.toFixed(2)
+                        getOrdersState.data?.delivery_fee
+                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
+                              2
+                            )
                           : 0.0
                       }
                       displayType={"text"}
@@ -551,6 +553,24 @@ export function ShopOrder() {
                       prefix={"₱"}
                     />
                   </span>
+
+                  {getOrdersState.data?.cod_fee &&
+                  getOrdersState.data?.cod_fee !== "0" ? (
+                    <>
+                      <span>COD Charge:</span>
+                      <span className="text-end">
+                        +{" "}
+                        <NumberFormat
+                          value={parseInt(getOrdersState.data.cod_fee).toFixed(
+                            2
+                          )}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
 
                   {getOrdersState.data?.order.clients_info.discount_name &&
                   getOrdersState.data?.order.clients_info.discount ? (
