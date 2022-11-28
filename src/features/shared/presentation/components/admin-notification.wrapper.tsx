@@ -24,6 +24,13 @@ export function AdminNotificationWrapper() {
     const snackshopChannel = pusher.subscribe("admin-snackshop");
 
     snackshopChannel.bind("order-transaction", (data: TransactionParam) => {
+      console.log(
+        getAdminSessionState.data?.is_admin,
+        getAdminSessionState.data?.is_csr_admin,
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      );
       if (
         getAdminSessionState.data?.is_admin ||
         getAdminSessionState.data?.is_csr_admin ||
@@ -36,7 +43,7 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-  }, []);
+  }, [getAdminSessionState, dispatch]);
 
   useEffect(() => {
     pusher.unsubscribe("admin-catering");
@@ -55,7 +62,7 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-  }, []);
+  }, [getAdminSessionState, dispatch]);
 
   useEffect(() => {
     pusher.unsubscribe("admin-popclub");
@@ -77,7 +84,7 @@ export function AdminNotificationWrapper() {
         }
       }
     );
-  }, []);
+  }, [getAdminSessionState, dispatch]);
 
   return (
     <>
