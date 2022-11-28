@@ -11,9 +11,10 @@ export interface AdminCateringBookingModel {
   message: string;
   event_class: string;
   company_name: string;
-  discount: string;
   discount_user_id: string;
-  discount_name: string;
+  discount: string | null;
+  discount_name: string | null;
+  discount_percentage: string | null;
   hash_key: string;
 
   service_fee: number;

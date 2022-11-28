@@ -8,8 +8,8 @@ export interface AdminUserDiscountModel {
   id_front: string;
   id_back: string;
   dateadded: string;
-  discount_type_id: number;
-  discount_type_name: string;
+  discount_id: number;
+  discount_name: string;
   status: number;
 
   fb_first_name: string;

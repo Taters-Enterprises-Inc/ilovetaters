@@ -302,7 +302,7 @@ export function CateringCheckout() {
         <>
           <span>
             {percentage * 100}%{" "}
-            {getAvailableUserDiscountState.data.discount_type_name}:
+            {getAvailableUserDiscountState.data.discount_name}:
           </span>
           <span className="text-end">
             -{" "}
@@ -768,21 +768,25 @@ export function CateringCheckout() {
                   <hr className="mt-1 mb-2 border-secondary" />
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
-                    <span className="text-end">{calculateSubTotalPrice()}</span>
+                    <span className="text-end">
+                      + {calculateSubTotalPrice()}
+                    </span>
                     {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
-                    <span className="text-end">{calculateServiceCharge()}</span>
+                    <span className="text-end">
+                      + {calculateServiceCharge()}
+                    </span>
                     <span>Transportation Fee:</span>
                     <span className="text-end">
-                      {calculateTransportationFee()}
+                      + {calculateTransportationFee()}
                     </span>
                     <span>Additional Hour Fee:</span>
                     <span className="text-end">
-                      {calculateSucceedingHourCharge()}
+                      + {calculateSucceedingHourCharge()}
                     </span>
                     <span>Night Differential Fee:</span>
                     <span className="text-end">
-                      {calculateNightDifferentialFee()}
+                      + {calculateNightDifferentialFee()}
                     </span>
                   </div>
 

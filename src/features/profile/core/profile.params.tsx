@@ -6,7 +6,7 @@ export interface ApplyUserDiscountParam {
   idNumber: string;
   idFront: string;
   idBack: string;
-  discountTypeId: number;
+  discountId: number;
 }
 
 export interface UpdateUserDiscountParam {
@@ -18,5 +18,5 @@ export interface UpdateUserDiscountParam {
   idNumber: string;
   idFront: string;
   idBack: string;
-  discountTypeId: number;
+  discountId: number;
 }

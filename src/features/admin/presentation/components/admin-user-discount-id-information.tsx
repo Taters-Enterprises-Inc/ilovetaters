@@ -127,7 +127,7 @@ export function AdminIdUserDiscountInformation(
             <div>
               <strong>Discount Type:</strong>{" "}
               <span className="font-semibold">
-                {getAdminUserDiscountState.data?.discount_type_name ?? "N/A"}
+                {getAdminUserDiscountState.data?.discount_name ?? "N/A"}
               </span>
             </div>
           </div>

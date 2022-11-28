@@ -91,11 +91,11 @@ export function AdminCateringBookingCustomerInformation() {
     dispatch(getAdminStores());
   }, [dispatch]);
 
-  const calculateWithZeroIfNoValue = (value: number) => {
+  const calculateWithZeroIfNoValue = (value: string) => {
     if (value)
       return (
         <NumberFormat
-          value={value.toFixed(2)}
+          value={parseInt(value).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -545,11 +545,12 @@ export function AdminCateringBookingCustomerInformation() {
                       </td>
                     </tr>
                   ))}
-                  <tr className="text-end">
+                  <tr className="text-end ">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -560,23 +561,12 @@ export function AdminCateringBookingCustomerInformation() {
                       />
                     </td>
                   </tr>
-                  {getAdminCateringBookingState?.data?.discount && (
-                    <tr className="text-end">
-                      <td colSpan={4} className="px-6 py-2 font-bold">
-                        {getAdminCateringBookingState?.data.discount_name}
-                      </td>
-                      <td className="px-6 py-2">
-                        {calculateWithZeroIfNoValue(
-                          parseInt(getAdminCateringBookingState?.data.discount)
-                        )}
-                      </td>
-                    </tr>
-                  )}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -588,13 +578,33 @@ export function AdminCateringBookingCustomerInformation() {
                     </td>
                   </tr>
 
+                  {getAdminCateringBookingState.data.discount &&
+                  getAdminCateringBookingState.data.discount_percentage &&
+                  getAdminCateringBookingState.data.discount_name ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold ">
+                        {parseFloat(
+                          getAdminCateringBookingState.data.discount_percentage
+                        ) * 100}
+                        % {getAdminCateringBookingState.data.discount_name}
+                      </td>
+                      <td className="px-6 py-2 w-[150px]">
+                        -{" "}
+                        {calculateWithZeroIfNoValue(
+                          getAdminCateringBookingState.data.discount
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Service Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.service_fee
+                        getAdminCateringBookingState.data.service_fee.toString()
                       )}
                     </td>
                   </tr>
@@ -602,11 +612,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Transportation Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        parseInt(
-                          getAdminCateringBookingState.data.distance_price
-                        )
+                        getAdminCateringBookingState.data.distance_price
                       )}
                     </td>
                   </tr>
@@ -614,9 +623,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Additional Hour Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.additional_hour_charge
+                        getAdminCateringBookingState.data.additional_hour_charge.toString()
                       )}
                     </td>
                   </tr>
@@ -624,9 +634,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Night differential Charge:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.night_diff_fee
+                        getAdminCateringBookingState.data.night_diff_fee.toString()
                       )}
                     </td>
                   </tr>
@@ -634,7 +645,9 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -696,6 +709,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -709,6 +723,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -719,19 +734,40 @@ export function AdminCateringBookingCustomerInformation() {
                     />
                   </span>
                 </div>
+
+                {getAdminCateringBookingState.data.discount &&
+                getAdminCateringBookingState.data.discount_percentage &&
+                getAdminCateringBookingState.data.discount_name ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {parseFloat(
+                        getAdminCateringBookingState.data.discount_percentage
+                      ) * 100}
+                      % {getAdminCateringBookingState.data.discount_name}:
+                    </span>
+                    <span className="text-sm text-end">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.discount
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Service Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.service_fee
+                      getAdminCateringBookingState.data.service_fee.toString()
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Transportation Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      parseInt(getAdminCateringBookingState.data.distance_price)
+                      getAdminCateringBookingState.data.distance_price
                     )}
                   </span>
                 </div>
@@ -740,8 +776,9 @@ export function AdminCateringBookingCustomerInformation() {
                     Additional Hour Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.additional_hour_charge
+                      getAdminCateringBookingState.data.additional_hour_charge.toString()
                     )}
                   </span>
                 </div>
@@ -750,8 +787,9 @@ export function AdminCateringBookingCustomerInformation() {
                     Night differential Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.night_diff_fee
+                      getAdminCateringBookingState.data.night_diff_fee.toString()
                     )}
                   </span>
                 </div>

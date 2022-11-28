@@ -681,14 +681,31 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">{calculateOrderTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      + {calculateOrderTotal()}
+                    </td>
                   </tr>
-                  {getAdminShopOrderState.data.discount ? (
+                  <tr className="text-end">
+                    <td colSpan={4} className="px-6 py-2 font-bold">
+                      Subtotal:
+                    </td>
+                    <td className="px-6 py-2 w-[150px]">
+                      + {calculateSubTotal()}
+                    </td>
+                  </tr>
+
+                  {getAdminShopOrderState.data.discount &&
+                  getAdminShopOrderState.data.discount_percentage &&
+                  getAdminShopOrderState.data.discount_name ? (
                     <tr className="text-end">
                       <td colSpan={4} className="px-6 py-2 font-bold ">
-                        {getAdminShopOrderState.data.discount_name}
+                        {parseFloat(
+                          getAdminShopOrderState.data.discount_percentage
+                        ) * 100}
+                        % {getAdminShopOrderState.data.discount_name}
                       </td>
-                      <td className="px-6 py-2">
+                      <td className="px-6 py-2 w-[150px]">
+                        -{" "}
                         {calculateWithZeroIfNoValue(
                           getAdminShopOrderState.data.discount
                         )}
@@ -697,25 +714,10 @@ export function AdminShopOrderCustomerInformation() {
                   ) : null}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
-                      Gift Card No.[ 0 ]:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminShopOrderState.data.giftcard_discount
-                      )}
-                    </td>
-                  </tr>
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
-                      Subtotal:
-                    </td>
-                    <td className="px-6 py-2">{calculateSubTotal()}</td>
-                  </tr>
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
                       Delivery Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2  w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.distance_price
                       )}
@@ -725,7 +727,8 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       COD Additional Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.cod_fee
                       )}
@@ -851,36 +854,37 @@ export function AdminShopOrderCustomerInformation() {
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
-                    {calculateOrderTotal()}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-bold">
-                    Code[ ] Voucher Discount:
-                  </span>
-                  <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminShopOrderState.data.discount
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
-                  <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminShopOrderState.data.discount
-                    )}
+                    + {calculateOrderTotal()}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
-                    {calculateSubTotal()}
+                    + {calculateSubTotal()}
                   </span>
                 </div>
+                {getAdminShopOrderState.data.discount &&
+                getAdminShopOrderState.data.discount_percentage &&
+                getAdminShopOrderState.data.discount_name ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {parseFloat(
+                        getAdminShopOrderState.data.discount_percentage
+                      ) * 100}
+                      % {getAdminShopOrderState.data.discount_name}:
+                    </span>
+                    <span className="text-sm text-end">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminShopOrderState.data.discount
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Delivery Fee:</span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.distance_price
                     )}
@@ -891,6 +895,7 @@ export function AdminShopOrderCustomerInformation() {
                     COD Additional Charges:
                   </span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.cod_fee
                     )}

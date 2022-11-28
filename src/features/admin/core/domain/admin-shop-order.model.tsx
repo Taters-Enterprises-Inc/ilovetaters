@@ -5,8 +5,9 @@ export interface AdminShopOrderModel {
   tracking_no: string;
   purchase_amount: string;
   distance_price: string;
-  discount: string;
+  discount: string | null;
   discount_name: string | null;
+  discount_percentage: string | null;
   reseller_discount: string;
   giftcard_discount: string;
   cod_fee: string;

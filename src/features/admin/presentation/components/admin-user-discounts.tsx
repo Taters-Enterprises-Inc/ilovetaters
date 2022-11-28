@@ -29,7 +29,7 @@ import { AdminChipsButton } from "./chips-button";
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "appDate", label: "Application Date" },
-  { id: "discount_type", label: "Discount Type" },
+  { id: "discount_name", label: "Discount Type" },
   { id: "full_name", label: "Full Name" },
   { id: "birthday", label: "Birthday" },
   { id: "id_number", label: "ID Number" },
@@ -342,7 +342,7 @@ export function AdminUserDiscounts() {
                       <DataTableCell>
                         <Moment format="lll">{row.dateadded}</Moment>
                       </DataTableCell>
-                      <DataTableCell>{row.discount_type_name}</DataTableCell>
+                      <DataTableCell>{row.discount_name}</DataTableCell>
                       <DataTableCell>
                         {row.first_name} {row.middle_name} {row.last_name}
                       </DataTableCell>

@@ -312,7 +312,7 @@ export function ShopCheckout() {
         <>
           <span>
             {percentage * 100}%{" "}
-            {getAvailableUserDiscountState.data.discount_type_name}:
+            {getAvailableUserDiscountState.data.discount_name}:
           </span>
           <span className="text-end">
             -{" "}
@@ -739,14 +739,17 @@ export function ShopCheckout() {
                     <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
-                        {calculateSubTotalPrice()}
+                        + {calculateSubTotalPrice()}
                       </span>
                       <span>Delivery Fee:</span>
-                      <span className="text-end">{calculateDeliveryFee()}</span>
+                      <span className="text-end">
+                        + {calculateDeliveryFee()}
+                      </span>
                       {cashOnDelivery ? (
                         <>
                           <span>COD charge:</span>
                           <span className="text-end">
+                            +{" "}
                             <NumberFormat
                               value={cashOnDelivery.toFixed(2)}
                               displayType={"text"}

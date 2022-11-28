@@ -168,6 +168,7 @@ export function CateringSignedContractIsOnVerification() {
           <div className="grid grid-cols-2 text-secondary">
             <span>Subtotal:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.order.clients_info.purchase_amount
@@ -181,6 +182,7 @@ export function CateringSignedContractIsOnVerification() {
               <>
                 <span>10% Service Charge:</span>
                 <span className="text-end">
+                  +
                   <NumberFormat
                     value={getCateringOrdersState.data.service_fee.toFixed(2)}
                     displayType={"text"}
@@ -192,6 +194,7 @@ export function CateringSignedContractIsOnVerification() {
             ) : null}
             <span>Transportation Fee:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.transportation_fee
@@ -203,6 +206,7 @@ export function CateringSignedContractIsOnVerification() {
             </span>
             <span>Additional Hour Fee:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.additional_hour_fee
@@ -214,6 +218,7 @@ export function CateringSignedContractIsOnVerification() {
             </span>
             <span>Night Differential Fee:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={getCateringOrdersState.data.night_diff_charge.toFixed(2)}
                 displayType={"text"}
@@ -222,9 +227,16 @@ export function CateringSignedContractIsOnVerification() {
               />
             </span>
             {getCateringOrdersState.data.order.clients_info.discount &&
-            getCateringOrdersState.data.order.clients_info.discount_name ? (
+            getCateringOrdersState.data.order.clients_info.discount_name &&
+            getCateringOrdersState.data.order.clients_info
+              .discount_percentage ? (
               <>
                 <span>
+                  {parseFloat(
+                    getCateringOrdersState.data?.order.clients_info
+                      .discount_percentage
+                  ) * 100}
+                  %{" "}
                   {getCateringOrdersState.data.order.clients_info.discount_name}
                 </span>
                 <span className="text-end">
