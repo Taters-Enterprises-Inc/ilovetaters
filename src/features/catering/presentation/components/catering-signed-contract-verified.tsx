@@ -194,6 +194,26 @@ export function CateringSignedContractVerified() {
                 prefix={"₱"}
               />
             </span>
+
+            {getCateringOrdersState.data.order.clients_info.discount &&
+            getCateringOrdersState.data.order.clients_info.discount_name ? (
+              <>
+                <span>
+                  {getCateringOrdersState.data.order.clients_info.discount_name}
+                </span>
+                <span className="text-end">
+                  -{" "}
+                  <NumberFormat
+                    value={parseInt(
+                      getCateringOrdersState.data.order.clients_info.discount
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </span>
+              </>
+            ) : null}
           </div>
 
           <h1 className="text-4xl text-center text-secondary">

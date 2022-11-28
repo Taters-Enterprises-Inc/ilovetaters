@@ -259,7 +259,9 @@ export function CateringContractViewer() {
                 </td>
               </tr>
 
-              {getCateringOrdersState.data.order.clients_info.discount ? (
+              {getCateringOrdersState.data.order.clients_info.discount &&
+              getCateringOrdersState.data.order.clients_info
+                .discount_percentage ? (
                 <tr>
                   <td></td>
                   <td></td>
