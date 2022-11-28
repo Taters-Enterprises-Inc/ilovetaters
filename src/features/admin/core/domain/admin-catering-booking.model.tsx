@@ -12,7 +12,7 @@ export interface AdminCateringBookingModel {
   event_class: string;
   company_name: string;
   discount: string;
-  discount_id: string;
+  discount_user_id: string;
   discount_name: string;
   hash_key: string;
 
