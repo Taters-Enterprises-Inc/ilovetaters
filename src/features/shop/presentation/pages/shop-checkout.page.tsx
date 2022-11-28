@@ -487,8 +487,11 @@ export function ShopCheckout() {
                     name="landmarkAddress"
                     fullWidth
                     autoComplete="off"
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     value={formState.landmarkAddress}
-                    onChange={handleInputChange}
+                    onChange={() => {}}
                   />
 
                   <MaterialInput

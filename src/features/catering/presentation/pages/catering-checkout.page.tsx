@@ -468,6 +468,9 @@ export function CateringCheckout() {
                         autoComplete="off"
                         name="eventStartDate"
                         value={formState.eventStartDate}
+                        InputProps={{
+                          readOnly: true,
+                        }}
                         onChange={() => {}}
                         fullWidth
                       />
@@ -483,6 +486,9 @@ export function CateringCheckout() {
                         required
                         autoComplete="off"
                         name="eventEndDate"
+                        InputProps={{
+                          readOnly: true,
+                        }}
                         value={formState.eventEndDate}
                         onChange={() => {}}
                         fullWidth
@@ -502,6 +508,9 @@ export function CateringCheckout() {
                       colorTheme="black"
                       name="servingTime"
                       value={formState.servingTime}
+                      InputProps={{
+                        readOnly: true,
+                      }}
                       onChange={() => {}}
                       fullWidth
                     />
@@ -575,11 +584,13 @@ export function CateringCheckout() {
 
                   <MaterialInput
                     required
-                    aria-readonly
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     colorTheme="black"
                     name="eventAddress"
                     value={formState.eventAddress}
-                    onChange={handleInputChange}
+                    onChange={() => {}}
                     fullWidth
                     autoComplete="off"
                   />
