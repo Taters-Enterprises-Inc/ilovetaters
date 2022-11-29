@@ -429,7 +429,7 @@ export function CateringOrder() {
 
             {getCateringOrdersState.data &&
             getCateringOrdersState.data.package_selection ? (
-              <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+              <div className="space-y-4 lg:flex-[0_0_36%] bg-paper w-full lg:max-w-[36%] lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
                 <h2 className="font-['Bebas_Neue'] text-4xl  text-secondary tracking-[3px] text-center">
                   Order Summary
                 </h2>

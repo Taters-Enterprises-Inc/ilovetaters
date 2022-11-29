@@ -670,6 +670,19 @@ export function ShopCheckout() {
                                   getSessionState.data.redeem_data.deal_remarks,
                               }}
                             />
+                            {getSessionState.data.redeem_data
+                              .deal_promo_price ? (
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
+                                    2
+                                  )}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            ) : null}
                           </div>
                         </div>
                       </div>
