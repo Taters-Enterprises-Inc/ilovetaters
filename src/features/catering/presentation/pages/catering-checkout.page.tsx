@@ -272,7 +272,8 @@ export function CateringCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(cateringCheckoutOrders(formState));
+    // dispatch(cateringCheckoutOrders(formState));
+    console.log(formState);
     e.preventDefault();
   };
 
@@ -318,22 +319,6 @@ export function CateringCheckout() {
     }
 
     return null;
-  };
-
-  const handlePaymentMethodChange = (payment: string) => {
-    setFormState({
-      ...formState,
-      payops: payment,
-    });
-    if (
-      getSessionState.data &&
-      getSessionState.data.cash_delivery &&
-      payment === "3"
-    ) {
-      setCashOnDelivery(parseInt(getSessionState.data.cash_delivery));
-    } else {
-      setCashOnDelivery(undefined);
-    }
   };
 
   return (
@@ -645,6 +630,11 @@ export function CateringCheckout() {
                   </h2>
                   <PaymentMethod
                     onChange={(payment) => {
+                      setFormState({
+                        ...formState,
+                        payops: payment,
+                      });
+
                       if (
                         getSessionState.data &&
                         getSessionState.data.cash_delivery &&
