@@ -643,7 +643,21 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod onChange={handlePaymentMethodChange} />
+                  <PaymentMethod
+                    onChange={(payment) => {
+                      if (
+                        getSessionState.data &&
+                        getSessionState.data.cash_delivery &&
+                        payment === "3"
+                      ) {
+                        setCashOnDelivery(
+                          parseInt(getSessionState.data.cash_delivery)
+                        );
+                      } else {
+                        setCashOnDelivery(undefined);
+                      }
+                    }}
+                  />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
@@ -788,6 +802,21 @@ export function CateringCheckout() {
                     <span className="text-end">
                       + {calculateNightDifferentialFee()}
                     </span>
+
+                    {cashOnDelivery ? (
+                      <>
+                        <span>COD charge:</span>
+                        <span className="text-end">
+                          +{" "}
+                          <NumberFormat
+                            value={cashOnDelivery.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
                   </div>
 
                   <h1 className="text-4xl font-bold text-center text-secondary">

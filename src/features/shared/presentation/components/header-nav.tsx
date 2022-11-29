@@ -130,7 +130,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const handleProfileMenuClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    console.log(event.currentTarget);
     setOpenProfileMenu(event.currentTarget);
   };
 

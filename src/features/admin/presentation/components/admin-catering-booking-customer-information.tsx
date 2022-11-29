@@ -141,6 +141,9 @@ export function AdminCateringBookingCustomerInformation() {
       calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount);
     }
 
+    if (getAdminCateringBookingState.data?.cod_fee) {
+      calculatedPrice += parseInt(getAdminCateringBookingState.data?.cod_fee);
+    }
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -641,6 +644,22 @@ export function AdminCateringBookingCustomerInformation() {
                       )}
                     </td>
                   </tr>
+
+                  {getAdminCateringBookingState.data.cod_fee &&
+                  getAdminCateringBookingState.data.cod_fee !== "0" ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold">
+                        COD Additional Charges:
+                      </td>
+                      <td className="px-6 py-2">
+                        +{" "}
+                        {calculateWithZeroIfNoValue(
+                          getAdminCateringBookingState.data.cod_fee
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
@@ -793,6 +812,19 @@ export function AdminCateringBookingCustomerInformation() {
                     )}
                   </span>
                 </div>
+                {getAdminCateringBookingState.data.cod_fee &&
+                getAdminCateringBookingState.data.cod_fee !== "0" ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      COD Additional Charges:
+                    </span>
+                    <span className="text-sm text-end">
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.cod_fee
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Grand Total:</span>
                   <span className="text-sm text-end">

@@ -26,8 +26,6 @@ export function BranchesCard(props: BranchesCardProps) {
     return () => window.removeEventListener("resize", resizeFunc);
   }, []);
 
-  console.log();
-
   return (
     <div
       onClick={() => {
