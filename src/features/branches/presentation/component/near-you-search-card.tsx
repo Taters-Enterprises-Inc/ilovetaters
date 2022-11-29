@@ -28,8 +28,6 @@ export const NearyouSearchCard: React.FC<{ store: StoreModel }> = ({
     store.store_distance * 1.609344 + store.store_distance * 1.609344 * 0.5
   );
 
-  console.log();
-
   return (
     <div
       onClick={() => {

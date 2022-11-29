@@ -192,8 +192,6 @@ export function UserNotificationWrapper() {
           mobile_user_id?: number;
           message: string;
         }) => {
-          console.log(data);
-          console.log(getDealState);
           if (
             getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
             getSessionState.data?.userData.mobile_user_id ===

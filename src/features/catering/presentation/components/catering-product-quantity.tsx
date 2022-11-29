@@ -60,7 +60,6 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
       let counter = isNaN(props.quantity) ? 1 : props.quantity;
 
       interval = setInterval(function () {
-        console.log(counter);
         counter = counter + (action === "plus" ? +1 : -1);
 
         if (counter >= 1) {

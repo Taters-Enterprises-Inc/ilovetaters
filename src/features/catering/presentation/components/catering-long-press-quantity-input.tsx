@@ -128,8 +128,6 @@ export function CateringLongPressQuantityInput(
     clearInterval(interval);
   };
 
-  console.log(currentMultiFlavors);
-
   return (
     <>
       <div className="w-full sm:w-[200px] h-12">

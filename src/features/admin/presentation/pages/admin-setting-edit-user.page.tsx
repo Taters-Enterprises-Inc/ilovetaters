@@ -33,7 +33,6 @@ export function AdminSettingEditUser() {
   const getAdminUserState = useAppSelector(selectGetAdminUser);
   const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
   const editAdminUserState = useAppSelector(selectEditAdminUser);
-  console.log(getAdminUserState);
 
   useEffect(() => {
     if (editAdminUserState.status === EditAdminUserState.success) {
