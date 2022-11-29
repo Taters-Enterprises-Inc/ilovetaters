@@ -72,7 +72,7 @@ export function CateringOrder() {
   };
 
   return (
-    <>
+    <main className="bg-paper">
       <PageTitleAndBreadCrumbs
         home={{
           title: "Catering",
@@ -862,6 +862,6 @@ export function CateringOrder() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
