@@ -272,9 +272,9 @@ export function CateringCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    // dispatch(cateringCheckoutOrders(formState));
-    console.log(formState);
     e.preventDefault();
+
+    dispatch(cateringCheckoutOrders(formState));
   };
 
   const handleInputChange = (evt: any) => {
