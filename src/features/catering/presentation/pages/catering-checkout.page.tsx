@@ -46,6 +46,7 @@ export function CateringCheckout() {
 
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
   const [enableCompanyName, setEnableCompanyName] = useState(false);
+  const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const getSessionState = useAppSelector(selectGetSession);
   const addContactState = useAppSelector(selectAddContact);
@@ -186,12 +187,9 @@ export function CateringCheckout() {
       calculatedPrice += getSessionState.data.catering_night_differential_fee;
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
 
-      console.log(
-        getSessionState.data.distance_rate_price,
-        getSessionState.data.catering_night_differential_fee,
-        getSessionState.data.catering_succeeding_hour_charge,
-        calculatedPrice * service_charge_percentage
-      );
+      if (cashOnDelivery) {
+        calculatedPrice += cashOnDelivery;
+      }
 
       return (
         <NumberFormat
@@ -554,7 +552,21 @@ export function CateringCheckout() {
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod onChange={(payment) => {}} />
+                  <PaymentMethod
+                    onChange={(payment) => {
+                      if (
+                        getSessionState.data &&
+                        getSessionState.data.cash_delivery &&
+                        payment === "3"
+                      ) {
+                        setCashOnDelivery(
+                          parseInt(getSessionState.data.cash_delivery)
+                        );
+                      } else {
+                        setCashOnDelivery(undefined);
+                      }
+                    }}
+                  />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
@@ -694,6 +706,20 @@ export function CateringCheckout() {
                     <span className="text-end">
                       {calculateNightDifferentialFee()}
                     </span>
+
+                    {cashOnDelivery ? (
+                      <>
+                        <span>COD charge:</span>
+                        <span className="text-end">
+                          <NumberFormat
+                            value={cashOnDelivery.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
                   </div>
 
                   <h1 className="text-4xl font-bold text-center text-secondary">

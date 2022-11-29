@@ -494,6 +494,22 @@ export function CateringOrder() {
                       prefix={"₱"}
                     />
                   </span>
+                  {getCateringOrdersState.data.cod_fee &&
+                  getCateringOrdersState.data.cod_fee !== "0" ? (
+                    <>
+                      <span>Cash On Delivery Charge:</span>
+                      <span className="text-end">
+                        <NumberFormat
+                          value={parseInt(
+                            getCateringOrdersState.data.cod_fee
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
                 </div>
                 <hr className="mt-1 border-secondary" />
 
@@ -554,6 +570,7 @@ export function CateringOrder() {
                       <span
                         className={`${
                           getCateringOrdersState.data.status === 6 ||
+                          getCateringOrdersState.data.status === 7 ||
                           getCateringOrdersState.data.status === 8 ||
                           getCateringOrdersState.data.status === 9
                             ? "line-through"
@@ -565,6 +582,7 @@ export function CateringOrder() {
                       <span
                         className={`text-end uppercase ${
                           getCateringOrdersState.data.status === 6 ||
+                          getCateringOrdersState.data.status === 7 ||
                           getCateringOrdersState.data.status === 8 ||
                           getCateringOrdersState.data.status === 9
                             ? "line-through"

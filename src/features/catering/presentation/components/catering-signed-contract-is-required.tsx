@@ -215,6 +215,22 @@ export function CateringSignedContractIsRequired() {
                 prefix={"₱"}
               />
             </span>
+            {getCateringOrdersState.data.cod_fee &&
+            getCateringOrdersState.data.cod_fee !== "0" ? (
+              <>
+                <span>Cash On Delivery Charge :</span>
+                <span className="text-end">
+                  <NumberFormat
+                    value={parseInt(
+                      getCateringOrdersState.data.cod_fee
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </span>
+              </>
+            ) : null}
           </div>
 
           <h1 className="text-4xl text-center text-secondary">

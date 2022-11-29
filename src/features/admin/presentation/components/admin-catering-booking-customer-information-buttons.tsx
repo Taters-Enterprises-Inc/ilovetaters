@@ -116,7 +116,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           style={{ opacity: 0.65 }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
         >
-          Booking Confirmed
+          Contract Verified
         </button>
       );
     } else if (
