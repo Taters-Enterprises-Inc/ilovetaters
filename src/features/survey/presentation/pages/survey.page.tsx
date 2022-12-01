@@ -40,7 +40,7 @@ import {
   selectGetCustomerSurveyResponse,
 } from "../slices/get-customer-survey-response.slice";
 
-export function CustomerSurvey() {
+export function Survey() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const query = useQuery();
@@ -68,11 +68,15 @@ export function CustomerSurvey() {
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
   );
+  const getAllStoresState = useAppSelector(selectGetAllStores);
   const getCustomerSurveyResponseState = useAppSelector(
     selectGetCustomerSurveyResponse
   );
 
-  const getAllStoresState = useAppSelector(selectGetAllStores);
+  useEffect(() => {
+    dispatch(getSurvey());
+    dispatch(getAllStores());
+  }, [dispatch]);
 
   useEffect(() => {
     if (
@@ -80,34 +84,12 @@ export function CustomerSurvey() {
         GetCustomerSurveyResponseState.success &&
       getCustomerSurveyResponseState.data
     ) {
-      let oldFormState: CustomerSurveyQuestionResponseAnswer = {};
-      for (
-        let i = 0;
-        i < getCustomerSurveyResponseState.data.answers.length;
-        i++
-      ) {
-        const answer = getCustomerSurveyResponseState.data.answers[i];
-
-        oldFormState = {
-          ...oldFormState,
-          [answer.survey_question_id]: {
-            surveyQuestionId: answer.survey_question_id,
-            surveyQuestionOfferedAnswerId:
-              answer.survey_question_offered_answer_id,
-            otherText: answer.other_text,
-          },
-        };
-      }
-
-      setFormState(oldFormState);
+      navigate(`complete?service=${service}&hash=${hash}`);
     }
-  }, [getCustomerSurveyResponseState]);
+  }, [dispatch, getCustomerSurveyResponseState, navigate, service, hash]);
 
   useEffect(() => {
-    dispatch(getSurvey());
-    dispatch(getAllStores());
-
-    if (hash != null && service != null) {
+    if (hash && service) {
       dispatch(
         getCustomerSurveyResponse({
           hash,
@@ -115,7 +97,7 @@ export function CustomerSurvey() {
         })
       );
     }
-  }, [dispatch]);
+  }, [dispatch, hash, service, insertCustomerSurveyResponseState]);
 
   useEffect(() => {
     if (
@@ -132,7 +114,6 @@ export function CustomerSurvey() {
       insertCustomerSurveyResponseState.status ===
       InsertCustomerSurveyResponseState.success
     ) {
-      navigate("complete");
       dispatch(resetInsertCustomerSurveyResponse());
       dispatch(
         popUpSnackBar({
@@ -333,46 +314,18 @@ export function CustomerSurvey() {
               ) : null}
 
               <div className="flex flex-col items-center justify-end pb-1 space-y-2 lg:space-y-0 lg:flex-row">
-                {getCustomerSurveyResponseState.data === undefined ? (
-                  <button
-                    type="submit"
-                    className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      {getSurveyState.data.length - 1 === surveyNumber
-                        ? "Submit"
-                        : "Continue"}
-                    </span>
-                  </button>
-                ) : null}
+                <button
+                  type="submit"
+                  className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
+                >
+                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                    {getSurveyState.data.length - 1 === surveyNumber
+                      ? "Submit"
+                      : "Continue"}
+                  </span>
+                </button>
 
-                {surveyNumber + 1 < getSurveyState.data.length &&
-                getCustomerSurveyResponseState.data ? (
-                  <button
-                    type="submit"
-                    className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Continue
-                    </span>
-                  </button>
-                ) : null}
-
-                {surveyNumber >= 0 && service === null && hash === null ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSurveyNumber(surveyNumber - 1);
-                    }}
-                    className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Go Back
-                    </span>
-                  </button>
-                ) : null}
-
-                {surveyNumber > 0 && service && hash ? (
+                {surveyNumber >= 0 ? (
                   <button
                     type="button"
                     onClick={() => {

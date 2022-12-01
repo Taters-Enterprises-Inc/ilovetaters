@@ -1,8 +1,11 @@
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { SurveyResponseModal } from "../modals";
 
-export function CustomerSurveyComplete() {
+export function SurveyComplete() {
+  const [openSurveyResponseModal, setOpenSurveyResponseModal] = useState(false);
+
   return (
     <>
       <Helmet>
@@ -31,10 +34,20 @@ export function CustomerSurveyComplete() {
               </section>
             </div>
 
-            <div className="flex items-center justify-center py-4">
+            <div className="flex items-center justify-center py-4 space-x-2">
+              <button
+                onClick={() => {
+                  setOpenSurveyResponseModal(true);
+                }}
+                className="text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg"
+              >
+                <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                  Check Answers
+                </span>
+              </button>
               <Link
                 to="/"
-                className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg`}
+                className="text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg"
               >
                 <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                   VISIT SITE
@@ -45,6 +58,13 @@ export function CustomerSurveyComplete() {
           </div>
         </section>
       </main>
+
+      <SurveyResponseModal
+        open={openSurveyResponseModal}
+        onClose={() => {
+          setOpenSurveyResponseModal(false);
+        }}
+      />
     </>
   );
 }

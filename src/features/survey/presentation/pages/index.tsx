@@ -1,2 +1,2 @@
-export { CustomerSurvey } from "./customer-survey.page";
-export { CustomerSurveyComplete } from "./customer-survey-complete.page";
+export { Survey } from "./survey.page";
+export { SurveyComplete } from "./survey-complete.page";

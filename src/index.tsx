@@ -93,10 +93,7 @@ import {
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
-import {
-  CustomerSurvey,
-  CustomerSurveyComplete,
-} from "features/survey/presentation/pages";
+import { Survey, SurveyComplete } from "features/survey/presentation/pages";
 
 import {
   BSCLogin,
@@ -267,7 +264,7 @@ root.render(
                           <Route path="faq">
                             <Route index element={<AdminFaq />} />
                             <Route path="store" element={<AdminFaq />} />
-                            <Route path="customer" element={<AdminCFaq />} />
+                            <Route path="" element={<AdminCFaq />} />
                           </Route>
 
                           <Route path="raffle">
@@ -379,11 +376,8 @@ root.render(
                   </Route>
 
                   <Route path="survey">
-                    <Route index element={<CustomerSurvey />} />
-                    <Route
-                      path="complete"
-                      element={<CustomerSurveyComplete />}
-                    />
+                    <Route index element={<Survey />} />
+                    <Route path="complete" element={<SurveyComplete />} />
                   </Route>
                 </Route>
               </Route>

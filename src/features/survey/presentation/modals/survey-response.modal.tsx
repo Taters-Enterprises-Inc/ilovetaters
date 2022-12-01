@@ -1,18 +1,42 @@
 import { IoMdClose } from "react-icons/io";
-import { selectGetAdminSurveyVerification } from "../slices/get-admin-survey-verification.slice";
-import { useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import {
+  getCustomerSurveyResponse,
+  GetCustomerSurveyResponseState,
+  selectGetCustomerSurveyResponse,
+} from "../slices/get-customer-survey-response.slice";
+import { useEffect } from "react";
 
-interface AdminSurveyAnswerSheetModalProps {
+interface SurveyResponseModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function AdminSurveyAnswerSheetModal(
-  props: AdminSurveyAnswerSheetModalProps
-) {
-  const getAdminSurveyVerificationState = useAppSelector(
-    selectGetAdminSurveyVerification
+export function SurveyResponseModal(props: SurveyResponseModalProps) {
+  const query = useQuery();
+  const dispatch = useAppDispatch();
+
+  const service = query.get("service");
+  const hash = query.get("hash");
+
+  const getCustomerSurveyResponseState = useAppSelector(
+    selectGetCustomerSurveyResponse
   );
+
+  useEffect(() => {
+    if (hash && service) {
+      dispatch(
+        getCustomerSurveyResponse({
+          hash,
+          service,
+        })
+      );
+    }
+  }, [hash, service, dispatch]);
 
   if (props.open) {
     const surveyVerificationModal = document.getElementById(
@@ -35,7 +59,7 @@ export function AdminSurveyAnswerSheetModal(
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-          <span className="text-2xl text-white">Survey Answer Sheet</span>
+          <span className="text-2xl text-white">Survey Response</span>
           <button
             className="text-2xl text-white"
             onClick={() => {
@@ -48,7 +72,7 @@ export function AdminSurveyAnswerSheetModal(
         </div>
 
         <div className="px-4 py-2 space-y-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
-          {getAdminSurveyVerificationState.data?.answers.map((survey) => (
+          {getCustomerSurveyResponseState.data?.answers.map((survey) => (
             <div>
               <span className="font-bold">{survey.question}</span>
               <br />
