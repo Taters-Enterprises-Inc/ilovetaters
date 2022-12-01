@@ -434,6 +434,7 @@ export function ShopCheckout() {
                         required
                         label="E-mail"
                         name="eMail"
+                        type="email"
                         fullWidth
                         value={formState.eMail}
                         onChange={handleInputChange}
