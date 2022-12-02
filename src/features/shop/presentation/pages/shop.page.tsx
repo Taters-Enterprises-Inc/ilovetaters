@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useAppDispatch } from "features/config/hooks";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { Helmet } from "react-helmet-async";
+import { Outlet } from "react-router-dom";
 
 import { useEffect } from "react";
 

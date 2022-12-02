@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
+import { Helmet } from "react-helmet-async";
+import { Outlet } from "react-router-dom";
 
 export function Profile() {
   return (

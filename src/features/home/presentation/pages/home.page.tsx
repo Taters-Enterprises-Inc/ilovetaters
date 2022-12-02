@@ -1,14 +1,14 @@
-import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { useEffect } from "react";
+import { useAppDispatch } from "features/config/hooks";
 import {
   REACT_APP_DOMAIN_URL,
   SERVICES_DESKTOP,
   SERVICES_MOBILE,
 } from "features/shared/constants";
-import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch } from "features/config/hooks";
+import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
-import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link, useLocation } from "react-router-dom";
 
 export function Home() {
   const dispatch = useAppDispatch();

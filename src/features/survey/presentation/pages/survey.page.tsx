@@ -7,38 +7,38 @@ import {
   MaterialDateInput,
   MaterialInput,
 } from "features/shared/presentation/components";
-import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-import { Helmet } from "react-helmet";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
-import {
-  selectGetSurvey,
-  getSurvey,
-  GetSurveyState,
-} from "features/survey/presentation/slices/get-survey.slice";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import {
-  insertCustomerSurveyResponse,
-  InsertCustomerSurveyResponseState,
-  resetInsertCustomerSurveyResponse,
-  selectInsertCustomerSurveyResponse,
-} from "../slices/insert-customer-survey-response.slice";
-import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
-import { useNavigate } from "react-router-dom";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import {
   getAllStores,
   GetAllStoresState,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
+import {
+  getSurvey,
+  GetSurveyState,
+  selectGetSurvey,
+} from "features/survey/presentation/slices/get-survey.slice";
+import { useNavigate } from "react-router-dom";
 import {
   getCustomerSurveyResponse,
   GetCustomerSurveyResponseState,
   selectGetCustomerSurveyResponse,
 } from "../slices/get-customer-survey-response.slice";
+import {
+  insertCustomerSurveyResponse,
+  InsertCustomerSurveyResponseState,
+  resetInsertCustomerSurveyResponse,
+  selectInsertCustomerSurveyResponse,
+} from "../slices/insert-customer-survey-response.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
