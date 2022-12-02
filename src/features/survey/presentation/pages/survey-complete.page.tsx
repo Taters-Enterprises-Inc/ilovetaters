@@ -1,9 +1,15 @@
+import { useQuery } from "features/config/hooks";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { SurveyResponseModal } from "../modals";
 
 export function SurveyComplete() {
+  const query = useQuery();
+
+  const service = query.get("service");
+  const hash = query.get("hash");
+
   const [openSurveyResponseModal, setOpenSurveyResponseModal] = useState(false);
 
   return (
@@ -35,16 +41,18 @@ export function SurveyComplete() {
             </div>
 
             <div className="flex items-center justify-center py-4 space-x-2">
-              <button
-                onClick={() => {
-                  setOpenSurveyResponseModal(true);
-                }}
-                className="text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg"
-              >
-                <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                  Check Answers
-                </span>
-              </button>
+              {service && hash ? (
+                <button
+                  onClick={() => {
+                    setOpenSurveyResponseModal(true);
+                  }}
+                  className="text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg"
+                >
+                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                    Check Answers
+                  </span>
+                </button>
+              ) : null}
               <Link
                 to="/"
                 className="text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#000000] py-2 w-[400px] rounded-lg shadow-lg"

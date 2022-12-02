@@ -37,6 +37,7 @@ import {
 import {
   getCustomerSurveyResponse,
   GetCustomerSurveyResponseState,
+  resetGetCustomerSurveyResponse,
   selectGetCustomerSurveyResponse,
 } from "../slices/get-customer-survey-response.slice";
 
@@ -86,6 +87,8 @@ export function Survey() {
     ) {
       navigate(`complete?service=${service}&hash=${hash}`);
     }
+
+    dispatch(resetGetCustomerSurveyResponse());
   }, [dispatch, getCustomerSurveyResponseState, navigate, service, hash]);
 
   useEffect(() => {
@@ -97,7 +100,7 @@ export function Survey() {
         })
       );
     }
-  }, [dispatch, hash, service, insertCustomerSurveyResponseState]);
+  }, [dispatch, hash, service, insertCustomerSurveyResponseState, navigate]);
 
   useEffect(() => {
     if (
@@ -121,8 +124,12 @@ export function Survey() {
           severity: "success",
         })
       );
+
+      if (hash == null && service == null) {
+        navigate("complete");
+      }
     }
-  }, [insertCustomerSurveyResponseState, dispatch, navigate]);
+  }, [insertCustomerSurveyResponseState, dispatch, navigate, hash, service]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
