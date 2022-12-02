@@ -54,8 +54,8 @@ export function PaymentMethod(props: PaymentMethodProps) {
   return (
     <>
       <ul className="flex space-x-2">
-        {PAYMENT_OPTIONS.map((option) => (
-          <li>
+        {PAYMENT_OPTIONS.map((option, i) => (
+          <li key={i}>
             <button
               type="button"
               onClick={() => handlePaymentMethodChange(option)}
@@ -72,7 +72,7 @@ export function PaymentMethod(props: PaymentMethodProps) {
                 }`}
               >
                 <svg
-                  enable-background="new 0 0 12 12"
+                  enableBackground="new 0 0 12 12"
                   viewBox="0 0 12 12"
                   x="0"
                   y="0"
@@ -99,64 +99,61 @@ export function PaymentMethod(props: PaymentMethodProps) {
         >
           {paymentSelected === "COD" ? (
             <>
-              {getSessionState.data?.payops_list.map((payops, i) => (
-                <>
-                  {payops.name === "CASH" ? (
-                    <FormControlLabel
-                      value={payops.id}
-                      control={<Radio required />}
-                      label={
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
-                          alt=""
-                        />
-                      }
-                    />
-                  ) : null}
-                </>
-              ))}
+              {getSessionState.data?.payops_list.map((payops, i) =>
+                payops.name === "CASH" ? (
+                  <FormControlLabel
+                    key={i}
+                    value={payops.id}
+                    control={<Radio required />}
+                    label={
+                      <img
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
+                        alt=""
+                      />
+                    }
+                  />
+                ) : null
+              )}
             </>
           ) : null}
 
           {paymentSelected === "BANK-ACCOUNT" ? (
             <>
-              {getSessionState.data?.payops_list.map((payops, i) => (
-                <>
-                  {!payops.qr_code && payops.name !== "CASH" ? (
-                    <FormControlLabel
-                      value={payops.id}
-                      control={<Radio required />}
-                      label={
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
-                          alt=""
-                        />
-                      }
-                    />
-                  ) : null}
-                </>
-              ))}
+              {getSessionState.data?.payops_list.map((payops, i) =>
+                !payops.qr_code && payops.name !== "CASH" ? (
+                  <FormControlLabel
+                    key={i}
+                    value={payops.id}
+                    control={<Radio required />}
+                    label={
+                      <img
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
+                        alt=""
+                      />
+                    }
+                  />
+                ) : null
+              )}
             </>
           ) : null}
 
           {paymentSelected === "E-WALLET" ? (
             <>
-              {getSessionState.data?.payops_list.map((payops, i) => (
-                <>
-                  {payops.qr_code ? (
-                    <FormControlLabel
-                      value={payops.id}
-                      control={<Radio required />}
-                      label={
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops4.png`}
-                          alt="Pay Ops"
-                        />
-                      }
-                    />
-                  ) : null}
-                </>
-              ))}
+              {getSessionState.data?.payops_list.map((payops, i) =>
+                payops.qr_code ? (
+                  <FormControlLabel
+                    key={i}
+                    value={payops.id}
+                    control={<Radio required />}
+                    label={
+                      <img
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops4.png`}
+                        alt="Pay Ops"
+                      />
+                    }
+                  />
+                ) : null
+              )}
             </>
           ) : null}
         </RadioGroup>

@@ -1,50 +1,50 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { TABS } from "features/shared/constants";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { AiOutlineUser } from "react-icons/ai";
-import { BsCart4 } from "react-icons/bs";
-import { ShopCartModal } from "../../../shop/presentation/modals";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
-import NumberFormat from "react-number-format";
+import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
+import { TABS } from "features/shared/constants";
 import {
   facebookLogout,
   FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
-import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
-import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
-import { MdLocationPin } from "react-icons/md";
-import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
-import { MessageModal } from "../modals";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuList from "@mui/material/MenuList";
-import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
-import { RiShoppingBag3Fill } from "react-icons/ri";
+import { BsCart4 } from "react-icons/bs";
+import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
 import { GiPopcorn } from "react-icons/gi";
-import { CartListItem } from "./cart-item-list";
 import { HiDocumentText } from "react-icons/hi";
+import { MdLocationPin } from "react-icons/md";
+import { RiShoppingBag3Fill } from "react-icons/ri";
+import { VscCircleFilled } from "react-icons/vsc";
+import NumberFormat from "react-number-format";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ShopCartModal } from "../../../shop/presentation/modals";
+import { MessageModal } from "../modals";
 import {
   getNotifications,
   selectGetNotifications,
 } from "../slices/get-notifications.slice";
-import { VscCircleFilled } from "react-icons/vsc";
 import {
-  selectSeenNotification,
   SeenNotificationState,
+  selectSeenNotification,
 } from "../slices/seen-notification.slice";
+import { CartListItem } from "./cart-item-list";
 
 interface HeaderNavProps {
   className?: string;
@@ -318,11 +318,11 @@ export function HeaderNav(props: HeaderNavProps) {
   const handlePopoverClose = () => {
     setOpenCartMenu(null);
   };
-  const menuList = profileMenu.map((item) => {
+  const menuList = profileMenu.map((item, i) => {
     const { text, icon, action, id } = item;
 
     return (
-      <div>
+      <div key={i}>
         <MenuItem onClick={action} className="bg-secondary">
           <ListItemIcon className="text-[20px] sm:text-xl">
             {icon}
