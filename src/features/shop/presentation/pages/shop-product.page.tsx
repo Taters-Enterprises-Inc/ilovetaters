@@ -216,7 +216,7 @@ export function ShopProduct() {
     if (quantity > 1) {
       if (
         getProductDetailsState.data &&
-        getProductDetailsState.data?.product.num_flavor > 1
+        getProductDetailsState.data?.product.num_flavor > 0
       ) {
         setCurrentMultiFlavors({});
         setResetMultiFlavors(true);
@@ -311,7 +311,7 @@ export function ShopProduct() {
     ) {
       if (
         getProductDetailsState.data?.product_flavor &&
-        getProductDetailsState.data.product.num_flavor > 1 &&
+        getProductDetailsState.data.product.num_flavor > 0 &&
         getProductDetailsState.data.product_flavor.length > 0
       ) {
         for (
@@ -393,7 +393,7 @@ export function ShopProduct() {
     ) {
       if (
         getProductDetailsState.data?.product_flavor &&
-        getProductDetailsState.data.product.num_flavor > 1 &&
+        getProductDetailsState.data.product.num_flavor > 0 &&
         getProductDetailsState.data.product_flavor.length > 0
       ) {
         for (
