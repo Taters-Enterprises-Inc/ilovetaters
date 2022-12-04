@@ -38,7 +38,6 @@ import { Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { QuantityInput } from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
@@ -62,8 +61,20 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
+import { ShopProductFlavor } from "../components";
 
 let quantityId: any;
+
+export type ShopFlavorType = {
+  [key: string]: {
+    name: string;
+    quantity: number;
+  };
+};
+
+export type ShopMultiFlavorType = {
+  [key: string]: ShopFlavorType;
+};
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
@@ -85,11 +96,9 @@ export function ShopProduct() {
   const isLongPress = useRef(false);
   const isQuantityNull = useRef(false);
 
-  const [currentSize, setCurrentSize] = useState<number | undefined>();
-  const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
-  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
-  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
-    useState<number>(0);
+  const [currentSize, setCurrentSize] = useState<string>("");
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<ShopMultiFlavorType>({});
 
   const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
     useState(false);
@@ -112,8 +121,7 @@ export function ShopProduct() {
 
   useEffect(() => {
     if (forfeitRedeemState.status === ForfeitRedeemState.success) {
-      setCurrentSize(undefined);
-      setCurrentFlavor(undefined);
+      setCurrentSize("");
       dispatch(resetForfeitRedeemStateStatus());
     }
   }, [dispatch, forfeitRedeemState]);
@@ -160,25 +168,11 @@ export function ShopProduct() {
       getProductDetailsState.data.product_size &&
       getProductDetailsState.data.product_size.length > 0 &&
       getProductDetailsState.data.product.product_hash === hash &&
-      currentSize === undefined
+      currentSize === ""
     ) {
-      setCurrentSize(getProductDetailsState.data.product_size[0].id);
+      setCurrentSize(getProductDetailsState.data.product_size[0].id.toString());
     }
   }, [getProductDetailsState, currentSize, hash]);
-
-  useEffect(() => {
-    if (
-      getProductDetailsState.status &&
-      getProductDetailsState.data &&
-      getProductDetailsState.data.product_flavor &&
-      getProductDetailsState.data.product_flavor.length > 0 &&
-      getProductDetailsState.data.product.product_hash === hash &&
-      currentFlavor === undefined &&
-      getProductDetailsState.data.product.num_flavor === 1
-    ) {
-      setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
-    }
-  }, [getProductDetailsState, currentFlavor, hash]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
@@ -209,13 +203,13 @@ export function ShopProduct() {
     );
   };
 
-  function handleonClick() {
+  function handleOnClick() {
     if (isLongPress.current === true) {
       return;
     }
   }
 
-  function handleonMouseUp() {
+  function handleOnMouseUp() {
     clearTimeout(timerRef.current);
     clearInterval(quantityId);
 
@@ -224,14 +218,13 @@ export function ShopProduct() {
         getProductDetailsState.data &&
         getProductDetailsState.data?.product.num_flavor > 1
       ) {
-        setCurrentMultiFlavors(undefined);
-        setTotalMultiFlavorsQuantity(0);
+        setCurrentMultiFlavors({});
         setResetMultiFlavors(true);
       }
     }
   }
 
-  function handleonMouseDown(action: string) {
+  function handleOnMouseDown(action: string) {
     isQuantityNull.current = false;
     if (
       getSessionState.data?.userData == null ||
@@ -282,20 +275,24 @@ export function ShopProduct() {
 
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
-    const multiFlavorsArray: Array<{
-      name: string;
-      quantity: number;
-    }> = Object.values(currentMultiFlavors);
     let result: string | undefined;
 
-    for (let i = 0; i < multiFlavorsArray.length; i++) {
-      if (multiFlavorsArray[i].quantity > 0)
-        result =
-          (result === undefined ? "" : result) +
-          `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
-            multiFlavorsArray[i].name
-          }<br/>`;
-    }
+    Object.keys(currentMultiFlavors).forEach((key) => {
+      const multiFlavorsArray: Array<{
+        name: string;
+        quantity: number;
+      }> = Object.values(currentMultiFlavors[key]);
+
+      for (let i = 0; i < multiFlavorsArray.length; i++) {
+        if (multiFlavorsArray[i].quantity > 0)
+          result =
+            (result === undefined ? "" : result) +
+            `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
+              multiFlavorsArray[i].name
+            }<br/>`;
+      }
+    });
+
     return result ? result : undefined;
   };
 
@@ -313,17 +310,47 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       if (
+        getProductDetailsState.data?.product_flavor &&
         getProductDetailsState.data.product.num_flavor > 1 &&
-        totalMultiFlavorsQuantity !==
-          getProductDetailsState.data.product.num_flavor * quantity
+        getProductDetailsState.data.product_flavor.length > 0
       ) {
-        dispatch(
-          popUpSnackBar({
-            message: "Please meet the required number of flavors.",
-            severity: "error",
-          })
-        );
-        return;
+        for (
+          let i = 0;
+          i < getProductDetailsState.data.product_flavor.length;
+          i++
+        ) {
+          let totalMultiFlavorsQuantity = 0;
+
+          if (currentMultiFlavors[i] === undefined) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+
+          Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+            const currentFlavor = currentMultiFlavors[i];
+            totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+          });
+
+          if (
+            totalMultiFlavorsQuantity !==
+            quantity * getProductDetailsState.data.product.num_flavor
+          ) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+        }
       }
 
       let flavors_details = createFlavorDetails();
@@ -334,7 +361,6 @@ export function ShopProduct() {
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor: currentFlavor,
           prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
@@ -366,17 +392,47 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       if (
+        getProductDetailsState.data?.product_flavor &&
         getProductDetailsState.data.product.num_flavor > 1 &&
-        totalMultiFlavorsQuantity !==
-          getProductDetailsState.data.product.num_flavor * quantity
+        getProductDetailsState.data.product_flavor.length > 0
       ) {
-        dispatch(
-          popUpSnackBar({
-            message: "Please meet the required number of flavors.",
-            severity: "error",
-          })
-        );
-        return;
+        for (
+          let i = 0;
+          i < getProductDetailsState.data.product_flavor.length;
+          i++
+        ) {
+          let totalMultiFlavorsQuantity = 0;
+
+          if (currentMultiFlavors[i] === undefined) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+
+          Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+            const currentFlavor = currentMultiFlavors[i];
+            totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+          });
+
+          if (
+            totalMultiFlavorsQuantity !==
+            quantity * getProductDetailsState.data.product.num_flavor
+          ) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+        }
       }
 
       let flavors_details = createFlavorDetails();
@@ -387,7 +443,6 @@ export function ShopProduct() {
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor: currentFlavor,
           prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
@@ -405,14 +460,11 @@ export function ShopProduct() {
     }
   };
 
-  const handleSizeAndFlavorChange = (
-    size: number | undefined,
-    flavor: number | undefined
-  ) => {
+  const handleSizeAndFlavorChange = (size: string) => {
     if (getProductDetailsState.data) {
       dispatch(
         getProductSku({
-          prod_flavor: flavor,
+          prod_flavor: "",
           prod_size: size,
         })
       );
@@ -617,14 +669,13 @@ export function ShopProduct() {
                     </h2>
                     <FormControl>
                       <RadioGroup
-                        value={currentSize ?? ""}
+                        value={currentSize}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                          const sizeId = parseInt(
-                            (event.target as HTMLInputElement).value
-                          );
+                          const sizeId = (event.target as HTMLInputElement)
+                            .value;
 
                           setCurrentSize(sizeId);
-                          handleSizeAndFlavorChange(sizeId, currentFlavor);
+                          handleSizeAndFlavorChange(sizeId);
                         }}
                       >
                         {getProductDetailsState.data?.product_size.map(
@@ -653,110 +704,6 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
-                {getProductDetailsState.data &&
-                getProductDetailsState.data.product_flavor &&
-                getProductDetailsState.data.product &&
-                getProductDetailsState.data.product_flavor.length > 0 ? (
-                  <div>
-                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                      Choose Flavor
-                    </h2>
-                    {getProductDetailsState.data.product.num_flavor > 1 ? (
-                      <ul>
-                        {getProductDetailsState.data.product_flavor.map(
-                          (flavor, i) => {
-                            if (getProductDetailsState.data) {
-                              return (
-                                <li key={i}>
-                                  <span className="text-sm text-white">
-                                    {flavor.name}
-                                  </span>
-                                  <QuantityInput
-                                    reset={resetMultiFlavors}
-                                    min={0}
-                                    disableAdd={
-                                      getProductDetailsState.data.product
-                                        .num_flavor *
-                                        quantity -
-                                        totalMultiFlavorsQuantity ===
-                                      0
-                                    }
-                                    onChange={(val, action) => {
-                                      if (currentMultiFlavors) {
-                                        currentMultiFlavors[flavor.id] = {
-                                          name: flavor.name,
-                                          quantity: val,
-                                        };
-
-                                        setCurrentMultiFlavors(
-                                          currentMultiFlavors
-                                        );
-                                      } else {
-                                        const temp: any = {};
-                                        temp[flavor.id] = {
-                                          name: flavor.name,
-                                          quantity: val,
-                                        };
-                                        setCurrentMultiFlavors(temp);
-                                      }
-                                      setTotalMultiFlavorsQuantity(
-                                        totalMultiFlavorsQuantity +
-                                          (action === "plus" ? +1 : -1)
-                                      );
-                                    }}
-                                  />
-                                </li>
-                              );
-                            }
-
-                            return null;
-                          }
-                        )}
-                      </ul>
-                    ) : (
-                      <FormControl>
-                        <RadioGroup
-                          value={currentFlavor ?? ""}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            const flavorId = parseInt(
-                              (event.target as HTMLInputElement).value
-                            );
-
-                            setCurrentFlavor(flavorId);
-                            handleSizeAndFlavorChange(currentSize, flavorId);
-                          }}
-                        >
-                          {getProductDetailsState.data.product_flavor.map(
-                            (flavor, i) => {
-                              if (getProductDetailsState.data) {
-                                return (
-                                  <FormControlLabel
-                                    key={i}
-                                    value={flavor.id}
-                                    control={
-                                      <Radio
-                                        color="tertiary"
-                                        sx={{ color: "white" }}
-                                      />
-                                    }
-                                    label={
-                                      <span className="!text-white">
-                                        {flavor.name}
-                                      </span>
-                                    }
-                                  />
-                                );
-                              }
-
-                              return null;
-                            }
-                          )}
-                        </RadioGroup>
-                      </FormControl>
-                    )}
-                  </div>
-                ) : null}
-
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
@@ -768,22 +715,22 @@ export function ShopProduct() {
                         onClick={() =>
                           quantity <= 1 || isQuantityNull.current
                             ? setDisabled
-                            : handleonClick()
+                            : handleOnClick()
                         }
                         onMouseDown={() =>
                           quantity <= 1
                             ? setDisabled
-                            : handleonMouseDown("minus")
+                            : handleOnMouseDown("minus")
                         }
-                        onMouseUp={handleonMouseUp}
+                        onMouseUp={handleOnMouseUp}
                         onTouchStart={() =>
                           quantity <= 1
                             ? setDisabled
-                            : handleonMouseDown("minus")
+                            : handleOnMouseDown("minus")
                         }
                         onTouchEnd={(e) => {
                           e.preventDefault();
-                          handleonMouseUp();
+                          handleOnMouseUp();
                         }}
                         className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
                           quantity <= 1 || isQuantityNull.current
@@ -828,23 +775,23 @@ export function ShopProduct() {
 
                       <button
                         onClick={() =>
-                          quantity >= 10 ? setDisabled : handleonClick()
+                          quantity >= 10 ? setDisabled : handleOnClick()
                         }
                         onMouseDown={() =>
                           quantity >= 10
                             ? setDisabled
-                            : handleonMouseDown("add")
+                            : handleOnMouseDown("add")
                         }
-                        onMouseUp={handleonMouseUp}
+                        onMouseUp={handleOnMouseUp}
                         onTouchStart={() =>
                           quantity >= 10
                             ? setDisabled
-                            : handleonMouseDown("add")
+                            : handleOnMouseDown("add")
                         }
                         onTouchEnd={(e) => {
                           e.preventDefault();
 
-                          handleonMouseUp();
+                          handleOnMouseUp();
                         }}
                         className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
                           quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
@@ -902,6 +849,33 @@ export function ShopProduct() {
                       </h2>
                     ) : null}
                   </>
+                )}
+
+                {getProductDetailsState.data?.product_flavor.map(
+                  (flavor, i) => (
+                    <>
+                      {getProductDetailsState.data ? (
+                        <ShopProductFlavor
+                          key={i}
+                          numberOfFlavors={
+                            getProductDetailsState.data.product.num_flavor
+                          }
+                          productQuantity={quantity}
+                          currentMultiFlavor={currentMultiFlavors[i]}
+                          flavor={flavor}
+                          onChangeMultiFlavor={(updatedMultiFlavors) => {
+                            const updateCurrentMultiFlavor = {
+                              ...currentMultiFlavors,
+                            };
+
+                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
+                          }}
+                        />
+                      ) : null}
+                    </>
+                  )
                 )}
 
                 {getSessionState.data?.cache_data ||

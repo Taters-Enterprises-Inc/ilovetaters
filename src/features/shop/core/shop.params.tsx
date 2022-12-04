@@ -5,10 +5,10 @@ export interface AddToCartShopParam {
   prod_qty: number;
   prod_price: number;
   prod_calc_amount: number;
-  prod_flavor?: number;
+  prod_flavor?: string;
   prod_flavor_id?: number;
   prod_with_drinks?: number;
-  prod_size?: number;
+  prod_size?: string;
   prod_size_id?: number;
   flavors_details?: string;
   prod_sku_id?: number;
@@ -20,8 +20,8 @@ export interface AddToCartShopParam {
 }
 
 export interface GetProductSkuParam {
-  prod_size: number | undefined;
-  prod_flavor: number | undefined;
+  prod_size: string;
+  prod_flavor: string;
 }
 
 export interface GetOrdersParam {

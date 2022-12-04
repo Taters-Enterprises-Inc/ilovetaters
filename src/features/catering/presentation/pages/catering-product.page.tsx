@@ -49,7 +49,6 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
-import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
 import { CateringSelectStoreModal } from "../modals";
 
 const DEFAULT_CAROUSEL = [
