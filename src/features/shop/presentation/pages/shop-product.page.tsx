@@ -253,7 +253,7 @@ export function ShopProduct() {
   }
 
   function handleOnLongPress(action: string) {
-    let counter = quantity;
+    let counter = isNaN(quantity) ? 1 : quantity;
 
     quantityId = setInterval(() => {
       if (action === "add") counter += 1;
