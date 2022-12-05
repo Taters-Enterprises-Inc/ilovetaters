@@ -396,7 +396,7 @@ export function CateringProduct() {
                     (name) => (
                       <SwiperSlide>
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                           className="lg:rounded-[20px] w-full h-full object-cover"
                           alt=""
                         />
@@ -406,7 +406,7 @@ export function CateringProduct() {
                   {DEFAULT_CAROUSEL.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}.jpg`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />

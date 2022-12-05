@@ -510,7 +510,7 @@ export function ShopProduct() {
                   {getProductDetailsState.data?.product_images.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />

@@ -201,7 +201,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           { name: getEditCartProduct.data?.product.name, url: "" },
         ]}
       />
-      <section className="min-h-screen  lg:space-x-4 pb-36">
+      <section className="min-h-screen lg:space-x-4 pb-36">
         <div className="lg:space-y-10 lg:container">
           <div className="bg-secondary  pb-20 w-full lg:rounded-[30px] space-y-10">
             <div className="flex flex-col space-y-10 lg:flex-row lg:space-x-10 lg:space-y-0">
@@ -217,7 +217,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                     (name: string, index: number): JSX.Element => (
                       <SwiperSlide key={index}>
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                           className="lg:rounded-[20px] w-full h-full object-cover"
                           alt=""
                         />
