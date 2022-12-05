@@ -1,5 +1,5 @@
-import TextField, { StandardTextFieldProps } from "@mui/material/TextField";
 import { alpha, styled } from "@mui/material/styles";
+import TextField, { StandardTextFieldProps } from "@mui/material/TextField";
 import { ChangeEventHandler } from "react";
 
 export interface MaterialInputProps extends StandardTextFieldProps {
@@ -18,7 +18,7 @@ export const MaterialInput = styled(
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -37,7 +37,7 @@ export const MaterialInput = styled(
     },
     "& .MuiInputBase-input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
   }),
 
@@ -63,7 +63,7 @@ export const MaterialInput = styled(
     },
     "& .MuiInputBase-input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
   }),
 }));
