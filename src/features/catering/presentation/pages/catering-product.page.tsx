@@ -406,7 +406,7 @@ export function CateringProduct() {
                   {DEFAULT_CAROUSEL.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}.jpg`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
                         alt=""
                       />
