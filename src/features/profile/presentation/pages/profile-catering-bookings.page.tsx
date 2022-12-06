@@ -172,7 +172,7 @@ export function ProfileCateringBookings() {
                 const notification: NotificationModel | undefined =
                   getNotificationsState.data?.catering_booking.unseen_notifications.find(
                     (notification) =>
-                      notification.catering_tracking_no === row.tracking_no
+                      notification.catering_transaction_tb_id === row.id
                   );
 
                 return (
@@ -318,8 +318,7 @@ export function ProfileCateringBookings() {
                       const notification: NotificationModel | undefined =
                         getNotificationsState.data?.catering_booking.unseen_notifications.find(
                           (notification) =>
-                            notification.catering_tracking_no ===
-                            row.tracking_no
+                            notification.catering_transaction_tb_id === row.id
                         );
 
                       return (

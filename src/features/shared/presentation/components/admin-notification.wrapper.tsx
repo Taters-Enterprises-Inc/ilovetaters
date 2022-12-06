@@ -2,13 +2,19 @@ import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { getAdminShopOrders } from "features/admin/presentation/slices/get-admin-shop-orders.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import { pusher } from "features/shared/constants";
 import { getAdminNotifications } from "features/admin/presentation/slices/get-admin-notifications.slice";
+import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-shop-order.slice";
+import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -18,6 +24,7 @@ interface TransactionParam {
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const query = useQuery();
 
   useEffect(() => {
     pusher.unsubscribe("admin-snackshop");
@@ -36,7 +43,27 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-  }, [getAdminSessionState, dispatch]);
+
+    snackshopChannel.bind("payment-transaction", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr_admin ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminShopOrders(""));
+        dispatch(getAdminNotifications());
+
+        const trackingNo = query.get("tracking_no");
+
+        if (trackingNo) {
+          dispatch(getAdminShopOrder(trackingNo));
+        }
+      }
+    });
+  }, [getAdminSessionState, dispatch, query]);
 
   useEffect(() => {
     pusher.unsubscribe("admin-catering");
@@ -55,7 +82,49 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-  }, [getAdminSessionState, dispatch]);
+
+    cateringChannel.bind("contract-booking", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr_admin ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+
+        const trackingNo = query.get("tracking_no");
+
+        if (trackingNo) {
+          dispatch(getAdminCateringBooking(trackingNo));
+        }
+
+        dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+
+    cateringChannel.bind("payment-transaction", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr_admin ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+
+        const trackingNo = query.get("tracking_no");
+
+        if (trackingNo) {
+          dispatch(getAdminCateringBooking(trackingNo));
+        }
+
+        dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+  }, [getAdminSessionState, dispatch, query]);
 
   useEffect(() => {
     pusher.unsubscribe("admin-popclub");

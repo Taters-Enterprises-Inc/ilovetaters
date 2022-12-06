@@ -161,8 +161,7 @@ export function ProfileSnackshopOrders() {
               {getSnackshopOrderHistoryState.data.orders.map((row, i) => {
                 const notification: NotificationModel | undefined =
                   getNotificationsState.data?.snackshop_order.unseen_notifications.find(
-                    (notification) =>
-                      notification.tracking_no === row.tracking_no
+                    (notification) => notification.transaction_tb_id === row.id
                   );
 
                 return (
@@ -296,7 +295,7 @@ export function ProfileSnackshopOrders() {
                     const notification: NotificationModel | undefined =
                       getNotificationsState.data?.snackshop_order.unseen_notifications.find(
                         (notification) =>
-                          notification.tracking_no === row.tracking_no
+                          notification.transaction_tb_id === row.id
                       );
 
                     return (

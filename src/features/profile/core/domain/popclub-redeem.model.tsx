@@ -1,4 +1,5 @@
 export interface PopclubRedeemModel {
+  id: number;
   status: number;
   dateadded: string;
   redeem_code: string;

@@ -57,6 +57,13 @@ export function Tab(props: TabProps) {
                   .unseen_notifications_count > 0 ? (
                   <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
                 ) : null}
+
+                {tab.active === "popclub" &&
+                getNotificationsState.data &&
+                getNotificationsState.data.popclub_redeem
+                  .unseen_notifications_count > 0 ? (
+                  <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
+                ) : null}
               </div>
 
               <span>{tab.name}</span>
