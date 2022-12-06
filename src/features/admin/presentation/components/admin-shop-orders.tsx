@@ -4,7 +4,6 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "../components/extract-btn";
 import { useEffect, useState } from "react";
 import {
   useAppDispatch,
@@ -89,7 +88,7 @@ export function AdminShopOrders() {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, [updateAdminNotificationDateSeenState]);
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (trackingNo) {
@@ -275,8 +274,7 @@ export function AdminShopOrders() {
               {getAdminShopOrdersState.data.orders.map((row, i) => {
                 const notification: NotificationModel | undefined =
                   getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
-                    (notification) =>
-                      notification.tracking_no === row.tracking_no
+                    (notification) => notification.transaction_tb_id === row.id
                   );
                 return (
                   <div
@@ -441,7 +439,7 @@ export function AdminShopOrders() {
                     const notification: NotificationModel | undefined =
                       getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
                         (notification) =>
-                          notification.tracking_no === row.tracking_no
+                          notification.transaction_tb_id === row.id
                       );
                     return (
                       <DataTableRow

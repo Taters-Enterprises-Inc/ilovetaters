@@ -91,7 +91,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (logoutAdminState.status === LogoutAdminState.success) {
@@ -99,7 +99,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
       dispatch(resetLogoutAdmin());
       navigate("/admin");
     }
-  }, [logoutAdminState]);
+  }, [logoutAdminState, dispatch, navigate]);
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
@@ -189,7 +189,13 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <Badge badgeContent={0} color="primary">
+                  <Badge
+                    badgeContent={
+                      getAdminNotificationsState.data?.popclub_redeem
+                        .unseen_notifications_count
+                    }
+                    color="primary"
+                  >
                     <FaCartArrowDown size={20} />
                   </Badge>
                   <span

@@ -167,7 +167,7 @@ export function HeaderNav(props: HeaderNavProps) {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
       dispatch(getSession());
     }
-  }, [facebookLogoutState]);
+  }, [facebookLogoutState, dispatch]);
 
   useEffect(() => {
     if (seenNotificationState.status === SeenNotificationState.success) {
@@ -320,6 +320,9 @@ export function HeaderNav(props: HeaderNavProps) {
                 .unseen_notifications_count) ||
             (id === 3 &&
               getNotificationsState.data?.catering_booking
+                .unseen_notifications_count) ||
+            (id === 4 &&
+              getNotificationsState.data?.popclub_redeem
                 .unseen_notifications_count) ? (
               <VscCircleFilled className="text-xs text-red-600 " />
             ) : null}
@@ -490,16 +493,13 @@ export function HeaderNav(props: HeaderNavProps) {
                             <FaUserCircle className="w-6 h-6 text-2xl text-white fill-current" />
 
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop_order
-                              .unseen_notifications_count +
-                              getNotificationsState.data.catering_booking
-                                .unseen_notifications_count !==
-                              0 ? (
+                            getNotificationsState.data.all
+                              .unseen_notifications_count !== 0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop_order
-                                  .unseen_notifications_count +
-                                  getNotificationsState.data.catering_booking
-                                    .unseen_notifications_count}
+                                {
+                                  getNotificationsState.data.all
+                                    .unseen_notifications_count
+                                }
                               </span>
                             ) : null}
                           </span>
@@ -514,25 +514,18 @@ export function HeaderNav(props: HeaderNavProps) {
                               width={30}
                             />
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop_order
-                              .unseen_notifications_count +
-                              getNotificationsState.data.catering_booking
-                                .unseen_notifications_count !==
-                              0 ? (
+                            getNotificationsState.data.all
+                              .unseen_notifications_count !== 0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop_order
-                                  .unseen_notifications_count +
-                                  getNotificationsState.data.catering_booking
-                                    .unseen_notifications_count}
+                                {
+                                  getNotificationsState.data.all
+                                    .unseen_notifications_count
+                                }
                               </span>
                             ) : null}
                           </span>
                         </>
                       )}
-                      {/* <span className="text-xs font-light text-white">
-                        {getSessionState.data?.userData.first_name}{" "}
-                        {getSessionState.data?.userData.last_name}
-                      </span> */}
                     </button>
                     <Menu
                       anchorEl={openProfileMenu}
