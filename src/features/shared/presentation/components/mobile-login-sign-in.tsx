@@ -1,15 +1,15 @@
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { MaterialPhoneInput } from ".";
-import { MaterialInputPassword } from "./material-input-password";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import { FormEvent, useEffect, useState } from "react";
+import { MaterialPhoneInput } from ".";
+import { MobileForgotPasswordModal } from "../modals";
 import {
   selectSignInMobileUser,
   signInMobileUser,
   SignInMobileUserState,
 } from "../slices/sign-in-mobile-user.slice";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { MobileForgotPasswordModal } from "../modals";
-import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { MaterialInputPassword } from "./material-input-password";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
@@ -35,6 +35,12 @@ export function MobileLoginSignIn() {
     e.preventDefault();
   };
 
+  const handleInputChange = (evt: any) => {
+    const re = /^[0-9\b]+$/;
+    if (evt === "" || re.test(evt)) {
+      setPhoneNumber(evt);
+    }
+  };
   return (
     <>
       <div className="flex items-center justify-center header_image">
@@ -58,9 +64,7 @@ export function MobileLoginSignIn() {
               value={phoneNumber}
               name="phoneNumber"
               fullWidth
-              onChange={(e) => {
-                setPhoneNumber(e.target.value);
-              }}
+              onChange={(e) => handleInputChange(e.target.value)}
             />
             <MaterialInputPassword
               required

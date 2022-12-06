@@ -1,10 +1,9 @@
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
 import { useAppDispatch } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { FormEvent, useState } from "react";
+import { MaterialInput } from ".";
 import { signUpMobileUser } from "../slices/sign-up-mobile-user.slice";
 import { MaterialPhoneInput } from "./material-phone-input";
-import { useState } from "react";
-import { MaterialInput } from ".";
 
 export function MobileLoginSignUp() {
   const dispatch = useAppDispatch();
@@ -15,16 +14,50 @@ export function MobileLoginSignUp() {
     email: "",
   });
 
+  const [phoneError, setPhoneError] = useState<string | null>();
+
   const handleMobileSignUp = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(signUpMobileUser(formState));
+    if (formState.phoneNumber.length === 11) {
+      setPhoneError(null);
+      dispatch(signUpMobileUser(formState));
+    } else {
+      setPhoneError("Invalid phone number");
+    }
     e.preventDefault();
   };
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
-    setFormState({
-      ...formState,
-      [evt.target.name]: value,
-    });
+    if (evt.target.name === "phoneNumber") {
+      const re = /^[0-9\b]+$/;
+      if (evt.target.value === "" || re.test(evt.target.value)) {
+        setPhoneError(null);
+        setFormState({
+          ...formState,
+          [evt.target.name]: value,
+        });
+      }
+    } else if (evt.target.name === "firstName") {
+      const re = /^[a-zA-Z\s]*$/;
+      if (evt.target.value === "" || re.test(evt.target.value)) {
+        setFormState({
+          ...formState,
+          [evt.target.name]: value,
+        });
+      }
+    } else if (evt.target.name === "lastName") {
+      const re = /^[a-zA-Z\s]*$/;
+      if (evt.target.value === "" || re.test(evt.target.value)) {
+        setFormState({
+          ...formState,
+          [evt.target.name]: value,
+        });
+      }
+    } else {
+      setFormState({
+        ...formState,
+        [evt.target.name]: value,
+      });
+    }
   };
 
   return (
@@ -64,17 +97,22 @@ export function MobileLoginSignUp() {
                 fullWidth
               />
             </div>
-            <MaterialPhoneInput
-              required
-              colorTheme="white"
-              value={formState.phoneNumber}
-              name="phoneNumber"
-              fullWidth
-              label="Phone Number"
-              size="small"
-              onChange={handleInputChange}
-            />
-
+            <div>
+              <MaterialPhoneInput
+                required
+                colorTheme="white"
+                value={formState.phoneNumber}
+                name="phoneNumber"
+                fullWidth
+                label="Phone Number"
+                size="small"
+                onChange={handleInputChange}
+                error={false}
+              />
+              <div className="mt-1 mb-1 ml-4 text-xs text-red-500 text-start">
+                {phoneError}
+              </div>
+            </div>
             <MaterialInput
               colorTheme="white"
               name="email"
