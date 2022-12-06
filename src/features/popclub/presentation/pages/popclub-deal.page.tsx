@@ -55,6 +55,7 @@ import {
 import moment from "moment";
 import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
 import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -140,6 +141,7 @@ export function PopClubDeal() {
       getDealState.data &&
       redeemDealState.status === RedeemDealState.success
     ) {
+      dispatch(getNotifications());
       dispatch(
         getRedeem({
           deal_id: getDealState.data.id,
