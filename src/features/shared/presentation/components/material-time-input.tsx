@@ -1,8 +1,8 @@
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
 
 interface MaterialTimeInputProps {
   value: any;
@@ -17,7 +17,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -36,7 +36,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",

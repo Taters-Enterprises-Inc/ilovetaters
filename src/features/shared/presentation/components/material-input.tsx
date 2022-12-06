@@ -44,7 +44,7 @@ export const MaterialInput = styled(
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",

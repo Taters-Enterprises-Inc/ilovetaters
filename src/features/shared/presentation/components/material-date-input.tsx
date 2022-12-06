@@ -1,12 +1,12 @@
-import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import TextField from "@mui/material/TextField";
 import {
   CalendarPickerView,
   DesktopDatePicker,
   LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useState } from "react";
 
 const MaterialInput = styled((props: any) => <TextField {...props} />, {
   shouldForwardProp: (prop) => prop !== "colorTheme",
@@ -14,7 +14,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -33,7 +33,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",

@@ -1,41 +1,41 @@
+import { styled } from "@mui/material/styles";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { SearchAddress } from "features/shared/presentation/components/search-address";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
-import { useEffect, useState } from "react";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { FaSearchLocation } from "react-icons/fa";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   selectSetStoreAndAddress,
   setStoreAndAddress,
   SetStoreAndAddressState,
 } from "features/shared/presentation/slices/set-store-and-address.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { FaSearchLocation } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CateringStoreClusterModal } from ".";
-import { getStoresAvailableCateringModal } from "../slices/get-stores-available-catering-modal.slice";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import moment from "moment";
 import {
   selectCateringHomePage,
+  setAddressCateringHomePage,
   setEventEndDateCateringHomePage,
   setEventStartDateCateringHomePage,
-  setAddressCateringHomePage,
 } from "../slices/catering-home-page.slice";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { styled } from "@mui/material/styles";
+import { getStoresAvailableCateringModal } from "../slices/get-stores-available-catering-modal.slice";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
 ))(({ theme }) => ({
   "& input": {
     color: "white !important",
-    "-webkit-text-fill-color": "white !important",
+    WebkitTextFillColor: "white !important",
   },
   "& label": {
     color: "white !important",
