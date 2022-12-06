@@ -1,8 +1,8 @@
-import { Fragment } from "react";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
+import { CSSObject, styled, Theme } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { Fragment } from "react";
 import {
   selectAdminSideBar,
   toggleAdminSideBar,
@@ -113,7 +113,7 @@ export function AdminDrawerDesktop() {
               <div className="text-xs">
                 {getAdminSessionState.data.admin.user_details.groups.map(
                   (group, i) => (
-                    <>
+                    <span key={i}>
                       {getAdminSessionState.data &&
                       i !==
                         getAdminSessionState.data.admin.user_details.groups
@@ -121,7 +121,7 @@ export function AdminDrawerDesktop() {
                           1
                         ? group.name + ", "
                         : group.name}
-                    </>
+                    </span>
                   )
                 )}
               </div>

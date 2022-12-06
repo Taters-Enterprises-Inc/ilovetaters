@@ -49,7 +49,7 @@ export function AdminBreadCrumbs(props: AdminBreadCrumbsProps) {
                 </div>
               </li>
               {props.pageTitles.map((title, i) => (
-                <li>
+                <li key={i}>
                   <div className="flex items-center">
                     <svg
                       className="w-6 h-6"
