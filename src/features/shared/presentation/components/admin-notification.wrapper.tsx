@@ -14,6 +14,7 @@ import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-a
 import { pusher } from "features/shared/constants";
 import { getAdminNotifications } from "features/admin/presentation/slices/get-admin-notifications.slice";
 import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-shop-order.slice";
+import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -81,7 +82,49 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
-  }, [getAdminSessionState, dispatch]);
+
+    cateringChannel.bind("contract-booking", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr_admin ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+
+        const trackingNo = query.get("tracking_no");
+
+        if (trackingNo) {
+          dispatch(getAdminCateringBooking(trackingNo));
+        }
+
+        dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+
+    cateringChannel.bind("payment-transaction", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.is_admin ||
+        getAdminSessionState.data?.is_csr_admin ||
+        getAdminSessionState.data?.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+
+        const trackingNo = query.get("tracking_no");
+
+        if (trackingNo) {
+          dispatch(getAdminCateringBooking(trackingNo));
+        }
+
+        dispatch(getAdminCateringBookings(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+  }, [getAdminSessionState, dispatch, query]);
 
   useEffect(() => {
     pusher.unsubscribe("admin-popclub");
