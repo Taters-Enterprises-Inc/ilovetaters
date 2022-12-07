@@ -7,7 +7,7 @@ import {
   MaterialDateInput,
   MaterialInput,
 } from "features/shared/presentation/components";
-import { useEffect, useState, FormEvent, ChangeEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { Helmet } from "react-helmet";
 
 import {
@@ -27,19 +27,12 @@ import {
 } from "../slices/insert-customer-survey-response.slice";
 import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
 import { useNavigate } from "react-router-dom";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import {
   getAllStores,
   GetAllStoresState,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
-import {
-  getCustomerSurveyResponse,
-  GetCustomerSurveyResponseState,
-  resetGetCustomerSurveyResponse,
-  selectGetCustomerSurveyResponse,
-} from "../slices/get-customer-survey-response.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -70,9 +63,6 @@ export function Survey() {
     selectInsertCustomerSurveyResponse
   );
   const getAllStoresState = useAppSelector(selectGetAllStores);
-  const getCustomerSurveyResponseState = useAppSelector(
-    selectGetCustomerSurveyResponse
-  );
 
   useEffect(() => {
     dispatch(getSurvey());
@@ -81,26 +71,13 @@ export function Survey() {
 
   useEffect(() => {
     if (
-      getCustomerSurveyResponseState.status ===
-        GetCustomerSurveyResponseState.success &&
-      getCustomerSurveyResponseState.data
+      insertCustomerSurveyResponseState.status ===
+      InsertCustomerSurveyResponseState.success
     ) {
+      dispatch(resetInsertCustomerSurveyResponse());
       navigate(`complete?service=${service}&hash=${hash}`);
     }
-
-    dispatch(resetGetCustomerSurveyResponse());
-  }, [dispatch, getCustomerSurveyResponseState, navigate, service, hash]);
-
-  useEffect(() => {
-    if (hash && service) {
-      dispatch(
-        getCustomerSurveyResponse({
-          hash,
-          service,
-        })
-      );
-    }
-  }, [dispatch, hash, service, insertCustomerSurveyResponseState, navigate]);
+  }, [dispatch, insertCustomerSurveyResponseState, navigate, service, hash]);
 
   useEffect(() => {
     if (
@@ -111,25 +88,6 @@ export function Survey() {
       setSelectedStore(getAllStoresState.data[0]);
     }
   }, [getAllStoresState]);
-
-  useEffect(() => {
-    if (
-      insertCustomerSurveyResponseState.status ===
-      InsertCustomerSurveyResponseState.success
-    ) {
-      dispatch(resetInsertCustomerSurveyResponse());
-      dispatch(
-        popUpSnackBar({
-          message: "Survey submitted!",
-          severity: "success",
-        })
-      );
-
-      if (hash == null && service == null) {
-        navigate("complete");
-      }
-    }
-  }, [insertCustomerSurveyResponseState, dispatch, navigate, hash, service]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -332,7 +290,21 @@ export function Survey() {
                   </span>
                 </button>
 
-                {surveyNumber >= 0 ? (
+                {surveyNumber === 0 && hash === null && service === null ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSurveyNumber(surveyNumber - 1);
+                    }}
+                    className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      Go Back
+                    </span>
+                  </button>
+                ) : null}
+
+                {surveyNumber > 0 ? (
                   <button
                     type="button"
                     onClick={() => {

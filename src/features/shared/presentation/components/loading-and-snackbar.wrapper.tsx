@@ -284,6 +284,10 @@ import {
   GetStoresAvailableCateringModalState,
   selectGetStoresAvailableCateringModal,
 } from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
+import {
+  InsertCustomerSurveyResponseState,
+  selectInsertCustomerSurveyResponse,
+} from "features/survey/presentation/slices/insert-customer-survey-response.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -441,6 +445,29 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
+
+  const insertCustomerSurveyResponseState = useAppSelector(
+    selectInsertCustomerSurveyResponse
+  );
+
+  useEffect(() => {
+    switch (insertCustomerSurveyResponseState.status) {
+      case InsertCustomerSurveyResponseState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case InsertCustomerSurveyResponseState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case InsertCustomerSurveyResponseState.success:
+        showAlert(setSuccessAlert, insertCustomerSurveyResponseState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case InsertCustomerSurveyResponseState.fail:
+        showAlert(setFailsAlert, insertCustomerSurveyResponseState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [insertCustomerSurveyResponseState]);
 
   useEffect(() => {
     switch (updateBscUserState.status) {

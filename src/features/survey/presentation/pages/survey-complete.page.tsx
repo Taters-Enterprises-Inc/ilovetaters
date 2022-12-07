@@ -1,16 +1,29 @@
-import { useQuery } from "features/config/hooks";
-import { useState } from "react";
+import { useAppDispatch, useQuery } from "features/config/hooks";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { SurveyResponseModal } from "../modals";
+import { getCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 
 export function SurveyComplete() {
   const query = useQuery();
+  const dispatch = useAppDispatch();
 
   const service = query.get("service");
   const hash = query.get("hash");
 
   const [openSurveyResponseModal, setOpenSurveyResponseModal] = useState(false);
+
+  useEffect(() => {
+    if (hash && service) {
+      dispatch(
+        getCustomerSurveyResponse({
+          hash,
+          service,
+        })
+      );
+    }
+  }, [hash, service, dispatch]);
 
   return (
     <>

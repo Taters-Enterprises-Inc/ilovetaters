@@ -1,15 +1,6 @@
 import { IoMdClose } from "react-icons/io";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
-import {
-  getCustomerSurveyResponse,
-  GetCustomerSurveyResponseState,
-  selectGetCustomerSurveyResponse,
-} from "../slices/get-customer-survey-response.slice";
-import { useEffect } from "react";
+import { useAppSelector } from "features/config/hooks";
+import { selectGetCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 
 interface SurveyResponseModalProps {
   open: boolean;
@@ -17,26 +8,9 @@ interface SurveyResponseModalProps {
 }
 
 export function SurveyResponseModal(props: SurveyResponseModalProps) {
-  const query = useQuery();
-  const dispatch = useAppDispatch();
-
-  const service = query.get("service");
-  const hash = query.get("hash");
-
   const getCustomerSurveyResponseState = useAppSelector(
     selectGetCustomerSurveyResponse
   );
-
-  useEffect(() => {
-    if (hash && service) {
-      dispatch(
-        getCustomerSurveyResponse({
-          hash,
-          service,
-        })
-      );
-    }
-  }, [hash, service, dispatch]);
 
   if (props.open) {
     const surveyVerificationModal = document.getElementById(
