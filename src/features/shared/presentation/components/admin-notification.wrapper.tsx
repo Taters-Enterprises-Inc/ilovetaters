@@ -46,9 +46,9 @@ export function AdminNotificationWrapper() {
 
     snackshopChannel.bind("payment-transaction", (data: TransactionParam) => {
       if (
-        getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr_admin ||
-        getAdminSessionState.data?.user_details.stores.some(
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin ||
+        getAdminSessionState.data?.admin.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
@@ -85,9 +85,9 @@ export function AdminNotificationWrapper() {
 
     cateringChannel.bind("contract-booking", (data: TransactionParam) => {
       if (
-        getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr_admin ||
-        getAdminSessionState.data?.user_details.stores.some(
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin ||
+        getAdminSessionState.data?.admin.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
@@ -106,9 +106,9 @@ export function AdminNotificationWrapper() {
 
     cateringChannel.bind("payment-transaction", (data: TransactionParam) => {
       if (
-        getAdminSessionState.data?.is_admin ||
-        getAdminSessionState.data?.is_csr_admin ||
-        getAdminSessionState.data?.user_details.stores.some(
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin ||
+        getAdminSessionState.data?.admin.user_details.stores.some(
           (store) => store.store_id === data.store_id
         )
       ) {
