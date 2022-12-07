@@ -1,4 +1,5 @@
 import { ProductModel } from "features/shared/core/domain/product.model";
+import { ProductFlavorsModel } from "./product_flavors.model";
 
 export interface CartItemModel {
   product: ProductModel;
@@ -34,6 +35,7 @@ export interface CartItemModel {
     prod_size_id: number;
     prod_flavor_id: number;
     prod_multiflavors: string;
+    prod_qty: number;
   };
   product_images: Array<string>;
   product_addson: Array<{
@@ -70,7 +72,7 @@ export interface CartItemModel {
     uom: string;
   }>;
   product_size: Array<{ id: number; name: string }>;
-  product_flavor: Array<{ id: number; name: string }>;
+  product_flavor: Array<ProductFlavorsModel>;
   cart_item: {
     prod_id: number;
     prod_image_name: string;

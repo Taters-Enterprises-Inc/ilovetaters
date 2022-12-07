@@ -137,7 +137,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
     });
 
     // console.log(item);
-    setCurrentMultiFlavors(item);
+    // setCurrentMultiFlavors(item)
 
     return item;
 
