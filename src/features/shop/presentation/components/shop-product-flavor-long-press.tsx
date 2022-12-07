@@ -1,11 +1,11 @@
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
-import { ShopFlavorType } from "../pages/shop-product.page";
-import { ProductFlavorModel } from "features/shop/core/domain/product_flavor.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { ProductFlavorModel } from "features/shop/core/domain/product_flavor.model";
+import { useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { ShopFlavorType } from "../pages/shop-product.page";
 
 export type ShopFlavorQuantityActionType = "minus" | "plus";
 
@@ -134,7 +134,7 @@ export function ShopProductFlavorLongPress(props: ShopProductLongPressProps) {
 
   return (
     <>
-      <div className="w-full sm:w-[200px] h-12">
+      <div className="w-full h-12">
         <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
           <button
             onMouseDown={() => quantityOnPressed("minus")}

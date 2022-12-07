@@ -1,67 +1,67 @@
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   AiFillInfoCircle,
   AiOutlineMinus,
   AiOutlinePlus,
 } from "react-icons/ai";
-import { TbTruckDelivery } from "react-icons/tb";
-import { MdFastfood, MdStore } from "react-icons/md";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { MdFastfood, MdStore } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
+import NumberFormat from "react-number-format";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Addon } from "../../../shared/presentation/components/addon";
 import {
   changeProductPrice,
   getProductDetails,
   GetProductDetailsState,
   selectGetProductDetails,
 } from "../slices/get-product-details.slice";
-import { useEffect, useState, useRef, ChangeEvent } from "react";
-import { Addon } from "../../../shared/presentation/components/addon";
-import NumberFormat from "react-number-format";
 
+import Radio from "@mui/material/Radio";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import Radio from "@mui/material/Radio";
-import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { Autoplay, Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import {
   getProductSku,
   GetProductSkuState,
   selectGetProductSku,
 } from "../slices/get-product-sku.slice";
-import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
-import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper";
 
-import "swiper/css";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import RadioGroup from "@mui/material/RadioGroup";
 import {
-  addToCartShop,
-  AddToCartShopState,
-  selectAddToCartShop,
-} from "../slices/add-to-cart-shop.slice";
+  ForfeitRedeemState,
+  resetForfeitRedeemStateStatus,
+  selectForfeitRedeem,
+} from "features/popclub/presentation/slices/forfeit-redeem.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
+import { IoMdClose } from "react-icons/io";
+import "swiper/css";
+import { ShopProductFlavor } from "../components";
 import {
   addToCartCheckoutShop,
   AddToCartCheckoutShopState,
   resetAddToCartCheckout,
   selectAddToCartCheckoutShop,
 } from "../slices/add-to-cart-checkout-shop.slice";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { removeItemFromCartShop } from "../slices/remove-item-from-cart-shop.slice";
-import { IoMdClose } from "react-icons/io";
 import {
-  ForfeitRedeemState,
-  resetForfeitRedeemStateStatus,
-  selectForfeitRedeem,
-} from "features/popclub/presentation/slices/forfeit-redeem.slice";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
-import { ShopProductFlavor } from "../components";
+  addToCartShop,
+  AddToCartShopState,
+  selectAddToCartShop,
+} from "../slices/add-to-cart-shop.slice";
+import { removeItemFromCartShop } from "../slices/remove-item-from-cart-shop.slice";
 
 let quantityId: any;
 
@@ -213,7 +213,7 @@ export function ShopProduct() {
     clearTimeout(timerRef.current);
     clearInterval(quantityId);
 
-    if (quantity > 1) {
+    if (quantity > 0) {
       if (
         getProductDetailsState.data &&
         getProductDetailsState.data?.product.num_flavor > 0
@@ -664,7 +664,7 @@ export function ShopProduct() {
                 {getProductDetailsState.data?.product_size &&
                 getProductDetailsState.data?.product_size.length > 0 ? (
                   <div>
-                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+                    <h2 className="font-['Bebas_Neue'] text-4xl mb-3 text-white tracking-[2px]">
                       Choose Size
                     </h2>
                     <FormControl>
@@ -677,6 +677,7 @@ export function ShopProduct() {
                           setCurrentSize(sizeId);
                           handleSizeAndFlavorChange(sizeId);
                         }}
+                        row
                       >
                         {getProductDetailsState.data?.product_size.map(
                           (size, i) => {
@@ -691,7 +692,7 @@ export function ShopProduct() {
                                   />
                                 }
                                 label={
-                                  <span className="!text-white">
+                                  <span className="!text-white text-2xl font-bold">
                                     {size.name}
                                   </span>
                                 }

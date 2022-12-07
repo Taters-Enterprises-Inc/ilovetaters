@@ -1,30 +1,30 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Radio } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { Autoplay, Navigation } from "swiper";
-import "swiper/css";
-import { getCartItem, selectGetCartItem } from "../slices/get-cart-item.slice";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Addon, QuantityInput } from "features/shared/presentation/components/";
-import { MdFastfood } from "react-icons/md";
-import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
-import { TbTruckDelivery } from "react-icons/tb";
-import { AiFillInfoCircle } from "react-icons/ai";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { Radio } from "@mui/material";
+import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { AiFillInfoCircle } from "react-icons/ai";
 import { FaRegEdit } from "react-icons/fa";
-import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
+import { MdFastfood } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 import NumberFormat from "react-number-format";
-import { getProductSku } from "../slices/get-product-sku.slice";
+import { useLocation, useParams } from "react-router-dom";
+import { Autoplay, Navigation } from "swiper";
+import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import {
   editCartItem,
-  selectEditCartItem,
   EditCartItemState,
   resetEditCartItem,
+  selectEditCartItem,
 } from "../slices/edit-cart-item.slice";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { getCartItem, selectGetCartItem } from "../slices/get-cart-item.slice";
+import { getProductSku } from "../slices/get-product-sku.slice";
 
 export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [flavorName, setFlavorName] = useState<string>("");

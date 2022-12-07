@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
 import { useRef } from "react";
 import NumberFormat from "react-number-format";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
 import "swiper/css";
+import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
-import "swiper/css/autoplay";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Autoplay, Navigation, EffectFade } from "swiper";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { Autoplay, EffectFade, Navigation } from "swiper";
 
 interface ShopProductsCarouselProps {
   products: Array<any>;
