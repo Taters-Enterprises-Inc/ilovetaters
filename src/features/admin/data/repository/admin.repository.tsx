@@ -48,6 +48,7 @@ import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.m
 import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
+import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -310,6 +311,13 @@ export interface GetCatersPackageCategoriesResponse {
   };
 }
 
+export interface getAllCataringPackageResponse {
+  data: {
+    data: AdminSettingCatersPackageModel;
+    message: string;
+  };
+}
+
 export interface GetAdminStoreCatersPackagesResponse {
   data: {
     message: string;
@@ -557,6 +565,12 @@ export function UpdateStoreCatersPackageRepository(
       withCredentials: true,
     }
   );
+}
+
+export function getAllCataringPackageRepository(): Promise<getAllCataringPackageResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminStoreCatersPackagesRepository(

@@ -52,6 +52,7 @@ import {
   AdminSettingStore,
   AdminSettingCreateUser,
   AdminSettingCreateGroup,
+  AdminSettingCatersPackage,
   AdminSettingEditUser,
   AdminAvailabilityDeal,
   AdminAvailabilityProduct,
