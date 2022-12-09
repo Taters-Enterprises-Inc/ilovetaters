@@ -6,7 +6,7 @@ interface AdminSnackshopOrderStatusBbuttonParams {
   params: (value: any) => any;
   status: string | null;
   dispactAction: () => void;
-  data: Array<any>;
+  data?: Array<any>;
 }
 
 export const AdminChipsButton: React.FC<

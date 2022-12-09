@@ -27,3 +27,5 @@ export { MaterialInputPassword } from "./material-input-password";
 export { MaterialInputAutoComplete } from "./material-input-autocomplete";
 export { MaterialTimeInput } from "./material-time-input";
 export { MaterialPhoneInput } from "./material-phone-input";
+
+export { UploadImageInput } from "./upload-image-input";

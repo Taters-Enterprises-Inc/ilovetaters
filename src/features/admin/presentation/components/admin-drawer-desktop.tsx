@@ -86,7 +86,7 @@ export function AdminDrawerDesktop() {
             alt="taters admin logo"
           />
           <h1
-            className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
+            className={` whitespace-pre duration-300 text-white origin-left font-medium -mt-2
           ${
             !adminSideBarState.status &&
             "opacity-0 translate-x-28 overflow-hidden"

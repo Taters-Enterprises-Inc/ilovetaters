@@ -484,6 +484,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           </NavLink>
                         </li>
                       ) : null}
+
                       <li>
                         <NavLink
                           to="/admin/setting/store"
@@ -508,6 +509,36 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                 }`}
                               >
                                 Store
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink
+                          to="/admin/setting/deals"
+                          onClick={() => {
+                            // toggle3();
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Deals
                               </span>
                             </span>
                           </span>

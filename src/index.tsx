@@ -65,6 +65,9 @@ import {
   AdminAvailabilityCatersProductAddon,
   AdminUserDiscount,
   AdminSurveyVerification,
+  AdminSettingDeal,
+  AdminSettingCreateDeal,
+  AdminSettingEditDeal,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -311,6 +314,17 @@ root.render(
                           </Route>
 
                           <Route path="setting">
+                            <Route path="deals">
+                              <Route index element={<AdminSettingDeal />} />
+                              <Route
+                                path="create-deal"
+                                element={<AdminSettingCreateDeal />}
+                              />
+                              <Route
+                                path="edit-deal/:id"
+                                element={<AdminSettingEditDeal />}
+                              />
+                            </Route>
                             <Route
                               path="category"
                               element={<AdminSettingCategory />}

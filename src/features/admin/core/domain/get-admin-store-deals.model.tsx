@@ -7,3 +7,7 @@ export interface GetAdminStoreDealsModel {
   };
   deals: Array<AdminStoreDealModel>;
 }
+
+export interface GetAdminStoreDealsByIdModel {
+  deals: Array<any>;
+}

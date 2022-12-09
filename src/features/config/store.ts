@@ -146,6 +146,8 @@ import seenNotification from "features/shared/presentation/slices/seen-notificat
 import shopStoreChooserModal from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
 import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
 import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
+import  getAdminSettingDeals from "features/admin/presentation/slices/get-admin-setting-deals.slices";
+import  getAdminStoreDealById  from "features/admin/presentation/slices/get-admin-setting-deal-by-id.slices";
 
 export const store = configureStore({
   reducer: {
@@ -293,6 +295,8 @@ export const store = configureStore({
     shopStoreChooserModal,
     getStoresAvailableSnackshopModal,
     getStoresAvailableCateringModal,
+    getAdminSettingDeals,
+    getAdminStoreDealById
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

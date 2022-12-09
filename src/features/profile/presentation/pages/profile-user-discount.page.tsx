@@ -380,6 +380,7 @@ export function ProfileUserDiscount() {
               </div>
             </div>
           </div>
+          
           <div>
             <h2 className="font-['Bebas_Neue'] text-xl text-secondary tracking-[3px] text-center">
               Upload ID Picture BACK

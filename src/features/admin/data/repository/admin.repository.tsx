@@ -30,7 +30,7 @@ import { GetAdminCateringBookingsModel } from "features/admin/core/domain/get-ad
 import { GetAdminPopclubRedeemsModel } from "features/admin/core/domain/get-admin-popclub-redeems.model";
 import { GetAdminSettingStoresModel } from "features/admin/core/domain/get-admin-setting-stores.model";
 import { GetAdminShopOrdersModel } from "features/admin/core/domain/get-admin-shop-orders.model";
-import { GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
+import { GetAdminStoreDealsByIdModel, GetAdminStoreDealsModel } from "features/admin/core/domain/get-admin-store-deals.model";
 import { GetAdminStoreProductsModel } from "features/admin/core/domain/get-admin-store-products.model";
 import { GroupModel } from "features/admin/core/domain/group.model";
 import { CategoryModel } from "features/admin/core/domain/category.model";
@@ -404,6 +404,13 @@ export interface GetAdminSurveyVerificationsResponse {
   data: {
     message: string;
     data: GetAdminSurveyVerificationsModel;
+  };
+}
+
+export interface GetAdminStoreDealByIdResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreDealsByIdModel;
   };
 }
 
@@ -910,6 +917,22 @@ export function LoginAdminRepository(
 
 export function LogoutAdminRepository(): Promise<LogoutAdminResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/auth/logout`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingDealsRepository(
+  query: string
+): Promise<GetAdminStoreDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/deals${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingDealsByIdRepository(
+  id: string
+): Promise<GetAdminStoreDealByIdResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/deals/${id}`, {
     withCredentials: true,
   });
 }
