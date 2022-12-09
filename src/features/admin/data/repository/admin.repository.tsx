@@ -567,10 +567,23 @@ export function UpdateStoreCatersPackageRepository(
   );
 }
 
-export function getAllCataringPackageRepository(): Promise<getAllCataringPackageResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package`, {
-    withCredentials: true,
-  });
+export function getAllCataringPackageRepository(
+  query: string | null
+): Promise<getAllCataringPackageResponse> {
+  if (query === null)
+    return axios.get(
+      `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package`,
+      {
+        withCredentials: true,
+      }
+    );
+  else
+    return axios.get(
+      `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package${query}`,
+      {
+        withCredentials: true,
+      }
+    );
 }
 
 export function GetAdminStoreCatersPackagesRepository(

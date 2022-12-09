@@ -17,21 +17,29 @@ interface InitialState {
   status: catersListStatus;
   message: string;
   data: AdminSettingCatersPackageModel[];
+  pagination: {
+    total_rows: number;
+    per_page: number;
+  };
 }
 
 const initialState: InitialState = {
   status: catersListStatus.initial,
   message: "",
   data: [],
+  pagination: {
+    total_rows: 0,
+    per_page: 25,
+  },
 };
 
 export const getAllCataringPackageLists = createAsyncThunk(
   "getAllCataringPackageLists",
-  async () => {
+  async (query: string | null) => {
     try {
       const response: getAllCataringPackageResponse =
-        await getAllCataringPackageRepository();
-      //   console.log(response);
+        await getAllCataringPackageRepository(query);
+      //   console.log(response.data);
       return response.data;
     } catch (error: any) {
       // console.log(error);
@@ -43,22 +51,32 @@ export const getAllCataringPackageLists = createAsyncThunk(
 const CataringPackageListsSlice = createSlice({
   name: "CataringPackageLists",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetCataringPackageListsStatus: (state) => {
+      state.status = catersListStatus.inProgress;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getAllCataringPackageLists.pending, (state, action) => {
         state.status = catersListStatus.inProgress;
       })
       .addCase(getAllCataringPackageLists.fulfilled, (state, action) => {
-        const { data, message } = action.payload;
+        const { data, message, pagination } = action.payload;
+        console.log(action.payload);
         state.status = catersListStatus.success;
         state.message = message;
         state.data = data;
+        state.pagination = pagination;
       })
       .addCase(getAllCataringPackageLists.rejected, (state, action) => {
         state.status = catersListStatus.fail;
         state.message = action.payload as string;
         state.data = [];
+        state.pagination = {
+          total_rows: 0,
+          per_page: 25,
+        };
       });
   },
 });
@@ -66,8 +84,10 @@ const CataringPackageListsSlice = createSlice({
 export const selectAllCataringPackageLists = (state: RootState) =>
   state.CataringPackageLists.data;
 
-export const fetchAllCataringPackageListsStatus = (state: RootState) =>
-  state.CataringPackageLists.status;
-// export const { signUp } = usersListSlice.actions;
+export const getPagination = (state: RootState) =>
+  state.CataringPackageLists.pagination;
+
+export const { resetGetCataringPackageListsStatus } =
+  CataringPackageListsSlice.actions;
 
 export default CataringPackageListsSlice.reducer;

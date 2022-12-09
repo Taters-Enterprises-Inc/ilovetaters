@@ -308,6 +308,10 @@ root.render(
                               path="store"
                               element={<AdminSettingStore />}
                             />
+                            <Route
+                              path="caters-setting"
+                              element={<AdminSettingCatersPackage />}
+                            />
                             <Route path="product">
                               <Route
                                 index
