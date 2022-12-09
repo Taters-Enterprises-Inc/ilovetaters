@@ -2,5 +2,5 @@ export interface AdminStoreDealModel {
   id: number;
   alias: string;
   name: string;
-  product_image:string
+  product_image?: string;
 }
