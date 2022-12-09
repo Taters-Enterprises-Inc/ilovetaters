@@ -91,7 +91,7 @@ import redeemValidators from "features/popclub/presentation/slices/redeem-valida
 import getAdminStoreDeals from "features/admin/presentation/slices/get-admin-stores-deals.slice";
 import updateStoreDeal from "features/admin/presentation/slices/update-store-deal.slice";
 import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-stores-products.slice";
-import getProductCategories from "features/admin/presentation/slices/get-product-categories.slice";
+import getAdminProductCategories from "features/admin/presentation/slices/get-admin-product-categories.slice";
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
 import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
@@ -147,6 +147,7 @@ import getStoresAvailableCateringModal from "features/catering/presentation/slic
 import getSurvey from "features/survey/presentation/slices/get-survey.slice";
 import insertCustomerSurveyResponse from "features/survey/presentation/slices/insert-customer-survey-response.slice";
 import getCustomerSurveyResponse from "features/survey/presentation/slices/get-customer-survey-response.slice";
+import getAdminSettingShopProducts from "features/admin/presentation/slices/get-admin-setting-shop-products.slice";
 
 export const store = configureStore({
   reducer: {
@@ -241,7 +242,7 @@ export const store = configureStore({
     getAdminStoreDeals,
     updateStoreDeal,
     getAdminStoreProducts,
-    getProductCategories,
+    getAdminProductCategories,
     updateStoreProduct,
     getAdminSettingStores,
     updateAdminSettingStore,
@@ -297,6 +298,7 @@ export const store = configureStore({
     getSurvey,
     insertCustomerSurveyResponse,
     getCustomerSurveyResponse,
+    getAdminSettingShopProducts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

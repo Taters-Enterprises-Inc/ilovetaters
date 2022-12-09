@@ -12,7 +12,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { Radio } from "@mui/material";
+import Radio from "@mui/material/Radio";
 import { FaRegEdit } from "react-icons/fa";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import NumberFormat from "react-number-format";

@@ -52,55 +52,48 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
           Which store do you want to have your snacks delivered?
         </h1>
 
-        <div className="flex items-center justify-center mb-3">
-          <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
-              value={
-                storeChooserModalState.address
-                  ? storeChooserModalState.address
-                  : ""
-              }
-              onDenied={() => {
-                dispatch(
-                  getStoresAvailablePopClub({
-                    address: null,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onPrompt={() => {
-                dispatch(
-                  getStoresAvailablePopClub({
-                    address: null,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onLocateCurrentAddress={(place: string) => {
-                dispatch(setAddressStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailablePopClub({
-                    address: place,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onChange={(value: string) => {
-                dispatch(setAddressStoreChooserModal({ address: value }));
-              }}
-              onPlaceSelected={(place: string) => {
-                dispatch(setAddressStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailablePopClub({
-                    address: place,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
+        <SearchAddress
+          value={
+            storeChooserModalState.address ? storeChooserModalState.address : ""
+          }
+          onDenied={() => {
+            dispatch(
+              getStoresAvailablePopClub({
+                address: null,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onPrompt={() => {
+            dispatch(
+              getStoresAvailablePopClub({
+                address: null,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onLocateCurrentAddress={(place: string) => {
+            dispatch(setAddressStoreChooserModal({ address: place }));
+            dispatch(
+              getStoresAvailablePopClub({
+                address: place,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onChange={(value: string) => {
+            dispatch(setAddressStoreChooserModal({ address: value }));
+          }}
+          onPlaceSelected={(place: string) => {
+            dispatch(setAddressStoreChooserModal({ address: place }));
+            dispatch(
+              getStoresAvailablePopClub({
+                address: place,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+        />
         <StoreCluster
           onClose={props.onClose}
           address={storeChooserModalState.address}

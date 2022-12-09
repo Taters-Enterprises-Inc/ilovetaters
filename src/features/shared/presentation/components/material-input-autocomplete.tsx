@@ -1,8 +1,8 @@
-import { SxProps, Theme } from "@mui/material";
 import Autocomplete, {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
 } from "@mui/material/Autocomplete";
+import { SxProps, Theme } from "@mui/material/styles";
 import { MaterialInput } from "./material-input";
 
 interface MaterialInputAutoCompleteProps {

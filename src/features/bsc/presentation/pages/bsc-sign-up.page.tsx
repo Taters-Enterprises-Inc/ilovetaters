@@ -9,7 +9,7 @@ import {
   MaterialInputPassword,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { MenuItem } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 import {
   getAllStores,
   GetAllStoresState,

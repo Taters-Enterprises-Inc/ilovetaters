@@ -47,6 +47,7 @@ import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-di
 import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
 import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
+import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -263,7 +264,7 @@ export interface GetAdminStoreProductsResponse {
   };
 }
 
-export interface GetProductCategoriesResponse {
+export interface GetAdminProductCategoriesResponse {
   data: {
     message: string;
     data: Array<CategoryModel>;
@@ -405,6 +406,21 @@ export interface GetAdminSurveyVerificationsResponse {
     message: string;
     data: GetAdminSurveyVerificationsModel;
   };
+}
+
+export interface GetAdminSettingShopProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductsModel;
+  };
+}
+
+export function GetAdminSettingShopProductsRepository(
+  query: string
+): Promise<GetAdminSettingShopProductsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop-products${query}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminSurveyVerificationsRepository(
@@ -626,7 +642,7 @@ export function UpdateStoreProductRepository(
   );
 }
 
-export function GetProductCategoriesRepository(): Promise<GetProductCategoriesResponse> {
+export function GetAdminProductCategoriesRepository(): Promise<GetAdminProductCategoriesResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/product-categories`, {
     withCredentials: true,
   });

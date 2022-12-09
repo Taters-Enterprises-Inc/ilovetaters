@@ -17,17 +17,15 @@ import {
   MaterialInputAutoComplete,
   MaterialInput,
 } from "features/shared/presentation/components";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import {
   getAdminStoreProducts,
   resetGetAdminStoreProductsStatus,
   selectGetAdminStoreProducts,
 } from "../slices/get-admin-stores-products.slice";
 import {
-  getProductCategories,
-  selectGetProductCategories,
-} from "../slices/get-product-categories.slice";
+  getAdminProductCategories,
+  selectGetAdminProductCategories,
+} from "../slices/get-admin-product-categories.slice";
 import {
   selectUpdateStoreProduct,
   updateStoreProduct,
@@ -59,11 +57,13 @@ export function AdminAvailabilityProducts() {
     selectGetAdminStoreProducts
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getProductCategoriesState = useAppSelector(selectGetProductCategories);
+  const getAdminProductCategoriesState = useAppSelector(
+    selectGetAdminProductCategories
+  );
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
 
   useEffect(() => {
-    dispatch(getProductCategories());
+    dispatch(getAdminProductCategories());
   }, [dispatch]);
 
   useEffect(() => {
@@ -195,7 +195,7 @@ export function AdminAvailabilityProducts() {
         </div>
       </div>
       <div className="px-4 py-2">
-        {getProductCategoriesState.data ? (
+        {getAdminProductCategoriesState.data ? (
           <MaterialInput
             colorTheme="black"
             label="Filter by category"
@@ -228,7 +228,7 @@ export function AdminAvailabilityProducts() {
             <MenuItem value="all">
               <span className="text-xs lg:text-base">All</span>
             </MenuItem>
-            {getProductCategoriesState.data?.map((category, index) => (
+            {getAdminProductCategoriesState.data?.map((category, index) => (
               <MenuItem key={index} value={category.id}>
                 <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>

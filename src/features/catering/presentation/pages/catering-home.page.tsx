@@ -152,56 +152,49 @@ export function CateringHome() {
         </h1>
 
         <div className="space-y-4">
-          <div className="flex justify-center">
-            <label className="pure-material-textfield-outlined w-[100%]">
-              <SearchAddress
-                value={
-                  cateringHomePageState.address
-                    ? cateringHomePageState.address
-                    : ""
-                }
-                onDenied={() => {
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onPrompt={() => {
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onLocateCurrentAddress={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onChange={(value: string) => {
-                  dispatch(setAddressCateringHomePage({ address: value }));
-                }}
-                onPlaceSelected={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
+          <SearchAddress
+            value={
+              cateringHomePageState.address ? cateringHomePageState.address : ""
+            }
+            onDenied={() => {
+              dispatch(
+                getStoresAvailableCatering({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onPrompt={() => {
+              dispatch(
+                getStoresAvailableCatering({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onLocateCurrentAddress={(place: string) => {
+              dispatch(setAddressCateringHomePage({ address: place }));
+              dispatch(
+                getStoresAvailableCatering({
+                  address: place,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onChange={(value: string) => {
+              dispatch(setAddressCateringHomePage({ address: value }));
+            }}
+            onPlaceSelected={(place: string) => {
+              dispatch(setAddressCateringHomePage({ address: place }));
 
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-              />
-              <span>Search Address</span>
-            </label>
-          </div>
+              dispatch(
+                getStoresAvailableCatering({
+                  address: place,
+                  service: "CATERING",
+                })
+              );
+            }}
+          />
           <div className="space-y-4 lg:space-y-0 lg:space-x-4 flex flex-col sm:flex-row">
             <MaterialDateTimeInput
               label="Select Event Start Date"

@@ -176,56 +176,49 @@ export function CateringStoreChooserModalHome() {
         </h1>
 
         <div className="space-y-4">
-          <div className="flex justify-center">
-            <label className="pure-material-textfield-outlined w-[100%]">
-              <SearchAddress
-                value={
-                  cateringHomePageState.address
-                    ? cateringHomePageState.address
-                    : ""
-                }
-                onDenied={() => {
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onPrompt={() => {
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onLocateCurrentAddress={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onChange={(value: string) => {
-                  dispatch(setAddressCateringHomePage({ address: value }));
-                }}
-                onPlaceSelected={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
+          <SearchAddress
+            value={
+              cateringHomePageState.address ? cateringHomePageState.address : ""
+            }
+            onDenied={() => {
+              dispatch(
+                getStoresAvailableCateringModal({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onPrompt={() => {
+              dispatch(
+                getStoresAvailableCateringModal({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onLocateCurrentAddress={(place: string) => {
+              dispatch(setAddressCateringHomePage({ address: place }));
+              dispatch(
+                getStoresAvailableCateringModal({
+                  address: place,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onChange={(value: string) => {
+              dispatch(setAddressCateringHomePage({ address: value }));
+            }}
+            onPlaceSelected={(place: string) => {
+              dispatch(setAddressCateringHomePage({ address: place }));
 
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-              />
-              <span>Search Address</span>
-            </label>
-          </div>
+              dispatch(
+                getStoresAvailableCateringModal({
+                  address: place,
+                  service: "CATERING",
+                })
+              );
+            }}
+          />
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="space-y-4 lg:space-y-0 lg:space-x-4">

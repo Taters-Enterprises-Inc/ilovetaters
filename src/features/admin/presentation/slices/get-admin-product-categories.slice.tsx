@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { CategoryModel } from "features/admin/core/domain/category.model";
 import {
-  GetProductCategoriesRepository,
-  GetProductCategoriesResponse,
+  GetAdminProductCategoriesRepository,
+  GetAdminProductCategoriesResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetProductCategoriesState {
+export enum GetAdminProductCategoriesState {
   initial,
   inProgress,
   success,
@@ -15,23 +15,23 @@ export enum GetProductCategoriesState {
 }
 
 interface InitialState {
-  status: GetProductCategoriesState;
+  status: GetAdminProductCategoriesState;
   message: string;
   data: Array<CategoryModel> | undefined;
 }
 
 const initialState: InitialState = {
-  status: GetProductCategoriesState.initial,
+  status: GetAdminProductCategoriesState.initial,
   message: "",
   data: undefined,
 };
 
-export const getProductCategories = createAsyncThunk(
-  "getProductCategories",
+export const getAdminProductCategories = createAsyncThunk(
+  "getAdminProductCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const response: GetProductCategoriesResponse =
-        await GetProductCategoriesRepository();
+      const response: GetAdminProductCategoriesResponse =
+        await GetAdminProductCategoriesRepository();
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -45,32 +45,32 @@ export const getProductCategories = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getProductCategoriesSlice = createSlice({
-  name: "getProductCategories",
+export const getAdminProductCategoriesSlice = createSlice({
+  name: "getAdminProductCategories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProductCategories.pending, (state) => {
-        state.status = GetProductCategoriesState.inProgress;
+      .addCase(getAdminProductCategories.pending, (state) => {
+        state.status = GetAdminProductCategoriesState.inProgress;
       })
-      .addCase(getProductCategories.fulfilled, (state, action) => {
+      .addCase(getAdminProductCategories.fulfilled, (state, action) => {
         if (action.payload) {
           const { message, data } = action.payload;
-          state.status = GetProductCategoriesState.success;
+          state.status = GetAdminProductCategoriesState.success;
           state.message = message;
           state.data = data;
         }
       })
-      .addCase(getProductCategories.rejected, (state, action) => {
-        state.status = GetProductCategoriesState.fail;
+      .addCase(getAdminProductCategories.rejected, (state, action) => {
+        state.status = GetAdminProductCategoriesState.fail;
         state.message = action.payload as string;
         state.data = undefined;
       });
   },
 });
 
-export const selectGetProductCategories = (state: RootState) =>
-  state.getProductCategories;
+export const selectGetAdminProductCategories = (state: RootState) =>
+  state.getAdminProductCategories;
 
-export default getProductCategoriesSlice.reducer;
+export default getAdminProductCategoriesSlice.reducer;

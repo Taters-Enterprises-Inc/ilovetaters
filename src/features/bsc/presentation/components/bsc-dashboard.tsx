@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { RiSurveyLine } from "react-icons/ri";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
 import { FaUsers } from "react-icons/fa";
 
 export function Dashboard() {

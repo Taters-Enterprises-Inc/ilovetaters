@@ -45,15 +45,10 @@ import {
   AdminLogin,
   AdminCateringBooking,
   AdminPopclub,
-  AdminRaffleInstore,
-  AdminRaffleSnackshop,
   AdminReports,
   AdminFaq,
   AdminCFaq,
-  AdminSettingCategory,
-  AdminProduct,
   AdminSettingUser,
-  AdminSettingVoucher,
   AdminSettingStore,
   AdminSettingCreateUser,
   AdminSettingCreateGroup,
@@ -65,6 +60,9 @@ import {
   AdminAvailabilityCatersProductAddon,
   AdminUserDiscount,
   AdminSurveyVerification,
+  AdminSettingShopProduct,
+  AdminSettingShopCreateProduct,
+  AdminSettingShopEditProduct,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -259,23 +257,11 @@ root.render(
                             path="survey-verification"
                             element={<AdminSurveyVerification />}
                           />
-                          <Route path="product" element={<AdminProduct />} />
                           <Route path="reports" element={<AdminReports />} />
                           <Route path="faq">
                             <Route index element={<AdminFaq />} />
                             <Route path="store" element={<AdminFaq />} />
                             <Route path="" element={<AdminCFaq />} />
-                          </Route>
-
-                          <Route path="raffle">
-                            <Route
-                              path="snackshop"
-                              element={<AdminRaffleSnackshop />}
-                            />
-                            <Route
-                              path="instore"
-                              element={<AdminRaffleInstore />}
-                            />
                           </Route>
 
                           <Route path="availability">
@@ -302,10 +288,6 @@ root.render(
                           </Route>
 
                           <Route path="setting">
-                            <Route
-                              path="category"
-                              element={<AdminSettingCategory />}
-                            />
                             <Route path="user">
                               <Route index element={<AdminSettingUser />} />
                               <Route
@@ -322,13 +304,25 @@ root.render(
                               />
                             </Route>
                             <Route
-                              path="voucher"
-                              element={<AdminSettingVoucher />}
-                            />
-                            <Route
                               path="store"
                               element={<AdminSettingStore />}
                             />
+                            <Route path="product">
+                              <Route
+                                index
+                                element={<AdminSettingShopProduct />}
+                              />
+
+                              <Route
+                                path="create-product"
+                                element={<AdminSettingShopCreateProduct />}
+                              />
+
+                              <Route
+                                path=":id"
+                                element={<AdminSettingShopEditProduct />}
+                              />
+                            </Route>
                           </Route>
                         </Route>
                       </Route>

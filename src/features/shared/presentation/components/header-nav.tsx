@@ -1,4 +1,7 @@
-import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
+import Box from "@mui/material/Box";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Popover from "@mui/material/Popover";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
 import Menu from "@mui/material/Menu";

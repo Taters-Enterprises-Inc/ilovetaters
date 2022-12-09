@@ -1,4 +1,4 @@
-import { Tabs } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
 import { ReactNode, useEffect } from "react";
 import { VscCircleFilled } from "react-icons/vsc";
 import { Link } from "react-router-dom";

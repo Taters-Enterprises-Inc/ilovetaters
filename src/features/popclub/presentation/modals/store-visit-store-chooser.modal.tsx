@@ -1,12 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getAllAvailableStores } from "../slices/get-all-available-stores.slice";
 import { StoreClusterStoreVisit } from "../components";
 import { IoMdClose } from "react-icons/io";
-import { SearchAddress } from "features/shared/presentation/components";
-import {
-  selectStoreVisitStoreChooserModal,
-  setAddressStoreVisitStoreChooserModal,
-} from "../slices/store-visit-store-chooser-modal.slice";
+import { selectStoreVisitStoreChooserModal } from "../slices/store-visit-store-chooser-modal.slice";
 import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
 import { useEffect } from "react";
 import { StoreVisitStoreSearch } from "../components/store-visit-store-search";

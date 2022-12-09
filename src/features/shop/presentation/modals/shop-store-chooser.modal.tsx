@@ -53,55 +53,50 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
           Please search your address for delivery
         </h1>
 
-        <div className="flex items-center justify-center mb-3">
-          <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
-              value={
-                shopStoreChooserModalState.address
-                  ? shopStoreChooserModalState.address
-                  : ""
-              }
-              onDenied={() => {
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onPrompt={() => {
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onLocateCurrentAddress={(place: string) => {
-                dispatch(setAddressShopStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onChange={(value: string) => {
-                dispatch(setAddressShopStoreChooserModal({ address: value }));
-              }}
-              onPlaceSelected={(place: string) => {
-                dispatch(setAddressShopStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
+        <SearchAddress
+          value={
+            shopStoreChooserModalState.address
+              ? shopStoreChooserModalState.address
+              : ""
+          }
+          onDenied={() => {
+            dispatch(
+              getStoresAvailableSnackshopModal({
+                address: null,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onPrompt={() => {
+            dispatch(
+              getStoresAvailableSnackshopModal({
+                address: null,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onLocateCurrentAddress={(place: string) => {
+            dispatch(setAddressShopStoreChooserModal({ address: place }));
+            dispatch(
+              getStoresAvailableSnackshopModal({
+                address: place,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onChange={(value: string) => {
+            dispatch(setAddressShopStoreChooserModal({ address: value }));
+          }}
+          onPlaceSelected={(place: string) => {
+            dispatch(setAddressShopStoreChooserModal({ address: place }));
+            dispatch(
+              getStoresAvailableSnackshopModal({
+                address: place,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+        />
         <ShopStoreCluster
           onClose={props.onClose}
           address={shopStoreChooserModalState.address}

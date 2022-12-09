@@ -1,8 +1,5 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getStoresAvailableSnackshop } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
-import { setAddressShopHomePage } from "features/shop/presentation/slices/shop-home-page.slice";
-import { useEffect, useRef, useState } from "react";
-import { selectGetSession } from "../slices/get-session.slice";
+import { useEffect, useRef } from "react";
+import "features/shared/presentation/css/material-ui.css";
 
 let autoComplete: any;
 
@@ -154,11 +151,16 @@ export function SearchAddress(props: SearchAddressProps) {
   };
 
   return (
-    <input
-      ref={autoCompleteRef}
-      onChange={(event) => props.onChange(event.target.value)}
-      value={props.value}
-      placeholder=" "
-    />
+    <div className="flex justify-center">
+      <label className="pure-material-textfield-outlined w-[100%] mb-4">
+        <input
+          ref={autoCompleteRef}
+          onChange={(event) => props.onChange(event.target.value)}
+          value={props.value}
+          placeholder=" "
+        />
+        <span>Search Address</span>
+      </label>
+    </div>
   );
 }
