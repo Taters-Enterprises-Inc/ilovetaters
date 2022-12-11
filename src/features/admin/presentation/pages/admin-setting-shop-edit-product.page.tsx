@@ -34,8 +34,8 @@ export interface Variant {
 
 interface VariantOption {
   name: string;
-  sku?: string;
-  price?: string;
+  sku: string | null;
+  price: string | null;
 }
 
 export function AdminSettingShopEditProduct() {
@@ -104,8 +104,8 @@ export function AdminSettingShopEditProduct() {
         price: getAdminSettingShopProductState.data.price.toString(),
         category: getAdminSettingShopProductState.data.category.toString(),
         uom: getAdminSettingShopProductState.data.uom,
-        variants: [],
-        stores: [],
+        variants: getAdminSettingShopProductState.data.variants,
+        stores: getAdminSettingShopProductState.data.stores,
         numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
         image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingShopProductState.data.product_image}`,
         image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${getAdminSettingShopProductState.data.product_image}`,
@@ -125,6 +125,8 @@ export function AdminSettingShopEditProduct() {
           options: [
             {
               name: "",
+              price: null,
+              sku: null,
             },
           ],
         },
@@ -137,6 +139,8 @@ export function AdminSettingShopEditProduct() {
 
     copyVariants[index].options.push({
       name: "",
+      price: null,
+      sku: null,
     });
 
     setFormState({
@@ -319,151 +323,74 @@ export function AdminSettingShopEditProduct() {
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Product Variant Creator
             </h1>
-
-            {formState.variants.map((variant, variantIndex) => (
-              <div key={variantIndex} className="space-y-2">
-                <div className="flex space-x-2">
-                  <MaterialInput
-                    colorTheme="green"
-                    onChange={(e) => {
-                      const copyVariants = [...formState.variants];
-                      copyVariants[variantIndex].name = e.target.value;
-                      setFormState({
-                        ...formState,
-                        variants: copyVariants,
-                      });
-                    }}
-                    value={variant.name}
-                    name="variant"
-                    required
-                    label="Variant Name"
-                    fullWidth
-                  />
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      let copyVariants = [...formState.variants];
-                      copyVariants = copyVariants.filter(
-                        (value, index) => index !== variantIndex
-                      );
-                      setFormState({
-                        ...formState,
-                        variants: copyVariants,
-                      });
-                    }}
-                    className="text-2xl"
-                  >
-                    <AiOutlineClose />
-                  </button>
-                </div>
-
-                {variant.options.map((option, optionIndex) => (
-                  <div className="flex space-x-2" key={optionIndex}>
-                    <MaterialInput
-                      size="small"
-                      required
-                      colorTheme="blue"
-                      onChange={(e) => {
-                        const copyVariants = [...formState.variants];
-                        copyVariants[variantIndex].options[optionIndex].name =
-                          e.target.value;
-                        setFormState({
-                          ...formState,
-                          variants: copyVariants,
-                        });
-                      }}
-                      value={option.name}
-                      name="variant"
-                      label="Variant Option Name"
-                      fullWidth
-                    />
-                    {option.sku !== undefined ? (
+            {formState.variants ? (
+              <>
+                {formState.variants.map((variant, variantIndex) => (
+                  <div key={variantIndex} className="space-y-2">
+                    <div className="flex space-x-2">
                       <MaterialInput
-                        size="small"
-                        required
-                        colorTheme="blue"
+                        colorTheme="green"
                         onChange={(e) => {
                           const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options[optionIndex].sku =
-                            e.target.value;
+                          copyVariants[variantIndex].name = e.target.value;
                           setFormState({
                             ...formState,
                             variants: copyVariants,
                           });
                         }}
-                        value={option.sku}
-                        name="sku"
-                        label="SKU"
+                        value={variant.name}
+                        name="variant"
+                        required
+                        label="Variant Name"
                         fullWidth
                       />
-                    ) : null}
-                    {option.price !== undefined ? (
-                      <MaterialInput
-                        size="small"
-                        type="number"
-                        required
-                        colorTheme="blue"
-                        onChange={(e) => {
-                          const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options[
-                            optionIndex
-                          ].price = e.target.value;
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          let copyVariants = [...formState.variants];
+                          copyVariants = copyVariants.filter(
+                            (value, index) => index !== variantIndex
+                          );
                           setFormState({
                             ...formState,
                             variants: copyVariants,
                           });
                         }}
-                        value={option.price}
-                        name="price"
-                        label="Price"
-                        fullWidth
-                      />
-                    ) : null}
+                        className="text-2xl"
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    </div>
+
                     <button
                       type="button"
-                      onClick={(e) => {
-                        const copyVariants = [...formState.variants];
-                        copyVariants[variantIndex].options = copyVariants[
-                          variantIndex
-                        ].options.filter(
-                          (value, index) => index !== optionIndex
-                        );
-                        setFormState({
-                          ...formState,
-                          variants: copyVariants,
-                        });
-                      }}
-                      className="text-2xl"
+                      onClick={() =>
+                        handleAddProductVariantOptionWithPrice(variantIndex)
+                      }
+                      className="flex items-center text-[#003399] space-x-1"
                     >
-                      <AiOutlineClose />
+                      <AiOutlinePlus className="text-sm" />
+                      <span className="text-sm font-semibold ">
+                        Add Product Variant Option with Price
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddProductVariantOption(variantIndex)
+                      }
+                      className="flex items-center space-x-1 text-[#003399]"
+                    >
+                      <AiOutlinePlus className="text-sm" />
+                      <span className="text-sm font-semibold">
+                        Add Product Variant Option
+                      </span>
                     </button>
                   </div>
                 ))}
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleAddProductVariantOptionWithPrice(variantIndex)
-                  }
-                  className="flex items-center text-[#003399] space-x-1"
-                >
-                  <AiOutlinePlus className="text-sm" />
-                  <span className="text-sm font-semibold ">
-                    Add Product Variant Option with Price
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleAddProductVariantOption(variantIndex)}
-                  className="flex items-center space-x-1 text-[#003399]"
-                >
-                  <AiOutlinePlus className="text-sm" />
-                  <span className="text-sm font-semibold">
-                    Add Product Variant Option
-                  </span>
-                </button>
-              </div>
-            ))}
+              </>
+            ) : null}
             <button
               type="button"
               onClick={handleAddProductVariant}
@@ -567,7 +494,7 @@ export function AdminSettingShopEditProduct() {
                   }}
                 />
                 <label
-                  className="cursor-pointer text-sm"
+                  className="text-sm cursor-pointer"
                   htmlFor={store.store_id.toString()}
                 >
                   {store.name}
