@@ -34,8 +34,8 @@ export interface Variant {
 
 interface VariantOption {
   name: string;
-  sku?: string;
-  price?: string;
+  sku: string | null;
+  price: string | null;
 }
 
 export function AdminSettingShopCreateProduct() {
@@ -116,6 +116,8 @@ export function AdminSettingShopCreateProduct() {
           options: [
             {
               name: "",
+              price: null,
+              sku: null,
             },
           ],
         },
@@ -128,6 +130,8 @@ export function AdminSettingShopCreateProduct() {
 
     copyVariants[index].options.push({
       name: "",
+      price: null,
+      sku: null,
     });
 
     setFormState({
@@ -375,7 +379,7 @@ export function AdminSettingShopCreateProduct() {
                       label="Variant Option Name"
                       fullWidth
                     />
-                    {option.sku !== undefined ? (
+                    {option.sku !== null ? (
                       <MaterialInput
                         size="small"
                         required
@@ -395,7 +399,7 @@ export function AdminSettingShopCreateProduct() {
                         fullWidth
                       />
                     ) : null}
-                    {option.price !== undefined ? (
+                    {option.price !== null ? (
                       <MaterialInput
                         size="small"
                         type="number"
@@ -565,7 +569,7 @@ export function AdminSettingShopCreateProduct() {
                   }}
                 />
                 <label
-                  className="cursor-pointer text-sm"
+                  className="text-sm cursor-pointer"
                   htmlFor={store.store_id.toString()}
                 >
                   {store.name}

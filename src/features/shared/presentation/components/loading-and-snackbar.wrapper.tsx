@@ -292,6 +292,10 @@ import {
   CreateAdminSettingShopProductState,
   selectCreateAdminSettingShopProduct,
 } from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
+import {
+  EditAdminSettingShopProductState,
+  selectEditAdminSettingShopProduct,
+} from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -457,6 +461,29 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminSettingShopProductState = useAppSelector(
     selectCreateAdminSettingShopProduct
   );
+
+  const editAdminSettingShopProductState = useAppSelector(
+    selectEditAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    switch (editAdminSettingShopProductState.status) {
+      case EditAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, editAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, editAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingShopProductState]);
 
   useEffect(() => {
     switch (createAdminSettingShopProductState.status) {

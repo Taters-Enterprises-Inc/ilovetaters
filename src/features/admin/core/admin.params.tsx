@@ -142,3 +142,21 @@ export interface CreateAdminSettingShopProductParam {
   image150x150: File | string;
   image75x75: File | string;
 }
+
+export interface EditAdminSettingShopProductParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  variants: string;
+  stores: string;
+  numFlavor: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image150x150: File | string;
+  image75x75: File | string;
+}

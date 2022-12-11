@@ -21,6 +21,7 @@ import {
   AdminShopOrderUpdateStatusParam,
   AdminSurveyVerificationChangeStatusParam,
   CreateAdminSettingShopProductParam,
+  EditAdminSettingShopProductParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -428,6 +429,27 @@ export interface GetAdminSettingShopProductResponse {
     message: string;
     data: GetAdminSettingShopProductModel;
   };
+}
+
+export interface EditAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingShopProductRepository(
+  param: EditAdminSettingShopProductParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/edit-shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSettingShopProductRepository(

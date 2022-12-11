@@ -9,7 +9,7 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
   getAdminProductCategories,
@@ -26,6 +26,12 @@ import {
   selectGetAdminStores,
 } from "../slices/get-admin-stores.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  editAdminSettingShopProduct,
+  EditAdminSettingShopProductState,
+  resetEditAdminSettingShopProductState,
+  selectEditAdminSettingShopProduct,
+} from "../slices/edit-admin-setting-shop-product.slice";
 
 export interface Variant {
   name: string;
@@ -40,6 +46,7 @@ interface VariantOption {
 
 export function AdminSettingShopEditProduct() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const getAdminProductCategoriesState = useAppSelector(
@@ -49,6 +56,19 @@ export function AdminSettingShopEditProduct() {
   const getAdminSettingShopProductState = useAppSelector(
     selectGetAdminSettingShopProduct
   );
+  const editAdminSettingShopProductState = useAppSelector(
+    selectEditAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    if (
+      editAdminSettingShopProductState.status ===
+      EditAdminSettingShopProductState.success
+    ) {
+      navigate("/admin/setting/product/" + id);
+      dispatch(resetEditAdminSettingShopProductState());
+    }
+  }, [editAdminSettingShopProductState, dispatch, navigate, id]);
 
   const [formState, setFormState] = useState<{
     name: string;
@@ -189,6 +209,18 @@ export function AdminSettingShopEditProduct() {
         })
       );
       return;
+    }
+
+    if (id) {
+      console.log(formState);
+      dispatch(
+        editAdminSettingShopProduct({
+          id,
+          ...formState,
+          stores: JSON.stringify(formState.stores),
+          variants: JSON.stringify(formState.variants),
+        })
+      );
     }
   };
 

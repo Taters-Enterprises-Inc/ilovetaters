@@ -44,22 +44,18 @@ export function UploadFile(props: UploadFileProps) {
           {props.image ? (
             <>
               <img
-                src={
-                  props.image instanceof File
-                    ? URL.createObjectURL(props.image as File)
-                    : props.image
-                }
+                src={URL.createObjectURL(props.image as File)}
                 className="object-contain h-[150px] w-[150px]"
                 alt="upload file"
               />
-              <span className="text-xs text-secondary text-center">
+              <span className="text-xs text-center text-secondary">
                 {props.description}
               </span>
             </>
           ) : (
             <>
               <AiOutlineCloudUpload className="text-5xl text-secondary" />
-              <span className="text-xs text-secondary text-center">
+              <span className="text-xs text-center text-secondary">
                 Drag and drop here to upload <br /> {props.description}
               </span>
               <button

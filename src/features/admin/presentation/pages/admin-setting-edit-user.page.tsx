@@ -96,7 +96,6 @@ export function AdminSettingEditUser() {
           }
         }
       }
-      console.log(groups);
 
       setFormState({
         firstName: getAdminUserState.data.first_name,

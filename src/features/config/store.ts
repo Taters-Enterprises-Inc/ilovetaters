@@ -150,6 +150,7 @@ import getCustomerSurveyResponse from "features/survey/presentation/slices/get-c
 import getAdminSettingShopProducts from "features/admin/presentation/slices/get-admin-setting-shop-products.slice";
 import createAdminSettingShopProduct from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
 import getAdminSettingShopProduct from "features/admin/presentation/slices/get-admin-setting-shop-product.slice";
+import editAdminSettingShopProduct from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 
 export const store = configureStore({
   reducer: {
@@ -303,6 +304,7 @@ export const store = configureStore({
     getAdminSettingShopProducts,
     createAdminSettingShopProduct,
     getAdminSettingShopProduct,
+    editAdminSettingShopProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
