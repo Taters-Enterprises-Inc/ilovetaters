@@ -8,11 +8,7 @@ import {
 } from "features/shared/presentation/components";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
-import {
-  AiOutlineClose,
-  AiOutlineCloudUpload,
-  AiOutlinePlus,
-} from "react-icons/ai";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
@@ -479,6 +475,7 @@ export function AdminSettingShopCreateProduct() {
           <div>
             <div className="grid grid-cols-2 gap-4">
               <UploadFile
+                image={formState.image500x500}
                 onChange={(file) => {
                   setFormState({
                     ...formState,
@@ -488,6 +485,7 @@ export function AdminSettingShopCreateProduct() {
                 description="500x500"
               />
               <UploadFile
+                image={formState.image250x250}
                 onChange={(file) => {
                   setFormState({
                     ...formState,
@@ -497,6 +495,7 @@ export function AdminSettingShopCreateProduct() {
                 description="250x250"
               />
               <UploadFile
+                image={formState.image150x150}
                 onChange={(file) => {
                   setFormState({
                     ...formState,
@@ -506,6 +505,7 @@ export function AdminSettingShopCreateProduct() {
                 description="150x150"
               />
               <UploadFile
+                image={formState.image75x75}
                 onChange={(file) => {
                   setFormState({
                     ...formState,

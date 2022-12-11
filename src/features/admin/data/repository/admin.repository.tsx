@@ -49,6 +49,7 @@ import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.m
 import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
+import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -420,6 +421,24 @@ export interface CreateAdminSettingShopProductResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingShopProductResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductModel;
+  };
+}
+
+export function GetAdminSettingShopProductRepository(
+  productId: string
+): Promise<GetAdminSettingShopProductResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/shop-product?product-id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function CreateAdminSettingShopProductRepository(

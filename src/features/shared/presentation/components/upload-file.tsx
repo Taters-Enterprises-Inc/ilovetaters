@@ -1,24 +1,21 @@
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useDropzone } from "react-dropzone";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 interface UploadFileProps {
   description: string;
+  image: File | string;
   onChange: (file: File) => void;
 }
 
 export function UploadFile(props: UploadFileProps) {
-  const [image, setImage] = useState("");
-
   const onDrop = useCallback(
     (acceptedFiles: Array<File>) => {
-      props.onChange(acceptedFiles[0]);
-
       acceptedFiles.map((file, index) => {
         const reader = new FileReader();
         reader.onload = function (e) {
           if (e.target?.result) {
-            setImage(e.target.result as string);
+            props.onChange(file);
           }
         };
         reader.readAsDataURL(file);
@@ -44,26 +41,30 @@ export function UploadFile(props: UploadFileProps) {
         <span className="text-lg text-secondary">Drop the files here ...</span>
       ) : (
         <>
-          {image ? (
+          {props.image ? (
             <>
               <img
-                src={image}
+                src={
+                  props.image instanceof File
+                    ? URL.createObjectURL(props.image as File)
+                    : props.image
+                }
                 className="object-contain h-[150px] w-[150px]"
                 alt="upload file"
               />
-              <span className="text-sm text-secondary text-center">
+              <span className="text-xs text-secondary text-center">
                 {props.description}
               </span>
             </>
           ) : (
             <>
               <AiOutlineCloudUpload className="text-5xl text-secondary" />
-              <span className="text-sm text-secondary text-center">
+              <span className="text-xs text-secondary text-center">
                 Drag and drop here to upload <br /> {props.description}
               </span>
               <button
                 type="button"
-                className="px-3 py-1 text-sm text-white rounded-lg bg-secondary"
+                className="px-3 py-1 text-xs text-white rounded-lg bg-secondary"
               >
                 Or select file
               </button>

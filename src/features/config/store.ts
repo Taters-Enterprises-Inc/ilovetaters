@@ -149,6 +149,8 @@ import insertCustomerSurveyResponse from "features/survey/presentation/slices/in
 import getCustomerSurveyResponse from "features/survey/presentation/slices/get-customer-survey-response.slice";
 import getAdminSettingShopProducts from "features/admin/presentation/slices/get-admin-setting-shop-products.slice";
 import createAdminSettingShopProduct from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
+import getAdminSettingShopProduct from "features/admin/presentation/slices/get-admin-setting-shop-product.slice";
+
 export const store = configureStore({
   reducer: {
     getAllPlatformCategories,
@@ -300,6 +302,7 @@ export const store = configureStore({
     getCustomerSurveyResponse,
     getAdminSettingShopProducts,
     createAdminSettingShopProduct,
+    getAdminSettingShopProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
