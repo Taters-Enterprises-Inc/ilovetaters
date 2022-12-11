@@ -704,6 +704,33 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
+                {getProductDetailsState.data?.product_flavor.map(
+                  (flavor, i) => (
+                    <>
+                      {getProductDetailsState.data ? (
+                        <ShopProductFlavor
+                          key={i}
+                          numberOfFlavors={
+                            getProductDetailsState.data.product.num_flavor
+                          }
+                          productQuantity={quantity}
+                          currentMultiFlavor={currentMultiFlavors[i]}
+                          flavor={flavor}
+                          onChangeMultiFlavor={(updatedMultiFlavors) => {
+                            const updateCurrentMultiFlavor = {
+                              ...currentMultiFlavors,
+                            };
+
+                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
+                          }}
+                        />
+                      ) : null}
+                    </>
+                  )
+                )}
+
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
@@ -802,6 +829,7 @@ export function ShopProduct() {
                     </div>
                   </div>
                 </div>
+
                 {getProductDetailsState.data?.product
                   .promo_discount_percentage ? (
                   <div>
@@ -849,33 +877,6 @@ export function ShopProduct() {
                       </h2>
                     ) : null}
                   </>
-                )}
-
-                {getProductDetailsState.data?.product_flavor.map(
-                  (flavor, i) => (
-                    <>
-                      {getProductDetailsState.data ? (
-                        <ShopProductFlavor
-                          key={i}
-                          numberOfFlavors={
-                            getProductDetailsState.data.product.num_flavor
-                          }
-                          productQuantity={quantity}
-                          currentMultiFlavor={currentMultiFlavors[i]}
-                          flavor={flavor}
-                          onChangeMultiFlavor={(updatedMultiFlavors) => {
-                            const updateCurrentMultiFlavor = {
-                              ...currentMultiFlavors,
-                            };
-
-                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
-
-                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
-                          }}
-                        />
-                      ) : null}
-                    </>
-                  )
                 )}
 
                 {getSessionState.data?.cache_data ||
