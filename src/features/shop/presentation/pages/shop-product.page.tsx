@@ -661,76 +661,6 @@ export function ShopProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getProductDetailsState.data?.product_size &&
-                getProductDetailsState.data?.product_size.length > 0 ? (
-                  <div>
-                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                      Choose Size
-                    </h2>
-                    <FormControl>
-                      <RadioGroup
-                        value={currentSize}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                          const sizeId = (event.target as HTMLInputElement)
-                            .value;
-
-                          setCurrentSize(sizeId);
-                          handleSizeAndFlavorChange(sizeId);
-                        }}
-                      >
-                        {getProductDetailsState.data?.product_size.map(
-                          (size, i) => {
-                            return (
-                              <FormControlLabel
-                                key={i}
-                                value={size.id}
-                                control={
-                                  <Radio
-                                    color="tertiary"
-                                    sx={{ color: "white" }}
-                                  />
-                                }
-                                label={
-                                  <span className="!text-white">
-                                    {size.name}
-                                  </span>
-                                }
-                              />
-                            );
-                          }
-                        )}
-                      </RadioGroup>
-                    </FormControl>
-                  </div>
-                ) : null}
-
-                {getProductDetailsState.data?.product_flavor.map(
-                  (flavor, i) => (
-                    <>
-                      {getProductDetailsState.data ? (
-                        <ShopProductFlavor
-                          key={i}
-                          numberOfFlavors={
-                            getProductDetailsState.data.product.num_flavor
-                          }
-                          productQuantity={quantity}
-                          currentMultiFlavor={currentMultiFlavors[i]}
-                          flavor={flavor}
-                          onChangeMultiFlavor={(updatedMultiFlavors) => {
-                            const updateCurrentMultiFlavor = {
-                              ...currentMultiFlavors,
-                            };
-
-                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
-
-                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
-                          }}
-                        />
-                      ) : null}
-                    </>
-                  )
-                )}
-
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                     Quantity
@@ -877,6 +807,76 @@ export function ShopProduct() {
                       </h2>
                     ) : null}
                   </>
+                )}
+
+                {getProductDetailsState.data?.product_size &&
+                getProductDetailsState.data?.product_size.length > 0 ? (
+                  <div>
+                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+                      Choose Size
+                    </h2>
+                    <FormControl>
+                      <RadioGroup
+                        value={currentSize}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                          const sizeId = (event.target as HTMLInputElement)
+                            .value;
+
+                          setCurrentSize(sizeId);
+                          handleSizeAndFlavorChange(sizeId);
+                        }}
+                      >
+                        {getProductDetailsState.data?.product_size.map(
+                          (size, i) => {
+                            return (
+                              <FormControlLabel
+                                key={i}
+                                value={size.id}
+                                control={
+                                  <Radio
+                                    color="tertiary"
+                                    sx={{ color: "white" }}
+                                  />
+                                }
+                                label={
+                                  <span className="!text-white">
+                                    {size.name}
+                                  </span>
+                                }
+                              />
+                            );
+                          }
+                        )}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                ) : null}
+
+                {getProductDetailsState.data?.product_flavor.map(
+                  (flavor, i) => (
+                    <>
+                      {getProductDetailsState.data ? (
+                        <ShopProductFlavor
+                          key={i}
+                          numberOfFlavors={
+                            getProductDetailsState.data.product.num_flavor
+                          }
+                          productQuantity={quantity}
+                          currentMultiFlavor={currentMultiFlavors[i]}
+                          flavor={flavor}
+                          onChangeMultiFlavor={(updatedMultiFlavors) => {
+                            const updateCurrentMultiFlavor = {
+                              ...currentMultiFlavors,
+                            };
+
+                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
+                          }}
+                        />
+                      ) : null}
+                    </>
+                  )
                 )}
 
                 {getSessionState.data?.cache_data ||
