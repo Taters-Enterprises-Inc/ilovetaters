@@ -288,6 +288,14 @@ import {
   InsertCustomerSurveyResponseState,
   selectInsertCustomerSurveyResponse,
 } from "features/survey/presentation/slices/insert-customer-survey-response.slice";
+import {
+  CreateAdminSettingShopProductState,
+  selectCreateAdminSettingShopProduct,
+} from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
+import {
+  EditAdminSettingShopProductState,
+  selectEditAdminSettingShopProduct,
+} from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -449,6 +457,52 @@ export function LoadingAndSnackbarWrapper() {
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
   );
+
+  const createAdminSettingShopProductState = useAppSelector(
+    selectCreateAdminSettingShopProduct
+  );
+
+  const editAdminSettingShopProductState = useAppSelector(
+    selectEditAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    switch (editAdminSettingShopProductState.status) {
+      case EditAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, editAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, editAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingShopProductState]);
+
+  useEffect(() => {
+    switch (createAdminSettingShopProductState.status) {
+      case CreateAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, createAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, createAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingShopProductState]);
 
   useEffect(() => {
     switch (insertCustomerSurveyResponseState.status) {

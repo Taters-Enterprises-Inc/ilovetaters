@@ -2,14 +2,21 @@ import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { MaterialInput } from "features/shared/presentation/components";
-import { useEffect, useState } from "react";
 import {
-  AiOutlineClose,
-  AiOutlineCloudUpload,
-  AiOutlinePlus,
-} from "react-icons/ai";
+  MaterialInput,
+  UploadFile,
+} from "features/shared/presentation/components";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import { FormEvent, useEffect, useState } from "react";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
+import {
+  createAdminSettingShopProduct,
+  CreateAdminSettingShopProductState,
+  resetCreateAdminSettingShopProductState,
+  selectCreateAdminSettingShopProduct,
+} from "../slices/create-admin-setting-shop-product.slice";
 import {
   getAdminProductCategories,
   selectGetAdminProductCategories,
@@ -20,18 +27,20 @@ import {
   selectGetAdminStores,
 } from "../slices/get-admin-stores.slice";
 
-interface Variant {
+export interface Variant {
   name: string;
   options: Array<VariantOption>;
 }
 
 interface VariantOption {
   name: string;
-  price: string;
+  sku: string | null;
+  price: string | null;
 }
 
 export function AdminSettingShopCreateProduct() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState<{
     name: string;
@@ -41,8 +50,13 @@ export function AdminSettingShopCreateProduct() {
     price: string;
     category: string;
     uom: string;
+    numFlavor: string;
     variants: Array<Variant>;
     stores: Array<AdminStoreModel>;
+    image500x500: File | string;
+    image250x250: File | string;
+    image150x150: File | string;
+    image75x75: File | string;
   }>({
     name: "",
     description: "",
@@ -53,6 +67,11 @@ export function AdminSettingShopCreateProduct() {
     uom: "",
     variants: [],
     stores: [],
+    numFlavor: "",
+    image500x500: "",
+    image250x250: "",
+    image150x150: "",
+    image75x75: "",
   });
 
   const getAdminProductCategoriesState = useAppSelector(
@@ -60,6 +79,20 @@ export function AdminSettingShopCreateProduct() {
   );
 
   const getAdminStoresState = useAppSelector(selectGetAdminStores);
+
+  const createAdminSettingShopProductState = useAppSelector(
+    selectCreateAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    if (
+      createAdminSettingShopProductState.status ===
+      CreateAdminSettingShopProductState.success
+    ) {
+      navigate("/admin/setting/product");
+      dispatch(resetCreateAdminSettingShopProductState());
+    }
+  }, [createAdminSettingShopProductState, dispatch, navigate]);
 
   useEffect(() => {
     dispatch(getAdminProductCategories());
@@ -83,7 +116,8 @@ export function AdminSettingShopCreateProduct() {
           options: [
             {
               name: "",
-              price: "",
+              price: null,
+              sku: null,
             },
           ],
         },
@@ -96,6 +130,21 @@ export function AdminSettingShopCreateProduct() {
 
     copyVariants[index].options.push({
       name: "",
+      price: null,
+      sku: null,
+    });
+
+    setFormState({
+      ...formState,
+      variants: copyVariants,
+    });
+  };
+  const handleAddProductVariantOptionWithPrice = (index: number) => {
+    const copyVariants = [...formState.variants];
+
+    copyVariants[index].options.push({
+      name: "",
+      sku: "",
       price: "",
     });
 
@@ -111,6 +160,34 @@ export function AdminSettingShopCreateProduct() {
       ...formState,
       [evt.target.name]: value,
     });
+  };
+
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      formState.image500x500 === "" ||
+      formState.image250x250 === "" ||
+      formState.image150x150 === "" ||
+      formState.image75x75 === ""
+    ) {
+      dispatch(
+        popUpSnackBar({
+          message:
+            "Please insure that all the required size image has been filled out",
+          severity: "error",
+        })
+      );
+      return;
+    }
+
+    dispatch(
+      createAdminSettingShopProduct({
+        ...formState,
+        stores: JSON.stringify(formState.stores),
+        variants: JSON.stringify(formState.variants),
+      })
+    );
   };
 
   return (
@@ -136,18 +213,19 @@ export function AdminSettingShopCreateProduct() {
           Create Product
         </span>
       </section>
-      <form className="p-4 space-y-2">
+      <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
         <div className="flex space-x-4">
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-3">
             <div className="flex space-x-2">
               <MaterialInput
                 colorTheme="black"
                 name="uom"
+                required
                 label="UOM"
                 select
-                value=""
+                value={formState.uom}
+                onChange={handleInputChange}
                 className="flex-1"
-                onChange={() => {}}
               >
                 <MenuItem value="PACK">PACK</MenuItem>
                 <MenuItem value="SET">SET</MenuItem>
@@ -160,12 +238,13 @@ export function AdminSettingShopCreateProduct() {
               {getAdminProductCategoriesState.data ? (
                 <MaterialInput
                   colorTheme="black"
+                  required
                   name="category"
                   label="Category"
                   select
-                  value=""
+                  value={formState.category}
+                  onChange={handleInputChange}
                   className="flex-1"
-                  onChange={() => {}}
                 >
                   {getAdminProductCategoriesState.data.map((category) => (
                     <MenuItem value={category.id}>{category.name}</MenuItem>
@@ -224,16 +303,30 @@ export function AdminSettingShopCreateProduct() {
               onChange={handleInputChange}
               value={formState.price}
               name="price"
+              type="number"
               label="Price"
               fullWidth
             />
+            <MaterialInput
+              required
+              colorTheme="black"
+              type="number"
+              onChange={handleInputChange}
+              value={formState.numFlavor}
+              name="numFlavor"
+              label="Number of Flavor"
+              fullWidth
+            />
+
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Product Variant Creator
+            </h1>
 
             {formState.variants.map((variant, variantIndex) => (
               <div key={variantIndex} className="space-y-2">
                 <div className="flex space-x-2">
                   <MaterialInput
-                    size="small"
-                    colorTheme="black"
+                    colorTheme="green"
                     onChange={(e) => {
                       const copyVariants = [...formState.variants];
                       copyVariants[variantIndex].name = e.target.value;
@@ -244,6 +337,7 @@ export function AdminSettingShopCreateProduct() {
                     }}
                     value={variant.name}
                     name="variant"
+                    required
                     label="Variant Name"
                     fullWidth
                   />
@@ -269,7 +363,8 @@ export function AdminSettingShopCreateProduct() {
                   <div className="flex space-x-2" key={optionIndex}>
                     <MaterialInput
                       size="small"
-                      colorTheme="black"
+                      required
+                      colorTheme="blue"
                       onChange={(e) => {
                         const copyVariants = [...formState.variants];
                         copyVariants[variantIndex].options[optionIndex].name =
@@ -284,24 +379,48 @@ export function AdminSettingShopCreateProduct() {
                       label="Variant Option Name"
                       fullWidth
                     />
-                    <MaterialInput
-                      size="small"
-                      type="number"
-                      colorTheme="black"
-                      onChange={(e) => {
-                        const copyVariants = [...formState.variants];
-                        copyVariants[variantIndex].options[optionIndex].price =
-                          e.target.value;
-                        setFormState({
-                          ...formState,
-                          variants: copyVariants,
-                        });
-                      }}
-                      value={option.price}
-                      name="price"
-                      label="Price"
-                      fullWidth
-                    />
+                    {option.sku !== null ? (
+                      <MaterialInput
+                        size="small"
+                        required
+                        colorTheme="blue"
+                        onChange={(e) => {
+                          const copyVariants = [...formState.variants];
+                          copyVariants[variantIndex].options[optionIndex].sku =
+                            e.target.value;
+                          setFormState({
+                            ...formState,
+                            variants: copyVariants,
+                          });
+                        }}
+                        value={option.sku}
+                        name="sku"
+                        label="SKU"
+                        fullWidth
+                      />
+                    ) : null}
+                    {option.price !== null ? (
+                      <MaterialInput
+                        size="small"
+                        type="number"
+                        required
+                        colorTheme="blue"
+                        onChange={(e) => {
+                          const copyVariants = [...formState.variants];
+                          copyVariants[variantIndex].options[
+                            optionIndex
+                          ].price = e.target.value;
+                          setFormState({
+                            ...formState,
+                            variants: copyVariants,
+                          });
+                        }}
+                        value={option.price}
+                        name="price"
+                        label="Price"
+                        fullWidth
+                      />
+                    ) : null}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -322,11 +441,23 @@ export function AdminSettingShopCreateProduct() {
                     </button>
                   </div>
                 ))}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAddProductVariantOptionWithPrice(variantIndex)
+                  }
+                  className="flex items-center text-[#003399] space-x-1"
+                >
+                  <AiOutlinePlus className="text-sm" />
+                  <span className="text-sm font-semibold ">
+                    Add Product Variant Option with Price
+                  </span>
+                </button>
 
                 <button
                   type="button"
                   onClick={() => handleAddProductVariantOption(variantIndex)}
-                  className="flex items-center text-secondary space-x-1"
+                  className="flex items-center space-x-1 text-[#003399]"
                 >
                   <AiOutlinePlus className="text-sm" />
                   <span className="text-sm font-semibold">
@@ -338,7 +469,7 @@ export function AdminSettingShopCreateProduct() {
             <button
               type="button"
               onClick={handleAddProductVariant}
-              className="flex items-center text-secondary space-x-1"
+              className="flex items-center space-x-1 text-[#006600]"
             >
               <AiOutlinePlus className="text-sm" />
               <span className="text-sm font-semibold">Add Product Variant</span>
@@ -347,61 +478,57 @@ export function AdminSettingShopCreateProduct() {
 
           <div>
             <div className="grid grid-cols-2 gap-4">
-              <div className=" border-dashed border-2 border-secondary h-[250px] rounded-lg flex justify-center items-center flex-col space-y-2">
-                <AiOutlineCloudUpload className="text-5xl text-secondary" />{" "}
-                <span className="text-sm text-secondary text-center">
-                  Drag and drop here to upload <br /> 500x500
-                </span>
-                <button
-                  type="button"
-                  className="px-3 py-1 text-sm text-white rounded-lg bg-secondary"
-                >
-                  Or select file
-                </button>
-              </div>
-              <div className=" border-dashed border-2 border-secondary h-[250px] rounded-lg flex justify-center items-center flex-col space-y-2">
-                <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                <span className="text-sm text-secondary text-center">
-                  Drag and drop here to upload <br /> 250x250
-                </span>
-                <button
-                  type="button"
-                  className="px-3 py-1 text-sm text-white rounded-lg bg-secondary"
-                >
-                  Or select file
-                </button>
-              </div>
-              <div className=" border-dashed border-2 border-secondary h-[250px] rounded-lg flex justify-center items-center flex-col space-y-2">
-                <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                <span className="text-sm text-secondary text-center">
-                  Drag and drop here to upload <br /> 150x150
-                </span>
-                <button
-                  type="button"
-                  className="px-3 py-1 text-sm text-white rounded-lg bg-secondary"
-                >
-                  Or select file
-                </button>
-              </div>
-              <div className=" border-dashed border-2 border-secondary h-[250px] rounded-lg flex justify-center items-center flex-col space-y-2">
-                <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                <span className="text-sm text-secondary text-center">
-                  Drag and drop here to upload <br /> 75x75
-                </span>
-                <button
-                  type="button"
-                  className="px-3 py-1 text-sm text-white rounded-lg bg-secondary"
-                >
-                  Or select file
-                </button>
-              </div>
+              <UploadFile
+                image={formState.image500x500}
+                onChange={(file) => {
+                  setFormState({
+                    ...formState,
+                    image500x500: file,
+                  });
+                }}
+                description="500x500"
+              />
+              <UploadFile
+                image={formState.image250x250}
+                onChange={(file) => {
+                  setFormState({
+                    ...formState,
+                    image250x250: file,
+                  });
+                }}
+                description="250x250"
+              />
+              <UploadFile
+                image={formState.image150x150}
+                onChange={(file) => {
+                  setFormState({
+                    ...formState,
+                    image150x150: file,
+                  });
+                }}
+                description="150x150"
+              />
+              <UploadFile
+                image={formState.image75x75}
+                onChange={(file) => {
+                  setFormState({
+                    ...formState,
+                    image75x75: file,
+                  });
+                }}
+                description="75x75"
+              />
             </div>
             <h4 className="mt-1 text-sm leading-5 text-secondary">
-              <strong>Note:</strong> Supported file types: JPG, JPEG, PNG and
-              GIF. Maximum file size is 2MB.
+              <strong>Note:</strong> JPG is the only supported file type.
+              Maximum file size is 2MB.
             </h4>
           </div>
         </div>
+
+        <h1 className="text-2xl font-bold text-secondary !my-2">
+          Store Selection
+        </h1>
 
         <div className="grid grid-cols-5 gap-4">
           {getAdminStoresState.data?.map((store, i) => {
@@ -442,7 +569,7 @@ export function AdminSettingShopCreateProduct() {
                   }}
                 />
                 <label
-                  className="cursor-pointer text-sm"
+                  className="text-sm cursor-pointer"
                   htmlFor={store.store_id.toString()}
                 >
                   {store.name}

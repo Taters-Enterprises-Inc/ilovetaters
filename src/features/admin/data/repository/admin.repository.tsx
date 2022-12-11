@@ -20,6 +20,8 @@ import {
   AdminCateringBookingUpdateStatusParam,
   AdminShopOrderUpdateStatusParam,
   AdminSurveyVerificationChangeStatusParam,
+  CreateAdminSettingShopProductParam,
+  EditAdminSettingShopProductParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -48,7 +50,7 @@ import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.m
 import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
-import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
+import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -421,6 +423,62 @@ export interface GetAdminSettingShopProductsResponse {
     message: string;
     data: GetAdminSettingShopProductsModel;
   };
+}
+
+export interface CreateAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingShopProductResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductModel;
+  };
+}
+
+export interface EditAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingShopProductRepository(
+  param: EditAdminSettingShopProductParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/edit-shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingShopProductRepository(
+  productId: string
+): Promise<GetAdminSettingShopProductResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/shop-product?product-id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingShopProductRepository(
+  param: CreateAdminSettingShopProductParam
+): Promise<CreateAdminSettingShopProductResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/shop-product`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetAdminSettingShopProductsRepository(

@@ -148,6 +148,9 @@ import getSurvey from "features/survey/presentation/slices/get-survey.slice";
 import insertCustomerSurveyResponse from "features/survey/presentation/slices/insert-customer-survey-response.slice";
 import getCustomerSurveyResponse from "features/survey/presentation/slices/get-customer-survey-response.slice";
 import getAdminSettingShopProducts from "features/admin/presentation/slices/get-admin-setting-shop-products.slice";
+import createAdminSettingShopProduct from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
+import getAdminSettingShopProduct from "features/admin/presentation/slices/get-admin-setting-shop-product.slice";
+import editAdminSettingShopProduct from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 
 import { default as CataringPackageListsReducer } from "features/admin/presentation/slices/admin-setting-caters-package.slice";
 export const store = configureStore({
@@ -301,6 +304,9 @@ export const store = configureStore({
     getCustomerSurveyResponse,
     getAdminSettingShopProducts,
     CataringPackageLists: CataringPackageListsReducer,
+    createAdminSettingShopProduct,
+    getAdminSettingShopProduct,
+    editAdminSettingShopProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
