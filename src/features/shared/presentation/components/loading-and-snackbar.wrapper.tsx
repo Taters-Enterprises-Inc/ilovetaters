@@ -288,6 +288,10 @@ import {
   InsertCustomerSurveyResponseState,
   selectInsertCustomerSurveyResponse,
 } from "features/survey/presentation/slices/insert-customer-survey-response.slice";
+import {
+  CreateAdminSettingShopProductState,
+  selectCreateAdminSettingShopProduct,
+} from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -449,6 +453,29 @@ export function LoadingAndSnackbarWrapper() {
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
   );
+
+  const createAdminSettingShopProductState = useAppSelector(
+    selectCreateAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    switch (createAdminSettingShopProductState.status) {
+      case CreateAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, createAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, createAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingShopProductState]);
 
   useEffect(() => {
     switch (insertCustomerSurveyResponseState.status) {

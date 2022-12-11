@@ -145,7 +145,6 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
-    console.log(formState);
     if (
       formState &&
       formState.firstName &&

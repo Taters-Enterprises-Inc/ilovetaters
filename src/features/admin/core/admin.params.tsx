@@ -1,3 +1,4 @@
+import { Variant } from "../presentation/pages/admin-setting-shop-create-product.page";
 import { AdminStoreModel } from "./domain/admin-store.model";
 
 export interface EditAdminUserParam {
@@ -123,4 +124,21 @@ export interface AdminShopOrderUpdateStatusParam {
   mobileUserId: number | null;
   fbUserId: number | null;
   status: number;
+}
+
+export interface CreateAdminSettingShopProductParam {
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  variants: string;
+  stores: string;
+  numFlavor: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image150x150: File | string;
+  image75x75: File | string;
 }
