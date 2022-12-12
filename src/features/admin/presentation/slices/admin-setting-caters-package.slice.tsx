@@ -3,6 +3,8 @@ import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin
 import {
   getAllCataringPackageResponse,
   getAllCataringPackageRepository,
+  createNewCataringPackageRepository,
+  createNewCataringPackageResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
@@ -39,10 +41,26 @@ export const getAllCataringPackageLists = createAsyncThunk(
     try {
       const response: getAllCataringPackageResponse =
         await getAllCataringPackageRepository(query);
-      //   console.log(response.data);
+      console.log(response);
       return response.data;
     } catch (error: any) {
-      // console.log(error);
+      console.log(error);
+      return error.message;
+    }
+  }
+);
+
+export const createCataringPackage = createAsyncThunk(
+  "createCataringPackage",
+  async (query: any) => {
+    try {
+      const response: createNewCataringPackageResponse =
+        await createNewCataringPackageRepository(query);
+      console.log(response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error.response.data);
+
       return error.message;
     }
   }
@@ -77,6 +95,10 @@ const CataringPackageListsSlice = createSlice({
           total_rows: 0,
           per_page: 25,
         };
+      })
+      .addCase(createCataringPackage.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.data.push(action.payload);
       });
   },
 });

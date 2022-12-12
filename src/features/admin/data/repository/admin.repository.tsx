@@ -51,6 +51,7 @@ import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
+import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -314,6 +315,13 @@ export interface GetCatersPackageCategoriesResponse {
 }
 
 export interface getAllCataringPackageResponse {
+  data: {
+    data: AdminSettingCatersPackageModel;
+    message: string;
+  };
+}
+
+export interface createNewCataringPackageResponse {
   data: {
     data: AdminSettingCatersPackageModel;
     message: string;
@@ -642,6 +650,17 @@ export function getAllCataringPackageRepository(
         withCredentials: true,
       }
     );
+}
+
+export function createNewCataringPackageRepository(
+  query: any
+): Promise<createNewCataringPackageResponse> {
+  const config = { headers: { "Content-Type": "multipart/form-data" } };
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package/create-package`,
+    query,
+    config
+  );
 }
 
 export function GetAdminStoreCatersPackagesRepository(

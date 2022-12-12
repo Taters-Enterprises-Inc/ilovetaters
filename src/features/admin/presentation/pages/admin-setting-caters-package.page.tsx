@@ -4,7 +4,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useEffect } from "react";
-import { MdOutlineGroupAdd, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
@@ -20,11 +20,13 @@ import {
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
 import { createQueryParams } from "features/config/helpers";
+// import { CreatePackageModal } from "../modals/admin-setting-create-caters-package-modal";
 
 const columns: Array<Column> = [
-  { id: "id", label: "ID" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
+  { id: "package_type", label: "Package Type" },
+  { id: "uom", label: "Unit of Measure" },
   { id: "price", label: "Price" },
   { id: "category", label: "Category" },
 ];
@@ -41,6 +43,8 @@ export function AdminSettingCatersPackage() {
 
   const packages = useAppSelector(selectAllCataringPackageLists);
   const pagination = useAppSelector(getPagination);
+
+  // const [openModal, setOpenModal] = useState(true);
 
   useEffect(() => {
     const query = createQueryParams({
@@ -76,14 +80,14 @@ export function AdminSettingCatersPackage() {
         <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
           <div>
             <Link
-              to="create-user"
+              to="create-caters-package"
               className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
             >
               <MdOutlinePersonAddAlt1 size={20} />
               <span>&nbsp;&nbsp;Create New Package</span>
             </Link>
           </div>
-          <div>
+          {/* <div>
             <Link
               to="create-group"
               className="inline-flex items-center px-4 tracking-wide bg-button font-['Varela_Round'] text-white py-1 text-xs rounded-md font-700"
@@ -100,7 +104,7 @@ export function AdminSettingCatersPackage() {
               <MdOutlineGroupAdd size={20} />
               <span>&nbsp;&nbsp;Create New Product Add-Ons</span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* $data['results'] */}
@@ -200,7 +204,6 @@ export function AdminSettingCatersPackage() {
             <>
               {packages.map((row, i) => (
                 <DataTableRow key={i}>
-                  <DataTableCell>{row.id}</DataTableCell>
                   <DataTableCell>{row.name}</DataTableCell>
                   <DataTableCell>
                     <div
@@ -209,6 +212,10 @@ export function AdminSettingCatersPackage() {
                       }}
                     />
                   </DataTableCell>
+                  <DataTableCell>
+                    {row.package_type === 0 ? "Package" : "Add-ons"}
+                  </DataTableCell>
+                  <DataTableCell>{row.uom}</DataTableCell>
                   <DataTableCell>{row.price}</DataTableCell>
                   <DataTableCell>{row.category}</DataTableCell>
                 </DataTableRow>
@@ -217,6 +224,27 @@ export function AdminSettingCatersPackage() {
           ) : null}
         </DataTable>
       </div>
+      {/* <CreatePackageModal
+        open={openModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            order_by: orderBy,
+            order: order,
+            search: search,
+            user_id: null,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+          setOpenModal(false);
+        }}
+      /> */}
     </>
   );
 }

@@ -8,7 +8,7 @@ export interface AdminSettingCatersPackageModel {
   uom: string;
   add_details: string;
   status: number;
-  category: number;
+  category: string;
   num_flavor: number;
   add_remarks: number;
   product_hash: string;
@@ -19,4 +19,6 @@ export interface AdminSettingCatersPackageModel {
   report_status: number;
   to_gc_value: number;
   free_threshold: number;
+  package_type: number;
+  store: string;
 }
