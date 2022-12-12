@@ -44,7 +44,11 @@ export function UploadFile(props: UploadFileProps) {
           {props.image ? (
             <>
               <img
-                src={URL.createObjectURL(props.image as File)}
+                src={
+                  props.image instanceof File
+                    ? URL.createObjectURL(props.image as File)
+                    : props.image
+                }
                 className="object-contain h-[150px] w-[150px]"
                 alt="upload file"
               />
