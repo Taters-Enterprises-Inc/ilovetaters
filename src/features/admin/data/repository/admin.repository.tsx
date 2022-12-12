@@ -437,6 +437,23 @@ export interface EditAdminSettingShopProductResponse {
   };
 }
 
+export interface DeleteAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function DeleteAdminSettingShopProductRepository(
+  productId: string
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/admin/delete-shop-product?id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function EditAdminSettingShopProductRepository(
   param: EditAdminSettingShopProductParam
 ): Promise<EditAdminSettingShopProductResponse> {

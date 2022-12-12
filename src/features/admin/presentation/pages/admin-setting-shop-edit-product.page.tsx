@@ -32,6 +32,13 @@ import {
   resetEditAdminSettingShopProductState,
   selectEditAdminSettingShopProduct,
 } from "../slices/edit-admin-setting-shop-product.slice";
+import {
+  deleteAdminSettingShopProduct,
+  DeleteAdminSettingShopProductState,
+  resetDeleteAdminSettingShopProductState,
+  selectDeleteAdminSettingShopProduct,
+} from "../slices/delete-admin-setting-shop-product.slice";
+import { MessageModal } from "features/shared/presentation/modals";
 
 export interface Variant {
   name: string;
@@ -49,6 +56,8 @@ export function AdminSettingShopEditProduct() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [openDeleteMessageModal, setOpenDeleteMessageModal] = useState(false);
+
   const getAdminProductCategoriesState = useAppSelector(
     selectGetAdminProductCategories
   );
@@ -59,6 +68,19 @@ export function AdminSettingShopEditProduct() {
   const editAdminSettingShopProductState = useAppSelector(
     selectEditAdminSettingShopProduct
   );
+
+  const deleteAdminSettingShopProductState = useAppSelector(
+    selectDeleteAdminSettingShopProduct
+  );
+  useEffect(() => {
+    if (
+      deleteAdminSettingShopProductState.status ===
+      DeleteAdminSettingShopProductState.success
+    ) {
+      navigate("/admin/setting/product");
+      dispatch(resetDeleteAdminSettingShopProductState());
+    }
+  }, [deleteAdminSettingShopProductState, dispatch, navigate, id]);
 
   useEffect(() => {
     if (
@@ -620,13 +642,38 @@ export function AdminSettingShopEditProduct() {
           })}
         </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 text-white rounded-lg bg-button w-fit"
-        >
-          Edit Product
-        </button>
+        <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+          >
+            Edit Product
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setOpenDeleteMessageModal(true);
+            }}
+            className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+          >
+            Delete Product
+          </button>
+        </div>
       </form>
+
+      <MessageModal
+        open={openDeleteMessageModal}
+        onClose={() => {
+          setOpenDeleteMessageModal(false);
+        }}
+        onYes={() => {
+          if (id) {
+            dispatch(deleteAdminSettingShopProduct(id));
+          }
+        }}
+        message={`Are you sure you want to delete ${getAdminSettingShopProductState.data?.name} product?`}
+      />
     </>
   );
 }
