@@ -48,7 +48,13 @@ export const getAdminSettingShopProduct = createAsyncThunk(
 export const getAdminSettingShopProductSlice = createSlice({
   name: "getAdminSettingShopProduct",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetAdminSettingShopProductState: (state) => {
+      state.status = GetAdminSettingShopProductState.initial;
+      state.data = undefined;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAdminSettingShopProduct.pending, (state) => {
@@ -72,5 +78,8 @@ export const getAdminSettingShopProductSlice = createSlice({
 
 export const selectGetAdminSettingShopProduct = (state: RootState) =>
   state.getAdminSettingShopProduct;
+
+export const { resetGetAdminSettingShopProductState } =
+  getAdminSettingShopProductSlice.actions;
 
 export default getAdminSettingShopProductSlice.reducer;

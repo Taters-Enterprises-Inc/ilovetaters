@@ -18,11 +18,11 @@ import {
 import {
   getAdminSettingShopProduct,
   GetAdminSettingShopProductState,
+  resetGetAdminSettingShopProductState,
   selectGetAdminSettingShopProduct,
 } from "../slices/get-admin-setting-shop-product.slice";
 import {
   getAdminStores,
-  GetAdminStoresState,
   selectGetAdminStores,
 } from "../slices/get-admin-stores.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -65,7 +65,7 @@ export function AdminSettingShopEditProduct() {
       editAdminSettingShopProductState.status ===
       EditAdminSettingShopProductState.success
     ) {
-      navigate("/admin/setting/product/" + id);
+      navigate("/admin/setting/product");
       dispatch(resetEditAdminSettingShopProductState());
     }
   }, [editAdminSettingShopProductState, dispatch, navigate, id]);
@@ -106,6 +106,7 @@ export function AdminSettingShopEditProduct() {
     dispatch(getAdminProductCategories());
     dispatch(getAdminStores());
     if (id) {
+      dispatch(resetGetAdminSettingShopProductState());
       dispatch(getAdminSettingShopProduct(id));
     }
   }, [dispatch, id]);
@@ -212,7 +213,6 @@ export function AdminSettingShopEditProduct() {
     }
 
     if (id) {
-      console.log(formState);
       dispatch(
         editAdminSettingShopProduct({
           id,
@@ -394,6 +394,90 @@ export function AdminSettingShopEditProduct() {
                       </button>
                     </div>
 
+                    {variant.options.map((option, optionIndex) => (
+                      <div className="flex space-x-2" key={optionIndex}>
+                        <MaterialInput
+                          size="small"
+                          required
+                          colorTheme="blue"
+                          onChange={(e) => {
+                            const copyVariants = [...formState.variants];
+                            copyVariants[variantIndex].options[
+                              optionIndex
+                            ].name = e.target.value;
+                            setFormState({
+                              ...formState,
+                              variants: copyVariants,
+                            });
+                          }}
+                          value={option.name}
+                          name="variant"
+                          label="Variant Option Name"
+                          fullWidth
+                        />
+                        {option.sku !== null ? (
+                          <MaterialInput
+                            size="small"
+                            required
+                            colorTheme="blue"
+                            onChange={(e) => {
+                              const copyVariants = [...formState.variants];
+                              copyVariants[variantIndex].options[
+                                optionIndex
+                              ].sku = e.target.value;
+                              setFormState({
+                                ...formState,
+                                variants: copyVariants,
+                              });
+                            }}
+                            value={option.sku}
+                            name="sku"
+                            label="SKU"
+                            fullWidth
+                          />
+                        ) : null}
+                        {option.price !== null ? (
+                          <MaterialInput
+                            size="small"
+                            type="number"
+                            required
+                            colorTheme="blue"
+                            onChange={(e) => {
+                              const copyVariants = [...formState.variants];
+                              copyVariants[variantIndex].options[
+                                optionIndex
+                              ].price = e.target.value;
+                              setFormState({
+                                ...formState,
+                                variants: copyVariants,
+                              });
+                            }}
+                            value={option.price}
+                            name="price"
+                            label="Price"
+                            fullWidth
+                          />
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            const copyVariants = [...formState.variants];
+                            copyVariants[variantIndex].options = copyVariants[
+                              variantIndex
+                            ].options.filter(
+                              (value, index) => index !== optionIndex
+                            );
+                            setFormState({
+                              ...formState,
+                              variants: copyVariants,
+                            });
+                          }}
+                          className="text-2xl"
+                        >
+                          <AiOutlineClose />
+                        </button>
+                      </div>
+                    ))}
                     <button
                       type="button"
                       onClick={() =>
