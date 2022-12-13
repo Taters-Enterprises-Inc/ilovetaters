@@ -545,7 +545,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Store
+                                Stores
                               </span>
                             </span>
                           </span>

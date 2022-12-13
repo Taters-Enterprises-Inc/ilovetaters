@@ -160,3 +160,8 @@ export interface EditAdminSettingShopProductParam {
   image150x150: File | string;
   image75x75: File | string;
 }
+
+export interface UpdateAdminSettingShopProductStatusParam {
+  product_id: number;
+  status: number;
+}

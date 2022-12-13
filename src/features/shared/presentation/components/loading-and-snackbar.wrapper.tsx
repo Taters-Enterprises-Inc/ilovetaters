@@ -296,6 +296,10 @@ import {
   EditAdminSettingShopProductState,
   selectEditAdminSettingShopProduct,
 } from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
+import {
+  DeleteAdminSettingShopProductState,
+  selectDeleteAdminSettingShopProduct,
+} from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
@@ -465,6 +469,29 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingShopProductState = useAppSelector(
     selectEditAdminSettingShopProduct
   );
+
+  const deleteAdminSettingShopProductState = useAppSelector(
+    selectDeleteAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    switch (deleteAdminSettingShopProductState.status) {
+      case DeleteAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case DeleteAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case DeleteAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, deleteAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case DeleteAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, deleteAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [deleteAdminSettingShopProductState]);
 
   useEffect(() => {
     switch (editAdminSettingShopProductState.status) {

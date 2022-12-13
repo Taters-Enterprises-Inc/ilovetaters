@@ -13,15 +13,9 @@ import { Helmet } from "react-helmet";
 export function Home() {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
-
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
 
   return (
     <>

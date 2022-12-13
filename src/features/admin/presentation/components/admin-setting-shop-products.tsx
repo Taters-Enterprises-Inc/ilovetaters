@@ -19,8 +19,12 @@ import {
   selectGetAdminSettingShopProducts,
 } from "../slices/get-admin-setting-shop-products.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FaEye } from "react-icons/fa";
 import { AiFillFolderAdd } from "react-icons/ai";
+import Checkbox from "@mui/material/Checkbox";
+import {
+  selectUpdateAdminSettingShopProductStatus,
+  updateAdminSettingShopProductStatus,
+} from "../slices/update-admin-setting-shop-product-status.slice";
 
 export function AdminSettingShopProducts() {
   const dispatch = useAppDispatch();
@@ -37,11 +41,19 @@ export function AdminSettingShopProducts() {
     { id: "image", label: "Image" },
     { id: "name", label: "Name", minWidth: 220 },
     { id: "description", label: "Description" },
-    { id: "action", label: "Action" },
+    {
+      id: "status",
+      label: "Status",
+    },
+    { id: "action", label: "" },
   ];
 
   const getAdminSettingShopProductsState = useAppSelector(
     selectGetAdminSettingShopProducts
+  );
+
+  const updateAdminSettingShopProductStatusState = useAppSelector(
+    selectUpdateAdminSettingShopProductStatus
   );
 
   useEffect(() => {
@@ -54,7 +66,15 @@ export function AdminSettingShopProducts() {
     });
 
     dispatch(getAdminSettingShopProducts(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+  }, [
+    updateAdminSettingShopProductStatusState,
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+  ]);
 
   return (
     <>
@@ -267,10 +287,27 @@ export function AdminSettingShopProducts() {
                             }}
                           />
                         </DataTableCell>
+                        <DataTableCell>
+                          <Checkbox
+                            onChange={(e) => {
+                              dispatch(
+                                updateAdminSettingShopProductStatus({
+                                  product_id: row.id,
+                                  status: e.target.checked ? 1 : 0,
+                                })
+                              );
+                            }}
+                            color="primary"
+                            checked={row.status === 1 ? true : false}
+                          />
+                        </DataTableCell>
 
-                        <DataTableCell align="left">
-                          <Link to={`${row.id}`}>
-                            <FaEye className="text-lg" />
+                        <DataTableCell>
+                          <Link
+                            to={`${row.id}`}
+                            className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                          >
+                            Edit
                           </Link>
                         </DataTableCell>
                       </DataTableRow>

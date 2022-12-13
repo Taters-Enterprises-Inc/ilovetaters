@@ -22,6 +22,7 @@ import {
   AdminSurveyVerificationChangeStatusParam,
   CreateAdminSettingShopProductParam,
   EditAdminSettingShopProductParam,
+  UpdateAdminSettingShopProductStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -450,6 +451,36 @@ export interface EditAdminSettingShopProductResponse {
   data: {
     message: string;
   };
+}
+
+export interface DeleteAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingShopProductStatusResponse {
+  data: {
+    message: string;
+  };
+}
+export function UpdateAdminSettingShopProductStatusRepository(
+  param: UpdateAdminSettingShopProductStatusParam
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/shop-product`, param, {
+    withCredentials: true,
+  });
+}
+
+export function DeleteAdminSettingShopProductRepository(
+  productId: string
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/admin/delete-shop-product?id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function EditAdminSettingShopProductRepository(

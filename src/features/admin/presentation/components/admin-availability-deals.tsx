@@ -17,8 +17,6 @@ import {
   MaterialInputAutoComplete,
   MaterialInput,
 } from "features/shared/presentation/components";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import {
   getAdminStoreDeals,
   selectGetAdminStoreDeals,
@@ -34,8 +32,10 @@ import {
 } from "../slices/get-deal-categories.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "alias", label: "Alias" },
   { id: "name", label: "Name" },
   { id: "action", label: "Action" },
@@ -459,6 +459,13 @@ export function AdminAvailabilityDeals() {
                 <>
                   {getAdminStoreDealsState.data.deals.map((row, i) => (
                     <DataTableRow key={i}>
+                      <DataTableCell>
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                          alt="Deal Product"
+                          className="rounded-[10px] w-[75px] h-[75px]"
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.alias}</DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>

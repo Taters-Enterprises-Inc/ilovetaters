@@ -26,8 +26,10 @@ import {
 } from "../slices/update-store-caters-product-addons.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "action", label: "Action" },
@@ -418,6 +420,13 @@ export function AdminAvailabilityCatersProductAddons() {
                   {getAdminStoreCatersProductAddonsState.data.caters_product_addons.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div
