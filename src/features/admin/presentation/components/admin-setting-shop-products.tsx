@@ -19,7 +19,6 @@ import {
   selectGetAdminSettingShopProducts,
 } from "../slices/get-admin-setting-shop-products.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FaEye } from "react-icons/fa";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
 import {
@@ -46,7 +45,7 @@ export function AdminSettingShopProducts() {
       id: "status",
       label: "Status",
     },
-    { id: "action", label: "Action" },
+    { id: "action", label: "" },
   ];
 
   const getAdminSettingShopProductsState = useAppSelector(
@@ -303,9 +302,12 @@ export function AdminSettingShopProducts() {
                           />
                         </DataTableCell>
 
-                        <DataTableCell align="left">
-                          <Link to={`${row.id}`}>
-                            <FaEye className="text-lg" />
+                        <DataTableCell>
+                          <Link
+                            to={`${row.id}`}
+                            className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                          >
+                            Edit
                           </Link>
                         </DataTableCell>
                       </DataTableRow>

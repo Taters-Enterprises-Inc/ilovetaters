@@ -31,8 +31,8 @@ const columns: Array<Column> = [
   { id: "email", label: "Email" },
   { id: "groups", label: "Groups" },
   { id: "status", label: "Status" },
-  { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
+  { id: "action", label: "" },
 ];
 
 export function AdminSettingUsers() {
@@ -306,16 +306,8 @@ export function AdminSettingUsers() {
                         )}
                       </DataTableCell>
                       <DataTableCell>
-                        <Link
-                          to={`/admin/setting/user/edit-user/${row.id}`}
-                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
-                        >
-                          Edit
-                        </Link>
-                      </DataTableCell>
-                      <DataTableCell>
                         {row.groups.some(
-                          (group) => group.id == 1 || group.id == 10
+                          (group) => group.id === 1 || group.id === 10
                         ) ? null : (
                           <button
                             onClick={() => {
@@ -340,6 +332,14 @@ export function AdminSettingUsers() {
                             Choose
                           </button>
                         )}
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Link
+                          to={`/admin/setting/user/edit-user/${row.id}`}
+                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                        >
+                          Edit
+                        </Link>
                       </DataTableCell>
                     </DataTableRow>
                   ))}
