@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminHead } from "../components";
 
 import {
@@ -15,12 +15,24 @@ import {
   createCataringPackage,
   getCreateCatersStatus,
   resetCreateCaterPackageStatus,
+  selectCatersPackageByID,
+  updateCataringPackage,
 } from "../slices/admin-setting-caters-package.slice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { UpdateCatersPackageParam } from "features/admin/core/admin.params";
 // import axios from "axios";
 // import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 export function AdminSettingCreateCatersPackage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const currentPackage = useAppSelector((state) =>
+    selectCatersPackageByID(state, Number(id))
+  );
+  const [hasEditPackage, setHasEditPackage] = useState(false);
+
   const [formState, setFormState] = useState<{
     product_image75x75: File | string;
     product_image150x150: File | string;
@@ -68,13 +80,15 @@ export function AdminSettingCreateCatersPackage() {
     free_threshold: "",
     package_type: "",
   });
+  if (currentPackage === undefined && id) {
+    navigate("/admin/setting/caters-setting");
+  }
 
   const getCatersPackageCategoriesState = useAppSelector(
     selectGetCatersPackageCategories
   );
 
   const CreateCatersStatus = useAppSelector(getCreateCatersStatus);
-  const navigate = useNavigate();
 
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
@@ -87,7 +101,51 @@ export function AdminSettingCreateCatersPackage() {
 
   useEffect(() => {
     dispatch(getCatersPackageCategories());
-  }, [dispatch]);
+    if (CreateCatersStatus === 2) {
+      dispatch(resetCreateCaterPackageStatus());
+      navigate("/admin/setting/caters-setting");
+    }
+
+    if (currentPackage !== undefined && id && !hasEditPackage) {
+      let picturename = currentPackage["product_image"];
+      picturename = picturename.replaceAll(" ", "_");
+      setFormState({
+        ...formState,
+        product_image: currentPackage["product_image"],
+        name: currentPackage["name"],
+        description: currentPackage["description"],
+        delivery_details: currentPackage["delivery_details"],
+        price: currentPackage["price"].toString(),
+        uom: currentPackage["uom"],
+        add_details: currentPackage["add_details"],
+        status: currentPackage["status"].toString(),
+        num_flavor: currentPackage["num_flavor"].toString(),
+        add_remarks: currentPackage["add_remarks"].toString(),
+        note: currentPackage["note"],
+        tags: currentPackage["tags"],
+        dateadded: currentPackage["dateadded"],
+        product_code: currentPackage["product_code"],
+        report_status: 0,
+        free_threshold: currentPackage["free_threshold"].toString(),
+        package_type: currentPackage["package_type"].toString(),
+        product_image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${picturename}`,
+        product_image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${picturename}`,
+        product_image150x150: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/150/${picturename}`,
+        product_image75x75: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${picturename}`,
+      });
+      setHasEditPackage(true);
+    }
+  }, [
+    dispatch,
+    navigate,
+    CreateCatersStatus,
+    currentPackage,
+    formState,
+    id,
+    hasEditPackage,
+  ]);
+  useEffect(() => {});
+
   const postUser = (event: any) => {
     event.preventDefault();
 
@@ -99,16 +157,32 @@ export function AdminSettingCreateCatersPackage() {
       formState["product_image"] = formState["product_image250x250"].name;
     else if (typeof formState["product_image500x500"] !== "string")
       formState["product_image"] = formState["product_image500x500"].name;
-
-    dispatch(createCataringPackage(formState));
-  };
-  //TODO clean up reset and fix it
-  useEffect(() => {
-    if (CreateCatersStatus === 2) {
-      dispatch(resetCreateCaterPackageStatus());
-      navigate("/admin/setting/caters-setting");
+    if (!hasEditPackage && !id) {
+      dispatch(createCataringPackage(formState));
+    } else if (id && hasEditPackage && currentPackage !== undefined) {
+      const updatedData: UpdateCatersPackageParam = {
+        id: id.toString(),
+        product_image: formState["product_image"],
+        name: formState["name"],
+        description: formState["description"],
+        delivery_details: formState["delivery_details"],
+        price: formState["price"].toString(),
+        uom: formState["uom"],
+        add_details: formState["add_details"],
+        category: formState["category"],
+        num_flavor: formState["num_flavor"],
+        add_remarks: formState["add_remarks"],
+        free_threshold: formState["free_threshold"],
+        package_type: formState["package_type"],
+        product_image500x500: formState["product_image500x500"],
+        product_image250x250: formState["product_image250x250"],
+        product_image150x150: formState["product_image150x150"],
+        product_image75x75: formState["product_image75x75"],
+      };
+      console.log(updatedData);
+      dispatch(updateCataringPackage(updatedData));
     }
-  }, [navigate, dispatch, CreateCatersStatus]);
+  };
   return (
     <>
       <AdminHead

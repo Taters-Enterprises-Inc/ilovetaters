@@ -22,6 +22,7 @@ import {
   AdminSurveyVerificationChangeStatusParam,
   CreateAdminSettingShopProductParam,
   EditAdminSettingShopProductParam,
+  UpdateCatersPackageParam,
   UpdateAdminSettingShopProductStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
@@ -329,6 +330,17 @@ export interface createNewCataringPackageResponse {
   };
 }
 
+export interface UpdateCataringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface deleteCataringPackageResponse {
+  data: {
+    message: string;
+  };
+}
 export interface GetAdminStoreCatersPackagesResponse {
   data: {
     message: string;
@@ -696,6 +708,30 @@ export function createNewCataringPackageRepository(
   );
 }
 
+export function UpdateCataringPackageRepository(
+  param: UpdateCatersPackageParam
+): Promise<UpdateCataringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package/update-package`,
+    param,
+    {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+}
+
+export function deleteCataringPackageRepository(
+  query: any
+): Promise<deleteCataringPackageResponse> {
+  console.log(query);
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package/delete-package/${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
 export function GetAdminStoreCatersPackagesRepository(
   query: string
 ): Promise<GetAdminStoreCatersPackagesResponse> {

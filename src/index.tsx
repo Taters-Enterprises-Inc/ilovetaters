@@ -318,6 +318,11 @@ root.render(
                                 path="create-caters-package"
                                 element={<AdminSettingCreateCatersPackage />}
                               />
+
+                              <Route
+                                path="edit-caters-package/:id"
+                                element={<AdminSettingCreateCatersPackage />}
+                              />
                             </Route>
 
                             <Route path="product">

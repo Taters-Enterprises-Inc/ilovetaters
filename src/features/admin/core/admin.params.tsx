@@ -25,6 +25,26 @@ export interface UpdateStoreProductParam {
   status: "1" | "0";
 }
 
+export interface UpdateCatersPackageParam {
+  id: string;
+  product_image: string;
+  name: string;
+  description: string;
+  delivery_details: string;
+  price: string;
+  uom: string;
+  add_details: string;
+  category: string;
+  num_flavor: string;
+  add_remarks: string;
+  free_threshold: string;
+  package_type: string;
+  product_image500x500: File | string;
+  product_image250x250: File | string;
+  product_image150x150: File | string;
+  product_image75x75: File | string;
+}
+
 export interface UpdateStoreCatersPackageParam {
   id: string;
   status: "1" | "0";

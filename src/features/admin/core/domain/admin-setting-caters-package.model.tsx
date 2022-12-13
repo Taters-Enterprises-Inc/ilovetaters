@@ -20,5 +20,4 @@ export interface AdminSettingCatersPackageModel {
   to_gc_value: number;
   free_threshold: number;
   package_type: number;
-  store: string;
 }

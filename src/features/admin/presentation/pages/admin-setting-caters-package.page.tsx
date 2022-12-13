@@ -4,7 +4,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useEffect } from "react";
-import { MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { MdEditNote, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
@@ -12,6 +12,7 @@ import {
   getPagination,
   selectAllCataringPackageLists,
   resetGetCataringPackageListsStatus,
+  deleteCataringPackage,
 } from "../slices/admin-setting-caters-package.slice";
 import {
   Column,
@@ -20,6 +21,7 @@ import {
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
 import { createQueryParams } from "features/config/helpers";
+import { TbTrash } from "react-icons/tb";
 // import { CreatePackageModal } from "../modals/admin-setting-create-caters-package-modal";
 
 const columns: Array<Column> = [
@@ -29,6 +31,7 @@ const columns: Array<Column> = [
   { id: "uom", label: "Unit of Measure" },
   { id: "price", label: "Price" },
   { id: "category", label: "Category" },
+  { id: "id", label: "Action" },
 ];
 
 export function AdminSettingCatersPackage() {
@@ -58,6 +61,9 @@ export function AdminSettingCatersPackage() {
     dispatch(getAllCataringPackageLists(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
+  const onDeletePackage = (id: number) => {
+    dispatch(deleteCataringPackage(id));
+  };
   return (
     <>
       <AdminHead
@@ -218,6 +224,17 @@ export function AdminSettingCatersPackage() {
                   <DataTableCell>{row.uom}</DataTableCell>
                   <DataTableCell>{row.price}</DataTableCell>
                   <DataTableCell>{row.category}</DataTableCell>
+                  <DataTableCell>
+                    <div className="flex">
+                      <Link to={`edit-caters-package/${row.id}`}>
+                        <MdEditNote className="text-2xl text-slate-500 hover:text-black"></MdEditNote>
+                      </Link>
+                      <TbTrash
+                        className="text-2xl cursor-pointer text-slate-500 hover:text-black"
+                        onClick={() => onDeletePackage(row.id)}
+                      ></TbTrash>
+                    </div>
+                  </DataTableCell>
                 </DataTableRow>
               ))}
             </>
