@@ -26,7 +26,17 @@ import {
 } from "../slices/edit-cart-item.slice";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { ShopProductFlavor } from "../components/shop-product-flavor";
-import { ShopMultiFlavorType } from "./shop-product.page";
+
+export type ShopFlavorType = {
+  [key: string]: {
+    name: string;
+    quantity: number;
+  };
+};
+
+export type ShopMultiFlavorType = {
+  [key: string]: ShopFlavorType;
+};
 
 export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [flavorName, setFlavorName] = useState<string>("");
@@ -78,6 +88,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
       //   getEditCartProduct.data.order_item.prod_flavor_id.toString()
       // );
 
+      setCurrentMultiFlavors(multi_flavor);
+
       setCurrentSize(
         getEditCartProduct.data.order_item?.prod_size_id.toString()
       );
@@ -127,9 +139,9 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         defaultMultyflavor?.forEach((multi_data: any) => {
           if (data.name.trim() === multi_data.split("-")[1]?.trim()) {
             item.push({
+              id: data.id,
               quantity: parseInt(multi_data.split("-")[0]),
               name: data.name,
-              id: data.id,
             });
           }
         });
@@ -137,22 +149,24 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
     });
 
     // console.log(item);
-    // setCurrentMultiFlavors(item)
+    // setCurrentMultiFlavors(item);
 
-    return item;
+    // return item;
 
-    // let result: any = {};
+    let result: any = {};
 
-    // for (var i = 0; i < item.length; ++i) {
-    //   count = count + item[i].quantity;
-    //   let id = item[i].id;
-    //   result[id] = { name: item[i].name, quantity: item[i].quantity };
-    // }
+    for (var i = 0; i < item.length; ++i) {
+      count = count + item[i].quantity;
+      let id = item[i].id;
+      result[id] = { name: item[i].name, quantity: item[i].quantity };
+    }
 
-    // return { result, count };
+    let multi_flav: any = { 0: result };
+
+    return multi_flav;
   }, [getEditCartProduct?.data]);
 
-  console.log(multi_flavor);
+  // console.log(multi_flavor);
 
   // const handleSizeAndFlavorChange = (size: string, flavor: string) => {
   //   if (getEditCartProduct.data) {
@@ -342,6 +356,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
 
                                 updateCurrentMultiFlavor[i] =
                                   updatedMultiFlavors;
+
+                                console.log(updateCurrentMultiFlavor);
 
                                 setCurrentMultiFlavors(
                                   updateCurrentMultiFlavor

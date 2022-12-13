@@ -11,6 +11,8 @@ interface ShopProductFlavorProps {
 }
 
 export function ShopProductFlavor(props: ShopProductFlavorProps) {
+  // console.log(props.currentMultiFlavor);
+
   return (
     <div>
       {props.flavor.parent_name === "flavor" ? (

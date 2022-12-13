@@ -1,5 +1,5 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShopFlavorType } from "../pages/shop-product.page";
 import { ProductFlavorModel } from "features/shop/core/domain/product_flavor.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -35,13 +35,24 @@ export function ShopProductFlavorLongPress(props: ShopProductLongPressProps) {
     });
 
     Object.keys(props.currentMultiFlavor).forEach(function (key) {
-      if (props.flavor.id.toString() !== key)
+      if (props.flavor.id.toString() !== key) {
         totalMultiFlavorsQuantityWithoutCurrentInput +=
           props.currentMultiFlavor[key].quantity;
+      }
     });
   } else if (quantity !== "0") {
     setQuantity("0");
   }
+
+  useEffect(() => {
+    if (props.currentMultiFlavor) {
+      Object.keys(props.currentMultiFlavor).map(function (key) {
+        if (props.flavor.id.toString() === key) {
+          setQuantity(props.currentMultiFlavor[key].quantity.toString());
+        }
+      });
+    }
+  }, [props.currentMultiFlavor]);
 
   const remainingNumberOfFlavor =
     props.numberOfFlavors * props.productQuantity - totalMultiFlavorsQuantity;
