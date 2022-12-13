@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Autoplay, Navigation } from "swiper";
@@ -12,7 +18,12 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { Radio } from "@mui/material";
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import { FaRegEdit } from "react-icons/fa";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import NumberFormat from "react-number-format";
@@ -97,7 +108,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
         getEditCartProduct.data.order_item?.prod_size_id.toString()
       );
     }
-  }, [getEditCartProduct, currentFlavor, currentSize]);
+  }, [getEditCartProduct, currentFlavor]);
 
   useEffect(() => {
     if (resetMultiFlavors === true) {
@@ -202,6 +213,17 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   //   }
   // };
 
+  const handleSizeAndFlavorChange = (size: string) => {
+    if (getEditCartProduct.data) {
+      dispatch(
+        getProductSku({
+          prod_flavor: "",
+          prod_size: size,
+        })
+      );
+    }
+  };
+
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
     let result: string | undefined;
@@ -226,6 +248,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   };
 
   const handleEditSubmit = () => {
+    console.log("ts");
+
     if (
       getEditCartProduct.data?.product_flavor &&
       getEditCartProduct.data.product.num_flavor > 0 &&
@@ -264,24 +288,24 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           return;
         }
       }
-
-      let flavors_details = createFlavorDetails();
-
-      dispatch(
-        editCartItem({
-          product_id: cart_id,
-          quantity,
-          currentFlavor,
-          currentSize,
-          sizeName,
-          flavorName,
-          total_amount:
-            getEditCartProduct.data?.product.price &&
-            getEditCartProduct.data?.product.price * quantity,
-          prod_multiflavors: flavors_details,
-        })
-      );
     }
+
+    let flavors_details = createFlavorDetails();
+
+    dispatch(
+      editCartItem({
+        product_id: cart_id,
+        quantity,
+        currentFlavor,
+        currentSize,
+        sizeName,
+        flavorName,
+        total_amount:
+          getEditCartProduct.data?.product.price &&
+          getEditCartProduct.data?.product.price * quantity,
+        prod_multiflavors: flavors_details,
+      })
+    );
 
     // let toString_prod_multiflavors = "";
     // if (currentMultiFlavors) {
@@ -402,6 +426,41 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
                       Choose Size
                     </h2>
+
+                    <FormControl>
+                      <RadioGroup
+                        value={currentSize}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                          const sizeId = (event.target as HTMLInputElement)
+                            .value;
+
+                          setCurrentSize(sizeId);
+                          handleSizeAndFlavorChange(sizeId);
+                        }}
+                      >
+                        {getEditCartProduct.data?.product_size.map(
+                          (size, i) => {
+                            return (
+                              <FormControlLabel
+                                key={i}
+                                value={size.id}
+                                control={
+                                  <Radio
+                                    color="tertiary"
+                                    sx={{ color: "white" }}
+                                  />
+                                }
+                                label={
+                                  <span className="!text-white">
+                                    {size.name}
+                                  </span>
+                                }
+                              />
+                            );
+                          }
+                        )}
+                      </RadioGroup>
+                    </FormControl>
 
                     {/* <ul>
                       <RadioSizeComponent
