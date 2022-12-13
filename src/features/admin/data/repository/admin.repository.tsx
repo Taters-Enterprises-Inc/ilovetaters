@@ -52,6 +52,7 @@ import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
+import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -449,6 +450,20 @@ export interface UpdateAdminSettingShopProductStatusResponse {
     message: string;
   };
 }
+
+export interface GetAdminSettingShopProductTypesResponse {
+  data: {
+    message: string;
+    data: Array<ProductTypeModel>;
+  };
+}
+
+export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop-product/type`, {
+    withCredentials: true,
+  });
+}
+
 export function UpdateAdminSettingShopProductStatusRepository(
   param: UpdateAdminSettingShopProductStatusParam
 ): Promise<DeleteAdminSettingShopProductResponse> {

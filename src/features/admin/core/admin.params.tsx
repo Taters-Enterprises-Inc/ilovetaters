@@ -133,6 +133,7 @@ export interface CreateAdminSettingShopProductParam {
   addDetails: string;
   price: string;
   category: string;
+  productType: string;
   uom: string;
   variants: string;
   stores: string;

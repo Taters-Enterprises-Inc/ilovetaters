@@ -12,6 +12,7 @@ export interface GetAdminSettingShopProductModel {
   add_details: string;
   status: number;
   category: number;
+  product_type_id: number;
   num_flavor: number;
   dateadded: string;
   variants: Array<Variant>;
