@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { getCartItem, selectGetCartItem } from "../slices/get-cart-item.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Addon, QuantityInput } from "features/shared/presentation/components/";
-import { MdFastfood } from "react-icons/md";
+import { MdFastfood, MdProductionQuantityLimits } from "react-icons/md";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import { TbTruckDelivery } from "react-icons/tb";
 import { AiFillInfoCircle } from "react-icons/ai";
@@ -26,6 +26,7 @@ import {
 } from "../slices/edit-cart-item.slice";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { ShopProductFlavor } from "../components/shop-product-flavor";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 export type ShopFlavorType = {
   [key: string]: {
@@ -51,6 +52,8 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [resetMultiFlavors, setResetMultiFlavors] = useState<boolean>(false);
   const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
     useState<number>(0);
+
+  const navigate = useNavigate();
 
   // const [currentMultiFlavors, setCurrentMultiFlavors] =
   //   useState<any>(undefined);
@@ -103,12 +106,19 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   }, [resetMultiFlavors]);
 
   useEffect(() => {
+    if (getEditCartProduct.data) {
+      if (quantity < getEditCartProduct.data?.order_item.prod_qty) {
+        setCurrentMultiFlavors({});
+      }
+    }
+  }, [quantity]);
+
+  useEffect(() => {
     dispatch(getCartItem(cart_id));
   }, [cart_id, dispatch]);
 
   useEffect(() => {
     if (editCartProductState.status === EditCartItemState.success) {
-      //setCurrentMultiFlavors(undefined);
       dispatch(getSession());
       dispatch(resetEditCartItem());
     }
@@ -192,30 +202,110 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   //   }
   // };
 
+  const createFlavorDetails = (): string | undefined => {
+    if (currentMultiFlavors === undefined) return undefined;
+    let result: string | undefined;
+
+    Object.keys(currentMultiFlavors).forEach((key) => {
+      const multiFlavorsArray: Array<{
+        name: string;
+        quantity: number;
+      }> = Object.values(currentMultiFlavors[key]);
+
+      for (let i = 0; i < multiFlavorsArray.length; i++) {
+        if (multiFlavorsArray[i].quantity > 0)
+          result =
+            (result === undefined ? "" : result) +
+            `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
+              multiFlavorsArray[i].name
+            }<br/>`;
+      }
+    });
+
+    return result ? result : undefined;
+  };
+
   const handleEditSubmit = () => {
-    let toString_prod_multiflavors = "";
-    if (currentMultiFlavors) {
-      Object.entries(currentMultiFlavors).forEach(([__, value]: any) => {
-        if (value.quantity !== 0) {
-          toString_prod_multiflavors += `<strong>${value.quantity}</strong> - ${value.name}</br>`;
+    if (
+      getEditCartProduct.data?.product_flavor &&
+      getEditCartProduct.data.product.num_flavor > 0 &&
+      getEditCartProduct.data.product_flavor.length > 0
+    ) {
+      for (let i = 0; i < getEditCartProduct.data.product_flavor.length; i++) {
+        let totalMultiFlavorsQuantity = 0;
+
+        if (currentMultiFlavors[i] === undefined) {
+          dispatch(
+            popUpSnackBar({
+              message: "Please meet the required number of flavors.",
+              severity: "error",
+            })
+          );
+
+          return;
         }
-      });
+
+        Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+          const currentFlavor = currentMultiFlavors[i];
+          totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+        });
+
+        if (
+          totalMultiFlavorsQuantity !==
+          quantity * getEditCartProduct.data.product.num_flavor
+        ) {
+          dispatch(
+            popUpSnackBar({
+              message: "Please meet the required number of flavors.",
+              severity: "error",
+            })
+          );
+
+          return;
+        }
+      }
+
+      let flavors_details = createFlavorDetails();
+
+      dispatch(
+        editCartItem({
+          product_id: cart_id,
+          quantity,
+          currentFlavor,
+          currentSize,
+          sizeName,
+          flavorName,
+          total_amount:
+            getEditCartProduct.data?.product.price &&
+            getEditCartProduct.data?.product.price * quantity,
+          prod_multiflavors: flavors_details,
+        })
+      );
     }
 
-    dispatch(
-      editCartItem({
-        product_id: cart_id,
-        quantity,
-        currentFlavor,
-        currentSize,
-        sizeName,
-        flavorName,
-        total_amount:
-          getEditCartProduct.data?.product.price &&
-          getEditCartProduct.data?.product.price * quantity,
-        prod_multiflavors: toString_prod_multiflavors,
-      })
-    );
+    // let toString_prod_multiflavors = "";
+    // if (currentMultiFlavors) {
+    //   Object.entries(currentMultiFlavors).forEach(([__, value]: any) => {
+    //     if (value.quantity !== 0) {
+    //       toString_prod_multiflavors += `<strong>${value.quantity}</strong> - ${value.name}</br>`;
+    //     }
+    //   });
+    // }
+
+    // dispatch(
+    //   editCartItem({
+    //     product_id: cart_id,
+    //     quantity,
+    //     currentFlavor,
+    //     currentSize,
+    //     sizeName,
+    //     flavorName,
+    //     total_amount:
+    //       getEditCartProduct.data?.product.price &&
+    //       getEditCartProduct.data?.product.price * quantity,
+    //     prod_multiflavors: toString_prod_multiflavors,
+    //   })
+    // );
   };
 
   return (
@@ -459,17 +549,22 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                 <div className="space-y-4">
                   <button
                     onClick={handleEditSubmit}
-                    disabled={
-                      totalMultiFlavorsQuantity - quantity === quantity
-                        ? true
-                        : false
-                    }
                     className="text-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <FaRegEdit className="text-3xl" />
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                       Edit
                     </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="order-2 w-full py-3 mt-4 font-bold text-white uppercase border bg-secondary rounded-xl lg:order-1"
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    Go Back
                   </button>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
+import { AiFillEdit } from "react-icons/ai";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
@@ -197,6 +198,15 @@ export function ShopCartModal(props: ShopCartModalProps) {
                         }}
                       >
                         <IoMdClose />
+                      </button>
+                      <button
+                        className="absolute text-1xl text-white top-7 right-4 "
+                        onClick={() => {
+                          props.onClose();
+                          navigate("/delivery/products/cart/" + i);
+                        }}
+                      >
+                        <AiFillEdit />
                       </button>
                     </div>
                   ))}

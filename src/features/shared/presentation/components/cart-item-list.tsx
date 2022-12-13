@@ -8,6 +8,7 @@ import {
   selectRemoveItemFromCartShop,
 } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { useEffect } from "react";
+import { AiFillEdit } from "react-icons/ai";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
@@ -24,6 +25,7 @@ export function CartListItem(props: CartListItemProps) {
   const removeItemFromCartShopState = useAppSelector(
     selectRemoveItemFromCartShop
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (
@@ -179,6 +181,14 @@ export function CartListItem(props: CartListItemProps) {
                           }}
                         >
                           <IoMdClose />
+                        </button>
+                        <button
+                          className="absolute text-1xl text-white top-7 right-4 "
+                          onClick={() => {
+                            navigate("/delivery/products/cart/" + i);
+                          }}
+                        >
+                          <AiFillEdit />
                         </button>
                       </div>
                     ))}
