@@ -9,7 +9,7 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
   getAdminProductCategories,
@@ -72,6 +72,7 @@ export function AdminSettingShopEditProduct() {
   const deleteAdminSettingShopProductState = useAppSelector(
     selectDeleteAdminSettingShopProduct
   );
+
   useEffect(() => {
     if (
       deleteAdminSettingShopProductState.status ===
@@ -147,7 +148,10 @@ export function AdminSettingShopEditProduct() {
         price: getAdminSettingShopProductState.data.price.toString(),
         category: getAdminSettingShopProductState.data.category.toString(),
         uom: getAdminSettingShopProductState.data.uom,
-        variants: getAdminSettingShopProductState.data.variants ?? [],
+        variants:
+          JSON.parse(
+            JSON.stringify(getAdminSettingShopProductState.data.variants)
+          ) ?? [],
         stores: getAdminSettingShopProductState.data.stores ?? [],
         numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
         image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingShopProductState.data.product_image}`,
