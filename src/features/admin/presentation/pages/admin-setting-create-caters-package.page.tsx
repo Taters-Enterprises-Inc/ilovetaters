@@ -11,9 +11,14 @@ import {
   getCatersPackageCategories,
   selectGetCatersPackageCategories,
 } from "../slices/get-caters-package-categories.slice";
-import { createCataringPackage } from "../slices/admin-setting-caters-package.slice";
-import axios from "axios";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  createCataringPackage,
+  getCreateCatersStatus,
+  resetCreateCaterPackageStatus,
+} from "../slices/admin-setting-caters-package.slice";
+import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 export function AdminSettingCreateCatersPackage() {
   const dispatch = useAppDispatch();
   const [formState, setFormState] = useState<{
@@ -21,6 +26,7 @@ export function AdminSettingCreateCatersPackage() {
     product_image150x150: File | string;
     product_image250x250: File | string;
     product_image500x500: File | string;
+    product_image: string;
     name: string;
     description: string;
     delivery_details: string;
@@ -36,13 +42,14 @@ export function AdminSettingCreateCatersPackage() {
     dateadded: string;
     product_code: string;
     report_status: number;
-    free_threshold: number;
+    free_threshold: string;
     package_type: string;
   }>({
     product_image75x75: "",
     product_image150x150: "",
     product_image250x250: "",
     product_image500x500: "",
+    product_image: "",
     name: "",
     description: "",
     delivery_details: "",
@@ -58,13 +65,17 @@ export function AdminSettingCreateCatersPackage() {
     dateadded: "",
     product_code: "",
     report_status: 0,
-    free_threshold: 0,
+    free_threshold: "",
     package_type: "",
   });
 
   const getCatersPackageCategoriesState = useAppSelector(
     selectGetCatersPackageCategories
   );
+
+  const CreateCatersStatus = useAppSelector(getCreateCatersStatus);
+  const navigate = useNavigate();
+
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
 
@@ -77,30 +88,27 @@ export function AdminSettingCreateCatersPackage() {
   useEffect(() => {
     dispatch(getCatersPackageCategories());
   }, [dispatch]);
-
   const postUser = (event: any) => {
     event.preventDefault();
-    var bodyFormData = new FormData();
-    bodyFormData.append("userName", "Fred");
-    bodyFormData.append("userName", "Fred");
-    console.log(JSON.stringify(formState));
-    try {
-      axios
-        .post(
-          `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package/create-package`,
-          formState,
-          {
-            withCredentials: true,
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        )
-        .then((response) => console.log(response.data))
-        .catch((errors) => console.log(errors));
-    } catch (err) {
-      console.log("failed to save the user", err);
-    }
-  };
 
+    if (typeof formState["product_image75x75"] !== "string")
+      formState["product_image"] = formState["product_image75x75"].name;
+    else if (typeof formState["product_image150x150"] !== "string")
+      formState["product_image"] = formState["product_image150x150"].name;
+    else if (typeof formState["product_image250x250"] !== "string")
+      formState["product_image"] = formState["product_image250x250"].name;
+    else if (typeof formState["product_image500x500"] !== "string")
+      formState["product_image"] = formState["product_image500x500"].name;
+
+    dispatch(createCataringPackage(formState));
+  };
+  //TODO clean up reset and fix it
+  useEffect(() => {
+    if (CreateCatersStatus === 2) {
+      dispatch(resetCreateCaterPackageStatus());
+      navigate("/admin/setting/caters-setting");
+    }
+  }, [navigate, dispatch, CreateCatersStatus]);
   return (
     <>
       <AdminHead
@@ -214,6 +222,18 @@ export function AdminSettingCreateCatersPackage() {
                   )}
                 </MaterialInput>
               ) : null}
+
+              <MaterialInput
+                required
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.free_threshold}
+                name="free_threshold"
+                type="number"
+                label="Free threshold"
+                fullWidth
+                className="flex-1"
+              />
             </div>
 
             <MaterialInput

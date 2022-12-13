@@ -15,8 +15,16 @@ export enum catersListStatus {
   fail,
 }
 
+export enum createCatersStatus {
+  initial,
+  inProgress,
+  success,
+  fail,
+}
+
 interface InitialState {
   status: catersListStatus;
+  createstatus: createCatersStatus;
   message: string;
   data: AdminSettingCatersPackageModel[];
   pagination: {
@@ -27,6 +35,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   status: catersListStatus.initial,
+  createstatus: createCatersStatus.initial,
   message: "",
   data: [],
   pagination: {
@@ -41,7 +50,7 @@ export const getAllCataringPackageLists = createAsyncThunk(
     try {
       const response: getAllCataringPackageResponse =
         await getAllCataringPackageRepository(query);
-      console.log(response);
+      // console.log(response);
       return response.data;
     } catch (error: any) {
       console.log(error);
@@ -56,7 +65,7 @@ export const createCataringPackage = createAsyncThunk(
     try {
       const response: createNewCataringPackageResponse =
         await createNewCataringPackageRepository(query);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error: any) {
       console.log(error.response.data);
@@ -73,6 +82,9 @@ const CataringPackageListsSlice = createSlice({
     resetGetCataringPackageListsStatus: (state) => {
       state.status = catersListStatus.inProgress;
     },
+    resetCreateCaterPackageStatus: (state) => {
+      state.createstatus = createCatersStatus.initial;
+    },
   },
   extraReducers(builder) {
     builder
@@ -81,7 +93,7 @@ const CataringPackageListsSlice = createSlice({
       })
       .addCase(getAllCataringPackageLists.fulfilled, (state, action) => {
         const { data, message, pagination } = action.payload;
-        console.log(action.payload);
+        // console.log(action.payload);
         state.status = catersListStatus.success;
         state.message = message;
         state.data = data;
@@ -96,9 +108,15 @@ const CataringPackageListsSlice = createSlice({
           per_page: 25,
         };
       })
+      .addCase(createCataringPackage.pending, (state, action) => {
+        state.createstatus = createCatersStatus.inProgress;
+      })
       .addCase(createCataringPackage.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.createstatus = createCatersStatus.success;
         state.data.push(action.payload);
+      })
+      .addCase(createCataringPackage.rejected, (state, action) => {
+        state.createstatus = createCatersStatus.fail;
       });
   },
 });
@@ -106,9 +124,14 @@ const CataringPackageListsSlice = createSlice({
 export const selectAllCataringPackageLists = (state: RootState) =>
   state.CataringPackageLists.data;
 
+export const getCreateCatersStatus = (state: RootState) =>
+  state.CataringPackageLists.createstatus;
+
 export const getPagination = (state: RootState) =>
   state.CataringPackageLists.pagination;
 
+export const { resetCreateCaterPackageStatus } =
+  CataringPackageListsSlice.actions;
 export const { resetGetCataringPackageListsStatus } =
   CataringPackageListsSlice.actions;
 

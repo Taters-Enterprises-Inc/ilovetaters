@@ -655,11 +655,13 @@ export function getAllCataringPackageRepository(
 export function createNewCataringPackageRepository(
   query: any
 ): Promise<createNewCataringPackageResponse> {
-  const config = { headers: { "Content-Type": "multipart/form-data" } };
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/setting/caters-package/create-package`,
     query,
-    config
+    {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    }
   );
 }
 
