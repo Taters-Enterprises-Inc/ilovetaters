@@ -1,4 +1,5 @@
 import { Variant } from "features/admin/presentation/pages/admin-setting-shop-edit-product.page";
+import { AdminProductModel } from "./admin-product.model";
 import { AdminStoreModel } from "./admin-store.model";
 
 export interface GetAdminSettingShopProductModel {
@@ -17,4 +18,5 @@ export interface GetAdminSettingShopProductModel {
   dateadded: string;
   variants: Array<Variant>;
   stores: Array<AdminStoreModel>;
+  products: Array<AdminProductModel>;
 }

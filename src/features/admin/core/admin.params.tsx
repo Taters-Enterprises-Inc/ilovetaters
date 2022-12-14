@@ -137,6 +137,7 @@ export interface CreateAdminSettingShopProductParam {
   uom: string;
   variants: string;
   stores: string;
+  products: string;
   numFlavor: string;
   image500x500: File | string;
   image250x250: File | string;
@@ -155,6 +156,7 @@ export interface EditAdminSettingShopProductParam {
   uom: string;
   variants: string;
   stores: string;
+  products: string;
   numFlavor: string;
   image500x500: File | string;
   image250x250: File | string;

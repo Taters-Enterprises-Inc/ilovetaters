@@ -154,6 +154,7 @@ import editAdminSettingShopProduct from "features/admin/presentation/slices/edit
 import deleteAdminSettingShopProduct from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
 import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
+import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
 
 export const store = configureStore({
   reducer: {
@@ -311,6 +312,7 @@ export const store = configureStore({
     deleteAdminSettingShopProduct,
     updateAdminSettingShopProductStatus,
     getAdminSettingShopProductTypes,
+    getAdminProducts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

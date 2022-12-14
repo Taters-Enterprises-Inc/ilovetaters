@@ -44,6 +44,11 @@ import {
   getAdminSettingShopProductTypes,
   selectGetAdminSettingShopProductTypes,
 } from "../slices/get-admin-setting-shop-product-types.slice";
+import {
+  getAdminProducts,
+  selectGetAdminProducts,
+} from "../slices/get-admin-products.slice";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 
 export interface Variant {
   name: string;
@@ -70,6 +75,8 @@ export function AdminSettingShopEditProduct() {
   const getAdminSettingShopProductState = useAppSelector(
     selectGetAdminSettingShopProduct
   );
+  const getAdminProductsState = useAppSelector(selectGetAdminProducts);
+
   const editAdminSettingShopProductState = useAppSelector(
     selectEditAdminSettingShopProduct
   );
@@ -114,6 +121,7 @@ export function AdminSettingShopEditProduct() {
     numFlavor: string;
     variants: Array<Variant>;
     stores: Array<AdminStoreModel>;
+    products: Array<AdminProductModel>;
     image500x500: File | string;
     image250x250: File | string;
     image150x150: File | string;
@@ -129,6 +137,7 @@ export function AdminSettingShopEditProduct() {
     uom: "",
     variants: [],
     stores: [],
+    products: [],
     numFlavor: "",
     image500x500: "",
     image250x250: "",
@@ -136,9 +145,12 @@ export function AdminSettingShopEditProduct() {
     image75x75: "",
   });
 
+  console.log(formState.products);
+
   useEffect(() => {
     dispatch(getAdminProductCategories());
     dispatch(getAdminStores());
+    dispatch(getAdminProducts());
     dispatch(getAdminSettingShopProductTypes());
     if (id) {
       dispatch(resetGetAdminSettingShopProductState());
@@ -168,6 +180,7 @@ export function AdminSettingShopEditProduct() {
             )
           : [],
         stores: getAdminSettingShopProductState.data.stores ?? [],
+        products: getAdminSettingShopProductState.data.products ?? [],
         numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
         image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingShopProductState.data.product_image}`,
         image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${getAdminSettingShopProductState.data.product_image}`,
@@ -260,6 +273,7 @@ export function AdminSettingShopEditProduct() {
           ...formState,
           stores: JSON.stringify(formState.stores),
           variants: JSON.stringify(formState.variants),
+          products: JSON.stringify(formState.products),
         })
       );
     }
@@ -645,6 +659,54 @@ export function AdminSettingShopEditProduct() {
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Stores"
+              colorTheme="black"
+              multiple
+              options={getAdminStoresState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.stores ? [...formState.stores] : []}
+              onChange={(e, stores) => {
+                setFormState({
+                  ...formState,
+                  stores,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminProductsState.data && formState.productType === "2" ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Product Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Products"
+              colorTheme="black"
+              multiple
+              options={getAdminProductsState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.products ? [...formState.products] : []}
+              onChange={(e, products) => {
+                setFormState({
+                  ...formState,
+                  products,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminStoresState.data && formState.productType === "2" ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Catering Store Selection
             </h1>
 
             <MaterialInputAutoComplete
