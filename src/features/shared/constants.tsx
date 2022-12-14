@@ -915,3 +915,21 @@ export const BRANCHES_INFO: Array<{
     link: "mailto:tei.csr@tatersgroup.com",
   },
 ];
+
+export const PRODUCT_TYPE: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Main",
+    color: "#004d00",
+  },
+  {
+    name: "Addons",
+    color: "#ffcd17",
+  },
+];

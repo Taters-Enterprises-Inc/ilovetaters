@@ -145,8 +145,6 @@ export function AdminSettingShopEditProduct() {
     image75x75: "",
   });
 
-  console.log(formState.products);
-
   useEffect(() => {
     dispatch(getAdminProductCategories());
     dispatch(getAdminStores());
@@ -740,7 +738,7 @@ export function AdminSettingShopEditProduct() {
             onClick={() => {
               setOpenDeleteMessageModal(true);
             }}
-            className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+            className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
           >
             Delete Product
           </button>
