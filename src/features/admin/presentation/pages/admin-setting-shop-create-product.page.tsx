@@ -1,5 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
@@ -22,6 +23,11 @@ import {
   getAdminProductCategories,
   selectGetAdminProductCategories,
 } from "../slices/get-admin-product-categories.slice";
+import {
+  getAdminProducts,
+  GetAdminProductsState,
+  selectGetAdminProducts,
+} from "../slices/get-admin-products.slice";
 import {
   selectGetAdminSettingShopProductTypes,
   getAdminSettingShopProductTypes,
@@ -59,6 +65,7 @@ export function AdminSettingShopCreateProduct() {
     numFlavor: string;
     variants: Array<Variant>;
     stores: Array<AdminStoreModel>;
+    products: Array<AdminProductModel>;
     image500x500: File | string;
     image250x250: File | string;
     image150x150: File | string;
@@ -74,6 +81,7 @@ export function AdminSettingShopCreateProduct() {
     uom: "",
     variants: [],
     stores: [],
+    products: [],
     numFlavor: "",
     image500x500: "",
     image250x250: "",
@@ -86,6 +94,7 @@ export function AdminSettingShopCreateProduct() {
   );
 
   const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminProductsState = useAppSelector(selectGetAdminProducts);
 
   const createAdminSettingShopProductState = useAppSelector(
     selectCreateAdminSettingShopProduct
@@ -108,6 +117,7 @@ export function AdminSettingShopCreateProduct() {
   useEffect(() => {
     dispatch(getAdminProductCategories());
     dispatch(getAdminSettingShopProductTypes());
+    dispatch(getAdminProducts());
     dispatch(getAdminStores());
   }, [dispatch]);
 
@@ -151,6 +161,7 @@ export function AdminSettingShopCreateProduct() {
       variants: copyVariants,
     });
   };
+
   const handleAddProductVariantOptionWithPrice = (index: number) => {
     const copyVariants = [...formState.variants];
 
@@ -198,6 +209,7 @@ export function AdminSettingShopCreateProduct() {
         ...formState,
         stores: JSON.stringify(formState.stores),
         variants: JSON.stringify(formState.variants),
+        products: JSON.stringify(formState.products),
       })
     );
   };
@@ -580,6 +592,54 @@ export function AdminSettingShopCreateProduct() {
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Stores"
+              colorTheme="black"
+              multiple
+              options={getAdminStoresState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.stores ? [...formState.stores] : []}
+              onChange={(e, stores) => {
+                setFormState({
+                  ...formState,
+                  stores,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminProductsState.data && formState.productType === "2" ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Product Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Products"
+              colorTheme="black"
+              multiple
+              options={getAdminProductsState.data}
+              getOptionLabel={(option) => option.name}
+              defaultValue={formState.products ? [...formState.products] : []}
+              onChange={(e, products) => {
+                setFormState({
+                  ...formState,
+                  products,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminStoresState.data && formState.productType === "2" ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Catering Store Selection
             </h1>
 
             <MaterialInputAutoComplete

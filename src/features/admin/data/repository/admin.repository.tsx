@@ -55,6 +55,7 @@ import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
 import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
 import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -485,25 +486,45 @@ export interface GetAdminSettingShopProductTypesResponse {
   };
 }
 
-export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop-product/type`, {
+export interface GetAdminProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
+  };
+}
+
+export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/products`, {
     withCredentials: true,
   });
+}
+
+export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product/type`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminSettingShopProductStatusRepository(
   param: UpdateAdminSettingShopProductStatusParam
 ): Promise<DeleteAdminSettingShopProductResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/shop-product`, param, {
-    withCredentials: true,
-  });
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function DeleteAdminSettingShopProductRepository(
   productId: string
 ): Promise<DeleteAdminSettingShopProductResponse> {
   return axios.delete(
-    `${REACT_APP_DOMAIN_URL}api/admin/delete-shop-product?id=${productId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/delete-shop-product?id=${productId}`,
     {
       withCredentials: true,
     }
@@ -514,7 +535,7 @@ export function EditAdminSettingShopProductRepository(
   param: EditAdminSettingShopProductParam
 ): Promise<EditAdminSettingShopProductResponse> {
   return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/edit-shop-product`,
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-shop-product`,
     param,
     {
       headers: {
@@ -529,7 +550,7 @@ export function GetAdminSettingShopProductRepository(
   productId: string
 ): Promise<GetAdminSettingShopProductResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/shop-product?product-id=${productId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product?product-id=${productId}`,
     {
       withCredentials: true,
     }
@@ -539,20 +560,27 @@ export function GetAdminSettingShopProductRepository(
 export function CreateAdminSettingShopProductRepository(
   param: CreateAdminSettingShopProductParam
 ): Promise<CreateAdminSettingShopProductResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/shop-product`, param, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    withCredentials: true,
-  });
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSettingShopProductsRepository(
   query: string
 ): Promise<GetAdminSettingShopProductsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/shop-products${query}`, {
-    withCredentials: true,
-  });
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-products${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSurveyVerificationsRepository(
@@ -997,7 +1025,7 @@ export function EditAdminUserRepository(
 }
 
 export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/groups`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/groups`, {
     withCredentials: true,
   });
 }
@@ -1005,7 +1033,7 @@ export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
 export function GetAdminUserRepository(
   userId: string
 ): Promise<GetAdminUserResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/user/${userId}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/user/${userId}`, {
     withCredentials: true,
   });
 }
@@ -1021,7 +1049,7 @@ export function CreateAdminUserRepository(
 export function GetAdminUsersRepository(
   query: string
 ): Promise<GetAdminUsersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/users${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/users${query}`, {
     withCredentials: true,
   });
 }

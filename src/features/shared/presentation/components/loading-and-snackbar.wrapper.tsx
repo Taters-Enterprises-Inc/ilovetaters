@@ -301,6 +301,11 @@ import {
   selectDeleteAdminSettingShopProduct,
 } from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const SweetAlert = withReactContent(Swal);
+
 export function LoadingAndSnackbarWrapper() {
   const [openBackdropLoading, setOpenBackdropLoading] = useState(false);
   const [openBackdropPopClubLoading, setOpenBackdropPopClubLoading] =
@@ -1391,11 +1396,15 @@ export function LoadingAndSnackbarWrapper() {
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.success:
-        showAlert(setSuccessAlert, signUpMobileUserState.message);
+        SweetAlert.fire(
+          "Account Registered!",
+          signUpMobileUserState.message,
+          "success"
+        );
         setOpenBackdropLoading(false);
         break;
       case SignUpMobileUserState.fail:
-        showAlert(setFailsAlert, signUpMobileUserState.message);
+        SweetAlert.fire("Oops...", signUpMobileUserState.message, "error");
         setOpenBackdropLoading(false);
         break;
     }
