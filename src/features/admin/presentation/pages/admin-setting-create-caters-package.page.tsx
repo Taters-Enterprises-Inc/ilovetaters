@@ -16,13 +16,20 @@ import {
   getCreateCatersStatus,
   resetCreateCaterPackageStatus,
   selectCatersPackageByID,
+  selectDynamicPricesBYPackageID,
   updateCataringPackage,
 } from "../slices/admin-setting-caters-package.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { UpdateCatersPackageParam } from "features/admin/core/admin.params";
-// import axios from "axios";
-// import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+
+export interface dynamicPriceParam {
+  id: string;
+  package_id: string;
+  price: string;
+  min_qty: string;
+}
 export function AdminSettingCreateCatersPackage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -31,7 +38,12 @@ export function AdminSettingCreateCatersPackage() {
   const currentPackage = useAppSelector((state) =>
     selectCatersPackageByID(state, Number(id))
   );
+
+  const currentPrices = useAppSelector((state) =>
+    selectDynamicPricesBYPackageID(state, Number(id))
+  );
   const [hasEditPackage, setHasEditPackage] = useState(false);
+  const [hasEditDynamicPrices, setHasEditDynamicPrices] = useState(false);
 
   const [formState, setFormState] = useState<{
     product_image75x75: File | string;
@@ -46,7 +58,7 @@ export function AdminSettingCreateCatersPackage() {
     uom: string;
     add_details: string;
     status: string;
-    category: string;
+    category: string | null;
     num_flavor: string;
     add_remarks: string;
     note: string;
@@ -56,6 +68,7 @@ export function AdminSettingCreateCatersPackage() {
     report_status: number;
     free_threshold: string;
     package_type: string;
+    dynamic_price: string;
   }>({
     product_image75x75: "",
     product_image150x150: "",
@@ -79,7 +92,23 @@ export function AdminSettingCreateCatersPackage() {
     report_status: 0,
     free_threshold: "",
     package_type: "",
+    dynamic_price: "",
   });
+
+  const [dynamicPrices, setDynamicPrices] = useState(Array<dynamicPriceParam>);
+
+  const addMoreDynamicPrice = () => {
+    setDynamicPrices([
+      ...dynamicPrices,
+      { id: "", package_id: "", price: "", min_qty: "" },
+    ]);
+  };
+  const removeDynamicPrice = (index: number) => {
+    const list = [...dynamicPrices];
+    list.splice(index, 1);
+    setDynamicPrices(list);
+  };
+
   if (currentPackage === undefined && id) {
     navigate("/admin/setting/caters-setting");
   }
@@ -98,7 +127,12 @@ export function AdminSettingCreateCatersPackage() {
       [evt.target.name]: value,
     });
   };
-
+  useEffect(() => {
+    if (!hasEditDynamicPrices) {
+      setDynamicPrices(currentPrices);
+      setHasEditDynamicPrices(true);
+    }
+  }, [currentPrices, hasEditDynamicPrices]);
   useEffect(() => {
     dispatch(getCatersPackageCategories());
     if (CreateCatersStatus === 2) {
@@ -144,7 +178,6 @@ export function AdminSettingCreateCatersPackage() {
     id,
     hasEditPackage,
   ]);
-  useEffect(() => {});
 
   const postUser = (event: any) => {
     event.preventDefault();
@@ -157,7 +190,16 @@ export function AdminSettingCreateCatersPackage() {
       formState["product_image"] = formState["product_image250x250"].name;
     else if (typeof formState["product_image500x500"] !== "string")
       formState["product_image"] = formState["product_image500x500"].name;
+    formState["product_image"] = formState["product_image"].replaceAll(
+      " ",
+      "_"
+    );
+
+    if (formState["package_type"] === "1") formState["category"] = null;
     if (!hasEditPackage && !id) {
+      formState["dynamic_price"] = JSON.stringify(dynamicPrices);
+      console.log(formState["dynamic_price"]);
+      console.log(formState);
       dispatch(createCataringPackage(formState));
     } else if (id && hasEditPackage && currentPackage !== undefined) {
       const updatedData: UpdateCatersPackageParam = {
@@ -178,7 +220,9 @@ export function AdminSettingCreateCatersPackage() {
         product_image250x250: formState["product_image250x250"],
         product_image150x150: formState["product_image150x150"],
         product_image75x75: formState["product_image75x75"],
+        dynamic_price: JSON.stringify(dynamicPrices),
       };
+
       console.log(updatedData);
       dispatch(updateCataringPackage(updatedData));
     }
@@ -204,7 +248,7 @@ export function AdminSettingCreateCatersPackage() {
 
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Create Caters Package
+          {currentPackage ? "Edit Caters Package" : "Create Caters Package"}
         </span>
       </div>
       {/* onSubmit={handleOnSubmit} */}
@@ -278,15 +322,24 @@ export function AdminSettingCreateCatersPackage() {
                 <MaterialInput
                   colorTheme="black"
                   name="category"
-                  required
                   label="Category Package"
                   select
-                  value={formState.category}
+                  value={
+                    Number(formState.package_type) === 0
+                      ? formState.category
+                      : "1"
+                  }
                   onChange={handleInputChange}
-                  className="flex-1"
+                  className={
+                    Number(formState.package_type) === 0
+                      ? "flex-1"
+                      : "flex-1 bg-gray-300 opacity-50"
+                  }
+                  disabled={Number(formState.package_type) === 0 ? false : true}
+                  required={Number(formState.package_type) === 0 ? true : false}
                 >
                   {getCatersPackageCategoriesState.data?.map(
-                    (category: any, key) => (
+                    (category: any, key: any) => (
                       <MenuItem key={key} value={category.id}>
                         <span className="text-xs lg:text-base">
                           {category.name}
@@ -344,11 +397,62 @@ export function AdminSettingCreateCatersPackage() {
               rows={4}
             />
 
+            {dynamicPrices.map((currentPrice, index) => (
+              <div className="flex space-x-2" key={index}>
+                <MaterialInput
+                  required
+                  colorTheme="black"
+                  onChange={(e) => {
+                    const list = [...dynamicPrices];
+                    list[index].price = e.target.value;
+                    if (id) list[index].package_id = id;
+                    setDynamicPrices(list);
+                  }}
+                  value={currentPrice.price}
+                  name="dynamic_price"
+                  type="number"
+                  label="Dynamic Price"
+                  fullWidth
+                />
+                <MaterialInput
+                  required
+                  colorTheme="black"
+                  onChange={(e) => {
+                    const list = [...dynamicPrices];
+                    list[index].min_qty = e.target.value;
+                    if (id) list[index].package_id = id;
+                    setDynamicPrices(list);
+                  }}
+                  value={currentPrice.min_qty}
+                  name="min_qty"
+                  type="number"
+                  label="Minimum Quantity"
+                  fullWidth
+                />
+
+                <button
+                  type="button"
+                  className="text-2xl"
+                  onClick={() => removeDynamicPrice(index)}
+                >
+                  <AiOutlineClose />
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addMoreDynamicPrice()}
+              className="flex items-center text-[#003399] space-x-1"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold ">Add Dynamic Price</span>
+            </button>
             <button
               type="submit"
               className="px-4 py-2 text-white rounded-lg bg-button w-fit"
             >
-              Create Package
+              {currentPackage ? "Save Caters Package" : "Create Package"}
             </button>
           </div>
           <div>

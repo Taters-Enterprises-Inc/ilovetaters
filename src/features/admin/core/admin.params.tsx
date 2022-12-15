@@ -34,7 +34,7 @@ export interface UpdateCatersPackageParam {
   price: string;
   uom: string;
   add_details: string;
-  category: string;
+  category: string | null;
   num_flavor: string;
   add_remarks: string;
   free_threshold: string;
@@ -43,6 +43,7 @@ export interface UpdateCatersPackageParam {
   product_image250x250: File | string;
   product_image150x150: File | string;
   product_image75x75: File | string;
+  dynamic_price: string;
 }
 
 export interface UpdateStoreCatersPackageParam {

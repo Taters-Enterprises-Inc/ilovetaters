@@ -3,7 +3,7 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MdEditNote, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
@@ -22,9 +22,12 @@ import {
 } from "../../../shared/presentation/components/data-table";
 import { createQueryParams } from "features/config/helpers";
 import { TbTrash } from "react-icons/tb";
+import { MessageModal } from "features/shared/presentation/modals";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 // import { CreatePackageModal } from "../modals/admin-setting-create-caters-package-modal";
 
 const columns: Array<Column> = [
+  { id: "product_image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "package_type", label: "Package Type" },
@@ -46,7 +49,8 @@ export function AdminSettingCatersPackage() {
 
   const packages = useAppSelector(selectAllCataringPackageLists);
   const pagination = useAppSelector(getPagination);
-
+  const [deleteID, setDeleteID] = useState(0);
+  const [openDeleteMessageModal, setOpenDeleteMessageModal] = useState(false);
   // const [openModal, setOpenModal] = useState(true);
 
   useEffect(() => {
@@ -210,6 +214,13 @@ export function AdminSettingCatersPackage() {
             <>
               {packages.map((row, i) => (
                 <DataTableRow key={i}>
+                  <DataTableCell>
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                      alt="Shop Product"
+                      className="rounded-[10px] w-[75px] h-[75px]"
+                    />
+                  </DataTableCell>
                   <DataTableCell>{row.name}</DataTableCell>
                   <DataTableCell>
                     <div
@@ -231,7 +242,10 @@ export function AdminSettingCatersPackage() {
                       </Link>
                       <TbTrash
                         className="text-2xl cursor-pointer text-slate-500 hover:text-black"
-                        onClick={() => onDeletePackage(row.id)}
+                        onClick={() => {
+                          setOpenDeleteMessageModal(true);
+                          setDeleteID(row.id);
+                        }}
                       ></TbTrash>
                     </div>
                   </DataTableCell>
@@ -241,27 +255,23 @@ export function AdminSettingCatersPackage() {
           ) : null}
         </DataTable>
       </div>
-      {/* <CreatePackageModal
-        open={openModal}
-        onClose={() => {
-          const params = {
-            page_no: pageNo,
-            per_page: perPage,
-            order_by: orderBy,
-            order: order,
-            search: search,
-            user_id: null,
-          };
-
-          const queryParams = createQueryParams(params);
-
-          navigate({
-            pathname: "",
-            search: queryParams,
-          });
-          setOpenModal(false);
-        }}
-      /> */}
+      {packages !== undefined ? (
+        <MessageModal
+          open={openDeleteMessageModal}
+          onClose={() => {
+            setOpenDeleteMessageModal(false);
+            setDeleteID(0);
+          }}
+          onYes={() => {
+            onDeletePackage(deleteID);
+            setDeleteID(0);
+            setOpenDeleteMessageModal(false);
+          }}
+          message={`Are you sure you want to delete ${packages
+            .filter((data) => data.id === deleteID)
+            .map((data) => data.name)} product?`}
+        />
+      ) : null}
     </>
   );
 }

@@ -21,3 +21,10 @@ export interface AdminSettingCatersPackageModel {
   free_threshold: number;
   package_type: number;
 }
+
+export interface DynamicPriceCatersPackageModel {
+  id: number;
+  package_id: number;
+  price: number;
+  min_qty: number;
+}

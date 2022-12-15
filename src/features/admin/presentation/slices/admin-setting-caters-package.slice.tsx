@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UpdateCatersPackageParam } from "features/admin/core/admin.params";
-import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
+import {
+  AdminSettingCatersPackageModel,
+  DynamicPriceCatersPackageModel,
+} from "features/admin/core/domain/admin-setting-caters-package.model";
 import {
   getAllCataringPackageResponse,
   getAllCataringPackageRepository,
@@ -36,6 +39,7 @@ interface InitialState {
     total_rows: number;
     per_page: number;
   };
+  dynamicPrices: DynamicPriceCatersPackageModel[];
 }
 
 const initialState: InitialState = {
@@ -47,6 +51,7 @@ const initialState: InitialState = {
     total_rows: 0,
     per_page: 25,
   },
+  dynamicPrices: [],
 };
 
 export const getAllCataringPackageLists = createAsyncThunk(
@@ -55,7 +60,7 @@ export const getAllCataringPackageLists = createAsyncThunk(
     try {
       const response: getAllCataringPackageResponse =
         await getAllCataringPackageRepository(query);
-      // console.log(response);
+      console.log(response);
       return response.data;
     } catch (error: any) {
       console.log(error);
@@ -70,10 +75,11 @@ export const createCataringPackage = createAsyncThunk(
     try {
       const response: createNewCataringPackageResponse =
         await createNewCataringPackageRepository(query);
-      // console.log(response.data);
+      console.log(response.data);
       return response.data;
     } catch (error: any) {
       console.log(error.response.data);
+      console.log(error.response);
 
       return error.message;
     }
@@ -129,12 +135,12 @@ const CataringPackageListsSlice = createSlice({
         state.status = catersListStatus.inProgress;
       })
       .addCase(getAllCataringPackageLists.fulfilled, (state, action) => {
-        const { data, message, pagination } = action.payload;
-        // console.log(action.payload);
+        const { data, message, pagination, DynamicPrices } = action.payload;
         state.status = catersListStatus.success;
         state.message = message;
         state.data = data;
         state.pagination = pagination;
+        state.dynamicPrices = DynamicPrices;
       })
       .addCase(getAllCataringPackageLists.rejected, (state, action) => {
         state.status = catersListStatus.fail;
@@ -144,6 +150,7 @@ const CataringPackageListsSlice = createSlice({
           total_rows: 0,
           per_page: 25,
         };
+        state.dynamicPrices = [];
       })
       .addCase(createCataringPackage.pending, (state, action) => {
         state.createstatus = createCatersStatus.inProgress;
@@ -186,6 +193,18 @@ export const selectCatersPackageByID = (state: RootState, id: number) =>
   state.CataringPackageLists.data.find(
     (currentpackage) => currentpackage.id === id
   );
+
+export const selectDynamicPricesBYPackageID = (state: RootState, id: number) =>
+  state.CataringPackageLists.dynamicPrices
+    .filter((dynamicPrice) => dynamicPrice.package_id === id)
+    .map((data) => {
+      return {
+        id: data.id.toString(),
+        package_id: data.package_id.toString(),
+        price: data.price.toString(),
+        min_qty: data.min_qty.toString(),
+      };
+    });
 
 export const getPagination = (state: RootState) =>
   state.CataringPackageLists.pagination;
