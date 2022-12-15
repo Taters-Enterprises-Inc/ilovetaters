@@ -56,6 +56,7 @@ import moment from "moment";
 import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
 import { StoreChooserModal } from "../modals/store-chooser.modal";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -141,6 +142,10 @@ export function PopClubDeal() {
       getDealState.data &&
       redeemDealState.status === RedeemDealState.success
     ) {
+      ReactGA.event({
+        category: "PopClub Deals",
+        action: "Redeem deals",
+      });
       dispatch(getNotifications());
       dispatch(
         getRedeem({
