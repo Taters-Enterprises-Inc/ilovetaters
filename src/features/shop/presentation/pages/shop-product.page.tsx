@@ -35,7 +35,6 @@ import { ProductDetailsAccordion } from "features/shared/presentation/components
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
-
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
