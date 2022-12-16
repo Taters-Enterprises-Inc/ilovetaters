@@ -5,7 +5,7 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   getCateringCategoryProducts,
@@ -16,8 +16,14 @@ import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { CateringPackageCustomizationModal } from "../modals";
 
 export function CateringProducts() {
+  const [
+    openCateringPackageCustomizationModal,
+    setOpenCateringPackageCustomizationModal,
+  ] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const getCateringCategoryProductsState = useAppSelector(
     selectGetCateringCategoryProducts
@@ -85,13 +91,25 @@ export function CateringProducts() {
                   </div>
                 </Link>
               ))}
+
+              <button
+                onClick={() => {
+                  setOpenCateringPackageCustomizationModal(true);
+                }}
+                className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
+              >
+                <AiOutlineAppstoreAdd className=" text-9xl" />
+
+                <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                  <h2 className="text-sm font-bold leading-4 text-white uppercase">
+                    Customize your own package
+                  </h2>
+                </div>
+              </button>
             </div>
           </section>
         ))}
 
-        {/* <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
-          FREQUENTLY ASKED QUESTIONS
-        </h3> */}
         <CateringFaqs />
       </section>
 
@@ -103,6 +121,13 @@ export function CateringProducts() {
       >
         Download our Catering Flyer
       </a>
+
+      <CateringPackageCustomizationModal
+        open={openCateringPackageCustomizationModal}
+        onClose={() => {
+          setOpenCateringPackageCustomizationModal(false);
+        }}
+      />
     </main>
   );
 }
