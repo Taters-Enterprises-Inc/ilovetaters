@@ -62,16 +62,14 @@ export function CateringPackageCustomizationModal(
         </button>
 
         <section className="grid grid-cols-2 gap-4 p-4">
-          <div className="p-4">
-            <h1 className=" text-2xl tracking-[3px] font-['Bebas_Neue'] text-white">
-              Package Products List
-            </h1>
-          </div>
           <div>
             <h1 className="p-4 text-2xl tracking-[3px] font-['Bebas_Neue'] text-white">
               Select Product
             </h1>
-            <div className="px-4 space-y-4 overflow-y-auto h-[500px]">
+            <div
+              className="px-4 space-y-4 overflow-y-auto h-[500px]"
+              style={{ direction: "rtl" }}
+            >
               {getCategoryProductsState.data?.map((category, i) => (
                 <div key={i} className="space-y-3">
                   <h1 className="text-base text-white text-end">
@@ -107,6 +105,11 @@ export function CateringPackageCustomizationModal(
                 </div>
               ))}
             </div>
+          </div>
+          <div className="p-4">
+            <h1 className=" text-2xl tracking-[3px] font-['Bebas_Neue'] text-white">
+              Package Products List
+            </h1>
           </div>
         </section>
       </div>

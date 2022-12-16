@@ -91,25 +91,34 @@ export function CateringProducts() {
                   </div>
                 </Link>
               ))}
-
-              <button
-                onClick={() => {
-                  setOpenCateringPackageCustomizationModal(true);
-                }}
-                className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
-              >
-                <AiOutlineAppstoreAdd className=" text-9xl" />
-
-                <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
-                  <h2 className="text-sm font-bold leading-4 text-white uppercase">
-                    Customize your own package
-                  </h2>
-                </div>
-              </button>
             </div>
           </section>
         ))}
+        <section>
+          <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
+            Build your own package
+          </h1>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <button
+              onClick={() => {
+                setOpenCateringPackageCustomizationModal(true);
+              }}
+              className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
+            >
+              <img
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/Popcorn_Catering_Taters_7.jpg`}
+                className="rounded-t-[10px] w-full"
+                alt=""
+              />
 
+              <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                <h2 className="text-sm font-bold leading-4 text-white uppercase">
+                  Customize your own package
+                </h2>
+              </div>
+            </button>{" "}
+          </div>
+        </section>
         <CateringFaqs />
       </section>
 
