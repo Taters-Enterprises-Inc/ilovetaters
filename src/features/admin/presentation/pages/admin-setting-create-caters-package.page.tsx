@@ -30,6 +30,21 @@ export interface dynamicPriceParam {
   price: string;
   min_qty: string;
 }
+
+export interface variantParam {
+  id: string;
+  product_id: string;
+  name: string;
+  status: string;
+  variantOption: Array<variantOptionParam>;
+}
+export interface variantOptionParam {
+  id: string;
+  product_variant_id: string;
+  name: string;
+  status: string;
+}
+
 export function AdminSettingCreateCatersPackage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,6 +84,7 @@ export function AdminSettingCreateCatersPackage() {
     free_threshold: string;
     package_type: string;
     dynamic_price: string;
+    variants: string;
   }>({
     product_image75x75: "",
     product_image150x150: "",
@@ -93,9 +109,14 @@ export function AdminSettingCreateCatersPackage() {
     free_threshold: "",
     package_type: "",
     dynamic_price: "",
+    variants: "",
   });
 
   const [dynamicPrices, setDynamicPrices] = useState(Array<dynamicPriceParam>);
+  const [variants, setVariants] = useState(Array<variantParam>);
+  // const [variantOptions, setVariantOptions] = useState(
+  //   Array<variantOptionParam>
+  // );
 
   const addMoreDynamicPrice = () => {
     setDynamicPrices([
@@ -107,6 +128,73 @@ export function AdminSettingCreateCatersPackage() {
     const list = [...dynamicPrices];
     list.splice(index, 1);
     setDynamicPrices(list);
+  };
+
+  const addMoreVariant = () => {
+    setVariants([
+      ...variants,
+      {
+        id: "",
+        product_id: "",
+        name: "",
+        status: "",
+        variantOption: [
+          { id: "", product_variant_id: "", name: "", status: "" },
+        ],
+      },
+    ]);
+  };
+
+  const removeVariant = (index: number) => {
+    const list = [...variants];
+    list.splice(index, 1);
+    setVariants(list);
+  };
+
+  const handleInputVariantOption = (
+    parentIndex: any,
+    childIndex: number,
+    e: any
+  ) => {
+    const test = variants.filter((data, key) => key === parentIndex);
+    if (test[0]) {
+      // console.log(e.target.value);
+      // console.log(test[0]["variantOption"]);
+      test[0]["variantOption"][childIndex].name = e.target.value;
+
+      const list = [...variants];
+      list[parentIndex].variantOption = test[0]["variantOption"];
+      setVariants(list);
+    }
+  };
+
+  const addMoreVariantOption = (parentIndex: any) => {
+    const filteredVariant = variants.filter((data, key) => key === parentIndex);
+    if (filteredVariant[0]) {
+      // console.log(test[0]["variantOption"]);
+      filteredVariant[0]["variantOption"].push({
+        id: "",
+        product_variant_id: "",
+        name: "",
+        status: "",
+      });
+
+      const list = [...variants];
+      list[parentIndex].variantOption = filteredVariant[0]["variantOption"];
+      setVariants(list);
+    }
+  };
+
+  const removeVariantOption = (parentIndex: number, childIndex: number) => {
+    const test = variants.filter((data, key) => key === parentIndex);
+    if (test[0]) {
+      console.log(test[0]["variantOption"]);
+      test[0]["variantOption"].splice(childIndex, 1);
+
+      const list = [...variants];
+      list[parentIndex].variantOption = test[0]["variantOption"];
+      setVariants(list);
+    }
   };
 
   if (currentPackage === undefined && id) {
@@ -198,8 +286,11 @@ export function AdminSettingCreateCatersPackage() {
     if (formState["package_type"] === "1") formState["category"] = null;
     if (!hasEditPackage && !id) {
       formState["dynamic_price"] = JSON.stringify(dynamicPrices);
+      formState["variants"] = JSON.stringify(variants);
       console.log(formState["dynamic_price"]);
+      console.log(formState["variants"]);
       console.log(formState);
+      // console.log(variants);
       dispatch(createCataringPackage(formState));
     } else if (id && hasEditPackage && currentPackage !== undefined) {
       const updatedData: UpdateCatersPackageParam = {
@@ -397,6 +488,9 @@ export function AdminSettingCreateCatersPackage() {
               rows={4}
             />
 
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Package Dynamic Price Creator
+            </h1>
             {dynamicPrices.map((currentPrice, index) => (
               <div className="flex space-x-2" key={index}>
                 <MaterialInput
@@ -448,6 +542,105 @@ export function AdminSettingCreateCatersPackage() {
               <AiOutlinePlus className="text-sm" />
               <span className="text-sm font-semibold ">Add Dynamic Price</span>
             </button>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Package Variant Creator
+            </h1>
+
+            {variants.map((data, parentindex) => (
+              <div key={parentindex} className="space-y-3">
+                <div className="flex space-x-2" key={parentindex}>
+                  <MaterialInput
+                    required
+                    colorTheme="black"
+                    onChange={(e) => {
+                      const list = [...variants];
+                      list[parentindex].name = e.target.value;
+                      setVariants(list);
+                    }}
+                    value={data.name}
+                    name="variantName"
+                    type="text"
+                    label="Variant"
+                    fullWidth
+                  />
+
+                  <button
+                    type="button"
+                    className="text-2xl"
+                    onClick={() => removeVariant(parentindex)}
+                  >
+                    <AiOutlineClose />
+                  </button>
+                </div>
+                {data["variantOption"].map((dataOption, childindex) => (
+                  <div key={childindex}>
+                    <div className="flex space-x-2">
+                      <MaterialInput
+                        required
+                        colorTheme="black"
+                        onChange={(e) => {
+                          handleInputVariantOption(parentindex, childindex, e);
+                        }}
+                        value={dataOption.name}
+                        name="variantOption"
+                        type="text"
+                        label="Variant Option"
+                        fullWidth
+                      />
+
+                      <button
+                        type="button"
+                        className="text-2xl"
+                        onClick={() =>
+                          removeVariantOption(parentindex, childindex)
+                        }
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    </div>
+                    {data["variantOption"].length - 1 === childindex ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          addMoreVariantOption(parentindex);
+                        }}
+                        className="flex items-center text-[#003399] space-x-1"
+                      >
+                        <AiOutlinePlus className="text-sm" />
+                        <span className="text-sm font-semibold ">
+                          Add Variang Option
+                        </span>
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
+
+                {data["variantOption"].length < 1 ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      addMoreVariantOption(parentindex);
+                    }}
+                    className="flex items-center text-[#003399] space-x-1"
+                  >
+                    <AiOutlinePlus className="text-sm" />
+                    <span className="text-sm font-semibold ">
+                      Add Variang Option
+                    </span>
+                  </button>
+                ) : null}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addMoreVariant()}
+              className="flex items-center text-[#003399] space-x-1"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold ">Add Variant</span>
+            </button>
+
             <button
               type="submit"
               className="px-4 py-2 text-white rounded-lg bg-button w-fit"
