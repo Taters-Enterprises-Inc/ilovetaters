@@ -28,6 +28,27 @@ import NumberFormat from "react-number-format";
 import { Link, useNavigate } from "react-router-dom";
 import { CateringPackageCustomizationQuantityFlavorModal } from "./catering-package-customization-quantity-flavor.modal";
 
+export interface CustomizePackageProduct {
+  prod_id: number;
+  prod_image_name: string;
+  prod_name: string;
+  prod_qty: number;
+  prod_price: number;
+  prod_calc_amount: number;
+  prod_flavor?: string;
+  prod_flavor_id?: number;
+  prod_with_drinks?: number;
+  prod_size?: string;
+  prod_size_id?: number;
+  flavors_details?: string;
+  prod_sku_id?: number;
+  prod_sku?: number;
+  prod_discount?: number;
+  prod_category: number;
+  prod_type: "main" | "addon";
+  promo_discount_percentage: string | null;
+}
+
 interface CateringPackageCustomizationModalProps {
   open: boolean;
   onClose: () => void;
@@ -35,6 +56,9 @@ interface CateringPackageCustomizationModalProps {
 export function CateringPackageCustomizationModal(
   props: CateringPackageCustomizationModalProps
 ) {
+  const [customizePackage, setCustomizePackage] = useState<
+    Array<CustomizePackageProduct>
+  >([]);
   const navigate = useNavigate();
   const query = useQuery();
 
@@ -151,63 +175,70 @@ export function CateringPackageCustomizationModal(
               </div>
               <div className="space-y-4">
                 <div className="px-4  py-2 space-y-4 overflow-y-auto max-h-[350px]">
-                  {getSessionState.data?.orders !== undefined &&
-                  getSessionState.data?.orders !== null &&
-                  getSessionState.data?.orders.length > 0 ? (
-                    <>
-                      {getSessionState.data.orders.map((order, i) => (
-                        <div
-                          key={i}
-                          className="relative flex bg-secondary shadow-tertiary shadow-md rounded-[10px]"
-                        >
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
-                            className="rounded-[10px] w-[75px] h-[75px]"
-                            alt=""
-                          />
-                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                            <h3 className="text-sm w-[90%] font-bold leading-4">
-                              {order.prod_size} {order.prod_name}
-                            </h3>
+                  {customizePackage.map((product, i) => {
+                    const productSize = product.prod_size;
+                    return (
+                      <div
+                        key={i}
+                        className="relative flex bg-secondary shadow-tertiary shadow-md rounded-[10px]"
+                      >
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${product.prod_image_name}`}
+                          className="rounded-[10px] w-[75px] h-[75px]"
+                          alt=""
+                        />
+                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                          <h3 className="text-sm w-[90%] font-bold leading-4">
+                            {productSize
+                              ? getProductDetailsState.data?.product_size?.find(
+                                  (size) => size.id === parseInt(productSize)
+                                )?.name
+                              : null}{" "}
+                            {product.prod_name}
+                          </h3>
+                          <h3 className="text-xs">
+                            Quantity:{" "}
+                            <span className="text-tertiary">
+                              {product.prod_qty}
+                            </span>
+                          </h3>
+
+                          {product.flavors_details ? (
                             <h3 className="text-xs">
-                              Quantity:{" "}
-                              <span className="text-tertiary">
-                                {order.prod_qty}
-                              </span>
-                            </h3>
-
-                            {order.prod_multiflavors ? (
-                              <h3 className="text-xs">
-                                Flavor:
-                                <br />
-                                <span
-                                  className="text-tertiary"
-                                  dangerouslySetInnerHTML={{
-                                    __html: order.prod_multiflavors,
-                                  }}
-                                />
-                              </h3>
-                            ) : null}
-
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={order.prod_calc_amount.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
+                              Flavor:
+                              <br />
+                              <span
+                                className="text-tertiary"
+                                dangerouslySetInnerHTML={{
+                                  __html: product.flavors_details,
+                                }}
                               />
                             </h3>
-                          </div>
-                          <button
-                            className="absolute text-white top-2 right-4 "
-                            onClick={() => {}}
-                          >
-                            <IoMdClose />
-                          </button>
+                          ) : null}
+
+                          <h3 className="flex items-end justify-end flex-1 text-base">
+                            <NumberFormat
+                              value={product.prod_calc_amount.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </h3>
                         </div>
-                      ))}
-                    </>
-                  ) : null}
+                        <button
+                          className="absolute text-white top-2 right-4 "
+                          onClick={() => {
+                            const filteredPackage = customizePackage.filter(
+                              (product, productIndex) => productIndex !== i
+                            );
+                            setCustomizePackage(filteredPackage);
+                          }}
+                        >
+                          <IoMdClose />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="px-4">
@@ -265,6 +296,9 @@ export function CateringPackageCustomizationModal(
       </div>
       <CateringPackageCustomizationQuantityFlavorModal
         open={openCateringPackageCustomizationQuantityFlavor}
+        onAddProduct={(product) => {
+          setCustomizePackage([...customizePackage, product]);
+        }}
         onClose={() => {
           navigate("");
           setOpenCateringPackageCustomizationQuantityFlavor(false);
