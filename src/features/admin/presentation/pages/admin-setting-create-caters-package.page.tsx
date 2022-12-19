@@ -510,117 +510,144 @@ export function AdminSettingCreateCatersPackage() {
               rows={4}
             />
 
-            <h1 className="text-2xl font-bold text-secondary !my-2">
-              Package Dynamic Price Creator
-            </h1>
-            {dynamicPrices.map((currentPrice, index) => (
-              <div className="flex space-x-2" key={index}>
-                <MaterialInput
-                  required
-                  colorTheme="black"
-                  onChange={(e) => {
-                    const list = [...dynamicPrices];
-                    list[index].price = e.target.value;
-                    if (id) list[index].package_id = id;
-                    setDynamicPrices(list);
-                  }}
-                  value={currentPrice.price}
-                  name="dynamic_price"
-                  type="number"
-                  label="Dynamic Price"
-                  fullWidth
-                />
-                <MaterialInput
-                  required
-                  colorTheme="black"
-                  onChange={(e) => {
-                    const list = [...dynamicPrices];
-                    list[index].min_qty = e.target.value;
-                    if (id) list[index].package_id = id;
-                    setDynamicPrices(list);
-                  }}
-                  value={currentPrice.min_qty}
-                  name="min_qty"
-                  type="number"
-                  label="Minimum Quantity"
-                  fullWidth
-                />
+            {Number(formState.package_type) === 0 ? (
+              <>
+                <h1 className="text-2xl font-bold text-secondary !my-2">
+                  Package Dynamic Price Creator
+                </h1>
+
+                {dynamicPrices.map((currentPrice, index) => (
+                  <div className="flex space-x-2" key={index}>
+                    <MaterialInput
+                      required
+                      colorTheme="black"
+                      onChange={(e) => {
+                        const list = [...dynamicPrices];
+                        list[index].price = e.target.value;
+                        if (id) list[index].package_id = id;
+                        setDynamicPrices(list);
+                      }}
+                      value={currentPrice.price}
+                      name="dynamic_price"
+                      type="number"
+                      label="Dynamic Price"
+                      fullWidth
+                    />
+                    <MaterialInput
+                      required
+                      colorTheme="black"
+                      onChange={(e) => {
+                        const list = [...dynamicPrices];
+                        list[index].min_qty = e.target.value;
+                        if (id) list[index].package_id = id;
+                        setDynamicPrices(list);
+                      }}
+                      value={currentPrice.min_qty}
+                      name="min_qty"
+                      type="number"
+                      label="Minimum Quantity"
+                      fullWidth
+                    />
+
+                    <button
+                      type="button"
+                      className="text-2xl"
+                      onClick={() => removeDynamicPrice(index)}
+                    >
+                      <AiOutlineClose />
+                    </button>
+                  </div>
+                ))}
 
                 <button
                   type="button"
-                  className="text-2xl"
-                  onClick={() => removeDynamicPrice(index)}
+                  onClick={() => addMoreDynamicPrice()}
+                  className="flex items-center text-[#003399] space-x-1"
                 >
-                  <AiOutlineClose />
+                  <AiOutlinePlus className="text-sm" />
+                  <span className="text-sm font-semibold ">
+                    Add Dynamic Price
+                  </span>
                 </button>
-              </div>
-            ))}
 
-            <button
-              type="button"
-              onClick={() => addMoreDynamicPrice()}
-              className="flex items-center text-[#003399] space-x-1"
-            >
-              <AiOutlinePlus className="text-sm" />
-              <span className="text-sm font-semibold ">Add Dynamic Price</span>
-            </button>
-            <h1 className="text-2xl font-bold text-secondary !my-2">
-              Package Variant Creator
-            </h1>
+                <h1 className="text-2xl font-bold text-secondary !my-2">
+                  Package Variant Creator
+                </h1>
 
-            {variants.map((data, parentindex) => (
-              <div key={parentindex} className="space-y-3">
-                <div className="flex space-x-2" key={parentindex}>
-                  <MaterialInput
-                    required
-                    colorTheme="black"
-                    onChange={(e) => {
-                      const list = [...variants];
-                      list[parentindex].name = e.target.value;
-                      setVariants(list);
-                    }}
-                    value={data.name}
-                    name="variantName"
-                    type="text"
-                    label="Variant"
-                    fullWidth
-                  />
-
-                  <button
-                    type="button"
-                    className="text-2xl"
-                    onClick={() => removeVariant(parentindex)}
-                  >
-                    <AiOutlineClose />
-                  </button>
-                </div>
-                {data["variantOption"].map((dataOption, childindex) => (
-                  <div key={childindex}>
-                    <div className="flex space-x-2">
+                {variants.map((data, parentindex) => (
+                  <div key={parentindex} className="space-y-3">
+                    <div className="flex space-x-2" key={parentindex}>
                       <MaterialInput
                         required
                         colorTheme="black"
                         onChange={(e) => {
-                          handleInputVariantOption(parentindex, childindex, e);
+                          const list = [...variants];
+                          list[parentindex].name = e.target.value;
+                          setVariants(list);
                         }}
-                        value={dataOption.name}
-                        name="variantOption"
+                        value={data.name}
+                        name="variantName"
                         type="text"
-                        label="Variant Option"
+                        label="Variant"
                         fullWidth
                       />
 
                       <button
                         type="button"
                         className="text-2xl"
-                        onClick={() =>
-                          removeVariantOption(parentindex, childindex)
-                        }
+                        onClick={() => removeVariant(parentindex)}
                       >
                         <AiOutlineClose />
                       </button>
                     </div>
-                    {data["variantOption"].length - 1 === childindex ? (
+                    {data["variantOption"].map((dataOption, childindex) => (
+                      <div key={childindex}>
+                        <div className="flex space-x-2">
+                          <MaterialInput
+                            required
+                            colorTheme="black"
+                            onChange={(e) => {
+                              handleInputVariantOption(
+                                parentindex,
+                                childindex,
+                                e
+                              );
+                            }}
+                            value={dataOption.name}
+                            name="variantOption"
+                            type="text"
+                            label="Variant Option"
+                            fullWidth
+                          />
+
+                          <button
+                            type="button"
+                            className="text-2xl"
+                            onClick={() =>
+                              removeVariantOption(parentindex, childindex)
+                            }
+                          >
+                            <AiOutlineClose />
+                          </button>
+                        </div>
+                        {data["variantOption"].length - 1 === childindex ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              addMoreVariantOption(parentindex);
+                            }}
+                            className="flex items-center text-[#003399] space-x-1"
+                          >
+                            <AiOutlinePlus className="text-sm" />
+                            <span className="text-sm font-semibold ">
+                              Add Variang Option
+                            </span>
+                          </button>
+                        ) : null}
+                      </div>
+                    ))}
+
+                    {data["variantOption"].length < 1 ? (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -637,31 +664,16 @@ export function AdminSettingCreateCatersPackage() {
                   </div>
                 ))}
 
-                {data["variantOption"].length < 1 ? (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      addMoreVariantOption(parentindex);
-                    }}
-                    className="flex items-center text-[#003399] space-x-1"
-                  >
-                    <AiOutlinePlus className="text-sm" />
-                    <span className="text-sm font-semibold ">
-                      Add Variang Option
-                    </span>
-                  </button>
-                ) : null}
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={() => addMoreVariant()}
-              className="flex items-center text-[#003399] space-x-1"
-            >
-              <AiOutlinePlus className="text-sm" />
-              <span className="text-sm font-semibold ">Add Variant</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={() => addMoreVariant()}
+                  className="flex items-center text-[#003399] space-x-1"
+                >
+                  <AiOutlinePlus className="text-sm" />
+                  <span className="text-sm font-semibold ">Add Variant</span>
+                </button>
+              </>
+            ) : null}
           </div>
           <div>
             <div className="grid grid-cols-2 gap-4">
