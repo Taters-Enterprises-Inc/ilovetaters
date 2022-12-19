@@ -3,6 +3,7 @@ import { AdminHead } from "../components";
 
 import {
   MaterialInput,
+  MaterialInputAutoComplete,
   UploadFile,
 } from "features/shared/presentation/components";
 import { MenuItem } from "@mui/material";
@@ -23,6 +24,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { UpdateCatersPackageParam } from "features/admin/core/admin.params";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import {
+  getAdminStores,
+  selectGetAdminStores,
+} from "../slices/get-admin-stores.slice";
+import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 
 export interface dynamicPriceParam {
   id: string;
@@ -60,6 +66,12 @@ export function AdminSettingCreateCatersPackage() {
   const [hasEditPackage, setHasEditPackage] = useState(false);
   const [hasEditDynamicPrices, setHasEditDynamicPrices] = useState(false);
 
+  const [storesState, setStoreState] = useState<{
+    stores: Array<AdminStoreModel>;
+  }>({
+    stores: [],
+  });
+
   const [formState, setFormState] = useState<{
     product_image75x75: File | string;
     product_image150x150: File | string;
@@ -85,6 +97,7 @@ export function AdminSettingCreateCatersPackage() {
     package_type: string;
     dynamic_price: string;
     variants: string;
+    stores: string;
   }>({
     product_image75x75: "",
     product_image150x150: "",
@@ -110,13 +123,11 @@ export function AdminSettingCreateCatersPackage() {
     package_type: "",
     dynamic_price: "",
     variants: "",
+    stores: "",
   });
 
   const [dynamicPrices, setDynamicPrices] = useState(Array<dynamicPriceParam>);
   const [variants, setVariants] = useState(Array<variantParam>);
-  // const [variantOptions, setVariantOptions] = useState(
-  //   Array<variantOptionParam>
-  // );
 
   const addMoreDynamicPrice = () => {
     setDynamicPrices([
@@ -156,14 +167,11 @@ export function AdminSettingCreateCatersPackage() {
     childIndex: number,
     e: any
   ) => {
-    const test = variants.filter((data, key) => key === parentIndex);
-    if (test[0]) {
-      // console.log(e.target.value);
-      // console.log(test[0]["variantOption"]);
-      test[0]["variantOption"][childIndex].name = e.target.value;
-
+    const option = variants.filter((data, key) => key === parentIndex);
+    if (option[0]) {
+      option[0]["variantOption"][childIndex].name = e.target.value;
       const list = [...variants];
-      list[parentIndex].variantOption = test[0]["variantOption"];
+      list[parentIndex].variantOption = option[0]["variantOption"];
       setVariants(list);
     }
   };
@@ -186,13 +194,13 @@ export function AdminSettingCreateCatersPackage() {
   };
 
   const removeVariantOption = (parentIndex: number, childIndex: number) => {
-    const test = variants.filter((data, key) => key === parentIndex);
-    if (test[0]) {
-      console.log(test[0]["variantOption"]);
-      test[0]["variantOption"].splice(childIndex, 1);
+    const filteredVariant = variants.filter((data, key) => key === parentIndex);
+    if (filteredVariant[0]) {
+      console.log(filteredVariant[0]["variantOption"]);
+      filteredVariant[0]["variantOption"].splice(childIndex, 1);
 
       const list = [...variants];
-      list[parentIndex].variantOption = test[0]["variantOption"];
+      list[parentIndex].variantOption = filteredVariant[0]["variantOption"];
       setVariants(list);
     }
   };
@@ -207,6 +215,8 @@ export function AdminSettingCreateCatersPackage() {
 
   const CreateCatersStatus = useAppSelector(getCreateCatersStatus);
 
+  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
 
@@ -216,13 +226,24 @@ export function AdminSettingCreateCatersPackage() {
     });
   };
   useEffect(() => {
+    dispatch(getCatersPackageCategories());
+    dispatch(getAdminStores());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const stores = getAdminStoresState.data;
+    if (getAdminStoresState.status === 2 && stores) {
+      setStoreState((f) => ({ ...f, stores }));
+    }
+  }, [getAdminStoresState]);
+
+  useEffect(() => {
     if (!hasEditDynamicPrices) {
       setDynamicPrices(currentPrices);
       setHasEditDynamicPrices(true);
     }
   }, [currentPrices, hasEditDynamicPrices]);
   useEffect(() => {
-    dispatch(getCatersPackageCategories());
     if (CreateCatersStatus === 2) {
       dispatch(resetCreateCaterPackageStatus());
       navigate("/admin/setting/caters-setting");
@@ -267,7 +288,7 @@ export function AdminSettingCreateCatersPackage() {
     hasEditPackage,
   ]);
 
-  const postUser = (event: any) => {
+  const postPackage = (event: any) => {
     event.preventDefault();
 
     if (typeof formState["product_image75x75"] !== "string")
@@ -287,8 +308,9 @@ export function AdminSettingCreateCatersPackage() {
     if (!hasEditPackage && !id) {
       formState["dynamic_price"] = JSON.stringify(dynamicPrices);
       formState["variants"] = JSON.stringify(variants);
-      console.log(formState["dynamic_price"]);
-      console.log(formState["variants"]);
+      formState["stores"] = JSON.stringify(storesState.stores);
+      // console.log(formState["stores"]);
+      // console.log(storesState.stores);
       console.log(formState);
       // console.log(variants);
       dispatch(createCataringPackage(formState));
@@ -343,7 +365,7 @@ export function AdminSettingCreateCatersPackage() {
         </span>
       </div>
       {/* onSubmit={handleOnSubmit} */}
-      <form className="p-4 space-y-3" onSubmit={postUser} method="POST">
+      <form className="p-4 space-y-3" onSubmit={postPackage} method="POST">
         <div className="flex space-x-4">
           <div className="flex-1 space-y-3">
             <div className="flex space-x-2">
@@ -640,13 +662,6 @@ export function AdminSettingCreateCatersPackage() {
               <AiOutlinePlus className="text-sm" />
               <span className="text-sm font-semibold ">Add Variant</span>
             </button>
-
-            <button
-              type="submit"
-              className="px-4 py-2 text-white rounded-lg bg-button w-fit"
-            >
-              {currentPackage ? "Save Caters Package" : "Create Package"}
-            </button>
           </div>
           <div>
             <div className="grid grid-cols-2 gap-4">
@@ -698,6 +713,37 @@ export function AdminSettingCreateCatersPackage() {
             </h4>
           </div>
         </div>
+        {/* && formState.productType === "1" */}
+        {getAdminStoresState.data ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Store Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Stores"
+              colorTheme="black"
+              multiple
+              options={getAdminStoresState.data}
+              getOptionLabel={(option) => option.name}
+              value={storesState.stores ? [...storesState.stores] : []}
+              onChange={(e, stores) => {
+                setStoreState({
+                  ...storesState.stores,
+                  stores,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        <button
+          type="submit"
+          className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+        >
+          {currentPackage ? "Save Caters Package" : "Create Package"}
+        </button>
       </form>
     </>
   );
