@@ -13,6 +13,11 @@ export interface UpdateStoreProductParam {
   status: "1" | "0";
 }
 
+export interface UpdateStoreCateringProductParam {
+  id: string;
+  status: "1" | "0";
+}
+
 export interface UpdateStoreCatersPackageParam {
   id: string;
   status: "1" | "0";

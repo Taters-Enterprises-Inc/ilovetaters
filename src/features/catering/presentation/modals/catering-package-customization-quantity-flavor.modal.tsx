@@ -85,6 +85,11 @@ export function CateringPackageCustomizationQuantityFlavorModal(
   }, [getProductSkuState, dispatch]);
 
   useEffect(() => {
+    setQuantity(1);
+    setCurrentSize("");
+  }, [hash]);
+
+  useEffect(() => {
     if (
       getProductDetailsState.status &&
       getProductDetailsState.data &&
@@ -275,7 +280,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
         flavors_details: flavors_details,
         prod_sku_id: -1,
         prod_sku: -1,
-        prod_type: "main",
+        prod_type: "product",
       });
 
       props.onClose();
@@ -403,8 +408,8 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                         if (isNaN(parseInt(value)) || value === "0") {
                           isQuantityNull.current = true;
                         }
-                        if (parseInt(value) >= 10) {
-                          setQuantity(10);
+                        if (parseInt(value) >= 1000) {
+                          setQuantity(1000);
                         } else if (parseInt(value) < 0) {
                           setQuantity(1);
                         } else {
@@ -413,21 +418,21 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                       }
                     }}
                     min="1"
-                    max="10"
+                    max="1000"
                     className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                     name="custom-input-number"
                   />
 
                   <button
                     onClick={() =>
-                      quantity >= 10 ? setDisabled : handleOnClick()
+                      quantity >= 1000 ? setDisabled : handleOnClick()
                     }
                     onMouseDown={() =>
-                      quantity >= 10 ? setDisabled : handleOnMouseDown("add")
+                      quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
                     }
                     onMouseUp={handleOnMouseUp}
                     onTouchStart={() =>
-                      quantity >= 10 ? setDisabled : handleOnMouseDown("add")
+                      quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
                     }
                     onTouchEnd={(e) => {
                       e.preventDefault();

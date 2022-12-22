@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { GetCateringCategoryProductsRepository } from "features/catering/data/repository/catering.repository";
+import { GetCateringCategoryProductsParam } from "features/catering/core/catering.params";
+import {
+  GetCateringCategoryProductsRepository,
+  GetCateringCategoryProductsResponse,
+} from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
-import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
-import { GetCategoryProductsParam } from "features/shop/core/shop.params";
-import { GetCategoryProductsResponse } from "features/shop/data/repository/shop.repository";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
 
 export enum GetCateringCategoryProductsState {
   initial,
@@ -15,7 +17,7 @@ export enum GetCateringCategoryProductsState {
 
 interface InitialState {
   status: GetCateringCategoryProductsState;
-  data: Array<CategoryProductsModel> | undefined;
+  data: Array<CategoryProductModel> | undefined;
   message: string;
 }
 
@@ -27,9 +29,9 @@ const initialState: InitialState = {
 
 export const getCateringCategoryProducts = createAsyncThunk(
   "getCateringCategoryProducts",
-  async (param: GetCategoryProductsParam, { rejectWithValue }) => {
+  async (param: GetCateringCategoryProductsParam, { rejectWithValue }) => {
     try {
-      const response: GetCategoryProductsResponse =
+      const response: GetCateringCategoryProductsResponse =
         await GetCateringCategoryProductsRepository(param);
       return response.data;
     } catch (error) {
@@ -66,6 +68,7 @@ export const getCateringCategoryProductsSlice = createSlice({
       .addCase(getCateringCategoryProducts.rejected, (state, action) => {
         state.status = GetCateringCategoryProductsState.fail;
         state.message = action.payload as string;
+        state.data = undefined;
       });
   },
 });

@@ -8,15 +8,14 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
-  getCateringCategoryProducts,
-  selectGetCateringCategoryProducts,
-} from "../slices/get-catering-category-products.slice";
+  getCateringCategoryPackages,
+  selectGetCateringCategoryPackages,
+} from "../slices/get-catering-category-packages.slice";
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
-import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { CateringPackageCustomizationModal } from "../modals";
 
 export function CateringProducts() {
@@ -25,8 +24,8 @@ export function CateringProducts() {
     setOpenCateringPackageCustomizationModal,
   ] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
-  const getCateringCategoryProductsState = useAppSelector(
-    selectGetCateringCategoryProducts
+  const getCateringCategoryPackagesState = useAppSelector(
+    selectGetCateringCategoryPackages
   );
 
   const dispatch = useAppDispatch();
@@ -43,7 +42,7 @@ export function CateringProducts() {
     ) {
       if (getSessionState.data.cache_data?.region_id) {
         dispatch(
-          getCateringCategoryProducts({
+          getCateringCategoryPackages({
             region_id: getSessionState.data.cache_data.region_id,
           })
         );
@@ -57,7 +56,7 @@ export function CateringProducts() {
         <CateringHeroCarousel />
       </section>
       <section className="container space-y-10 pb-[90px]">
-        {getCateringCategoryProductsState.data?.map((category, i) => (
+        {getCateringCategoryPackagesState.data?.map((category, i) => (
           <section key={i}>
             <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
               {category.category_name}

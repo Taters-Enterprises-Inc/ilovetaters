@@ -5,27 +5,29 @@ import {
 } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
+  getSession,
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import {
-  getCategoryProducts,
-  selectGetCategoryProducts,
-} from "features/shop/presentation/slices/get-category-products.slice";
-import {
   getProductDetails,
-  GetProductDetailsState,
   selectGetProductDetails,
 } from "features/shop/presentation/slices/get-product-details.slice";
 import { useEffect, useState } from "react";
-import {
-  BsCartX,
-  BsFillBagCheckFill,
-  BsFillCartPlusFill,
-} from "react-icons/bs";
+import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  addToCartCateringProducts,
+  AddToCartCateringProductsState,
+  resetAddToCartCateringProductsState,
+  selectAddToCartCateringProducts,
+} from "../slices/add-to-cart-catering-products.slice";
+import {
+  getCateringCategoryProducts,
+  selectGetCateringCategoryProducts,
+} from "../slices/get-catering-category-products.slice";
 import { CateringPackageCustomizationQuantityFlavorModal } from "./catering-package-customization-quantity-flavor.modal";
 
 export interface CustomizePackageProduct {
@@ -45,7 +47,7 @@ export interface CustomizePackageProduct {
   prod_sku?: number;
   prod_discount?: number;
   prod_category: number;
-  prod_type: "main" | "addon";
+  prod_type: "main" | "addon" | "product";
   promo_discount_percentage: string | null;
 }
 
@@ -72,21 +74,30 @@ export function CateringPackageCustomizationModal(
   ] = useState(false);
 
   const getSessionState = useAppSelector(selectGetSession);
-  const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
+  const getCateringCategoryProductsState = useAppSelector(
+    selectGetCateringCategoryProducts
+  );
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
+  const addToCartCateringProductsState = useAppSelector(
+    selectAddToCartCateringProducts
+  );
 
   useEffect(() => {
     if (
-      getProductDetailsState.status === GetProductDetailsState.success &&
-      getProductDetailsState.data
+      addToCartCateringProductsState.status ===
+      AddToCartCateringProductsState.success
     ) {
-      setOpenCateringPackageCustomizationQuantityFlavor(true);
+      dispatch(getSession());
+      props.onClose();
+      dispatch(resetAddToCartCateringProductsState());
     }
-  }, [getProductDetailsState]);
+  }, [addToCartCateringProductsState, dispatch, props]);
 
   useEffect(() => {
     if (hash) {
-      dispatch(getProductDetails({ hash }));
+      dispatch(getProductDetails({ hash })).then(() => {
+        setOpenCateringPackageCustomizationQuantityFlavor(true);
+      });
     }
   }, [dispatch, hash]);
 
@@ -97,12 +108,32 @@ export function CateringPackageCustomizationModal(
       getSessionState.data.cache_data?.region_id
     ) {
       dispatch(
-        getCategoryProducts({
+        getCateringCategoryProducts({
           region_id: getSessionState.data.cache_data.region_id,
         })
       );
     }
-  }, [getSessionState, dispatch]);
+  }, [getSessionState, dispatch, props.open]);
+
+  const calculateTotalQuantity = () => {
+    let totalQuantity = 0;
+
+    for (let i = 0; i < customizePackage.length; i++) {
+      totalQuantity += customizePackage[i].prod_qty;
+    }
+
+    return totalQuantity;
+  };
+
+  const calculateTotalPackagePrice = () => {
+    let calculatedPackagePrice = 0;
+
+    for (let i = 0; i < customizePackage.length; i++) {
+      calculatedPackagePrice += customizePackage[i].prod_calc_amount;
+    }
+
+    return calculatedPackagePrice.toFixed(2);
+  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -133,15 +164,25 @@ export function CateringPackageCustomizationModal(
               Build your own Package
             </h1>
 
-            <div className="grid grid-cols-2 gap-4 p-4">
+            <div
+              className={`${
+                customizePackage.length > 0 ? "grid grid-cols-2 gap-4" : null
+              } p-4`}
+            >
               <div>
                 <div className="px-4 space-y-4 overflow-y-auto py-4 h-[500px]">
-                  {getCategoryProductsState.data?.map((category, i) => (
+                  {getCateringCategoryProductsState.data?.map((category, i) => (
                     <div key={i} className="space-y-3 cursor-pointer">
                       <h1 className="text-base text-white text-end">
                         {category.category_name}
                       </h1>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div
+                        className={`grid ${
+                          customizePackage.length > 0
+                            ? "grid-cols-3"
+                            : "grid-cols-6"
+                        } gap-4`}
+                      >
                         {category.category_products.map((product, i) => (
                           <Link
                             key={i}
@@ -173,123 +214,142 @@ export function CateringPackageCustomizationModal(
                   ))}
                 </div>
               </div>
-              <div className="space-y-4">
-                <div className="px-4  py-2 space-y-4 overflow-y-auto max-h-[350px]">
-                  {customizePackage.map((product, i) => {
-                    const productSize = product.prod_size;
-                    return (
-                      <div
-                        key={i}
-                        className="relative flex bg-secondary shadow-tertiary shadow-md rounded-[10px]"
-                      >
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${product.prod_image_name}`}
-                          className="rounded-[10px] w-[75px] h-[75px]"
-                          alt=""
-                        />
-                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                          <h3 className="text-sm w-[90%] font-bold leading-4">
-                            {productSize
-                              ? getProductDetailsState.data?.product_size?.find(
-                                  (size) => size.id === parseInt(productSize)
-                                )?.name
-                              : null}{" "}
-                            {product.prod_name}
-                          </h3>
-                          <h3 className="text-xs">
-                            Quantity:{" "}
-                            <span className="text-tertiary">
-                              {product.prod_qty}
-                            </span>
-                          </h3>
-
-                          {product.flavors_details ? (
+              {customizePackage.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="px-4  py-2 space-y-4 overflow-y-auto max-h-[350px]">
+                    {customizePackage.map((product, i) => {
+                      const productSize = product.prod_size;
+                      return (
+                        <div
+                          key={i}
+                          className="relative flex bg-secondary shadow-tertiary shadow-md rounded-[10px]"
+                        >
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${product.prod_image_name}`}
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            alt=""
+                          />
+                          <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                            <h3 className="text-sm w-[90%] font-bold leading-4">
+                              {productSize
+                                ? getProductDetailsState.data?.product_size?.find(
+                                    (size) => size.id === parseInt(productSize)
+                                  )?.name
+                                : null}{" "}
+                              {product.prod_name}
+                            </h3>
                             <h3 className="text-xs">
-                              Flavor:
-                              <br />
-                              <span
-                                className="text-tertiary"
-                                dangerouslySetInnerHTML={{
-                                  __html: product.flavors_details,
-                                }}
+                              Quantity:{" "}
+                              <span className="text-tertiary">
+                                {product.prod_qty}
+                              </span>
+                            </h3>
+
+                            {product.flavors_details ? (
+                              <h3 className="text-xs">
+                                Flavor:
+                                <br />
+                                <span
+                                  className="text-tertiary"
+                                  dangerouslySetInnerHTML={{
+                                    __html: product.flavors_details,
+                                  }}
+                                />
+                              </h3>
+                            ) : null}
+
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={product.prod_calc_amount.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
                               />
                             </h3>
-                          ) : null}
-
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={product.prod_calc_amount.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          </div>
+                          <button
+                            className="absolute text-white top-2 right-4 "
+                            onClick={() => {
+                              const filteredPackage = customizePackage.filter(
+                                (product, productIndex) => productIndex !== i
+                              );
+                              setCustomizePackage(filteredPackage);
+                            }}
+                          >
+                            <IoMdClose />
+                          </button>
                         </div>
-                        <button
-                          className="absolute text-white top-2 right-4 "
-                          onClick={() => {
-                            const filteredPackage = customizePackage.filter(
-                              (product, productIndex) => productIndex !== i
-                            );
-                            setCustomizePackage(filteredPackage);
-                          }}
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="px-4">
-                  <div className="flex">
-                    <span className="text-lg font-bold text-white">
-                      Package Quantity:
-                    </span>
-
-                    <h3 className="flex items-end justify-end flex-1 text-lg text-white">
-                      10
-                    </h3>
+                      );
+                    })}
                   </div>
 
-                  <div className="flex">
-                    <span className="text-lg font-bold text-white">
-                      Package Price:
-                    </span>
-
-                    <h3 className="flex items-end justify-end flex-1 text-lg text-white">
-                      <NumberFormat
-                        value={(100).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h3>
-                  </div>
-
-                  <div className="mt-4 space-y-4">
-                    <button
-                      onClick={() => {}}
-                      className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                    >
-                      <BsFillBagCheckFill className="text-3xl" />
-                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                        Checkout
+                  <div className="px-4">
+                    <div className="flex">
+                      <span className="text-lg font-bold text-white">
+                        Package Quantity:
                       </span>
-                    </button>
 
-                    <button
-                      onClick={() => {}}
-                      className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-                    >
-                      <BsFillCartPlusFill className="text-3xl" />
-                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                        Add to cart
+                      <h3 className="flex items-end justify-end flex-1 text-lg text-white">
+                        {calculateTotalQuantity()}
+                      </h3>
+                    </div>
+
+                    <div className="flex">
+                      <span className="text-lg font-bold text-white">
+                        Package Price:
                       </span>
-                    </button>
+
+                      <h3 className="flex items-end justify-end flex-1 text-lg text-white">
+                        <NumberFormat
+                          value={calculateTotalPackagePrice()}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h3>
+                    </div>
+
+                    <div className="mt-4 space-y-4">
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            addToCartCateringProducts({
+                              products: customizePackage,
+                            })
+                          ).then(() => {
+                            setCustomizePackage([]);
+                            navigate("/shop/checkout");
+                          });
+                        }}
+                        className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                      >
+                        <BsFillBagCheckFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Checkout
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            addToCartCateringProducts({
+                              products: customizePackage,
+                            })
+                          ).then(() => {
+                            setCustomizePackage([]);
+                          });
+                        }}
+                        className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+                      >
+                        <BsFillCartPlusFill className="text-3xl" />
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Add to cart
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </section>
         </div>

@@ -1,4 +1,4 @@
-export interface CategoryProductsModel {
+export interface CategoryProductModel {
   category_id: number;
   category_name: string;
   category_details: string;

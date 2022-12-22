@@ -15,6 +15,7 @@ export { AdminAvailabilityCatersPackageAddon } from "./admin-availability-caters
 export { AdminAvailabilityCatersProductAddon } from "./admin-availability-caters-product-addon.page";
 export { AdminAvailabilityProduct } from "./admin-availability-product.page";
 export { AdminAvailabilityBanner } from "./admin-availability-banner.page";
+export { AdminAvailabilityCatersProduct } from "./admin-availability-caters-product.page";
 
 export { AdminSettingCategory } from "./admin-setting-category-page";
 export { AdminSettingUser } from "./admin-setting-user.page";

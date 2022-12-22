@@ -8,6 +8,7 @@ import {
   UpdateStoreProductParam,
   UpdateStoreCatersPackageAddonParam,
   UpdateStoreCatersProductAddonParam,
+  UpdateStoreCateringProductParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -31,6 +32,7 @@ import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transa
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
 import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
+import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/get-admin-store-catering-products.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -336,6 +338,41 @@ export interface UpdateAdminNotificationDateSeenResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminStoreCateringProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCateringProductsModel;
+  };
+}
+export interface UpdateStoreCateringProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateStoreCateringProductRepository(
+  param: UpdateStoreCateringProductParam
+): Promise<UpdateStoreCateringProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCateringProductsRepository(
+  query: string
+): Promise<GetAdminStoreCateringProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminNotificationDateSeenRepository(

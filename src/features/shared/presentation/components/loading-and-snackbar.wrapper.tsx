@@ -259,6 +259,10 @@ import {
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import {
+  AddToCartCateringProductsState,
+  selectAddToCartCateringProducts,
+} from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -402,6 +406,36 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
+  const addToCartCateringProductsState = useAppSelector(
+    selectAddToCartCateringProducts
+  );
+
+  useEffect(() => {
+    switch (addToCartCateringProductsState.status) {
+      case AddToCartCateringProductsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AddToCartCateringProductsState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringProductsState.success:
+        SweetAlert.fire(
+          "Package Created!",
+          addToCartCateringProductsState.message,
+          "success"
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringProductsState.fail:
+        SweetAlert.fire(
+          "Oops...",
+          addToCartCateringProductsState.message,
+          "error"
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [addToCartCateringProductsState]);
 
   useEffect(() => {
     switch (getStoresAvailableCateringModalState.status) {
