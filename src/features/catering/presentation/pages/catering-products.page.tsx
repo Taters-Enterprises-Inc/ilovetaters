@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
-import { CateringPackageCustomizationModal } from "../modals";
 
 export function CateringProducts() {
   const [
@@ -98,10 +97,8 @@ export function CateringProducts() {
             Build your own package
           </h1>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            <button
-              onClick={() => {
-                setOpenCateringPackageCustomizationModal(true);
-              }}
+            <Link
+              to="build-your-own-package"
               className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
             >
               <img
@@ -115,7 +112,7 @@ export function CateringProducts() {
                   Customize your own package
                 </h2>
               </div>
-            </button>{" "}
+            </Link>
           </div>
         </section>
         <CateringFaqs />
@@ -129,13 +126,6 @@ export function CateringProducts() {
       >
         Download our Catering Flyer
       </a>
-
-      <CateringPackageCustomizationModal
-        open={openCateringPackageCustomizationModal}
-        onClose={() => {
-          setOpenCateringPackageCustomizationModal(false);
-        }}
-      />
     </main>
   );
 }

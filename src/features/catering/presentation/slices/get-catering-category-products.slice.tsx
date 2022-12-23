@@ -6,7 +6,7 @@ import {
   GetCateringCategoryProductsResponse,
 } from "features/catering/data/repository/catering.repository";
 import { RootState } from "features/config/store";
-import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
+import { GetCateringCategoryProductsModel } from "features/shared/core/domain/get-catering-category-products.model";
 
 export enum GetCateringCategoryProductsState {
   initial,
@@ -17,7 +17,7 @@ export enum GetCateringCategoryProductsState {
 
 interface InitialState {
   status: GetCateringCategoryProductsState;
-  data: Array<CategoryProductModel> | undefined;
+  data: GetCateringCategoryProductsModel | undefined;
   message: string;
 }
 

@@ -31,6 +31,7 @@ import {
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringBuildYourOwnPackage,
   CateringCheckout,
   CateringContract,
   CateringOrder,
@@ -200,15 +201,18 @@ root.render(
                       <Route path="shop" element={<Catering />}>
                         <Route index element={<CateringHome />} />
                         <Route
-                          path="products/:hash"
-                          element={<CateringProduct />}
-                        />
-                        <Route
                           path="contract/:hash"
                           element={<CateringContract />}
                         />
                         <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route path="products" element={<CateringProducts />} />
+                        <Route path="products">
+                          <Route index element={<CateringProducts />} />
+                          <Route
+                            path="build-your-own-package"
+                            element={<CateringBuildYourOwnPackage />}
+                          />
+                          <Route path=":hash" element={<CateringProduct />} />
+                        </Route>
                         <Route path="checkout" element={<CateringCheckout />} />
                         <Route path="*" element={<NotFound />} />
                       </Route>

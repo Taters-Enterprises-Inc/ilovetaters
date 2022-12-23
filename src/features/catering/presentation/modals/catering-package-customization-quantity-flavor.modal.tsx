@@ -31,7 +31,7 @@ import {
 } from "features/shop/presentation/slices/get-product-sku.slice";
 import { ShopProductFlavor } from "features/shop/presentation/components";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import { CustomizePackageProduct } from "./catering-package-customization.modal";
+import { CustomizePackageProduct } from "../pages/catering-build-your-own-package.page";
 
 let quantityId: any;
 
@@ -158,10 +158,10 @@ export function CateringPackageCustomizationQuantityFlavorModal(
       if (action === "add") counter += 1;
       else counter -= 1;
 
-      if (counter >= 10) {
+      if (counter >= 1000) {
         clearTimeout(timerRef.current);
         clearInterval(quantityId);
-        setQuantity(10);
+        setQuantity(1000);
       } else if (counter <= 1) {
         clearTimeout(timerRef.current);
         clearInterval(quantityId);
@@ -440,7 +440,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                       handleOnMouseUp();
                     }}
                     className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                      quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
+                      quantity >= 1000 ? "opacity-30 cursor-not-allowed" : ""
                     }`}
                   >
                     <AiOutlinePlus className="mx-8 text-3xl" />
@@ -517,7 +517,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
             >
               <BsFillCartPlusFill className="text-3xl" />
               <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                Add package
+                Add product
               </span>
             </button>
           </section>

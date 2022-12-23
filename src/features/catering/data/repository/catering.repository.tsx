@@ -1,6 +1,5 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
 import {
   AddToCartCateringParam,
   CateringCheckoutOrdersParam,
@@ -15,6 +14,8 @@ import {
 import { CateringPackageDetailsModel } from "features/catering/core/domain/catering-package-details.model";
 import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
+import { GetCateringCategoryProductsModel } from "features/shared/core/domain/get-catering-category-products.model";
 
 export interface GetCategoryPackagesResponse {
   data: {
@@ -76,7 +77,7 @@ export interface AddToCartCateringProductsResponse {
 export interface GetCateringCategoryProductsResponse {
   data: {
     message: string;
-    data: Array<CategoryProductModel>;
+    data: GetCateringCategoryProductsModel;
   };
 }
 export function GetCateringCategoryProductsRepository(
