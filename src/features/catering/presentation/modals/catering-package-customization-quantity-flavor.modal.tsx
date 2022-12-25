@@ -87,6 +87,8 @@ export function CateringPackageCustomizationQuantityFlavorModal(
   useEffect(() => {
     setQuantity(1);
     setCurrentSize("");
+    setCurrentMultiFlavors({});
+    setResetMultiFlavors(false);
   }, [hash]);
 
   useEffect(() => {
@@ -311,38 +313,37 @@ export function CateringPackageCustomizationQuantityFlavorModal(
             <IoMdClose />
           </button>
 
-          <section className="px-2 space-y-3">
-            <div className="relative flex">
-              <Swiper
-                slidesPerView={"auto"}
-                autoplay={{ delay: 5000 }}
-                modules={[Navigation, Autoplay]}
-                className="w-[100px] h-[100px]"
-              >
-                {getProductDetailsState.data?.product_images.map((name) => (
-                  <SwiperSlide>
-                    <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
-                      className="lg:rounded-[10px]  object-cover"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-              <div className="flex flex-col flex-1 px-3 py-2 space-y-1 text-white">
-                <h3 className="text-lg w-[90%] font-bold leading-4">
-                  {getProductDetailsState.data?.product.name}
-                </h3>
-
-                {getProductDetailsState.data?.product.add_details ? (
-                  <span
-                    className="text-sm"
-                    dangerouslySetInnerHTML={{
-                      __html: getProductDetailsState.data?.product.add_details,
-                    }}
+          <section className="px-2 py-4 space-y-3">
+            <Swiper
+              slidesPerView={"auto"}
+              autoplay={{ delay: 5000 }}
+              modules={[Navigation, Autoplay]}
+              navigation
+              className="w-full"
+            >
+              {getProductDetailsState.data?.product_images.map((name) => (
+                <SwiperSlide>
+                  <img
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
+                    className="rounded-[10px] w-full h-full object-cover"
+                    alt=""
                   />
-                ) : null}
-              </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <div className="flex flex-col flex-1 py-2 space-y-1 text-white">
+              <h3 className="text-lg w-[90%] font-bold leading-4">
+                {getProductDetailsState.data?.product.name}
+              </h3>
+
+              {getProductDetailsState.data?.product.add_details ? (
+                <span
+                  className="text-sm"
+                  dangerouslySetInnerHTML={{
+                    __html: getProductDetailsState.data?.product.add_details,
+                  }}
+                />
+              ) : null}
             </div>
 
             {getProductDetailsState.data?.product.price ? (
@@ -359,11 +360,11 @@ export function CateringPackageCustomizationQuantityFlavorModal(
             ) : null}
 
             <div>
-              <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+              <h2 className="font-['Bebas_Neue'] text-3xl text-white tracking-[2px]">
                 Quantity
               </h2>
 
-              <div className="h-[60px] w-full mt-2">
+              <div className="h-[50px] w-full mt-2">
                 <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                   <button
                     onClick={() =>
@@ -388,7 +389,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                         : ""
                     }`}
                   >
-                    <AiOutlineMinus className="mx-8 text-3xl " />
+                    <AiOutlineMinus className="mx-8 text-xl " />
                   </button>
 
                   <input
@@ -419,7 +420,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                     }}
                     min="1"
                     max="1000"
-                    className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+                    className="flex items-center w-full text-xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
                     name="custom-input-number"
                   />
 
@@ -443,7 +444,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
                       quantity >= 1000 ? "opacity-30 cursor-not-allowed" : ""
                     }`}
                   >
-                    <AiOutlinePlus className="mx-8 text-3xl" />
+                    <AiOutlinePlus className="mx-8 text-xl" />
                   </button>
                 </div>
               </div>
@@ -513,7 +514,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
 
             <button
               onClick={handleAddProductToPackage}
-              className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+              className="text-white !mt-8 text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
             >
               <BsFillCartPlusFill className="text-3xl" />
               <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

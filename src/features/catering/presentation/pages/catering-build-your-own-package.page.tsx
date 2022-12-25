@@ -44,6 +44,7 @@ import "swiper/css/navigation";
 import "swiper/css/autoplay";
 
 import { Autoplay, Navigation } from "swiper";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 
 export interface CustomizePackageProduct {
   prod_id: number;
@@ -116,6 +117,8 @@ export function CateringBuildYourOwnPackage() {
         category: "Catering Order",
         action: "Add to cart item",
       });
+
+      navigate("/shop/products");
       dispatch(getSession());
       dispatch(resetAddToCartCateringProductsState());
     }
@@ -175,15 +178,22 @@ export function CateringBuildYourOwnPackage() {
   return (
     <>
       <main className="min-h-screen bg-primary">
-        <section className="container pb-64 mx-auto">
-          <h1 className="py-8 text-4xl text-center tracking-[3px] font-['Bebas_Neue'] text-white">
-            Build your own Package
-          </h1>
-
+        <PageTitleAndBreadCrumbs
+          home={{
+            title: "Catering",
+            url: "/shop",
+          }}
+          title="Build your own package"
+          pageTitles={[
+            { name: "Products", url: "/shop/products" },
+            { name: "Build your own package" },
+          ]}
+        />
+        <section className="container pt-8 pb-64 mx-auto">
           <div
             className={`${
               customizePackage.length > 0
-                ? "flex justify-start items-start flex-col sm:flex-row space-x-4"
+                ? "flex justify-start items-start flex-col sm:flex-row sm:space-x-4"
                 : null
             } `}
           >
@@ -193,7 +203,7 @@ export function CateringBuildYourOwnPackage() {
                 modules={[Navigation, Autoplay]}
                 navigation
                 autoplay={{ delay: 5000 }}
-                className="flex-1"
+                className="w-[103%] sm:w-[102%] lg:w-full flex-1"
               >
                 {getCateringCategoryProductsState.data?.products.map(
                   (category, i) => {
