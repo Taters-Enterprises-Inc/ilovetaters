@@ -44,15 +44,10 @@ import {
   AdminLogin,
   AdminCateringBooking,
   AdminPopclub,
-  AdminRaffleInstore,
-  AdminRaffleSnackshop,
   AdminReports,
   AdminFaq,
   AdminCFaq,
-  AdminSettingCategory,
-  AdminProduct,
   AdminSettingUser,
-  AdminSettingVoucher,
   AdminSettingStore,
   AdminSettingCreateUser,
   AdminSettingCreateGroup,
@@ -225,23 +220,11 @@ root.render(
                               element={<AdminCateringBooking />}
                             />
                             <Route path="popclub" element={<AdminPopclub />} />
-                            <Route path="product" element={<AdminProduct />} />
                             <Route path="reports" element={<AdminReports />} />
                             <Route path="faq">
                               <Route index element={<AdminFaq />} />
                               <Route path="store" element={<AdminFaq />} />
                               <Route path="customer" element={<AdminCFaq />} />
-                            </Route>
-
-                            <Route path="raffle">
-                              <Route
-                                path="snackshop"
-                                element={<AdminRaffleSnackshop />}
-                              />
-                              <Route
-                                path="instore"
-                                element={<AdminRaffleInstore />}
-                              />
                             </Route>
 
                             <Route path="availability">
@@ -272,10 +255,6 @@ root.render(
                             </Route>
 
                             <Route path="setting">
-                              <Route
-                                path="category"
-                                element={<AdminSettingCategory />}
-                              />
                               <Route path="user">
                                 <Route index element={<AdminSettingUser />} />
                                 <Route
@@ -291,10 +270,6 @@ root.render(
                                   element={<AdminSettingCreateGroup />}
                                 />
                               </Route>
-                              <Route
-                                path="voucher"
-                                element={<AdminSettingVoucher />}
-                              />
                               <Route
                                 path="store"
                                 element={<AdminSettingStore />}
