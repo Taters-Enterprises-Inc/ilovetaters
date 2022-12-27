@@ -3,6 +3,8 @@ import { UpdateCatersPackageParam } from "features/admin/core/admin.params";
 import {
   AdminSettingCatersPackageModel,
   DynamicPriceCatersPackageModel,
+  VariantCatersPackageModel,
+  VariantOptionPriceCatersPackageModel,
 } from "features/admin/core/domain/admin-setting-caters-package.model";
 import {
   getAllCataringPackageResponse,
@@ -40,6 +42,8 @@ interface InitialState {
     per_page: number;
   };
   dynamicPrices: DynamicPriceCatersPackageModel[];
+  variants: VariantCatersPackageModel[];
+  variantOptions: VariantOptionPriceCatersPackageModel[];
 }
 
 const initialState: InitialState = {
@@ -52,6 +56,8 @@ const initialState: InitialState = {
     per_page: 25,
   },
   dynamicPrices: [],
+  variants: [],
+  variantOptions: [],
 };
 
 export const getAllCataringPackageLists = createAsyncThunk(
@@ -135,12 +141,21 @@ const CataringPackageListsSlice = createSlice({
         state.status = catersListStatus.inProgress;
       })
       .addCase(getAllCataringPackageLists.fulfilled, (state, action) => {
-        const { data, message, pagination, DynamicPrices } = action.payload;
+        const {
+          data,
+          message,
+          pagination,
+          DynamicPrices,
+          Variant,
+          VariantOption,
+        } = action.payload;
         state.status = catersListStatus.success;
         state.message = message;
         state.data = data;
         state.pagination = pagination;
         state.dynamicPrices = DynamicPrices;
+        state.variants = Variant;
+        state.variantOptions = VariantOption;
       })
       .addCase(getAllCataringPackageLists.rejected, (state, action) => {
         state.status = catersListStatus.fail;
@@ -151,6 +166,8 @@ const CataringPackageListsSlice = createSlice({
           per_page: 25,
         };
         state.dynamicPrices = [];
+        state.variants = [];
+        state.variantOptions = [];
       })
       .addCase(createCataringPackage.pending, (state, action) => {
         state.createstatus = createCatersStatus.inProgress;
@@ -203,6 +220,32 @@ export const selectDynamicPricesBYPackageID = (state: RootState, id: number) =>
         package_id: data.package_id.toString(),
         price: data.price.toString(),
         min_qty: data.min_qty.toString(),
+      };
+    });
+
+export const selectVariantsBYPackageID = (state: RootState, id: number) =>
+  state.CataringPackageLists.variants
+    .filter((variant) => variant.product_id.toString() === id.toString())
+    .map((data) => {
+      let variantOption = state.CataringPackageLists.variantOptions
+        .filter(
+          (variantOption) =>
+            variantOption.product_variant_id.toString() === data.id.toString()
+        )
+        .map((data) => {
+          return {
+            id: data.id.toString(),
+            product_variant_id: data.product_variant_id.toString(),
+            name: data.name.toString(),
+            status: data.status.toString(),
+          };
+        });
+      return {
+        id: data.id.toString(),
+        product_id: data.product_id.toString(),
+        name: data.name.toString(),
+        status: data.status.toString(),
+        variantOption: variantOption,
       };
     });
 

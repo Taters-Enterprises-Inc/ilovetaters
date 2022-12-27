@@ -28,3 +28,17 @@ export interface DynamicPriceCatersPackageModel {
   price: number;
   min_qty: number;
 }
+
+export interface VariantCatersPackageModel {
+  id: string;
+  product_id: string;
+  name: string;
+  status: string;
+}
+
+export interface VariantOptionPriceCatersPackageModel {
+  id: string;
+  product_variant_id: string;
+  name: string;
+  status: string;
+}

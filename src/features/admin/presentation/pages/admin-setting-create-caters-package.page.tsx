@@ -18,6 +18,7 @@ import {
   resetCreateCaterPackageStatus,
   selectCatersPackageByID,
   selectDynamicPricesBYPackageID,
+  selectVariantsBYPackageID,
   updateCataringPackage,
 } from "../slices/admin-setting-caters-package.slice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -63,8 +64,16 @@ export function AdminSettingCreateCatersPackage() {
   const currentPrices = useAppSelector((state) =>
     selectDynamicPricesBYPackageID(state, Number(id))
   );
+
+  const currentVariants = useAppSelector((state) =>
+    selectVariantsBYPackageID(state, Number(id))
+  );
+  // const currentVariantOptions = useAppSelector((state) =>
+  //   selectDynamicPricesBYPackageID(state, Number(id))
+  // );
   const [hasEditPackage, setHasEditPackage] = useState(false);
   const [hasEditDynamicPrices, setHasEditDynamicPrices] = useState(false);
+  const [hasEditVariant, setHasEditVariant] = useState(false);
 
   const [storesState, setStoreState] = useState<{
     stores: Array<AdminStoreModel>;
@@ -243,6 +252,14 @@ export function AdminSettingCreateCatersPackage() {
       setHasEditDynamicPrices(true);
     }
   }, [currentPrices, hasEditDynamicPrices]);
+
+  useEffect(() => {
+    if (!hasEditVariant) {
+      console.log(currentVariants);
+      setVariants(currentVariants);
+      setHasEditVariant(true);
+    }
+  }, [currentVariants, hasEditVariant]);
   useEffect(() => {
     if (CreateCatersStatus === 2) {
       dispatch(resetCreateCaterPackageStatus());
@@ -315,6 +332,7 @@ export function AdminSettingCreateCatersPackage() {
       // console.log(variants);
       dispatch(createCataringPackage(formState));
     } else if (id && hasEditPackage && currentPackage !== undefined) {
+      //! Update variant missing in the php controller and model
       const updatedData: UpdateCatersPackageParam = {
         id: id.toString(),
         product_image: formState["product_image"],
@@ -334,6 +352,8 @@ export function AdminSettingCreateCatersPackage() {
         product_image150x150: formState["product_image150x150"],
         product_image75x75: formState["product_image75x75"],
         dynamic_price: JSON.stringify(dynamicPrices),
+        // variants: JSON.stringify(variants),
+        // stores: JSON.stringify(storesState.stores),
       };
 
       console.log(updatedData);

@@ -44,6 +44,8 @@ export interface UpdateCatersPackageParam {
   product_image150x150: File | string;
   product_image75x75: File | string;
   dynamic_price: string;
+  variants?: string;
+  stores?: string;
 }
 
 export interface UpdateStoreCatersPackageParam {
