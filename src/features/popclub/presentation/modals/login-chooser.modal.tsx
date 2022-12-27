@@ -14,6 +14,7 @@ import { BsFacebook } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { HiOutlinePhone } from "react-icons/hi";
 import { MobileLoginModal } from "features/shared/presentation/modals";
+import ReactGA from "react-ga";
 
 interface LoginChooserModalProps {
   open: boolean;
@@ -27,6 +28,10 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
 
   useEffect(() => {
     if (facebookLoginState.status === FacebookLoginState.success) {
+      ReactGA.event({
+        category: "Sign In",
+        action: "Facebook Sign-in",
+      });
       dispatch(facebookLoginPoint({ currentUrl: window.location.href }));
     }
   }, [facebookLoginState, dispatch]);

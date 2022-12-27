@@ -506,7 +506,7 @@ export function AdminCateringBookingCustomerInformation() {
                     <tr key={i}>
                       <th
                         scope="row"
-                        className="px-6 py-4 font-medium text-secondary"
+                        className="px-6 py-4 font-medium text-secondary "
                       >
                         <span
                           dangerouslySetInnerHTML={{
@@ -520,7 +520,7 @@ export function AdminCateringBookingCustomerInformation() {
                           }}
                         />
                       </th>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 w-[250px]">
                         <span
                           dangerouslySetInnerHTML={{
                             __html: item.remarks,

@@ -13,6 +13,7 @@ import {
   adminCateringBookingUpdateStatus,
   selectAdminCateringBookingUpdateStatus,
 } from "../slices/admin-catering-booking-update-status.slice";
+import ReactGA from "react-ga";
 
 export function AdminCateringBookingCustomerInformationButtons() {
   const getAdminCateringBookingState = useAppSelector(
@@ -58,7 +59,15 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
+<<<<<<< HEAD
               handleUpdateStatus(2);
+=======
+              ReactGA.event({
+                category: "Admin Catering Order",
+                action: "Confirm order",
+              });
+              handleUpdateStatus("2");
+>>>>>>> main
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -182,7 +191,15 @@ export function AdminCateringBookingCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
+<<<<<<< HEAD
             handleUpdateStatus(9);
+=======
+            ReactGA.event({
+              category: "Admin Catering Order",
+              action: "Complete order",
+            });
+            handleUpdateStatus("9");
+>>>>>>> main
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >

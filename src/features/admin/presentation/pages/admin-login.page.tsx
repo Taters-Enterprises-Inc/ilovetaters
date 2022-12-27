@@ -10,6 +10,7 @@ import {
 import {
   loginAdmin,
   LoginAdminState,
+  resetLoginAdminState,
   selectLoginAdmin,
 } from "../slices/login-admin.slice";
 import { useEffect } from "react";
@@ -34,6 +35,7 @@ export function AdminLogin() {
 
   useEffect(() => {
     dispatch(getAdminSession());
+    dispatch(resetLoginAdminState());
   }, [dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {

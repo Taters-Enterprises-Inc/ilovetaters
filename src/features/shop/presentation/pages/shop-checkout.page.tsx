@@ -45,6 +45,7 @@ import {
   selectGetAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -87,6 +88,10 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Checkout order",
+      });
       dispatch(getNotifications());
       navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
