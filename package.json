@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-helmet": "^6.1.5",
     "axios": "^0.27.2",
+    "caniuse-lite": "^1.0.30001441",
     "credit-card-type": "^9.1.0",
     "date-fns": "^2.29.2",
     "env-cmd": "^10.1.0",
