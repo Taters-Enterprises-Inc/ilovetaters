@@ -302,7 +302,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
         style={{ display: props.open ? "flex" : "none" }}
         className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
       >
-        <div className="bg-secondary px-3 py-[30px] round w-[90%] lg:w-[40%] relative rounded-[10px] my-10">
+        <div className="bg-secondary px-3 py-[30px] round w-[90%] sm:w-[60%] lg:w-[40%] relative rounded-[10px] mt-10 mb-[150px]">
           <button
             className="absolute text-2xl text-white top-2 right-4 "
             onClick={() => {

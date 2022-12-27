@@ -197,152 +197,154 @@ export function CateringBuildYourOwnPackage() {
                 : null
             } `}
           >
-            {customizePackage.length > 0 ? (
-              <Swiper
-                slidesPerView={"auto"}
-                modules={[Navigation, Autoplay]}
-                navigation
-                autoplay={{ delay: 5000 }}
-                className="w-[103%] sm:w-[102%] lg:w-full flex-1"
-              >
-                {getCateringCategoryProductsState.data?.products.map(
-                  (category, i) => {
-                    var _2x2 = spliceIntoChunks(
-                      [...category.category_products],
-                      4
-                    );
+            <div className="m-0 ml-[-12px] lg:ml-0 flex-1">
+              {customizePackage.length > 0 ? (
+                <Swiper
+                  slidesPerView={"auto"}
+                  modules={[Navigation, Autoplay]}
+                  navigation
+                  autoplay={{ delay: 5000 }}
+                  className="w-[103%] sm:w-[102%] lg:w-full "
+                >
+                  {getCateringCategoryProductsState.data?.products.map(
+                    (category, i) => {
+                      var _2x2 = spliceIntoChunks(
+                        [...category.category_products],
+                        4
+                      );
 
-                    var _3x2 = spliceIntoChunks(
-                      [...category.category_products],
-                      6
-                    );
+                      var _3x2 = spliceIntoChunks(
+                        [...category.category_products],
+                        6
+                      );
 
-                    var _4x2 = spliceIntoChunks(
-                      [...category.category_products],
-                      8
-                    );
+                      var _4x2 = spliceIntoChunks(
+                        [...category.category_products],
+                        8
+                      );
 
-                    return (
-                      <>
-                        {_2x2.map((chunk, i) => {
-                          return (
-                            <SwiperSlide
-                              key={i}
-                              className={`lg:hidden pb-2 px-3 `}
-                            >
-                              <div className="grid grid-cols-2 gap-4">
-                                {chunk.map((product, i) => (
-                                  <Link
-                                    key={i}
-                                    to={`?hash=${product.hash}`}
-                                    className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
-                                  >
-                                    <img
-                                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
-                                      className="rounded-t-[10px] w-full"
-                                      alt=""
-                                    />
-                                    <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
-                                      <h2 className="text-sm leading-4 text-white">
-                                        {product.name}
-                                      </h2>
-                                      <h3 className="font-bold text-white">
-                                        <NumberFormat
-                                          value={product.price.toFixed(2)}
-                                          displayType={"text"}
-                                          thousandSeparator={true}
-                                          prefix={"₱"}
-                                        />
-                                      </h3>
-                                    </div>
-                                  </Link>
-                                ))}
-                              </div>
-                            </SwiperSlide>
-                          );
-                        })}
+                      return (
+                        <>
+                          {_2x2.map((chunk, i) => {
+                            return (
+                              <SwiperSlide
+                                key={i}
+                                className={`lg:hidden pb-2 px-3 `}
+                              >
+                                <div className="grid grid-cols-2 gap-4">
+                                  {chunk.map((product, i) => (
+                                    <Link
+                                      key={i}
+                                      to={`?hash=${product.hash}`}
+                                      className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
+                                    >
+                                      <img
+                                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
+                                        className="rounded-t-[10px] w-full"
+                                        alt=""
+                                      />
+                                      <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                                        <h2 className="text-sm leading-4 text-white">
+                                          {product.name}
+                                        </h2>
+                                        <h3 className="font-bold text-white">
+                                          <NumberFormat
+                                            value={product.price.toFixed(2)}
+                                            displayType={"text"}
+                                            thousandSeparator={true}
+                                            prefix={"₱"}
+                                          />
+                                        </h3>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </SwiperSlide>
+                            );
+                          })}
 
-                        {_3x2.map((chunk, i) => {
-                          return (
-                            <SwiperSlide
-                              key={i}
-                              className={`pb-2 px-3 hidden lg:block xl:hidden`}
-                            >
-                              <div className="grid grid-cols-3 gap-4">
-                                {chunk.map((product, i) => (
-                                  <Link
-                                    key={i}
-                                    to={`?hash=${product.hash}`}
-                                    className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
-                                  >
-                                    <img
-                                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
-                                      className="rounded-t-[10px] w-full"
-                                      alt=""
-                                    />
-                                    <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
-                                      <h2 className="text-sm leading-4 text-white">
-                                        {product.name}
-                                      </h2>
-                                      <h3 className="font-bold text-white">
-                                        <NumberFormat
-                                          value={product.price.toFixed(2)}
-                                          displayType={"text"}
-                                          thousandSeparator={true}
-                                          prefix={"₱"}
-                                        />
-                                      </h3>
-                                    </div>
-                                  </Link>
-                                ))}
-                              </div>
-                            </SwiperSlide>
-                          );
-                        })}
+                          {_3x2.map((chunk, i) => {
+                            return (
+                              <SwiperSlide
+                                key={i}
+                                className={`pb-2 px-3 hidden lg:block xl:hidden`}
+                              >
+                                <div className="grid grid-cols-3 gap-4">
+                                  {chunk.map((product, i) => (
+                                    <Link
+                                      key={i}
+                                      to={`?hash=${product.hash}`}
+                                      className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
+                                    >
+                                      <img
+                                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
+                                        className="rounded-t-[10px] w-full"
+                                        alt=""
+                                      />
+                                      <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                                        <h2 className="text-sm leading-4 text-white">
+                                          {product.name}
+                                        </h2>
+                                        <h3 className="font-bold text-white">
+                                          <NumberFormat
+                                            value={product.price.toFixed(2)}
+                                            displayType={"text"}
+                                            thousandSeparator={true}
+                                            prefix={"₱"}
+                                          />
+                                        </h3>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </SwiperSlide>
+                            );
+                          })}
 
-                        {_4x2.map((chunk, i) => {
-                          return (
-                            <SwiperSlide
-                              key={i}
-                              className={`pb-2 px-3 hidden xl:block `}
-                            >
-                              <div className="grid grid-cols-4 gap-4">
-                                {chunk.map((product, i) => (
-                                  <Link
-                                    key={i}
-                                    to={`?hash=${product.hash}`}
-                                    className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
-                                  >
-                                    <img
-                                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
-                                      className="rounded-t-[10px] w-full"
-                                      alt=""
-                                    />
-                                    <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
-                                      <h2 className="text-sm leading-4 text-white">
-                                        {product.name}
-                                      </h2>
-                                      <h3 className="font-bold text-white">
-                                        <NumberFormat
-                                          value={product.price.toFixed(2)}
-                                          displayType={"text"}
-                                          thousandSeparator={true}
-                                          prefix={"₱"}
-                                        />
-                                      </h3>
-                                    </div>
-                                  </Link>
-                                ))}
-                              </div>
-                            </SwiperSlide>
-                          );
-                        })}
-                      </>
-                    );
-                  }
-                )}
-              </Swiper>
-            ) : null}
+                          {_4x2.map((chunk, i) => {
+                            return (
+                              <SwiperSlide
+                                key={i}
+                                className={`pb-2 px-3 hidden xl:block `}
+                              >
+                                <div className="grid grid-cols-4 gap-4">
+                                  {chunk.map((product, i) => (
+                                    <Link
+                                      key={i}
+                                      to={`?hash=${product.hash}`}
+                                      className="bg-secondary shadow-tertiary flex flex-col shadow-md rounded-[10px] text-white h-full"
+                                    >
+                                      <img
+                                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
+                                        className="rounded-t-[10px] w-full"
+                                        alt=""
+                                      />
+                                      <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                                        <h2 className="text-sm leading-4 text-white">
+                                          {product.name}
+                                        </h2>
+                                        <h3 className="font-bold text-white">
+                                          <NumberFormat
+                                            value={product.price.toFixed(2)}
+                                            displayType={"text"}
+                                            thousandSeparator={true}
+                                            prefix={"₱"}
+                                          />
+                                        </h3>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </SwiperSlide>
+                            );
+                          })}
+                        </>
+                      );
+                    }
+                  )}
+                </Swiper>
+              ) : null}
+            </div>
 
             <div
               className={` ${
@@ -387,7 +389,7 @@ export function CateringBuildYourOwnPackage() {
 
             {customizePackage.length > 0 ? (
               <div className="flex-1 space-y-4">
-                <div className="py-2 space-y-4 overflow-y-auto max-h-[350px]">
+                <div className="py-2 space-y-4 overflow-y-auto max-h-[350px] px-1">
                   {customizePackage.map((product, i) => {
                     const productSize = product.prod_size;
                     return (
@@ -454,30 +456,32 @@ export function CateringBuildYourOwnPackage() {
                   })}
                 </div>
 
-                <div>
-                  <div className="flex">
-                    <span className="text-lg font-bold text-white">
-                      Package Quantity:
-                    </span>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex">
+                      <span className="text-lg  text-white">
+                        Package Quantity:
+                      </span>
 
-                    <h3 className="flex items-end justify-end flex-1 text-lg text-white">
-                      {calculateTotalQuantity()}
-                    </h3>
-                  </div>
+                      <h3 className="flex items-end justify-end flex-1 text-xl font-semibold text-white">
+                        {calculateTotalQuantity()}
+                      </h3>
+                    </div>
 
-                  <div className="flex">
-                    <span className="text-lg font-bold text-white">
-                      Package Price:
-                    </span>
+                    <div className="flex">
+                      <span className="text-lg  text-white">
+                        Package Price:
+                      </span>
 
-                    <h3 className="flex items-end justify-end flex-1 text-lg text-white">
-                      <NumberFormat
-                        value={calculateTotalPackagePrice()}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h3>
+                      <h3 className="flex items-end justify-end flex-1 text-xl font-semibold text-white">
+                        <NumberFormat
+                          value={calculateTotalPackagePrice().toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h3>
+                    </div>
                   </div>
 
                   <div className="mt-4 space-y-4">
@@ -518,7 +522,92 @@ export function CateringBuildYourOwnPackage() {
                       </span>
                     </button>
                   </div>
+                </div>
 
+                {getCateringCategoryProductsState.data?.product_addons &&
+                getCateringCategoryProductsState.data.addons.length !== 0 ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Product Add-ons",
+                      prefixIcon: <MdFastfood className="text-3xl" />,
+                    }}
+                  >
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getCateringCategoryProductsState.data?.product_addons.map(
+                        (product, i) => (
+                          <Addon key={i} product={product} />
+                        )
+                      )}
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
+
+                {getCateringCategoryProductsState.data?.addons &&
+                getCateringCategoryProductsState.data.addons.length !== 0 ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "Catering Add-ons",
+                      prefixIcon: <MdFastfood className="text-3xl" />,
+                    }}
+                  >
+                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                      {getCateringCategoryProductsState.data.addons.map(
+                        (product, i) => {
+                          if (
+                            getCateringCategoryProductsState.data &&
+                            getSessionState.data
+                          ) {
+                            let calculatedPrice = 0;
+
+                            const orders = getSessionState.data.orders;
+                            let isFreeItemClaimed = false;
+
+                            if (orders) {
+                              for (let i = 0; i < orders.length; i++) {
+                                calculatedPrice += orders[i].prod_calc_amount;
+
+                                if (
+                                  orders[i].prod_id === product.id &&
+                                  orders[i].prod_price === 0
+                                ) {
+                                  isFreeItemClaimed = true;
+                                }
+                              }
+                            }
+
+                            let isFreeItem = product.free_threshold
+                              ? calculatedPrice >= product.free_threshold
+                              : false;
+
+                            let isFreeItemButAddToCartFirst =
+                              product.free_threshold
+                                ? calculateTotalPackagePrice() +
+                                    calculatedPrice >=
+                                  product.free_threshold
+                                : false;
+
+                            return (
+                              <CateringAddon
+                                key={i}
+                                product={product}
+                                isFreeItem={isFreeItem}
+                                isFreeItemButAddToCartFirst={
+                                  isFreeItemButAddToCartFirst
+                                }
+                                isFreeItemClaimed={isFreeItemClaimed}
+                              />
+                            );
+                          }
+                          return null;
+                        }
+                      )}
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 py-8">
+                <div>
                   {getCateringCategoryProductsState.data?.product_addons &&
                   getCateringCategoryProductsState.data.addons.length !== 0 ? (
                     <ProductDetailsAccordion
@@ -536,7 +625,9 @@ export function CateringBuildYourOwnPackage() {
                       </div>
                     </ProductDetailsAccordion>
                   ) : null}
+                </div>
 
+                <div>
                   {getCateringCategoryProductsState.data?.addons &&
                   getCateringCategoryProductsState.data.addons.length !== 0 ? (
                     <ProductDetailsAccordion
@@ -601,7 +692,7 @@ export function CateringBuildYourOwnPackage() {
                   ) : null}
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
         </section>
       </main>
