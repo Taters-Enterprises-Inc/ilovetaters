@@ -138,13 +138,11 @@ root.render(
                   <Route element={<LoadingAndSnackbarWrapper />}>
                     <Route element={<UserNotificationWrapper />}>
                       <Route path="/" element={<Home />} />
-
                       <Route path="branches" element={<Branches />}>
                         <Route index element={<BranchesHome />} />
                       </Route>
 
                       <Route path="franchising" element={<Franchising />} />
-
                       <Route
                         path="privacy-policy"
                         element={<PrivacyPolicy />}
@@ -207,25 +205,27 @@ root.render(
 
                         <Route
                           path="privacy-policy"
-                          element={<PrivacyPolicy />}
+                          element={<ShopPrivacyPolicy />}
                         />
+                        <Route
+                          path="return-policy"
+                          element={<ShopReturnPolicy />}
+                        />
+                        <Route path="*" element={<NotFound />} />
                       </Route>
 
                       <Route
                         path="catering"
                         element={<Navigate to={"/shop"} />}
                       />
-
                       <Route
                         path="shop/admin"
                         element={<Navigate to={"/admin"} />}
                       />
-
                       <Route
                         path="shop/login"
                         element={<Navigate to={"/admin"} />}
                       />
-
                       <Route path="shop" element={<Catering />}>
                         <Route index element={<CateringHome />} />
                         <Route
@@ -252,8 +252,8 @@ root.render(
                           <Route element={<AdminSidebarWrapper />}>
                             <Route path="order" element={<AdminShopOrder />} />
                             <Route
-                              path="snackshop-orders"
-                              element={<ProfileSnackshopOrders />}
+                              path="catering"
+                              element={<AdminCateringBooking />}
                             />
                             <Route path="popclub" element={<AdminPopclub />} />
 
@@ -271,71 +271,48 @@ root.render(
                               <Route path="store" element={<AdminFaq />} />
                               <Route path="" element={<AdminCFaq />} />
                             </Route>
-                          </Route>
-                        </Route>
 
-                        <Route path="delivery" element={<Shop />}>
-                          <Route index element={<ShopHome />} />
-                          <Route
-                            path="products/cart/:cart_id"
-                            element={<ShopEditCartItem />}
-                          />
-                          <Route
-                            path="products/:hash"
-                            element={<ShopProduct />}
-                          />
-                          <Route path="order/:hash" element={<ShopOrder />} />
+                            <Route path="availability">
+                              <Route
+                                path="deal"
+                                element={<AdminAvailabilityDeal />}
+                              />
+                              <Route
+                                path="product"
+                                element={<AdminAvailabilityProduct />}
+                              />
+                              <Route
+                                path="caters-package"
+                                element={<AdminAvailabilityCatersPackage />}
+                              />
+                              <Route
+                                path="caters-package-addon"
+                                element={
+                                  <AdminAvailabilityCatersPackageAddon />
+                                }
+                              />
+                              <Route
+                                path="caters-product-addon"
+                                element={
+                                  <AdminAvailabilityCatersProductAddon />
+                                }
+                              />
+                            </Route>
 
-                          <Route path="setting">
-                            <Route path="user">
-                              <Route index element={<AdminSettingUser />} />
-
-                              <Route path="availability">
+                            <Route path="setting">
+                              <Route path="user">
+                                <Route index element={<AdminSettingUser />} />
                                 <Route
-                                  path="deal"
-                                  element={<AdminAvailabilityDeal />}
+                                  path="create-user"
+                                  element={<AdminSettingCreateUser />}
                                 />
                                 <Route
-                                  path="product"
-                                  element={<AdminAvailabilityProduct />}
+                                  path="edit-user/:id"
+                                  element={<AdminSettingEditUser />}
                                 />
                                 <Route
-                                  path="caters-package"
-                                  element={<AdminAvailabilityCatersPackage />}
-                                />
-                                <Route
-                                  path="caters-package-addon"
-                                  element={
-                                    <AdminAvailabilityCatersPackageAddon />
-                                  }
-                                />
-                                <Route
-                                  path="caters-product-addon"
-                                  element={
-                                    <AdminAvailabilityCatersProductAddon />
-                                  }
-                                />
-                              </Route>
-
-                              <Route path="setting">
-                                <Route path="user">
-                                  <Route index element={<AdminSettingUser />} />
-                                  <Route
-                                    path="create-user"
-                                    element={<AdminSettingCreateUser />}
-                                  />
-                                  <Route
-                                    path="edit-user/:id"
-                                    element={<AdminSettingEditUser />}
-                                  />
-                                  <Route
-                                    path="create-group"
-                                    element={<AdminSettingCreateGroup />}
-                                  />
-                                </Route>
-                                <Route
-                                  path="store"
-                                  element={<AdminSettingStore />}
+                                  path="create-group"
+                                  element={<AdminSettingCreateGroup />}
                                 />
                               </Route>
                               <Route
@@ -361,8 +338,8 @@ root.render(
                             </Route>
                           </Route>
                         </Route>
-                        <Route path="*" element={<NotFound />} />
                       </Route>
+                      <Route path="*" element={<NotFound />} />
                     </Route>
 
                     <Route path="bsc" element={<Bsc />}>
