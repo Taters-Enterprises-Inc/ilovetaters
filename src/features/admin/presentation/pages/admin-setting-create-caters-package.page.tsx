@@ -255,7 +255,6 @@ export function AdminSettingCreateCatersPackage() {
 
   useEffect(() => {
     if (!hasEditVariant) {
-      console.log(currentVariants);
       setVariants(currentVariants);
       setHasEditVariant(true);
     }
@@ -352,7 +351,7 @@ export function AdminSettingCreateCatersPackage() {
         product_image150x150: formState["product_image150x150"],
         product_image75x75: formState["product_image75x75"],
         dynamic_price: JSON.stringify(dynamicPrices),
-        // variants: JSON.stringify(variants),
+        variants: JSON.stringify(variants),
         // stores: JSON.stringify(storesState.stores),
       };
 
