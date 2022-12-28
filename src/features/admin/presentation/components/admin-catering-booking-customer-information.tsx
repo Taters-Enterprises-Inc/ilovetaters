@@ -32,6 +32,10 @@ import {
 } from "../slices/get-admin-catering-booking.slice";
 import Moment from "react-moment";
 import moment from "moment";
+import { AiFillEdit } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
+import { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
+import { selectUpdateAdminCateringOrderItemRemarks } from "../slices/update-admin-catering-order-item-remarks.slice";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -54,6 +58,10 @@ export function AdminCateringBookingCustomerInformation() {
     selectAdminCateringPrivilege
   );
 
+  const updateAdminCateringOrderItemRemarksState = useAppSelector(
+    selectUpdateAdminCateringOrderItemRemarks
+  );
+
   useEffect(() => {
     if (
       adminCateringPrivilegeState.status === AdminCateringPrivilegeState.success
@@ -67,7 +75,12 @@ export function AdminCateringBookingCustomerInformation() {
     if (trackingNo) {
       dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [dispatch, trackingNo, adminCateringPrivilegeState]);
+  }, [
+    dispatch,
+    trackingNo,
+    adminCateringPrivilegeState,
+    updateAdminCateringOrderItemRemarksState,
+  ]);
 
   useEffect(() => {
     dispatch(getAdminStores());
@@ -525,12 +538,8 @@ export function AdminCateringBookingCustomerInformation() {
                           }}
                         />
                       </th>
-                      <td className="px-6 py-4 w-[250px]">
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: item.remarks,
-                          }}
-                        />
+                      <td className="px-6 align-top w-[250px] ">
+                        <AdminCateringEditFlavor orderItem={item} />
                       </td>
                       <td className="px-6 py-4">{item.quantity}</td>
                       <td className="px-6 py-4 text-end">

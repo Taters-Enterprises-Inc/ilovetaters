@@ -237,7 +237,7 @@ export function CateringProduct() {
             (result === undefined ? "" : result) +
             `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
               multiFlavorsArray[i].name
-            }<br/>`;
+            }<br>`;
       }
     });
 
