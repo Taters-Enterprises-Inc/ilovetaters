@@ -6,6 +6,7 @@ import { FaSave } from "react-icons/fa";
 import {
   getAdminCateringPackageFlavors,
   GetAdminCateringPackageFlavorsState,
+  resetGetAdminCateringFlavorsState,
   selectGetAdminCateringPackageFlavors,
 } from "../slices/get-admin-catering-package-flavors.slice";
 import {
@@ -21,7 +22,7 @@ export interface AdminCateringEditFlavorProps {
     product_id: number;
     product_price: string;
     quantity: number;
-    remarks: string;
+    remarks: string | null;
     name: string;
     description: string;
     add_details: string;
@@ -60,9 +61,13 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
     if (
       getAdminCateringPackageFlavorsState.status ===
         GetAdminCateringPackageFlavorsState.success &&
-      getAdminCateringPackageFlavorsState.data
+      getAdminCateringPackageFlavorsState.data &&
+      getAdminCateringPackageFlavorsState.data[props.orderItem.product_id] &&
+      flavors.length === 0 &&
+      props.orderItem.remarks
     ) {
       const remarks = props.orderItem.remarks;
+
       const remarksToflavors = remarks.split("<br>");
       const currentFlavors: Array<{ quantity: string; name: string }> = [];
       for (let i = 0; i < remarksToflavors.length; i++) {
@@ -80,10 +85,15 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
       const filteredPackageFlavors: Array<CateringAdminFlavor> = [];
       for (
         let i = 0;
-        i < getAdminCateringPackageFlavorsState.data.length;
+        i <
+        getAdminCateringPackageFlavorsState.data[props.orderItem.product_id]
+          .length;
         i++
       ) {
-        const oldPackageFlavor = getAdminCateringPackageFlavorsState.data[i];
+        const oldPackageFlavor =
+          getAdminCateringPackageFlavorsState.data[props.orderItem.product_id][
+            i
+          ];
         const newPackageFlavor: CateringAdminFlavor = {
           parent_name: oldPackageFlavor.parent_name,
           flavors: [],
@@ -104,9 +114,14 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
         filteredPackageFlavors.push(newPackageFlavor);
       }
 
+      console.log(filteredPackageFlavors);
+      console.log(currentFlavors);
+
       setFlavors(filteredPackageFlavors);
+
+      dispatch(resetGetAdminCateringFlavorsState());
     }
-  }, [getAdminCateringPackageFlavorsState]);
+  }, [getAdminCateringPackageFlavorsState, dispatch]);
 
   useEffect(() => {
     if (
@@ -140,7 +155,7 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
 
           <span
             dangerouslySetInnerHTML={{
-              __html: props.orderItem.remarks,
+              __html: props.orderItem.remarks ?? "",
             }}
           />
         </>
@@ -150,6 +165,10 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
             <div className="flex justify-end px-2 py-2">
               <button
                 onClick={() => {
+                  if (props.orderItem.remarks === null) {
+                    return;
+                  }
+
                   const remarksToflavors =
                     props.orderItem.remarks.split("<br>");
                   let oldTotalQuantity = 0;

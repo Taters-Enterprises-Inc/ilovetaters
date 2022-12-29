@@ -17,7 +17,7 @@ export enum GetAdminCateringPackageFlavorsState {
 interface InitialState {
   status: GetAdminCateringPackageFlavorsState;
   message: string;
-  data: Array<PackageFlavorModel> | undefined;
+  data: { [key: number]: Array<PackageFlavorModel> } | undefined;
 }
 
 const initialState: InitialState = {
@@ -32,7 +32,7 @@ export const getAdminCateringPackageFlavors = createAsyncThunk(
     try {
       const response: GetAdminCateringPackageFlavorsResponse =
         await GetAdminCateringPackageFlavorsRepository(packageId);
-      return response.data;
+      return { packageId, response: response.data };
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {
@@ -48,7 +48,13 @@ export const getAdminCateringPackageFlavors = createAsyncThunk(
 export const getAdminCateringPackageFlavorsSlice = createSlice({
   name: "getAdminCateringPackageFlavors",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetAdminCateringFlavorsState: (state) => {
+      state.status = GetAdminCateringPackageFlavorsState.initial;
+      state.message = "";
+      state.data = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAdminCateringPackageFlavors.pending, (state) => {
@@ -56,10 +62,16 @@ export const getAdminCateringPackageFlavorsSlice = createSlice({
       })
       .addCase(getAdminCateringPackageFlavors.fulfilled, (state, action) => {
         if (action.payload) {
-          const { message, data } = action.payload;
+          const { packageId, response } = action.payload;
           state.status = GetAdminCateringPackageFlavorsState.success;
-          state.message = message;
-          state.data = data;
+          state.message = response.message;
+
+          if (state.data === undefined) {
+            state.data = {};
+            state.data[packageId] = response.data;
+          } else {
+            state.data[packageId] = response.data;
+          }
         }
       })
       .addCase(getAdminCateringPackageFlavors.rejected, (state, action) => {
@@ -72,5 +84,8 @@ export const getAdminCateringPackageFlavorsSlice = createSlice({
 
 export const selectGetAdminCateringPackageFlavors = (state: RootState) =>
   state.getAdminCateringPackageFlavors;
+
+export const { resetGetAdminCateringFlavorsState } =
+  getAdminCateringPackageFlavorsSlice.actions;
 
 export default getAdminCateringPackageFlavorsSlice.reducer;

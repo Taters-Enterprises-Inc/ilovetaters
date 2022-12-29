@@ -677,7 +677,7 @@ export function AdminCateringBookingCustomerInformation() {
                       <span className="text-xs">
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: item.remarks,
+                            __html: item.remarks ?? "",
                           }}
                         />
                       </span>
