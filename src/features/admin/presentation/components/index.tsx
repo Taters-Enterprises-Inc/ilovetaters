@@ -22,3 +22,4 @@ export { AdminUserDiscounts } from "./admin-user-discounts";
 export { AdminIdUserDiscountInformation } from "./admin-user-discount-id-information";
 export { AdminSurveyVerifications } from "./admin-survey-verifications";
 export { AdminSettingShopProducts } from "./admin-setting-shop-products";
+export { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";

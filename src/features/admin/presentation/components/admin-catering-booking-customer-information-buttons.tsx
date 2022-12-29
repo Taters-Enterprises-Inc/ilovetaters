@@ -81,10 +81,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           Booking Confirmed
         </button>
       );
-    } else if (
-      getAdminCateringBookingState.data.status === 3 ||
-      getAdminCateringBookingState.data.status === 21
-    ) {
+    } else if (getAdminCateringBookingState.data.status === 3) {
       return (
         <>
           <button
@@ -115,10 +112,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           Contract Verified
         </button>
       );
-    } else if (
-      getAdminCateringBookingState.data.status === 5 ||
-      getAdminCateringBookingState.data.status === 22
-    ) {
+    } else if (getAdminCateringBookingState.data.status === 5) {
       return (
         <>
           <button
@@ -149,10 +143,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           Initial Payment Verified
         </button>
       );
-    } else if (
-      getAdminCateringBookingState.data.status === 7 ||
-      getAdminCateringBookingState.data.status === 23
-    ) {
+    } else if (getAdminCateringBookingState.data.status === 7) {
       return (
         <>
           <button
@@ -197,6 +188,90 @@ export function AdminCateringBookingCustomerInformationButtons() {
         >
           Complete
         </button>
+      );
+    } else if (getAdminCateringBookingState.data.status === 20) {
+      return (
+        <>
+          <button
+            disabled
+            style={{ opacity: 0.65 }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Booking
+          </button>
+          <button
+            onClick={() => {
+              ReactGA.event({
+                category: "Admin Catering Order",
+                action: "Confirm order",
+              });
+              handleUpdateStatus("2");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Confirm Booking
+          </button>
+        </>
+      );
+    } else if (getAdminCateringBookingState.data.status === 21) {
+      return (
+        <>
+          <button
+            disabled
+            style={{ opacity: 0.65 }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Contract
+          </button>
+          <button
+            onClick={() => {
+              handleUpdateStatus("4");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Verify Contract
+          </button>
+        </>
+      );
+    } else if (getAdminCateringBookingState.data.status === 22) {
+      return (
+        <>
+          <button
+            disabled
+            style={{ opacity: 0.65 }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Initial Payment
+          </button>
+          <button
+            onClick={() => {
+              handleUpdateStatus("6");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Verify Initial Payment
+          </button>
+        </>
+      );
+    } else if (getAdminCateringBookingState.data.status === 23) {
+      return (
+        <>
+          <button
+            disabled
+            style={{ opacity: 0.65 }}
+            className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
+          >
+            Decline Final Payment
+          </button>
+          <button
+            onClick={() => {
+              handleUpdateStatus("8");
+            }}
+            className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
+          >
+            Verify Final Payment
+          </button>
+        </>
       );
     }
   }

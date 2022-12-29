@@ -303,6 +303,10 @@ import {
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import {
+  selectUpdateAdminCateringOrderItemRemarks,
+  UpdateAdminCateringOrderItemRemarksState,
+} from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -462,6 +466,34 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
+  const updateAdminCateringOrderItemRemarksState = useAppSelector(
+    selectUpdateAdminCateringOrderItemRemarks
+  );
+
+  useEffect(() => {
+    switch (updateAdminCateringOrderItemRemarksState.status) {
+      case UpdateAdminCateringOrderItemRemarksState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.success:
+        showAlert(
+          setSuccessAlert,
+          updateAdminCateringOrderItemRemarksState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.fail:
+        showAlert(
+          setFailsAlert,
+          updateAdminCateringOrderItemRemarksState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateAdminCateringOrderItemRemarksState]);
 
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
