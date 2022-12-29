@@ -205,7 +205,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
                 category: "Admin Catering Order",
                 action: "Confirm order",
               });
-              handleUpdateStatus("2");
+              handleUpdateStatus(2);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -225,7 +225,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
+              handleUpdateStatus(4);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -245,7 +245,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("6");
+              handleUpdateStatus(6);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -265,7 +265,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("8");
+              handleUpdateStatus(8);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
