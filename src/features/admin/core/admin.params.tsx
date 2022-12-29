@@ -38,3 +38,8 @@ export interface UpdateAdminSettingStoreOperatingHoursParam {
   available_start_time: string;
   available_end_time: string;
 }
+
+export interface UpdateAdminCateringOrderItemRemarksParam {
+  orderItemId: number;
+  remarks: string;
+}

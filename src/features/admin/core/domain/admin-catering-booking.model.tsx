@@ -46,9 +46,11 @@ export interface AdminCateringBookingModel {
   payops: number;
   store_name: string;
   items: Array<{
+    id: number;
+    product_id: number;
     product_price: string;
     quantity: number;
-    remarks: string;
+    remarks: string | null;
     name: string;
     description: string;
     add_details: string;

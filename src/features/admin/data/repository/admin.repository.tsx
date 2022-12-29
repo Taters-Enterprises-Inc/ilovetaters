@@ -8,6 +8,7 @@ import {
   UpdateStoreProductParam,
   UpdateStoreCatersPackageAddonParam,
   UpdateStoreCatersProductAddonParam,
+  UpdateAdminCateringOrderItemRemarksParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -31,6 +32,7 @@ import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transa
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
 import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
+import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -338,9 +340,45 @@ export interface UpdateAdminNotificationDateSeenResponse {
   };
 }
 
+export interface UpdateAdminCateringOrderItemRemarksResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminCateringPackageFlavorsResponse {
+  data: {
+    message: string;
+    data: Array<PackageFlavorModel>;
+  };
+}
+
+export function GetAdminCateringPackageFlavorsRepository(
+  packageId: number
+): Promise<GetAdminCateringPackageFlavorsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${packageId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateAdminCateringOrderItemRemarksRepository(
+  param: UpdateAdminCateringOrderItemRemarksParam
+): Promise<UpdateAdminCateringOrderItemRemarksResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-order-item-remarks`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
-) {
+): Promise<UpdateAdminNotificationDateSeenResponse> {
   return axios.put(
     `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
     new FormData(),
