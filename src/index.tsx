@@ -86,6 +86,7 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
 import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
+import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -214,6 +215,10 @@ root.render(
                       <Route element={<AdminNotificationWrapper />}>
                         <Route element={<AdminGuard />}>
                           <Route element={<AdminSidebarWrapper />}>
+                            <Route
+                              path="dashboard"
+                              element={<AdminDashboard />}
+                            />
                             <Route path="order" element={<AdminShopOrder />} />
                             <Route
                               path="catering"
