@@ -71,4 +71,9 @@ export const getAdminStoresSlice = createSlice({
 
 export const selectGetAdminStores = (state: RootState) => state.getAdminStores;
 
+// export const selectGetAdminStoreByProductID = (state: RootState, id: number) => {
+//   if(state.getAdminStores.data){
+//     return state.getAdminStores.data.filter((store) => store.product_id.toString() === id.toString())
+//   }
+// }
 export default getAdminStoresSlice.reducer;

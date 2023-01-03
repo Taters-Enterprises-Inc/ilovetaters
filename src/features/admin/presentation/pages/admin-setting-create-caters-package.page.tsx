@@ -20,6 +20,7 @@ import {
   selectDynamicPricesBYPackageID,
   selectVariantsBYPackageID,
   updateCataringPackage,
+  selectCatersRegionDaLog,
 } from "../slices/admin-setting-caters-package.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -59,6 +60,10 @@ export function AdminSettingCreateCatersPackage() {
 
   const currentPackage = useAppSelector((state) =>
     selectCatersPackageByID(state, Number(id))
+  );
+
+  const currentDaLog = useAppSelector((state) =>
+    selectCatersRegionDaLog(state, Number(id))
   );
 
   const currentPrices = useAppSelector((state) =>
@@ -241,10 +246,27 @@ export function AdminSettingCreateCatersPackage() {
 
   useEffect(() => {
     const stores = getAdminStoresState.data;
-    if (getAdminStoresState.status === 2 && stores) {
+    if (getAdminStoresState.status === 2 && stores && !id) {
+      console.log(getAdminStoresState);
       setStoreState((f) => ({ ...f, stores }));
     }
-  }, [getAdminStoresState]);
+
+    if (
+      currentDaLog &&
+      id &&
+      storesState.stores.length === 0 &&
+      stores &&
+      getAdminStoresState.status === 2
+    ) {
+      const myArrayFiltered = stores.filter((el) => {
+        return currentDaLog.some((f) => {
+          return f.store_id === el.store_id;
+        });
+      });
+      setStoreState({ stores: myArrayFiltered });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getAdminStoresState, id]);
 
   useEffect(() => {
     if (!hasEditDynamicPrices) {
@@ -326,8 +348,8 @@ export function AdminSettingCreateCatersPackage() {
       formState["variants"] = JSON.stringify(variants);
       formState["stores"] = JSON.stringify(storesState.stores);
       // console.log(formState["stores"]);
-      // console.log(storesState.stores);
-      console.log(formState);
+      console.log(storesState.stores);
+      // console.log(formState);
       // console.log(variants);
       dispatch(createCataringPackage(formState));
     } else if (id && hasEditPackage && currentPackage !== undefined) {
@@ -352,7 +374,7 @@ export function AdminSettingCreateCatersPackage() {
         product_image75x75: formState["product_image75x75"],
         dynamic_price: JSON.stringify(dynamicPrices),
         variants: JSON.stringify(variants),
-        // stores: JSON.stringify(storesState.stores),
+        stores: JSON.stringify(storesState.stores),
       };
 
       console.log(updatedData);
@@ -745,20 +767,34 @@ export function AdminSettingCreateCatersPackage() {
           </div>
         </div>
         {/* && formState.productType === "1" */}
+
+        <h1 className="text-2xl font-bold text-secondary !my-2">
+          Store Selection
+        </h1>
+
         {getAdminStoresState.data ? (
           <>
-            <h1 className="text-2xl font-bold text-secondary !my-2">
-              Store Selection
-            </h1>
-
             <MaterialInputAutoComplete
               label="Select Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={
+                currentDaLog
+                  ? getAdminStoresState.data?.filter((currData) => {
+                      if (
+                        !currentDaLog.find(
+                          (da) => da.store_id === currData.store_id
+                        )
+                      ) {
+                        return currData;
+                      } else return null;
+                    })
+                  : getAdminStoresState.data
+              }
               getOptionLabel={(option) => option.name}
               value={storesState.stores ? [...storesState.stores] : []}
               onChange={(e, stores) => {
+                console.log(stores);
                 setStoreState({
                   ...storesState.stores,
                   stores,
