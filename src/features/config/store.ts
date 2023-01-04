@@ -118,6 +118,11 @@ import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/
 import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
+import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
+import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-admin-snackshop-total-sales.slice";
+import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
+import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
+import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
 
 export const store = configureStore({
   reducer: {
@@ -239,6 +244,11 @@ export const store = configureStore({
     getStoresAvailableCateringModal,
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
+    getAdminSales,
+    getAdminSnackshopTotalSales,
+    getAdminCateringTotalSales,
+    getAdminPopClubTotalSales,
+    getAdminOverallTotalSales,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
