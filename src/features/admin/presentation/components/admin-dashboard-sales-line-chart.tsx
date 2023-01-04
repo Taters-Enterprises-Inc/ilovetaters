@@ -49,7 +49,6 @@ export function AdminDashboardSalesLineChart() {
           dataKey="purchase_amount"
           axisLine={false}
           tickLine={false}
-          tickCount={8}
           width={65}
           padding={{ bottom: 15 }}
           tickFormatter={(number) =>
