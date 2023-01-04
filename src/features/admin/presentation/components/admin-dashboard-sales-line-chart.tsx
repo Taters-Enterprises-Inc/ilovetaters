@@ -49,7 +49,7 @@ export function AdminDashboardSalesLineChart() {
           dataKey="purchase_amount"
           axisLine={false}
           tickLine={false}
-          width={65}
+          width={80}
           padding={{ bottom: 15 }}
           tickFormatter={(number) =>
             `₱ ${new Intl.NumberFormat("en").format(number)}`
