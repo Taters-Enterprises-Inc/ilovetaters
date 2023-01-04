@@ -7,48 +7,54 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { format, parseISO, subDays } from "date-fns";
-
-const data: Array<{ date: string; value: number }> = [];
-for (let num = 30; num >= 0; num--) {
-  data.push({
-    date: subDays(new Date(), num).toISOString().substr(0, 10),
-    value: 1 + Math.random(),
-  });
-}
+import { useAppSelector } from "features/config/hooks";
+import { selectGetAdminSales } from "../slices/get-admin-sales.slice";
+import moment from "moment";
+import { useState } from "react";
+import NumberFormat from "react-number-format";
 
 export function AdminDashboardSalesLineChart() {
+  const getAdminSalesState = useAppSelector(selectGetAdminSales);
+
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <AreaChart data={data}>
+      <AreaChart data={getAdminSalesState.data}>
         <defs>
           <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2451B7" stopOpacity={0.4} />
-            <stop offset="75%" stopColor="#2451B7" stopOpacity={0.05} />
+            <stop offset="5%" stopColor="#22201A" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#22201A" stopOpacity={0} />
           </linearGradient>
         </defs>
 
-        <Area dataKey="value" stroke="#2451B7" fill="url(#color)" />
+        <Area
+          type="monotone"
+          dataKey="purchase_amount"
+          stroke="#22201A"
+          fill="url(#color)"
+          fillOpacity={1}
+        />
 
         <XAxis
-          dataKey="date"
+          dataKey="dateadded"
           axisLine={false}
           tickLine={false}
           tickFormatter={(str) => {
-            const date = parseISO(str);
-            if (date.getDate() % 7 === 0) {
-              return format(date, "MMM, d");
-            }
-            return "";
+            const date = moment(str);
+
+            return date.format("MMM D");
           }}
         />
 
         <YAxis
-          dataKey="value"
+          dataKey="purchase_amount"
           axisLine={false}
           tickLine={false}
           tickCount={8}
-          tickFormatter={(number) => `$${number.toFixed(2)}`}
+          width={65}
+          padding={{ bottom: 15 }}
+          tickFormatter={(number) =>
+            `₱ ${new Intl.NumberFormat("en").format(number)}`
+          }
         />
 
         <Tooltip content={<CustomTooltip />} />
@@ -70,9 +76,15 @@ function CustomTooltip({
 }) {
   if (active && label && payload) {
     return (
-      <div className="tooltip">
-        <h4>{format(parseISO(label), "eeee, d MMM, yyyy")}</h4>
-        <p>${payload[0].value.toFixed(2)} CAD</p>
+      <div className="p-2 bg-white tooltip">
+        <h4>{moment(label).format("LL")}</h4>
+
+        <NumberFormat
+          value={payload[0].value.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
       </div>
     );
   }
