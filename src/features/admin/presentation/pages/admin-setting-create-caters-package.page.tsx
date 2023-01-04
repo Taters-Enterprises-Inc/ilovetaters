@@ -348,7 +348,7 @@ export function AdminSettingCreateCatersPackage() {
       formState["variants"] = JSON.stringify(variants);
       formState["stores"] = JSON.stringify(storesState.stores);
       // console.log(formState["stores"]);
-      console.log(storesState.stores);
+      console.log(formState["stores"]);
       // console.log(formState);
       // console.log(variants);
       dispatch(createCataringPackage(formState));

@@ -17,7 +17,10 @@ import {
   UpdateCataringPackageResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
-import { CataringRegionDaLogModel } from "../../core/domain/admin-cataring-region-da-log.model";
+import {
+  CataringRegionDaLogModel,
+  CataringRegionAddonDaLogModel,
+} from "../../core/domain/admin-cataring-region-da-log.model";
 
 export enum catersListStatus {
   initial,
@@ -46,6 +49,7 @@ interface InitialState {
   variants: VariantCatersPackageModel[];
   variantOptions: VariantOptionPriceCatersPackageModel[];
   stores: CataringRegionDaLogModel[];
+  storesAddons: CataringRegionAddonDaLogModel[];
 }
 
 const initialState: InitialState = {
@@ -61,6 +65,7 @@ const initialState: InitialState = {
   variants: [],
   variantOptions: [],
   stores: [],
+  storesAddons: [],
 };
 
 export const getAllCataringPackageLists = createAsyncThunk(
@@ -152,6 +157,7 @@ const CataringPackageListsSlice = createSlice({
           Variant,
           VariantOption,
           stores,
+          storesAddons,
         } = action.payload;
         state.status = catersListStatus.success;
         state.message = message;
@@ -161,6 +167,7 @@ const CataringPackageListsSlice = createSlice({
         state.variants = Variant;
         state.variantOptions = VariantOption;
         state.stores = stores;
+        state.storesAddons = storesAddons;
       })
       .addCase(getAllCataringPackageLists.rejected, (state, action) => {
         state.status = catersListStatus.fail;
@@ -174,6 +181,7 @@ const CataringPackageListsSlice = createSlice({
         state.variants = [];
         state.variantOptions = [];
         state.stores = [];
+        state.storesAddons = [];
       })
       .addCase(createCataringPackage.pending, (state, action) => {
         state.createstatus = createCatersStatus.inProgress;
@@ -217,11 +225,20 @@ export const selectCatersPackageByID = (state: RootState, id: number) =>
     (currentpackage) => currentpackage.id === id
   );
 
-export const selectCatersRegionDaLog = (state: RootState, id: number) =>
-  state.CataringPackageLists.stores.filter(
-    (store) => store.product_id.toString() === id.toString()
+export const selectCatersRegionDaLog = (state: RootState, id: number) => {
+  let CurPackage = state.CataringPackageLists.data.find(
+    (elem) => elem.id === id
   );
-
+  if (CurPackage === undefined) return;
+  if (CurPackage["package_type"] === 0)
+    return state.CataringPackageLists.stores.filter(
+      (store) => store.product_id.toString() === id.toString()
+    );
+  if (CurPackage["package_type"] === 1)
+    return state.CataringPackageLists.storesAddons.filter(
+      (store) => store.product_id.toString() === id.toString()
+    );
+};
 export const selectDynamicPricesBYPackageID = (state: RootState, id: number) =>
   state.CataringPackageLists.dynamicPrices
     .filter((dynamicPrice) => dynamicPrice.package_id === id)
