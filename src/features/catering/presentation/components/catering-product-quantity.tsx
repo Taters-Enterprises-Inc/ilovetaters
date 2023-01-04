@@ -34,10 +34,6 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
       return;
     }
 
-    // if (isNaN(props.quantity)) {
-    //   props.onChange(action, 0);
-    // }
-
     if (isTouch === false) {
       switch (action) {
         case "plus":

@@ -46,6 +46,7 @@ import {
   selectGetAdminNotifications,
 } from "../slices/get-admin-notifications.slice";
 import { TbReportSearch } from "react-icons/tb";
+import { MdOutlineDashboardCustomize } from "react-icons/md";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -110,6 +111,32 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
     <div className="relative flex flex-col pb-4 m-0 mt-2 text-sm text-white">
       <nav>
         <ul>
+          <li>
+            <NavLink
+              to="/admin/dashboard"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <MdOutlineDashboardCustomize size={20} />
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Dashboard
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
           <li>
             <NavLink
               to="/admin/order"

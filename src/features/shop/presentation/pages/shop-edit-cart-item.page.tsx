@@ -269,7 +269,7 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
                     <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
                       {getEditCartProduct?.data?.product_addson.map(
                         (product, i: number) => (
-                          <Addon key={i} product={product} />
+                          <Addon key={i} product={product} maxQuantity={10} />
                         )
                       )}
                     </div>

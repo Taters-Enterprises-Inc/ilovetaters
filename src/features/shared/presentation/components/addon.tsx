@@ -16,6 +16,7 @@ import {
 } from "../../../shop/presentation/slices/add-to-cart-shop.slice";
 interface AddonProps {
   product: ProductModel;
+  maxQuantity: number;
 }
 
 let quantityId: any;
@@ -80,10 +81,10 @@ export function Addon(props: AddonProps) {
       if (action === "add") counter += 1;
       else counter -= 1;
 
-      if (counter >= 10) {
+      if (counter >= props.maxQuantity) {
         clearTimeout(timerRef.current);
         clearInterval(quantityId);
-        setQuantity(10);
+        setQuantity(props.maxQuantity);
       } else if (counter <= 1) {
         clearTimeout(timerRef.current);
         clearInterval(quantityId);
@@ -146,7 +147,7 @@ export function Addon(props: AddonProps) {
               />
             </h5>
 
-            <div className="w-24 h-10">
+            <div className="w-[105px] h-10">
               <div className="relative flex flex-row w-full h-10 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
                 <button
                   onClick={() =>
@@ -169,7 +170,7 @@ export function Addon(props: AddonProps) {
                     e.preventDefault();
                     handleonMouseUp();
                   }}
-                  className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                  className={`h-full w-[100px] rounded-l cursor-pointer outline-none bg-primary ${
                     quantity <= 1 || isQuantityNull.current
                       ? "opacity-30 cursor-not-allowed"
                       : ""
@@ -202,8 +203,8 @@ export function Addon(props: AddonProps) {
                         }
                       }, 1000);
 
-                      if (parseInt(value) >= 10) {
-                        setQuantity(10);
+                      if (parseInt(value) >= props.maxQuantity) {
+                        setQuantity(props.maxQuantity);
                       } else if (parseInt(value) < 0) {
                         setQuantity(1);
                       } else {
@@ -217,21 +218,29 @@ export function Addon(props: AddonProps) {
 
                 <button
                   onClick={() =>
-                    quantity >= 10 ? setDisabled : handleonClick()
+                    quantity >= props.maxQuantity
+                      ? setDisabled
+                      : handleonClick()
                   }
                   onMouseDown={() =>
-                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                    quantity >= props.maxQuantity
+                      ? setDisabled
+                      : handleonMouseDown("add")
                   }
                   onMouseUp={handleonMouseUp}
                   onTouchStart={() =>
-                    quantity >= 10 ? setDisabled : handleonMouseDown("add")
+                    quantity >= props.maxQuantity
+                      ? setDisabled
+                      : handleonMouseDown("add")
                   }
                   onTouchEnd={(e) => {
                     e.preventDefault();
                     handleonMouseUp();
                   }}
-                  className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                    quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
+                  className={`h-full w-[100px] rounded-r cursor-pointer bg-primary ${
+                    quantity >= props.maxQuantity
+                      ? "opacity-30 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   <span className="m-auto text-2xl font-thin leading-3 ">
