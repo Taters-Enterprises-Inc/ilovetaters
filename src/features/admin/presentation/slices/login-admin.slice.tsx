@@ -44,7 +44,12 @@ export const loginAdmin = createAsyncThunk(
 export const loginAdminSlice = createSlice({
   name: "loginAdmin",
   initialState,
-  reducers: {},
+  reducers: {
+    resetLoginAdminState: (state) => {
+      state.status = LoginAdminState.initial;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginAdmin.pending, (state) => {
@@ -65,5 +70,7 @@ export const loginAdminSlice = createSlice({
 });
 
 export const selectLoginAdmin = (state: RootState) => state.loginAdmin;
+
+export const { resetLoginAdminState } = loginAdminSlice.actions;
 
 export default loginAdminSlice.reducer;

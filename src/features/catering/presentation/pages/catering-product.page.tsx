@@ -41,15 +41,12 @@ import {
   selectAddToCartCatering,
 } from "../slices/add-to-cart-catering.slice";
 import { Addon } from "features/shared/presentation/components";
-import {
-  AddToCartShopState,
-  selectAddToCartShop,
-} from "features/shop/presentation/slices/add-to-cart-shop.slice";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
 import { CateringSelectStoreModal } from "../modals";
+import ReactGA from "react-ga";
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -85,7 +82,6 @@ export function CateringProduct() {
   );
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
-  const addToCartShopState = useAppSelector(selectAddToCartShop);
   const [currentMultiFlavors, setCurrentMultiFlavors] =
     useState<CateringMultiFlavorsType>({});
   const navigate = useNavigate();
@@ -120,15 +116,13 @@ export function CateringProduct() {
 
   useEffect(() => {
     if (addToCartCateringState.status === AddToCartCateringState.success) {
+      ReactGA.event({
+        category: "Catering Order",
+        action: "Add to cart item",
+      });
       dispatch(getSession());
     }
   }, [addToCartCateringState, dispatch]);
-
-  useEffect(() => {
-    if (addToCartShopState.status === AddToCartShopState.success) {
-      dispatch(getSession());
-    }
-  }, [addToCartShopState, dispatch]);
 
   const calculateFreeAddon = () => {
     if (
@@ -243,7 +237,7 @@ export function CateringProduct() {
             (result === undefined ? "" : result) +
             `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
               multiFlavorsArray[i].name
-            }<br/>`;
+            }<br>`;
       }
     });
 

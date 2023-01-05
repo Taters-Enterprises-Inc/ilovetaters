@@ -62,6 +62,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 import { ShopProductFlavor } from "../components";
+import ReactGA from "react-ga";
 
 let quantityId: any;
 
@@ -147,6 +148,10 @@ export function ShopProduct() {
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Add to cart item",
+      });
       dispatch(getSession());
     }
   }, [addToCartShopState, dispatch]);
@@ -155,6 +160,10 @@ export function ShopProduct() {
     if (
       addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
     ) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Add to cart item",
+      });
       dispatch(getSession());
       navigate("/delivery/checkout");
       dispatch(resetAddToCartCheckout());

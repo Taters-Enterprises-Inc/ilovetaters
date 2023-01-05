@@ -24,6 +24,7 @@ import {
   EditAdminSettingShopProductParam,
   UpdateCatersPackageParam,
   UpdateAdminSettingShopProductStatusParam,
+  UpdateAdminCateringOrderItemRemarksParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -56,6 +57,7 @@ import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-
 import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
 import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
+import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -427,6 +429,12 @@ export interface AdminSurveyVerificationChangeStatusResponse {
   };
 }
 
+export interface UpdateAdminCateringOrderItemRemarksResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface GetAdminSurveyVerificationResponse {
   data: {
     message: string;
@@ -493,6 +501,13 @@ export interface GetAdminProductsResponse {
   };
 }
 
+export interface GetAdminCateringPackageFlavorsResponse {
+  data: {
+    message: string;
+    data: Array<PackageFlavorModel>;
+  };
+}
+
 export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/products`, {
     withCredentials: true,
@@ -502,6 +517,17 @@ export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> 
 export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product/type`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminCateringPackageFlavorsRepository(
+  packageId: number
+): Promise<GetAdminCateringPackageFlavorsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${packageId}`,
     {
       withCredentials: true,
     }
@@ -610,6 +636,18 @@ export function AdminUserDiscountChangeStatusRepository(
 ): Promise<AdminUserDiscountChangeStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/discount/user-discount-change-status`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateAdminCateringOrderItemRemarksRepository(
+  param: UpdateAdminCateringOrderItemRemarksParam
+): Promise<UpdateAdminCateringOrderItemRemarksResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-order-item-remarks`,
     param,
     {
       withCredentials: true,

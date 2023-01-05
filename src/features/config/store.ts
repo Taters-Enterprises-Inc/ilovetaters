@@ -155,6 +155,8 @@ import deleteAdminSettingShopProduct from "features/admin/presentation/slices/de
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
 import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
 import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
+import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
+import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
 
 import { default as CataringPackageListsReducer } from "features/admin/presentation/slices/admin-setting-caters-package.slice";
 export const store = configureStore({
@@ -315,6 +317,8 @@ export const store = configureStore({
     updateAdminSettingShopProductStatus,
     getAdminSettingShopProductTypes,
     getAdminProducts,
+    updateAdminCateringOrderItemRemarks,
+    getAdminCateringPackageFlavors,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

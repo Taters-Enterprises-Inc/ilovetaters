@@ -32,6 +32,8 @@ import {
 import Moment from "react-moment";
 import moment from "moment";
 import { MaterialInput } from "features/shared/presentation/components";
+import { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
+import { selectUpdateAdminCateringOrderItemRemarks } from "../slices/update-admin-catering-order-item-remarks.slice";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -60,6 +62,10 @@ export function AdminCateringBookingCustomerInformation() {
     selectAdminCateringPrivilege
   );
 
+  const updateAdminCateringOrderItemRemarksState = useAppSelector(
+    selectUpdateAdminCateringOrderItemRemarks
+  );
+
   useEffect(() => {
     if (
       getAdminCateringBookingState.status ===
@@ -85,7 +91,12 @@ export function AdminCateringBookingCustomerInformation() {
     if (trackingNo) {
       dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [dispatch, trackingNo, adminCateringPrivilegeState]);
+  }, [
+    dispatch,
+    trackingNo,
+    adminCateringPrivilegeState,
+    updateAdminCateringOrderItemRemarksState,
+  ]);
 
   useEffect(() => {
     dispatch(getAdminStores());
@@ -506,7 +517,7 @@ export function AdminCateringBookingCustomerInformation() {
                     <tr key={i}>
                       <th
                         scope="row"
-                        className="px-6 py-4 font-medium text-secondary"
+                        className="px-6 py-4 font-medium text-secondary "
                       >
                         <span
                           dangerouslySetInnerHTML={{
@@ -520,12 +531,8 @@ export function AdminCateringBookingCustomerInformation() {
                           }}
                         />
                       </th>
-                      <td className="px-6 py-4">
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: item.remarks,
-                          }}
-                        />
+                      <td className="px-6 align-top w-[250px] ">
+                        <AdminCateringEditFlavor orderItem={item} />
                       </td>
                       <td className="px-6 py-4">{item.quantity}</td>
                       <td className="px-6 py-4 text-end">
@@ -690,7 +697,7 @@ export function AdminCateringBookingCustomerInformation() {
                       <span className="text-xs">
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: item.remarks,
+                            __html: item.remarks ?? "",
                           }}
                         />
                       </span>

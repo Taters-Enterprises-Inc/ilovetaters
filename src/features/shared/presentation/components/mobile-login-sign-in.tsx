@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MobileForgotPasswordModal } from "../modals";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
 
 export function MobileLoginSignIn() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,10 @@ export function MobileLoginSignIn() {
   useEffect(() => {
     if (signInMobileUserState.status === SignInMobileUserState.success) {
       dispatch(getNotifications());
+      ReactGA.event({
+        category: "Sign In",
+        action: "Mobile Sign-in",
+      });
     }
   }, [signInMobileUserState, dispatch]);
 

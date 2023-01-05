@@ -49,6 +49,7 @@ import {
   getAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -122,6 +123,10 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
+      ReactGA.event({
+        category: "Catering Order",
+        action: "Add to cart item",
+      });
       dispatch(getNotifications());
       navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());

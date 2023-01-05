@@ -191,3 +191,8 @@ export interface UpdateAdminSettingShopProductStatusParam {
   product_id: number;
   status: number;
 }
+
+export interface UpdateAdminCateringOrderItemRemarksParam {
+  orderItemId: number;
+  remarks: string;
+}
