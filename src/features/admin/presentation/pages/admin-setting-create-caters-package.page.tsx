@@ -620,7 +620,7 @@ export function AdminSettingCreateCatersPackage() {
                     <div className="flex space-x-2" key={parentindex}>
                       <MaterialInput
                         required
-                        colorTheme="black"
+                        colorTheme="green"
                         onChange={(e) => {
                           const list = [...variants];
                           list[parentindex].name = e.target.value;
@@ -646,7 +646,7 @@ export function AdminSettingCreateCatersPackage() {
                         <div className="flex space-x-2">
                           <MaterialInput
                             required
-                            colorTheme="black"
+                            colorTheme="blue"
                             onChange={(e) => {
                               handleInputVariantOption(
                                 parentindex,

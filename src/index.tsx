@@ -316,25 +316,22 @@ root.render(
                                   path="create-group"
                                   element={<AdminSettingCreateGroup />}
                                 />
-                                <Route path="caters-setting">
-                                  <Route
-                                    index
-                                    element={<AdminSettingCatersPackage />}
-                                  />
-                                  <Route
-                                    path="create-caters-package"
-                                    element={
-                                      <AdminSettingCreateCatersPackage />
-                                    }
-                                  />
+                              </Route>
 
-                                  <Route
-                                    path="edit-caters-package/:id"
-                                    element={
-                                      <AdminSettingCreateCatersPackage />
-                                    }
-                                  />
-                                </Route>
+                              <Route path="caters-setting">
+                                <Route
+                                  index
+                                  element={<AdminSettingCatersPackage />}
+                                />
+                                <Route
+                                  path="create-caters-package"
+                                  element={<AdminSettingCreateCatersPackage />}
+                                />
+
+                                <Route
+                                  path="edit-caters-package/:id"
+                                  element={<AdminSettingCreateCatersPackage />}
+                                />
                               </Route>
                               <Route
                                 path="store"
