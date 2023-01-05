@@ -12,6 +12,7 @@ import {
   UpdateAdminCateringOrderItemRemarksParam,
   GetAdminSalesParam,
   GetAdminTotalSalesParam,
+  GetAdminCateringPackageFlavorsParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -416,10 +417,10 @@ export function GetAdminSalesRepository(
 }
 
 export function GetAdminCateringPackageFlavorsRepository(
-  packageId: number
+  param: GetAdminCateringPackageFlavorsParam
 ): Promise<GetAdminCateringPackageFlavorsResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${packageId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${param.packageId}?type=${param.type}`,
     {
       withCredentials: true,
     }

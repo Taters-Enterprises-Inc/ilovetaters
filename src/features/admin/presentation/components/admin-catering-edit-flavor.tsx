@@ -27,6 +27,7 @@ export interface AdminCateringEditFlavorProps {
     description: string;
     add_details: string;
     product_label: string;
+    type: string;
   };
 }
 
@@ -54,8 +55,14 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
   );
 
   useEffect(() => {
-    dispatch(getAdminCateringPackageFlavors(props.orderItem.product_id));
-  }, [dispatch]);
+    console.log(props.orderItem);
+    dispatch(
+      getAdminCateringPackageFlavors({
+        packageId: props.orderItem.product_id,
+        type: props.orderItem.type,
+      })
+    );
+  }, [dispatch, props]);
 
   useEffect(() => {
     if (
@@ -237,7 +244,7 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
               <div className="mb-2 font-bold">{packageFlavor.parent_name}</div>
 
               {packageFlavor.flavors.map((flavor, flavorIndex) => (
-                <div key={flavorIndex}>
+                <div key={flavorIndex} className="mb-2">
                   <input
                     type="number"
                     value={

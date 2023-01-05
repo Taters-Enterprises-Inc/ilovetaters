@@ -56,3 +56,8 @@ export interface GetAdminSalesParam {
 export interface GetAdminTotalSalesParam {
   service: "overall" | "snackshop" | "catering" | "popclub";
 }
+
+export interface GetAdminCateringPackageFlavorsParam {
+  packageId: number;
+  type: string;
+}
