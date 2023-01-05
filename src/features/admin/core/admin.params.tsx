@@ -43,3 +43,16 @@ export interface UpdateAdminSettingStoreOperatingHoursParam {
   available_start_time: string;
   available_end_time: string;
 }
+
+export interface UpdateAdminCateringOrderItemRemarksParam {
+  orderItemId: number;
+  remarks: string;
+}
+
+export interface GetAdminSalesParam {
+  service: "overall" | "snackshop" | "catering" | "popclub";
+}
+
+export interface GetAdminTotalSalesParam {
+  service: "overall" | "snackshop" | "catering" | "popclub";
+}

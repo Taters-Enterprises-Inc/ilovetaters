@@ -535,7 +535,11 @@ export function CateringBuildYourOwnPackage() {
                     <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
                       {getCateringCategoryProductsState.data?.product_addons.map(
                         (product, i) => (
-                          <Addon key={i} product={product} />
+                          <Addon
+                            key={i}
+                            product={product}
+                            maxQuantity={99999}
+                          />
                         )
                       )}
                     </div>
@@ -619,7 +623,11 @@ export function CateringBuildYourOwnPackage() {
                       <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
                         {getCateringCategoryProductsState.data?.product_addons.map(
                           (product, i) => (
-                            <Addon key={i} product={product} />
+                            <Addon
+                              key={i}
+                              product={product}
+                              maxQuantity={99999}
+                            />
                           )
                         )}
                       </div>

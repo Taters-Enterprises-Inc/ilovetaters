@@ -107,49 +107,54 @@ export function SearchAddress(props: SearchAddressProps) {
   }, []);
 
   const geolocate = () => {
-    navigator.permissions.query({ name: "geolocation" }).then((result) => {
-      if (result.state === "prompt") {
-        props.onPrompt();
-      } else if (result.state === "denied") {
-        props.onDenied();
-      }
-    });
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var geolocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        var circle = new google.maps.Circle({
-          center: geolocation,
-          radius: position.coords.accuracy,
-        });
-
-        var latlng: any = new google.maps.LatLng(
-          position.coords.latitude,
-          position.coords.longitude
-        );
-
-        const geocoder: any = new google.maps.Geocoder();
-        autoComplete.setBounds(circle.getBounds());
-
-        geocoder.geocode(
-          { latLng: latlng },
-          function (results: any, status: any) {
-            if (status === google.maps.GeocoderStatus.OK) {
-              if (results[1]) {
-                const place = results[0].formatted_address;
-
-                props.onLocateCurrentAddress(place);
-              } else {
-                console.log("No results found");
-              }
-            } else {
-              console.log("Geocoder failed due to: " + status);
-            }
-          }
-        );
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: "geolocation" }).then((result) => {
+        if (result.state === "prompt") {
+          props.onPrompt();
+        } else if (result.state === "denied") {
+          props.onDenied();
+        }
       });
+    }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          var geolocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          var circle = new google.maps.Circle({
+            center: geolocation,
+            radius: position.coords.accuracy,
+          });
+
+          var latlng: any = new google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+
+          const geocoder: any = new google.maps.Geocoder();
+          autoComplete.setBounds(circle.getBounds());
+
+          geocoder.geocode(
+            { latLng: latlng },
+            function (results: any, status: any) {
+              if (status === google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                  const place = results[0].formatted_address;
+
+                  props.onLocateCurrentAddress(place);
+                } else {
+                  console.log("No results found");
+                }
+              } else {
+                console.log("Geocoder failed due to: " + status);
+              }
+            }
+          );
+        },
+        (i) => console.log("failed", i)
+      );
     }
   };
 

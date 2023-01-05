@@ -45,15 +45,10 @@ import {
   AdminLogin,
   AdminCateringBooking,
   AdminPopclub,
-  AdminRaffleInstore,
-  AdminRaffleSnackshop,
   AdminReports,
   AdminFaq,
   AdminCFaq,
-  AdminSettingCategory,
-  AdminProduct,
   AdminSettingUser,
-  AdminSettingVoucher,
   AdminSettingStore,
   AdminSettingCreateUser,
   AdminSettingCreateGroup,
@@ -93,6 +88,7 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import { BSCLogin } from "features/bsc/presentation/pages";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
 import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
+import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -224,29 +220,21 @@ root.render(
                       <Route element={<AdminNotificationWrapper />}>
                         <Route element={<AdminGuard />}>
                           <Route element={<AdminSidebarWrapper />}>
+                            <Route
+                              path="dashboard"
+                              element={<AdminDashboard />}
+                            />
                             <Route path="order" element={<AdminShopOrder />} />
                             <Route
                               path="catering"
                               element={<AdminCateringBooking />}
                             />
                             <Route path="popclub" element={<AdminPopclub />} />
-                            <Route path="product" element={<AdminProduct />} />
                             <Route path="reports" element={<AdminReports />} />
                             <Route path="faq">
                               <Route index element={<AdminFaq />} />
                               <Route path="store" element={<AdminFaq />} />
                               <Route path="customer" element={<AdminCFaq />} />
-                            </Route>
-
-                            <Route path="raffle">
-                              <Route
-                                path="snackshop"
-                                element={<AdminRaffleSnackshop />}
-                              />
-                              <Route
-                                path="instore"
-                                element={<AdminRaffleInstore />}
-                              />
                             </Route>
 
                             <Route path="availability">
@@ -281,10 +269,6 @@ root.render(
                             </Route>
 
                             <Route path="setting">
-                              <Route
-                                path="category"
-                                element={<AdminSettingCategory />}
-                              />
                               <Route path="user">
                                 <Route index element={<AdminSettingUser />} />
                                 <Route
@@ -300,10 +284,6 @@ root.render(
                                   element={<AdminSettingCreateGroup />}
                                 />
                               </Route>
-                              <Route
-                                path="voucher"
-                                element={<AdminSettingVoucher />}
-                              />
                               <Route
                                 path="store"
                                 element={<AdminSettingStore />}

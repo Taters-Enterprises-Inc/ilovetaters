@@ -938,7 +938,11 @@ export function ShopProduct() {
                         <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
                           {getProductDetailsState.data?.addons.map(
                             (product, i) => (
-                              <Addon key={i} product={product} />
+                              <Addon
+                                key={i}
+                                product={product}
+                                maxQuantity={10}
+                              />
                             )
                           )}
                         </div>

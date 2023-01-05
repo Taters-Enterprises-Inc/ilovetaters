@@ -264,6 +264,11 @@ import {
   selectAddToCartCateringProducts,
 } from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 
+import {
+  selectUpdateAdminCateringOrderItemRemarks,
+  UpdateAdminCateringOrderItemRemarksState,
+} from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
+
 const SweetAlert = withReactContent(Swal);
 
 export function LoadingAndSnackbarWrapper() {
@@ -410,6 +415,10 @@ export function LoadingAndSnackbarWrapper() {
     selectAddToCartCateringProducts
   );
 
+  const updateAdminCateringOrderItemRemarksState = useAppSelector(
+    selectUpdateAdminCateringOrderItemRemarks
+  );
+
   useEffect(() => {
     switch (addToCartCateringProductsState.status) {
       case AddToCartCateringProductsState.inProgress:
@@ -436,6 +445,31 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [addToCartCateringProductsState]);
+
+  useEffect(() => {
+    switch (updateAdminCateringOrderItemRemarksState.status) {
+      case UpdateAdminCateringOrderItemRemarksState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.success:
+        showAlert(
+          setSuccessAlert,
+          updateAdminCateringOrderItemRemarksState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateAdminCateringOrderItemRemarksState.fail:
+        showAlert(
+          setFailsAlert,
+          updateAdminCateringOrderItemRemarksState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateAdminCateringOrderItemRemarksState]);
 
   useEffect(() => {
     switch (getStoresAvailableCateringModalState.status) {

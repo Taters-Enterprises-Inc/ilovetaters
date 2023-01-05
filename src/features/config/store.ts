@@ -120,6 +120,13 @@ import addToCartCateringProducts from "features/catering/presentation/slices/add
 import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
 import getAdminStoreCateringProducts from "features/admin/presentation/slices/get-admin-stores-catering-products.slice";
 import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
+import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
+import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
+import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
+import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-admin-snackshop-total-sales.slice";
+import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
+import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
+import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
 
 export const store = configureStore({
   reducer: {
@@ -243,6 +250,13 @@ export const store = configureStore({
     getCateringCategoryProducts,
     getAdminStoreCateringProducts,
     updateStoreCateringProduct,
+    updateAdminCateringOrderItemRemarks,
+    getAdminCateringPackageFlavors,
+    getAdminSales,
+    getAdminSnackshopTotalSales,
+    getAdminCateringTotalSales,
+    getAdminPopClubTotalSales,
+    getAdminOverallTotalSales,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
