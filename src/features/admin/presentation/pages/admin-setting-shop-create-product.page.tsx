@@ -1,4 +1,3 @@
-import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
@@ -127,6 +126,16 @@ export function AdminSettingShopCreateProduct() {
       setFormState((f) => ({ ...f, stores }));
     }
   }, [getAdminStoresState]);
+
+  useEffect(() => {
+    const products = getAdminProductsState.data;
+    if (
+      getAdminProductsState.status === GetAdminProductsState.success &&
+      products
+    ) {
+      setFormState((f) => ({ ...f, products }));
+    }
+  }, [getAdminProductsState]);
 
   const handleAddProductVariant = () => {
     setFormState({
@@ -624,7 +633,7 @@ export function AdminSettingShopCreateProduct() {
               multiple
               options={getAdminProductsState.data}
               getOptionLabel={(option) => option.name}
-              defaultValue={formState.products ? [...formState.products] : []}
+              value={formState.products ? [...formState.products] : []}
               onChange={(e, products) => {
                 setFormState({
                   ...formState,

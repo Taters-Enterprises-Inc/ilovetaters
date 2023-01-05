@@ -60,6 +60,7 @@ import { AdminProductModel } from "features/admin/core/domain/admin-product.mode
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 import { SaleModel } from "features/admin/core/domain/sale.model";
 import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
+import { StoreMenuModel } from "../../core/domain/store-menu.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -497,6 +498,19 @@ export interface GetAdminTotalSalesResponse {
     message: string;
     data: TotalSalesModel;
   };
+}
+
+export interface GetAdminStoreMenusResponse {
+  data: {
+    message: string;
+    data: Array<StoreMenuModel>;
+  };
+}
+
+export function GetAdminStoreMenusRepository(): Promise<GetAdminStoreMenusResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/store-menu`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminTotalSalesRepository(

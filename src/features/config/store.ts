@@ -162,6 +162,7 @@ import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-
 import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
 import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
+import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 
 export const store = configureStore({
   reducer: {
@@ -327,6 +328,7 @@ export const store = configureStore({
     getAdminCateringTotalSales,
     getAdminPopClubTotalSales,
     getAdminOverallTotalSales,
+    getAdminStoreMenus,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
