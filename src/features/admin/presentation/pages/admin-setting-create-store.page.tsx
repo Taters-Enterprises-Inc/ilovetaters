@@ -20,9 +20,19 @@ import {
   selectGetAdminStoreMenus,
 } from "../slices/get-admin-store-menus.slice";
 import moment, { Moment } from "moment";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+import {
+  createAdminSettingStore,
+  CreateAdminSettingStoreState,
+  resetCreateAdminSettingStoreState,
+  selectCreateAdminSettingStore,
+} from "../slices/create-admin-setting-store.slice";
+import { useNavigate } from "react-router-dom";
+import AdminStoreSelector from "../components/admin-store-selector";
 
 export function AdminSettingCreateStore() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState<{
     name: string;
@@ -35,7 +45,7 @@ export function AdminSettingCreateStore() {
     email: string;
     deliveryHours: string;
     operatingHours: string;
-    storeImage: File | string;
+    image250x250: File | string;
     services: Array<string>;
     products: Array<AdminProductModel>;
   }>({
@@ -49,7 +59,7 @@ export function AdminSettingCreateStore() {
     email: "",
     deliveryHours: "",
     operatingHours: "",
-    storeImage: "",
+    image250x250: "",
     services: [
       "Snackshop",
       "Catering",
@@ -61,11 +71,24 @@ export function AdminSettingCreateStore() {
 
   const getAdminStoreMenusState = useAppSelector(selectGetAdminStoreMenus);
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
+  const createAdminSettingStoreState = useAppSelector(
+    selectCreateAdminSettingStore
+  );
 
   useEffect(() => {
     dispatch(getAdminStoreMenus());
     dispatch(getAdminProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      createAdminSettingStoreState.status ===
+      CreateAdminSettingStoreState.success
+    ) {
+      navigate("/admin/setting/product");
+      dispatch(resetCreateAdminSettingStoreState());
+    }
+  }, [createAdminSettingStoreState, dispatch, navigate]);
 
   useEffect(() => {
     const products = getAdminProductsState.data;
@@ -79,6 +102,25 @@ export function AdminSettingCreateStore() {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (formState.image250x250 === "") {
+      dispatch(
+        popUpSnackBar({
+          message:
+            "Please insure that all the required size image has been filled out",
+          severity: "error",
+        })
+      );
+      return;
+    }
+
+    dispatch(
+      createAdminSettingStore({
+        ...formState,
+        services: JSON.stringify(formState.services),
+        products: JSON.stringify(formState.products),
+      })
+    );
   };
 
   const handleInputChange = (evt: any) => {
@@ -235,11 +277,11 @@ export function AdminSettingCreateStore() {
 
           <div>
             <UploadFile
-              image={formState.storeImage}
+              image={formState.image250x250}
               onChange={(file) => {
                 setFormState({
                   ...formState,
-                  storeImage: file,
+                  image250x250: file,
                 });
               }}
               description="250x250"
@@ -250,6 +292,8 @@ export function AdminSettingCreateStore() {
             </h4>
           </div>
         </div>
+
+        <AdminStoreSelector />
 
         <h1 className="text-2xl font-bold text-secondary !my-2">
           Service Selection

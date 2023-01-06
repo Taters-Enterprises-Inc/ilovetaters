@@ -26,6 +26,7 @@ import {
   UpdateAdminCateringOrderItemRemarksParam,
   GetAdminSalesParam,
   GetAdminTotalSalesParam,
+  CreateAdminSettingStoreParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -505,6 +506,23 @@ export interface GetAdminStoreMenusResponse {
     message: string;
     data: Array<StoreMenuModel>;
   };
+}
+
+export interface CreateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function CreateAdminSettingStoreRepository(
+  param: CreateAdminSettingStoreParam
+): Promise<CreateAdminSettingStoreResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/stores`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetAdminStoreMenusRepository(): Promise<GetAdminStoreMenusResponse> {

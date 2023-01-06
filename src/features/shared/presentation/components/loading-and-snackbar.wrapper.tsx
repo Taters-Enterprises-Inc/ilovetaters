@@ -307,6 +307,10 @@ import {
   selectUpdateAdminCateringOrderItemRemarks,
   UpdateAdminCateringOrderItemRemarksState,
 } from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
+import {
+  CreateAdminSettingStoreState,
+  selectCreateAdminSettingStore,
+} from "features/admin/presentation/slices/create-admin-setting-store.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -469,6 +473,27 @@ export function LoadingAndSnackbarWrapper() {
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
     selectUpdateAdminCateringOrderItemRemarks
   );
+  const createAdminSettingStoreState = useAppSelector(
+    selectCreateAdminSettingStore
+  );
+  useEffect(() => {
+    switch (createAdminSettingStoreState.status) {
+      case CreateAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingStoreState.success:
+        showAlert(setSuccessAlert, createAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingStoreState.fail:
+        showAlert(setFailsAlert, createAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingStoreState]);
 
   useEffect(() => {
     switch (updateAdminCateringOrderItemRemarksState.status) {
