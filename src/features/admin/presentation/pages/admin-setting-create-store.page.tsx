@@ -9,7 +9,7 @@ import {
   UploadFile,
 } from "features/shared/presentation/components";
 import { FormEvent, useState, useEffect } from "react";
-import { AdminHead, AdminStoreSelector } from "../components";
+import { AdminHead, AdminSearchStoreCoordinates } from "../components";
 import {
   getAdminProducts,
   GetAdminProductsState,
@@ -37,20 +37,22 @@ export function AdminSettingCreateStore() {
     name: string;
     address: string;
     storeMenu: string;
-    availableStartTime: Moment | string;
-    availableEndTime: Moment | string;
+    availableStartTime: Moment | null;
+    availableEndTime: Moment | null;
     phoneNumber: string;
     contactPerson: string;
     email: string;
     deliveryHours: string;
     operatingHours: string;
     image250x250: File | string;
+    lat: number;
+    lng: number;
     services: Array<string>;
     products: Array<AdminProductModel>;
   }>({
     storeMenu: "",
-    availableStartTime: "",
-    availableEndTime: "",
+    availableStartTime: null,
+    availableEndTime: null,
     name: "",
     address: "",
     phoneNumber: "",
@@ -59,6 +61,8 @@ export function AdminSettingCreateStore() {
     deliveryHours: "",
     operatingHours: "",
     image250x250: "",
+    lat: 14.660950420631163,
+    lng: 121.0873865267099,
     services: [
       "Snackshop",
       "Catering",
@@ -113,13 +117,17 @@ export function AdminSettingCreateStore() {
       return;
     }
 
-    dispatch(
-      createAdminSettingStore({
-        ...formState,
-        services: JSON.stringify(formState.services),
-        products: JSON.stringify(formState.products),
-      })
-    );
+    if (formState.availableStartTime && formState.availableEndTime) {
+      dispatch(
+        createAdminSettingStore({
+          ...formState,
+          availableStartTime: formState.availableStartTime.format("HH:mm:ss"),
+          availableEndTime: formState.availableEndTime.format("HH:mm:ss"),
+          services: JSON.stringify(formState.services),
+          products: JSON.stringify(formState.products),
+        })
+      );
+    }
   };
 
   const handleInputChange = (evt: any) => {
@@ -212,9 +220,10 @@ export function AdminSettingCreateStore() {
               onChange={handleInputChange}
               value={formState.address}
               name="address"
-              label="Address"
+              label="Address to display"
               fullWidth
               multiline
+              placeholder="Eg. 3rd Floor SM City Grand Central Rizal Ave. Ext, East Grace Park, Caloocan"
               rows={4}
               maxRows={5}
             />
@@ -258,7 +267,7 @@ export function AdminSettingCreateStore() {
               value={formState.deliveryHours}
               name="deliveryHours"
               label="Delivery Hours"
-              placeholder="Same day delivery 5:00PM cut-off"
+              placeholder="Eg. Same day delivery 5:00PM cut-off"
               fullWidth
             />
 
@@ -269,7 +278,7 @@ export function AdminSettingCreateStore() {
               value={formState.operatingHours}
               name="operatingHours"
               label="Operating Hours"
-              placeholder="MON - SUN (10AM - 7PM)"
+              placeholder="Eg. MON - SUN (10AM - 7PM)"
               fullWidth
             />
           </div>
@@ -291,8 +300,17 @@ export function AdminSettingCreateStore() {
             </h4>
           </div>
         </div>
-
-        <AdminStoreSelector />
+        <AdminSearchStoreCoordinates
+          lat={formState.lat}
+          lng={formState.lng}
+          onLatLngChanged={(coordinates) => {
+            setFormState((val) => ({
+              ...val,
+              lat: coordinates.lat,
+              lng: coordinates.lng,
+            }));
+          }}
+        />
 
         <h1 className="text-2xl font-bold text-secondary !my-2">
           Service Selection

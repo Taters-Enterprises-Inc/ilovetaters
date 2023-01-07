@@ -186,13 +186,15 @@ export interface CreateAdminSettingStoreParam {
   name: string;
   address: string;
   storeMenu: string;
-  availableStartTime: Moment | string;
-  availableEndTime: Moment | string;
+  availableStartTime: string;
+  availableEndTime: string;
   phoneNumber: string;
   contactPerson: string;
   email: string;
   deliveryHours: string;
   operatingHours: string;
+  lat: number;
+  lng: number;
   services: string;
   products: string;
   image250x250: File | string;

@@ -2,13 +2,32 @@ import { useState } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 
-export function AdminStoreSelector() {
-  const [marker, setMarker] = useState<{ lat: number; lng: number }>({
-    lat: 14.660950420631163,
-    lng: 121.0873865267099,
-  });
+interface AdminSearchStoreCoordinatesProps {
+  lat: number;
+  lng: number;
+  onLatLngChanged: (latLng: { lat: number; lng: number }) => void;
+}
+
+export function AdminSearchStoreCoordinates(
+  props: AdminSearchStoreCoordinatesProps
+) {
   const [center, setCenter] = useState<any>();
   const [address, setAddress] = useState("");
+
+  const handleCoordinatesChanged = (place: {
+    lat: number;
+    lng: number;
+    formattedAddress: string;
+  }) => {
+    const coordinates = {
+      lat: place.lat,
+      lng: place.lng,
+    };
+
+    setCenter(coordinates);
+    props.onLatLngChanged(coordinates);
+    setAddress(place.formattedAddress);
+  };
 
   return (
     <>
@@ -19,29 +38,8 @@ export function AdminStoreSelector() {
         }}
         onDenied={() => {}}
         onPrompt={() => {}}
-        onLocateCurrentAddress={(place) => {
-          setCenter({
-            lat: place.lat,
-            lng: place.lng,
-          });
-          setMarker({
-            lat: place.lat,
-            lng: place.lng,
-          });
-          setAddress(place.formattedAddress);
-        }}
-        onPlaceSelected={(place) => {
-          setCenter({
-            lat: place.lat,
-            lng: place.lng,
-          });
-
-          setMarker({
-            lat: place.lat,
-            lng: place.lng,
-          });
-          setAddress(place.formattedAddress);
-        }}
+        onLocateCurrentAddress={handleCoordinatesChanged}
+        onPlaceSelected={handleCoordinatesChanged}
       />
       <h4 className="mt-1 text-sm leading-5 text-secondary">
         <strong>Note:</strong> you can mark your position in the map by left
@@ -71,10 +69,8 @@ export function AdminStoreSelector() {
                     const place = results[0].formatted_address;
 
                     setAddress(place);
-                    setMarker({
-                      lat,
-                      lng,
-                    });
+
+                    props.onLatLngChanged({ lat, lng });
                   } else {
                     console.log("No results found");
                   }
@@ -86,7 +82,7 @@ export function AdminStoreSelector() {
           }
         }}
       >
-        <MarkerF position={{ lat: marker.lat, lng: marker.lng }} />
+        <MarkerF position={{ lat: props.lat, lng: props.lng }} />
       </GoogleMap>
     </>
   );
