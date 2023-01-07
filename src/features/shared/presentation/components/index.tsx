@@ -29,3 +29,4 @@ export { MaterialTimeInput } from "./material-time-input";
 export { MaterialPhoneInput } from "./material-phone-input";
 
 export { UploadFile } from "./upload-file";
+export { MaterialInputAddress } from "./material-input-address";

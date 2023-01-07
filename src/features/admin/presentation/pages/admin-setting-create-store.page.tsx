@@ -9,7 +9,7 @@ import {
   UploadFile,
 } from "features/shared/presentation/components";
 import { FormEvent, useState, useEffect } from "react";
-import { AdminHead } from "../components";
+import { AdminHead, AdminStoreSelector } from "../components";
 import {
   getAdminProducts,
   GetAdminProductsState,
@@ -28,7 +28,6 @@ import {
   selectCreateAdminSettingStore,
 } from "../slices/create-admin-setting-store.slice";
 import { useNavigate } from "react-router-dom";
-import AdminStoreSelector from "../components/admin-store-selector";
 
 export function AdminSettingCreateStore() {
   const dispatch = useAppDispatch();
