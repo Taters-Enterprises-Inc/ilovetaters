@@ -28,6 +28,14 @@ import {
   selectCreateAdminSettingStore,
 } from "../slices/create-admin-setting-store.slice";
 import { useNavigate } from "react-router-dom";
+import {
+  getAdminStoreRegions,
+  selectGetAdminStoreRegions,
+} from "../slices/get-admin-store-regions.slice";
+import {
+  getAdminStoreActiveResellerRegions,
+  selectGetAdminStoreActiveResellerRegions,
+} from "../slices/get-admin-store-active-reseller-regions.slice";
 
 export function AdminSettingCreateStore() {
   const dispatch = useAppDispatch();
@@ -45,6 +53,8 @@ export function AdminSettingCreateStore() {
     deliveryHours: string;
     operatingHours: string;
     image250x250: File | string;
+    region: string;
+    activeResellerRegion: string;
     lat: number;
     lng: number;
     services: Array<string>;
@@ -63,6 +73,8 @@ export function AdminSettingCreateStore() {
     image250x250: "",
     lat: 14.660950420631163,
     lng: 121.0873865267099,
+    region: "",
+    activeResellerRegion: "",
     services: [
       "Snackshop",
       "Catering",
@@ -74,6 +86,10 @@ export function AdminSettingCreateStore() {
 
   const getAdminStoreMenusState = useAppSelector(selectGetAdminStoreMenus);
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
+  const getAdminStoreRegionsState = useAppSelector(selectGetAdminStoreRegions);
+  const getAdminStoreActiveResellerRegionsState = useAppSelector(
+    selectGetAdminStoreActiveResellerRegions
+  );
   const createAdminSettingStoreState = useAppSelector(
     selectCreateAdminSettingStore
   );
@@ -81,6 +97,8 @@ export function AdminSettingCreateStore() {
   useEffect(() => {
     dispatch(getAdminStoreMenus());
     dispatch(getAdminProducts());
+    dispatch(getAdminStoreRegions());
+    dispatch(getAdminStoreActiveResellerRegions());
   }, [dispatch]);
 
   useEffect(() => {
@@ -88,7 +106,7 @@ export function AdminSettingCreateStore() {
       createAdminSettingStoreState.status ===
       CreateAdminSettingStoreState.success
     ) {
-      navigate("/admin/setting/product");
+      navigate("/admin/setting/store");
       dispatch(resetCreateAdminSettingStoreState());
     }
   }, [createAdminSettingStoreState, dispatch, navigate]);
@@ -148,8 +166,11 @@ export function AdminSettingCreateStore() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "User", url: "/admin/setting/user" },
-            { name: "Create User", url: "/admin/setting/user/create-user" },
+            { name: "Stores", url: "/admin/setting/user" },
+            {
+              name: "Create new store",
+              url: "/admin/setting/store/create-store",
+            },
           ],
         }}
       />
@@ -281,6 +302,42 @@ export function AdminSettingCreateStore() {
               placeholder="Eg. MON - SUN (10AM - 7PM)"
               fullWidth
             />
+
+            <div className="grid grid-cols-2 gap-4">
+              <MaterialInput
+                colorTheme="black"
+                name="region"
+                required
+                label="Region"
+                select
+                fullWidth
+                value={formState.region}
+                onChange={handleInputChange}
+              >
+                {getAdminStoreRegionsState.data?.map((region) => (
+                  <MenuItem value={region.id}>{region.name}</MenuItem>
+                ))}
+              </MaterialInput>
+
+              <MaterialInput
+                colorTheme="black"
+                name="activeResellerRegion"
+                required
+                label="Active Reseller Region"
+                select
+                fullWidth
+                value={formState.activeResellerRegion}
+                onChange={handleInputChange}
+              >
+                {getAdminStoreActiveResellerRegionsState.data?.map(
+                  (activeResellerRegion) => (
+                    <MenuItem value={activeResellerRegion.id}>
+                      {activeResellerRegion.name}
+                    </MenuItem>
+                  )
+                )}
+              </MaterialInput>
+            </div>
           </div>
 
           <div>

@@ -94,10 +94,8 @@ import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-
 import getAdminProductCategories from "features/admin/presentation/slices/get-admin-product-categories.slice";
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
-import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
 import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
-import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
 import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
 import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
 import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
@@ -164,6 +162,8 @@ import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-ad
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
 import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
+import getAdminStoreRegions from "features/admin/presentation/slices/get-admin-store-regions.slice";
+import getAdminStoreActiveResellerRegions from "features/admin/presentation/slices/get-admin-store-active-reseller-regions.slice";
 
 export const store = configureStore({
   reducer: {
@@ -261,10 +261,8 @@ export const store = configureStore({
     getAdminProductCategories,
     updateStoreProduct,
     getAdminSettingStores,
-    updateAdminSettingStore,
     adminDeclineRedeem,
     getAdminStore,
-    updateAdminSettingStoreOperatingHours,
     getCatersPackageCategories,
     getAdminStoreCatersPackages,
     updateStoreCatersPackage,
@@ -331,6 +329,8 @@ export const store = configureStore({
     getAdminOverallTotalSales,
     getAdminStoreMenus,
     createAdminSettingStore,
+    getAdminStoreRegions,
+    getAdminStoreActiveResellerRegions,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
