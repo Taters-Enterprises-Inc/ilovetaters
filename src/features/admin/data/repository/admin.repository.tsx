@@ -63,6 +63,9 @@ import { SaleModel } from "features/admin/core/domain/sale.model";
 import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
 import { StoreMenuModel } from "../../core/domain/store-menu.model";
 import { AdminRegionModel } from "features/admin/core/domain/admin-region.model";
+import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-locale.model";
+import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -509,15 +512,40 @@ export interface GetAdminStoreRegionsResponse {
   };
 }
 
-export interface GetAdminStoreActiveResellerRegionsResponse {
+export interface GetAdminPackagesResponse {
   data: {
     message: string;
-    data: Array<AdminRegionModel>;
+    data: Array<AdminPackageModel>;
+  };
+}
+export interface GetAdminDealsResponse {
+  data: {
+    message: string;
+    data: Array<AdminDealModel>;
   };
 }
 
-export function GetAdminStoreActiveResellerRegionsRepository(): Promise<GetAdminStoreActiveResellerRegionsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/active-reseller-regions`, {
+export function GetAdminDealsRepository(): Promise<GetAdminDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deals`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminPackagesRepository(): Promise<GetAdminPackagesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/packages`, {
+    withCredentials: true,
+  });
+}
+
+export interface GetAdminStoreLocalesResponse {
+  data: {
+    message: string;
+    data: Array<AdminStoreLocaleModel>;
+  };
+}
+
+export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/locales`, {
     withCredentials: true,
   });
 }

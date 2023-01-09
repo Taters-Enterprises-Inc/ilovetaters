@@ -163,7 +163,9 @@ import getAdminOverallTotalSales from "features/admin/presentation/slices/get-ad
 import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
 import getAdminStoreRegions from "features/admin/presentation/slices/get-admin-store-regions.slice";
-import getAdminStoreActiveResellerRegions from "features/admin/presentation/slices/get-admin-store-active-reseller-regions.slice";
+import getAdminStoreLocales from "features/admin/presentation/slices/get-admin-store-locales.slice";
+import getAdminPackages from "features/admin/presentation/slices/get-admin-packages.slice";
+import getAdminDeals from "features/admin/presentation/slices/get-admin-deals.slice";
 
 export const store = configureStore({
   reducer: {
@@ -330,7 +332,9 @@ export const store = configureStore({
     getAdminStoreMenus,
     createAdminSettingStore,
     getAdminStoreRegions,
-    getAdminStoreActiveResellerRegions,
+    getAdminStoreLocales,
+    getAdminPackages,
+    getAdminDeals,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

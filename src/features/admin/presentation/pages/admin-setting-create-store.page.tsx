@@ -33,9 +33,20 @@ import {
   selectGetAdminStoreRegions,
 } from "../slices/get-admin-store-regions.slice";
 import {
-  getAdminStoreActiveResellerRegions,
-  selectGetAdminStoreActiveResellerRegions,
-} from "../slices/get-admin-store-active-reseller-regions.slice";
+  getAdminStoreLocales,
+  selectGetAdminStoreLocales,
+} from "../slices/get-admin-store-locales.slice";
+import {
+  getAdminDeals,
+  selectGetAdminDeals,
+} from "../slices/get-admin-deals.slice";
+import {
+  getAdminPackages,
+  GetAdminPackagesState,
+  selectGetAdminPackages,
+} from "../slices/get-admin-packages.slice";
+import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
 
 export function AdminSettingCreateStore() {
   const dispatch = useAppDispatch();
@@ -52,13 +63,20 @@ export function AdminSettingCreateStore() {
     email: string;
     deliveryHours: string;
     operatingHours: string;
-    image250x250: File | string;
     region: string;
     activeResellerRegion: string;
     lat: number;
     lng: number;
+    deliveryRate: string;
+    minimumRate: string;
+    cateringDeliveryRate: string;
+    cateringMinimumRate: string;
+    storeHash: string;
+    locale: string;
+    image250x250: File | string;
     services: Array<string>;
     products: Array<AdminProductModel>;
+    packages: Array<AdminPackageModel>;
   }>({
     storeMenu: "",
     availableStartTime: null,
@@ -70,11 +88,17 @@ export function AdminSettingCreateStore() {
     email: "",
     deliveryHours: "",
     operatingHours: "",
-    image250x250: "",
     lat: 14.660950420631163,
     lng: 121.0873865267099,
+    deliveryRate: "",
+    minimumRate: "",
+    cateringDeliveryRate: "",
+    cateringMinimumRate: "",
+    storeHash: "",
+    locale: "",
     region: "",
     activeResellerRegion: "",
+    image250x250: "",
     services: [
       "Snackshop",
       "Catering",
@@ -82,23 +106,26 @@ export function AdminSettingCreateStore() {
       "PopClub Online Delivery",
     ],
     products: [],
+    packages: [],
   });
 
   const getAdminStoreMenusState = useAppSelector(selectGetAdminStoreMenus);
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
+  const getAdminPackagesState = useAppSelector(selectGetAdminPackages);
+  const getAdminDealsState = useAppSelector(selectGetAdminDeals);
   const getAdminStoreRegionsState = useAppSelector(selectGetAdminStoreRegions);
-  const getAdminStoreActiveResellerRegionsState = useAppSelector(
-    selectGetAdminStoreActiveResellerRegions
-  );
   const createAdminSettingStoreState = useAppSelector(
     selectCreateAdminSettingStore
   );
+  const getAdminStoreLocalesState = useAppSelector(selectGetAdminStoreLocales);
 
   useEffect(() => {
     dispatch(getAdminStoreMenus());
     dispatch(getAdminProducts());
+    dispatch(getAdminPackages());
+    dispatch(getAdminDeals());
     dispatch(getAdminStoreRegions());
-    dispatch(getAdminStoreActiveResellerRegions());
+    dispatch(getAdminStoreLocales());
   }, [dispatch]);
 
   useEffect(() => {
@@ -106,7 +133,7 @@ export function AdminSettingCreateStore() {
       createAdminSettingStoreState.status ===
       CreateAdminSettingStoreState.success
     ) {
-      navigate("/admin/setting/store");
+      // navigate("/admin/setting/store");
       dispatch(resetCreateAdminSettingStoreState());
     }
   }, [createAdminSettingStoreState, dispatch, navigate]);
@@ -120,6 +147,16 @@ export function AdminSettingCreateStore() {
       setFormState((f) => ({ ...f, products }));
     }
   }, [getAdminProductsState]);
+
+  useEffect(() => {
+    const packages = getAdminPackagesState.data;
+    if (
+      getAdminPackagesState.status === GetAdminPackagesState.success &&
+      packages
+    ) {
+      setFormState((f) => ({ ...f, packages }));
+    }
+  }, [getAdminPackagesState]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -142,7 +179,14 @@ export function AdminSettingCreateStore() {
           availableStartTime: formState.availableStartTime.format("HH:mm:ss"),
           availableEndTime: formState.availableEndTime.format("HH:mm:ss"),
           services: JSON.stringify(formState.services),
-          products: JSON.stringify(formState.products),
+          products: formState.services.some(
+            (service) => service === "Snackshop"
+          )
+            ? JSON.stringify(formState.products)
+            : "",
+          packages: formState.services.some((service) => service === "Catering")
+            ? JSON.stringify(formState.packages)
+            : "",
         })
       );
     }
@@ -183,6 +227,26 @@ export function AdminSettingCreateStore() {
       <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
         <div className="flex space-x-4">
           <div className="flex-1 space-y-3">
+            <MaterialInputAutoComplete
+              label="Select Services"
+              colorTheme="black"
+              multiple
+              options={[
+                "Snackshop",
+                "Catering",
+                "PopClub Store Visit",
+                "PopClub Online Delivery",
+              ]}
+              getOptionLabel={(option) => option}
+              value={formState.services ? [...formState.services] : []}
+              onChange={(e, services) => {
+                setFormState({
+                  ...formState,
+                  services,
+                });
+              }}
+              filterSelectedOptions
+            />
             <div className="grid grid-cols-3 gap-4">
               <MaterialInput
                 colorTheme="black"
@@ -303,7 +367,84 @@ export function AdminSettingCreateStore() {
               fullWidth
             />
 
+            <div className="flex space-x-4">
+              <MaterialInput
+                required
+                type="number"
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.deliveryRate}
+                name="deliveryRate"
+                label="Delivery Rate"
+                className="flex-1"
+                fullWidth
+              />
+              <MaterialInput
+                required
+                type="number"
+                colorTheme="black"
+                onChange={handleInputChange}
+                value={formState.minimumRate}
+                name="minimumRate"
+                label="Minimum Rate"
+                className="flex-1"
+                fullWidth
+              />
+
+              {formState.services.some((service) => service === "Catering") ? (
+                <>
+                  <MaterialInput
+                    required
+                    type="number"
+                    colorTheme="black"
+                    onChange={handleInputChange}
+                    value={formState.cateringDeliveryRate}
+                    name="cateringDeliveryRate"
+                    label="Catering Delivery Rate"
+                    className="flex-1"
+                    fullWidth
+                  />
+                  <MaterialInput
+                    required
+                    type="number"
+                    colorTheme="black"
+                    onChange={handleInputChange}
+                    value={formState.cateringMinimumRate}
+                    name="cateringMinimumRate"
+                    label="Catering Minimum Rate"
+                    className="flex-1"
+                    fullWidth
+                  />
+                </>
+              ) : null}
+            </div>
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.storeHash}
+              name="storeHash"
+              label="Store hash"
+              fullWidth
+              placeholder="Eg. TSS0191"
+            />
+
             <div className="grid grid-cols-2 gap-4">
+              <MaterialInput
+                colorTheme="black"
+                name="locale"
+                required
+                label="Locale"
+                select
+                fullWidth
+                value={formState.locale}
+                onChange={handleInputChange}
+              >
+                {getAdminStoreLocalesState.data?.map((locale) => (
+                  <MenuItem value={locale.id}>{locale.name}</MenuItem>
+                ))}
+              </MaterialInput>
               <MaterialInput
                 colorTheme="black"
                 name="region"
@@ -318,26 +459,18 @@ export function AdminSettingCreateStore() {
                   <MenuItem value={region.id}>{region.name}</MenuItem>
                 ))}
               </MaterialInput>
-
-              <MaterialInput
-                colorTheme="black"
-                name="activeResellerRegion"
-                required
-                label="Active Reseller Region"
-                select
-                fullWidth
-                value={formState.activeResellerRegion}
-                onChange={handleInputChange}
-              >
-                {getAdminStoreActiveResellerRegionsState.data?.map(
-                  (activeResellerRegion) => (
-                    <MenuItem value={activeResellerRegion.id}>
-                      {activeResellerRegion.name}
-                    </MenuItem>
-                  )
-                )}
-              </MaterialInput>
             </div>
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.activeResellerRegion}
+              name="activeResellerRegion"
+              label="Active Reseller Region"
+              fullWidth
+              placeholder="Davao City - Tulip Drive Davao"
+            />
           </div>
 
           <div>
@@ -369,32 +502,8 @@ export function AdminSettingCreateStore() {
           }}
         />
 
-        <h1 className="text-2xl font-bold text-secondary !my-2">
-          Service Selection
-        </h1>
-
-        <MaterialInputAutoComplete
-          label="Select Services"
-          colorTheme="black"
-          multiple
-          options={[
-            "Snackshop",
-            "Catering",
-            "PopClub Store Visit",
-            "PopClub Online Delivery",
-          ]}
-          getOptionLabel={(option) => option}
-          value={formState.services ? [...formState.services] : []}
-          onChange={(e, services) => {
-            setFormState({
-              ...formState,
-              services,
-            });
-          }}
-          filterSelectedOptions
-        />
-
-        {getAdminProductsState.data ? (
+        {getAdminProductsState.data &&
+        formState.services.some((service) => service === "Snackshop") ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Product Selection
@@ -411,6 +520,31 @@ export function AdminSettingCreateStore() {
                 setFormState({
                   ...formState,
                   products,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminPackagesState.data &&
+        formState.services.some((service) => service === "Catering") ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Package Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Packages"
+              colorTheme="black"
+              multiple
+              options={getAdminPackagesState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.packages ? [...formState.packages] : []}
+              onChange={(e, packages) => {
+                setFormState({
+                  ...formState,
+                  packages,
                 });
               }}
               filterSelectedOptions

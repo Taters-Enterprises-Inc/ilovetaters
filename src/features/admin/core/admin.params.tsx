@@ -195,7 +195,14 @@ export interface CreateAdminSettingStoreParam {
   operatingHours: string;
   lat: number;
   lng: number;
+  deliveryRate: string;
+  minimumRate: string;
+  cateringDeliveryRate: string;
+  cateringMinimumRate: string;
+  storeHash: string;
+  locale: string;
   services: string;
   products: string;
+  packages: string;
   image250x250: File | string;
 }
