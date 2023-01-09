@@ -23,3 +23,5 @@ export { AdminIdUserDiscountInformation } from "./admin-user-discount-id-informa
 export { AdminSurveyVerifications } from "./admin-survey-verifications";
 export { AdminSettingShopProducts } from "./admin-setting-shop-products";
 export { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
+export { AdminDashboardSalesLineChart } from "./admin-dashboard-sales-line-chart";
+export { AdminTotalSalesCard } from "./admin-total-sales-card";

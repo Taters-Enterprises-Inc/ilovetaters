@@ -25,6 +25,8 @@ import {
   UpdateCatersPackageParam,
   UpdateAdminSettingShopProductStatusParam,
   UpdateAdminCateringOrderItemRemarksParam,
+  GetAdminSalesParam,
+  GetAdminTotalSalesParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -58,6 +60,8 @@ import { ProductTypeModel } from "features/shared/core/domain/product_type.model
 import { AdminSettingCatersPackageModel } from "features/admin/core/domain/admin-setting-caters-package.model";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
+import { SaleModel } from "features/admin/core/domain/sale.model";
+import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -506,6 +510,39 @@ export interface GetAdminCateringPackageFlavorsResponse {
     message: string;
     data: Array<PackageFlavorModel>;
   };
+}
+
+export interface GetAdminSalesResponse {
+  data: {
+    message: string;
+    data: Array<SaleModel>;
+  };
+}
+
+export interface GetAdminTotalSalesResponse {
+  data: {
+    message: string;
+    data: TotalSalesModel;
+  };
+}
+
+export function GetAdminTotalSalesRepository(
+  param: GetAdminTotalSalesParam
+): Promise<GetAdminTotalSalesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}/sum`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSalesRepository(
+  param: GetAdminSalesParam
+): Promise<GetAdminSalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {
