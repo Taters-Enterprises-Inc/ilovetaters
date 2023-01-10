@@ -114,9 +114,6 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
         filteredPackageFlavors.push(newPackageFlavor);
       }
 
-      console.log(filteredPackageFlavors);
-      console.log(currentFlavors);
-
       setFlavors(filteredPackageFlavors);
 
       dispatch(resetGetAdminCateringFlavorsState());
