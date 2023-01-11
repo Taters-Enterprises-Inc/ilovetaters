@@ -610,7 +610,7 @@ export function ShopCheckout() {
                         {getSessionState.data.orders.map((order, i) => (
                           <div
                             key={i}
-                            className="flex bg-secondary shadow-lg rounded-[10px] relative"
+                            className="flex bg-secondary shadow-lg rounded-[10px] relative  p-4"
                           >
                             <img
                               src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
@@ -638,7 +638,7 @@ export function ShopCheckout() {
                               ) : null}
 
                               {order.prod_multiflavors ? (
-                                <h3 className="text-xs">
+                                <h3 className="text-xs ">
                                   Flavor:
                                   <br />
                                   <span
@@ -674,7 +674,7 @@ export function ShopCheckout() {
                                   </h3>
                                 </div>
                               ) : (
-                                <h3 className="flex items-end justify-end flex-1 text-base">
+                                <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
                                   <NumberFormat
                                     value={order.prod_calc_amount.toFixed(2)}
                                     displayType={"text"}
