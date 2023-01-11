@@ -23,9 +23,11 @@ import {
   CreateAdminSettingShopProductParam,
   EditAdminSettingShopProductParam,
   UpdateAdminSettingShopProductStatusParam,
+  UpdateStoreCateringProductParam,
   UpdateAdminCateringOrderItemRemarksParam,
   GetAdminSalesParam,
   GetAdminTotalSalesParam,
+  GetAdminCateringPackageFlavorsParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -57,6 +59,7 @@ import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
 import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
+import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/get-admin-store-catering-products.model";
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 import { SaleModel } from "features/admin/core/domain/sale.model";
 import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
@@ -406,6 +409,17 @@ export interface AdminSurveyVerificationChangeStatusResponse {
   };
 }
 
+export interface GetAdminStoreCateringProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCateringProductsModel;
+  };
+}
+export interface UpdateStoreCateringProductResponse {
+  data: {
+    message: string;
+  };
+}
 export interface UpdateAdminCateringOrderItemRemarksResponse {
   data: {
     message: string;
@@ -499,6 +513,18 @@ export interface GetAdminTotalSalesResponse {
   };
 }
 
+export function UpdateStoreCateringProductRepository(
+  param: UpdateStoreCateringProductParam
+): Promise<UpdateStoreCateringProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminTotalSalesRepository(
   param: GetAdminTotalSalesParam
 ): Promise<GetAdminTotalSalesResponse> {
@@ -534,10 +560,10 @@ export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSet
 }
 
 export function GetAdminCateringPackageFlavorsRepository(
-  packageId: number
+  param: GetAdminCateringPackageFlavorsParam
 ): Promise<GetAdminCateringPackageFlavorsResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${packageId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${param.packageId}?type=${param.type}`,
     {
       withCredentials: true,
     }
@@ -664,6 +690,18 @@ export function UpdateAdminCateringOrderItemRemarksRepository(
     }
   );
 }
+
+export function GetAdminStoreCateringProductsRepository(
+  query: string
+): Promise<GetAdminStoreCateringProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
 ) {

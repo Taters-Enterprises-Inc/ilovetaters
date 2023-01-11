@@ -5,12 +5,12 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
-  getCateringCategoryProducts,
-  selectGetCateringCategoryProducts,
-} from "../slices/get-catering-category-products.slice";
+  getCateringCategoryPackages,
+  selectGetCateringCategoryPackages,
+} from "../slices/get-catering-category-packages.slice";
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
@@ -18,9 +18,13 @@ import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 
 export function CateringProducts() {
+  const [
+    openCateringPackageCustomizationModal,
+    setOpenCateringPackageCustomizationModal,
+  ] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
-  const getCateringCategoryProductsState = useAppSelector(
-    selectGetCateringCategoryProducts
+  const getCateringCategoryPackagesState = useAppSelector(
+    selectGetCateringCategoryPackages
   );
 
   const dispatch = useAppDispatch();
@@ -37,7 +41,7 @@ export function CateringProducts() {
     ) {
       if (getSessionState.data.cache_data?.region_id) {
         dispatch(
-          getCateringCategoryProducts({
+          getCateringCategoryPackages({
             region_id: getSessionState.data.cache_data.region_id,
           })
         );
@@ -51,7 +55,7 @@ export function CateringProducts() {
         <CateringHeroCarousel />
       </section>
       <section className="container space-y-10 pb-[90px]">
-        {getCateringCategoryProductsState.data?.map((category, i) => (
+        {getCateringCategoryPackagesState.data?.map((category, i) => (
           <section key={i}>
             <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
               {category.category_name}
@@ -88,10 +92,29 @@ export function CateringProducts() {
             </div>
           </section>
         ))}
+        <section>
+          <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
+            Build your own package
+          </h1>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <Link
+              to="build-your-own-package"
+              className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
+            >
+              <img
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/Popcorn_Catering_Taters_7.jpg`}
+                className="rounded-t-[10px] w-full"
+                alt=""
+              />
 
-        {/* <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
-          FREQUENTLY ASKED QUESTIONS
-        </h3> */}
+              <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
+                <h2 className="text-sm font-bold leading-4 text-white uppercase">
+                  Customize your own package
+                </h2>
+              </div>
+            </Link>
+          </div>
+        </section>
         <CateringFaqs />
       </section>
 

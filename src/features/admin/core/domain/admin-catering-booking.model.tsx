@@ -59,5 +59,6 @@ export interface AdminCateringBookingModel {
     description: string;
     add_details: string;
     product_label: string;
+    type: string;
   }>;
 }

@@ -1,7 +1,7 @@
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 import { ProductModel } from "features/shared/core/domain/product.model";
 
-export interface CateringProductDetailsModel {
+export interface CateringPackageDetailsModel {
   product: ProductModel;
   addons: Array<ProductModel>;
   product_addons: Array<ProductModel>;

@@ -25,7 +25,7 @@ import facebookLogin from "../shared/presentation/slices/facebook-login.slice";
 import facebookLoginPoint from "../shared/presentation/slices/facebook-login-point.slice";
 import facebookLogout from "../shared/presentation/slices/facebook-logout.slice";
 import storeReset from "../shared/presentation/slices/store-reset.slice";
-import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
+import getCateringCategoryPackages from "../catering/presentation/slices/get-catering-category-packages.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
 import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
@@ -37,7 +37,7 @@ import getStoresAvailableSnackshop from "../shop/presentation/slices/get-stores-
 import getStoresAvailableCatering from "../catering/presentation/slices/get-stores-available-catering.slice";
 import getStoresAvailableBranches from "../branches/presentation/slices/get-stores-available-branches.slice";
 import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
-import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
+import getCateringPackageDetails from "../catering/presentation/slices/get-catering-package-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
 import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
@@ -155,6 +155,10 @@ import deleteAdminSettingShopProduct from "features/admin/presentation/slices/de
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
 import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
 import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
+import addToCartCateringProducts from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
+import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
+import getAdminStoreCateringProducts from "features/admin/presentation/slices/get-admin-stores-catering-products.slice";
+import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
 import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
@@ -197,7 +201,7 @@ export const store = configureStore({
     facebookLoginPoint,
     facebookLogout,
     storeReset,
-    getCateringCategoryProducts,
+    getCateringCategoryPackages,
     getProductSku,
     removeItemFromCartShop,
     uploadProofOfPayment,
@@ -205,7 +209,7 @@ export const store = configureStore({
     updateContact,
     deleteContact,
     getContacts,
-    getCateringProductDetails,
+    getCateringPackageDetails,
     addToCartCatering,
     removeItemFromCartCatering,
     popSnackBar,
@@ -320,6 +324,10 @@ export const store = configureStore({
     updateAdminSettingShopProductStatus,
     getAdminSettingShopProductTypes,
     getAdminProducts,
+    addToCartCateringProducts,
+    getCateringCategoryProducts,
+    getAdminStoreCateringProducts,
+    updateStoreCateringProduct,
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
     getAdminSales,

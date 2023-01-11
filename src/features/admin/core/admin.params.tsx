@@ -25,6 +25,11 @@ export interface UpdateStoreProductParam {
   status: "1" | "0";
 }
 
+export interface UpdateStoreCateringProductParam {
+  id: string;
+  status: "1" | "0";
+}
+
 export interface UpdateStoreCatersPackageParam {
   id: string;
   status: "1" | "0";
@@ -180,4 +185,9 @@ export interface GetAdminSalesParam {
 
 export interface GetAdminTotalSalesParam {
   service: "overall" | "snackshop" | "catering" | "popclub";
+}
+
+export interface GetAdminCateringPackageFlavorsParam {
+  packageId: number;
+  type: string;
 }

@@ -32,6 +32,7 @@ import {
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringBuildYourOwnPackage,
   CateringCheckout,
   CateringContract,
   CateringOrder,
@@ -63,6 +64,7 @@ import {
   AdminSettingShopProduct,
   AdminSettingShopCreateProduct,
   AdminSettingShopEditProduct,
+  AdminAvailabilityCatersProduct,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -230,15 +232,18 @@ root.render(
                       <Route path="shop" element={<Catering />}>
                         <Route index element={<CateringHome />} />
                         <Route
-                          path="products/:hash"
-                          element={<CateringProduct />}
-                        />
-                        <Route
                           path="contract/:hash"
                           element={<CateringContract />}
                         />
                         <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route path="products" element={<CateringProducts />} />
+                        <Route path="products">
+                          <Route index element={<CateringProducts />} />
+                          <Route
+                            path="build-your-own-package"
+                            element={<CateringBuildYourOwnPackage />}
+                          />
+                          <Route path=":hash" element={<CateringProduct />} />
+                        </Route>
                         <Route path="checkout" element={<CateringCheckout />} />
                         <Route path="*" element={<NotFound />} />
                       </Route>
@@ -285,6 +290,10 @@ root.render(
                               <Route
                                 path="product"
                                 element={<AdminAvailabilityProduct />}
+                              />
+                              <Route
+                                path="caters-product"
+                                element={<AdminAvailabilityCatersProduct />}
                               />
                               <Route
                                 path="caters-package"
