@@ -407,7 +407,7 @@ export function AdminSettingCreateCatersPackage() {
       </div>
       {/* onSubmit={handleOnSubmit} */}
       <form className="p-4 space-y-3" onSubmit={postPackage} method="POST">
-        <div className="flex space-x-4">
+        <div className="flex flex-col-reverse space-x-0 lg:space-x-4 lg:flex-row">
           <div className="flex-1 space-y-3">
             <div className="flex space-x-2">
               <MaterialInput
@@ -716,7 +716,7 @@ export function AdminSettingCreateCatersPackage() {
               </>
             ) : null}
           </div>
-          <div>
+          <div className="ml-0">
             <div className="grid grid-cols-2 gap-4">
               <UploadFile
                 image={formState.product_image75x75}

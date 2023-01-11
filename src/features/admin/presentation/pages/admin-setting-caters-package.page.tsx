@@ -24,6 +24,7 @@ import { createQueryParams } from "features/config/helpers";
 import { TbTrash } from "react-icons/tb";
 import { MessageModal } from "features/shared/presentation/modals";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { DataList } from "features/shared/presentation/components";
 // import { CreatePackageModal } from "../modals/admin-setting-create-caters-package-modal";
 
 const columns: Array<Column> = [
@@ -97,27 +98,94 @@ export function AdminSettingCatersPackage() {
               <span>&nbsp;&nbsp;Create New Package</span>
             </Link>
           </div>
-          {/* <div>
-            <Link
-              to="create-group"
-              className="inline-flex items-center px-4 tracking-wide bg-button font-['Varela_Round'] text-white py-1 text-xs rounded-md font-700"
-            >
-              <MdOutlineGroupAdd size={20} />
-              <span>&nbsp;&nbsp;Create New Package Add-Ons</span>
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="create-group"
-              className="inline-flex items-center px-4 tracking-wide bg-button font-['Varela_Round'] text-white py-1 text-xs rounded-md font-700"
-            >
-              <MdOutlineGroupAdd size={20} />
-              <span>&nbsp;&nbsp;Create New Product Add-Ons</span>
-            </Link>
-          </div> */}
         </div>
       </div>
-      {/* $data['results'] */}
+
+      <div className="p-4 lg:hidden">
+        <DataList
+          search={search ?? ""}
+          emptyMessage="No stores yet."
+          onSearch={(val) => {
+            const params = {
+              page_no: null,
+              per_page: perPage,
+              order_by: orderBy,
+              order: order,
+              search: val === "" ? null : val,
+            };
+
+            const queryParams = createQueryParams(params);
+
+            navigate({
+              pathname: "",
+              search: queryParams,
+            });
+          }}
+          onRowsPerPageChange={(event) => {
+            if (perPage !== event.target.value) {
+              const params = {
+                page_no: pageNo,
+                per_page: event.target.value,
+                search: search,
+              };
+
+              const queryParams = createQueryParams(params);
+
+              dispatch(resetGetCataringPackageListsStatus());
+              navigate({
+                pathname: "",
+                search: queryParams,
+              });
+            }
+          }}
+          onPageChange={(event, newPage) => {
+            const pageNoInt = pageNo ? parseInt(pageNo) : null;
+            if (newPage !== pageNoInt) {
+              const params = {
+                page_no: newPage,
+                per_page: perPage,
+                search: search,
+              };
+
+              const queryParams = createQueryParams(params);
+
+              dispatch(resetGetCataringPackageListsStatus());
+              navigate({
+                pathname: "",
+                search: queryParams,
+              });
+            }
+          }}
+          totalRows={pagination.total_rows}
+          perPage={pagination.per_page}
+          page={pageNo ? parseInt(pageNo) : 1}
+        >
+          <hr className="mt-4" />
+          {packages.map((row, i) => (
+            <div
+              className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
+              key={i}
+            >
+              <span className="flex flex-wrap items-center justify-between space-x-1 text-xl">
+                <span className="text-xs lg:text-bas">{row.name}</span>
+
+                <div className="flex">
+                  <Link to={`edit-caters-package/${row.id}`}>
+                    <MdEditNote className="text-2xl text-slate-500 hover:text-black"></MdEditNote>
+                  </Link>
+                  <TbTrash
+                    className="text-2xl cursor-pointer text-slate-500 hover:text-black"
+                    onClick={() => {
+                      setOpenDeleteMessageModal(true);
+                      setDeleteID(row.id);
+                    }}
+                  ></TbTrash>
+                </div>
+              </span>
+            </div>
+          ))}
+        </DataList>
+      </div>
       <div className="hidden p-4 lg:block">
         <DataTable
           order={order === "asc" ? "asc" : "desc"}
