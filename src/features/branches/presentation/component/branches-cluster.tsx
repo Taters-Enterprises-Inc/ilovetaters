@@ -80,7 +80,7 @@ export function BranchesCluster() {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white" />}
               >
-                <div className="flex items-center justify-start flex-1 space-x-4">
+                <div className="flex items-center justify-start flex-1 space-x-4 text-xl font-semibold">
                   <span>{store_cluster.region_name}</span>
                 </div>
               </AccordionSummary>
