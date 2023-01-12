@@ -13,7 +13,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { DataList } from "features/shared/presentation/components";
+import {
+  DataList,
+  MaterialInput,
+  MaterialInputAutoComplete,
+} from "features/shared/presentation/components";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -102,7 +106,7 @@ export function AdminAvailabilityCatersProducts() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Catering Products Availability
+          Build Your Own Package Availability
         </span>
 
         <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
@@ -162,11 +166,12 @@ export function AdminAvailabilityCatersProducts() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
-              options={getAdminSessionState.data.admin.user_details.stores}
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               sx={{ width: 328 }}
               size="small"
+              options={getAdminSessionState.data.admin.user_details.stores}
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
               }
@@ -192,52 +197,50 @@ export function AdminAvailabilityCatersProducts() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
       </div>
       <div className="px-4 py-2">
         {getAdminProductCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
-            <InputLabel>Filter by category</InputLabel>
+          <MaterialInput
+            colorTheme="black"
+            select
+            label="Filter by category"
+            name="category"
+            className="!min-w-[150px]"
+            size="small"
+            value={categoryId ?? "all"}
+            onChange={(event) => {
+              if (event.target.value !== status) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: status,
+                  store_id: storeId,
+                  category_id:
+                    event.target.value === "all" ? null : event.target.value,
+                  search: search,
+                };
 
-            <Select
-              label="Filter by category"
-              defaultValue={categoryId ?? "all"}
-              onChange={(event) => {
-                if (event.target.value !== status) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    status: status,
-                    store_id: storeId,
-                    category_id:
-                      event.target.value === "all" ? null : event.target.value,
-                    search: search,
-                  };
+                const queryParams = createQueryParams(params);
 
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="all">
-                <span className="text-xs lg:text-base">All</span>
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
+            }}
+          >
+            <MenuItem value="all">
+              <span className="text-xs lg:text-base">All</span>
+            </MenuItem>
+            {getAdminProductCategoriesState.data?.map((category, index) => (
+              <MenuItem key={index} value={category.id}>
+                <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>
-              {getAdminProductCategoriesState.data?.map((category, index) => (
-                <MenuItem key={index} value={category.id}>
-                  <span className="text-xs lg:text-base">{category.name}</span>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            ))}
+          </MaterialInput>
         ) : null}
       </div>
 

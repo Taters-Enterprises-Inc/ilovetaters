@@ -11,7 +11,12 @@ export function AdminAvailabilityCatersPackageAddon() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Availabilities", url: "/admin/availabilities" },
+            { name: "Availabilities" },
+            { name: "Catering" },
+            {
+              name: "Package Add-ons",
+              url: "/admin/availability/catering/package-addon",
+            },
           ],
         }}
       />

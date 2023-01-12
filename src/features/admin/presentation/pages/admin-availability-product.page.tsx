@@ -11,7 +11,12 @@ export function AdminAvailabilityProduct() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Availabilities", url: "/admin/availabilities" },
+            { name: "Availabilities" },
+            { name: "Shop" },
+            {
+              name: "Product",
+              url: "/admin/availability/shop/product",
+            },
           ],
         }}
       />
