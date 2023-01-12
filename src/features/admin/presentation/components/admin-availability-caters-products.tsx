@@ -22,9 +22,9 @@ import {
   selectGetAdminStoreCateringProducts,
 } from "../slices/get-admin-stores-catering-products.slice";
 import {
-  getProductCategories,
-  selectGetProductCategories,
-} from "../slices/get-product-categories.slice";
+  getAdminProductCategories,
+  selectGetAdminProductCategories,
+} from "../slices/get-admin-product-categories.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -58,18 +58,20 @@ export function AdminAvailabilityCatersProducts() {
     selectGetAdminStoreCateringProducts
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getProductCategoriesState = useAppSelector(selectGetProductCategories);
+  const getAdminProductCategoriesState = useAppSelector(
+    selectGetAdminProductCategories
+  );
   const updateStoreCateringProductState = useAppSelector(
     selectUpdateStoreCateringProduct
   );
 
   useEffect(() => {
-    dispatch(getProductCategories());
+    dispatch(getAdminProductCategories());
   }, [dispatch]);
 
   useEffect(() => {
     const defaultStoreId =
-      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
+      getAdminSessionState.data?.admin.user_details.stores[0].store_id ?? 3;
 
     const query = createQueryParams({
       page_no: pageNo,
@@ -162,10 +164,12 @@ export function AdminAvailabilityCatersProducts() {
           {getAdminSessionState.data ? (
             <Autocomplete
               disablePortal
-              options={getAdminSessionState.data.user_details.stores}
+              options={getAdminSessionState.data.admin.user_details.stores}
               sx={{ width: 328 }}
               size="small"
-              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              defaultValue={
+                getAdminSessionState.data.admin.user_details.stores[0]
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
@@ -196,7 +200,7 @@ export function AdminAvailabilityCatersProducts() {
         </div>
       </div>
       <div className="px-4 py-2">
-        {getProductCategoriesState.data ? (
+        {getAdminProductCategoriesState.data ? (
           <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
             <InputLabel>Filter by category</InputLabel>
 
@@ -227,7 +231,7 @@ export function AdminAvailabilityCatersProducts() {
               <MenuItem value="all">
                 <span className="text-xs lg:text-base">All</span>
               </MenuItem>
-              {getProductCategoriesState.data?.map((category, index) => (
+              {getAdminProductCategoriesState.data?.map((category, index) => (
                 <MenuItem key={index} value={category.id}>
                   <span className="text-xs lg:text-base">{category.name}</span>
                 </MenuItem>
