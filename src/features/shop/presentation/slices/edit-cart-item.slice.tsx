@@ -4,8 +4,8 @@ import { RootState } from "features/config/store";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
 
 import {
-  GetEditCartItemRepository,
-  GetEditCartItemResponse,
+  EditCartItemRepository,
+  EditCartItemResponse,
 } from "features/shop/data/repository/shop.repository";
 
 export enum EditCartItemState {
@@ -17,13 +17,11 @@ export enum EditCartItemState {
 
 interface InitialState {
   status: EditCartItemState;
-  data: GetEditCartItemResponse | undefined;
   message: string;
 }
 
 const initialState: InitialState = {
   status: EditCartItemState.initial,
-  data: undefined,
   message: "",
 };
 
@@ -31,7 +29,7 @@ export const editCartItem = createAsyncThunk(
   "editCartItem",
   async (params: EditCartItemModel, { rejectWithValue }) => {
     try {
-      const response: GetEditCartItemResponse = await GetEditCartItemRepository(
+      const response: EditCartItemResponse = await EditCartItemRepository(
         params
       );
       return response.data;
@@ -53,7 +51,6 @@ export const editCartItemSlice = createSlice({
   reducers: {
     resetEditCartItem: (state) => {
       state.status = EditCartItemState.initial;
-      state.data = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -63,9 +60,8 @@ export const editCartItemSlice = createSlice({
       })
       .addCase(editCartItem.fulfilled, (state, action) => {
         if (action.payload) {
-          const { data, message } = action.payload;
+          const { message } = action.payload;
 
-          state.data = data;
           state.message = message;
           state.status = EditCartItemState.success;
         }
@@ -73,7 +69,6 @@ export const editCartItemSlice = createSlice({
       .addCase(editCartItem.rejected, (state, action) => {
         state.status = EditCartItemState.fail;
         state.message = action.payload as string;
-        state.data = undefined;
       });
   },
 });

@@ -18,6 +18,7 @@ import {
   AddToCartShopParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { AutomaticDiscountBasketSizeModel } from "features/shared/core/domain/automatic-discount-basket-size.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -77,11 +78,32 @@ export interface GetCartItemResponse {
     data: CartItemModel;
   };
 }
+export interface EditCartItemResponse {
+  data: {
+    message: string;
+  };
+}
 export interface GetEditCartItemResponse {
   data: {
     message: string;
-    data: GetEditCartItemResponse;
   };
+}
+export interface GetAutomaticDiscountBasketSizesResponse {
+  data: {
+    message: string;
+    data: Array<AutomaticDiscountBasketSizeModel>;
+  };
+}
+
+export function GetAutomaticDiscountBasketSizesRepository(): Promise<GetAutomaticDiscountBasketSizesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/shop/automatic-discount-basket-sizes`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
 export function RemoveItemFromCartShopRepository(
@@ -190,7 +212,7 @@ export function GetCartItemRepository(
   });
 }
 
-export function GetEditCartItemRepository(
+export function EditCartItemRepository(
   params: EditCartItemModel
 ): Promise<GetEditCartItemResponse> {
   return axios.put(`${REACT_APP_DOMAIN_URL}api/cart/shop`, params, {

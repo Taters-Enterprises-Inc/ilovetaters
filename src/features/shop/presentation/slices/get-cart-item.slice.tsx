@@ -7,7 +7,7 @@ import {
   GetCartItemRepository,
 } from "features/shop/data/repository/shop.repository";
 
-export enum EditCartState {
+export enum GetCartState {
   initial,
   inProgress,
   success,
@@ -15,13 +15,13 @@ export enum EditCartState {
 }
 
 interface InitialState {
-  status: EditCartState;
+  status: GetCartState;
   message: string;
   data: CartItemModel | undefined;
 }
 
 const initialState: InitialState = {
-  status: EditCartState.initial,
+  status: GetCartState.initial,
   message: "",
   data: undefined,
 };
@@ -52,19 +52,19 @@ export const getCartItemSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCartItem.pending, (state) => {
-        state.status = EditCartState.inProgress;
+        state.status = GetCartState.inProgress;
       })
       .addCase(getCartItem.fulfilled, (state, action) => {
         if (action.payload) {
           const { data, message } = action.payload;
 
-          state.status = EditCartState.success;
+          state.status = GetCartState.success;
           state.message = message;
           state.data = data;
         }
       })
       .addCase(getCartItem.rejected, (state, action) => {
-        state.status = EditCartState.fail;
+        state.status = GetCartState.fail;
 
         state.message = action.payload as string;
       });

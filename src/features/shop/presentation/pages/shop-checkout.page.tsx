@@ -44,6 +44,10 @@ import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/sl
 
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+import {
+  getAutomaticDiscountBasketSizes,
+  selectGetAutomaticDiscountBasketSizes,
+} from "../slices/get-automatic-discount-basket-size.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -61,6 +65,13 @@ export function ShopCheckout() {
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+  const getAutomaticDiscountBasketSizesState = useAppSelector(
+    selectGetAutomaticDiscountBasketSizes
+  );
+
+  useEffect(() => {
+    getAutomaticDiscountBasketSizes();
+  }, []);
 
   useEffect(() => {
     if (
