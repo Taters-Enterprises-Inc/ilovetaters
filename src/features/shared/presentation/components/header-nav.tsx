@@ -200,8 +200,8 @@ export function HeaderNav(props: HeaderNavProps) {
       calculatedQuantity += getSessionState.data.orders.length;
     }
 
-    if (getSessionState.data?.deals) {
-      calculatedQuantity += getSessionState.data.deals.length;
+    if (getSessionState.data?.redeem_data) {
+      calculatedQuantity += 1;
     }
 
     return calculatedQuantity;
@@ -210,7 +210,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -222,12 +221,9 @@ export function HeaderNav(props: HeaderNavProps) {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (

@@ -1,5 +1,6 @@
 import { ListItemText, MenuItem } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { forfeitRedeem } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   removeItemFromCartShop,
@@ -37,7 +38,6 @@ export function CartListItem(props: CartListItemProps) {
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -49,12 +49,9 @@ export function CartListItem(props: CartListItemProps) {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -74,9 +71,7 @@ export function CartListItem(props: CartListItemProps) {
           {(getSessionState.data?.orders === undefined ||
             getSessionState.data?.orders == null ||
             getSessionState.data?.orders.length <= 0) &&
-          (getSessionState.data?.deals === undefined ||
-            getSessionState.data?.deals == null ||
-            getSessionState.data?.deals.length <= 0) ? (
+          getSessionState.data?.redeem_data === null ? (
             <div className="flex flex-row items-center justify-center px-10 pt-2 space-x-5 space-y-2">
               <BsCartX className="text-2xl text-secondary" />
               <span className="text-secondary text-md font-['Bebas_Neue'] tracking-[2px]">
@@ -185,66 +180,60 @@ export function CartListItem(props: CartListItemProps) {
                   </>
                 ) : null}
 
-                {getSessionState.data?.deals !== undefined &&
-                getSessionState.data?.deals !== null &&
-                getSessionState.data?.deals.length > 0 ? (
-                  <>
-                    {getSessionState.data?.deals.map((deal, i) => (
-                      <div
-                        key={i}
-                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                      >
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
-                          className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
-                        />
-                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                          <h3 className="w-full text-sm font-bold leading-4">
-                            {deal.deal_name}
-                          </h3>
-                          <h3 className="text-xs">
-                            Quantity:{" "}
-                            <span className="text-tertiary">
-                              {deal.deal_qty}
-                            </span>
-                          </h3>
+                {getSessionState.data?.redeem_data ? (
+                  <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
+                      className="rounded-[10px] w-[92px] h-[92px]"
+                      alt=""
+                    />
+                    <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                      <h3 className="w-full text-sm font-bold leading-4">
+                        {getSessionState.data.redeem_data.deal_name}
+                      </h3>
+                      <h3 className="text-xs">
+                        Quantity:{" "}
+                        <span className="text-tertiary">
+                          {getSessionState.data.redeem_data.deal_qty}
+                        </span>
+                      </h3>
 
-                          {deal.deal_remarks ? (
-                            <h3 className="text-xs">
-                              Flavor:
-                              <br />
-                              <span
-                                className="text-tertiary"
-                                dangerouslySetInnerHTML={{
-                                  __html: deal.deal_remarks,
-                                }}
-                              />
-                            </h3>
-                          ) : null}
+                      {getSessionState.data.redeem_data.deal_remarks ? (
+                        <h3 className="text-xs">
+                          Flavor:
+                          <br />
+                          <span
+                            className="text-tertiary"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                getSessionState.data.redeem_data.deal_remarks,
+                            }}
+                          />
+                        </h3>
+                      ) : null}
 
-                          {deal.deal_promo_price ? (
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={deal.deal_promo_price.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          ) : null}
-                        </div>
-                        <button
-                          className="absolute text-white top-2 right-4 "
-                          onClick={() => {
-                            dispatch(removeItemFromCartShop(i));
-                          }}
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    ))}
-                  </>
+                      {getSessionState.data.redeem_data.deal_promo_price ? (
+                        <h3 className="flex items-end justify-end flex-1 text-base">
+                          <NumberFormat
+                            value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+                      ) : null}
+                    </div>
+                    <button
+                      className="absolute text-white top-2 right-4 "
+                      onClick={() => {
+                        dispatch(forfeitRedeem());
+                      }}
+                    >
+                      <IoMdClose />
+                    </button>
+                  </div>
                 ) : null}
               </div>
 

@@ -113,7 +113,6 @@ export function ShopCheckout() {
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -125,12 +124,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -146,7 +142,6 @@ export function ShopCheckout() {
   const calculateDeliveryFee = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -158,12 +153,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
@@ -200,10 +192,54 @@ export function ShopCheckout() {
     }
   };
 
+  const calculateDiscount = () => {
+    let calculatedPrice = 0;
+    let calculatedOrderQuantity = 0;
+
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+        calculatedOrderQuantity += orders[i].prod_qty;
+      }
+    }
+
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+    }
+
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_quantity &&
+      getLatestUnexpiredRedeemState.data.minimum_quantity <=
+        calculatedOrderQuantity &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
+      return (
+        <NumberFormat
+          value={discountedPrice.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    }
+
+    return "₱ 0.00";
+  };
+
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
+    let calculatedOrderQuantity = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -212,15 +248,25 @@ export function ShopCheckout() {
           ? orders[i].prod_calc_amount * discountPercentage
           : 0;
         calculatedPrice += orders[i].prod_calc_amount - discount;
+        calculatedOrderQuantity += orders[i].prod_qty;
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_quantity &&
+      getLatestUnexpiredRedeemState.data.minimum_quantity <=
+        calculatedOrderQuantity &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
 
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+      calculatedPrice -= discountedPrice;
     }
 
     if (cashOnDelivery) {
@@ -548,7 +594,8 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                {getSessionState.data.orders || getSessionState.data.deals ? (
+                {getSessionState.data.orders ||
+                getSessionState.data.redeem_data ? (
                   <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
                     <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                       Order Summary
@@ -739,7 +786,7 @@ export function ShopCheckout() {
                         </>
                       ) : null}
                       <span>Discount:</span>
-                      <span className="text-end">( ₱ 0.00 )</span>
+                      <span className="text-end">{calculateDiscount()}</span>
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

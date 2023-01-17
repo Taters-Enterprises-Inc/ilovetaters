@@ -449,14 +449,16 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={deal.price.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {deal.price ? (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={deal.price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          ) : null}
                         </div>
                       </div>
                     )
@@ -550,6 +552,26 @@ export function ShopOrder() {
                     prefix={"₱"}
                   />
                 </span>
+                {getOrdersState.data?.order.clients_info.discount ? (
+                  <>
+                    <span>Discount:</span>
+                    <span className="text-end">
+                      -{" "}
+                      <NumberFormat
+                        value={
+                          getOrdersState.data?.order.clients_info.discount
+                            ? parseInt(
+                                getOrdersState.data.order.clients_info.discount
+                              ).toFixed(2)
+                            : 0.0
+                        }
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                  </>
+                ) : null}
 
                 {getOrdersState.data?.cod_fee !== "0" ? (
                   <>
