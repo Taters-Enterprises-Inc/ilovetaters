@@ -4,7 +4,6 @@ import getAllPlatformCategories from "../popclub/presentation/slices/get-all-pla
 import getDeals from "../popclub/presentation/slices/get-deals.slice";
 import getPopClubData from "../popclub/presentation/slices/get-popclub-data.slice";
 import setPopClubData from "../popclub/presentation/slices/set-popclub-data.slice";
-import setStoreAndAddress from "../shared/presentation/slices/set-store-and-address.slice";
 import getSession from "../shared/presentation/slices/get-session.slice";
 import setSession from "../shared/presentation/slices/set-session.slice";
 import getAllAvailableStores from "../popclub/presentation/slices/get-all-available-stores.slice";
@@ -36,7 +35,7 @@ import getContacts from "../shared/presentation/slices/get-contacts.slice";
 import getStoresAvailableSnackshop from "../shop/presentation/slices/get-stores-available-snackshop.slice";
 import getStoresAvailableCatering from "../catering/presentation/slices/get-stores-available-catering.slice";
 import getStoresAvailableBranches from "../branches/presentation/slices/get-stores-available-branches.slice";
-import getStoresAvailablePopClub from "../popclub/presentation/slices/get-stores-available-popclub.slice";
+import getSnacksDeliveredAvailableStores from "../popclub/presentation/slices/get-snacks-delivered-available-stores.slice";
 import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
 import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
@@ -46,12 +45,13 @@ import popSnackBar from "../shared/presentation/slices/pop-snackbar.slice";
 import cateringCheckoutOrders from "../catering/presentation/slices/catering-checkout-orders.slice";
 import cateringHomePage from "../catering/presentation/slices/catering-home-page.slice";
 import shopHomePage from "../shop/presentation/slices/shop-home-page.slice";
-import storeChooserModal from "../popclub/presentation/slices/store-chooser-modal.slice";
+import snacksDeliveredStoreChooserModal from "../popclub/presentation/slices/snacks-delivered-store-chooser-modal.slice";
 import getCateringOrders from "../catering/presentation/slices/get-catering-orders.slice";
 import uploadContract from "../catering/presentation/slices/upload-contract.slice";
 import cateringUploadProofOfPayment from "../catering/presentation/slices/catering-upload-proof-of-payment.slice";
 import signInMobileUser from "../shared/presentation/slices/sign-in-mobile-user.slice";
-import setStoreAndAddressPopClub from "../popclub/presentation/slices/set-store-and-address-popclub.slice";
+import setSnacksDeliveredStoreAndAddress from "../popclub/presentation/slices/set-snacks-delivered-store-and-address.slice";
+import setStoreVisitStoreAndAddress from "../popclub/presentation/slices/set-store-visit-store-and-address.slice";
 import addToCartCheckoutShop from "../shop/presentation/slices/add-to-cart-checkout-shop.slice";
 import signUpMobileUser from "../shared/presentation/slices/sign-up-mobile-user.slice";
 import changeForgotPasswordStatus from "../shared/presentation/slices/change-forgot-password-status.slice";
@@ -69,7 +69,7 @@ import getAdminPopclubRedeems from "features/admin/presentation/slices/get-admin
 import getAdminPopclubRedeem from "features/admin/presentation/slices/get-admin-popclub-redeem.slice";
 import adminCompleteRedeem from "features/admin/presentation/slices/admin-complete-redeem.slice";
 import storeVisitStoreChooserModal from "features/popclub/presentation/slices/store-visit-store-chooser-modal.slice";
-import getStoresAvailablePopClubStoreVisit from "features/popclub/presentation/slices/get-stores-available-popclub-store-visit.slice";
+import getStoreVisitAvailableStore from "features/popclub/presentation/slices/get-store-visit-available-stores.slice";
 import getAdminUsers from "features/admin/presentation/slices/get-admin-users.slice";
 import createAdminUser from "features/admin/presentation/slices/create-admin-user.slice";
 import getAdminUser from "features/admin/presentation/slices/get-admin-user.slice";
@@ -123,6 +123,15 @@ import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-
 import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
 import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
+import snacksDeliveredDealStoreChooserModal from "features/popclub/presentation/slices/snacks-delivered-deal-store-chooser-modal.slice";
+import getSnacksDeliveredDealAvailableStores from "features/popclub/presentation/slices/get-snacks-delivered-deal-available-stores.slice";
+import setSnacksDeliveredDealStoreAndAddress from "features/popclub/presentation/slices/set-snacks-delivered-deal-store-and-address.slice";
+import storeVisitDealStoreChooserModal from "features/popclub/presentation/slices/store-visit-deal-store-chooser-modal.slice";
+import getStoreVisitDealAvailableStore from "features/popclub/presentation/slices/get-store-visit-deal-available-stores.slice";
+import setStoreVisitDealStoreAndAddress from "features/popclub/presentation/slices/set-store-visit-deal-store-and-address.slice";
+import setSnackshopStoreAndAddress from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
+import setCateringStoreAndAddress from "features/catering/presentation/slices/set-catering-store-and-address.slice";
+import setCateringPackageStoreAndAddress from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
 
 export const store = configureStore({
   reducer: {
@@ -133,8 +142,7 @@ export const store = configureStore({
     getStoresAvailableSnackshop,
     getStoresAvailableCatering,
     getStoresAvailableBranches,
-    getStoresAvailablePopClub,
-    setStoreAndAddress,
+    getSnacksDeliveredAvailableStores,
     getSession,
     setSession,
     getAllAvailableStores,
@@ -173,12 +181,13 @@ export const store = configureStore({
     cateringCheckoutOrders,
     cateringHomePage,
     shopHomePage,
-    storeChooserModal,
+    snacksDeliveredStoreChooserModal,
     getCateringOrders,
     uploadContract,
     cateringUploadProofOfPayment,
     signInMobileUser,
-    setStoreAndAddressPopClub,
+    setSnacksDeliveredStoreAndAddress,
+    setStoreVisitStoreAndAddress,
     signUpMobileUser,
     changeForgotPasswordStatus,
     forgotPasswordGenerateOTP,
@@ -195,7 +204,7 @@ export const store = configureStore({
     getAdminPopclubRedeem,
     adminCompleteRedeem,
     storeVisitStoreChooserModal,
-    getStoresAvailablePopClubStoreVisit,
+    getStoreVisitAvailableStore,
     getAdminUsers,
     createAdminUser,
     getAdminUser,
@@ -249,6 +258,15 @@ export const store = configureStore({
     getAdminCateringTotalSales,
     getAdminPopClubTotalSales,
     getAdminOverallTotalSales,
+    snacksDeliveredDealStoreChooserModal,
+    getSnacksDeliveredDealAvailableStores,
+    setSnacksDeliveredDealStoreAndAddress,
+    storeVisitDealStoreChooserModal,
+    getStoreVisitDealAvailableStore,
+    setStoreVisitDealStoreAndAddress,
+    setSnackshopStoreAndAddress,
+    setCateringStoreAndAddress,
+    setCateringPackageStoreAndAddress,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

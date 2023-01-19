@@ -12,12 +12,12 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FaSearchLocation } from "react-icons/fa";
 import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  selectSetCateringPackageStoreAndAddress,
+  setCateringPackageStoreAndAddress,
+  SetCateringPackageStoreAndAddressState,
+} from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CateringStoreClusterModal } from ".";
+import { CateringStoreCluster } from ".";
 import { getStoresAvailableCateringModal } from "../slices/get-stores-available-catering-modal.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import moment from "moment";
@@ -29,6 +29,7 @@ import {
 } from "../slices/catering-home-page.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { styled } from "@mui/material/styles";
+import { selectGetCateringProductDetails } from "../slices/get-catering-product-details.slice";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
@@ -51,13 +52,19 @@ const DateTimeTextField = styled((props: TextFieldProps) => (
   },
 }));
 
-export function CateringStoreChooserModalHome() {
+export function CateringStoreChooser() {
   const dispatch = useAppDispatch();
   const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
 
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setCateringPackageStoreAndAddressState = useAppSelector(
+    selectSetCateringPackageStoreAndAddress
+  );
+
+  const getCateringProductDetailsState = useAppSelector(
+    selectGetCateringProductDetails
+  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,11 +74,14 @@ export function CateringStoreChooserModalHome() {
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setCateringPackageStoreAndAddressState.status ===
+      SetCateringPackageStoreAndAddressState.success
+    ) {
       dispatch(getSession());
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate, dispatch]);
+  }, [setCateringPackageStoreAndAddressState, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(storeReset());
@@ -185,42 +195,67 @@ export function CateringStoreChooserModalHome() {
                     : ""
                 }
                 onDenied={() => {
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
+                  if (
+                    getCateringProductDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: null,
+                        service: "CATERING",
+                        hash: getCateringProductDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
                 }}
                 onPrompt={() => {
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
+                  if (
+                    getCateringProductDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: null,
+                        service: "CATERING",
+                        hash: getCateringProductDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
                 }}
                 onLocateCurrentAddress={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
+                  if (
+                    getCateringProductDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: place,
+                        service: "CATERING",
+
+                        hash: getCateringProductDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
                 }}
                 onChange={(value: string) => {
                   dispatch(setAddressCateringHomePage({ address: value }));
                 }}
                 onPlaceSelected={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
+                  if (
+                    getCateringProductDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: place,
+                        service: "CATERING",
 
-                  dispatch(
-                    getStoresAvailableCateringModal({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
+                        hash: getCateringProductDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
                 }}
               />
               <span>Search Address</span>
@@ -334,7 +369,7 @@ export function CateringStoreChooserModalHome() {
             <span>Check Availability</span>
           </button>
 
-          <CateringStoreClusterModal
+          <CateringStoreCluster
             onClickStore={(storeId: number, regionId: number) => {
               if (
                 cateringHomePageState &&
@@ -343,7 +378,7 @@ export function CateringStoreChooserModalHome() {
                 cateringHomePageState.eventEndDate
               ) {
                 dispatch(
-                  setStoreAndAddress({
+                  setCateringPackageStoreAndAddress({
                     address: cateringHomePageState.address,
                     storeId,
                     regionId,

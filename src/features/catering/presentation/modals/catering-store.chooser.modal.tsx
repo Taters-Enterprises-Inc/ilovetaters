@@ -1,32 +1,39 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import {
-  selectSetStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  selectSetCateringPackageStoreAndAddress,
+  SetCateringPackageStoreAndAddressState,
+} from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
 import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
-import { CateringStoreChooserModalHome } from "../components/catering-store-chooser-modal-home";
+import { CateringStoreChooser } from "../components/catering-store-chooser";
 
-interface CateringSelectStoreModalProps {
+interface CateringStoreChooserModalProps {
   open: boolean;
   onClose: () => void;
 }
-export function CateringSelectStoreModal(props: CateringSelectStoreModalProps) {
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+export function CateringStoreChooserModal(
+  props: CateringStoreChooserModalProps
+) {
+  const setCateringPackageStoreAndAddressState = useAppSelector(
+    selectSetCateringPackageStoreAndAddress
+  );
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setCateringPackageStoreAndAddressState.status ===
+      SetCateringPackageStoreAndAddressState.success
+    ) {
       dispatch(getSession());
       props.onClose();
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate, dispatch, props]);
+  }, [setCateringPackageStoreAndAddressState, navigate, dispatch, props]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -55,7 +62,7 @@ export function CateringSelectStoreModal(props: CateringSelectStoreModalProps) {
           <CateringHeroCarousel />
         </div>
 
-        <CateringStoreChooserModalHome />
+        <CateringStoreChooser />
       </div>
     </div>
   );

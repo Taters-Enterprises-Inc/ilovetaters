@@ -17,6 +17,7 @@ export interface UploadProofOfPaymentParam {
 }
 
 export interface GetStoresAvailableParam {
+  hash?: string;
   address: string | null;
   service:
     | "SNACKSHOP"
