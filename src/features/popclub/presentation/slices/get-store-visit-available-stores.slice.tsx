@@ -9,7 +9,7 @@ import {
   GetStoresAvailableResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum GetStoresAvailablePopClubStoreVisitState {
+export enum GetStoreVisitAvailableStoreState {
   initial,
   inProgress,
   success,
@@ -17,21 +17,21 @@ export enum GetStoresAvailablePopClubStoreVisitState {
 }
 
 interface InitialState {
-  status: GetStoresAvailablePopClubStoreVisitState;
+  status: GetStoreVisitAvailableStoreState;
   data: Array<RegionModel> | undefined;
   search: Array<StoreModel> | undefined;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: GetStoresAvailablePopClubStoreVisitState.initial,
+  status: GetStoreVisitAvailableStoreState.initial,
   data: undefined,
   search: undefined,
   message: "",
 };
 
-export const getStoresAvailablePopClubStoreVisit = createAsyncThunk(
-  "getStoresAvailablePopClubStoreVisit",
+export const getStoreVisitAvailableStore = createAsyncThunk(
+  "getStoreVisitAvailableStore",
   async (param: GetStoresAvailableParam, { rejectWithValue }) => {
     try {
       const response: GetStoresAvailableResponse =
@@ -50,8 +50,8 @@ export const getStoresAvailablePopClubStoreVisit = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getStoresAvailablePopClubStoreVisitSlice = createSlice({
-  name: "getStoresAvailablePopClubStoreVisit",
+export const getStoreVisitAvailableStoreSlice = createSlice({
+  name: "getStoreVisitAvailableStore",
   initialState,
   reducers: {
     searchStores: (
@@ -66,35 +66,29 @@ export const getStoresAvailablePopClubStoreVisitSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getStoresAvailablePopClubStoreVisit.pending, (state) => {
-        state.status = GetStoresAvailablePopClubStoreVisitState.inProgress;
+      .addCase(getStoreVisitAvailableStore.pending, (state) => {
+        state.status = GetStoreVisitAvailableStoreState.inProgress;
       })
-      .addCase(
-        getStoresAvailablePopClubStoreVisit.fulfilled,
-        (state, action) => {
-          if (action.payload) {
-            const { data, message } = action.payload;
+      .addCase(getStoreVisitAvailableStore.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { data, message } = action.payload;
 
-            state.status = GetStoresAvailablePopClubStoreVisitState.success;
-            state.message = message;
-            state.data = data;
-          }
+          state.status = GetStoreVisitAvailableStoreState.success;
+          state.message = message;
+          state.data = data;
         }
-      )
-      .addCase(
-        getStoresAvailablePopClubStoreVisit.rejected,
-        (state, action) => {
-          state.status = GetStoresAvailablePopClubStoreVisitState.fail;
-          state.message = action.payload as string;
-        }
-      );
+      })
+      .addCase(getStoreVisitAvailableStore.rejected, (state, action) => {
+        state.status = GetStoreVisitAvailableStoreState.fail;
+        state.message = action.payload as string;
+      });
   },
 });
 
-export const selectGetStoresAvailablePopClubStoreVisit = (state: RootState) =>
-  state.getStoresAvailablePopClubStoreVisit;
+export const selectGetStoreVisitAvailableStore = (state: RootState) =>
+  state.getStoreVisitAvailableStore;
 
 export const { searchStores, resetStoreSearch } =
-  getStoresAvailablePopClubStoreVisitSlice.actions;
+  getStoreVisitAvailableStoreSlice.actions;
 
-export default getStoresAvailablePopClubStoreVisitSlice.reducer;
+export default getStoreVisitAvailableStoreSlice.reducer;

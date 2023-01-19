@@ -7,7 +7,7 @@ import {
   SetStoreAndAddressResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum SetStoreAndAddressState {
+export enum SetCateringStoreAndAddressState {
   initial,
   inProgress,
   success,
@@ -15,17 +15,17 @@ export enum SetStoreAndAddressState {
 }
 
 interface InitialState {
-  status: SetStoreAndAddressState;
+  status: SetCateringStoreAndAddressState;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: SetStoreAndAddressState.initial,
+  status: SetCateringStoreAndAddressState.initial,
   message: "",
 };
 
-export const setStoreAndAddress = createAsyncThunk(
-  "setStoreAndAddress",
+export const setCateringStoreAndAddress = createAsyncThunk(
+  "setCateringStoreAndAddress",
   async (param: SetStoreAndAddressParm, { rejectWithValue }) => {
     try {
       const response: SetStoreAndAddressResponse =
@@ -43,35 +43,36 @@ export const setStoreAndAddress = createAsyncThunk(
     }
   }
 );
-export const setStoreAndAddressSlice = createSlice({
-  name: "setStoreAndAddress",
+export const setCateringStoreAndAddressSlice = createSlice({
+  name: "setCateringStoreAndAddress",
   initialState,
   reducers: {
-    resetStoreAndAddress: (state) => {
-      state.status = SetStoreAndAddressState.initial;
+    resetCateringStoreAndAddress: (state) => {
+      state.status = SetCateringStoreAndAddressState.initial;
       state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(setStoreAndAddress.pending, (state) => {
-        state.status = SetStoreAndAddressState.inProgress;
+      .addCase(setCateringStoreAndAddress.pending, (state) => {
+        state.status = SetCateringStoreAndAddressState.inProgress;
       })
-      .addCase(setStoreAndAddress.fulfilled, (state, action) => {
+      .addCase(setCateringStoreAndAddress.fulfilled, (state, action) => {
         if (action.payload) {
           const { message } = action.payload;
           state.message = message;
-          state.status = SetStoreAndAddressState.success;
+          state.status = SetCateringStoreAndAddressState.success;
         }
       })
-      .addCase(setStoreAndAddress.rejected, (state, action) => {
-        state.status = SetStoreAndAddressState.fail;
+      .addCase(setCateringStoreAndAddress.rejected, (state, action) => {
+        state.status = SetCateringStoreAndAddressState.fail;
         state.message = action.payload as string;
       });
   },
 });
 
-export const selectSetStoreAndAddress = (state: RootState) =>
-  state.setStoreAndAddress;
-export const { resetStoreAndAddress } = setStoreAndAddressSlice.actions;
-export default setStoreAndAddressSlice.reducer;
+export const selectSetCateringStoreAndAddress = (state: RootState) =>
+  state.setCateringStoreAndAddress;
+export const { resetCateringStoreAndAddress } =
+  setCateringStoreAndAddressSlice.actions;
+export default setCateringStoreAndAddressSlice.reducer;

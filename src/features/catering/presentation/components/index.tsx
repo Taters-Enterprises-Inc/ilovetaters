@@ -10,5 +10,5 @@ export { CateringSignedContractIsRequired } from "./catering-signed-contract-is-
 export { CateringContractTermsAndConditions } from "./catering-contract-terms-and-conditions";
 export { CateringSignedContractIsOnVerification } from "./catering-signed-contract-is-on-verification";
 export { CateringSignedContractVerified } from "./catering-signed-contract-verified";
-export { CateringStoreChooserModalHome } from "./catering-store-chooser-modal-home";
-export { CateringStoreClusterModal } from "./catering-store-cluster-modal";
+export { CateringStoreChooser } from "./catering-store-chooser";
+export { CateringStoreCluster } from "./catering-store-cluster";
