@@ -685,14 +685,16 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">{calculateOrderTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateOrderTotal()}
+                    </td>
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold ">
                       Discount:
                     </td>
-                    <td className="px-6 py-2">
-                      +{" "}
+                    <td className="px-6 py-2 w-[150px]">
+                      -{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.discount
                       )}
@@ -729,7 +731,7 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Delivery Fee:
                     </td>
-                    <td className="px-6 py-2  w-[150px]">
+                    <td className="px-6 py-2 w-[150px]">
                       +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.distance_price
@@ -751,7 +753,9 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -873,6 +877,7 @@ export function AdminShopOrderCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Discount:</span>
                   <span className="text-sm text-end">
+                    -{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.discount
                     )}
