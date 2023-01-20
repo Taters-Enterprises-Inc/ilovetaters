@@ -587,39 +587,38 @@ export function AdminShopOrderCustomerInformation() {
                         scope="row"
                         className="px-6 py-4 font-medium text-secondary"
                       >
-                        {item.alias ? (
-                          <span className="font-bold">{item.alias}</span>
-                        ) : null}
-                        <br />
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: item.product_label
-                              ? item.product_label +
-                                " " +
-                                item.name +
-                                (item.add_details
-                                  ? " , " + item.add_details
-                                  : "")
-                              : item.name +
-                                (item.add_details
-                                  ? " , " + item.add_details
-                                  : ""),
-                          }}
-                        />
                         {item.deal_name ? (
                           <>
-                            <br />
-                            <br />
                             <span className=" !text-green-700 font-bold">
                               Deal Applied:{" "}
                             </span>
+                            <br />
+                            {item.alias ? (
+                              <span className="font-bold">{item.alias}</span>
+                            ) : null}
                             <br />
                             <span className="whitespace-pre-wrap">
                               {item.deal_name}
                               {item.deal_description}
                             </span>
                           </>
-                        ) : null}
+                        ) : (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: item.product_label
+                                ? item.product_label +
+                                  " " +
+                                  item.name +
+                                  (item.add_details
+                                    ? " , " + item.add_details
+                                    : "")
+                                : item.name +
+                                  (item.add_details
+                                    ? " , " + item.add_details
+                                    : ""),
+                            }}
+                          />
+                        )}
                       </th>
                       <td className="px-6 py-4">
                         <span
