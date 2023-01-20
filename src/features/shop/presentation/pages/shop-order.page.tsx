@@ -528,7 +528,6 @@ export function ShopOrder() {
                 <div className="grid grid-cols-2 text-secondary">
                   <span>Subtotal:</span>
                   <span className="text-end">
-                    +{" "}
                     <NumberFormat
                       value={
                         getOrdersState.data?.subtotal
@@ -562,6 +561,34 @@ export function ShopOrder() {
                       </span>
                     </>
                   ) : null}
+
+                  {getOrdersState.data?.order.clients_info.discount_name &&
+                  getOrdersState.data?.order.clients_info.discount &&
+                  getOrdersState.data?.order.clients_info
+                    .discount_percentage ? (
+                    <>
+                      <span className="w-[300px]">
+                        {parseFloat(
+                          getOrdersState.data?.order.clients_info
+                            .discount_percentage
+                        ) * 100}
+                        %{" "}
+                        {getOrdersState.data?.order.clients_info.discount_name}:
+                      </span>
+                      <span className="text-end">
+                        -{" "}
+                        <NumberFormat
+                          value={parseInt(
+                            getOrdersState.data?.order.clients_info.discount
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
+
                   <span>Delivery Fee:</span>
                   <span className="text-end ">
                     +{" "}
@@ -589,33 +616,6 @@ export function ShopOrder() {
                           value={parseInt(getOrdersState.data.cod_fee).toFixed(
                             2
                           )}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </>
-                  ) : null}
-
-                  {getOrdersState.data?.order.clients_info.discount_name &&
-                  getOrdersState.data?.order.clients_info.discount &&
-                  getOrdersState.data?.order.clients_info
-                    .discount_percentage ? (
-                    <>
-                      <span className="w-[300px]">
-                        {parseFloat(
-                          getOrdersState.data?.order.clients_info
-                            .discount_percentage
-                        ) * 100}
-                        %{" "}
-                        {getOrdersState.data?.order.clients_info.discount_name}:
-                      </span>
-                      <span className="text-end">
-                        -{" "}
-                        <NumberFormat
-                          value={parseInt(
-                            getOrdersState.data?.order.clients_info.discount
-                          ).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}

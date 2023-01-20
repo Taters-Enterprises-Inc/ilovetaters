@@ -700,14 +700,6 @@ export function AdminShopOrderCustomerInformation() {
                       )}
                     </td>
                   </tr>
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
-                      Subtotal:
-                    </td>
-                    <td className="px-6 py-2 w-[150px]">
-                      {calculateSubTotal()}
-                    </td>
-                  </tr>
 
                   {getAdminShopOrderState.data.discount &&
                   getAdminShopOrderState.data.discount_percentage &&
@@ -727,6 +719,16 @@ export function AdminShopOrderCustomerInformation() {
                       </td>
                     </tr>
                   ) : null}
+
+                  <tr className="text-end">
+                    <td colSpan={4} className="px-6 py-2 font-bold">
+                      Subtotal:
+                    </td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateSubTotal()}
+                    </td>
+                  </tr>
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Delivery Fee:
