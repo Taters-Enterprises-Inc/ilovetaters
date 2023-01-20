@@ -3,10 +3,11 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  resetSnackshopStoreAndAddress,
+  selectSetSnackshopStoreAndAddress,
+  setSnackshopStoreAndAddress,
+  SetSnackshopStoreAndAddressState,
+} from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
 import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,24 +21,30 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
   const getStoresAvailableSnackshopState = useAppSelector(
     selectGetStoresAvailableSnackshop
   );
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setSnackshopStoreAndAddressState = useAppSelector(
+    selectSetSnackshopStoreAndAddress
+  );
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setSnackshopStoreAndAddressState.status ===
+      SetSnackshopStoreAndAddressState.success
+    ) {
       dispatch(getSession()).then(() => {
         navigate("products");
       });
       document.body.classList.remove("overflow-hidden");
+      dispatch(resetSnackshopStoreAndAddress());
     }
-  }, [setStoreAndAddressState, navigate, dispatch]);
+  }, [setSnackshopStoreAndAddressState, navigate, dispatch]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     if (props.address) {
       dispatch(
-        setStoreAndAddress({
+        setSnackshopStoreAndAddress({
           address: props.address,
           storeId,
           regionId,

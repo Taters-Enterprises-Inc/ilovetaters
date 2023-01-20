@@ -12,10 +12,11 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FaSearchLocation } from "react-icons/fa";
 import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  resetCateringStoreAndAddress,
+  selectSetCateringStoreAndAddress,
+  setCateringStoreAndAddress,
+  SetCateringStoreAndAddressState,
+} from "features/catering/presentation/slices/set-catering-store-and-address.slice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
@@ -58,7 +59,9 @@ export function CateringHome() {
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
 
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setCateringStoreAndAddressState = useAppSelector(
+    selectSetCateringStoreAndAddress
+  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,12 +71,16 @@ export function CateringHome() {
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setCateringStoreAndAddressState.status ===
+      SetCateringStoreAndAddressState.success
+    ) {
       dispatch(getSession());
       navigate("products");
+      dispatch(resetCateringStoreAndAddress());
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate, dispatch]);
+  }, [setCateringStoreAndAddressState, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(storeReset());
@@ -348,7 +355,7 @@ export function CateringHome() {
                 cateringHomePageState.eventEndDate
               ) {
                 dispatch(
-                  setStoreAndAddress({
+                  setCateringStoreAndAddress({
                     address: cateringHomePageState.address,
                     storeId,
                     regionId,

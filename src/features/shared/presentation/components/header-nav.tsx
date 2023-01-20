@@ -19,7 +19,7 @@ import {
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
-import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { MdLocationPin } from "react-icons/md";
@@ -734,7 +734,7 @@ export function HeaderNav(props: HeaderNavProps) {
         }}
       />
 
-      <StoreChooserModal
+      <SnacksDeliveredStoreChooserModal
         open={openStoreChooserModal}
         onClose={() => {
           setOpenStoreChooserModal(false);

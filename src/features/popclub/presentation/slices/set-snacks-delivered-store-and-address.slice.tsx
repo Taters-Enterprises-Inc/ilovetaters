@@ -7,7 +7,7 @@ import {
   SetStoreAndAddressResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum SetStoreAndAddressPopClubState {
+export enum SetSnacksDeliveredStoreAndAddressState {
   initial,
   inProgress,
   success,
@@ -15,17 +15,17 @@ export enum SetStoreAndAddressPopClubState {
 }
 
 interface InitialState {
-  status: SetStoreAndAddressPopClubState;
+  status: SetSnacksDeliveredStoreAndAddressState;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: SetStoreAndAddressPopClubState.initial,
+  status: SetSnacksDeliveredStoreAndAddressState.initial,
   message: "",
 };
 
-export const setStoreAndAddressPopClub = createAsyncThunk(
-  "setStoreAndAddressPopClub",
+export const setSnacksDeliveredStoreAndAddress = createAsyncThunk(
+  "setSnacksDeliveredStoreAndAddress",
   async (param: SetStoreAndAddressParm, { rejectWithValue }) => {
     try {
       const response: SetStoreAndAddressResponse =
@@ -43,37 +43,39 @@ export const setStoreAndAddressPopClub = createAsyncThunk(
     }
   }
 );
-export const setStoreAndAddressPopClubSlice = createSlice({
-  name: "setStoreAndAddressPopClub",
+export const setSnacksDeliveredStoreAndAddressSlice = createSlice({
+  name: "setSnacksDeliveredStoreAndAddress",
   initialState,
   reducers: {
-    resetStoreAndAddressPopClub: (state) => {
-      state.status = SetStoreAndAddressPopClubState.initial;
+    resetSnacksDeliveredStoreAndAddress: (state) => {
+      state.status = SetSnacksDeliveredStoreAndAddressState.initial;
       state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(setStoreAndAddressPopClub.pending, (state) => {
-        state.status = SetStoreAndAddressPopClubState.inProgress;
+      .addCase(setSnacksDeliveredStoreAndAddress.pending, (state) => {
+        state.status = SetSnacksDeliveredStoreAndAddressState.inProgress;
       })
-      .addCase(setStoreAndAddressPopClub.fulfilled, (state, action) => {
+      .addCase(setSnacksDeliveredStoreAndAddress.fulfilled, (state, action) => {
         if (action.payload) {
           const { message } = action.payload;
 
-          state.status = SetStoreAndAddressPopClubState.success;
+          state.status = SetSnacksDeliveredStoreAndAddressState.success;
           state.message = message;
         }
       })
-      .addCase(setStoreAndAddressPopClub.rejected, (state, action) => {
-        state.status = SetStoreAndAddressPopClubState.fail;
+      .addCase(setSnacksDeliveredStoreAndAddress.rejected, (state, action) => {
+        state.status = SetSnacksDeliveredStoreAndAddressState.fail;
         state.message = action.payload as string;
       });
   },
 });
 
-export const selectSetStoreAndAddressPopClub = (state: RootState) =>
-  state.setStoreAndAddressPopClub;
-export const { resetStoreAndAddressPopClub } =
-  setStoreAndAddressPopClubSlice.actions;
-export default setStoreAndAddressPopClubSlice.reducer;
+export const selectSetSnacksDeliveredStoreAndAddress = (state: RootState) =>
+  state.setSnacksDeliveredStoreAndAddress;
+
+export const { resetSnacksDeliveredStoreAndAddress } =
+  setSnacksDeliveredStoreAndAddressSlice.actions;
+
+export default setSnacksDeliveredStoreAndAddressSlice.reducer;

@@ -8,6 +8,7 @@ import {
 } from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
 import { getStoresAvailableSnackshopModal } from "../slices/get-stores-available-snackshop-modal.slice";
 import { ShopHeroCarousel } from "../carousels";
+import { selectGetProductDetails } from "../slices/get-product-details.slice";
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
@@ -21,6 +22,8 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
   const shopStoreChooserModalState = useAppSelector(
     selectShopStoreChooserModal
   );
+
+  const getProductDetailsState = useAppSelector(selectGetProductDetails);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -62,41 +65,53 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
                   : ""
               }
               onDenied={() => {
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: null,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
               }}
               onPrompt={() => {
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: null,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
               }}
               onLocateCurrentAddress={(place: string) => {
-                dispatch(setAddressShopStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: place,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
               }}
               onChange={(value: string) => {
                 dispatch(setAddressShopStoreChooserModal({ address: value }));
               }}
               onPlaceSelected={(place: string) => {
-                dispatch(setAddressShopStoreChooserModal({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshopModal({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: place,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
               }}
             />
             <span>Search Address</span>

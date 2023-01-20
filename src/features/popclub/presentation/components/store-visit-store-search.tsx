@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   resetStoreSearch,
   searchStores,
-  selectGetStoresAvailablePopClubStoreVisit,
-} from "../slices/get-stores-available-popclub-store-visit.slice";
+  selectGetStoreVisitAvailableStore,
+} from "../slices/get-store-visit-available-stores.slice";
 import { useEffect } from "react";
 
 const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
@@ -32,8 +32,8 @@ interface StoreVisitStoreSearchProps {
   label: string;
 }
 export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
-  const getStoresAvailablePopClubStoreVisitState = useAppSelector(
-    selectGetStoresAvailablePopClubStoreVisit
+  const getStoreVisitAvailableStoreState = useAppSelector(
+    selectGetStoreVisitAvailableStore
   );
 
   useEffect(() => {
@@ -50,8 +50,8 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
       return;
     }
 
-    if (getStoresAvailablePopClubStoreVisitState.data) {
-      const regions = getStoresAvailablePopClubStoreVisitState.data;
+    if (getStoreVisitAvailableStoreState.data) {
+      const regions = getStoreVisitAvailableStoreState.data;
       const merged_stores = [];
 
       for (let i = 0; i < regions.length; i++) {
