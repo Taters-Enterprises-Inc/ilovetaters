@@ -538,20 +538,6 @@ export function ShopOrder() {
                     prefix={"₱"}
                   />
                 </span>
-                <span>Delivery Fee:</span>
-                <span className="text-end">
-                  +{" "}
-                  <NumberFormat
-                    value={
-                      getOrdersState.data?.delivery_fee
-                        ? parseInt(getOrdersState.data.delivery_fee).toFixed(2)
-                        : 0.0
-                    }
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"₱"}
-                  />
-                </span>
                 {getOrdersState.data?.order.clients_info.discount ? (
                   <>
                     <span>Discount:</span>
@@ -572,6 +558,20 @@ export function ShopOrder() {
                     </span>
                   </>
                 ) : null}
+                <span>Delivery Fee:</span>
+                <span className="text-end">
+                  +{" "}
+                  <NumberFormat
+                    value={
+                      getOrdersState.data?.delivery_fee
+                        ? parseInt(getOrdersState.data.delivery_fee).toFixed(2)
+                        : 0.0
+                    }
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </span>
 
                 {getOrdersState.data?.cod_fee !== "0" ? (
                   <>

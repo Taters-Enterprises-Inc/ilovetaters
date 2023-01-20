@@ -178,18 +178,11 @@ export function ShopCheckout() {
           value={getSessionState.data.distance_rate_price.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
-          prefix={"₱"}
+          prefix={"+ ₱"}
         />
       );
     } else {
-      return (
-        <NumberFormat
-          value={0}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return "+ ₱ 0.00";
     }
   };
 
@@ -227,12 +220,12 @@ export function ShopCheckout() {
           value={discountedPrice.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
-          prefix={"₱"}
+          prefix={"- ₱"}
         />
       );
     }
 
-    return "₱ 0.00";
+    return "- ₱ 0.00";
   };
 
   const calculateTotalPrice = () => {
@@ -774,6 +767,8 @@ export function ShopCheckout() {
                       <span className="text-end">
                         {calculateSubTotalPrice()}
                       </span>
+                      <span>Discount:</span>
+                      <span className="text-end">{calculateDiscount()}</span>
                       <span>Delivery Fee:</span>
                       <span className="text-end">{calculateDeliveryFee()}</span>
                       {cashOnDelivery ? (
@@ -789,8 +784,6 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-                      <span>Discount:</span>
-                      <span className="text-end">{calculateDiscount()}</span>
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">
