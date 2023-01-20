@@ -106,11 +106,14 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
-        const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
-          : 0;
-        calculatedPrice += orders[i].price - discount;
+        const order = orders[i];
+        if (order.price) {
+          const discountPercentage = order.promo_discount_percentage;
+          const discount = discountPercentage
+            ? order.price * parseFloat(discountPercentage)
+            : 0;
+          calculatedPrice += order.price - discount;
+        }
       }
     }
 
@@ -141,11 +144,14 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
-        const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
-          : 0;
-        calculatedPrice += orders[i].price - discount;
+        const order = orders[i];
+        if (order.price) {
+          const discountPercentage = order.promo_discount_percentage;
+          const discount = discountPercentage
+            ? order.price * parseFloat(discountPercentage)
+            : 0;
+          calculatedPrice += order.price - discount;
+        }
       }
     }
 
@@ -166,11 +172,14 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
-        const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
-          : 0;
-        calculatedPrice += orders[i].price - discount;
+        const order = orders[i];
+        if (order.price) {
+          const discountPercentage = order.promo_discount_percentage;
+          const discount = discountPercentage
+            ? order.price * parseFloat(discountPercentage)
+            : 0;
+          calculatedPrice += order.price - discount;
+        }
       }
     }
 
@@ -624,7 +633,7 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={item.product_price.toFixed(2)}
+                                value={(item.product_price ?? 0).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -634,8 +643,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  item.product_price -
-                                  item.product_price *
+                                  (item.product_price ?? 0) -
+                                  (item.product_price ?? 0) *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -646,7 +655,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={item.product_price.toFixed(2)}
+                            value={(item.product_price ?? 0).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -658,7 +667,7 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={item.price.toFixed(2)}
+                                value={(item.price ?? 0).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -668,8 +677,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  item.price -
-                                  item.price *
+                                  (item.price ?? 0) -
+                                  (item.price ?? 0) *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -680,7 +689,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={item.price.toFixed(2)}
+                            value={(item.price ?? 0).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -693,13 +702,16 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">{calculateOrderTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateOrderTotal()}
+                    </td>
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold ">
-                      Code[ ] Voucher Discount:
+                      Discount:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      -{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.discount
                       )}
@@ -707,25 +719,18 @@ export function AdminShopOrderCustomerInformation() {
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
-                      Gift Card No.[ 0 ]:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminShopOrderState.data.giftcard_discount
-                      )}
-                    </td>
-                  </tr>
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">{calculateSubTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateSubTotal()}
+                    </td>
                   </tr>
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Delivery Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.distance_price
                       )}
@@ -735,7 +740,8 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       COD Additional Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.cod_fee
                       )}
@@ -745,7 +751,9 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -799,7 +807,7 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Quantity:</span>
                       <span className="text-xs">{item.quantity}</span>
                     </div>
-                    {item.promo_discount_percentage ? (
+                    {item.promo_discount_percentage && item.product_price ? (
                       <>
                         <div className="flex justify-between">
                           <span className="text-xs font-bold">Price:</span>
@@ -836,7 +844,7 @@ export function AdminShopOrderCustomerInformation() {
                         <span className="text-xs font-bold">Price:</span>
                         <span className="text-xs">
                           <NumberFormat
-                            value={item.product_price.toFixed(2)}
+                            value={(item.product_price ?? 0).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -849,7 +857,7 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={item.price.toFixed(2)}
+                          value={(item.price ?? 0).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -865,18 +873,9 @@ export function AdminShopOrderCustomerInformation() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm font-bold">
-                    Code[ ] Voucher Discount:
-                  </span>
+                  <span className="text-sm font-bold">Discount:</span>
                   <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminShopOrderState.data.discount
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
-                  <span className="text-sm text-end">
+                    -{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.discount
                     )}
@@ -891,6 +890,7 @@ export function AdminShopOrderCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Delivery Fee:</span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.distance_price
                     )}
@@ -901,6 +901,7 @@ export function AdminShopOrderCustomerInformation() {
                     COD Additional Charges:
                   </span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.cod_fee
                     )}
