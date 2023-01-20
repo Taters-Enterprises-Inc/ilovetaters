@@ -4,52 +4,30 @@ import moment from "moment";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { HiClock } from "react-icons/hi";
 import { RiTimerFlashFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import { useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { selectRedeemValidators } from "../slices/redeem-validators.slice";
+import { getDeals } from "../slices/get-deals.slice";
 
 interface DealProps {
   deal: DealModel;
 }
 
-function secondsToHms(d: any) {
-  d = Number(d);
-  var h = Math.floor(d / 3600);
-  var m = Math.floor((d % 3600) / 60);
-  var s = Math.floor((d % 3600) % 60);
-
-  var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
-  var mDisplay = m > 0 ? m + (m === 1 ? " min " : " mins ") : "";
-  var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
-  return hDisplay + mDisplay + sDisplay;
-}
-
-const pad = (number: number) => ("0" + number).slice(-2);
-
-const renderer = ({ hours, minutes, seconds, completed }: any) => {
-  if (completed) {
-  } else {
-    let timeName = "";
-
-    return (
-      <span>
-        <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
-          <div className="font-['Bebas_Neue'] tracking-[3px]">
-            <span className="mr-2">
-              {pad(hours)}:{pad(minutes)}:{pad(seconds)}
-            </span>
-          </div>
-        </div>
-      </span>
-    );
-  }
-};
-
 export function Deal(props: DealProps) {
   const navigate = useNavigate();
   const redeemValidatorsState = useAppSelector(selectRedeemValidators);
+  const dispatch = useAppDispatch();
+
+  let { platform } = useParams();
+  const query = useQuery();
+  const category = query.get("category");
+
   let availableStartTime;
   let availableEndTime;
   let availableStartTimeInDate: any;
@@ -58,6 +36,42 @@ export function Deal(props: DealProps) {
   let availableStartDateTime;
   let availableEndDateTime;
   let availableStartDateTimeInDate: any;
+
+  function secondsToHms(d: any) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
+    var mDisplay = m > 0 ? m + (m === 1 ? " min " : " mins ") : "";
+    var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
+    return hDisplay + mDisplay + sDisplay;
+  }
+
+  const pad = (number: number) => ("0" + number).slice(-2);
+
+  const renderer = ({ hours, minutes, seconds, completed }: any) => {
+    if (completed) {
+      if (platform !== undefined && category !== null) {
+        dispatch(
+          getDeals({ platform_url_name: platform, category_url_name: category })
+        );
+      }
+    } else {
+      return (
+        <span>
+          <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
+            <div className="font-['Bebas_Neue'] tracking-[3px]">
+              <span className="mr-2">
+                {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+              </span>
+            </div>
+          </div>
+        </span>
+      );
+    }
+  };
 
   if (
     props.deal.available_start_datetime &&
