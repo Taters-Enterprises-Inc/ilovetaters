@@ -164,6 +164,7 @@ export function ShopCheckout() {
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
         getLatestUnexpiredRedeemState.data.minimum_purchase <=
           calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1 &&
         getLatestUnexpiredRedeemState.data.store ===
           getSessionState.data.cache_data?.store_id
       ) {
@@ -194,14 +195,12 @@ export function ShopCheckout() {
 
   const calculateDiscount = () => {
     let calculatedPrice = 0;
-    let calculatedOrderQuantity = 0;
 
     const orders = getSessionState.data?.orders;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
-        calculatedOrderQuantity += orders[i].prod_qty;
       }
     }
 
@@ -212,9 +211,9 @@ export function ShopCheckout() {
 
     if (
       getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_quantity &&
-      getLatestUnexpiredRedeemState.data.minimum_quantity <=
-        calculatedOrderQuantity &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
       getLatestUnexpiredRedeemState.data &&
       getLatestUnexpiredRedeemState.data?.promo_discount_percentage
     ) {
@@ -238,7 +237,6 @@ export function ShopCheckout() {
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
-    let calculatedOrderQuantity = 0;
     const orders = getSessionState.data?.orders;
 
     if (orders) {
@@ -248,15 +246,19 @@ export function ShopCheckout() {
           ? orders[i].prod_calc_amount * discountPercentage
           : 0;
         calculatedPrice += orders[i].prod_calc_amount - discount;
-        calculatedOrderQuantity += orders[i].prod_qty;
       }
+    }
+
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (
       getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_quantity &&
-      getLatestUnexpiredRedeemState.data.minimum_quantity <=
-        calculatedOrderQuantity &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
       getLatestUnexpiredRedeemState.data &&
       getLatestUnexpiredRedeemState.data?.promo_discount_percentage
     ) {
@@ -279,7 +281,9 @@ export function ShopCheckout() {
       if (
         getLatestUnexpiredRedeemState.data &&
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+        getLatestUnexpiredRedeemState.data.minimum_purchase <=
+          calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1
       ) {
         calculatedPrice -= getSessionState.data.distance_rate_price;
       }

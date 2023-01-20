@@ -15,7 +15,7 @@ export interface RedeemDealModel {
   promo_price: number | null;
   promo_discount_percentage: string | null;
   minimum_purchase: number | null;
-  minimum_quantity: number | null;
+  is_free_delivery: number;
   deal_products_promo_exclude: Array<{
     product_id: number;
   }>;

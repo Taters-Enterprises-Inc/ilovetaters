@@ -153,10 +153,7 @@ export function PopClubDeal() {
         })
       );
 
-      if (
-        getDealState.data.minimum_purchase ||
-        getDealState.data.promo_discount_percentage
-      ) {
+      if (getDealState.data.promo_discount_percentage) {
         navigate("/delivery/products");
       }
 
@@ -404,8 +401,7 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ||
-              getRedeemState.data.promo_discount_percentage ? (
+              {getRedeemState.data.promo_discount_percentage ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");
