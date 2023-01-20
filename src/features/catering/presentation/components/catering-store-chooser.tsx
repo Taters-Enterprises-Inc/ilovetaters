@@ -11,24 +11,25 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { FaSearchLocation } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CateringStoreClusterModal } from ".";
 import {
   selectCateringHomePage,
   setAddressCateringHomePage,
   setEventEndDateCateringHomePage,
   setEventStartDateCateringHomePage,
 } from "../slices/catering-home-page.slice";
+import { selectGetCateringPackageDetails } from "../slices/get-catering-package-details.slice";
 import { getStoresAvailableCateringModal } from "../slices/get-stores-available-catering-modal.slice";
+import {
+  selectSetCateringPackageStoreAndAddress,
+  setCateringPackageStoreAndAddress,
+  SetCateringPackageStoreAndAddressState,
+} from "../slices/set-catering-package-store-and-address.slice";
+import { CateringStoreCluster } from "./catering-store-cluster";
 
 const DateTimeTextField = styled((props: TextFieldProps) => (
   <TextField {...props} />
@@ -51,13 +52,19 @@ const DateTimeTextField = styled((props: TextFieldProps) => (
   },
 }));
 
-export function CateringStoreChooserModalHome() {
+export function CateringStoreChooser() {
   const dispatch = useAppDispatch();
   const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
 
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setCateringPackageStoreAndAddressState = useAppSelector(
+    selectSetCateringPackageStoreAndAddress
+  );
+
+  const getCateringPackageDetailsState = useAppSelector(
+    selectGetCateringPackageDetails
+  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,11 +74,14 @@ export function CateringStoreChooserModalHome() {
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setCateringPackageStoreAndAddressState.status ===
+      SetCateringPackageStoreAndAddressState.success
+    ) {
       dispatch(getSession());
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate, dispatch]);
+  }, [setCateringPackageStoreAndAddressState, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(storeReset());
@@ -176,49 +186,81 @@ export function CateringStoreChooserModalHome() {
         </h1>
 
         <div className="space-y-4">
-          <SearchAddress
-            value={
-              cateringHomePageState.address ? cateringHomePageState.address : ""
-            }
-            onDenied={() => {
-              dispatch(
-                getStoresAvailableCateringModal({
-                  address: null,
-                  service: "CATERING",
-                })
-              );
-            }}
-            onPrompt={() => {
-              dispatch(
-                getStoresAvailableCateringModal({
-                  address: null,
-                  service: "CATERING",
-                })
-              );
-            }}
-            onLocateCurrentAddress={(place: string) => {
-              dispatch(setAddressCateringHomePage({ address: place }));
-              dispatch(
-                getStoresAvailableCateringModal({
-                  address: place,
-                  service: "CATERING",
-                })
-              );
-            }}
-            onChange={(value: string) => {
-              dispatch(setAddressCateringHomePage({ address: value }));
-            }}
-            onPlaceSelected={(place: string) => {
-              dispatch(setAddressCateringHomePage({ address: place }));
+          <div className="flex justify-center">
+            <label className="pure-material-textfield-outlined w-[100%]">
+              <SearchAddress
+                value={
+                  cateringHomePageState.address
+                    ? cateringHomePageState.address
+                    : ""
+                }
+                onDenied={() => {
+                  if (
+                    getCateringPackageDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: null,
+                        service: "CATERING",
+                        hash: getCateringPackageDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
+                }}
+                onPrompt={() => {
+                  if (
+                    getCateringPackageDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: null,
+                        service: "CATERING",
+                        hash: getCateringPackageDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
+                }}
+                onLocateCurrentAddress={(place: string) => {
+                  if (
+                    getCateringPackageDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: place,
+                        service: "CATERING",
 
-              dispatch(
-                getStoresAvailableCateringModal({
-                  address: place,
-                  service: "CATERING",
-                })
-              );
-            }}
-          />
+                        hash: getCateringPackageDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
+                }}
+                onChange={(value: string) => {
+                  dispatch(setAddressCateringHomePage({ address: value }));
+                }}
+                onPlaceSelected={(place: string) => {
+                  if (
+                    getCateringPackageDetailsState.data?.product.product_hash
+                  ) {
+                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      getStoresAvailableCateringModal({
+                        address: place,
+                        service: "CATERING",
+
+                        hash: getCateringPackageDetailsState.data.product
+                          .product_hash,
+                      })
+                    );
+                  }
+                }}
+              />
+              <span>Search Address</span>
+            </label>
+          </div>
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="space-y-4 lg:space-y-0 lg:space-x-4">
@@ -327,7 +369,7 @@ export function CateringStoreChooserModalHome() {
             <span>Check Availability</span>
           </button>
 
-          <CateringStoreClusterModal
+          <CateringStoreCluster
             onClickStore={(storeId: number, regionId: number) => {
               if (
                 cateringHomePageState &&
@@ -336,7 +378,7 @@ export function CateringStoreChooserModalHome() {
                 cateringHomePageState.eventEndDate
               ) {
                 dispatch(
-                  setStoreAndAddress({
+                  setCateringPackageStoreAndAddress({
                     address: cateringHomePageState.address,
                     storeId,
                     regionId,

@@ -1,13 +1,14 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { StoreVisitStoreCluster } from "../components";
+import { StoreVisitDealStoreCluster } from "../components";
 import { IoMdClose } from "react-icons/io";
-import { selectStoreVisitStoreChooserModal } from "../slices/store-visit-store-chooser-modal.slice";
-import { getStoreVisitAvailableStore } from "../slices/get-store-visit-available-stores.slice";
+import { selectStoreVisitDealStoreChooserModal } from "../slices/store-visit-deal-store-chooser-modal.slice";
+import { getStoreVisitDealAvailableStore } from "../slices/get-store-visit-deal-available-stores.slice";
 import { useEffect } from "react";
 import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
 import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
+import { GetDealState, selectGetDeal } from "../slices/get-deal.slice";
 
-interface StoreVisitStoreChooserModalProps {
+interface StoreVisitDealStoreChooserModalProps {
   open: boolean;
   onClose: () => void;
 
@@ -15,21 +16,26 @@ interface StoreVisitStoreChooserModalProps {
   onDefaultStoreSelectHandler?: () => void;
 }
 
-export function StoreVisitStoreChooserModal(
-  props: StoreVisitStoreChooserModalProps
+export function StoreVisitDealStoreChooserModal(
+  props: StoreVisitDealStoreChooserModalProps
 ) {
   const dispatch = useAppDispatch();
 
+  const getDealState = useAppSelector(selectGetDeal);
+
   useEffect(() => {
-    dispatch(
-      getStoreVisitAvailableStore({
-        address: null,
-        service: "POPCLUB-STORE-VISIT",
-      })
-    );
-  }, []);
-  const storeVisitStoreChooserModalState = useAppSelector(
-    selectStoreVisitStoreChooserModal
+    if (getDealState.status === GetDealState.success && getDealState.data) {
+      dispatch(
+        getStoreVisitDealAvailableStore({
+          address: null,
+          service: "POPCLUB-STORE-VISIT",
+          hash: getDealState.data.hash,
+        })
+      );
+    }
+  }, [getDealState]);
+  const storeVisitDealStoreChooserModalState = useAppSelector(
+    selectStoreVisitDealStoreChooserModal
   );
 
   if (props.open) {
@@ -67,12 +73,12 @@ export function StoreVisitStoreChooserModal(
           <StoreVisitStoreSearch label="Search Store" />
         </div>
 
-        <StoreVisitStoreCluster
+        <StoreVisitDealStoreCluster
           onClose={props.onClose}
           onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
           address={
-            storeVisitStoreChooserModalState.address
-              ? storeVisitStoreChooserModalState.address
+            storeVisitDealStoreChooserModalState.address
+              ? storeVisitDealStoreChooserModalState.address
               : ""
           }
         />

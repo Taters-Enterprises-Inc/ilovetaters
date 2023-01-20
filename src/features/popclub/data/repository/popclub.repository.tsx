@@ -77,7 +77,6 @@ export interface GetDealProductVariantsResponse {
 export interface RedeemDealResponse {
   data: {
     message: string;
-    data: RedeemDealModel;
   };
 }
 

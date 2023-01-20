@@ -8,7 +8,7 @@ import {
   GetStoresAvailableResponse,
 } from "features/shared/data/repository/shared.repository";
 
-export enum GetStoresAvailablePopClubState {
+export enum GetSnacksDeliveredAvailableStoresState {
   initial,
   inProgress,
   success,
@@ -16,19 +16,19 @@ export enum GetStoresAvailablePopClubState {
 }
 
 interface InitialState {
-  status: GetStoresAvailablePopClubState;
+  status: GetSnacksDeliveredAvailableStoresState;
   data: Array<RegionModel> | undefined;
   message: string;
 }
 
 const initialState: InitialState = {
-  status: GetStoresAvailablePopClubState.initial,
+  status: GetSnacksDeliveredAvailableStoresState.initial,
   data: undefined,
   message: "",
 };
 
-export const getStoresAvailablePopClub = createAsyncThunk(
-  "getStoresAvailablePopClub",
+export const getSnacksDeliveredAvailableStores = createAsyncThunk(
+  "getSnacksDeliveredAvailableStores",
   async (param: GetStoresAvailableParam, { rejectWithValue }) => {
     try {
       const response: GetStoresAvailableResponse =
@@ -46,32 +46,32 @@ export const getStoresAvailablePopClub = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getStoresAvailablePopClubSlice = createSlice({
-  name: "getStoresAvailablePopClub",
+export const getSnacksDeliveredAvailableStoresSlice = createSlice({
+  name: "getSnacksDeliveredAvailableStores",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getStoresAvailablePopClub.pending, (state) => {
-        state.status = GetStoresAvailablePopClubState.inProgress;
+      .addCase(getSnacksDeliveredAvailableStores.pending, (state) => {
+        state.status = GetSnacksDeliveredAvailableStoresState.inProgress;
       })
-      .addCase(getStoresAvailablePopClub.fulfilled, (state, action) => {
+      .addCase(getSnacksDeliveredAvailableStores.fulfilled, (state, action) => {
         if (action.payload) {
           const { data, message } = action.payload;
-          state.status = GetStoresAvailablePopClubState.success;
+          state.status = GetSnacksDeliveredAvailableStoresState.success;
           state.message = message;
           state.data = data;
         }
       })
-      .addCase(getStoresAvailablePopClub.rejected, (state, action) => {
-        state.status = GetStoresAvailablePopClubState.fail;
+      .addCase(getSnacksDeliveredAvailableStores.rejected, (state, action) => {
+        state.status = GetSnacksDeliveredAvailableStoresState.fail;
         state.message = action.payload as string;
         state.data = undefined;
       });
   },
 });
 
-export const selectGetStoresAvailablePopClub = (state: RootState) =>
-  state.getStoresAvailablePopClub;
+export const selectGetSnacksDeliveredAvailableStores = (state: RootState) =>
+  state.getSnacksDeliveredAvailableStores;
 
-export default getStoresAvailablePopClubSlice.reducer;
+export default getSnacksDeliveredAvailableStoresSlice.reducer;

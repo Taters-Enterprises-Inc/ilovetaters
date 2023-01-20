@@ -8,7 +8,7 @@ interface StoreListProps {
   onClickStore: (storeId: number, regionId: number) => void;
 }
 
-export function CateringStoreClusterModal(props: StoreListProps) {
+export function CateringStoreCluster(props: StoreListProps) {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );

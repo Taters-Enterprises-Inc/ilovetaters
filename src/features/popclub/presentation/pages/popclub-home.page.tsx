@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { PlatformChooserModal } from "../modals/platform-chooser.modal";
-import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "../modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
 import {
   getAllPlatformCategories,
@@ -15,13 +15,11 @@ import {
 import { getDeals, selectGetDeals } from "../slices/get-deals.slice";
 import { getPopClubData } from "../slices/get-popclub-data.slice";
 import { selectSetPopClubData } from "../slices/set-popclub-data.slice";
-import { selectSetSession } from "../../../shared/presentation/slices/set-session.slice";
 import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { selectSetStoreAndAddressPopClub } from "../slices/set-store-and-address-popclub.slice";
 import { Deal } from "../components";
 import { redeemValidators } from "../slices/redeem-validators.slice";
 import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
@@ -202,7 +200,7 @@ export function PopClubHome() {
         }}
       />
 
-      <StoreChooserModal
+      <SnacksDeliveredStoreChooserModal
         open={openStoreChooserModal}
         onClose={() => {
           setOpenStoreChooserModal(false);

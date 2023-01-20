@@ -53,10 +53,10 @@ import {
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
 import moment from "moment";
-import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
-import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { StoreVisitDealStoreChooserModal } from "../modals/store-visit-deal-store-chooser.modal";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+import { SnacksDeliveredDealStoreChooserModal } from "../modals/snacks-delivered-deal-store-chooser.modal";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -81,9 +81,14 @@ export function PopClubDeal() {
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
   const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
-  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
-    useState(false);
-  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [
+    openStoreVisitDealStoreChooserModal,
+    setOpenStoreVisitDealStoreChooserModal,
+  ] = useState(false);
+  const [
+    openSnacksDeliveredDealStoreChooserModal,
+    setOpenSnacksDeliveredDealStoreChooserModal,
+  ] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -153,10 +158,7 @@ export function PopClubDeal() {
         })
       );
 
-      if (
-        getDealState.data.minimum_purchase ||
-        getDealState.data.promo_discount_percentage
-      ) {
+      if (getDealState.data.promo_discount_percentage) {
         navigate("/delivery/products");
       }
 
@@ -404,8 +406,7 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ||
-              getRedeemState.data.promo_discount_percentage ? (
+              {getRedeemState.data.promo_discount_percentage ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");
@@ -539,10 +540,10 @@ export function PopClubDeal() {
             onClick={() => {
               switch (getDealState.data?.platform_id) {
                 case 1:
-                  setOpenStoreVisitStoreChooserModal(true);
+                  setOpenStoreVisitDealStoreChooserModal(true);
                   break;
                 case 2:
-                  setOpenStoreChooserModal(true);
+                  setOpenSnacksDeliveredDealStoreChooserModal(true);
                   break;
               }
             }}
@@ -637,10 +638,10 @@ export function PopClubDeal() {
         }}
       />
 
-      <StoreVisitStoreChooserModal
-        open={openStoreVisitStoreChooserModal}
+      <StoreVisitDealStoreChooserModal
+        open={openStoreVisitDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreVisitStoreChooserModal(false);
+          setOpenStoreVisitDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {
@@ -649,10 +650,10 @@ export function PopClubDeal() {
         }}
       />
 
-      <StoreChooserModal
-        open={openStoreChooserModal}
+      <SnacksDeliveredDealStoreChooserModal
+        open={openSnacksDeliveredDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreChooserModal(false);
+          setOpenSnacksDeliveredDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {

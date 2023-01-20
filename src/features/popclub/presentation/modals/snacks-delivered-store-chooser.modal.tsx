@@ -1,15 +1,15 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { StoreCluster } from "../components";
+import { SnacksDeliveredStoreCluster } from "../components";
 import { SearchAddress } from "../../../shared/presentation/components/search-address";
 import { IoMdClose } from "react-icons/io";
-import { getStoresAvailablePopClub } from "../slices/get-stores-available-popclub.slice";
+import { getSnacksDeliveredAvailableStores } from "../slices/get-snacks-delivered-available-stores.slice";
 import {
-  selectStoreChooserModal,
-  setAddressStoreChooserModal,
-} from "../slices/store-chooser-modal.slice";
+  selectSnacksDeliveredStoreChooserModal,
+  setAddressSnacksDeliveredStoreChooserModal,
+} from "../slices/snacks-delivered-store-chooser-modal.slice";
 import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
-interface StoreChooserModalProps {
+interface SnacksDeliveredStoreChooserModalProps {
   open: boolean;
   onClose: any;
 
@@ -17,9 +17,13 @@ interface StoreChooserModalProps {
   onDefaultStoreSelectHandler?: () => void;
 }
 
-export function StoreChooserModal(props: StoreChooserModalProps) {
+export function SnacksDeliveredStoreChooserModal(
+  props: SnacksDeliveredStoreChooserModalProps
+) {
   const dispatch = useAppDispatch();
-  const storeChooserModalState = useAppSelector(selectStoreChooserModal);
+  const snacksDeliveredStoreChooserModalState = useAppSelector(
+    selectSnacksDeliveredStoreChooserModal
+  );
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -51,14 +55,15 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
         <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store do you want to have your snacks delivered?
         </h1>
-
         <SearchAddress
           value={
-            storeChooserModalState.address ? storeChooserModalState.address : ""
+            snacksDeliveredStoreChooserModalState.address
+              ? snacksDeliveredStoreChooserModalState.address
+              : ""
           }
           onDenied={() => {
             dispatch(
-              getStoresAvailablePopClub({
+              getSnacksDeliveredAvailableStores({
                 address: null,
                 service: "POPCLUB-ONLINE-DELIVERY",
               })
@@ -66,37 +71,43 @@ export function StoreChooserModal(props: StoreChooserModalProps) {
           }}
           onPrompt={() => {
             dispatch(
-              getStoresAvailablePopClub({
+              getSnacksDeliveredAvailableStores({
                 address: null,
                 service: "POPCLUB-ONLINE-DELIVERY",
               })
             );
           }}
           onLocateCurrentAddress={(place: string) => {
-            dispatch(setAddressStoreChooserModal({ address: place }));
             dispatch(
-              getStoresAvailablePopClub({
+              setAddressSnacksDeliveredStoreChooserModal({ address: place })
+            );
+            dispatch(
+              getSnacksDeliveredAvailableStores({
                 address: place,
                 service: "POPCLUB-ONLINE-DELIVERY",
               })
             );
           }}
           onChange={(value: string) => {
-            dispatch(setAddressStoreChooserModal({ address: value }));
+            dispatch(
+              setAddressSnacksDeliveredStoreChooserModal({ address: value })
+            );
           }}
           onPlaceSelected={(place: string) => {
-            dispatch(setAddressStoreChooserModal({ address: place }));
             dispatch(
-              getStoresAvailablePopClub({
+              setAddressSnacksDeliveredStoreChooserModal({ address: place })
+            );
+            dispatch(
+              getSnacksDeliveredAvailableStores({
                 address: place,
                 service: "POPCLUB-ONLINE-DELIVERY",
               })
             );
           }}
         />
-        <StoreCluster
+        <SnacksDeliveredStoreCluster
           onClose={props.onClose}
-          address={storeChooserModalState.address}
+          address={snacksDeliveredStoreChooserModalState.address}
           onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
         />
       </div>
