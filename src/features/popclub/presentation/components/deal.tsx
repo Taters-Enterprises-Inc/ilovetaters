@@ -51,7 +51,7 @@ export function Deal(props: DealProps) {
 
   const pad = (number: number) => ("0" + number).slice(-2);
 
-  const renderer = ({ hours, minutes, seconds, completed }: any) => {
+  const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
     if (completed) {
       if (platform !== undefined && category !== null) {
         dispatch(
@@ -64,7 +64,7 @@ export function Deal(props: DealProps) {
           <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
             <div className="font-['Bebas_Neue'] tracking-[3px]">
               <span className="mr-2">
-                {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
               </span>
             </div>
           </div>

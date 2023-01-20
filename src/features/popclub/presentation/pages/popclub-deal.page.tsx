@@ -254,7 +254,7 @@ export function PopClubDeal() {
 
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -270,7 +270,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -296,7 +302,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
@@ -329,7 +335,7 @@ export function PopClubDeal() {
     } else if (!isAvailableStartDateTime) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -345,7 +351,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -371,7 +383,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
