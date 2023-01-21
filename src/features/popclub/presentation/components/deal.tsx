@@ -161,7 +161,7 @@ export function Deal(props: DealProps) {
   }
 
   const handleOnDealClick = () => {
-    if (dealValidationState !== DealValidationState.valid)
+    if (dealValidationState === DealValidationState.valid)
       navigate(`/popclub/deal/${props.deal.hash}`);
   };
 
