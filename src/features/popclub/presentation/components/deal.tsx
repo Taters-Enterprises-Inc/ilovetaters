@@ -299,8 +299,13 @@ export function Deal(props: DealProps) {
               <div className="flex items-center pt-2 space-x-1">
                 <HiClock className="text-base text-white" />
                 <span className="text-[10px] lg:text-xs text-white">
-                  {availableStartDateTime.format("ll")} -{" "}
-                  {availableEndDateTime.format("ll")}
+                  {availableStartDateTime.format("ll") ===
+                  availableEndDateTime.format("ll")
+                    ? availableStartDateTime.format("ll")
+                    : `
+                    ${availableStartDateTime.format(
+                      "ll"
+                    )} - ${availableEndDateTime.format("ll")}`}
                 </span>
               </div>
             </>
