@@ -5,7 +5,7 @@ import {
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   BsCartX,
   BsFillCalendar2WeekFill,
@@ -72,6 +72,9 @@ import {
   selectGetSnackshopDeals,
 } from "../slices/get-snackshop-deals.slice";
 import { ShopDeal } from "../components/shop-deal";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 
 let quantityId: any;
 
@@ -102,6 +105,12 @@ export function ShopProduct() {
   const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
     useState(false);
 
+  const [openPlatformChooserModal, setOpenPlatformChooserModal] =
+    useState(false);
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
+    useState(false);
+
   const timerRef = useRef(0);
   const isLongPress = useRef(false);
   const isQuantityNull = useRef(false);
@@ -116,9 +125,9 @@ export function ShopProduct() {
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
   const getSnackshopDealsState = useAppSelector(selectGetSnackshopDeals);
 
-  // useEffect(() => {
-  //   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  // }, [location]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   useEffect(() => {
     if (resetMultiFlavors === true) {
@@ -561,7 +570,8 @@ export function ShopProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getSnackshopDealsState.data ? (
+                {getSnackshopDealsState.data &&
+                getSessionState.data?.redeem_data === null ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "PopClub Deals",
@@ -572,6 +582,14 @@ export function ShopProduct() {
                       {getSnackshopDealsState.data.map((deal, i) => (
                         <ShopDeal key={i} deal={deal} />
                       ))}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setOpenPlatformChooserModal(true);
+                      }}
+                      className="p-2 m-4 rounded-lg cursor-pointer text-center text-2xl font-['Bebas_Neue'] tracking-[3px] font-light text-white bg-button "
+                    >
+                      View more popclub deals
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
@@ -1011,6 +1029,38 @@ export function ShopProduct() {
           if (hash) {
             dispatch(getProductDetails({ hash }));
           }
+        }}
+      />
+
+      <PlatformChooserModal
+        hasCloseButton={true}
+        onSelectedPlatform={(platform: string) => {
+          switch (platform) {
+            case "store-visit":
+              setOpenStoreVisitStoreChooserModal(true);
+              break;
+            case "online-delivery":
+              setOpenStoreChooserModal(true);
+              break;
+          }
+        }}
+        open={openPlatformChooserModal}
+        onClose={() => {
+          setOpenPlatformChooserModal(false);
+        }}
+      />
+
+      <SnacksDeliveredStoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+      />
+
+      <StoreVisitStoreChooserModal
+        open={openStoreVisitStoreChooserModal}
+        onClose={() => {
+          setOpenStoreVisitStoreChooserModal(false);
         }}
       />
     </main>

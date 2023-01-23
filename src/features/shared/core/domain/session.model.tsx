@@ -31,7 +31,7 @@ export interface SessionModel {
     platform: string;
   };
 
-  redeem_data?: {
+  redeem_data: {
     id: number;
     deal_id: number;
     deal_image_name: string;
@@ -44,7 +44,7 @@ export interface SessionModel {
     minimum_purchase: number | null;
     deal_original_price: number | null;
     deal_promo_price: number | null;
-  };
+  } | null;
 
   orders?: Array<{
     prod_id: number;

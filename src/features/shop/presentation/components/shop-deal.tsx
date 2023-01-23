@@ -1,6 +1,21 @@
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  redeemDeal,
+  RedeemDealState,
+  resetRedeemDeal,
+  selectRedeemDeal,
+} from "features/popclub/presentation/slices/redeem-deal.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { HiClock } from "react-icons/hi";
 import { RiTimerFlashFill } from "react-icons/ri";
@@ -10,16 +25,32 @@ interface ShopDealCardProps {
 }
 
 export function ShopDeal(props: ShopDealCardProps) {
+  const dispatch = useAppDispatch();
+
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+
+  const getSessionState = useAppSelector(selectGetSession);
+  const redeemDealState = useAppSelector(selectRedeemDeal);
+
   let availableStartTime;
   let availableEndTime;
-
   let availableStartDateTime;
   let availableEndDateTime;
+
+  useEffect(() => {
+    if (redeemDealState.status === RedeemDealState.success) {
+      dispatch(getNotifications());
+      dispatch(getSession());
+      dispatch(getLatestUnexpiredRedeem());
+      dispatch(resetRedeemDeal());
+    }
+  }, [dispatch, redeemDealState]);
 
   if (props.deal.available_start_time && props.deal.available_end_time) {
     availableStartTime = moment(props.deal.available_start_time, "HH:mm:ss");
     availableEndTime = moment(props.deal.available_end_time, "HH:mm:ss");
   }
+
   if (
     props.deal.available_start_datetime &&
     props.deal.available_end_datetime
@@ -40,69 +71,96 @@ export function ShopDeal(props: ShopDealCardProps) {
     return hDisplay + mDisplay + sDisplay;
   }
 
+  const handleRedeem = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+    dispatch(
+      redeemDeal({
+        hash: props.deal.hash,
+      })
+    );
+  };
+
   return (
-    <div className="relative flex">
-      <img
-        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.deal.product_image}`}
-        className="rounded-[10px] w-[75px] h-[75px]"
-        alt=""
-      />
-      <div className="flex flex-col flex-1 pt-2 pl-3 text-white">
-        <h3 className="text-sm w-[90%] font-bold leading-4 pr-3">
-          {props.deal.name}
-        </h3>
+    <>
+      <div className="relative flex">
+        <img
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.deal.product_image}`}
+          className="rounded-[10px] w-[75px] h-[75px]"
+          alt=""
+        />
+        <div className="flex flex-col flex-1 pt-2 pl-3 text-white">
+          <h3 className="text-sm w-[90%] font-bold leading-4 pr-3">
+            {props.deal.name}
+          </h3>
 
-        <h3 className="pr-3 text-xs">{props.deal.description}</h3>
+          <h3 className="pr-3 text-xs">{props.deal.description}</h3>
 
-        <div className="py-2 space-y-2">
-          {props.deal.available_days ? (
-            <div className="flex items-end space-x-2">
-              <BsFillCalendar2WeekFill className="text-base text-white" />
-              <span className="text-[9px] lg:text-xs text-white">
-                Valid Weekdays
-              </span>
-            </div>
-          ) : null}
+          <div className="py-2 space-y-2">
+            {props.deal.available_days ? (
+              <div className="flex items-end space-x-2">
+                <BsFillCalendar2WeekFill className="text-base text-white" />
+                <span className="text-[9px] lg:text-xs text-white">
+                  Valid Weekdays
+                </span>
+              </div>
+            ) : null}
 
-          {availableStartTime && availableEndTime ? (
-            <div className="flex items-center space-x-1">
-              <HiClock className="text-base text-white" />
-              <span className="text-[10px] lg:text-xs text-white">
-                {availableStartTime.format("LT")} -{" "}
-                {availableEndTime.format("LT")}
-              </span>
-            </div>
-          ) : null}
+            {availableStartTime && availableEndTime ? (
+              <div className="flex items-center space-x-1">
+                <HiClock className="text-base text-white" />
+                <span className="text-[10px] lg:text-xs text-white">
+                  {availableStartTime.format("LT")} -{" "}
+                  {availableEndTime.format("LT")}
+                </span>
+              </div>
+            ) : null}
 
-          {availableStartDateTime && availableEndDateTime ? (
-            <div className="flex items-center space-x-1">
-              <HiClock className="text-base text-white" />
-              <span className="text-[10px] lg:text-xs text-white">
-                {availableStartDateTime.format("ll") ===
-                availableEndDateTime.format("ll")
-                  ? availableStartDateTime.format("ll")
-                  : `
+            {availableStartDateTime && availableEndDateTime ? (
+              <div className="flex items-center space-x-1">
+                <HiClock className="text-base text-white" />
+                <span className="text-[10px] lg:text-xs text-white">
+                  {availableStartDateTime.format("ll") ===
+                  availableEndDateTime.format("ll")
+                    ? availableStartDateTime.format("ll")
+                    : `
                     ${availableStartDateTime.format(
                       "ll"
                     )} - ${availableEndDateTime.format("ll")}`}
+                </span>
+              </div>
+            ) : null}
+
+            <div className="flex items-center space-x-1">
+              <RiTimerFlashFill className="text-base text-white" />
+              <span className="text-[9px] lg:text-xs text-white">
+                {secondsToHms(props.deal.seconds_before_expiration)} claim time
               </span>
             </div>
-          ) : null}
+          </div>
 
-          <div className="flex items-center space-x-1">
-            <RiTimerFlashFill className="text-base text-white" />
-            <span className="text-[9px] lg:text-xs text-white">
-              {secondsToHms(props.deal.seconds_before_expiration)} claim time
-            </span>
+          <div className="flex items-center justify-end flex-1">
+            <button
+              onClick={handleRedeem}
+              className="px-3 py-1 text-sm font-bold rounded-lg bg-button"
+            >
+              Redeem
+            </button>
           </div>
         </div>
-
-        <div className="flex items-center justify-end flex-1">
-          <button className="px-3 py-1 text-sm font-bold rounded-lg bg-button">
-            Redeem
-          </button>
-        </div>
       </div>
-    </div>
+
+      <LoginChooserModal
+        open={openLoginChooserModal}
+        onClose={() => {
+          setOpenLoginChooserModal(false);
+        }}
+      />
+    </>
   );
 }
