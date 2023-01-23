@@ -5,8 +5,12 @@ import {
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  BsCartX,
+  BsFillCalendar2WeekFill,
+  BsFillCartPlusFill,
+} from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -62,6 +66,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 import { ShopProductFlavor } from "../components";
 import ReactGA from "react-ga";
+import {
+  getSnackshopDeals,
+  selectGetSnackshopDeals,
+} from "../slices/get-snackshop-deals.slice";
+import { ShopDeal } from "../components/shop-deal";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 
 let quantityId: any;
 
@@ -78,36 +90,39 @@ export type ShopMultiFlavorType = {
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { hash } = useParams();
+  const location = useLocation();
+
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
+  const [setDisabled] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [currentSize, setCurrentSize] = useState<string>("");
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<ShopMultiFlavorType>({});
+  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
+    useState(false);
+
+  const [openPlatformChooserModal, setOpenPlatformChooserModal] =
+    useState(false);
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
+    useState(false);
+
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
+
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const getProductSkuState = useAppSelector(selectGetProductSku);
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const addToCartCheckoutShopState = useAppSelector(
     selectAddToCartCheckoutShop
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
-
-  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-  const [setDisabled] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-
-  const timerRef = useRef(0);
-  const isLongPress = useRef(false);
-  const isQuantityNull = useRef(false);
-
-  const [currentSize, setCurrentSize] = useState<string>("");
-  const [currentMultiFlavors, setCurrentMultiFlavors] =
-    useState<ShopMultiFlavorType>({});
-
-  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
-    useState(false);
-
-  const navigate = useNavigate();
-
-  let { hash } = useParams();
-
-  const location = useLocation();
+  const getSnackshopDealsState = useAppSelector(selectGetSnackshopDeals);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -129,6 +144,7 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
+      dispatch(getSnackshopDeals());
     }
   }, [location, dispatch, hash, forfeitRedeemState]);
 
@@ -549,6 +565,30 @@ export function ShopProduct() {
                               .delivery_details,
                         }}
                       />
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
+
+                {getSnackshopDealsState.data &&
+                getSessionState.data?.redeem_data === null ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "PopClub Deals",
+                      prefixIcon: <TbTruckDelivery className="text-3xl" />,
+                    }}
+                  >
+                    <div className="space-y-6 overflow-y-auto max-h-[400px] px-[14px] py-[10px]">
+                      {getSnackshopDealsState.data.map((deal, i) => (
+                        <ShopDeal key={i} deal={deal} />
+                      ))}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setOpenPlatformChooserModal(true);
+                      }}
+                      className="p-2 m-4 rounded-lg cursor-pointer text-center text-2xl font-['Bebas_Neue'] tracking-[3px] font-light text-white bg-button "
+                    >
+                      View more popclub deals
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
@@ -988,6 +1028,38 @@ export function ShopProduct() {
           if (hash) {
             dispatch(getProductDetails({ hash }));
           }
+        }}
+      />
+
+      <PlatformChooserModal
+        hasCloseButton={true}
+        onSelectedPlatform={(platform: string) => {
+          switch (platform) {
+            case "store-visit":
+              setOpenStoreVisitStoreChooserModal(true);
+              break;
+            case "online-delivery":
+              setOpenStoreChooserModal(true);
+              break;
+          }
+        }}
+        open={openPlatformChooserModal}
+        onClose={() => {
+          setOpenPlatformChooserModal(false);
+        }}
+      />
+
+      <SnacksDeliveredStoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+      />
+
+      <StoreVisitStoreChooserModal
+        open={openStoreVisitStoreChooserModal}
+        onClose={() => {
+          setOpenStoreVisitStoreChooserModal(false);
         }}
       />
     </main>
