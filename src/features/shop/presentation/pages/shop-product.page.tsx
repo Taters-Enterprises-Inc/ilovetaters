@@ -6,7 +6,11 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
+import {
+  BsCartX,
+  BsFillCalendar2WeekFill,
+  BsFillCartPlusFill,
+} from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -63,6 +67,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 import { ShopProductFlavor } from "../components";
 import ReactGA from "react-ga";
+import {
+  getSnackshopDeals,
+  selectGetSnackshopDeals,
+} from "../slices/get-snackshop-deals.slice";
+import { ShopDeal } from "../components/shop-deal";
 
 let quantityId: any;
 
@@ -79,40 +88,37 @@ export type ShopMultiFlavorType = {
 
 export function ShopProduct() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { hash } = useParams();
+  const location = useLocation();
+
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
+  const [setDisabled] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [currentSize, setCurrentSize] = useState<string>("");
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<ShopMultiFlavorType>({});
+  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
+    useState(false);
+
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
+
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const getProductSkuState = useAppSelector(selectGetProductSku);
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const addToCartCheckoutShopState = useAppSelector(
     selectAddToCartCheckoutShop
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
+  const getSnackshopDealsState = useAppSelector(selectGetSnackshopDeals);
 
-  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-  const [setDisabled] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-
-  const timerRef = useRef(0);
-  const isLongPress = useRef(false);
-  const isQuantityNull = useRef(false);
-
-  const [currentSize, setCurrentSize] = useState<string>("");
-  const [currentMultiFlavors, setCurrentMultiFlavors] =
-    useState<ShopMultiFlavorType>({});
-
-  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
-    useState(false);
-
-  const navigate = useNavigate();
-
-  let { hash } = useParams();
-
-  const location = useLocation();
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
+  // useEffect(() => {
+  //   window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  // }, [location]);
 
   useEffect(() => {
     if (resetMultiFlavors === true) {
@@ -130,6 +136,7 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
+      dispatch(getSnackshopDeals());
     }
   }, [location, dispatch, hash, forfeitRedeemState]);
 
@@ -553,14 +560,21 @@ export function ShopProduct() {
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
-                <ProductDetailsAccordion
-                  title={{
-                    name: "PopClub Deals",
-                    prefixIcon: <TbTruckDelivery className="text-3xl" />,
-                  }}
-                >
-                  <div className="p-4 text-sm">Test</div>
-                </ProductDetailsAccordion>
+
+                {getSnackshopDealsState.data ? (
+                  <ProductDetailsAccordion
+                    title={{
+                      name: "PopClub Deals",
+                      prefixIcon: <TbTruckDelivery className="text-3xl" />,
+                    }}
+                  >
+                    <div className="space-y-6 overflow-y-auto max-h-[400px] px-[14px] py-[10px]">
+                      {getSnackshopDealsState.data.map((deal, i) => (
+                        <ShopDeal key={i} deal={deal} />
+                      ))}
+                    </div>
+                  </ProductDetailsAccordion>
+                ) : null}
 
                 {getSessionState.data?.orders !== undefined &&
                 getSessionState.data?.orders !== null &&
