@@ -7,7 +7,6 @@ import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.mode
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
-import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
@@ -18,6 +17,7 @@ import {
   AddToCartShopParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -84,6 +84,18 @@ export interface GetEditCartItemResponse {
   };
 }
 
+export interface GetSnackshopDealsResponse {
+  data: {
+    message: string;
+    data: Array<SnackshopDealModel>;
+  };
+}
+
+export function GetSnackshopDealsRepository(): Promise<GetSnackshopDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shop/deals`, {
+    withCredentials: true,
+  });
+}
 export function RemoveItemFromCartShopRepository(
   param: number
 ): Promise<RemoveItemFromCartShopResponse> {

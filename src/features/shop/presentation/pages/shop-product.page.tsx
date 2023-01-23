@@ -553,6 +553,14 @@ export function ShopProduct() {
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
+                <ProductDetailsAccordion
+                  title={{
+                    name: "PopClub Deals",
+                    prefixIcon: <TbTruckDelivery className="text-3xl" />,
+                  }}
+                >
+                  <div className="p-4 text-sm">Test</div>
+                </ProductDetailsAccordion>
 
                 {getSessionState.data?.orders !== undefined &&
                 getSessionState.data?.orders !== null &&
