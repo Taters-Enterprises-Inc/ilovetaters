@@ -115,6 +115,7 @@ import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
 import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
 import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
+import { SeeMe } from "features/see-me/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -146,6 +147,7 @@ root.render(
                       </Route>
 
                       <Route path="franchising" element={<Franchising />} />
+                      <Route path="see-me" element={<SeeMe />} />
                       <Route
                         path="privacy-policy"
                         element={<PrivacyPolicy />}
