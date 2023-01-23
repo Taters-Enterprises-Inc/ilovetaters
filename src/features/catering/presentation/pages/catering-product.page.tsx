@@ -45,7 +45,7 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
-import { CateringSelectStoreModal } from "../modals";
+import { CateringStoreChooserModal } from "../modals";
 import ReactGA from "react-ga";
 
 const DEFAULT_CAROUSEL = [
@@ -74,7 +74,7 @@ export function CateringProduct() {
   const [quantity, setQuantity] = useState(1);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [openCateringSelectStoreModal, setOpenCateringSelectStoreModal] =
+  const [openCateringStoreChooserModal, setOpenCateringStoreChooserModal] =
     useState(false);
 
   const getCateringProductDetailsState = useAppSelector(
@@ -645,7 +645,7 @@ export function CateringProduct() {
                   <div className="space-y-4">
                     <button
                       onClick={() => {
-                        setOpenCateringSelectStoreModal(true);
+                        setOpenCateringStoreChooserModal(true);
                       }}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
@@ -755,10 +755,10 @@ export function CateringProduct() {
         }}
       />
 
-      <CateringSelectStoreModal
-        open={openCateringSelectStoreModal}
+      <CateringStoreChooserModal
+        open={openCateringStoreChooserModal}
         onClose={() => {
-          setOpenCateringSelectStoreModal(false);
+          setOpenCateringStoreChooserModal(false);
         }}
       />
     </main>

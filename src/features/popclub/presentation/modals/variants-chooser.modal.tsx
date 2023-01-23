@@ -47,8 +47,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     if (
       redeemDealState.status === RedeemDealState.success &&
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery" &&
-      redeemDealState.data
+      getSessionState.data?.popclub_data.platform === "online-delivery"
     ) {
       navigate("/delivery/checkout");
       dispatch(getSession());
@@ -56,13 +55,19 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     } else if (
       redeemDealState.status === RedeemDealState.success &&
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "store-visit" &&
-      redeemDealState.data
+      getSessionState.data?.popclub_data.platform === "store-visit"
     ) {
       props.onClose();
       dispatch(resetRedeemDeal());
     }
-  }, [getSessionState, navigate, redeemDealState, getRedeemsState, props]);
+  }, [
+    getSessionState,
+    navigate,
+    redeemDealState,
+    getRedeemsState,
+    props,
+    dispatch,
+  ]);
 
   const onSubmit = (event: any) => {
     event.preventDefault();

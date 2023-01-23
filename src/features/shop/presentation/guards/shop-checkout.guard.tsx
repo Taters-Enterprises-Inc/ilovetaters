@@ -15,10 +15,12 @@ export function ShopCheckoutGuard() {
     const orders = getSessionState.data.orders
       ? getSessionState.data.orders
       : [];
-    const deals = getSessionState.data.deals ? getSessionState.data.deals : [];
-    const total = orders.length + deals.length;
 
-    if (total <= 0) {
+    if (
+      orders.length <= 0 &&
+      getSessionState.data?.redeem_data?.deal_promo_price &&
+      getSessionState.data.redeem_data.deal_promo_price <= 0
+    ) {
       return <Navigate to={"/"} />;
     }
   }

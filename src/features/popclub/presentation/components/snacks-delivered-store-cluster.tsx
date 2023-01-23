@@ -1,17 +1,23 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import moment from "moment";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { selectGetSnacksDeliveredAvailableStores } from "../slices/get-snacks-delivered-available-stores.slice";
+import { setPopClubData } from "../slices/set-popclub-data.slice";
 import {
-  selectSetSnackshopStoreAndAddress,
-  setSnackshopStoreAndAddress,
-  SetSnackshopStoreAndAddressState,
-} from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
-import { selectGetStoresAvailableSnackshopModal } from "../slices/get-stores-available-snackshop-modal.slice";
+  resetSnacksDeliveredStoreAndAddress,
+  selectSetSnacksDeliveredStoreAndAddress,
+  setSnacksDeliveredStoreAndAddress,
+  SetSnacksDeliveredStoreAndAddressState,
+} from "../slices/set-snacks-delivered-store-and-address.slice";
 
-interface ShopStoreClusterProps {
+interface SnacksDeliveredStoreClusterProps {
   onClose: any;
   address: string | null;
 
@@ -19,40 +25,63 @@ interface ShopStoreClusterProps {
   onDefaultStoreSelectHandler?: () => void;
 }
 
-export function ShopStoreCluster(props: ShopStoreClusterProps) {
-  const dispatch = useAppDispatch();
+export function SnacksDeliveredStoreCluster(
+  props: SnacksDeliveredStoreClusterProps
+) {
+  const getSnacksDeliveredAvailableStoresState = useAppSelector(
+    selectGetSnacksDeliveredAvailableStores
+  );
+  const setSnacksDeliveredStoreAndAddressState = useAppSelector(
+    selectSetSnacksDeliveredStoreAndAddress
+  );
+  const getSessionState = useAppSelector(selectGetSession);
 
-  const getStoresAvailableSnackshopModalState = useAppSelector(
-    selectGetStoresAvailableSnackshopModal
-  );
-  const setSnackshopStoreAndAddressState = useAppSelector(
-    selectSetSnackshopStoreAndAddress
-  );
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { platform } = useParams();
 
   useEffect(() => {
     if (
-      setSnackshopStoreAndAddressState.status ===
-      SetSnackshopStoreAndAddressState.success
+      setSnacksDeliveredStoreAndAddressState.status ===
+      SetSnacksDeliveredStoreAndAddressState.success
     ) {
       dispatch(getSession());
     }
-  }, [setSnackshopStoreAndAddressState, dispatch]);
+  }, [setSnacksDeliveredStoreAndAddressState, dispatch]);
 
   useEffect(() => {
     if (
-      setSnackshopStoreAndAddressState.status ===
-      SetSnackshopStoreAndAddressState.success
+      setSnacksDeliveredStoreAndAddressState.status ===
+      SetSnacksDeliveredStoreAndAddressState.success
     ) {
       props.onClose();
 
+      dispatch(resetSnacksDeliveredStoreAndAddress());
+
+      dispatch(setPopClubData({ platform: "online-delivery" }));
+
+      if (props.onDefaultStoreSelectHandler === undefined) {
+        if (platform) {
+          if (platform === "store-visit") {
+            navigate(`/popclub/online-delivery?category=all`);
+          } else {
+            navigate(`?category=all`);
+          }
+        } else {
+          navigate(`/popclub/online-delivery?category=all`);
+        }
+      } else {
+        props.onDefaultStoreSelectHandler();
+      }
+
       document.body.classList.remove("overflow-hidden");
     }
-  }, [dispatch, props, setSnackshopStoreAndAddressState]);
+  }, [getSessionState]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     if (props.address) {
       dispatch(
-        setSnackshopStoreAndAddress({
+        setSnacksDeliveredStoreAndAddress({
           address: props.address,
           storeId,
           regionId,
@@ -71,7 +100,7 @@ export function ShopStoreCluster(props: ShopStoreClusterProps) {
 
   return (
     <section className="text-white ">
-      {getStoresAvailableSnackshopModalState.data?.map(
+      {getSnacksDeliveredAvailableStoresState.data?.map(
         (store_cluster, index) => (
           <div key={index}>
             <h1 className="pl-2 text-sm font-normal">

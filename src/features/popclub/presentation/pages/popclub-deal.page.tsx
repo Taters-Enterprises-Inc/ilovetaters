@@ -53,10 +53,10 @@ import {
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
 import moment from "moment";
-import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
-import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { StoreVisitDealStoreChooserModal } from "../modals/store-visit-deal-store-chooser.modal";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+import { SnacksDeliveredDealStoreChooserModal } from "../modals/snacks-delivered-deal-store-chooser.modal";
 
 export function PopClubDeal() {
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
@@ -81,9 +81,14 @@ export function PopClubDeal() {
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
   const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
-  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
-    useState(false);
-  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [
+    openStoreVisitDealStoreChooserModal,
+    setOpenStoreVisitDealStoreChooserModal,
+  ] = useState(false);
+  const [
+    openSnacksDeliveredDealStoreChooserModal,
+    setOpenSnacksDeliveredDealStoreChooserModal,
+  ] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -153,10 +158,7 @@ export function PopClubDeal() {
         })
       );
 
-      if (
-        getDealState.data.minimum_purchase ||
-        getDealState.data.promo_discount_percentage
-      ) {
+      if (getDealState.data.promo_discount_percentage) {
         navigate("/delivery/products");
       }
 
@@ -252,7 +254,7 @@ export function PopClubDeal() {
 
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -268,7 +270,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -294,7 +302,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
@@ -327,7 +335,7 @@ export function PopClubDeal() {
     } else if (!isAvailableStartDateTime) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -343,7 +351,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -369,7 +383,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
@@ -404,8 +418,7 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ||
-              getRedeemState.data.promo_discount_percentage ? (
+              {getRedeemState.data.promo_discount_percentage ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");
@@ -529,10 +542,10 @@ export function PopClubDeal() {
             onClick={() => {
               switch (getDealState.data?.platform_id) {
                 case 1:
-                  setOpenStoreVisitStoreChooserModal(true);
+                  setOpenStoreVisitDealStoreChooserModal(true);
                   break;
                 case 2:
-                  setOpenStoreChooserModal(true);
+                  setOpenSnacksDeliveredDealStoreChooserModal(true);
                   break;
               }
             }}
@@ -627,10 +640,10 @@ export function PopClubDeal() {
         }}
       />
 
-      <StoreVisitStoreChooserModal
-        open={openStoreVisitStoreChooserModal}
+      <StoreVisitDealStoreChooserModal
+        open={openStoreVisitDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreVisitStoreChooserModal(false);
+          setOpenStoreVisitDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {
@@ -639,10 +652,10 @@ export function PopClubDeal() {
         }}
       />
 
-      <StoreChooserModal
-        open={openStoreChooserModal}
+      <SnacksDeliveredDealStoreChooserModal
+        open={openSnacksDeliveredDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreChooserModal(false);
+          setOpenSnacksDeliveredDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {
