@@ -257,7 +257,7 @@ root.render(
                                 />
 
                                 <Route
-                                  path="product"
+                                  path="build-your-own-package"
                                   element={<AdminAvailabilityCatersProduct />}
                                 />
 
