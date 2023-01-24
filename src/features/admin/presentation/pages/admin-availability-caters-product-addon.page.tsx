@@ -11,7 +11,12 @@ export function AdminAvailabilityCatersProductAddon() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Availabilities", url: "/admin/availabilities" },
+            { name: "Availabilities" },
+            { name: "Catering" },
+            {
+              name: "Product Add-ons",
+              url: "/admin/availability/catering/product-addon",
+            },
           ],
         }}
       />

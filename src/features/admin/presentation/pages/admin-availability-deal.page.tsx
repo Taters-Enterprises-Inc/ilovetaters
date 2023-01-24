@@ -11,7 +11,12 @@ export function AdminAvailabilityDeal() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Availabilities", url: "/admin/availabilities" },
+            { name: "Availabilities" },
+            { name: "Pop Club" },
+            {
+              name: "Deals",
+              url: "/admin/availability/popclub/deal",
+            },
           ],
         }}
       />

@@ -2,7 +2,7 @@ import { PlatformChooserModal } from "../modals/platform-chooser.modal";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "../modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
@@ -58,7 +58,7 @@ export function PopClubIndexPage() {
         open={true}
         onClose={() => {}}
       />
-      <StoreChooserModal
+      <SnacksDeliveredStoreChooserModal
         open={openStoreChooserModal}
         onClose={() => {
           setOpenStoreChooserModal(false);

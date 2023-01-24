@@ -7,17 +7,16 @@ import {
 import moment from "moment";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { selectGetAllAvailableStores } from "../slices/get-all-available-stores.slice";
-import { selectGetStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
+import { selectGetStoreVisitDealAvailableStore } from "../slices/get-store-visit-deal-available-stores.slice";
 import { setPopClubData } from "../slices/set-popclub-data.slice";
 import {
-  resetStoreAndAddressPopClub,
-  selectSetStoreAndAddressPopClub,
-  setStoreAndAddressPopClub,
-  SetStoreAndAddressPopClubState,
-} from "../slices/set-store-and-address-popclub.slice";
+  resetStoreVisitDealStoreAndAddress,
+  selectSetStoreVisitDealStoreAndAddress,
+  setStoreVisitDealStoreAndAddress,
+  SetStoreVisitDealStoreAndAddressState,
+} from "../slices/set-store-visit-deal-store-and-address.slice";
 
-interface StoreClusterProps {
+interface StoreVisitDealStoreClusterProps {
   onClose: any;
   address: string | null;
 
@@ -25,13 +24,15 @@ interface StoreClusterProps {
   onDefaultStoreSelectHandler?: () => void;
 }
 
-export function StoreClusterStoreVisit(props: StoreClusterProps) {
-  const getStoresAvailablePopClubStoreVisitState = useAppSelector(
-    selectGetStoresAvailablePopClubStoreVisit
+export function StoreVisitDealStoreCluster(
+  props: StoreVisitDealStoreClusterProps
+) {
+  const getStoreVisitDealAvailableStoreState = useAppSelector(
+    selectGetStoreVisitDealAvailableStore
   );
   const dispatch = useAppDispatch();
-  const setStoreAndAddressPopClubState = useAppSelector(
-    selectSetStoreAndAddressPopClub
+  const setStoreVisitDealStoreAndAddressState = useAppSelector(
+    selectSetStoreVisitDealStoreAndAddress
   );
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
   const storeClicked = (storeId: number, regionId: number) => {
     dispatch(
-      setStoreAndAddressPopClub({
+      setStoreVisitDealStoreAndAddress({
         address: props.address,
         storeId,
         regionId,
@@ -50,21 +51,21 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
   useEffect(() => {
     if (
-      setStoreAndAddressPopClubState.status ===
-      SetStoreAndAddressPopClubState.success
+      setStoreVisitDealStoreAndAddressState.status ===
+      SetStoreVisitDealStoreAndAddressState.success
     ) {
       dispatch(getSession());
     }
-  }, [setStoreAndAddressPopClubState]);
+  }, [setStoreVisitDealStoreAndAddressState]);
 
   useEffect(() => {
     if (
-      setStoreAndAddressPopClubState.status ===
-      SetStoreAndAddressPopClubState.success
+      setStoreVisitDealStoreAndAddressState.status ===
+      SetStoreVisitDealStoreAndAddressState.success
     ) {
       props.onClose();
 
-      dispatch(resetStoreAndAddressPopClub());
+      dispatch(resetStoreVisitDealStoreAndAddress());
 
       dispatch(setPopClubData({ platform: "store-visit" }));
 
@@ -88,11 +89,11 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
 
   return (
     <section className="text-white ">
-      {getStoresAvailablePopClubStoreVisitState.search ? (
+      {getStoreVisitDealAvailableStoreState.search ? (
         <>
-          {getStoresAvailablePopClubStoreVisitState.search.length > 0 ? (
+          {getStoreVisitDealAvailableStoreState.search.length > 0 ? (
             <section className="grid grid-cols-2 gap-1 pb-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-              {getStoresAvailablePopClubStoreVisitState.search.map(
+              {getStoreVisitDealAvailableStoreState.search.map(
                 (store, index) => {
                   const currentTime = moment(
                     moment().format("HH:mm:ss"),
@@ -170,7 +171,7 @@ export function StoreClusterStoreVisit(props: StoreClusterProps) {
         </>
       ) : (
         <>
-          {getStoresAvailablePopClubStoreVisitState.data?.map(
+          {getStoreVisitDealAvailableStoreState.data?.map(
             (store_cluster, index) => (
               <div key={index}>
                 <h1 className="pl-2 text-sm font-normal">

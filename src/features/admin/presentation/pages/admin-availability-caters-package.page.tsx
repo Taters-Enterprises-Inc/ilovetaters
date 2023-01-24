@@ -11,7 +11,12 @@ export function AdminAvailabilityCatersPackage() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Availabilities", url: "/admin/availabilities" },
+            { name: "Availabilities" },
+            { name: "Catering" },
+            {
+              name: "Package",
+              url: "/admin/availability/catering/package",
+            },
           ],
         }}
       />

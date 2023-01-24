@@ -236,36 +236,44 @@ root.render(
                               <Route path="store" element={<AdminFaq />} />
                               <Route path="customer" element={<AdminCFaq />} />
                             </Route>
-
                             <Route path="availability">
-                              <Route
-                                path="deal"
-                                element={<AdminAvailabilityDeal />}
-                              />
-                              <Route
-                                path="product"
-                                element={<AdminAvailabilityProduct />}
-                              />
-                              <Route
-                                path="caters-product"
-                                element={<AdminAvailabilityCatersProduct />}
-                              />
-                              <Route
-                                path="caters-package"
-                                element={<AdminAvailabilityCatersPackage />}
-                              />
-                              <Route
-                                path="caters-package-addon"
-                                element={
-                                  <AdminAvailabilityCatersPackageAddon />
-                                }
-                              />
-                              <Route
-                                path="caters-product-addon"
-                                element={
-                                  <AdminAvailabilityCatersProductAddon />
-                                }
-                              />
+                              <Route path="shop">
+                                <Route
+                                  path="product"
+                                  element={<AdminAvailabilityProduct />}
+                                />
+                              </Route>
+
+                              <Route path="catering">
+                                <Route
+                                  path="package"
+                                  element={<AdminAvailabilityCatersPackage />}
+                                />
+                                <Route
+                                  path="package-addon"
+                                  element={
+                                    <AdminAvailabilityCatersPackageAddon />
+                                  }
+                                />
+
+                                <Route
+                                  path="product"
+                                  element={<AdminAvailabilityCatersProduct />}
+                                />
+
+                                <Route
+                                  path="product-addon"
+                                  element={
+                                    <AdminAvailabilityCatersProductAddon />
+                                  }
+                                />
+                              </Route>
+                              <Route path="popclub">
+                                <Route
+                                  path="deal"
+                                  element={<AdminAvailabilityDeal />}
+                                />
+                              </Route>
                             </Route>
 
                             <Route path="setting">
