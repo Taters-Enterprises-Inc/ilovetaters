@@ -426,7 +426,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   }}
                                   className={(navData) =>
                                     navData.isActive
-                                      ? "flex bg-white text-secondary "
+                                      ? "flex bg-white text-secondary"
                                       : "flex"
                                   }
                                 >

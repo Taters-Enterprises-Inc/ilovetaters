@@ -306,6 +306,12 @@ root.render(
                                     <AdminAvailabilityCatersPackageAddon />
                                   }
                                 />
+
+                                <Route
+                                  path="build-your-own-package"
+                                  element={<AdminAvailabilityCatersProduct />}
+                                />
+
                                 <Route
                                   path="product-addon"
                                   element={
