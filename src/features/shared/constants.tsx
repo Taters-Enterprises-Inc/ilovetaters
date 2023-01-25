@@ -188,6 +188,24 @@ export const ADMIN_FAQ: Array<TabModel> = [
   },
 ];
 
+export const SEE_ME_TAB_FAQ: Array<TabModel> = [
+  {
+    name: "Snackshop",
+    active: "snackshop",
+    url: "/see-me",
+  },
+  {
+    name: "Catering",
+    active: "catering",
+    url: "/see-me/catering",
+  },
+  {
+    name: "PopClub",
+    active: "popclub",
+    url: "/see-me/popclub",
+  },
+];
+
 export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
   {
     name: "My Profile",

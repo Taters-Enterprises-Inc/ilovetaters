@@ -54,7 +54,8 @@ interface HeaderNavProps {
     | "POPCLUB"
     | "HOME"
     | "BRANCHES"
-    | "FRANCHISING";
+    | "FRANCHISING"
+    | "SEEME";
   logoProps: {
     src: string;
     alt: string;
