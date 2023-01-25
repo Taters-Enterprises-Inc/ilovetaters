@@ -120,6 +120,7 @@ import {
   SeeMeSnackshop,
   SeeMePopClub,
 } from "features/see-me/presentation/pages";
+import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -151,10 +152,11 @@ root.render(
                       </Route>
 
                       <Route path="franchising" element={<Franchising />} />
-                      <Route path="see-me">
+                      <Route path="see_me">
                         <Route index element={<SeeMeSnackshop />} />
                         <Route path="catering" element={<SeeMeCatering />} />
                         <Route path="popclub" element={<SeeMePopClub />} />
+                        <Route path="reseller" element={<SeeMeReseller />} />
                       </Route>
                       <Route
                         path="privacy-policy"

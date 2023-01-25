@@ -215,17 +215,22 @@ export const SEE_ME_TAB_FAQ: Array<TabModel> = [
   {
     name: "Snackshop",
     active: "snackshop",
-    url: "/see-me",
+    url: "/see_me",
   },
   {
     name: "Catering",
     active: "catering",
-    url: "/see-me/catering",
+    url: "/see_me/catering",
   },
   {
     name: "PopClub",
     active: "popclub",
-    url: "/see-me/popclub",
+    url: "/see_me/popclub",
+  },
+  {
+    name: "Reseller",
+    active: "reseller",
+    url: "/see_me/reseller",
   },
 ];
 
