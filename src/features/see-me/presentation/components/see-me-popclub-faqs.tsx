@@ -54,42 +54,64 @@ export function SeeMePopClubFaqs() {
     <div>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel0d-content" id="panel0d-header">
-          <Typography>What is Snackshop?</Typography>
+          <Typography>What is Popclub?</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          Snackshop is the E-Commerce portal of Taters. It allows customers to
-          order snacks directly from taters with better promos than other food
-          delivery services or online marketplace
+          Popclub is the Loyalty Program Solution of Taters where we offer our
+          deals and promos that are not available in other food delivery
+          services or online marketplace. It can only be accessed via
+          ilovetaters.com and will require customer to register an account.
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
           <Typography>
-            What do I need to apply for a Snackshop Store?{" "}
+            Is it available for both walk-in and delivery?
           </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>Yes</Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <Typography>What do I need to apply for a Popclub Store?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
             You just need to sign this form and we will immediately setup your
             account. Account setup can take between 3 to 5 working days upon
-            receipt
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion defaultExpanded={true}>
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Do we get training for Snackshop?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            There will be a screen recorded training that will allow your team
-            to understand how to use Snackshop as a customer and as a store
-            merchant.
+            receipt.
           </Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>Do we get training for Popclub?</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            There will be a screen recorded training that will allow your team
+            to understand how to use Popclub as a customer and as a store
+            merchant.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+          <Typography>Can we create our own deals for our store?</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            For now no, but this is part of our development pipeline to allow
+            stores to create their own customized deals. We will make an
+            announcement once this feature becomes available
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
           <Typography>Do we get support for any issues?</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -99,8 +121,9 @@ export function SeeMePopClubFaqs() {
           </Typography>
         </AccordionDetails>
       </Accordion>
+
       <Accordion defaultExpanded={true}>
-        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+        <AccordionSummary aria-controls="panel6d-content" id="panel6d-header">
           <Typography>
             As a franchisee, how do we get paid for purchases?
           </Typography>
@@ -108,15 +131,17 @@ export function SeeMePopClubFaqs() {
         <AccordionDetails>
           <Typography>
             The payment options available are COD and E-WALLETS such as GCASH or
-            BANK. You will use your own E-WALLETS or BANK ACCOUNTS so the
-            payment directly goes to you.
+            BANK. For Full Franchisees, you will use your own E-WALLETS or BANK
+            ACCOUNTS so the payment directly goes to you.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
       <Accordion defaultExpanded={true}>
-        <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
-          <Typography>What about logistics/delivery to customer?</Typography>
+        <AccordionSummary aria-controls="panel6d-content" id="panel6d-header">
+          <Typography>
+            What about logistics/delivery to customer for popclub deliveries?
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>

@@ -59,7 +59,7 @@ interface HeaderNavProps {
     | "HOME"
     | "BRANCHES"
     | "FRANCHISING"
-    | "SEEME";
+    | "SEE_ME";
   logoProps: {
     src: string;
     alt: string;

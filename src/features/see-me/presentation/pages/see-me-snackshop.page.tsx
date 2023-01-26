@@ -18,7 +18,7 @@ export function SeeMeSnackshop() {
   return (
     <main className="bg-primary">
       <HeaderNav
-        activeUrl="FRANCHISING"
+        activeUrl="SEE_ME"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
