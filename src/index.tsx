@@ -87,6 +87,12 @@ import { BSCLogin } from "features/bsc/presentation/pages";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
 import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
 import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
+import {
+  SeeMeCatering,
+  SeeMeSnackshop,
+  SeeMePopClub,
+} from "features/see-me/presentation/pages";
+import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -115,6 +121,12 @@ root.render(
                       <Route path="/" element={<Home />} />
                       <Route path="branches" element={<Branches />} />
                       <Route path="franchising" element={<Franchising />} />
+                      <Route path="see_me">
+                        <Route index element={<SeeMeSnackshop />} />
+                        <Route path="catering" element={<SeeMeCatering />} />
+                        <Route path="popclub" element={<SeeMePopClub />} />
+                        <Route path="reseller" element={<SeeMeReseller />} />
+                      </Route>
                       <Route
                         path="privacy-policy"
                         element={<PrivacyPolicy />}

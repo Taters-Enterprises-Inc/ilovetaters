@@ -32,7 +32,7 @@ export function AdminFaq() {
         <main className="">
           <section className="px-4 lg:mt-6 ">
             <TabFaq tabs={ADMIN_FAQ} activeTab="store">
-              <CustomizedAccordionsSFAQ></CustomizedAccordionsSFAQ>
+              <CustomizedAccordionsSFAQ />
             </TabFaq>
           </section>
         </main>
