@@ -59,7 +59,15 @@ export function SeeMeResellerFaqs() {
         <AccordionDetails>
           Reseller is the online solution of Taters that allows entrepreneur to
           resell out products. The reseller program information for customer can
-          be found in https://ilovetaters.com/reseller
+          be found in{" "}
+          <a
+            href="https://ilovetaters.com/reseller"
+            className="text-tertiary"
+            target="_blank"
+            rel="noreferrer"
+          >
+            https://ilovetaters.com/reseller
+          </a>{" "}
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
@@ -68,9 +76,17 @@ export function SeeMeResellerFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You just need to sign this form and we will immediately setup your
-            account. Account setup can take between 3 to 5 working days upon
-            receipt.
+            You just need to sign this{" "}
+            <a
+              href="https://forms.gle/7rotFEnWiFgbnpGf8"
+              className="text-tertiary"
+              target="_blank"
+              rel="noreferrer"
+            >
+              google form{" "}
+            </a>{" "}
+            and we will immediately setup your account. Account setup can take
+            between 3 to 5 working days upon receipt.
           </Typography>
         </AccordionDetails>
       </Accordion>

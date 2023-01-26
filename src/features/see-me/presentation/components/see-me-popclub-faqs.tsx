@@ -79,9 +79,17 @@ export function SeeMePopClubFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You just need to sign this form and we will immediately setup your
-            account. Account setup can take between 3 to 5 working days upon
-            receipt.
+            You just need to sign this{" "}
+            <a
+              href="https://forms.gle/7rotFEnWiFgbnpGf8"
+              className="text-tertiary"
+              target="_blank"
+              rel="noreferrer"
+            >
+              google form{" "}
+            </a>{" "}
+            and we will immediately setup your account. Account setup can take
+            between 3 to 5 working days upon receipt.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -117,7 +125,7 @@ export function SeeMePopClubFaqs() {
         <AccordionDetails>
           <Typography>
             Yes the MIS team will be providing support for any issues related to
-            Snackshop
+            PopClub
           </Typography>
         </AccordionDetails>
       </Accordion>
