@@ -54,42 +54,68 @@ export function SeeMeCateringFaqs() {
     <div>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel0d-content" id="panel0d-header">
-          <Typography>What is Snackshop?</Typography>
+          <Typography>What is Catering?</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          Snackshop is the E-Commerce portal of Taters. It allows customers to
-          order snacks directly from taters with better promos than other food
-          delivery services or online marketplace
+          Catering is the online solution of Taters to allow customer to easily
+          book their catering events. This also helps our stores easily track
+          and manager each catering request as it’s being consolidated in a
+          portal
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>
-            What do I need to apply for a Snackshop Store?{" "}
-          </Typography>
+          <Typography>What do I need to apply for a Catering Store?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You just need to sign this form and we will immediately setup your
-            account. Account setup can take between 3 to 5 working days upon
-            receipt
+            Please contact the marketing team with regards to your application
+            as a catering store. They have a few requirements that’s necessary
+            to allow you to be part of the program
           </Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Do we get training for Snackshop?</Typography>
+          <Typography>Do we get training for Catering?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
             There will be a screen recorded training that will allow your team
-            to understand how to use Snackshop as a customer and as a store
+            to understand how to use Catering as a customer and as a store
             merchant.
           </Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>Can we create our own package for our store?</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            For now no, but this is part of our development pipeline to allow
+            stores to create their own customized deals. We will make an
+            announcement once this feature becomes available
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+          <Typography>
+            Can the customer build their own catering package?
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            For now no, but this is part of our development pipeline to allow
+            stores to create their own customized deals. We will make an
+            announcement once this feature becomes available
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
           <Typography>Do we get support for any issues?</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -99,8 +125,9 @@ export function SeeMeCateringFaqs() {
           </Typography>
         </AccordionDetails>
       </Accordion>
+
       <Accordion defaultExpanded={true}>
-        <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
+        <AccordionSummary aria-controls="panel6d-content" id="panel6d-header">
           <Typography>
             As a franchisee, how do we get paid for purchases?
           </Typography>
@@ -108,21 +135,23 @@ export function SeeMeCateringFaqs() {
         <AccordionDetails>
           <Typography>
             The payment options available are COD and E-WALLETS such as GCASH or
-            BANK. You will use your own E-WALLETS or BANK ACCOUNTS so the
-            payment directly goes to you.
+            BANK. For Full Franchisees, you will use your own E-WALLETS or BANK
+            ACCOUNTS so the payment directly goes to you.
           </Typography>
         </AccordionDetails>
       </Accordion>
 
       <Accordion defaultExpanded={true}>
-        <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
-          <Typography>What about logistics/delivery to customer?</Typography>
+        <AccordionSummary aria-controls="panel6d-content" id="panel6d-header">
+          <Typography>
+            What about logistics/delivery to customer for catering services?
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
             Logistics/delivery will be handled by your store. Delivery Fee is
-            calculated by the system so it may not always match the delivery fee
-            charged by your logistics provider.
+            calculated by the system based on logistics data we’ve captured from
+            our deals with several logistics providers.
           </Typography>
         </AccordionDetails>
       </Accordion>
