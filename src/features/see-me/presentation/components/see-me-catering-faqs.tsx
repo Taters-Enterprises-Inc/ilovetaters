@@ -57,10 +57,10 @@ export function SeeMeCateringFaqs() {
           <Typography>What is Catering?</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          Catering is the online solution of Taters to allow customer to easily
-          book their catering events. This also helps our stores easily track
-          and manager each catering request as it’s being consolidated in a
-          portal
+          Catering is the online solution of Taters that allows customer to
+          easily book their catering events. This also helps our stores easily
+          track and manager each catering request as it’s being consolidated in
+          a portal
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded={true}>
@@ -70,8 +70,8 @@ export function SeeMeCateringFaqs() {
         <AccordionDetails>
           <Typography>
             Please contact the marketing team with regards to your application
-            as a catering store. They have a few requirements that’s necessary
-            to allow you to be part of the program
+            as a catering store. They have a few requirements that’s required
+            for the program.
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -121,7 +121,7 @@ export function SeeMeCateringFaqs() {
         <AccordionDetails>
           <Typography>
             Yes the MIS team will be providing support for any issues related to
-            Snackshop
+            Catering
           </Typography>
         </AccordionDetails>
       </Accordion>

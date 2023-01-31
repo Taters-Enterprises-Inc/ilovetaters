@@ -70,9 +70,17 @@ export function SeeMeSnackshopFaqs() {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            You just need to sign this form and we will immediately setup your
-            account. Account setup can take between 3 to 5 working days upon
-            receipt
+            You just need to sign up to this{" "}
+            <a
+              href="https://forms.gle/7rotFEnWiFgbnpGf8"
+              className="text-tertiary"
+              target="_blank"
+              rel="noreferrer"
+            >
+              google form{" "}
+            </a>{" "}
+            and we will immediately setup your account. Account setup can take
+            between 3 to 5 working days upon receipt
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -108,8 +116,8 @@ export function SeeMeSnackshopFaqs() {
         <AccordionDetails>
           <Typography>
             The payment options available are COD and E-WALLETS such as GCASH or
-            BANK. You will use your own E-WALLETS or BANK ACCOUNTS so the
-            payment directly goes to you.
+            BANK. For Full Franchisees, you will use your own E-WALLETS or BANK
+            ACCOUNTS so the payment directly goes to you.
           </Typography>
         </AccordionDetails>
       </Accordion>
