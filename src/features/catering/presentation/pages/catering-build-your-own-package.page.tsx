@@ -459,7 +459,7 @@ export function CateringBuildYourOwnPackage() {
                 <div className="space-y-4">
                   <div>
                     <div className="flex">
-                      <span className="text-lg  text-white">
+                      <span className="text-lg text-white">
                         Package Quantity:
                       </span>
 
@@ -469,7 +469,7 @@ export function CateringBuildYourOwnPackage() {
                     </div>
 
                     <div className="flex">
-                      <span className="text-lg  text-white">
+                      <span className="text-lg text-white">
                         Package Price:
                       </span>
 
@@ -610,7 +610,7 @@ export function CateringBuildYourOwnPackage() {
                 ) : null}
               </div>
             ) : (
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 py-8">
+              <div className="flex flex-col py-8 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <div>
                   {getCateringCategoryProductsState.data?.product_addons &&
                   getCateringCategoryProductsState.data.addons.length !== 0 ? (
