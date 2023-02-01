@@ -272,31 +272,27 @@ export function Deal(props: DealProps) {
             </h4>
           </div>
           <hr />
-          {props.deal.available_days ? (
-            <>
-              <div className="flex items-end pt-2 space-x-2">
+          <div className="py-2 space-y-2">
+            {props.deal.available_days ? (
+              <div className="flex items-end space-x-2">
                 <BsFillCalendar2WeekFill className="text-base text-white" />
                 <span className="text-[9px] lg:text-xs text-white">
                   Valid Weekdays
                 </span>
               </div>
-            </>
-          ) : null}
-          {availableStartTime && availableEndTime ? (
-            <>
-              <div className="flex items-center pt-2 space-x-1">
+            ) : null}
+            {availableStartTime && availableEndTime ? (
+              <div className="flex items-center space-x-1">
                 <HiClock className="text-base text-white" />
                 <span className="text-[10px] lg:text-xs text-white">
                   {availableStartTime.format("LT")} -{" "}
                   {availableEndTime.format("LT")}
                 </span>
               </div>
-            </>
-          ) : null}
+            ) : null}
 
-          {availableStartDateTime && availableEndDateTime ? (
-            <>
-              <div className="flex items-center pt-2 space-x-1">
+            {availableStartDateTime && availableEndDateTime ? (
+              <div className="flex items-center space-x-1">
                 <HiClock className="text-base text-white" />
                 <span className="text-[10px] lg:text-xs text-white">
                   {availableStartDateTime.format("ll") ===
@@ -308,14 +304,13 @@ export function Deal(props: DealProps) {
                     )} - ${availableEndDateTime.format("ll")}`}
                 </span>
               </div>
-            </>
-          ) : null}
-
-          <div className="flex items-center pt-2 space-x-1">
-            <RiTimerFlashFill className="text-base text-white" />
-            <span className="text-[9px] lg:text-xs text-white">
-              {secondsToHms(props.deal.seconds_before_expiration)} claim time
-            </span>
+            ) : null}
+            <div className="flex items-center space-x-1">
+              <RiTimerFlashFill className="text-base text-white" />
+              <span className="text-[9px] lg:text-xs text-white">
+                {secondsToHms(props.deal.seconds_before_expiration)} claim time
+              </span>
+            </div>
           </div>
         </div>
       </div>
