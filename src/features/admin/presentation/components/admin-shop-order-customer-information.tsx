@@ -570,7 +570,7 @@ export function AdminShopOrderCustomerInformation() {
                         scope="row"
                         className="px-6 py-4 font-medium text-secondary"
                       >
-                        {item.deal_name ? (
+                        {item.deal_order_item_id ? (
                           <>
                             <span className=" !text-green-700 font-bold">
                               Deal Applied:{" "}
