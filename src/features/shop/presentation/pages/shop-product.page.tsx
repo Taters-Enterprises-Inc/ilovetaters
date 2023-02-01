@@ -75,6 +75,7 @@ import { ShopDeal } from "../components/shop-deal";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
+import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
 
 let quantityId: any;
 
@@ -124,6 +125,7 @@ export function ShopProduct() {
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
   const getSnackshopDealsState = useAppSelector(selectGetSnackshopDeals);
+  const redeemDealState = useAppSelector(selectRedeemDeal);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -147,7 +149,7 @@ export function ShopProduct() {
       dispatch(getProductDetails({ hash }));
       dispatch(getSnackshopDeals());
     }
-  }, [location, dispatch, hash, forfeitRedeemState]);
+  }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
 
   useEffect(() => {
     if (
