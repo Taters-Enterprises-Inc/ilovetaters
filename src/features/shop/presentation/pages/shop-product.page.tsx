@@ -76,6 +76,7 @@ import { PlatformChooserModal } from "features/popclub/presentation/modals/platf
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
+import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 
 let quantityId: any;
 
@@ -148,6 +149,8 @@ export function ShopProduct() {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
       dispatch(getSnackshopDeals());
+
+      dispatch(redeemValidators());
     }
   }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
 

@@ -1,4 +1,5 @@
 export interface SnackshopDealModel {
+  id: number;
   hash: string;
   name: string;
   description: string;
