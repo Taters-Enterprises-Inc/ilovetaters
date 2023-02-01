@@ -584,6 +584,13 @@ export function ShopProduct() {
                       {getSnackshopDealsState.data.map((deal, i) => (
                         <ShopDeal key={i} deal={deal} />
                       ))}
+                      {getSnackshopDealsState.data.length === 0 ||
+                      getSnackshopDealsState.data === undefined ||
+                      getSnackshopDealsState.data === null ? (
+                        <span className="text-white text-base font-['Bebas_Neue'] tracking-[3px]">
+                          No Deals Available
+                        </span>
+                      ) : null}
                     </div>
                     <div
                       onClick={() => {
