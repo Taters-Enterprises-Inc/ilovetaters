@@ -58,7 +58,7 @@ export function Home() {
             }
             alt="The best pop corn in town"
             style={{ visibility: "hidden" }}
-          ></img>
+          />
         </section>
         <img
           src={
@@ -67,7 +67,7 @@ export function Home() {
           }
           className="hidden w-full sm:block"
           alt="The best pop corn in town"
-        ></img>
+        />
         <section className="container lg:mx-auto pb-[100px] grid-cols-3 gap-4 pt-4 hidden sm:grid">
           {SERVICES_DESKTOP.map(function (service_desktop, i) {
             return (

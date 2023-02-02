@@ -16,6 +16,7 @@ import {
   AddToCartShopParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -82,6 +83,18 @@ export interface GetEditCartItemResponse {
   };
 }
 
+export interface GetSnackshopDealsResponse {
+  data: {
+    message: string;
+    data: Array<SnackshopDealModel>;
+  };
+}
+
+export function GetSnackshopDealsRepository(): Promise<GetSnackshopDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shop/deals`, {
+    withCredentials: true,
+  });
+}
 export function RemoveItemFromCartShopRepository(
   param: number
 ): Promise<RemoveItemFromCartShopResponse> {

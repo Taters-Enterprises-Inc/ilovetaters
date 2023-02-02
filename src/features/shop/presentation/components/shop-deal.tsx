@@ -1,40 +1,41 @@
-import { DealModel } from "features/popclub/core/domain/deal.model";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { DealValidationState } from "features/popclub/presentation/components/deal";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  redeemDeal,
+  RedeemDealState,
+  resetRedeemDeal,
+  selectRedeemDeal,
+} from "features/popclub/presentation/slices/redeem-deal.slice";
+import { selectRedeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
+import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import Countdown from "react-countdown";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { HiClock } from "react-icons/hi";
 import { RiTimerFlashFill } from "react-icons/ri";
-import { useNavigate, useParams } from "react-router-dom";
-import Countdown from "react-countdown";
-import { AiOutlineFieldTime } from "react-icons/ai";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
-import { selectRedeemValidators } from "../slices/redeem-validators.slice";
-import { getDeals } from "../slices/get-deals.slice";
+import { getSnackshopDeals } from "../slices/get-snackshop-deals.slice";
 
-interface DealProps {
-  deal: DealModel;
+interface ShopDealCardProps {
+  deal: SnackshopDealModel;
 }
 
-export enum DealValidationState {
-  valid,
-  startAndEndDateTimeInvalid,
-  startAndEndTimeInvalid,
-  availableListInvalid,
-  redeemValidatorsInvalid,
-}
-
-export function Deal(props: DealProps) {
-  const navigate = useNavigate();
-  const redeemValidatorsState = useAppSelector(selectRedeemValidators);
+export function ShopDeal(props: ShopDealCardProps) {
   const dispatch = useAppDispatch();
 
-  let { platform } = useParams();
-  const query = useQuery();
-  const category = query.get("category");
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+
+  const getSessionState = useAppSelector(selectGetSession);
+  const redeemDealState = useAppSelector(selectRedeemDeal);
+  const redeemValidatorsState = useAppSelector(selectRedeemValidators);
 
   let availableStartTime;
   let availableEndTime;
@@ -61,11 +62,7 @@ export function Deal(props: DealProps) {
 
   const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
     if (completed) {
-      if (platform !== undefined && category !== null) {
-        dispatch(
-          getDeals({ platform_url_name: platform, category_url_name: category })
-        );
-      }
+      dispatch(getSnackshopDeals());
     } else {
       return (
         <span>
@@ -160,10 +157,14 @@ export function Deal(props: DealProps) {
     dealValidationState = DealValidationState.redeemValidatorsInvalid;
   }
 
-  const handleOnDealClick = () => {
-    if (dealValidationState === DealValidationState.valid)
-      navigate(`/popclub/deal/${props.deal.hash}`);
-  };
+  useEffect(() => {
+    if (redeemDealState.status === RedeemDealState.success) {
+      dispatch(getNotifications());
+      dispatch(getSession());
+      dispatch(getLatestUnexpiredRedeem());
+      dispatch(resetRedeemDeal());
+    }
+  }, [dispatch, redeemDealState]);
 
   const dealIsNotAvailableMessage = () => {
     switch (dealValidationState) {
@@ -218,60 +219,42 @@ export function Deal(props: DealProps) {
     }
   };
 
+  const handleRedeem = () => {
+    if (
+      getSessionState.data?.userData == null ||
+      getSessionState.data?.userData === undefined
+    ) {
+      setOpenLoginChooserModal(true);
+      return;
+    }
+    dispatch(
+      redeemDeal({
+        hash: props.deal.hash,
+      })
+    );
+  };
+
   return (
-    <button onClick={handleOnDealClick}>
-      <div
-        className={`${
-          dealValidationState === DealValidationState.valid
-            ? ""
-            : "cursor-not-allowed"
-        } relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full`}
-      >
+    <>
+      <div className="relative flex">
         {dealValidationState === DealValidationState.valid ? null : (
           <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
             {dealIsNotAvailableMessage()}
           </div>
         )}
 
-        <h1 className="text-[12px] lg:text-lg pt-1 text-white uppercase font-['Bebas_Neue'] tracking-[2px] text-center ">
-          {props.deal.category_name}
-        </h1>
-        {props.deal.original_price && props.deal.promo_price ? (
-          <div className="absolute top-0 left-0 mt-9 lg:mt-12">
-            <div
-              className={`text-[11px] lg:text-[12px] mb-[2px] bg-yellow-500 text-white rounded-r-[2px] font-bold px-1`}
-            >
-              {Math.round(
-                ((props.deal.original_price - props.deal.promo_price) /
-                  props.deal.original_price) *
-                  100
-              )}
-              % OFF
-            </div>
-            <div className=" bg-red-500 text-white rounded-r-[4px] leading-[13px] lg:leading-[15px] px-1 py-[4px] lg:py-[6px]">
-              <div className="text-left md:text-[12px] text-[11px] lg:text-[12px] font-normal line-through">
-                ₱{props.deal.original_price}
-              </div>
-              <div className="text-[15px] lg:text-[20px] text-start">
-                ₱{props.deal.promo_price}
-              </div>
-            </div>
-          </div>
-        ) : null}
         <img
-          alt="..."
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${props.deal.product_image}`}
-          className="card-clickable h-[200px] lg:h-[350px] object-cover"
+          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.deal.product_image}`}
+          className="rounded-[10px] w-[75px] h-[75px]"
+          alt=""
         />
+        <div className="flex flex-col flex-1 pt-2 pl-3 text-white">
+          <h3 className="text-sm w-[90%] font-bold leading-4 pr-3">
+            {props.deal.name}
+          </h3>
 
-        <div className="px-3 pt-4 pb-3 ">
-          <div className="relative flex mb-2">
-            <div className="fade-seperator"></div>
-            <h4 className="text-white text-[11px] leading-4 lg:text-base font-semibold text-start text-sm whitespace-pre-wrap ">
-              {props.deal.name}
-            </h4>
-          </div>
-          <hr />
+          <h3 className="pr-3 text-xs">{props.deal.description}</h3>
+
           <div className="py-2 space-y-2">
             {props.deal.available_days ? (
               <div className="flex items-end space-x-2">
@@ -281,6 +264,7 @@ export function Deal(props: DealProps) {
                 </span>
               </div>
             ) : null}
+
             {availableStartTime && availableEndTime ? (
               <div className="flex items-center space-x-1">
                 <HiClock className="text-base text-white" />
@@ -305,6 +289,7 @@ export function Deal(props: DealProps) {
                 </span>
               </div>
             ) : null}
+
             <div className="flex items-center space-x-1">
               <RiTimerFlashFill className="text-base text-white" />
               <span className="text-[9px] lg:text-xs text-white">
@@ -312,8 +297,26 @@ export function Deal(props: DealProps) {
               </span>
             </div>
           </div>
+
+          {dealValidationState === DealValidationState.valid ? (
+            <div className="flex items-center justify-end flex-1">
+              <button
+                onClick={handleRedeem}
+                className="px-3 py-1 text-sm font-bold rounded-lg bg-button"
+              >
+                Redeem
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
-    </button>
+
+      <LoginChooserModal
+        open={openLoginChooserModal}
+        onClose={() => {
+          setOpenLoginChooserModal(false);
+        }}
+      />
+    </>
   );
 }

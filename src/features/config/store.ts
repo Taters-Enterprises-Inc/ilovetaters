@@ -136,6 +136,7 @@ import setStoreVisitDealStoreAndAddress from "features/popclub/presentation/slic
 import setSnackshopStoreAndAddress from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
 import setCateringStoreAndAddress from "features/catering/presentation/slices/set-catering-store-and-address.slice";
 import setCateringPackageStoreAndAddress from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
+import getSnackshopDeals from "features/shop/presentation/slices/get-snackshop-deals.slice";
 
 export const store = configureStore({
   reducer: {
@@ -275,6 +276,7 @@ export const store = configureStore({
     setSnackshopStoreAndAddress,
     setCateringStoreAndAddress,
     setCateringPackageStoreAndAddress,
+    getSnackshopDeals,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
