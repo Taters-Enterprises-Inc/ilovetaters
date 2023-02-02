@@ -93,6 +93,10 @@ import {
   SeeMePopClub,
 } from "features/see-me/presentation/pages";
 import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
+import {
+  CateringCheckoutGuard,
+  CateringProductsGuard,
+} from "features/catering/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -215,8 +219,18 @@ root.render(
                           element={<CateringContract />}
                         />
                         <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route path="products" element={<CateringProducts />} />
-                        <Route path="checkout" element={<CateringCheckout />} />
+                        <Route element={<CateringProductsGuard />}>
+                          <Route
+                            path="products"
+                            element={<CateringProducts />}
+                          />
+                        </Route>
+                        <Route element={<CateringCheckoutGuard />}>
+                          <Route
+                            path="checkout"
+                            element={<CateringCheckout />}
+                          />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
                       </Route>
                       <Route path="*" element={<NotFound />} />

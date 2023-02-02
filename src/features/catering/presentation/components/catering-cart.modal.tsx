@@ -37,7 +37,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartCatering());
     }
-  }, [removeItemFromCartCateringState]);
+  }, [removeItemFromCartCateringState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
