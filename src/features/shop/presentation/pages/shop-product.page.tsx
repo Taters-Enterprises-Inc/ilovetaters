@@ -75,6 +75,7 @@ import { PlatformChooserModal } from "features/popclub/presentation/modals/platf
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
+import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 
 let quantityId: any;
 
@@ -147,6 +148,8 @@ export function ShopProduct() {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
       dispatch(getSnackshopDeals());
+
+      dispatch(redeemValidators());
     }
   }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
 
@@ -583,6 +586,13 @@ export function ShopProduct() {
                       {getSnackshopDealsState.data.map((deal, i) => (
                         <ShopDeal key={i} deal={deal} />
                       ))}
+                      {getSnackshopDealsState.data.length === 0 ||
+                      getSnackshopDealsState.data === undefined ||
+                      getSnackshopDealsState.data === null ? (
+                        <span className="text-white text-base font-['Bebas_Neue'] tracking-[3px]">
+                          No Deals Available
+                        </span>
+                      ) : null}
                     </div>
                     <div
                       onClick={() => {

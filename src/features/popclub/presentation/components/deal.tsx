@@ -19,7 +19,7 @@ interface DealProps {
   deal: DealModel;
 }
 
-enum DealValidationState {
+export enum DealValidationState {
   valid,
   startAndEndDateTimeInvalid,
   startAndEndTimeInvalid,
