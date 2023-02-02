@@ -33,6 +33,11 @@ import {
   GetAllStoresState,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
+import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import {
+  GetSessionState,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -58,11 +63,23 @@ export function Survey() {
     | undefined
   >();
 
+  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+
   const getSurveyState = useAppSelector(selectGetSurvey);
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
   );
   const getAllStoresState = useAppSelector(selectGetAllStores);
+  const getSessionState = useAppSelector(selectGetSession);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.userData === null
+    ) {
+      setOpenLoginChooserModal(true);
+    }
+  }, [getSessionState]);
 
   useEffect(() => {
     dispatch(getSurvey());
@@ -322,6 +339,13 @@ export function Survey() {
           </section>
         ) : null}
       </main>
+
+      <LoginChooserModal
+        open={openLoginChooserModal}
+        onClose={() => {
+          setOpenLoginChooserModal(false);
+        }}
+      />
     </>
   );
 }
