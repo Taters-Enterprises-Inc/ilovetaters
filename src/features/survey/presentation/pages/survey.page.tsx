@@ -41,6 +41,12 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getCustomerSurveyResponse,
+  GetCustomerSurveyResponseState,
+  selectGetCustomerSurveyResponse,
+  resetGetCustomerSurveyResponseState,
+} from "../slices/get-customer-survey-response.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -75,6 +81,10 @@ export function Survey() {
   const getAllStoresState = useAppSelector(selectGetAllStores);
   const getSessionState = useAppSelector(selectGetSession);
 
+  const getCustomerSurveyResponseState = useAppSelector(
+    selectGetCustomerSurveyResponse
+  );
+
   useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
@@ -87,7 +97,26 @@ export function Survey() {
   useEffect(() => {
     dispatch(getSurvey());
     dispatch(getAllStores());
-  }, [dispatch]);
+    if (hash && service) {
+      dispatch(
+        getCustomerSurveyResponse({
+          hash,
+          service,
+        })
+      );
+    }
+  }, [hash, service, dispatch]);
+
+  useEffect(() => {
+    if (
+      getCustomerSurveyResponseState.status ===
+        GetCustomerSurveyResponseState.success &&
+      getCustomerSurveyResponseState.data
+    ) {
+      dispatch(resetGetCustomerSurveyResponseState());
+      navigate(`complete?service=${service}&hash=${hash}`);
+    }
+  }, [dispatch, getCustomerSurveyResponseState, navigate, service, hash]);
 
   useEffect(() => {
     if (
@@ -356,6 +385,7 @@ export function Survey() {
       </main>
 
       <LoginChooserModal
+        required
         open={openLoginChooserModal}
         onClose={() => {
           setOpenLoginChooserModal(false);

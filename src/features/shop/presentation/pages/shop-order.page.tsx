@@ -19,16 +19,44 @@ import {
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  selectCheckIfCustomerSurveyResponseExist,
+  checkIfCustomerSurveyResponseExist,
+} from "features/shared/presentation/slices/check-if-customer-survey-response-exist.slice";
 
 export function ShopOrder() {
-  const getOrdersState = useAppSelector(selectGetOrders);
-  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
-
-  const [images, setImages] = useState<any>();
   const dispatch = useAppDispatch();
   let { hash } = useParams();
-  const [uploadedFile, setUploadedFile] = useState<any>([]);
   const location = useLocation();
+
+  const [uploadedFile, setUploadedFile] = useState<any>([]);
+  const [images, setImages] = useState<any>();
+
+  const getOrdersState = useAppSelector(selectGetOrders);
+  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
+  const checkIfCustomerSurveyResponseExistState = useAppSelector(
+    selectCheckIfCustomerSurveyResponseExist
+  );
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [location]);
+
+  useEffect(() => {
+    dispatch(getLatestUnexpiredRedeem());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (hash !== undefined) {
+      dispatch(getOrders({ hash }));
+      dispatch(
+        checkIfCustomerSurveyResponseExist({
+          hash,
+          service: "SNACKSHOP",
+        })
+      );
+    }
+  }, [uploadProofOfPaymentState, dispatch, hash]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     setUploadedFile(acceptedFiles[0]);
@@ -43,24 +71,10 @@ export function ShopOrder() {
     });
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  }, [location]);
-
-  useEffect(() => {
-    dispatch(getLatestUnexpiredRedeem());
-  }, [dispatch]);
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
   });
-
-  useEffect(() => {
-    if (hash !== undefined) {
-      dispatch(getOrders({ hash }));
-    }
-  }, [uploadProofOfPaymentState, dispatch, hash]);
 
   const getStatus = (
     status: number | undefined,
@@ -717,14 +731,25 @@ export function ShopOrder() {
                 ) : null}
               </div>
               <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                <Link
-                  to={`/survey?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
-                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                >
-                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    RATE US
-                  </span>
-                </Link>
+                {checkIfCustomerSurveyResponseExistState.data ? (
+                  <Link
+                    to={`/survey/complete?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
+                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      VIEW YOUR RATING
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/survey?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
+                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                  >
+                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                      RATE US
+                    </span>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

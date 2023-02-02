@@ -18,6 +18,7 @@ import ReactGA from "react-ga";
 
 interface LoginChooserModalProps {
   open: boolean;
+  required?: boolean;
   onClose: () => void;
 }
 
@@ -60,12 +61,14 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
         className="fixed inset-0 z-30 flex items-center justify-center bg-secondary bg-opacity-30 backdrop-blur-sm "
       >
         <div className="bg-secondary px-4 py-8 round w-[90%] sm:w-[400px] rounded-lg relative text-white">
-          <button
-            className="absolute text-2xl text-white top-2 right-4"
-            onClick={props.onClose}
-          >
-            <IoMdClose />
-          </button>
+          {props.required ? null : (
+            <button
+              className="absolute text-2xl text-white top-2 right-4"
+              onClick={props.onClose}
+            >
+              <IoMdClose />
+            </button>
+          )}
 
           <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">
             Hi! Welcome to Taters

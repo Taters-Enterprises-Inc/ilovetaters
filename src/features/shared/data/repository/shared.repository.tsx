@@ -3,6 +3,7 @@ import { SessionModel } from "features/shared/core/domain/session.model";
 import { RegionModel } from "features/shared/core/domain/region.model";
 import {
   AddContactParam,
+  CheckIfCustomerSurveyResponseExistParam,
   DeleteContactParam,
   DiscountRegistrationParam,
   FacebookLoginPointParam,
@@ -178,6 +179,24 @@ export interface GetAllCompaniesResponse {
     message: string;
     data: Array<CompanyModel>;
   };
+}
+
+export interface CheckIfCustomerSurveyResponseExistResponse {
+  data: {
+    message: string;
+    data: boolean;
+  };
+}
+
+export function CheckIfCustomerSurveyResponseExistRepository(
+  param: CheckIfCustomerSurveyResponseExistParam
+): Promise<CheckIfCustomerSurveyResponseExistResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/shared/survey?hash=${param.hash}&service=${param.service}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAllCompaniesRepository(): Promise<GetAllCompaniesResponse> {
