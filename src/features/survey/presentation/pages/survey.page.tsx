@@ -4,6 +4,8 @@ import {
   useQuery,
 } from "features/config/hooks";
 import {
+  FooterNav,
+  HeaderNav,
   MaterialDateInput,
   MaterialInput,
 } from "features/shared/presentation/components";
@@ -33,6 +35,7 @@ import {
   GetAllStoresState,
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -123,6 +126,16 @@ export function Survey() {
       </Helmet>
 
       <main className="min-h-screen bg-paper">
+        <HeaderNav
+          activeUrl="HOME"
+          logoProps={{
+            src:
+              REACT_APP_DOMAIN_URL +
+              "api/assets/images/shared/logo/taters-logo.png",
+            alt: "Taters Logo",
+            className: "w-[150px] lg:w-[120px]",
+          }}
+        />
         {getSurveyState.data && getSurveyState.data.length > 0 ? (
           <section className="container py-4 mx-auto">
             <form onSubmit={handleFormSubmit}>
@@ -321,6 +334,8 @@ export function Survey() {
             </form>
           </section>
         ) : null}
+
+        <FooterNav activeUrl="HOME" />
       </main>
     </>
   );
