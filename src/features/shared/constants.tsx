@@ -1,5 +1,10 @@
 import createTheme from "@mui/material/styles/createTheme";
-import { FaShoppingBag, FaUserAlt, FaStoreAlt } from "react-icons/fa";
+import {
+  FaShoppingBag,
+  FaUserAlt,
+  FaStoreAlt,
+  FaEnvelope,
+} from "react-icons/fa";
 import { MdPolicy, MdRule } from "react-icons/md";
 import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
@@ -7,8 +12,7 @@ import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
 import { HiDocumentText } from "react-icons/hi";
 import Pusher from "pusher-js";
-import { ReactElement } from "react";
-
+import { ReactElement, ReactNode } from "react";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 
@@ -240,6 +244,12 @@ export const PROFILE_TABS: Array<TabModel> = [
     active: "profile",
     icon: <FaUserAlt />,
     url: "/profile",
+  },
+  {
+    name: "Inbox",
+    active: "inbox",
+    icon: <FaEnvelope />,
+    url: "/profile/inbox",
   },
   {
     name: "Snack Shop Orders",
@@ -954,5 +964,37 @@ export const PRODUCT_TYPE: Array<{
   {
     name: "Addons",
     color: "#ffcd17",
+  },
+];
+
+export const PROFILE_MENU: Array<{
+  name: string;
+  icon: ReactNode;
+  urlId: string;
+}> = [
+  {
+    name: "Inbox",
+    icon: <FaEnvelope />,
+    urlId: "inbox",
+  },
+  {
+    name: "Snack Shop Orders",
+    icon: <FaShoppingBag />,
+    urlId: "snackshop-orders",
+  },
+  {
+    name: "Catering Bookings",
+    icon: <RiShoppingBag3Fill />,
+    urlId: "catering-bookings",
+  },
+  {
+    name: "Popclub Redeems",
+    icon: <GiPopcorn />,
+    urlId: "popclub-redeems",
+  },
+  {
+    name: "User Discount",
+    icon: <HiDocumentText />,
+    urlId: "user-discount",
   },
 ];

@@ -8,4 +8,5 @@ export interface SnackShopOrderModel {
   generated_raffle_code: string;
   application_status: boolean;
   hash_key: string;
+  survey_hash: string | null;
 }

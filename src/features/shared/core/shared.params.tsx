@@ -76,7 +76,7 @@ export interface ForgotPasswordNewPasswordOtpParam {
   confirmPassword: string;
 }
 
-export interface CheckIfCustomerSurveyResponseExistParam {
+export interface GetCustomerSurveyResponseInOrderServiceParam {
   hash: string;
-  service: "SNACKSHOP";
+  service: "snackshop" | "catering";
 }

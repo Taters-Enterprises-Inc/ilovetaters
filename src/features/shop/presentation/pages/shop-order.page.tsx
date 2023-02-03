@@ -20,9 +20,9 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
-  selectCheckIfCustomerSurveyResponseExist,
-  checkIfCustomerSurveyResponseExist,
-} from "features/shared/presentation/slices/check-if-customer-survey-response-exist.slice";
+  selectGetCustomerSurveyResponseInOrderService,
+  getCustomerSurveyResponseInOrderService,
+} from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 
 export function ShopOrder() {
   const dispatch = useAppDispatch();
@@ -34,8 +34,8 @@ export function ShopOrder() {
 
   const getOrdersState = useAppSelector(selectGetOrders);
   const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
-  const checkIfCustomerSurveyResponseExistState = useAppSelector(
-    selectCheckIfCustomerSurveyResponseExist
+  const getCustomerSurveyResponseInOrderServiceState = useAppSelector(
+    selectGetCustomerSurveyResponseInOrderService
   );
 
   useEffect(() => {
@@ -50,9 +50,9 @@ export function ShopOrder() {
     if (hash !== undefined) {
       dispatch(getOrders({ hash }));
       dispatch(
-        checkIfCustomerSurveyResponseExist({
+        getCustomerSurveyResponseInOrderService({
           hash,
-          service: "SNACKSHOP",
+          service: "snackshop",
         })
       );
     }
@@ -731,9 +731,9 @@ export function ShopOrder() {
                 ) : null}
               </div>
               <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                {checkIfCustomerSurveyResponseExistState.data ? (
+                {getCustomerSurveyResponseInOrderServiceState.data ? (
                   <Link
-                    to={`/survey/complete?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
+                    to={`/survey/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
                     className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                   >
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -742,7 +742,7 @@ export function ShopOrder() {
                   </Link>
                 ) : (
                   <Link
-                    to={`/survey?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
+                    to={`/survey/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
                     className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                   >
                     <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

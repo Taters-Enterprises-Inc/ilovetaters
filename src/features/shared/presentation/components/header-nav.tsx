@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import { TABS } from "features/shared/constants";
+import { PROFILE_MENU, TABS } from "features/shared/constants";
 import {
   facebookLogout,
   FacebookLogoutState,
@@ -137,30 +137,6 @@ export function HeaderNav(props: HeaderNavProps) {
     setOpenProfileMenu(event.currentTarget);
   };
 
-  const handleMyProfile = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile");
-  };
-
-  const handleSnackshopOrders = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/snackshop-orders");
-  };
-
-  const handleCateringBooking = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/catering-bookings");
-  };
-
-  const handlePopClubRedeem = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/popclub-redeems");
-  };
-  const handleUserDiscount = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/user-discount");
-  };
-
   const handleLogout = () => {
     setOpenProfileMenu(null);
 
@@ -268,49 +244,6 @@ export function HeaderNav(props: HeaderNavProps) {
     prevOpen.current = open;
   }, [open]);
 
-  const profileMenu = [
-    {
-      id: 1,
-      text: getSessionState.data?.userData
-        ? getSessionState.data?.userData.first_name +
-          " " +
-          getSessionState.data?.userData.last_name
-        : "",
-      icon: <FaUserAlt />,
-      action: handleMyProfile,
-    },
-    {
-      id: 2,
-      text: "Snack Shop Orders",
-      icon: <FaShoppingBag />,
-      action: handleSnackshopOrders,
-    },
-    {
-      id: 3,
-      text: "Catering Bookings",
-      icon: <RiShoppingBag3Fill />,
-      action: handleCateringBooking,
-    },
-    {
-      id: 4,
-      text: "Popclub Redeems",
-      icon: <GiPopcorn />,
-      action: handlePopClubRedeem,
-    },
-    {
-      id: 5,
-      text: "User Discount",
-      icon: <HiDocumentText />,
-      action: handleUserDiscount,
-    },
-    {
-      id: 6,
-      text: " Logout",
-      icon: <BiLogOut />,
-      action: handleLogout,
-    },
-  ];
-
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setOpenCartMenu(event.currentTarget);
   };
@@ -318,33 +251,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const handlePopoverClose = () => {
     setOpenCartMenu(null);
   };
-  const menuList = profileMenu.map((item, i) => {
-    const { text, icon, action, id } = item;
-
-    return (
-      <div key={i}>
-        <MenuItem onClick={action} className="bg-secondary">
-          <ListItemIcon className="text-[20px] sm:text-xl">
-            {icon}
-            {(id === 2 &&
-              getNotificationsState.data?.snackshop_order
-                .unseen_notifications_count) ||
-            (id === 3 &&
-              getNotificationsState.data?.catering_booking
-                .unseen_notifications_count) ||
-            (id === 4 &&
-              getNotificationsState.data?.popclub_redeem
-                .unseen_notifications_count) ? (
-              <VscCircleFilled className="text-xs text-red-600 " />
-            ) : null}
-          </ListItemIcon>
-
-          <ListItemText primary={text} />
-        </MenuItem>
-        {id === 1 || id === 5 ? <hr /> : null}
-      </div>
-    );
-  });
 
   return (
     <>
@@ -575,7 +481,80 @@ export function HeaderNav(props: HeaderNavProps) {
                           },
                         }}
                       />
-                      <div className="bg-white">{menuList}</div>
+                      <div className="bg-white">
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+                            navigate(`/profile`);
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <FaUserAlt />
+                          </ListItemIcon>
+
+                          <ListItemText
+                            primary={
+                              getSessionState.data?.userData
+                                ? getSessionState.data?.userData.first_name +
+                                  " " +
+                                  getSessionState.data?.userData.last_name
+                                : ""
+                            }
+                          />
+                        </MenuItem>
+                        <hr />
+                        {PROFILE_MENU.map((menu) => (
+                          <MenuItem
+                            onClick={() => {
+                              setOpenProfileMenu(null);
+                              navigate(`/profile/${menu.urlId}`);
+                            }}
+                            className="bg-secondary"
+                          >
+                            <ListItemIcon className="text-[20px] sm:text-xl">
+                              {menu.icon}
+                              {(menu.urlId === "snackshop-orders" &&
+                                getNotificationsState.data?.snackshop_order
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "inbox" &&
+                                getNotificationsState.data?.inbox
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "catering-bookings" &&
+                                getNotificationsState.data?.catering_booking
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "popclub-redeems" &&
+                                getNotificationsState.data?.popclub_redeem
+                                  .unseen_notifications_count) ? (
+                                <VscCircleFilled className="text-xs text-red-600 " />
+                              ) : null}
+                            </ListItemIcon>
+
+                            <ListItemText primary={menu.name} />
+                          </MenuItem>
+                        ))}
+                        <hr />
+
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+
+                            if (currentLocation.pathname === "/profile") {
+                              dispatch(facebookLogout());
+                              navigate("/");
+                            } else {
+                              dispatch(facebookLogout());
+                            }
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <BiLogOut />
+                          </ListItemIcon>
+
+                          <ListItemText primary="Logout" />
+                        </MenuItem>
+                      </div>
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (

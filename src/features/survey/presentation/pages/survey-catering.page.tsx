@@ -28,13 +28,7 @@ import {
   selectInsertCustomerSurveyResponse,
 } from "../slices/insert-customer-survey-response.slice";
 import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
-import { useNavigate } from "react-router-dom";
-import { MaterialInputAutoComplete } from "features/shared/presentation/components";
-import {
-  getAllStores,
-  GetAllStoresState,
-  selectGetAllStores,
-} from "features/shared/presentation/slices/get-all-stores.slice";
+import { useNavigate, useParams } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
@@ -42,25 +36,15 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 
-export function Survey() {
+export function SurveyCatering() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { hash } = useParams();
 
   const [formState, setFormState] =
     useState<CustomerSurveyQuestionResponseAnswer>({});
 
-  const [surveyNumber, setSurveyNumber] = useState(-1);
-
-  const [orderedDate, setOrderedDate] = useState("");
-  const [orderedNo, setOrderedNo] = useState("");
-  const [selectedStore, setSelectedStore] = useState<
-    | {
-        store_id: number;
-        name: string;
-        menu_name: string;
-      }
-    | undefined
-  >();
+  const [surveyNumber, setSurveyNumber] = useState(0);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
@@ -68,7 +52,6 @@ export function Survey() {
   const insertCustomerSurveyResponseState = useAppSelector(
     selectInsertCustomerSurveyResponse
   );
-  const getAllStoresState = useAppSelector(selectGetAllStores);
   const getSessionState = useAppSelector(selectGetSession);
 
   useEffect(() => {
@@ -82,7 +65,6 @@ export function Survey() {
 
   useEffect(() => {
     dispatch(getSurvey());
-    dispatch(getAllStores());
   }, [dispatch]);
 
   useEffect(() => {
@@ -90,20 +72,12 @@ export function Survey() {
       insertCustomerSurveyResponseState.status ===
       InsertCustomerSurveyResponseState.success
     ) {
+      navigate(
+        `/survey/complete/${insertCustomerSurveyResponseState.data?.hash}`
+      );
       dispatch(resetInsertCustomerSurveyResponse());
-      navigate(`complete/${insertCustomerSurveyResponseState.data?.hash}`);
     }
-  }, [dispatch, insertCustomerSurveyResponseState, navigate]);
-
-  useEffect(() => {
-    if (
-      getAllStoresState.status === GetAllStoresState.success &&
-      getAllStoresState.data &&
-      getAllStoresState.data.length > 0
-    ) {
-      setSelectedStore(getAllStoresState.data[0]);
-    }
-  }, [getAllStoresState]);
+  }, [dispatch, insertCustomerSurveyResponseState, navigate, hash]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -120,10 +94,9 @@ export function Survey() {
       } else {
         dispatch(
           insertCustomerSurveyResponse({
+            service: "catering",
             answers: formState,
-            orderedDate,
-            orderedNo,
-            storeId: selectedStore?.store_id,
+            orderHash: hash,
           })
         );
       }
@@ -159,55 +132,6 @@ export function Survey() {
                 participate in our short survey so that we can improve our
                 service.
               </p>
-
-              {surveyNumber === -1 ? (
-                <div className="py-4 space-y-4">
-                  {getAllStoresState.status === GetAllStoresState.success &&
-                  getAllStoresState.data ? (
-                    <MaterialInputAutoComplete
-                      label="Select store"
-                      colorTheme="black"
-                      size="small"
-                      required
-                      options={getAllStoresState.data}
-                      value={selectedStore ?? ""}
-                      getOptionLabel={(option) =>
-                        option.name + " (" + option.menu_name + ") "
-                      }
-                      onChange={(event, value) => {
-                        if (value) {
-                          setSelectedStore(value);
-                        }
-                      }}
-                    />
-                  ) : null}
-
-                  <MaterialDateInput
-                    colorTheme="black"
-                    label="Order Date"
-                    openTo="year"
-                    size="small"
-                    required
-                    views={["year", "month", "day"]}
-                    value={orderedDate}
-                    onChange={(newValue: any) => {
-                      setOrderedDate(newValue);
-                    }}
-                  />
-                  <MaterialInput
-                    colorTheme="black"
-                    label="Order Number"
-                    value={orderedNo}
-                    required
-                    onChange={(event) => {
-                      setOrderedNo(event.target.value);
-                    }}
-                    size="small"
-                    fullWidth
-                    name="orderNumber"
-                  />
-                </div>
-              ) : null}
 
               {surveyNumber >= 0 ? (
                 <>

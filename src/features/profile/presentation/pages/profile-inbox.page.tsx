@@ -4,10 +4,10 @@ import {
   useQuery,
 } from "features/config/hooks";
 import {
-  selectGetSnackShopOrderHistory,
-  resetGetSnackShopOrderHistoryStatus,
-  getSnackshopOrderHistory,
-} from "features/profile/presentation/slices/get-snackshop-order-history.slice";
+  selectGetInbox,
+  resetGetInboxStatus,
+  getInbox,
+} from "features/profile/presentation/slices/get-inbox.slice";
 import { FaEye } from "react-icons/fa";
 import Moment from "react-moment";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ProfileContainer } from "../components";
 import NumberFormat from "react-number-format";
 import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
@@ -29,23 +29,18 @@ import { NotificationModel } from "features/shared/core/domain/notification.mode
 import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 
 const columns: Array<Column> = [
-  { id: "dateadded", label: "Order Date" },
-  { id: "tracking_no", label: "Tracking No." },
-  { id: "purchase_amount", label: "Purchase Amount" },
-  { id: "raffle_code", label: "Raffle Code" },
-  { id: "raffle_status", label: "Raffle Status" },
-  { id: "survey", label: "Survey" },
+  { id: "dateadded", label: "Survey Date" },
+  { id: "message", label: "Message" },
   { id: "view", label: "View" },
 ];
 
-export function ProfileSnackshopOrders() {
+export function ProfileInbox() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
 
-  const getSnackshopOrderHistoryState = useAppSelector(
-    selectGetSnackShopOrderHistory
-  );
+  const getInboxState = useAppSelector(selectGetInbox);
+
   const getNotificationsState = useAppSelector(selectGetNotifications);
 
   const pageNo = query.get("page_no");
@@ -62,40 +57,16 @@ export function ProfileSnackshopOrders() {
       order: order,
       search: search,
     });
-    dispatch(getSnackshopOrderHistory(query));
+    dispatch(getInbox(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
-  const calculatePurchaseAmount = (row: SnackShopOrderModel) => {
-    let calculatedPrice = 0;
-
-    if (row.purchase_amount) {
-      calculatedPrice += parseInt(row.purchase_amount);
-    }
-
-    if (row.cod_fee) {
-      calculatedPrice += parseInt(row.cod_fee);
-    }
-    if (row.distance_price) {
-      calculatedPrice += parseInt(row.distance_price);
-    }
-
-    return (
-      <NumberFormat
-        value={calculatedPrice.toFixed(2)}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={"₱"}
-      />
-    );
-  };
-
   return (
-    <ProfileContainer title="Snack Shop Orders" activeTab="snackshop">
+    <ProfileContainer title="Inbox" activeTab="inbox">
       <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl leading-6">
-        Snack Shop Orders
+        Inbox
       </h1>
 
-      {getSnackshopOrderHistoryState.data?.orders ? (
+      {getInboxState.data?.inbox ? (
         <>
           <div className="py-4 lg:hidden">
             <DataList
@@ -127,7 +98,7 @@ export function ProfileSnackshopOrders() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  dispatch(resetGetInboxStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -145,23 +116,21 @@ export function ProfileSnackshopOrders() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  dispatch(resetGetInboxStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={
-                getSnackshopOrderHistoryState.data.pagination.total_rows
-              }
-              perPage={getSnackshopOrderHistoryState.data.pagination.per_page}
+              totalRows={getInboxState.data.pagination.total_rows}
+              perPage={getInboxState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getSnackshopOrderHistoryState.data.orders.map((row, i) => {
+              {getInboxState.data.inbox.map((row, i) => {
                 const notification: NotificationModel | undefined =
-                  getNotificationsState.data?.snackshop_order.unseen_notifications.find(
+                  getNotificationsState.data?.inbox.unseen_notifications.find(
                     (notification) => notification.transaction_tb_id === row.id
                   );
 
@@ -173,16 +142,15 @@ export function ProfileSnackshopOrders() {
                           dispatch(seenNotification(notification.id));
                         }
                       }}
-                      to={`/delivery/order/${row.hash_key}`}
+                      to=""
+                      // to={`/delivery/order/${row.hash_key}`}
                       className={`flex flex-col px-4 py-2 border-b ${
                         notification ? "bg-gray-200" : ""
                       }`}
                       key={i}
                     >
                       <span className="flex items-center justify-between space-x-1 text-xl">
-                        <span className="text-lg text-gray-600">
-                          #{row.tracking_no}
-                        </span>
+                        <span className="text-lg text-gray-600">#sadfasdf</span>
                         {notification ? (
                           <VscCircleFilled className="text-red-600 " />
                         ) : null}
@@ -192,7 +160,8 @@ export function ProfileSnackshopOrders() {
                           <Moment format="LLL">{row.dateadded}</Moment>
                         </span>
                         <span className="text-lg font-semibold">
-                          {calculatePurchaseAmount(row)}
+                          Test
+                          {/* {calculatePurchaseAmount(row)} */}
                         </span>
                       </div>
                     </Link>
@@ -237,7 +206,7 @@ export function ProfileSnackshopOrders() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  dispatch(resetGetInboxStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -257,7 +226,7 @@ export function ProfileSnackshopOrders() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  dispatch(resetGetInboxStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -277,26 +246,23 @@ export function ProfileSnackshopOrders() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  dispatch(resetGetInboxStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={
-                getSnackshopOrderHistoryState.data.pagination.total_rows
-              }
-              perPage={getSnackshopOrderHistoryState.data.pagination.per_page}
+              totalRows={getInboxState.data.pagination.total_rows}
+              perPage={getInboxState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getSnackshopOrderHistoryState.data.orders !== undefined ? (
+              {getInboxState.data.inbox !== undefined ? (
                 <>
-                  {getSnackshopOrderHistoryState.data.orders.map((row, i) => {
+                  {getInboxState.data.inbox.map((row, i) => {
                     const notification: NotificationModel | undefined =
-                      getNotificationsState.data?.snackshop_order.unseen_notifications.find(
-                        (notification) =>
-                          notification.transaction_tb_id === row.id
+                      getNotificationsState.data?.inbox.unseen_notifications.find(
+                        (notification) => notification.id === row.id
                       );
 
                     return (
@@ -307,29 +273,7 @@ export function ProfileSnackshopOrders() {
                         <DataTableCell>
                           <Moment format="LLL">{row.dateadded}</Moment>
                         </DataTableCell>
-                        <DataTableCell>{row.tracking_no}</DataTableCell>
-                        <DataTableCell>
-                          {calculatePurchaseAmount(row)}
-                        </DataTableCell>
-                        <DataTableCell>N/A</DataTableCell>
-                        <DataTableCell>N/A</DataTableCell>
-                        <DataTableCell align="left">
-                          {row.survey_hash ? (
-                            <Link
-                              to={`/survey/complete/${row.survey_hash}`}
-                              className="text-green-700 font-bold"
-                            >
-                              View Rate
-                            </Link>
-                          ) : (
-                            <Link
-                              to={`/survey/snackshop/${row.hash_key}`}
-                              className="text-blue-800 font-bold"
-                            >
-                              Rate Now
-                            </Link>
-                          )}
-                        </DataTableCell>
+                        <DataTableCell>{row.text}</DataTableCell>
                         <DataTableCell align="left">
                           <Link
                             onClick={() => {
@@ -337,7 +281,8 @@ export function ProfileSnackshopOrders() {
                                 dispatch(seenNotification(notification.id));
                               }
                             }}
-                            to={`/delivery/order/${row.hash_key}`}
+                            to=""
+                            // to={`/delivery/order/${row.hash_key}`}
                           >
                             <FaEye
                               className={`text-lg ${

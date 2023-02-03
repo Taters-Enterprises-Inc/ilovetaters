@@ -3,7 +3,7 @@ import { SessionModel } from "features/shared/core/domain/session.model";
 import { RegionModel } from "features/shared/core/domain/region.model";
 import {
   AddContactParam,
-  CheckIfCustomerSurveyResponseExistParam,
+  GetCustomerSurveyResponseInOrderServiceParam,
   DeleteContactParam,
   DiscountRegistrationParam,
   FacebookLoginPointParam,
@@ -24,6 +24,7 @@ import { StoreModel } from "features/shared/core/domain/store.model";
 import { CompanyModel } from "features/shared/core/domain/company.model";
 import { GetNotificationsModel } from "features/shared/core/domain/get-notifications.model";
 import { ContactModel } from "features/shared/core/domain/contact.model";
+import { GetCustomerSurveyResponseInOrderServiceModel } from "features/shared/core/domain/get-customer-service-response-in-order-services.model";
 
 export interface GetStoresAvailableResponse {
   data: {
@@ -181,18 +182,18 @@ export interface GetAllCompaniesResponse {
   };
 }
 
-export interface CheckIfCustomerSurveyResponseExistResponse {
+export interface GetCustomerSurveyResponseInOrderServiceResponse {
   data: {
     message: string;
-    data: boolean;
+    data: GetCustomerSurveyResponseInOrderServiceModel;
   };
 }
 
-export function CheckIfCustomerSurveyResponseExistRepository(
-  param: CheckIfCustomerSurveyResponseExistParam
-): Promise<CheckIfCustomerSurveyResponseExistResponse> {
+export function GetCustomerSurveyResponseInOrderServiceRepository(
+  param: GetCustomerSurveyResponseInOrderServiceParam
+): Promise<GetCustomerSurveyResponseInOrderServiceResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/shared/survey?hash=${param.hash}&service=${param.service}`,
+    `${REACT_APP_DOMAIN_URL}api/shared/survey/${param.service}/${param.hash}`,
     {
       withCredentials: true,
     }

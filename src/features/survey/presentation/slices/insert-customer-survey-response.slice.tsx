@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
+import { InsertCustomerSurveyResponseModel } from "features/survey/core/domain/insert-customer-survey-response.model";
 import { InsertCustomerSurveyResponseParam } from "features/survey/core/survey.params";
 import {
   InsertCustomerSurveyResponseRepository,
@@ -17,11 +18,13 @@ export enum InsertCustomerSurveyResponseState {
 export interface InitialState {
   status: InsertCustomerSurveyResponseState;
   message: string;
+  data: InsertCustomerSurveyResponseModel | undefined;
 }
 
 const initialState: InitialState = {
   status: InsertCustomerSurveyResponseState.initial,
   message: "",
+  data: undefined,
 };
 
 export const insertCustomerSurveyResponse = createAsyncThunk(
@@ -50,6 +53,7 @@ const insertCustomerSurveyResponseSlice = createSlice({
     resetInsertCustomerSurveyResponse: (state) => {
       state.status = InsertCustomerSurveyResponseState.initial;
       state.message = "";
+      state.data = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -59,10 +63,11 @@ const insertCustomerSurveyResponseSlice = createSlice({
       })
       .addCase(insertCustomerSurveyResponse.fulfilled, (state, action) => {
         if (action.payload) {
-          const { message } = action.payload;
+          const { message, data } = action.payload;
 
           state.status = InsertCustomerSurveyResponseState.success;
           state.message = message;
+          state.data = data;
         }
       })
       .addCase(insertCustomerSurveyResponse.rejected, (state, action) => {

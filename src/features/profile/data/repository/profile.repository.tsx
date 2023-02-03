@@ -8,6 +8,7 @@ import {
   UpdateUserDiscountParam,
 } from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
 
 export interface GetCateringBookingHistoryResponse {
   data: {
@@ -48,6 +49,20 @@ export interface UpdateUserDiscountResponse {
     message: string;
   };
 }
+
+export interface GetInboxResponse {
+  data: {
+    message: string;
+    data: GetInboxModel;
+  };
+}
+
+export function GetInboxRepository(query: string): Promise<GetInboxResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/inbox${query}`, {
+    withCredentials: true,
+  });
+}
+
 export function UpdateUserDiscountRepository(
   param: UpdateUserDiscountParam
 ): Promise<UpdateUserDiscountResponse> {
