@@ -155,9 +155,10 @@ export function Survey() {
               </h1>
 
               <p className="text-base text-secondary ">
-                Thank you for choosing Taters! It would be great if you would
-                participate in our short survey so that we can improve our
-                service.
+                Welcome and thank you for your continued patronage. In our
+                desire to serve you better, please assist us by answering this
+                survey. We value your time and effort in completing this
+                endeavor.
               </p>
 
               {surveyNumber === -1 ? (
@@ -226,22 +227,21 @@ export function Survey() {
                             value={
                               formState[
                                 getSurveyState.data[surveyNumber].id.toString()
-                              ]?.surveyQuestionOfferedAnswerId ?? ""
+                              ]?.surveyQuestionAnswerId ?? ""
                             }
                             name={getSurveyState.data[
                               surveyNumber
                             ].id.toString()}
                             onChange={(e) => {
                               if (getSurveyState.data) {
-                                const surveyQuestionOfferedAnswerId =
-                                  e.target.value;
+                                const surveyQuestionAnswerId = e.target.value;
                                 const surveyQuestionId =
                                   getSurveyState.data[surveyNumber].id;
 
                                 setFormState({
                                   ...formState,
                                   [e.target.name]: {
-                                    surveyQuestionOfferedAnswerId,
+                                    surveyQuestionAnswerId,
                                     surveyQuestionId,
                                   },
                                 });
@@ -251,9 +251,7 @@ export function Survey() {
                             {getSurveyState.data[surveyNumber].answers.map(
                               (answer) => (
                                 <FormControlLabel
-                                  value={
-                                    answer.survey_question_offered_answer_id
-                                  }
+                                  value={answer.id}
                                   control={
                                     <Radio
                                       required
@@ -267,36 +265,75 @@ export function Survey() {
                             )}
                           </RadioGroup>
                         </FormControl>
-                      ) : null}
-                      {getSurveyState.data[surveyNumber].is_comment ? (
-                        <MaterialInput
-                          colorTheme="black"
-                          value={
-                            formState[
-                              getSurveyState.data[surveyNumber].id.toString()
-                            ]?.otherText ?? ""
-                          }
-                          onChange={(e) => {
-                            if (getSurveyState.data) {
-                              const otherText = e.target.value;
-                              const surveyQuestionId =
-                                getSurveyState.data[surveyNumber].id;
-                              setFormState({
-                                ...formState,
-                                [e.target.name]: {
-                                  otherText,
-                                  surveyQuestionId,
-                                },
-                              });
-                            }
-                          }}
-                          name={getSurveyState.data[surveyNumber].id.toString()}
-                          multiline
-                          rows={4}
-                          fullWidth
-                          required
-                        />
-                      ) : null}
+                      ) : (
+                        <>
+                          {" "}
+                          {getSurveyState.data[surveyNumber].is_text_area ? (
+                            <MaterialInput
+                              colorTheme="black"
+                              value={
+                                formState[
+                                  getSurveyState.data[
+                                    surveyNumber
+                                  ].id.toString()
+                                ]?.otherText ?? ""
+                              }
+                              onChange={(e) => {
+                                if (getSurveyState.data) {
+                                  const otherText = e.target.value;
+                                  const surveyQuestionId =
+                                    getSurveyState.data[surveyNumber].id;
+                                  setFormState({
+                                    ...formState,
+                                    [e.target.name]: {
+                                      otherText,
+                                      surveyQuestionId,
+                                    },
+                                  });
+                                }
+                              }}
+                              name={getSurveyState.data[
+                                surveyNumber
+                              ].id.toString()}
+                              multiline
+                              rows={4}
+                              fullWidth
+                              required
+                            />
+                          ) : null}
+                          {getSurveyState.data[surveyNumber].is_text_field ? (
+                            <MaterialInput
+                              colorTheme="black"
+                              value={
+                                formState[
+                                  getSurveyState.data[
+                                    surveyNumber
+                                  ].id.toString()
+                                ]?.otherText ?? ""
+                              }
+                              onChange={(e) => {
+                                if (getSurveyState.data) {
+                                  const otherText = e.target.value;
+                                  const surveyQuestionId =
+                                    getSurveyState.data[surveyNumber].id;
+                                  setFormState({
+                                    ...formState,
+                                    [e.target.name]: {
+                                      otherText,
+                                      surveyQuestionId,
+                                    },
+                                  });
+                                }
+                              }}
+                              name={getSurveyState.data[
+                                surveyNumber
+                              ].id.toString()}
+                              fullWidth
+                              required
+                            />
+                          ) : null}
+                        </>
+                      )}
                     </div>
                   </div>
                 </>

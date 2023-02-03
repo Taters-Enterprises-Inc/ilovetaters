@@ -1,7 +1,7 @@
 export interface CustomerSurveyQuestionResponseAnswer {
   [key: string]: {
-    surveyQuestionOfferedAnswerId?: string;
-    otherText?: string;
     surveyQuestionId: number;
+    surveyQuestionAnswerId?: string;
+    otherText?: string;
   };
 }
