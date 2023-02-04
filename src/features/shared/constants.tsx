@@ -998,3 +998,49 @@ export const PROFILE_MENU: Array<{
     urlId: "user-discount",
   },
 ];
+
+export const SHOP_ORDER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Incomplete Transaction",
+    color: "#a21013",
+  },
+  {
+    name: "Order Placed In System",
+    color: "#004d00",
+  },
+  {
+    name: "Payment under Verification",
+    color: "#cca300",
+  },
+  {
+    name: "Payment Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Order Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Order Cancelled",
+    color: "#a21013",
+  },
+  {
+    name: "Product Received by Customer",
+    color: "#004d00",
+  },
+  {
+    name: "Order Rejected due to Incorrect/Incomplete Payment",
+    color: "#a21013",
+  },
+  {
+    name: "Product currently being prepared",
+    color: "#004d00",
+  },
+  {
+    name: "Product en route to Customer",
+    color: "#004d00",
+  },
+];

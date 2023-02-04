@@ -1,6 +1,7 @@
 export interface SnackShopOrderModel {
   id: number;
   dateadded: string;
+  status: number;
   tracking_no: string;
   purchase_amount: string;
   distance_price: string;

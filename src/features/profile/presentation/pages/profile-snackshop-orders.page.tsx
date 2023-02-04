@@ -314,20 +314,26 @@ export function ProfileSnackshopOrders() {
                         <DataTableCell>N/A</DataTableCell>
                         <DataTableCell>N/A</DataTableCell>
                         <DataTableCell align="left">
-                          {row.survey_hash ? (
-                            <Link
-                              to={`/survey/complete/${row.survey_hash}`}
-                              className="text-green-700 font-bold"
-                            >
-                              View Rate
-                            </Link>
+                          {row.status === 6 ? (
+                            <>
+                              {row.survey_hash ? (
+                                <Link
+                                  to={`/survey/complete/${row.survey_hash}`}
+                                  className="text-green-700 font-bold"
+                                >
+                                  View Rate
+                                </Link>
+                              ) : (
+                                <Link
+                                  to={`/survey/snackshop/${row.hash_key}`}
+                                  className="text-blue-800 font-bold"
+                                >
+                                  Rate Now
+                                </Link>
+                              )}
+                            </>
                           ) : (
-                            <Link
-                              to={`/survey/snackshop/${row.hash_key}`}
-                              className="text-blue-800 font-bold"
-                            >
-                              Rate Now
-                            </Link>
+                            "-----"
                           )}
                         </DataTableCell>
                         <DataTableCell align="left">

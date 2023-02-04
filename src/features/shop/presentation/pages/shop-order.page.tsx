@@ -17,7 +17,10 @@ import {
   uploadProofOfPayment,
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  SHOP_ORDER_STATUS,
+} from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   selectGetCustomerSurveyResponseInOrderService,
@@ -75,88 +78,6 @@ export function ShopOrder() {
     onDrop,
     multiple: false,
   });
-
-  const getStatus = (
-    status: number | undefined,
-    payops: number | undefined
-  ) => {
-    switch (status) {
-      case 0:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Incomplete Transaction
-          </span>
-        );
-      case 1:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Order Placed In System
-          </span>
-        );
-      case 2:
-        return (
-          <span className="rounded-full bg-[#cca300] text-white px-2 py-1 text-[10px]">
-            Payment under Verification
-          </span>
-        );
-      case 3:
-        if (payops === 3) {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Order Confirmed
-            </span>
-          );
-        } else {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Payment Confirmed
-            </span>
-          );
-        }
-      case 4:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Declined
-          </span>
-        );
-      case 5:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Cancelled
-          </span>
-        );
-      case 6:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product Received by Customer
-          </span>
-        );
-      case 7:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Rejected due to Incorrect/Incomplete Payment
-          </span>
-        );
-      case 8:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product currently being prepared
-          </span>
-        );
-      case 9:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product en route to Customer
-          </span>
-        );
-      default:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Error Transaction
-          </span>
-        );
-    }
-  };
 
   const handleProofOfPayment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -332,10 +253,28 @@ export function ShopOrder() {
                   </div>
                   <div className="space-x-2 text-xs">
                     <strong>Status:</strong>{" "}
-                    {getStatus(
-                      getOrdersState.data?.order.clients_info.status,
-                      getOrdersState.data?.order.clients_info.payops
-                    )}
+                    {getOrdersState.data?.order.clients_info.status &&
+                    getOrdersState.data?.order.clients_info.payops ? (
+                      <span
+                        className="rounded-full text-white px-2 py-1 text-[10px]"
+                        style={{
+                          background:
+                            SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].color,
+                        }}
+                      >
+                        {getOrdersState.data.order.clients_info.status === 3
+                          ? getOrdersState.data.order.clients_info.payops === 3
+                            ? "Order Confirmed"
+                            : SHOP_ORDER_STATUS[
+                                getOrdersState.data.order.clients_info.status
+                              ].name
+                          : SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].name}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
@@ -730,27 +669,29 @@ export function ShopOrder() {
                   </h2>
                 ) : null}
               </div>
-              <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                {getCustomerSurveyResponseInOrderServiceState.data ? (
-                  <Link
-                    to={`/survey/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
-                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      VIEW YOUR RATING
-                    </span>
-                  </Link>
-                ) : (
-                  <Link
-                    to={`/survey/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
-                    className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      RATE US
-                    </span>
-                  </Link>
-                )}
-              </div>
+              {getOrdersState.data?.order.clients_info.status === 6 ? (
+                <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
+                  {getCustomerSurveyResponseInOrderServiceState.data ? (
+                    <Link
+                      to={`/survey/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        VIEW YOUR RATING
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/survey/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        RATE US
+                      </span>
+                    </Link>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
