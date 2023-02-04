@@ -34,6 +34,7 @@ const columns: Array<Column> = [
   { id: "trackingNo", label: "Tracking No." },
   { id: "purchaseAmount", label: "Purchase Amount" },
   { id: "bookingStatus", label: "Booking Status" },
+  { id: "survey", label: "Survey" },
   { id: "view", label: "View" },
 ];
 
@@ -344,6 +345,29 @@ export function ProfileCateringBookings() {
                             >
                               {CATERING_BOOKING_STATUS[row.status].name}
                             </span>
+                          </DataTableCell>
+                          <DataTableCell align="left">
+                            {row.status === 9 ? (
+                              <>
+                                {row.survey_hash ? (
+                                  <Link
+                                    to={`/survey/complete/${row.survey_hash}`}
+                                    className="text-green-700 font-bold"
+                                  >
+                                    View Rate
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to={`/survey/catering/${row.hash_key}`}
+                                    className="text-blue-800 font-bold"
+                                  >
+                                    Rate Now
+                                  </Link>
+                                )}
+                              </>
+                            ) : (
+                              "-----"
+                            )}
                           </DataTableCell>
                           <DataTableCell align="left">
                             <Link

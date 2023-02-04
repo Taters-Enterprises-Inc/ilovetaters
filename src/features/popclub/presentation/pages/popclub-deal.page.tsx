@@ -465,16 +465,6 @@ export function PopClubDeal() {
                 </span>
               </div>
               <button
-                onClick={() => {
-                  navigate(
-                    `/survey?service=POPCLUB-STORE-VISIT&hash=${getRedeemState.data?.redeem_hash}`
-                  );
-                }}
-                className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-button rounded-xl"
-              >
-                RATE US
-              </button>
-              <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
                   setOpenForfeitModalMessage(true);
