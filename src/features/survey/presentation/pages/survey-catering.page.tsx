@@ -134,7 +134,7 @@ export function SurveyCatering() {
                 endeavor.
               </p>
 
-              {surveyNumber >= 0 ? (
+              {/* {surveyNumber >= 0 ? (
                 <>
                   <h1 className="text-lg font-bold text-end text-secondary">
                     {surveyNumber + 1}/{getSurveyState.data.length}
@@ -304,7 +304,7 @@ export function SurveyCatering() {
                     </span>
                   </button>
                 ) : null}
-              </div>
+              </div> */}
             </form>
           </section>
         ) : null}

@@ -40,6 +40,7 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import { SurveyRating } from "../components";
 
 export function SurveySnackshop() {
   const dispatch = useAppDispatch();
@@ -49,7 +50,7 @@ export function SurveySnackshop() {
   const [formState, setFormState] =
     useState<CustomerSurveyQuestionResponseAnswer>({});
 
-  const [surveyNumber, setSurveyNumber] = useState(0);
+  const [surveySection, setSurveySection] = useState(0);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
@@ -87,15 +88,15 @@ export function SurveySnackshop() {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const increasedSurveyNumber = surveyNumber + 1;
+    const increasedSurveySection = surveySection + 1;
 
     if (
       getSurveyState.status === GetSurveyState.success &&
       getSurveyState.data &&
       getSurveyState.data.length > 0
     ) {
-      if (increasedSurveyNumber < getSurveyState.data.length) {
-        setSurveyNumber(increasedSurveyNumber);
+      if (increasedSurveySection < getSurveyState.data.length) {
+        setSurveySection(increasedSurveySection);
       } else {
         dispatch(
           insertCustomerSurveyResponse({
@@ -139,136 +140,128 @@ export function SurveySnackshop() {
                 endeavor.
               </p>
 
-              {surveyNumber >= 0 ? (
-                <>
-                  <h1 className="text-lg font-bold text-end text-secondary">
-                    {surveyNumber + 1}/{getSurveyState.data.length}
-                  </h1>
+              {/* {getSurveyState.data[surveySection].surveys.map((survey) => (
+                <div className="pb-4 text-lg text-secondary">
+                  <strong>{survey.description}</strong>
+                  <div className="flex">
+                    {survey.answers.length > 0 ? (
+                      <FormControl>
+                        <RadioGroup
+                          value={
+                            formState[survey.id.toString()]
+                              ?.surveyQuestionAnswerId ?? ""
+                          }
+                          name={survey.id.toString()}
+                          onChange={(e) => {
+                            if (getSurveyState.data) {
+                              const surveyQuestionAnswerId = e.target.value;
+                              const surveyQuestionId = survey.id;
 
-                  <div className="pb-4 text-lg text-secondary">
-                    <strong>
-                      {getSurveyState.data[surveyNumber].description}
-                    </strong>
-                    <div className="flex">
-                      {getSurveyState.data[surveyNumber].answers.length > 0 ? (
-                        <FormControl>
-                          <RadioGroup
-                            value={
-                              formState[
-                                getSurveyState.data[surveyNumber].id.toString()
-                              ]?.surveyQuestionAnswerId ?? ""
+                              setFormState({
+                                ...formState,
+                                [e.target.name]: {
+                                  surveyQuestionAnswerId,
+                                  surveyQuestionId,
+                                },
+                              });
                             }
-                            name={getSurveyState.data[
-                              surveyNumber
-                            ].id.toString()}
-                            onChange={(e) => {
-                              if (getSurveyState.data) {
-                                const surveyQuestionAnswerId = e.target.value;
-                                const surveyQuestionId =
-                                  getSurveyState.data[surveyNumber].id;
-
-                                setFormState({
-                                  ...formState,
-                                  [e.target.name]: {
-                                    surveyQuestionAnswerId,
-                                    surveyQuestionId,
-                                  },
-                                });
-                              }
-                            }}
-                          >
-                            {getSurveyState.data[surveyNumber].answers.map(
-                              (answer) => (
-                                <FormControlLabel
-                                  value={
-                                    answer.survey_question_offered_answer_id
-                                  }
-                                  control={
-                                    <Radio
-                                      required
-                                      size="small"
-                                      color="secondary"
-                                    />
-                                  }
-                                  label={answer.text}
+                          }}
+                        >
+                          {survey.answers.map((answer) => (
+                            <FormControlLabel
+                              value={answer.id}
+                              control={
+                                <Radio
+                                  required
+                                  size="small"
+                                  color="secondary"
                                 />
-                              )
-                            )}
-                          </RadioGroup>
-                        </FormControl>
-                      ) : (
-                        <>
-                          {getSurveyState.data[surveyNumber].is_text_area ? (
-                            <MaterialInput
-                              colorTheme="black"
-                              value={
-                                formState[
-                                  getSurveyState.data[
-                                    surveyNumber
-                                  ].id.toString()
-                                ]?.otherText ?? ""
                               }
-                              onChange={(e) => {
-                                if (getSurveyState.data) {
-                                  const otherText = e.target.value;
-                                  const surveyQuestionId =
-                                    getSurveyState.data[surveyNumber].id;
-                                  setFormState({
-                                    ...formState,
-                                    [e.target.name]: {
-                                      otherText,
-                                      surveyQuestionId,
-                                    },
-                                  });
-                                }
-                              }}
-                              name={getSurveyState.data[
-                                surveyNumber
-                              ].id.toString()}
-                              multiline
-                              rows={4}
-                              fullWidth
-                              required
+                              label={answer.text}
                             />
-                          ) : null}
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    ) : (
+                      <>
+                        {" "}
+                        {survey.is_text_area ? (
+                          <MaterialInput
+                            colorTheme="black"
+                            value={formState[survey.id.toString()]?.text ?? ""}
+                            onChange={(e) => {
+                              const text = e.target.value;
+                              const surveyQuestionId = survey.id;
+                              setFormState({
+                                ...formState,
+                                [e.target.name]: {
+                                  text,
+                                  surveyQuestionId,
+                                },
+                              });
+                            }}
+                            name={survey.id.toString()}
+                            multiline
+                            rows={4}
+                            fullWidth
+                            required
+                          />
+                        ) : null}
+                        {survey.is_text_field ? (
+                          <MaterialInput
+                            colorTheme="black"
+                            value={formState[survey.id.toString()]?.text ?? ""}
+                            onChange={(e) => {
+                              const text = e.target.value;
+                              const surveyQuestionId = survey.id;
+                              setFormState({
+                                ...formState,
+                                [e.target.name]: {
+                                  text,
+                                  surveyQuestionId,
+                                },
+                              });
+                            }}
+                            name={survey.id.toString()}
+                            fullWidth
+                            required
+                          />
+                        ) : null}
+                      </>
+                    )}
+                    {survey.ratings.length > 0 ? (
+                      <div className="w-full space-y-4">
+                        {survey.ratings.map((rating) => (
+                          <SurveyRating
+                            rate={
+                              formState[
+                                survey.id.toString() +
+                                  "_" +
+                                  rating.id.toString()
+                              ]?.rate ?? ""
+                            }
+                            onRateSelect={(rate) => {
+                              const surveyQuestionId = survey.id;
 
-                          {getSurveyState.data[surveyNumber].is_text_field ? (
-                            <MaterialInput
-                              colorTheme="black"
-                              value={
-                                formState[
-                                  getSurveyState.data[
-                                    surveyNumber
-                                  ].id.toString()
-                                ]?.otherText ?? ""
-                              }
-                              onChange={(e) => {
-                                if (getSurveyState.data) {
-                                  const otherText = e.target.value;
-                                  const surveyQuestionId =
-                                    getSurveyState.data[surveyNumber].id;
-                                  setFormState({
-                                    ...formState,
-                                    [e.target.name]: {
-                                      otherText,
-                                      surveyQuestionId,
-                                    },
-                                  });
-                                }
-                              }}
-                              name={getSurveyState.data[
-                                surveyNumber
-                              ].id.toString()}
-                              fullWidth
-                              required
-                            />
-                          ) : null}
-                        </>
-                      )}
-                    </div>
+                              setFormState({
+                                ...formState,
+                                [survey.id.toString() +
+                                "_" +
+                                rating.id.toString()]: {
+                                  surveyQuestionId,
+                                  surveyQuestionRatingId: rating.id.toString(),
+                                  rate,
+                                },
+                              });
+                            }}
+                            rating={rating}
+                          />
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
-                </>
-              ) : null}
+                </div>
+              ))} */}
 
               <div className="flex flex-col items-center justify-end pb-1 space-y-2 lg:space-y-0 lg:flex-row">
                 <button
@@ -276,17 +269,17 @@ export function SurveySnackshop() {
                   className={`text-white border border-secondary order-1 lg:order-2 lg:ml-2 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px]  rounded-lg shadow-lg`}
                 >
                   <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    {getSurveyState.data.length - 1 === surveyNumber
+                    {getSurveyState.data.length - 1 === surveySection
                       ? "Submit"
                       : "Continue"}
                   </span>
                 </button>
 
-                {surveyNumber === 0 ? (
+                {surveySection === 0 ? (
                   <button
                     type="button"
                     onClick={() => {
-                      setSurveyNumber(surveyNumber - 1);
+                      setSurveySection(surveySection - 1);
                     }}
                     className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
                   >
@@ -296,11 +289,11 @@ export function SurveySnackshop() {
                   </button>
                 ) : null}
 
-                {surveyNumber > 0 ? (
+                {surveySection > 0 ? (
                   <button
                     type="button"
                     onClick={() => {
-                      setSurveyNumber(surveyNumber - 1);
+                      setSurveySection(surveySection - 1);
                     }}
                     className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
                   >

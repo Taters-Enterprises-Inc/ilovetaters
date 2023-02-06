@@ -2,6 +2,9 @@ export interface CustomerSurveyQuestionResponseAnswer {
   [key: string]: {
     surveyQuestionId: number;
     surveyQuestionAnswerId?: string;
-    otherText?: string;
+    surveyQuestionRatingId?: string;
+    rate?: string;
+    text?: string;
+    others?: string;
   };
 }
