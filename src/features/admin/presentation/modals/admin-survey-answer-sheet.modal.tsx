@@ -64,10 +64,10 @@ export function AdminSurveyAnswerSheetModal(
               <span className="font-bold ">{survey.question}</span>
               <br />
               <span>
-                <span className="font-bold ">{survey.name}:</span>{" "}
-                <span className="font-bold text-green-800 ">{survey.rate}</span>
+                <span className="font-bold">{survey.name}:</span>{" "}
+                <span className="font-bold">{survey.rate}</span>
               </span>
-              <div className="space-x-4 ">
+              <div className="space-x-4">
                 <span>
                   <span>{survey.lowest_rate_text} Answer:</span>{" "}
                   <span className="font-bold">{survey.lowest_rate}</span>
