@@ -75,3 +75,8 @@ export interface ForgotPasswordNewPasswordOtpParam {
   password: string;
   confirmPassword: string;
 }
+
+export interface GetCustomerSurveyResponseInOrderServiceParam {
+  hash: string;
+  service: "snackshop" | "catering";
+}

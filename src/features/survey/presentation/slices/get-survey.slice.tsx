@@ -1,10 +1,11 @@
-import { SurveyQuestionModel } from "features/survey/core/domain/survey-question.model";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   GetSurveyResponse,
   GetSurveyRepository,
 } from "features/survey/data/repository/survey.repository";
 import { RootState } from "features/config/store";
+import { GetSurveysModel } from "features/survey/core/domain/get-surveys.model";
+import { AxiosError } from "axios";
 
 export enum GetSurveyState {
   initial,
@@ -15,7 +16,7 @@ export enum GetSurveyState {
 
 const initialState: {
   status: GetSurveyState;
-  data: Array<SurveyQuestionModel> | undefined;
+  data: Array<GetSurveysModel> | undefined;
   message: string;
 } = {
   status: GetSurveyState.initial,
@@ -25,12 +26,19 @@ const initialState: {
 
 export const getSurvey = createAsyncThunk(
   "getSurvey",
-  async (param, { rejectWithValue, fulfillWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response: GetSurveyResponse = await GetSurveyRepository();
-      return fulfillWithValue(response.data);
-    } catch (error: any) {
-      throw rejectWithValue({ message: error.response.data.message });
+
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+
+        throw rejectWithValue(error.response.data.message);
+      }
     }
   }
 );
@@ -39,26 +47,25 @@ const getSurveySlice = createSlice({
   name: "getSurvey",
   initialState,
   reducers: {},
-  extraReducers: (builder: any) => {
+  extraReducers: (builder) => {
     builder
-      .addCase(getSurvey.pending, (state: any) => {
+      .addCase(getSurvey.pending, (state) => {
         state.status = GetSurveyState.inProgress;
       })
-      .addCase(
-        getSurvey.fulfilled,
-        (
-          state: any,
-          action: PayloadAction<{
-            message: string;
-            data: Array<SurveyQuestionModel>;
-          }>
-        ) => {
+      .addCase(getSurvey.fulfilled, (state, action) => {
+        if (action.payload) {
           const { message, data } = action.payload;
+
           state.status = GetSurveyState.success;
           state.message = message;
           state.data = data;
         }
-      );
+      })
+      .addCase(getSurvey.rejected, (state, action) => {
+        state.status = GetSurveyState.fail;
+        state.message = action.payload as string;
+        state.data = undefined;
+      });
   },
 });
 

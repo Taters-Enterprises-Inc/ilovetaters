@@ -13,7 +13,8 @@ interface ProfileContainerProps {
     | "popclub"
     | "raffle"
     | "gift-cards"
-    | "user-discount";
+    | "user-discount"
+    | "inbox";
 }
 
 export function ProfileContainer(props: ProfileContainerProps) {

@@ -89,11 +89,17 @@ import {
   ProfileHome,
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
+  ProfileInbox,
 } from "features/profile/presentation/pages";
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
-import { Survey, SurveyComplete } from "features/survey/presentation/pages";
+import {
+  Survey,
+  SurveyCatering,
+  SurveyComplete,
+  SurveySnackshop,
+} from "features/survey/presentation/pages";
 
 import {
   BSCLogin,
@@ -166,6 +172,7 @@ root.render(
                       <Route path="profile" element={<Profile />}>
                         <Route element={<ProfileGuard />}>
                           <Route index element={<ProfileHome />} />
+                          <Route path="inbox" element={<ProfileInbox />} />
                           <Route
                             path="snackshop-orders"
                             element={<ProfileSnackshopOrders />}
@@ -421,7 +428,18 @@ root.render(
 
                     <Route path="survey">
                       <Route index element={<Survey />} />
-                      <Route path="complete" element={<SurveyComplete />} />
+                      <Route
+                        path="snackshop/:hash"
+                        element={<SurveySnackshop />}
+                      />
+                      <Route
+                        path="catering/:hash"
+                        element={<SurveyCatering />}
+                      />
+                      <Route
+                        path="complete/:hash"
+                        element={<SurveyComplete />}
+                      />
                     </Route>
                   </Route>
                 </Route>

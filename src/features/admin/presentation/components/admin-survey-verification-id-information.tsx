@@ -1,15 +1,5 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
-import { selectGetAdminPopclubRedeem } from "../slices/get-admin-popclub-redeem.slice";
-import {
-  ADMIN_SURVEY_VERIFICATION_STATUS,
-  REACT_APP_DOMAIN_URL,
-} from "features/shared/constants";
-import moment from "moment";
-import NumberFormat from "react-number-format";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { ADMIN_SURVEY_VERIFICATION_STATUS } from "features/shared/constants";
 import Moment from "react-moment";
 import { selectGetAdminSurveyVerification } from "../slices/get-admin-survey-verification.slice";
 import {
@@ -18,9 +8,7 @@ import {
   resetAdminSurveyVerificationChangeStatusSliceStatus,
   selectAdminSurveyVerificationChangeStatus,
 } from "../slices/admin-survey-verification-change-status.slice";
-import React, { useEffect, useState } from "react";
-import { createQueryParams } from "features/config/helpers";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { AdminSurveyAnswerSheetModal } from "../modals";
 
 interface AdminSurveyVerificationIDInformationProps {
@@ -50,7 +38,7 @@ export function AdminSurveyVerificationIDInformation(
       dispatch(resetAdminSurveyVerificationChangeStatusSliceStatus());
       props.onClose();
     }
-  }, [adminSurveyVerificationChangeStatusState, dispatch]);
+  }, [adminSurveyVerificationChangeStatusState, dispatch, props]);
 
   const handleApprove = () => {
     if (getAdminSurveyVerificationState.data) {
@@ -74,18 +62,22 @@ export function AdminSurveyVerificationIDInformation(
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <>
       <div className="pt-1 text-secondary">
         <div className="space-y-1 ">
+          <div className="grid-cols-2 gap-4 lg:grid ">
+            <div>
+              <strong>Profile Name :</strong>{" "}
+              <span className="font-semibold">
+                {getAdminSurveyVerificationState.data?.user.first_name}
+                {getAdminSurveyVerificationState.data?.user.last_name}
+              </span>
+            </div>
+          </div>
+
+          <hr />
+
           <div className="grid-cols-2 gap-4 lg:grid ">
             <div>
               <strong>Order Number :</strong>{" "}
@@ -93,7 +85,6 @@ export function AdminSurveyVerificationIDInformation(
                 {getAdminSurveyVerificationState.data?.order_no}
                 {getAdminSurveyVerificationState.data?.snackshop_tracking_no}
                 {getAdminSurveyVerificationState.data?.catering_tracking_no}
-                {getAdminSurveyVerificationState.data?.popclub_redeem_code}
               </span>
             </div>
             <div>

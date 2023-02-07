@@ -50,7 +50,13 @@ export const getCustomerSurveyResponse = createAsyncThunk(
 const getCustomerSurveyResponseSlice = createSlice({
   name: "getCustomerSurveyResponse",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetCustomerSurveyResponseState: (state) => {
+      state.status = GetCustomerSurveyResponseState.initial;
+      state.message = "";
+      state.data = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCustomerSurveyResponse.pending, (state) => {
@@ -75,5 +81,8 @@ const getCustomerSurveyResponseSlice = createSlice({
 
 export const selectGetCustomerSurveyResponse = (state: RootState) =>
   state.getCustomerSurveyResponse;
+
+export const { resetGetCustomerSurveyResponseState } =
+  getCustomerSurveyResponseSlice.actions;
 
 export default getCustomerSurveyResponseSlice.reducer;
