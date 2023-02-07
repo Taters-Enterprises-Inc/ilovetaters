@@ -279,7 +279,16 @@ export function ProfileInbox() {
                           </DataTableCell>
                           <DataTableCell>
                             <span className="block overflow-hidden text-secondary text-ellipsis whitespace-nowrap max-w-[500px]">
-                              {row.text}
+                              {row.text}{" "}
+                              {row.survey_hash ? (
+                                <Link
+                                  to={`/survey/complete/${row.survey_hash}`}
+                                  className="underline text-primary"
+                                >
+                                  {" "}
+                                  Here
+                                </Link>
+                              ) : null}
                             </span>
                           </DataTableCell>
                           <DataTableCell align="left">

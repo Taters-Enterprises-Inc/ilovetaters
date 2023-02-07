@@ -1,5 +1,6 @@
 import { InboxModel } from "features/profile/core/domain/inbox.model";
 import { IoMdClose } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 interface InboxViewerModalProps {
   open: boolean;
@@ -28,7 +29,18 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
           <IoMdClose />
         </button>
 
-        <div className="mt-2 leading-tight">{props.inbox?.text}</div>
+        <div className="mt-2 leading-tight">
+          {props.inbox?.text}
+          {props.inbox?.survey_hash ? (
+            <Link
+              to={`/survey/complete/${props.inbox.survey_hash}`}
+              className="underline text-primary"
+            >
+              {" "}
+              Here
+            </Link>
+          ) : null}
+        </div>
 
         <div className="flex items-center justify-end mt-4 space-x-2">
           <button

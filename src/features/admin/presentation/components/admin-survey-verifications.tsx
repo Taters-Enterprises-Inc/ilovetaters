@@ -97,7 +97,7 @@ export function AdminSurveyVerifications() {
 
   return (
     <>
-      <div className="flex flex-col  lg:flex-row lg:items-end">
+      <div className="flex flex-col lg:flex-row lg:items-end">
         <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Survey Verification
         </span>
@@ -360,7 +360,6 @@ export function AdminSurveyVerifications() {
                           {row.order_no}
                           {row.snackshop_tracking_no}
                           {row.catering_tracking_no}
-                          {row.popclub_redeem_code}
                         </DataTableCell>
                         <DataTableCell>{row.order_type}</DataTableCell>
                         <DataTableCell>{row.store_name}</DataTableCell>

@@ -63,8 +63,8 @@ export function SurveyComplete() {
             </section>
           </div>
 
-          <h1 className='text-secondary text-4xl font-["Bebas_Neue"]'>
-            Answer
+          <h1 className='text-secondary text-4xl mt-4 font-["Bebas_Neue"]'>
+            Answers
           </h1>
 
           <div className="space-y-3">

@@ -6,6 +6,7 @@ export interface SurveyQuestionModel {
   description: string;
   is_text_field: boolean;
   is_text_area: boolean;
+  is_email: boolean;
   others: boolean;
   answers: Array<SurveyAnswerModel>;
   ratings: Array<SurveyRatingModel>;

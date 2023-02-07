@@ -140,10 +140,12 @@ export function SurveySnackshop() {
                 endeavor.
               </p>
 
-              {/* {getSurveyState.data[surveySection].surveys.map((survey) => (
-                <div className="pb-4 text-lg text-secondary">
-                  <strong>{survey.description}</strong>
-                  <div className="flex">
+              {getSurveyState.data[surveySection].surveys.map((survey) => (
+                <div className="pb-4">
+                  <span className="text-xl font-bold text-secondary">
+                    {survey.description}
+                  </span>
+                  <div className="flex flex-col">
                     {survey.answers.length > 0 ? (
                       <FormControl>
                         <RadioGroup
@@ -180,14 +182,66 @@ export function SurveySnackshop() {
                               label={answer.text}
                             />
                           ))}
+                          {survey.others ? (
+                            <FormControlLabel
+                              value="others"
+                              control={
+                                <Radio
+                                  required
+                                  size="small"
+                                  color="secondary"
+                                />
+                              }
+                              label={
+                                <MaterialInput
+                                  variant="standard"
+                                  colorTheme="black"
+                                  label="Others"
+                                  onFocus={() => {
+                                    const surveyQuestionId = survey.id;
+                                    setFormState({
+                                      ...formState,
+                                      [survey.id.toString()]: {
+                                        surveyQuestionAnswerId: "others",
+                                        surveyQuestionId,
+                                      },
+                                    });
+                                  }}
+                                  required={
+                                    formState[survey.id.toString()]
+                                      ?.surveyQuestionAnswerId === "others"
+                                  }
+                                  value={
+                                    formState[survey.id.toString()]?.others ??
+                                    ""
+                                  }
+                                  onChange={(e) => {
+                                    const others = e.target.value;
+                                    const surveyQuestionId = survey.id;
+                                    setFormState({
+                                      ...formState,
+                                      [e.target.name]: {
+                                        surveyQuestionAnswerId: "others",
+                                        others,
+                                        surveyQuestionId,
+                                      },
+                                    });
+                                  }}
+                                  fullWidth
+                                  name={survey.id.toString()}
+                                  className="!mb-4"
+                                />
+                              }
+                            />
+                          ) : null}
                         </RadioGroup>
                       </FormControl>
                     ) : (
                       <>
-                        {" "}
                         {survey.is_text_area ? (
                           <MaterialInput
                             colorTheme="black"
+                            type={survey.is_email ? "email" : "text"}
                             value={formState[survey.id.toString()]?.text ?? ""}
                             onChange={(e) => {
                               const text = e.target.value;
@@ -210,6 +264,7 @@ export function SurveySnackshop() {
                         {survey.is_text_field ? (
                           <MaterialInput
                             colorTheme="black"
+                            type={survey.is_email ? "email" : "text"}
                             value={formState[survey.id.toString()]?.text ?? ""}
                             onChange={(e) => {
                               const text = e.target.value;
@@ -230,9 +285,13 @@ export function SurveySnackshop() {
                       </>
                     )}
                     {survey.ratings.length > 0 ? (
-                      <div className="w-full space-y-4">
-                        {survey.ratings.map((rating) => (
+                      <div className="flex flex-col w-full space-x-0 space-y-8 md:space-x-16 md:space-y-0 md:flex-row">
+                        {survey.ratings.map((rating, i) => (
                           <SurveyRating
+                            key={i}
+                            surveyName={
+                              survey.id.toString() + "_" + rating.id.toString()
+                            }
                             rate={
                               formState[
                                 survey.id.toString() +
@@ -261,7 +320,7 @@ export function SurveySnackshop() {
                     ) : null}
                   </div>
                 </div>
-              ))} */}
+              ))}
 
               <div className="flex flex-col items-center justify-end pb-1 space-y-2 lg:space-y-0 lg:flex-row">
                 <button
@@ -274,20 +333,6 @@ export function SurveySnackshop() {
                       : "Continue"}
                   </span>
                 </button>
-
-                {surveySection === 0 ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSurveySection(surveySection - 1);
-                    }}
-                    className={`text-white border order-2 lg:order-1 border-secondary text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-full lg:w-[300px] rounded-lg shadow-lg`}
-                  >
-                    <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                      Go Back
-                    </span>
-                  </button>
-                ) : null}
 
                 {surveySection > 0 ? (
                   <button

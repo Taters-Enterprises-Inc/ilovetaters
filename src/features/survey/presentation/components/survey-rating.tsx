@@ -29,15 +29,15 @@ export function SurveyRating(props: SurveyRatingProps) {
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-col">
+    <div className="flex flex-col items-center justify-center py-4 space-y-2 md:items-start">
+      <div className="flex flex-col ">
         <span className="text-sm font-bold text-center text-secondary">
           {props.rating.name}
         </span>
         <span className="text-xs text-center">{props.rating.description}</span>
       </div>
 
-      <div className="flex flex-col space-y-1">
+      <div className="flex flex-col space-y-2 w-[300px]">
         <div className="flex items-center justify-between text-xs">
           <span>{props.rating.lowest_rate_text}</span>
           <span>{props.rating.highest_rate_text}</span>
@@ -55,9 +55,16 @@ export function SurveyRating(props: SurveyRatingProps) {
             <div className="flex items-center justify-between">
               {ratings.map((rate) => (
                 <FormControlLabel
-                  className="relative"
+                  className="relative !m-0 !p-0"
                   value={rate}
-                  control={<Radio required size="small" color="secondary" />}
+                  control={
+                    <Radio
+                      required
+                      size="small"
+                      color="secondary"
+                      className="!p-0"
+                    />
+                  }
                   label={
                     <button
                       type="button"
@@ -65,11 +72,11 @@ export function SurveyRating(props: SurveyRatingProps) {
                         const rateString = rate.toString();
                         props.onRateSelect(rateString);
                       }}
-                      className={`h-[30px] w-[30px] text-xs ${
+                      className={`h-[25px] w-[25px] text-[12px] ${
                         rate.toString() === props.rate
                           ? "text-white bg-secondary"
                           : "border border-secondary bg-white "
-                      } rounded-full absolute left-0 top-[5px] z-10`}
+                      } rounded-full absolute left-[-3px] top-[0px] z-10`}
                     >
                       {rate}
                     </button>

@@ -162,7 +162,7 @@ export function Survey() {
                 endeavor.
               </p>
 
-              <div>
+              <div className="space-y-4">
                 {surveySection === 0 ? (
                   <div className="py-4 space-y-4">
                     {getAllStoresState.status === GetAllStoresState.success &&
@@ -213,8 +213,10 @@ export function Survey() {
                 ) : null}
 
                 {getSurveyState.data[surveySection].surveys.map((survey) => (
-                  <div className="pb-4 text-lg text-secondary">
-                    <strong>{survey.description}</strong>
+                  <div className="pb-4">
+                    <span className="text-xl font-bold text-secondary">
+                      {survey.description}
+                    </span>
                     <div className="flex flex-col">
                       {survey.answers.length > 0 ? (
                         <FormControl>
@@ -311,6 +313,7 @@ export function Survey() {
                           {survey.is_text_area ? (
                             <MaterialInput
                               colorTheme="black"
+                              type={survey.is_email ? "email" : "text"}
                               value={
                                 formState[survey.id.toString()]?.text ?? ""
                               }
@@ -335,6 +338,7 @@ export function Survey() {
                           {survey.is_text_field ? (
                             <MaterialInput
                               colorTheme="black"
+                              type={survey.is_email ? "email" : "text"}
                               value={
                                 formState[survey.id.toString()]?.text ?? ""
                               }
@@ -357,7 +361,7 @@ export function Survey() {
                         </>
                       )}
                       {survey.ratings.length > 0 ? (
-                        <div className="w-full space-y-4">
+                        <div className="flex flex-col w-full space-x-0 space-y-8 md:space-x-16 md:space-y-0 md:flex-row">
                           {survey.ratings.map((rating, i) => (
                             <SurveyRating
                               key={i}
