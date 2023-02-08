@@ -56,6 +56,17 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
               Rate Now Here
             </Link>
           ) : null}
+          {props.inbox?.notification_event_type_id === 6 ? (
+            <div className="relative mt-2">
+              <img
+                src="https://www.ilovetaters.com/api/assets/images/home/cards/taters_branches.jpg"
+                alt="gift-promo"
+              />
+              <span className="absolute bottom-[10px] z-10 text-2xl text-black font-bold left-[10px]">
+                {props.inbox.order_no}
+              </span>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex items-center justify-end mt-4 space-x-2">
