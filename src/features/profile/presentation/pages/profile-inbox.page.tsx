@@ -158,6 +158,31 @@ export function ProfileInbox() {
                       <span className="flex items-center justify-between space-x-1 text-xl">
                         <span className="overflow-hidden text-secondary text-ellipsis whitespace-nowrap max-w-[360px]">
                           {row.text}
+                          {row.survey_hash &&
+                          row.notification_event_type_id === 5 ? (
+                            <Link
+                              to={`/feedback/complete/${row.survey_hash}`}
+                              className="underline text-primary"
+                            >
+                              {" "}
+                              Here
+                            </Link>
+                          ) : null}
+                          {row.notification_event_type_id === 4 ? (
+                            <Link
+                              to={`/feedback${
+                                row.transaction_hash
+                                  ? `/snackshop/${row.transaction_hash}`
+                                  : row.catering_transaction_hash
+                                  ? `/catering/${row.catering_transaction_hash}`
+                                  : ""
+                              }`}
+                              className="underline text-primary"
+                            >
+                              {" "}
+                              Rate Now Here
+                            </Link>
+                          ) : null}
                         </span>
                         {notification ? (
                           <VscCircleFilled className="text-red-600 " />
@@ -280,13 +305,29 @@ export function ProfileInbox() {
                           <DataTableCell>
                             <span className="block overflow-hidden text-secondary text-ellipsis whitespace-nowrap max-w-[500px]">
                               {row.text}{" "}
-                              {row.survey_hash ? (
+                              {row.survey_hash &&
+                              row.notification_event_type_id === 5 ? (
                                 <Link
-                                  to={`/survey/complete/${row.survey_hash}`}
+                                  to={`/feedback/complete/${row.survey_hash}`}
                                   className="underline text-primary"
                                 >
                                   {" "}
                                   Here
+                                </Link>
+                              ) : null}
+                              {row.notification_event_type_id === 4 ? (
+                                <Link
+                                  to={`/feedback${
+                                    row.transaction_hash
+                                      ? `/snackshop/${row.transaction_hash}`
+                                      : row.catering_transaction_hash
+                                      ? `/catering/${row.catering_transaction_hash}`
+                                      : ""
+                                  }`}
+                                  className="underline text-primary"
+                                >
+                                  {" "}
+                                  Rate Now Here
                                 </Link>
                               ) : null}
                             </span>

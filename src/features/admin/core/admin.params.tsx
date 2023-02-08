@@ -72,6 +72,8 @@ export interface LoginAdminParam {
 }
 
 export interface AdminPrivilegeParam {
+  fbUserId: number | null;
+  mobileUserId: number | null;
   password: string;
   transactionId: number;
   fromStatusId?: number;

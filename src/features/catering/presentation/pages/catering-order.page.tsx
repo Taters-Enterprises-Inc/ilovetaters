@@ -865,7 +865,7 @@ export function CateringOrder() {
                   <>
                     {getCustomerSurveyResponseInOrderServiceState.data ? (
                       <Link
-                        to={`/survey/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                        to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
                         className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                       >
                         <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -874,7 +874,7 @@ export function CateringOrder() {
                       </Link>
                     ) : (
                       <Link
-                        to={`/survey/catering/${getCateringOrdersState.data?.order.clients_info.hash_key}`}
+                        to={`/feedback/catering/${getCateringOrdersState.data?.order.clients_info.hash_key}`}
                         className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                       >
                         <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

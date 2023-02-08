@@ -79,7 +79,7 @@ export function SurveySnackshop() {
     ) {
       console.log(insertCustomerSurveyResponseState);
       navigate(
-        `/survey/complete/${insertCustomerSurveyResponseState.data?.hash}`
+        `/feedback/complete/${insertCustomerSurveyResponseState.data?.hash}`
       );
       dispatch(resetInsertCustomerSurveyResponse());
     }
@@ -127,7 +127,7 @@ export function SurveySnackshop() {
           }}
         />
         {getSurveyState.data && getSurveyState.data.length > 0 ? (
-          <section className="container py-4 mx-auto">
+          <section className="container py-4 pb-24 mx-auto">
             <form onSubmit={handleFormSubmit}>
               <h1 className='text-secondary text-6xl font-["Bebas_Neue"]'>
                 Taters CUSTOMER SATISFACTION SURVEY

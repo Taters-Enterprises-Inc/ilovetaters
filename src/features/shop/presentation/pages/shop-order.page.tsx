@@ -673,7 +673,7 @@ export function ShopOrder() {
                 <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
                   {getCustomerSurveyResponseInOrderServiceState.data ? (
                     <Link
-                      to={`/survey/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                      to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
                       className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                     >
                       <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
@@ -682,7 +682,7 @@ export function ShopOrder() {
                     </Link>
                   ) : (
                     <Link
-                      to={`/survey/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
+                      to={`/feedback/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
                       className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                     >
                       <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">

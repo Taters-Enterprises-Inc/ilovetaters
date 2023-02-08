@@ -974,6 +974,8 @@ export function AdminShopOrderCustomerInformation() {
             dispatch(
               adminPrivilege({
                 password,
+                fbUserId: getAdminShopOrderState.data.fb_user_id,
+                mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
                 fromStatusId: getAdminShopOrderState.data.status,
                 toStatusId: status,
@@ -992,6 +994,8 @@ export function AdminShopOrderCustomerInformation() {
             dispatch(
               adminPrivilege({
                 password,
+                fbUserId: getAdminShopOrderState.data.fb_user_id,
+                mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
                 fromStoreId: getAdminShopOrderState.data.store,
                 toStoreId: store,

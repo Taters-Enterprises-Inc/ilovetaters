@@ -31,13 +31,29 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
 
         <div className="mt-2 leading-tight">
           {props.inbox?.text}
-          {props.inbox?.survey_hash ? (
+          {props.inbox?.survey_hash &&
+          props.inbox?.notification_event_type_id === 5 ? (
             <Link
-              to={`/survey/complete/${props.inbox.survey_hash}`}
+              to={`/feedback/complete/${props.inbox?.survey_hash}`}
               className="underline text-primary"
             >
               {" "}
               Here
+            </Link>
+          ) : null}
+          {props.inbox?.notification_event_type_id === 4 ? (
+            <Link
+              to={`/feedback${
+                props.inbox?.transaction_hash
+                  ? `/snackshop/${props.inbox?.transaction_hash}`
+                  : props.inbox?.catering_transaction_hash
+                  ? `/catering/${props.inbox?.catering_transaction_hash}`
+                  : ""
+              }`}
+              className="underline text-primary"
+            >
+              {" "}
+              Rate Now Here
             </Link>
           ) : null}
         </div>

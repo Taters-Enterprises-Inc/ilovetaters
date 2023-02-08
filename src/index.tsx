@@ -267,6 +267,22 @@ root.render(
                         <Route path="*" element={<NotFound />} />
                       </Route>
 
+                      <Route path="feedback">
+                        <Route index element={<Survey />} />
+                        <Route
+                          path="snackshop/:hash"
+                          element={<SurveySnackshop />}
+                        />
+                        <Route
+                          path="catering/:hash"
+                          element={<SurveyCatering />}
+                        />
+                        <Route
+                          path="complete/:hash"
+                          element={<SurveyComplete />}
+                        />
+                      </Route>
+
                       <Route path="*" element={<NotFound />} />
                     </Route>
 
@@ -424,22 +440,6 @@ root.render(
                           </Route>
                         </Route>
                       </Route>
-                    </Route>
-
-                    <Route path="survey">
-                      <Route index element={<Survey />} />
-                      <Route
-                        path="snackshop/:hash"
-                        element={<SurveySnackshop />}
-                      />
-                      <Route
-                        path="catering/:hash"
-                        element={<SurveyCatering />}
-                      />
-                      <Route
-                        path="complete/:hash"
-                        element={<SurveyComplete />}
-                      />
                     </Route>
                   </Route>
                 </Route>
