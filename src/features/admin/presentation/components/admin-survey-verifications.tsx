@@ -27,14 +27,23 @@ import {
 } from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 import { AdminChipsButton } from "./chips-button";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "order_date", label: "Order Date" },
   { id: "dateadded", label: "Survey Date" },
   {
-    id: "reference_number",
-    label: "Order Number",
+    id: "invoice_number",
+    label: "Invoice Number",
   },
   { id: "order_type", label: "Order Type" },
   { id: "store", label: "Store" },
@@ -64,6 +73,13 @@ export function AdminSurveyVerifications() {
 
   const adminSurveyVerificationChangeStatusState = useAppSelector(
     selectAdminSurveyVerificationChangeStatus
+  );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
   );
 
   useEffect(() => {
@@ -190,51 +206,67 @@ export function AdminSurveyVerifications() {
             >
               <hr className="mt-4" />
 
-              {getAdminSurveyVerificationsStates.data.surveys.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      id: row.id,
-                      search: search,
-                    };
+              {getAdminSurveyVerificationsStates.data.surveys.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getAdminNotificationsState.data?.survey_verification.unseen_notifications.find(
+                    (notification) =>
+                      notification.customer_survey_response_id === row.id
+                  );
 
-                    const queryParams = createQueryParams(params);
+                return (
+                  <div
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(
+                          updateAdminNotificationDateSeen(notification.id)
+                        );
+                      }
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>Walk-in</span>
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        id: row.id,
+                        search: search,
+                      };
 
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                      const queryParams = createQueryParams(params);
+
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>Walk-in</span>
+
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_SURVEY_VERIFICATION_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
+                      </span>
                     </span>
-                  </span>
 
-                  <span className="text-xs text-gray-600">
-                    <strong> Order Number:</strong> {row.order_no}
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    <strong>Date and Time: </strong>
-                    <Moment format="lll">{row.dateadded}</Moment>
-                  </span>
-                </div>
-              ))}
+                    <span className="text-xs text-gray-600">
+                      <strong> Invoice Number:</strong> {row.order_no}
+                    </span>
+                    <span className="text-xs text-gray-600">
+                      <strong>Date and Time: </strong>
+                      <Moment format="lll">{row.dateadded}</Moment>
+                    </span>
+                  </div>
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -335,61 +367,83 @@ export function AdminSurveyVerifications() {
               {getAdminSurveyVerificationsStates.data.surveys !== undefined ? (
                 <>
                   {getAdminSurveyVerificationsStates.data.surveys.map(
-                    (row, i) => (
-                      <DataTableRow key={i}>
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
+                    (row, i) => {
+                      const notification: NotificationModel | undefined =
+                        getAdminNotificationsState.data?.survey_verification.unseen_notifications.find(
+                          (notification) =>
+                            notification.customer_survey_response_id === row.id
+                        );
+
+                      return (
+                        <DataTableRow
+                          key={i}
+                          className={`${notification ? "bg-gray-200" : ""}`}
+                        >
+                          <DataTableCell>
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
+                                    .color,
+                              }}
+                            >
+                              {
                                 ADMIN_SURVEY_VERIFICATION_STATUS[row.status]
-                                  .color,
-                            }}
-                          >
-                            {ADMIN_SURVEY_VERIFICATION_STATUS[row.status].name}
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell>
-                          <Moment format="lll">{row.dateadded}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>
-                          <Moment format="lll">{row.order_date}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>
-                          {row.order_no}
-                          {row.snackshop_tracking_no}
-                          {row.catering_tracking_no}
-                        </DataTableCell>
-                        <DataTableCell>{row.order_type}</DataTableCell>
-                        <DataTableCell>{row.store_name}</DataTableCell>
+                                  .name
+                              }
+                            </span>
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Moment format="lll">{row.dateadded}</Moment>
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Moment format="lll">{row.order_date}</Moment>
+                          </DataTableCell>
+                          <DataTableCell>
+                            {row.order_no}
+                            {row.snackshop_tracking_no}
+                            {row.catering_tracking_no}
+                          </DataTableCell>
+                          <DataTableCell>{row.order_type}</DataTableCell>
+                          <DataTableCell>{row.store_name}</DataTableCell>
 
-                        <DataTableCell align="left">
-                          <button
-                            onClick={() => {
-                              const params = {
-                                page_no: pageNo,
-                                per_page: perPage,
-                                status: status,
-                                id: row.id,
-                                order_by: orderBy,
-                                order: order,
-                                search: search,
-                              };
+                          <DataTableCell align="left">
+                            <button
+                              onClick={() => {
+                                if (notification) {
+                                  dispatch(
+                                    updateAdminNotificationDateSeen(
+                                      notification.id
+                                    )
+                                  );
+                                }
 
-                              const queryParams = createQueryParams(params);
+                                const params = {
+                                  page_no: pageNo,
+                                  per_page: perPage,
+                                  status: status,
+                                  id: row.id,
+                                  order_by: orderBy,
+                                  order: order,
+                                  search: search,
+                                };
 
-                              navigate({
-                                pathname: "",
-                                search: queryParams,
-                              });
-                            }}
-                          >
-                            <FaEye className="text-lg" />
-                          </button>
-                        </DataTableCell>
-                      </DataTableRow>
-                    )
+                                const queryParams = createQueryParams(params);
+
+                                navigate({
+                                  pathname: "",
+                                  search: queryParams,
+                                });
+                              }}
+                            >
+                              <FaEye className="text-lg" />
+                            </button>
+                          </DataTableCell>
+                        </DataTableRow>
+                      );
+                    }
                   )}
                 </>
               ) : null}

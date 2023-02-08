@@ -118,7 +118,6 @@ export function Survey() {
       if (increasedSurveySection < getSurveyState.data.length) {
         setSurveySection(increasedSurveySection);
       } else {
-        console.log(formState);
         dispatch(
           insertCustomerSurveyResponse({
             answers: formState,
@@ -199,7 +198,7 @@ export function Survey() {
                     />
                     <MaterialInput
                       colorTheme="black"
-                      label="Order Number"
+                      label="Invoice Number"
                       value={orderedNo}
                       required
                       onChange={(event) => {

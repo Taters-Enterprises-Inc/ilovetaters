@@ -21,4 +21,9 @@ export interface GetAdminNotificationModel {
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;
   };
+  survey_verification: {
+    notifications: Array<NotificationModel>;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
+  };
 }

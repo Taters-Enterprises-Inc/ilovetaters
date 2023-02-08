@@ -280,7 +280,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             >
               <span className="flex items-center px-4 ">
                 <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <TbFileCheck size={20} />
+                  <Badge
+                    badgeContent={
+                      getAdminNotificationsState.data?.survey_verification
+                        .unseen_notifications_count
+                    }
+                    color="primary"
+                  >
+                    <TbFileCheck size={20} />
+                  </Badge>
 
                   <span
                     className={`whitespace-pre duration-300 ${
