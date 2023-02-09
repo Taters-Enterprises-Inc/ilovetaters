@@ -351,14 +351,14 @@ export function ProfileCateringBookings() {
                               <>
                                 {row.survey_hash ? (
                                   <Link
-                                    to={`/survey/complete/${row.survey_hash}`}
+                                    to={`/feedback/complete/${row.survey_hash}`}
                                     className="text-green-700 font-bold"
                                   >
                                     View Rate
                                   </Link>
                                 ) : (
                                   <Link
-                                    to={`/survey/catering/${row.hash_key}`}
+                                    to={`/feedback/catering/${row.hash_key}`}
                                     className="text-blue-800 font-bold"
                                   >
                                     Rate Now
