@@ -10,7 +10,7 @@ export interface AdminSurveyVerificationModel {
   };
   status: number;
   store_name: string;
-  order_no: string | null;
+  invoice_no: string;
   snackshop_tracking_no: string | null;
   catering_tracking_no: string | null;
   order_type: string;

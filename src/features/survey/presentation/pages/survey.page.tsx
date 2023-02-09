@@ -51,7 +51,7 @@ export function Survey() {
     useState<CustomerSurveyQuestionResponseAnswer>({});
 
   const [orderedDate, setOrderedDate] = useState("");
-  const [orderedNo, setOrderedNo] = useState("");
+  const [invoiceNo, setInvoiceNo] = useState("");
   const [selectedStore, setSelectedStore] = useState<
     | {
         store_id: number;
@@ -122,7 +122,7 @@ export function Survey() {
           insertCustomerSurveyResponse({
             answers: formState,
             orderedDate,
-            orderedNo,
+            invoiceNo,
             storeId: selectedStore?.store_id,
           })
         );
@@ -199,14 +199,14 @@ export function Survey() {
                     <MaterialInput
                       colorTheme="black"
                       label="Invoice Number"
-                      value={orderedNo}
+                      value={invoiceNo}
                       required
                       onChange={(event) => {
-                        setOrderedNo(event.target.value);
+                        setInvoiceNo(event.target.value);
                       }}
                       size="small"
                       fullWidth
-                      name="orderNumber"
+                      name="invoiceNumber"
                     />
                   </div>
                 ) : null}

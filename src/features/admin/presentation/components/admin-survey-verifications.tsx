@@ -258,7 +258,7 @@ export function AdminSurveyVerifications() {
                     </span>
 
                     <span className="text-xs text-gray-600">
-                      <strong> Invoice Number:</strong> {row.order_no}
+                      <strong> Invoice Number:</strong> {row.invoice_no}
                     </span>
                     <span className="text-xs text-gray-600">
                       <strong>Date and Time: </strong>
@@ -401,11 +401,7 @@ export function AdminSurveyVerifications() {
                           <DataTableCell>
                             <Moment format="lll">{row.order_date}</Moment>
                           </DataTableCell>
-                          <DataTableCell>
-                            {row.order_no}
-                            {row.snackshop_tracking_no}
-                            {row.catering_tracking_no}
-                          </DataTableCell>
+                          <DataTableCell>{row.invoice_no}</DataTableCell>
                           <DataTableCell>{row.order_type}</DataTableCell>
                           <DataTableCell>{row.store_name}</DataTableCell>
 

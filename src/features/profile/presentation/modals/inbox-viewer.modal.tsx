@@ -1,4 +1,5 @@
 import { InboxModel } from "features/profile/core/domain/inbox.model";
+import { GrAttachment, GrDocumentText } from "react-icons/gr";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 
@@ -30,41 +31,48 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
         </button>
 
         <div className="mt-2 leading-tight">
-          {props.inbox?.text}
-          {props.inbox?.survey_hash &&
-          props.inbox?.notification_event_type_id === 5 ? (
-            <Link
-              to={`/feedback/complete/${props.inbox?.survey_hash}`}
-              className="underline text-primary"
-            >
-              {" "}
-              Here
-            </Link>
-          ) : null}
-          {props.inbox?.notification_event_type_id === 4 ? (
-            <Link
-              to={`/feedback${
-                props.inbox?.transaction_hash
-                  ? `/snackshop/${props.inbox?.transaction_hash}`
-                  : props.inbox?.catering_transaction_hash
-                  ? `/catering/${props.inbox?.catering_transaction_hash}`
-                  : ""
-              }`}
-              className="underline text-primary"
-            >
-              {" "}
-              Rate Now Here
-            </Link>
-          ) : null}
-          {props.inbox?.notification_event_type_id === 6 ? (
-            <div className="relative mt-2">
+          <div className="space-y-3 text-secondary">
+            <h1 className="text-lg font-bold">{props.inbox?.title}</h1>
+
+            <p className="text-sm whitespace-pre-line">{props.inbox?.body}</p>
+
+            <p className="text-sm">{props.inbox?.closing}</p>
+
+            <p className="text-sm">{props.inbox?.closing_salutation}</p>
+
+            <div>
+              <p className="font-bold">{props.inbox?.message_from}</p>
+              <p className="text-xs font-bold">{props.inbox?.contact_number}</p>
+              <p className="text-xs font-bold">{props.inbox?.email}</p>
+            </div>
+          </div>
+
+          {props.inbox?.image_url ? (
+            <div className="relative mt-4">
               <img
-                src="https://www.ilovetaters.com/api/assets/images/home/cards/taters_branches.jpg"
-                alt="gift-promo"
+                src={props.inbox.image_url}
+                alt={props.inbox?.image_title ?? ""}
               />
               <span className="absolute bottom-[10px] z-10 text-2xl text-black font-bold left-[10px]">
-                {props.inbox.order_no}
+                {props.inbox?.image_title}
               </span>
+            </div>
+          ) : null}
+
+          {props.inbox?.internal_link_url ? (
+            <div className="flex mt-4">
+              <Link
+                to={props.inbox.internal_link_url}
+                className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+              >
+                <GrDocumentText className="text-6xl" />
+                <div className="flex items-center justify-center mt-2 space-x-1">
+                  <GrAttachment className="text-lg font-semibold" />
+                  <span className="text-lg font-semibold">
+                    {props.inbox?.internal_link_title}
+                  </span>
+                </div>
+              </Link>
             </div>
           ) : null}
         </div>

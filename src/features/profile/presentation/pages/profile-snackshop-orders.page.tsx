@@ -27,6 +27,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
 import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
+import { SHOP_ORDER_STATUS } from "features/shared/constants";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -183,9 +184,22 @@ export function ProfileSnackshopOrders() {
                         <span className="text-lg text-gray-600">
                           #{row.tracking_no}
                         </span>
-                        {notification ? (
-                          <VscCircleFilled className="text-red-600 " />
-                        ) : null}
+
+                        <div className="flex">
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                SHOP_ORDER_STATUS[row.status].color,
+                            }}
+                          >
+                            {SHOP_ORDER_STATUS[row.status].name}
+                          </span>
+                          {notification ? (
+                            <VscCircleFilled className="text-red-600 " />
+                          ) : null}
+                        </div>
                       </span>
                       <div className="flex justify-between">
                         <span className="text-xs">
@@ -319,14 +333,14 @@ export function ProfileSnackshopOrders() {
                               {row.survey_hash ? (
                                 <Link
                                   to={`/feedback/complete/${row.survey_hash}`}
-                                  className="text-green-700 font-bold"
+                                  className="font-bold text-green-700"
                                 >
                                   View Rate
                                 </Link>
                               ) : (
                                 <Link
                                   to={`/feedback/snackshop/${row.hash_key}`}
-                                  className="text-blue-800 font-bold"
+                                  className="font-bold text-blue-800"
                                 >
                                   Rate Now
                                 </Link>

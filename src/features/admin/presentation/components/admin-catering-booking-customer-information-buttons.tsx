@@ -39,6 +39,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           transactionId: getAdminCateringBookingState.data.id,
           fbUserId: getAdminCateringBookingState.data.fb_user_id,
           mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
+          transactionHash: getAdminCateringBookingState.data.hash_key,
           status,
         })
       );

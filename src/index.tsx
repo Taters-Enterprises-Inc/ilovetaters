@@ -127,6 +127,10 @@ import {
   SeeMePopClub,
 } from "features/see-me/presentation/pages";
 import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
+import {
+  CateringSurveyGuard,
+  ShopSurveyGuard,
+} from "features/survey/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -269,14 +273,18 @@ root.render(
 
                       <Route path="feedback">
                         <Route index element={<Survey />} />
-                        <Route
-                          path="snackshop/:hash"
-                          element={<SurveySnackshop />}
-                        />
-                        <Route
-                          path="catering/:hash"
-                          element={<SurveyCatering />}
-                        />
+                        <Route element={<ShopSurveyGuard />}>
+                          <Route
+                            path="snackshop/:hash"
+                            element={<SurveySnackshop />}
+                          />
+                        </Route>
+                        <Route element={<CateringSurveyGuard />}>
+                          <Route
+                            path="catering/:hash"
+                            element={<SurveyCatering />}
+                          />
+                        </Route>
                         <Route
                           path="complete/:hash"
                           element={<SurveyComplete />}

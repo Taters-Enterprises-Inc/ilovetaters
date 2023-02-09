@@ -1,12 +1,7 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   FooterNav,
   HeaderNav,
-  MaterialDateInput,
   MaterialInput,
 } from "features/shared/presentation/components";
 import { useEffect, useState, FormEvent } from "react";
@@ -29,11 +24,6 @@ import {
 } from "../slices/insert-customer-survey-response.slice";
 import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getAllStores,
-  GetAllStoresState,
-  selectGetAllStores,
-} from "features/shared/presentation/slices/get-all-stores.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
@@ -77,7 +67,6 @@ export function SurveySnackshop() {
       insertCustomerSurveyResponseState.status ===
       InsertCustomerSurveyResponseState.success
     ) {
-      console.log(insertCustomerSurveyResponseState);
       navigate(
         `/feedback/complete/${insertCustomerSurveyResponseState.data?.hash}`
       );

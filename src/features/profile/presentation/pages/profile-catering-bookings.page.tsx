@@ -196,19 +196,21 @@ export function ProfileCateringBookings() {
                         #{row.tracking_no}
                       </span>
 
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            CATERING_BOOKING_STATUS[row.status].color,
-                        }}
-                      >
-                        {CATERING_BOOKING_STATUS[row.status].name}
-                      </span>
-                      {notification ? (
-                        <VscCircleFilled className="text-red-600 " />
-                      ) : null}
+                      <div className="flex">
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              CATERING_BOOKING_STATUS[row.status].color,
+                          }}
+                        >
+                          {CATERING_BOOKING_STATUS[row.status].name}
+                        </span>
+                        {notification ? (
+                          <VscCircleFilled className="text-red-600 " />
+                        ) : null}
+                      </div>
                     </span>
                     <div className="flex justify-between">
                       <span className="text-xs">
@@ -352,14 +354,14 @@ export function ProfileCateringBookings() {
                                 {row.survey_hash ? (
                                   <Link
                                     to={`/feedback/complete/${row.survey_hash}`}
-                                    className="text-green-700 font-bold"
+                                    className="font-bold text-green-700"
                                   >
                                     View Rate
                                   </Link>
                                 ) : (
                                   <Link
                                     to={`/feedback/catering/${row.hash_key}`}
-                                    className="text-blue-800 font-bold"
+                                    className="font-bold text-blue-800"
                                   >
                                     Rate Now
                                   </Link>

@@ -977,6 +977,7 @@ export function AdminShopOrderCustomerInformation() {
                 fbUserId: getAdminShopOrderState.data.fb_user_id,
                 mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
+                transactionHash: getAdminShopOrderState.data.hash_key,
                 fromStatusId: getAdminShopOrderState.data.status,
                 toStatusId: status,
               })
@@ -997,6 +998,7 @@ export function AdminShopOrderCustomerInformation() {
                 fbUserId: getAdminShopOrderState.data.fb_user_id,
                 mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
+                transactionHash: getAdminShopOrderState.data.hash_key,
                 fromStoreId: getAdminShopOrderState.data.store,
                 toStoreId: store,
               })

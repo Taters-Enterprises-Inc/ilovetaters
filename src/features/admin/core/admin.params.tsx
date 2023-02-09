@@ -76,6 +76,7 @@ export interface AdminPrivilegeParam {
   mobileUserId: number | null;
   password: string;
   transactionId: number;
+  transactionHash: string;
   fromStatusId?: number;
   toStatusId?: string;
   fromStoreId?: number;
@@ -103,7 +104,8 @@ export interface AdminUserDiscountChangeStatusParam {
 }
 
 export interface AdminSurveyVerificationChangeStatusParam {
-  surveyverificationId: number;
+  surveyVerificationId: number;
+  invoiceNo: string;
   status: number;
 }
 
@@ -121,6 +123,7 @@ export interface AdminCompleteRedeemParam {
 
 export interface AdminCateringBookingUpdateStatusParam {
   transactionId: number;
+  transactionHash: string;
   mobileUserId: number | null;
   fbUserId: number | null;
   status: number;
@@ -128,6 +131,7 @@ export interface AdminCateringBookingUpdateStatusParam {
 
 export interface AdminShopOrderUpdateStatusParam {
   transactionId: number;
+  transactionHash: string;
   mobileUserId: number | null;
   fbUserId: number | null;
   status: number;

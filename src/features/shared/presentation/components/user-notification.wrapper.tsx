@@ -249,7 +249,7 @@ export function UserNotificationWrapper() {
 
   useEffect(() => {
     dispatch(getNotifications());
-  }, []);
+  }, [getCateringOrdersState, getOrdersState, dispatch]);
 
   return (
     <>

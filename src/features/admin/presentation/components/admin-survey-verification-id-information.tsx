@@ -44,7 +44,8 @@ export function AdminSurveyVerificationIDInformation(
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
-          surveyverificationId: getAdminSurveyVerificationState.data.id,
+          surveyVerificationId: getAdminSurveyVerificationState.data.id,
+          invoiceNo: getAdminSurveyVerificationState.data.invoice_no,
           status: 2,
         })
       );
@@ -55,7 +56,8 @@ export function AdminSurveyVerificationIDInformation(
     if (getAdminSurveyVerificationState.data) {
       dispatch(
         adminSurveyVerificationChangeStatus({
-          surveyverificationId: getAdminSurveyVerificationState.data.id,
+          surveyVerificationId: getAdminSurveyVerificationState.data.id,
+          invoiceNo: getAdminSurveyVerificationState.data.invoice_no,
           status: 3,
         })
       );
@@ -82,7 +84,7 @@ export function AdminSurveyVerificationIDInformation(
             <div>
               <strong>Order Number :</strong>{" "}
               <span className="font-semibold">
-                {getAdminSurveyVerificationState.data?.order_no}
+                {getAdminSurveyVerificationState.data?.invoice_no}
                 {getAdminSurveyVerificationState.data?.snackshop_tracking_no}
                 {getAdminSurveyVerificationState.data?.catering_tracking_no}
               </span>
