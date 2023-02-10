@@ -36,6 +36,7 @@ import {
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { SurveyRating } from "../components";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 
 export function SurveyCatering() {
   const dispatch = useAppDispatch();
@@ -73,6 +74,7 @@ export function SurveyCatering() {
       insertCustomerSurveyResponseState.status ===
       InsertCustomerSurveyResponseState.success
     ) {
+      dispatch(getNotifications());
       navigate(
         `/feedback/complete/${insertCustomerSurveyResponseState.data?.hash}`
       );
