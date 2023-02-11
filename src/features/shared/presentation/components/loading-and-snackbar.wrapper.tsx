@@ -203,10 +203,6 @@ import {
   UpdateStoreDealState,
 } from "features/admin/presentation/slices/update-store-deal.slice";
 import {
-  selectUpdateAdminSettingStore,
-  UpdateAdminSettingStoreState,
-} from "features/admin/presentation/slices/update-setting-store.slice";
-import {
   AdminDeclineRedeemState,
   selectAdminDeclineRedeem,
 } from "features/admin/presentation/slices/admin-decline-redeem.slice";
@@ -214,10 +210,6 @@ import {
   GetAdminStoreState,
   selectGetAdminStore,
 } from "features/admin/presentation/slices/get-admin-store.slice";
-import {
-  selectUpdateAdminSettingStoreOperatingHours,
-  UpdateAdminSettingStoreOperatingHoursState,
-} from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
 import {
   GetAdminSettingStoresState,
   selectGetAdminSettingStores,
@@ -306,6 +298,10 @@ import {
   selectUpdateAdminCateringOrderItemRemarks,
   UpdateAdminCateringOrderItemRemarksState,
 } from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
+import {
+  CreateAdminSettingStoreState,
+  selectCreateAdminSettingStore,
+} from "features/admin/presentation/slices/create-admin-setting-store.slice";
 import {
   GetSnacksDeliveredDealAvailableStoresState,
   selectGetSnacksDeliveredDealAvailableStores,
@@ -437,17 +433,10 @@ export function LoadingAndSnackbarWrapper() {
 
   const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
 
-  const updateAdminSettingStoreState = useAppSelector(
-    selectUpdateAdminSettingStore
-  );
-
   const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
   const getAdminStoreState = useAppSelector(selectGetAdminStore);
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
-  );
-  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
-    selectUpdateAdminSettingStoreOperatingHours
   );
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
   const updateStoreCatersPackageState = useAppSelector(
@@ -493,6 +482,27 @@ export function LoadingAndSnackbarWrapper() {
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
     selectUpdateAdminCateringOrderItemRemarks
   );
+  const createAdminSettingStoreState = useAppSelector(
+    selectCreateAdminSettingStore
+  );
+  useEffect(() => {
+    switch (createAdminSettingStoreState.status) {
+      case CreateAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingStoreState.success:
+        showAlert(setSuccessAlert, createAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingStoreState.fail:
+        showAlert(setFailsAlert, createAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingStoreState]);
 
   const getSnacksDeliveredDealAvailableStoresState = useAppSelector(
     selectGetSnacksDeliveredDealAvailableStores
@@ -1013,31 +1023,6 @@ export function LoadingAndSnackbarWrapper() {
   }, [getAdminSettingStoresState]);
 
   useEffect(() => {
-    switch (updateAdminSettingStoreOperatingHoursState.status) {
-      case UpdateAdminSettingStoreOperatingHoursState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case UpdateAdminSettingStoreOperatingHoursState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateAdminSettingStoreOperatingHoursState.success:
-        showAlert(
-          setSuccessAlert,
-          updateAdminSettingStoreOperatingHoursState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateAdminSettingStoreOperatingHoursState.fail:
-        showAlert(
-          setFailsAlert,
-          updateAdminSettingStoreOperatingHoursState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [updateAdminSettingStoreOperatingHoursState]);
-
-  useEffect(() => {
     switch (getAdminStoreState.status) {
       case GetAdminStoreState.inProgress:
         setOpenBackdropLoading(true);
@@ -1072,23 +1057,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [adminDeclineRedeemState]);
-
-  useEffect(() => {
-    switch (updateAdminSettingStoreState.status) {
-      case UpdateAdminSettingStoreState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case UpdateAdminSettingStoreState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateAdminSettingStoreState.success:
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateAdminSettingStoreState.fail:
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [updateAdminSettingStoreState]);
 
   useEffect(() => {
     switch (updateStoreDealState.status) {

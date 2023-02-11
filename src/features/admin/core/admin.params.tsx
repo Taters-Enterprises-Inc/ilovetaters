@@ -1,4 +1,4 @@
-import { Variant } from "../presentation/pages/admin-setting-shop-create-product.page";
+import { Moment } from "moment";
 import { AdminStoreModel } from "./domain/admin-store.model";
 
 export interface EditAdminUserParam {
@@ -191,6 +191,31 @@ export interface GetAdminSalesParam {
 
 export interface GetAdminTotalSalesParam {
   service: "overall" | "snackshop" | "catering" | "popclub";
+}
+
+export interface CreateAdminSettingStoreParam {
+  name: string;
+  address: string;
+  storeMenu: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  phoneNumber: string;
+  contactPerson: string;
+  email: string;
+  deliveryHours: string;
+  operatingHours: string;
+  lat: number;
+  lng: number;
+  deliveryRate: string;
+  minimumRate: string;
+  cateringDeliveryRate: string;
+  cateringMinimumRate: string;
+  storeHash: string;
+  locale: string;
+  services: string;
+  products: string;
+  packages: string;
+  image250x250: File | string;
 }
 
 export interface GetAdminCateringPackageFlavorsParam {

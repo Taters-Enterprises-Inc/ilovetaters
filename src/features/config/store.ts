@@ -94,10 +94,8 @@ import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-
 import getAdminProductCategories from "features/admin/presentation/slices/get-admin-product-categories.slice";
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
-import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
 import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
-import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
 import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
 import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
 import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
@@ -166,6 +164,12 @@ import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-
 import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
 import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
+import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
+import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
+import getAdminStoreRegions from "features/admin/presentation/slices/get-admin-store-regions.slice";
+import getAdminStoreLocales from "features/admin/presentation/slices/get-admin-store-locales.slice";
+import getAdminPackages from "features/admin/presentation/slices/get-admin-packages.slice";
+import getAdminDeals from "features/admin/presentation/slices/get-admin-deals.slice";
 import snacksDeliveredDealStoreChooserModal from "features/popclub/presentation/slices/snacks-delivered-deal-store-chooser-modal.slice";
 import getSnacksDeliveredDealAvailableStores from "features/popclub/presentation/slices/get-snacks-delivered-deal-available-stores.slice";
 import setSnacksDeliveredDealStoreAndAddress from "features/popclub/presentation/slices/set-snacks-delivered-deal-store-and-address.slice";
@@ -275,10 +279,8 @@ export const store = configureStore({
     getAdminProductCategories,
     updateStoreProduct,
     getAdminSettingStores,
-    updateAdminSettingStore,
     adminDeclineRedeem,
     getAdminStore,
-    updateAdminSettingStoreOperatingHours,
     getCatersPackageCategories,
     getAdminStoreCatersPackages,
     updateStoreCatersPackage,
@@ -347,6 +349,12 @@ export const store = configureStore({
     getAdminCateringTotalSales,
     getAdminPopClubTotalSales,
     getAdminOverallTotalSales,
+    getAdminStoreMenus,
+    createAdminSettingStore,
+    getAdminStoreRegions,
+    getAdminStoreLocales,
+    getAdminPackages,
+    getAdminDeals,
     snacksDeliveredDealStoreChooserModal,
     getSnacksDeliveredDealAvailableStores,
     setSnacksDeliveredDealStoreAndAddress,

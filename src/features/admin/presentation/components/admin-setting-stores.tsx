@@ -4,7 +4,7 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,9 +17,6 @@ import {
   resetGetAdminSettingStoresStatus,
   selectGetAdminSettingStores,
 } from "../slices/get-admin-setting-stores.slice";
-import { selectUpdateAdminSettingStore } from "../slices/update-setting-store.slice";
-import { AdminStoreEditModal } from "../modals";
-import { selectUpdateAdminSettingStoreOperatingHours } from "../slices/update-setting-store-operating-hours.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -36,19 +33,9 @@ export function AdminSettingStores() {
   const search = query.get("search");
   const storeId = query.get("store_id");
 
-  const [openAdminStoreEditModal, setOpenAdminStoreEditModal] = useState(false);
-
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
-  );
-
-  const updateAdminSettingStoreOperatingHoursState = useAppSelector(
-    selectUpdateAdminSettingStoreOperatingHours
-  );
-
-  const updateAdminSettingStoreState = useAppSelector(
-    selectUpdateAdminSettingStore
   );
 
   let columns: Array<Column> = [
@@ -73,12 +60,6 @@ export function AdminSettingStores() {
   }
 
   useEffect(() => {
-    if (storeId) {
-      setOpenAdminStoreEditModal(true);
-    }
-  }, [dispatch, storeId]);
-
-  useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
@@ -88,16 +69,7 @@ export function AdminSettingStores() {
     });
 
     dispatch(getAdminSettingStores(query));
-  }, [
-    dispatch,
-    pageNo,
-    perPage,
-    orderBy,
-    order,
-    search,
-    updateAdminSettingStoreState,
-    updateAdminSettingStoreOperatingHoursState,
-  ]);
+  }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
   return (
     <>
@@ -308,28 +280,6 @@ export function AdminSettingStores() {
           </div>
         </>
       ) : null}
-      <AdminStoreEditModal
-        open={openAdminStoreEditModal}
-        onClose={() => {
-          const params = {
-            page_no: pageNo,
-            per_page: perPage,
-            store_id: null,
-            order_by: orderBy,
-            order: order,
-            search: search,
-          };
-
-          const queryParams = createQueryParams(params);
-
-          navigate({
-            pathname: "",
-            search: queryParams,
-          });
-
-          setOpenAdminStoreEditModal(false);
-        }}
-      />
     </>
   );
 }

@@ -1,14 +1,9 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { SearchAddress } from "features/shared/presentation/components/search-address";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
-import {
-  getSession,
-  selectGetSession,
-} from "../../../shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   selectShopHomePage,
   setAddressShopHomePage,

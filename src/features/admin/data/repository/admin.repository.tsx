@@ -27,6 +27,7 @@ import {
   UpdateAdminCateringOrderItemRemarksParam,
   GetAdminSalesParam,
   GetAdminTotalSalesParam,
+  CreateAdminSettingStoreParam,
   GetAdminCateringPackageFlavorsParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
@@ -63,6 +64,11 @@ import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/g
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 import { SaleModel } from "features/admin/core/domain/sale.model";
 import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
+import { StoreMenuModel } from "../../core/domain/store-menu.model";
+import { AdminRegionModel } from "features/admin/core/domain/admin-region.model";
+import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-locale.model";
+import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -299,25 +305,12 @@ export interface GetAdminSettingStoresResponse {
   };
 }
 
-export interface UpdateAdminSettingStoreResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetAdminStoreResponse {
   data: {
     message: string;
     data: AdminStoreModel;
   };
 }
-
-export interface UpdateAdminSettingStoreOperatingHoursResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetCatersPackageCategoriesResponse {
   data: {
     message: string;
@@ -511,6 +504,87 @@ export interface GetAdminTotalSalesResponse {
     message: string;
     data: TotalSalesModel;
   };
+}
+
+export interface GetAdminStoreMenusResponse {
+  data: {
+    message: string;
+    data: Array<StoreMenuModel>;
+  };
+}
+
+export interface CreateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreRegionsResponse {
+  data: {
+    message: string;
+    data: Array<AdminRegionModel>;
+  };
+}
+
+export interface GetAdminPackagesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPackageModel>;
+  };
+}
+export interface GetAdminDealsResponse {
+  data: {
+    message: string;
+    data: Array<AdminDealModel>;
+  };
+}
+
+export interface GetAdminStoreLocalesResponse {
+  data: {
+    message: string;
+    data: Array<AdminStoreLocaleModel>;
+  };
+}
+
+export function GetAdminDealsRepository(): Promise<GetAdminDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deals`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminPackagesRepository(): Promise<GetAdminPackagesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/packages`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/locales`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreRegionsRepository(): Promise<GetAdminStoreRegionsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/regions`, {
+    withCredentials: true,
+  });
+}
+
+export function CreateAdminSettingStoreRepository(
+  param: CreateAdminSettingStoreParam
+): Promise<CreateAdminSettingStoreResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/stores`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreMenusRepository(): Promise<GetAdminStoreMenusResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/store-menu`, {
+    withCredentials: true,
+  });
 }
 
 export function UpdateStoreCateringProductRepository(
@@ -825,18 +899,6 @@ export function GetCatersPackageCategoriesRepository(): Promise<GetCatersPackage
   );
 }
 
-export function UpdateAdminSettingStoreOperatingHoursRepository(
-  param: UpdateAdminSettingStoreOperatingHoursParam
-): Promise<UpdateAdminSettingStoreOperatingHoursResponse> {
-  return axios.put(
-    `${REACT_APP_DOMAIN_URL}api/admin/store-operating-hours`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
 export function GetAdminStoreRepository(
   storeId: string
 ): Promise<GetAdminStoreResponse> {
@@ -858,14 +920,6 @@ export function AdminDeclineRedeemRepository(
       withCredentials: true,
     }
   );
-}
-
-export function UpdateAdminSettingStoreRepository(
-  param: UpdateAdminSettingStoreParam
-): Promise<UpdateStoreProductResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/store`, param, {
-    withCredentials: true,
-  });
 }
 
 export function GetAdminSettingStoresRepository(

@@ -1,31 +1,16 @@
-import { useEffect, useRef } from "react";
-import "features/shared/presentation/css/material-ui.css";
+import { InputBaseComponentProps } from "@mui/material/InputBase";
+import { useRef, useEffect } from "react";
+import { MaterialInput } from "./material-input";
 
 let autoComplete: any;
 
-const loadScript = (url: any, callback: any) => {
-  let script: any = document.createElement("script");
-  script.type = "text/javascript";
-
-  if (script.readyState) {
-    script.onreadystatechange = function () {
-      if (script.readyState === "loaded" || script.readyState === "complete") {
-        script.onreadystatechange = null;
-        callback();
-      }
-    };
-  } else {
-    script.onload = () => callback();
-  }
-
-  script.src = url;
-  document.getElementsByTagName("head")[0].appendChild(script);
-};
-
 function handleScriptLoad(
-  setQuery: any,
-  onPlaceSelected: any,
-  autoCompleteRef: any,
+  onPlaceSelected: (location: {
+    lat: number;
+    lng: number;
+    formattedAddress: string;
+  }) => void,
+  autoCompleteRef: InputBaseComponentProps,
   geolocate: any
 ) {
   autoComplete = new window.google.maps.places.Autocomplete(
@@ -33,12 +18,18 @@ function handleScriptLoad(
     { componentRestrictions: { country: "ph" } }
   );
 
-  autoComplete.setFields(["address_components", "formatted_address"]);
   geolocate();
   autoComplete.addListener("place_changed", () => {
-    console.log(autoCompleteRef.current);
-    onPlaceSelected(autoCompleteRef.current.value);
-    setQuery(autoCompleteRef.current.value);
+    var place = autoComplete.getPlace();
+
+    const lat = place.geometry.location.lat();
+    const lng = place.geometry.location.lng();
+
+    onPlaceSelected({
+      lat,
+      lng,
+      formattedAddress: place.formatted_address,
+    });
     handlePlaceSelect();
   });
 }
@@ -79,29 +70,28 @@ async function handlePlaceSelect() {
   }
 }
 
-interface SearchAddressProps {
-  onPlaceSelected: any;
-  value: string;
+interface MaterialInputAddressProps {
   onPrompt: () => void;
   onDenied: () => void;
-  onChange: (newValue: string) => void;
-  onLocateCurrentAddress: (place: string) => void;
+  onChange: (address: string) => void;
+  value: string;
+  onPlaceSelected: (location: {
+    lat: number;
+    lng: number;
+    formattedAddress: string;
+  }) => void;
+  onLocateCurrentAddress: (location: {
+    lat: number;
+    lng: number;
+    formattedAddress: string;
+  }) => void;
 }
 
-export function SearchAddress(props: SearchAddressProps) {
-  const autoCompleteRef = useRef(null);
+export function MaterialInputAddress(props: MaterialInputAddressProps) {
+  const autoCompleteRef = useRef();
 
   useEffect(() => {
-    loadScript(
-      `https://maps.googleapis.com/maps/api/js?key=AIzaSyAi3QDkRTVGFyD4vuUS0lEx080Nm6GNsI8&libraries=places`,
-      () =>
-        handleScriptLoad(
-          props.onChange,
-          props.onPlaceSelected,
-          autoCompleteRef,
-          geolocate
-        )
-    );
+    handleScriptLoad(props.onPlaceSelected, autoCompleteRef, geolocate);
   }, []);
 
   const geolocate = () => {
@@ -141,7 +131,11 @@ export function SearchAddress(props: SearchAddressProps) {
                 if (results[1]) {
                   const place = results[0].formatted_address;
 
-                  props.onLocateCurrentAddress(place);
+                  props.onLocateCurrentAddress({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    formattedAddress: place,
+                  });
                 } else {
                   console.log("No results found");
                 }
@@ -157,16 +151,15 @@ export function SearchAddress(props: SearchAddressProps) {
   };
 
   return (
-    <div className="flex justify-center">
-      <label className="pure-material-textfield-outlined w-[100%] mb-4">
-        <input
-          ref={autoCompleteRef}
-          onChange={(event) => props.onChange(event.target.value)}
-          value={props.value}
-          placeholder=" "
-        />
-        <span>Search Address</span>
-      </label>
-    </div>
+    <MaterialInput
+      inputRef={autoCompleteRef}
+      colorTheme="black"
+      value={props.value}
+      onChange={(e) => props.onChange(e.target.value)}
+      name=""
+      label="Search Address"
+      fullWidth
+      placeholder=" "
+    />
   );
 }

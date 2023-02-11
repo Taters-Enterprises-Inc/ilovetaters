@@ -26,3 +26,4 @@ export { AdminAvailabilityCatersProducts } from "./admin-availability-caters-pro
 export { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
 export { AdminDashboardSalesLineChart } from "./admin-dashboard-sales-line-chart";
 export { AdminTotalSalesCard } from "./admin-total-sales-card";
+export { AdminSearchStoreCoordinates } from "./admin-search-store-coordinates";

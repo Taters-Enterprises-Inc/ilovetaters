@@ -57,7 +57,7 @@ export function MaterialTimeInput(props: MaterialTimeInputProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MobileTimePicker
-        label="Available Start Time"
+        label={props.label}
         value={props.value}
         onChange={props.onChange}
         renderInput={(params) => (
