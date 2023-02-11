@@ -4,60 +4,82 @@ import moment from "moment";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { HiClock } from "react-icons/hi";
 import { RiTimerFlashFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import { useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { selectRedeemValidators } from "../slices/redeem-validators.slice";
+import { getDeals } from "../slices/get-deals.slice";
 
 interface DealProps {
   deal: DealModel;
 }
 
-function secondsToHms(d: any) {
-  d = Number(d);
-  var h = Math.floor(d / 3600);
-  var m = Math.floor((d % 3600) / 60);
-  var s = Math.floor((d % 3600) % 60);
-
-  var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
-  var mDisplay = m > 0 ? m + (m === 1 ? " min " : " mins ") : "";
-  var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
-  return hDisplay + mDisplay + sDisplay;
+export enum DealValidationState {
+  valid,
+  startAndEndDateTimeInvalid,
+  startAndEndTimeInvalid,
+  availableListInvalid,
+  redeemValidatorsInvalid,
 }
-
-const pad = (number: number) => ("0" + number).slice(-2);
-
-const renderer = ({ hours, minutes, seconds, completed }: any) => {
-  if (completed) {
-  } else {
-    let timeName = "";
-
-    return (
-      <span>
-        <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
-          <div className="font-['Bebas_Neue'] tracking-[3px]">
-            <span className="mr-2">
-              {pad(hours)}:{pad(minutes)}:{pad(seconds)}
-            </span>
-          </div>
-        </div>
-      </span>
-    );
-  }
-};
 
 export function Deal(props: DealProps) {
   const navigate = useNavigate();
   const redeemValidatorsState = useAppSelector(selectRedeemValidators);
+  const dispatch = useAppDispatch();
+
+  let { platform } = useParams();
+  const query = useQuery();
+  const category = query.get("category");
+
   let availableStartTime;
   let availableEndTime;
   let availableStartTimeInDate: any;
-  let isDealAvailable = true;
+  let dealValidationState: DealValidationState = DealValidationState.valid;
 
   let availableStartDateTime;
   let availableEndDateTime;
   let availableStartDateTimeInDate: any;
+
+  function secondsToHms(d: any) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
+    var mDisplay = m > 0 ? m + (m === 1 ? " min " : " mins ") : "";
+    var sDisplay = s > 0 ? s + (s === 1 ? " second " : " seconds ") : "";
+    return hDisplay + mDisplay + sDisplay;
+  }
+
+  const pad = (number: number) => ("0" + number).slice(-2);
+
+  const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
+    if (completed) {
+      if (platform !== undefined && category !== null) {
+        dispatch(
+          getDeals({ platform_url_name: platform, category_url_name: category })
+        );
+      }
+    } else {
+      return (
+        <span>
+          <div className="flex items-center justify-center text-xs text-white lg:text-lg ">
+            <div className="font-['Bebas_Neue'] tracking-[3px]">
+              <span className="mr-2">
+                {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
+              </span>
+            </div>
+          </div>
+        </span>
+      );
+    }
+  };
 
   if (
     props.deal.available_start_datetime &&
@@ -68,10 +90,15 @@ export function Deal(props: DealProps) {
     availableStartDateTime = moment(props.deal.available_start_datetime);
     availableEndDateTime = moment(props.deal.available_end_datetime);
 
-    isDealAvailable = currentTime.isBetween(
+    const isAvailable = currentTime.isBetween(
       availableStartDateTime,
       availableEndDateTime
     );
+
+    if (isAvailable === false) {
+      dealValidationState = DealValidationState.startAndEndDateTimeInvalid;
+    }
+
     availableStartDateTimeInDate = availableStartDateTime.toDate();
   }
 
@@ -80,10 +107,14 @@ export function Deal(props: DealProps) {
     availableStartTime = moment(props.deal.available_start_time, "HH:mm:ss");
     availableEndTime = moment(props.deal.available_end_time, "HH:mm:ss");
 
-    isDealAvailable = currentTime.isBetween(
+    const isAvailable = currentTime.isBetween(
       availableStartTime,
       availableEndTime
     );
+
+    if (isAvailable === false) {
+      dealValidationState = DealValidationState.startAndEndTimeInvalid;
+    }
 
     const currentDateStartingTime = moment().set({
       hour: availableStartTime.get("hour"),
@@ -117,23 +148,26 @@ export function Deal(props: DealProps) {
 
     const availableDays = props.deal.available_days;
     const currentDayOfWeek = DAYS[moment().weekday() - 1];
-    isDealAvailable = availableDays.includes(currentDayOfWeek);
+
+    const isAvailable = availableDays.includes(currentDayOfWeek);
+
+    if (isAvailable === false) {
+      dealValidationState = DealValidationState.availableListInvalid;
+    }
   }
 
   if (redeemValidatorsState.data?.some((el) => el.deal_id === props.deal.id)) {
-    isDealAvailable = false;
+    dealValidationState = DealValidationState.redeemValidatorsInvalid;
   }
 
   const handleOnDealClick = () => {
-    if (isDealAvailable) navigate(`/popclub/deal/${props.deal.hash}`);
+    if (dealValidationState === DealValidationState.valid)
+      navigate(`/popclub/deal/${props.deal.hash}`);
   };
 
   const dealIsNotAvailableMessage = () => {
-    if (redeemValidatorsState.data?.some((o) => o.deal_id === props.deal.id)) {
-      const redeemValidator = redeemValidatorsState.data.find(
-        (o) => o.deal_id === props.deal.id
-      );
-      if (redeemValidator)
+    switch (dealValidationState) {
+      case DealValidationState.startAndEndDateTimeInvalid:
         return (
           <>
             <span className="text-xs font-bold lg:text-base">
@@ -141,46 +175,59 @@ export function Deal(props: DealProps) {
             </span>
             <Countdown
               renderer={renderer}
-              date={redeemValidator.next_available_redeem}
+              date={availableStartDateTimeInDate}
             />
           </>
         );
-    } else if (availableStartTimeInDate) {
-      return (
-        <>
+      case DealValidationState.startAndEndTimeInvalid:
+        return (
+          <>
+            <span className="text-xs font-bold lg:text-base">
+              Available after
+            </span>
+            <Countdown renderer={renderer} date={availableStartTimeInDate} />
+          </>
+        );
+      case DealValidationState.availableListInvalid:
+        return (
           <span className="text-xs font-bold lg:text-base">
-            Available after
+            Only available on Weekdays
           </span>
-          <Countdown renderer={renderer} date={availableStartTimeInDate} />
-        </>
-      );
-    } else if (availableStartDateTimeInDate) {
-      return (
-        <>
-          <span className="text-xs font-bold lg:text-base">
-            Available after
-          </span>
-          <Countdown renderer={renderer} date={availableStartDateTimeInDate} />
-        </>
-      );
-    } else if (props.deal.available_days) {
-      return (
-        <span className="text-xs font-bold lg:text-base">
-          Only available on Weekdays
-        </span>
-      );
+        );
+      case DealValidationState.redeemValidatorsInvalid:
+        if (redeemValidatorsState.data) {
+          const redeemValidator = redeemValidatorsState.data.find(
+            (o) => o.deal_id === props.deal.id
+          );
+          if (redeemValidator)
+            return (
+              <>
+                <span className="text-xs font-bold lg:text-base">
+                  Available after
+                </span>
+                <Countdown
+                  renderer={renderer}
+                  date={redeemValidator.next_available_redeem}
+                />
+              </>
+            );
+        }
+        break;
+      default:
+        return null;
     }
-    return null;
   };
 
   return (
     <button onClick={handleOnDealClick}>
       <div
         className={`${
-          isDealAvailable ? "" : "cursor-not-allowed"
+          dealValidationState === DealValidationState.valid
+            ? ""
+            : "cursor-not-allowed"
         } relative flex flex-wrap flex-col bg-secondary shadow-md shadow-[#ffcd17] rounded-[10px] h-full`}
       >
-        {isDealAvailable ? null : (
+        {dealValidationState === DealValidationState.valid ? null : (
           <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
             {dealIsNotAvailableMessage()}
           </div>
@@ -225,45 +272,45 @@ export function Deal(props: DealProps) {
             </h4>
           </div>
           <hr />
-          {props.deal.available_days ? (
-            <>
-              <div className="flex items-end pt-2 space-x-2">
+          <div className="py-2 space-y-2">
+            {props.deal.available_days ? (
+              <div className="flex items-end space-x-2">
                 <BsFillCalendar2WeekFill className="text-base text-white" />
                 <span className="text-[9px] lg:text-xs text-white">
                   Valid Weekdays
                 </span>
               </div>
-            </>
-          ) : null}
-          {availableStartTime && availableEndTime ? (
-            <>
-              <div className="flex items-center pt-2 space-x-1">
+            ) : null}
+            {availableStartTime && availableEndTime ? (
+              <div className="flex items-center space-x-1">
                 <HiClock className="text-base text-white" />
                 <span className="text-[10px] lg:text-xs text-white">
                   {availableStartTime.format("LT")} -{" "}
                   {availableEndTime.format("LT")}
                 </span>
               </div>
-            </>
-          ) : null}
+            ) : null}
 
-          {availableStartDateTime && availableEndDateTime ? (
-            <>
-              <div className="flex items-center pt-2 space-x-1">
+            {availableStartDateTime && availableEndDateTime ? (
+              <div className="flex items-center space-x-1">
                 <HiClock className="text-base text-white" />
                 <span className="text-[10px] lg:text-xs text-white">
-                  {availableStartDateTime.format("ll")} -{" "}
-                  {availableEndDateTime.format("ll")}
+                  {availableStartDateTime.format("ll") ===
+                  availableEndDateTime.format("ll")
+                    ? availableStartDateTime.format("ll")
+                    : `
+                    ${availableStartDateTime.format(
+                      "ll"
+                    )} - ${availableEndDateTime.format("ll")}`}
                 </span>
               </div>
-            </>
-          ) : null}
-
-          <div className="flex items-center pt-2 space-x-1">
-            <RiTimerFlashFill className="text-base text-white" />
-            <span className="text-[9px] lg:text-xs text-white">
-              {secondsToHms(props.deal.seconds_before_expiration)} claim time
-            </span>
+            ) : null}
+            <div className="flex items-center space-x-1">
+              <RiTimerFlashFill className="text-base text-white" />
+              <span className="text-[9px] lg:text-xs text-white">
+                {secondsToHms(props.deal.seconds_before_expiration)} claim time
+              </span>
+            </div>
           </div>
         </div>
       </div>

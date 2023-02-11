@@ -865,7 +865,10 @@ export function AdminCateringBookingCustomerInformation() {
             dispatch(
               adminCateringPrivilege({
                 password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
                 transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
                 fromStatusId: getAdminCateringBookingState.data.status,
                 toStatusId: status,
               })
@@ -883,7 +886,10 @@ export function AdminCateringBookingCustomerInformation() {
             dispatch(
               adminCateringPrivilege({
                 password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
                 transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
                 fromStoreId: getAdminCateringBookingState.data.store,
                 toStoreId: store,
               })

@@ -11,11 +11,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  changeCateringProductPrice,
-  getCateringProductDetails,
-  GetCateringProductDetailsState,
-  selectGetCateringProductDetails,
-} from "../slices/get-catering-product-details.slice";
+  changeCateringPackagePrice,
+  getCateringPackageDetails,
+  GetCateringPackageDetailsState,
+  selectGetCateringPackageDetails,
+} from "../slices/get-catering-package-details.slice";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
@@ -45,8 +45,13 @@ import { ProductModel } from "features/shared/core/domain/product.model";
 import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
-import { CateringSelectStoreModal } from "../modals";
+import { CateringStoreChooserModal } from "../modals";
 import ReactGA from "react-ga";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const SweetAlert = withReactContent(Swal);
 
 const DEFAULT_CAROUSEL = [
   "table_setup",
@@ -70,15 +75,16 @@ export function CateringProduct() {
   const dispatch = useAppDispatch();
   let { hash } = useParams();
   const location = useLocation();
+  const cateringAddonsRef = useRef<null | HTMLDivElement>(null);
 
   const [quantity, setQuantity] = useState(1);
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [openCateringSelectStoreModal, setOpenCateringSelectStoreModal] =
+  const [openCateringStoreChooserModal, setOpenCateringStoreChooserModal] =
     useState(false);
 
-  const getCateringProductDetailsState = useAppSelector(
-    selectGetCateringProductDetails
+  const getCateringPackageDetailsState = useAppSelector(
+    selectGetCateringPackageDetails
   );
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
@@ -88,15 +94,15 @@ export function CateringProduct() {
 
   const checkBaseProduct = (updatedQuantity: number) => {
     if (
-      getCateringProductDetailsState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success
+      getCateringPackageDetailsState.data &&
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success
     ) {
-      const productPrices = getCateringProductDetailsState.data.product_prices;
+      const productPrices = getCateringPackageDetailsState.data.product_prices;
       for (let i = 0; i < productPrices.length; i++) {
         if (productPrices[i].min_qty <= updatedQuantity) {
           dispatch(
-            changeCateringProductPrice({ price: productPrices[i].price })
+            changeCateringPackagePrice({ price: productPrices[i].price })
           );
         }
       }
@@ -109,7 +115,7 @@ export function CateringProduct() {
 
   useEffect(() => {
     if (hash !== undefined) {
-      dispatch(getCateringProductDetails({ hash }));
+      dispatch(getCateringPackageDetails({ hash }));
       dispatch(getSession());
     }
   }, [location, dispatch, hash]);
@@ -124,48 +130,32 @@ export function CateringProduct() {
     }
   }, [addToCartCateringState, dispatch]);
 
-  const calculateFreeAddon = () => {
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: () => void;
+  }) => {
     if (
-      getCateringProductDetailsState.data &&
+      getCateringPackageDetailsState.data &&
       getSessionState.status === GetSessionState.success &&
       getSessionState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success
     ) {
-      const addons = getCateringProductDetailsState.data.addons;
+      const addons = getCateringPackageDetailsState.data.addons;
       let freeItem: Array<ProductModel> = [];
       let calculatedPrice = 0;
 
       const orders = getSessionState.data.orders;
-      let existingFreeOrder:
-        | undefined
-        | {
-            index: number;
-            data: any;
-          };
 
       if (orders) {
         for (let i = 0; i < orders.length; i++) {
           const order = orders[i];
           calculatedPrice += order.prod_calc_amount;
-          if (order.is_free_item) {
-            existingFreeOrder = { index: i, data: order };
-          }
         }
       }
       const totalPrice =
-        getCateringProductDetailsState.data.product.price * quantity +
+        getCateringPackageDetailsState.data.product.price * quantity +
         calculatedPrice;
-
-      if (
-        existingFreeOrder &&
-        existingFreeOrder.data.free_threshold &&
-        existingFreeOrder.data.free_threshold >
-          getCateringProductDetailsState.data.product.price * quantity +
-            calculatedPrice
-      ) {
-        dispatch(removeItemFromCartCatering(existingFreeOrder.index));
-      }
 
       if (addons) {
         for (let i = 0; i < addons.length; i++) {
@@ -179,15 +169,32 @@ export function CateringProduct() {
       }
 
       if (freeItem.length > 0) {
-        return (
-          <div className="text-white ">
-            🎉 <strong>Claim</strong> FREE{" "}
-            <strong>{freeItem[freeItem.length - 1].name}</strong>
-          </div>
-        );
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable();
       }
+    }
+  };
 
-      return null;
+  const calculateFreeAddon = () => {
+    let freeItem: Array<ProductModel> = [];
+
+    checkFreeItem({
+      freeItemAvailable: (val) => {
+        freeItem = val;
+      },
+      freeItemNotAvailable: () => {
+        freeItem = [];
+      },
+    });
+
+    if (freeItem.length > 0) {
+      return (
+        <div className="text-white ">
+          🎉 <strong>Claim</strong> FREE{" "}
+          <strong>{freeItem[freeItem.length - 1].name}</strong>
+        </div>
+      );
     }
 
     return null;
@@ -195,16 +202,16 @@ export function CateringProduct() {
 
   const calculateTotalSavings = () => {
     if (
-      getCateringProductDetailsState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success &&
-      getCateringProductDetailsState.data.product.base_price &&
-      getCateringProductDetailsState.data.product.base_price !==
-        getCateringProductDetailsState.data.product.price
+      getCateringPackageDetailsState.data &&
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success &&
+      getCateringPackageDetailsState.data.product.base_price &&
+      getCateringPackageDetailsState.data.product.base_price !==
+        getCateringPackageDetailsState.data.product.price
     ) {
       const totalSavings =
-        getCateringProductDetailsState.data.product.base_price * quantity -
-        getCateringProductDetailsState.data.product.price * quantity;
+        getCateringPackageDetailsState.data.product.base_price * quantity -
+        getCateringPackageDetailsState.data.product.price * quantity;
       return (
         <div className="text-white ">
           total savings:{" "}
@@ -262,17 +269,17 @@ export function CateringProduct() {
     }
 
     if (
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success &&
-      getCateringProductDetailsState.data
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success &&
+      getCateringPackageDetailsState.data
     ) {
       if (
-        getCateringProductDetailsState.data?.product_flavor &&
-        getCateringProductDetailsState.data.product_flavor.length
+        getCateringPackageDetailsState.data?.product_flavor &&
+        getCateringPackageDetailsState.data.product_flavor.length
       ) {
         for (
           let i = 0;
-          i < getCateringProductDetailsState.data.product_flavor.length;
+          i < getCateringPackageDetailsState.data.product_flavor.length;
           i++
         ) {
           let totalMultiFlavorsQuantity = 0;
@@ -310,15 +317,15 @@ export function CateringProduct() {
 
       dispatch(
         addToCartCatering({
-          prod_id: getCateringProductDetailsState.data.product.id,
+          prod_id: getCateringPackageDetailsState.data.product.id,
           prod_image_name:
-            getCateringProductDetailsState.data.product.product_image,
-          prod_name: getCateringProductDetailsState.data.product.name,
+            getCateringPackageDetailsState.data.product.product_image,
+          prod_name: getCateringPackageDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_price: getCateringProductDetailsState.data.product.price,
+          prod_price: getCateringPackageDetailsState.data.product.price,
           prod_calc_amount:
-            getCateringProductDetailsState.data.product.price * quantity,
-          prod_category: getCateringProductDetailsState.data.product.category,
+            getCateringPackageDetailsState.data.product.price * quantity,
+          prod_category: getCateringPackageDetailsState.data.product.category,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -351,6 +358,73 @@ export function CateringProduct() {
     );
   };
 
+  const handleCheckout = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Check the free item",
+          denyButtonText: `Proceed to checkout`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setTimeout(() => {
+              if (cateringAddonsRef.current)
+                cateringAddonsRef.current.scrollIntoView();
+            }, 500);
+          } else if (result.isDenied) {
+            dispatchAddToCartCatering(() => {
+              setQuantity(1);
+              setCurrentMultiFlavors({});
+              navigate("/shop/checkout");
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatchAddToCartCatering(() => {
+          setQuantity(1);
+          setCurrentMultiFlavors({});
+          navigate("/shop/checkout");
+        });
+      },
+    });
+  };
+
+  const handleAddToCart = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showCancelButton: true,
+          confirmButtonText: "Add to cart, then check the item",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatchAddToCartCatering(() => {
+              setQuantity(1);
+              setCurrentMultiFlavors({});
+              setTimeout(() => {
+                if (cateringAddonsRef.current)
+                  cateringAddonsRef.current.scrollIntoView();
+              }, 500);
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatchAddToCartCatering(() => {
+          setQuantity(1);
+          setCurrentMultiFlavors({});
+        });
+      },
+    });
+  };
+
   const pageTitles: Array<{
     name?: string;
     url?: string;
@@ -362,7 +436,7 @@ export function CateringProduct() {
   ) {
     pageTitles.push({ name: "Products", url: "/shop/products" });
   }
-  pageTitles.push({ name: getCateringProductDetailsState.data?.product.name });
+  pageTitles.push({ name: getCateringPackageDetailsState.data?.product.name });
 
   return (
     <main className="bg-secondary">
@@ -371,7 +445,7 @@ export function CateringProduct() {
           title: "Catering",
           url: "/shop",
         }}
-        title={getCateringProductDetailsState.data?.product.name}
+        title={getCateringPackageDetailsState.data?.product.name}
         pageTitles={pageTitles}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">
@@ -386,7 +460,7 @@ export function CateringProduct() {
                   navigation
                   className="w-full"
                 >
-                  {getCateringProductDetailsState.data?.product_images.map(
+                  {getCateringPackageDetailsState.data?.product_images.map(
                     (name) => (
                       <SwiperSlide>
                         <img
@@ -410,7 +484,7 @@ export function CateringProduct() {
               </div>
 
               <div className="container flex-1 space-y-10 lg:px-0">
-                {getCateringProductDetailsState.data?.product.add_details ? (
+                {getCateringPackageDetailsState.data?.product.add_details ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Info",
@@ -422,7 +496,7 @@ export function CateringProduct() {
                         className="mt-2 space-y-2 text-sm"
                         dangerouslySetInnerHTML={{
                           __html:
-                            getCateringProductDetailsState.data.product
+                            getCateringPackageDetailsState.data.product
                               .add_details,
                         }}
                       />
@@ -542,11 +616,11 @@ export function CateringProduct() {
                         setQuantity(parseInt(value));
                       }}
                     />
-                    {getCateringProductDetailsState.data ? (
+                    {getCateringPackageDetailsState.data ? (
                       <span className="text-base text-white">
                         base price:{" "}
                         <NumberFormat
-                          value={getCateringProductDetailsState.data.product.price.toFixed(
+                          value={getCateringPackageDetailsState.data.product.price.toFixed(
                             2
                           )}
                           displayType={"text"}
@@ -560,11 +634,11 @@ export function CateringProduct() {
                     {calculateFreeAddon()}
                   </div>
 
-                  {getCateringProductDetailsState.data?.product.price ? (
+                  {getCateringPackageDetailsState.data?.product.price ? (
                     <h2 className="mt-4 text-4xl text-white">
                       <NumberFormat
                         value={(
-                          getCateringProductDetailsState.data.product.price *
+                          getCateringPackageDetailsState.data.product.price *
                           quantity
                         ).toFixed(2)}
                         displayType={"text"}
@@ -575,8 +649,8 @@ export function CateringProduct() {
                   ) : null}
                 </div>
 
-                {getCateringProductDetailsState.data?.product_flavor &&
-                getCateringProductDetailsState.data?.product_flavor.length >
+                {getCateringPackageDetailsState.data?.product_flavor &&
+                getCateringPackageDetailsState.data?.product_flavor.length >
                   0 ? (
                   <div>
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px] mb-4">
@@ -584,7 +658,7 @@ export function CateringProduct() {
                     </h2>
 
                     <ul className="space-y-6">
-                      {getCateringProductDetailsState.data?.product_flavor.map(
+                      {getCateringPackageDetailsState.data?.product_flavor.map(
                         (product_flavor, i) => (
                           <CateringFlavors
                             key={i}
@@ -613,11 +687,7 @@ export function CateringProduct() {
                 getSessionState.data?.customer_address ? (
                   <div className="space-y-4">
                     <button
-                      onClick={() => {
-                        dispatchAddToCartCatering(() => {
-                          navigate("/shop/checkout");
-                        });
-                      }}
+                      onClick={handleCheckout}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
                       <BsFillBagCheckFill className="text-3xl" />
@@ -627,12 +697,7 @@ export function CateringProduct() {
                     </button>
 
                     <button
-                      onClick={() => {
-                        dispatchAddToCartCatering(() => {
-                          setQuantity(1);
-                          setCurrentMultiFlavors({});
-                        });
-                      }}
+                      onClick={handleAddToCart}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
                       <BsFillCartPlusFill className="text-3xl" />
@@ -645,7 +710,7 @@ export function CateringProduct() {
                   <div className="space-y-4">
                     <button
                       onClick={() => {
-                        setOpenCateringSelectStoreModal(true);
+                        setOpenCateringStoreChooserModal(true);
                       }}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
@@ -657,8 +722,8 @@ export function CateringProduct() {
                   </div>
                 )}
 
-                {getCateringProductDetailsState.data?.product_addons &&
-                getCateringProductDetailsState.data.addons.length !== 0 ? (
+                {getCateringPackageDetailsState.data?.product_addons &&
+                getCateringPackageDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
@@ -666,7 +731,7 @@ export function CateringProduct() {
                     }}
                   >
                     <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getCateringProductDetailsState.data?.product_addons.map(
+                      {getCateringPackageDetailsState.data?.product_addons.map(
                         (product, i) => (
                           <Addon
                             key={i}
@@ -679,19 +744,22 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data?.addons &&
-                getCateringProductDetailsState.data.addons.length !== 0 ? (
+                {getCateringPackageDetailsState.data?.addons &&
+                getCateringPackageDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getCateringProductDetailsState.data.addons.map(
+                    <div
+                      ref={cateringAddonsRef}
+                      className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
+                    >
+                      {getCateringPackageDetailsState.data.addons.map(
                         (product, i) => {
                           if (
-                            getCateringProductDetailsState.data &&
+                            getCateringPackageDetailsState.data &&
                             getSessionState.data
                           ) {
                             let calculatedPrice = 0;
@@ -718,7 +786,7 @@ export function CateringProduct() {
 
                             let isFreeItemButAddToCartFirst =
                               product.free_threshold
-                                ? getCateringProductDetailsState.data.product
+                                ? getCateringPackageDetailsState.data.product
                                     .price *
                                     quantity +
                                     calculatedPrice >=
@@ -748,6 +816,7 @@ export function CateringProduct() {
           </div>
         </div>
       </section>
+
       <LoginChooserModal
         open={openLoginChooserModal}
         onClose={() => {
@@ -755,10 +824,10 @@ export function CateringProduct() {
         }}
       />
 
-      <CateringSelectStoreModal
-        open={openCateringSelectStoreModal}
+      <CateringStoreChooserModal
+        open={openCateringStoreChooserModal}
         onClose={() => {
-          setOpenCateringSelectStoreModal(false);
+          setOpenCateringStoreChooserModal(false);
         }}
       />
     </main>

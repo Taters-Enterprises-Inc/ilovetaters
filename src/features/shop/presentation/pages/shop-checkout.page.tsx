@@ -145,7 +145,6 @@ export function ShopCheckout() {
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -157,12 +156,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -178,7 +174,6 @@ export function ShopCheckout() {
   const calculateDeliveryFee = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -190,12 +185,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
@@ -204,6 +196,7 @@ export function ShopCheckout() {
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
         getLatestUnexpiredRedeemState.data.minimum_purchase <=
           calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1 &&
         getLatestUnexpiredRedeemState.data.store ===
           getSessionState.data.cache_data?.store_id
       ) {
@@ -221,21 +214,55 @@ export function ShopCheckout() {
         />
       );
     } else {
+      return "₱ 0.00";
+    }
+  };
+
+  const calculateDiscount = () => {
+    let calculatedPrice = 0;
+
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+    }
+
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
       return (
         <NumberFormat
-          value={0}
+          value={discountedPrice.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
         />
       );
     }
+
+    return "₱ 0.00";
   };
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -247,12 +274,26 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+    }
 
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
+
+      calculatedPrice -= discountedPrice;
     }
 
     if (getAvailableUserDiscountState.data?.percentage) {
@@ -273,7 +314,9 @@ export function ShopCheckout() {
       if (
         getLatestUnexpiredRedeemState.data &&
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+        getLatestUnexpiredRedeemState.data.minimum_purchase <=
+          calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1
       ) {
         calculatedPrice -= getSessionState.data.distance_rate_price;
       }
@@ -292,7 +335,6 @@ export function ShopCheckout() {
   const calculateAvailableUserDiscount = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -300,13 +342,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const dealPromoPrice = deals[i].deal_promo_price;
-        if (dealPromoPrice) {
-          calculatedPrice += dealPromoPrice;
-        }
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (getAvailableUserDiscountState.data) {
@@ -599,7 +637,8 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                {getSessionState.data.orders || getSessionState.data.deals ? (
+                {getSessionState.data.orders ||
+                getSessionState.data.redeem_data ? (
                   <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
                     <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                       Order Summary
@@ -610,7 +649,7 @@ export function ShopCheckout() {
                         {getSessionState.data.orders.map((order, i) => (
                           <div
                             key={i}
-                            className="flex bg-secondary shadow-lg rounded-[10px] relative"
+                            className="flex bg-secondary shadow-lg rounded-[10px] relative "
                           >
                             <img
                               src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
@@ -638,7 +677,7 @@ export function ShopCheckout() {
                               ) : null}
 
                               {order.prod_multiflavors ? (
-                                <h3 className="text-xs">
+                                <h3 className="text-xs ">
                                   Flavor:
                                   <br />
                                   <span
@@ -674,7 +713,7 @@ export function ShopCheckout() {
                                   </h3>
                                 </div>
                               ) : (
-                                <h3 className="flex items-end justify-end flex-1 text-base">
+                                <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
                                   <NumberFormat
                                     value={order.prod_calc_amount.toFixed(2)}
                                     displayType={"text"}
@@ -758,8 +797,13 @@ export function ShopCheckout() {
                     <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
-                        + {calculateSubTotalPrice()}
+                        {calculateSubTotalPrice()}
                       </span>
+                      <span>Discount:</span>
+                      <span className="text-end">- {calculateDiscount()}</span>
+
+                      {calculateAvailableUserDiscount()}
+
                       <span>Delivery Fee:</span>
                       <span className="text-end">
                         + {calculateDeliveryFee()}
@@ -778,8 +822,6 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-
-                      {calculateAvailableUserDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

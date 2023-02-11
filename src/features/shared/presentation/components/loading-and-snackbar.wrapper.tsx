@@ -9,12 +9,6 @@ import {
   GetProductDetailsState,
   selectGetProductDetails,
 } from "features/shop/presentation/slices/get-product-details.slice";
-
-import {
-  resetStoreAndAddress,
-  selectSetStoreAndAddress,
-  SetStoreAndAddressState,
-} from "../slices/set-store-and-address.slice";
 import {
   FacebookLoginState,
   selectFacebookLogin,
@@ -85,17 +79,17 @@ import {
 } from "../slices/sign-in-mobile-user.slice";
 import { BackdropLoadingPopClub } from "features/popclub/presentation/components";
 import {
-  GetStoresAvailablePopClubState,
-  selectGetStoresAvailablePopClub,
-} from "features/popclub/presentation/slices/get-stores-available-popclub.slice";
+  GetSnacksDeliveredAvailableStoresState,
+  selectGetSnacksDeliveredAvailableStores,
+} from "features/popclub/presentation/slices/get-snacks-delivered-available-stores.slice";
 import {
   GetDealsState,
   selectGetDeals,
 } from "features/popclub/presentation/slices/get-deals.slice";
 import {
-  selectSetStoreAndAddressPopClub,
-  SetStoreAndAddressPopClubState,
-} from "features/popclub/presentation/slices/set-store-and-address-popclub.slice";
+  selectSetSnacksDeliveredStoreAndAddress,
+  SetSnacksDeliveredStoreAndAddressState,
+} from "features/popclub/presentation/slices/set-snacks-delivered-store-and-address.slice";
 import {
   RedeemDealState,
   selectRedeemDeal,
@@ -296,6 +290,11 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {
+  AddToCartCateringProductsState,
+  selectAddToCartCateringProducts,
+} from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
+
+import {
   selectUpdateAdminCateringOrderItemRemarks,
   UpdateAdminCateringOrderItemRemarksState,
 } from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
@@ -303,6 +302,22 @@ import {
   CreateAdminSettingStoreState,
   selectCreateAdminSettingStore,
 } from "features/admin/presentation/slices/create-admin-setting-store.slice";
+import {
+  GetSnacksDeliveredDealAvailableStoresState,
+  selectGetSnacksDeliveredDealAvailableStores,
+} from "features/popclub/presentation/slices/get-snacks-delivered-deal-available-stores.slice";
+import {
+  selectSetSnacksDeliveredDealStoreAndAddress,
+  SetSnacksDeliveredDealStoreAndAddressState,
+} from "features/popclub/presentation/slices/set-snacks-delivered-deal-store-and-address.slice";
+import {
+  selectSetSnackshopStoreAndAddress,
+  SetSnackshopStoreAndAddressState,
+} from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
+import {
+  selectSetCateringStoreAndAddress,
+  SetCateringStoreAndAddressState,
+} from "features/catering/presentation/slices/set-catering-store-and-address.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -331,7 +346,12 @@ export function LoadingAndSnackbarWrapper() {
   );
   const getCategoryProductsState = useAppSelector(selectGetCategoryProducts);
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setSnackshopStoreAndAddressState = useAppSelector(
+    selectSetSnackshopStoreAndAddress
+  );
+  const setCateringStoreAndAddressState = useAppSelector(
+    selectSetCateringStoreAndAddress
+  );
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const facebookLoginState = useAppSelector(selectFacebookLogin);
   const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
@@ -356,12 +376,12 @@ export function LoadingAndSnackbarWrapper() {
     selectCateringUploadProofOfPayment
   );
   const signInMobileUserState = useAppSelector(selectSignInMobileUser);
-  const getStoresAvailablePopClubState = useAppSelector(
-    selectGetStoresAvailablePopClub
+  const getSnacksDeliveredAvailableStoresState = useAppSelector(
+    selectGetSnacksDeliveredAvailableStores
   );
   const getDealsState = useAppSelector(selectGetDeals);
-  const setStoreAndAddressPopClub = useAppSelector(
-    selectSetStoreAndAddressPopClub
+  const setSnacksDeliveredStoreAndAddress = useAppSelector(
+    selectSetSnacksDeliveredStoreAndAddress
   );
   const redeemDealState = useAppSelector(selectRedeemDeal);
   const signUpMobileUserState = useAppSelector(selectSignUpMobileUser);
@@ -455,6 +475,10 @@ export function LoadingAndSnackbarWrapper() {
   const getStoresAvailableCateringModalState = useAppSelector(
     selectGetStoresAvailableCateringModal
   );
+  const addToCartCateringProductsState = useAppSelector(
+    selectAddToCartCateringProducts
+  );
+
   const updateAdminCateringOrderItemRemarksState = useAppSelector(
     selectUpdateAdminCateringOrderItemRemarks
   );
@@ -479,6 +503,109 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [createAdminSettingStoreState]);
+
+  const getSnacksDeliveredDealAvailableStoresState = useAppSelector(
+    selectGetSnacksDeliveredDealAvailableStores
+  );
+
+  const setSnacksDeliveredDealStoreAndAddressState = useAppSelector(
+    selectSetSnacksDeliveredDealStoreAndAddress
+  );
+
+  useEffect(() => {
+    switch (setCateringStoreAndAddressState.status) {
+      case SetCateringStoreAndAddressState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SetCateringStoreAndAddressState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SetCateringStoreAndAddressState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case SetCateringStoreAndAddressState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [setCateringStoreAndAddressState, dispatch]);
+
+  useEffect(() => {
+    switch (setSnackshopStoreAndAddressState.status) {
+      case SetSnackshopStoreAndAddressState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case SetSnackshopStoreAndAddressState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case SetSnackshopStoreAndAddressState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case SetSnackshopStoreAndAddressState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [setSnackshopStoreAndAddressState, dispatch]);
+
+  useEffect(() => {
+    switch (setSnacksDeliveredDealStoreAndAddressState.status) {
+      case SetSnacksDeliveredDealStoreAndAddressState.inProgress:
+        setOpenBackdropPopClubLoading(true);
+        break;
+      case SetSnacksDeliveredDealStoreAndAddressState.initial:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case SetSnacksDeliveredDealStoreAndAddressState.success:
+        setOpenBackdropPopClubLoading(false);
+        break;
+      case SetSnacksDeliveredDealStoreAndAddressState.fail:
+        setOpenBackdropPopClubLoading(false);
+        break;
+    }
+  }, [setSnacksDeliveredDealStoreAndAddressState, dispatch]);
+
+  useEffect(() => {
+    switch (getSnacksDeliveredDealAvailableStoresState.status) {
+      case GetSnacksDeliveredDealAvailableStoresState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSnacksDeliveredDealAvailableStoresState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSnacksDeliveredDealAvailableStoresState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSnacksDeliveredDealAvailableStoresState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getSnacksDeliveredDealAvailableStoresState]);
+
+  useEffect(() => {
+    switch (addToCartCateringProductsState.status) {
+      case AddToCartCateringProductsState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AddToCartCateringProductsState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringProductsState.success:
+        SweetAlert.fire(
+          "Package Created!",
+          addToCartCateringProductsState.message,
+          "success"
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case AddToCartCateringProductsState.fail:
+        SweetAlert.fire(
+          "Oops...",
+          addToCartCateringProductsState.message,
+          "error"
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [addToCartCateringProductsState]);
 
   useEffect(() => {
     switch (updateAdminCateringOrderItemRemarksState.status) {
@@ -1428,23 +1555,21 @@ export function LoadingAndSnackbarWrapper() {
   }, [redeemDealState]);
 
   useEffect(() => {
-    switch (setStoreAndAddressPopClub.status) {
-      case SetStoreAndAddressPopClubState.inProgress:
+    switch (setSnacksDeliveredStoreAndAddress.status) {
+      case SetSnacksDeliveredStoreAndAddressState.inProgress:
         setOpenBackdropPopClubLoading(true);
         break;
-      case SetStoreAndAddressPopClubState.initial:
+      case SetSnacksDeliveredStoreAndAddressState.initial:
         setOpenBackdropPopClubLoading(false);
         break;
-      case SetStoreAndAddressPopClubState.success:
+      case SetSnacksDeliveredStoreAndAddressState.success:
         setOpenBackdropPopClubLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
-      case SetStoreAndAddressPopClubState.fail:
+      case SetSnacksDeliveredStoreAndAddressState.fail:
         setOpenBackdropPopClubLoading(false);
-        dispatch(resetStoreAndAddress());
         break;
     }
-  }, [setStoreAndAddressPopClub]);
+  }, [setSnacksDeliveredStoreAndAddress, dispatch]);
 
   useEffect(() => {
     switch (getDealsState.status) {
@@ -1464,21 +1589,21 @@ export function LoadingAndSnackbarWrapper() {
   }, [getDealsState]);
 
   useEffect(() => {
-    switch (getStoresAvailablePopClubState.status) {
-      case GetStoresAvailablePopClubState.inProgress:
+    switch (getSnacksDeliveredAvailableStoresState.status) {
+      case GetSnacksDeliveredAvailableStoresState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case GetStoresAvailablePopClubState.initial:
+      case GetSnacksDeliveredAvailableStoresState.initial:
         setOpenBackdropLoading(false);
         break;
-      case GetStoresAvailablePopClubState.success:
+      case GetSnacksDeliveredAvailableStoresState.success:
         setOpenBackdropLoading(false);
         break;
-      case GetStoresAvailablePopClubState.fail:
+      case GetSnacksDeliveredAvailableStoresState.fail:
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getStoresAvailablePopClubState]);
+  }, [getSnacksDeliveredAvailableStoresState]);
 
   useEffect(() => {
     switch (signInMobileUserState.status) {
@@ -1743,25 +1868,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [facebookLoginState]);
-
-  useEffect(() => {
-    switch (setStoreAndAddressState.status) {
-      case SetStoreAndAddressState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case SetStoreAndAddressState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case SetStoreAndAddressState.success:
-        setOpenBackdropLoading(false);
-        dispatch(resetStoreAndAddress());
-        break;
-      case SetStoreAndAddressState.fail:
-        setOpenBackdropLoading(false);
-        dispatch(resetStoreAndAddress());
-        break;
-    }
-  }, [setStoreAndAddressState]);
 
   useEffect(() => {
     switch (getStoresAvailableSnackshopState.status) {

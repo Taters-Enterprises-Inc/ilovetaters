@@ -1,15 +1,14 @@
 import { CustomerSurveyQuestionResponseAnswer } from "./survey.interface";
 
 export interface InsertCustomerSurveyResponseParam {
-  orderedNo?: string;
+  invoiceNo?: string;
   orderedDate?: string;
   storeId?: number;
-  service: string | null;
-  orderHash: string | null;
+  service?: "snackshop" | "catering";
+  orderHash?: string;
   answers: CustomerSurveyQuestionResponseAnswer;
 }
 
 export interface GetCustomerSurveyResponseParam {
   hash: string;
-  service: string;
 }

@@ -32,6 +32,7 @@ import {
 } from "features/shop/presentation/pages";
 import {
   Catering,
+  CateringBuildYourOwnPackage,
   CateringCheckout,
   CateringContract,
   CateringOrder,
@@ -64,6 +65,7 @@ import {
   AdminSettingShopCreateProduct,
   AdminSettingShopEditProduct,
   AdminSettingCreateStore,
+  AdminAvailabilityCatersProduct,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -88,11 +90,17 @@ import {
   ProfileHome,
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
+  ProfileInbox,
 } from "features/profile/presentation/pages";
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
-import { Survey, SurveyComplete } from "features/survey/presentation/pages";
+import {
+  Survey,
+  SurveyCatering,
+  SurveyComplete,
+  SurveySnackshop,
+} from "features/survey/presentation/pages";
 
 import {
   BSCLogin,
@@ -114,6 +122,20 @@ import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
 import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
 import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
 import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
+import {
+  SeeMeCatering,
+  SeeMeSnackshop,
+  SeeMePopClub,
+} from "features/see-me/presentation/pages";
+import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
+import {
+  CateringSurveyGuard,
+  ShopSurveyGuard,
+} from "features/survey/presentation/guards";
+import {
+  CateringCheckoutGuard,
+  CateringProductsGuard,
+} from "features/catering/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -145,6 +167,12 @@ root.render(
                       </Route>
 
                       <Route path="franchising" element={<Franchising />} />
+                      <Route path="see_me">
+                        <Route index element={<SeeMeSnackshop />} />
+                        <Route path="catering" element={<SeeMeCatering />} />
+                        <Route path="popclub" element={<SeeMePopClub />} />
+                        <Route path="reseller" element={<SeeMeReseller />} />
+                      </Route>
                       <Route
                         path="privacy-policy"
                         element={<PrivacyPolicy />}
@@ -153,6 +181,7 @@ root.render(
                       <Route path="profile" element={<Profile />}>
                         <Route element={<ProfileGuard />}>
                           <Route index element={<ProfileHome />} />
+                          <Route path="inbox" element={<ProfileInbox />} />
                           <Route
                             path="snackshop-orders"
                             element={<ProfileSnackshopOrders />}
@@ -231,17 +260,43 @@ root.render(
                       <Route path="shop" element={<Catering />}>
                         <Route index element={<CateringHome />} />
                         <Route
-                          path="products/:hash"
-                          element={<CateringProduct />}
-                        />
-                        <Route
                           path="contract/:hash"
                           element={<CateringContract />}
                         />
                         <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route path="products" element={<CateringProducts />} />
-                        <Route path="checkout" element={<CateringCheckout />} />
+                        <Route element={<CateringProductsGuard />}>
+                          <Route
+                            path="products"
+                            element={<CateringProducts />}
+                          />
+                        </Route>
+                        <Route element={<CateringCheckoutGuard />}>
+                          <Route
+                            path="checkout"
+                            element={<CateringCheckout />}
+                          />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
+                      </Route>
+
+                      <Route path="feedback">
+                        <Route index element={<Survey />} />
+                        <Route element={<ShopSurveyGuard />}>
+                          <Route
+                            path="snackshop/:hash"
+                            element={<SurveySnackshop />}
+                          />
+                        </Route>
+                        <Route element={<CateringSurveyGuard />}>
+                          <Route
+                            path="catering/:hash"
+                            element={<SurveyCatering />}
+                          />
+                        </Route>
+                        <Route
+                          path="complete/:hash"
+                          element={<SurveyComplete />}
+                        />
                       </Route>
 
                       <Route path="*" element={<NotFound />} />
@@ -277,32 +332,48 @@ root.render(
                               <Route path="store" element={<AdminFaq />} />
                               <Route path="" element={<AdminCFaq />} />
                             </Route>
-
                             <Route path="availability">
-                              <Route
-                                path="deal"
-                                element={<AdminAvailabilityDeal />}
-                              />
-                              <Route
-                                path="product"
-                                element={<AdminAvailabilityProduct />}
-                              />
-                              <Route
-                                path="caters-package"
-                                element={<AdminAvailabilityCatersPackage />}
-                              />
-                              <Route
-                                path="caters-package-addon"
-                                element={
-                                  <AdminAvailabilityCatersPackageAddon />
-                                }
-                              />
-                              <Route
-                                path="caters-product-addon"
-                                element={
-                                  <AdminAvailabilityCatersProductAddon />
-                                }
-                              />
+                              <Route path="shop">
+                                <Route
+                                  path="product"
+                                  element={<AdminAvailabilityProduct />}
+                                />
+                              </Route>
+
+                              <Route path="catering">
+                                <Route
+                                  path="package"
+                                  element={<AdminAvailabilityCatersPackage />}
+                                />
+                                <Route
+                                  path="build-your-own-package"
+                                  element={<AdminAvailabilityCatersProduct />}
+                                />
+                                <Route
+                                  path="package-addon"
+                                  element={
+                                    <AdminAvailabilityCatersPackageAddon />
+                                  }
+                                />
+
+                                <Route
+                                  path="build-your-own-package"
+                                  element={<AdminAvailabilityCatersProduct />}
+                                />
+
+                                <Route
+                                  path="product-addon"
+                                  element={
+                                    <AdminAvailabilityCatersProductAddon />
+                                  }
+                                />
+                              </Route>
+                              <Route path="popclub">
+                                <Route
+                                  path="deal"
+                                  element={<AdminAvailabilityDeal />}
+                                />
+                              </Route>
                             </Route>
 
                             <Route path="setting">
@@ -388,11 +459,6 @@ root.render(
                           </Route>
                         </Route>
                       </Route>
-                    </Route>
-
-                    <Route path="survey">
-                      <Route index element={<Survey />} />
-                      <Route path="complete" element={<SurveyComplete />} />
                     </Route>
                   </Route>
                 </Route>

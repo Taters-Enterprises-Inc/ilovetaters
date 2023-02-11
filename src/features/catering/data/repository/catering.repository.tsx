@@ -1,30 +1,33 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
 import {
   AddToCartCateringParam,
   CateringCheckoutOrdersParam,
-  GetCategoryProductsParam,
+  GetCategoryPackagesParam,
   GetCateringOrdersParam,
-  GetCateringProductDetailsParam,
+  GetCateringPackageDetailsParam,
   UploadContractParam,
   CateringUploadProofOfPaymentParam,
+  AddToCartProductsParam,
+  GetCateringCategoryProductsParam,
 } from "features/catering/core/catering.params";
-import { CateringProductDetailsModel } from "features/catering/core/domain/catering-product-details.model";
+import { CateringPackageDetailsModel } from "features/catering/core/domain/catering-package-details.model";
 import { CateringOrderModel } from "features/catering/core/domain/catering-order.model";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
+import { GetCateringCategoryProductsModel } from "features/shared/core/domain/get-catering-category-products.model";
 
-export interface GetCategoryProductsResponse {
+export interface GetCategoryPackagesResponse {
   data: {
     message: string;
-    data: Array<CategoryProductsModel>;
+    data: Array<CategoryProductModel>;
   };
 }
 
-export interface GetCateringProductDetailsResponse {
+export interface GetCateringPackageDetailsResponse {
   data: {
     message: string;
-    data: CateringProductDetailsModel;
+    data: CateringPackageDetailsModel;
   };
 }
 
@@ -64,6 +67,50 @@ export interface CateringUploadProofOfPaymentResponse {
     message: string;
   };
 }
+
+export interface AddToCartCateringProductsResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetCateringCategoryProductsResponse {
+  data: {
+    message: string;
+    data: GetCateringCategoryProductsModel;
+  };
+}
+export function GetCateringCategoryProductsRepository(
+  param: GetCateringCategoryProductsParam
+): Promise<GetCateringCategoryProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/catering/products${
+      param.region_id ? "?region_id=" + param.region_id : ""
+    }`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function AddToCartCateringProductsRepository(
+  param: AddToCartProductsParam
+): Promise<CateringUploadProofOfPaymentResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/cart/catering-product/`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function CateringUploadProofOfPaymentRepository(
   param: CateringUploadProofOfPaymentParam
 ): Promise<CateringUploadProofOfPaymentResponse> {
@@ -145,11 +192,11 @@ export function AddToCartCateringRepository(
   });
 }
 
-export function GetCateringProductDetailsRepository(
-  param: GetCateringProductDetailsParam
-): Promise<GetCateringProductDetailsResponse> {
+export function GetCateringPackageDetailsRepository(
+  param: GetCateringPackageDetailsParam
+): Promise<GetCateringPackageDetailsResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/catering/product${
+    `${REACT_APP_DOMAIN_URL}api/catering/package${
       param.hash ? "?hash=" + param.hash : ""
     }`,
     {
@@ -161,11 +208,11 @@ export function GetCateringProductDetailsRepository(
   );
 }
 
-export function GetCateringCategoryProductsRepository(
-  param: GetCategoryProductsParam
-): Promise<GetCategoryProductsResponse> {
+export function GetCateringCategoryPackagesRepository(
+  param: GetCategoryPackagesParam
+): Promise<GetCategoryPackagesResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/catering/products${
+    `${REACT_APP_DOMAIN_URL}api/catering/packages${
       param.region_id ? "?region_id=" + param.region_id : ""
     }`,
     {

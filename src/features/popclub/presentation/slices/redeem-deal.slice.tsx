@@ -18,13 +18,11 @@ export enum RedeemDealState {
 interface InitialState {
   status: RedeemDealState;
   message: string;
-  data: RedeemDealModel | undefined | null;
 }
 
 const initialState: InitialState = {
   status: RedeemDealState.initial,
   message: "",
-  data: undefined,
 };
 
 export const redeemDeal = createAsyncThunk(
@@ -61,16 +59,14 @@ export const redeemDealSlice = createSlice({
       })
       .addCase(redeemDeal.fulfilled, (state, action) => {
         if (action.payload) {
-          const { data, message } = action.payload;
+          const { message } = action.payload;
           state.status = RedeemDealState.success;
           state.message = message;
-          state.data = data;
         }
       })
       .addCase(redeemDeal.rejected, (state, action) => {
         state.status = RedeemDealState.fail;
         state.message = action.payload as string;
-        state.data = undefined;
       });
   },
 });

@@ -17,18 +17,49 @@ import {
   uploadProofOfPayment,
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  SHOP_ORDER_STATUS,
+} from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  selectGetCustomerSurveyResponseInOrderService,
+  getCustomerSurveyResponseInOrderService,
+} from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 
 export function ShopOrder() {
-  const getOrdersState = useAppSelector(selectGetOrders);
-  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
-
-  const [images, setImages] = useState<any>();
   const dispatch = useAppDispatch();
   let { hash } = useParams();
-  const [uploadedFile, setUploadedFile] = useState<any>([]);
   const location = useLocation();
+
+  const [uploadedFile, setUploadedFile] = useState<any>([]);
+  const [images, setImages] = useState<any>();
+
+  const getOrdersState = useAppSelector(selectGetOrders);
+  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
+  const getCustomerSurveyResponseInOrderServiceState = useAppSelector(
+    selectGetCustomerSurveyResponseInOrderService
+  );
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [location]);
+
+  useEffect(() => {
+    dispatch(getLatestUnexpiredRedeem());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (hash !== undefined) {
+      dispatch(getOrders({ hash }));
+      dispatch(
+        getCustomerSurveyResponseInOrderService({
+          hash,
+          service: "snackshop",
+        })
+      );
+    }
+  }, [uploadProofOfPaymentState, dispatch, hash]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     setUploadedFile(acceptedFiles[0]);
@@ -43,106 +74,10 @@ export function ShopOrder() {
     });
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  }, [location]);
-
-  useEffect(() => {
-    dispatch(getLatestUnexpiredRedeem());
-  }, [dispatch]);
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
   });
-
-  useEffect(() => {
-    if (hash !== undefined) {
-      dispatch(getOrders({ hash }));
-    }
-  }, [uploadProofOfPaymentState, dispatch, hash]);
-
-  const getStatus = (
-    status: number | undefined,
-    payops: number | undefined
-  ) => {
-    switch (status) {
-      case 0:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Incomplete Transaction
-          </span>
-        );
-      case 1:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Order Placed In System
-          </span>
-        );
-      case 2:
-        return (
-          <span className="rounded-full bg-[#cca300] text-white px-2 py-1 text-[10px]">
-            Payment under Verification
-          </span>
-        );
-      case 3:
-        if (payops === 3) {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Order Confirmed
-            </span>
-          );
-        } else {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Payment Confirmed
-            </span>
-          );
-        }
-      case 4:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Declined
-          </span>
-        );
-      case 5:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Cancelled
-          </span>
-        );
-      case 6:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product Received by Customer
-          </span>
-        );
-      case 7:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Rejected due to Incorrect/Incomplete Payment
-          </span>
-        );
-      case 8:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product currently being prepared
-          </span>
-        );
-      case 9:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product en route to Customer
-          </span>
-        );
-      default:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Error Transaction
-          </span>
-        );
-    }
-  };
 
   const handleProofOfPayment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -318,10 +253,28 @@ export function ShopOrder() {
                   </div>
                   <div className="space-x-2 text-xs">
                     <strong>Status:</strong>{" "}
-                    {getStatus(
-                      getOrdersState.data?.order.clients_info.status,
-                      getOrdersState.data?.order.clients_info.payops
-                    )}
+                    {getOrdersState.data?.order.clients_info.status &&
+                    getOrdersState.data?.order.clients_info.payops ? (
+                      <span
+                        className="rounded-full text-white px-2 py-1 text-[10px]"
+                        style={{
+                          background:
+                            SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].color,
+                        }}
+                      >
+                        {getOrdersState.data.order.clients_info.status === 3
+                          ? getOrdersState.data.order.clients_info.payops === 3
+                            ? "Order Confirmed"
+                            : SHOP_ORDER_STATUS[
+                                getOrdersState.data.order.clients_info.status
+                              ].name
+                          : SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].name}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
@@ -369,18 +322,7 @@ export function ShopOrder() {
                             </h3>
                           ) : null}
                           {order.promo_discount_percentage ? (
-                            <div>
-                              <br />
-                              <span className=" !text-green-400 font-bold text-sm">
-                                Deal Applied:{" "}
-                              </span>
-                              <br />
-                              <span className="text-xs leading-3 whitespace-pre-wrap">
-                                {order.deal_name}
-                                {order.deal_description}
-                              </span>
-                              <br />
-
+                            <>
                               <h3 className="flex items-end justify-end flex-1 text-sm line-through">
                                 <NumberFormat
                                   value={order.calc_price.toFixed(2)}
@@ -403,7 +345,7 @@ export function ShopOrder() {
                                   prefix={"₱"}
                                 />
                               </h3>
-                            </div>
+                            </>
                           ) : (
                             <h3 className="flex items-end justify-end flex-1 text-base">
                               <NumberFormat
@@ -449,14 +391,16 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={deal.price.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {deal.price ? (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={deal.price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          ) : null}
                         </div>
                       </div>
                     )
@@ -526,7 +470,6 @@ export function ShopOrder() {
                 <div className="grid grid-cols-2 text-secondary">
                   <span>Subtotal:</span>
                   <span className="text-end">
-                    +{" "}
                     <NumberFormat
                       value={
                         getOrdersState.data?.subtotal
@@ -538,33 +481,21 @@ export function ShopOrder() {
                       prefix={"₱"}
                     />
                   </span>
-                  <span>Delivery Fee:</span>
-                  <span className="text-end ">
-                    +{" "}
-                    <NumberFormat
-                      value={
-                        getOrdersState.data?.delivery_fee
-                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
-                              2
-                            )
-                          : 0.0
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
 
-                  {getOrdersState.data?.cod_fee &&
-                  getOrdersState.data?.cod_fee !== "0" ? (
+                  {getOrdersState.data?.order.clients_info.discount ? (
                     <>
-                      <span>COD Charge:</span>
+                      <span>Discount:</span>
                       <span className="text-end">
-                        +{" "}
+                        -{" "}
                         <NumberFormat
-                          value={parseInt(getOrdersState.data.cod_fee).toFixed(
-                            2
-                          )}
+                          value={
+                            getOrdersState.data?.order.clients_info.discount
+                              ? parseInt(
+                                  getOrdersState.data.order.clients_info
+                                    .discount
+                                ).toFixed(2)
+                              : 0.0
+                          }
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -592,6 +523,41 @@ export function ShopOrder() {
                           value={parseInt(
                             getOrdersState.data?.order.clients_info.discount
                           ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
+
+                  <span>Delivery Fee:</span>
+                  <span className="text-end ">
+                    +{" "}
+                    <NumberFormat
+                      value={
+                        getOrdersState.data?.delivery_fee
+                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
+                              2
+                            )
+                          : 0.0
+                      }
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </span>
+
+                  {getOrdersState.data?.cod_fee &&
+                  getOrdersState.data?.cod_fee !== "0" ? (
+                    <>
+                      <span>COD Charge:</span>
+                      <span className="text-end">
+                        +{" "}
+                        <NumberFormat
+                          value={parseInt(getOrdersState.data.cod_fee).toFixed(
+                            2
+                          )}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -703,16 +669,29 @@ export function ShopOrder() {
                   </h2>
                 ) : null}
               </div>
-              <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                <Link
-                  to={`/survey?service=SNACKSHOP&hash=${getOrdersState.data?.order.clients_info.hash_key}`}
-                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                >
-                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    RATE US
-                  </span>
-                </Link>
-              </div>
+              {getOrdersState.data?.order.clients_info.status === 6 ? (
+                <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
+                  {getCustomerSurveyResponseInOrderServiceState.data ? (
+                    <Link
+                      to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        VIEW YOUR RATING
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/feedback/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        RATE US
+                      </span>
+                    </Link>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

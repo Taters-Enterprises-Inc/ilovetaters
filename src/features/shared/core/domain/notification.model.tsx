@@ -13,4 +13,5 @@ export interface NotificationModel {
   dateadded: string;
   dateseen: string;
   notification_event_type_id: number;
+  customer_survey_response_id: number;
 }

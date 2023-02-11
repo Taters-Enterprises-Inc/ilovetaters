@@ -1,13 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /*IE9*/
 *::selection {
   background-color: gray;
 }
+
 *::-moz-selection {
   background-color: transparent;
 }
+
 * {
   /* -webkit-user-select: none;
   -moz-user-select: -moz-none; */
@@ -31,13 +34,15 @@
 .customer-information-table tr:nth-child(even) {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
-.payment-method-active > .icon-tick-bold {
+
+.payment-method-active>.icon-tick-bold {
   position: absolute;
   right: 0;
   bottom: 0;
   color: #fff;
   font-size: 8px;
 }
+
 .taters-svg-icon {
   display: inline-block;
   width: 1em;
@@ -45,6 +50,7 @@
   fill: currentColor;
   position: relative;
 }
+
 .payment-method-active {
   width: 0.9375rem;
   height: 0.9375rem;
@@ -66,6 +72,7 @@
   right: -0.9375rem;
   bottom: 0;
 }
+
 input[type="text"],
 textarea,
 [contenteditable] {
@@ -74,6 +81,7 @@ textarea,
   -ms-user-select: text;
   user-select: text;
 }
+
 .tab-active {
   z-index: 1;
 }
@@ -97,10 +105,12 @@ textarea,
 html {
   scroll-behavior: smooth;
 }
+
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 600000s 0s, color 600000s 0s;
 }
+
 input[data-autocompleted] {
   background-color: transparent !important;
 }
@@ -114,10 +124,12 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
 .swiper-button-next,
 .swiper-button-prev {
   background-color: #ffcd17;
@@ -129,6 +141,7 @@ input[type="number"] {
   fill: black !important;
   stroke: black !important;
 }
+
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 20px !important;
@@ -150,9 +163,11 @@ input[type="number"] {
   top: -20px;
   background-image: linear-gradient(transparent 0%, #22201a 100%, #22201a 100%);
 }
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .pac-container {
   z-index: 2001;
 }
@@ -182,11 +197,13 @@ input[type="number"] {
 #contract_paper {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
 #contract_paper th {
   font-size: 16px;
   border: 1px solid black;
   border-collapse: collapse;
 }
+
 #contract_paper table,
 #contract_paper td {
   font-size: 14px;
@@ -206,9 +223,11 @@ input[type="number"] {
   align-items: center;
   flex-direction: column;
 }
+
 #contract_paper #title_wrapper img {
   margin: 10px 0 10px 0;
 }
+
 #contract_paper #title_wrapper h1 {
   font-weight: bold;
   font-size: 20px;
@@ -225,12 +244,14 @@ input[type="number"] {
   padding: 10px 0 10px 0;
   color: white;
 }
+
 #terms-and-condition h4,
 #terms-and-condition p {
   color: black;
   padding: 0;
   margin: 0;
 }
+
 #terms-and-condition h4 {
   margin-bottom: 4px;
 }
@@ -238,6 +259,7 @@ input[type="number"] {
 #terms-and-condition p {
   font-size: 13px;
 }
+
 #terms-and-condition h4 {
   text-decoration: underline;
   font-size: 14px;
@@ -250,8 +272,10 @@ input[type="number"] {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Add Varela Round fonts for admin page */
@@ -269,3 +293,28 @@ input[type="number"] {
     margin-bottom: 1.5em;
   }
 }
+
+
+/* Sidebar Styling Scrollbar */
+
+.Sidebar {
+  /* overflow: hidden; */
+}
+
+.Sidebar::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.Sidebar::-webkit-scrollbar {
+  width: 12px;
+  background-color: transparent;
+}
+
+.Sidebar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: transparent;
+  background-color: #555;
+}
+
+/* Sidebar Styling Scrollbar */

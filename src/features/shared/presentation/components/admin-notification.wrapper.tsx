@@ -148,6 +148,25 @@ export function AdminNotificationWrapper() {
     );
   }, [getAdminSessionState, dispatch]);
 
+  useEffect(() => {
+    pusher.unsubscribe("admin-survey-verification");
+    const snackshopChannel = pusher.subscribe("admin-survey-verification");
+
+    snackshopChannel.bind("new-survey", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin ||
+        getAdminSessionState.data?.admin.user_details.stores.some(
+          (store) => store.store_id === data.store_id
+        )
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminShopOrders(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+  }, [getAdminSessionState, dispatch, query]);
+
   return (
     <>
       <ToastContainer

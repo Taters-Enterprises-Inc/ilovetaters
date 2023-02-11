@@ -34,6 +34,7 @@ const columns: Array<Column> = [
   { id: "trackingNo", label: "Tracking No." },
   { id: "purchaseAmount", label: "Purchase Amount" },
   { id: "bookingStatus", label: "Booking Status" },
+  { id: "survey", label: "Survey" },
   { id: "view", label: "View" },
 ];
 
@@ -195,19 +196,21 @@ export function ProfileCateringBookings() {
                         #{row.tracking_no}
                       </span>
 
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            CATERING_BOOKING_STATUS[row.status].color,
-                        }}
-                      >
-                        {CATERING_BOOKING_STATUS[row.status].name}
-                      </span>
-                      {notification ? (
-                        <VscCircleFilled className="text-red-600 " />
-                      ) : null}
+                      <div className="flex">
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              CATERING_BOOKING_STATUS[row.status].color,
+                          }}
+                        >
+                          {CATERING_BOOKING_STATUS[row.status].name}
+                        </span>
+                        {notification ? (
+                          <VscCircleFilled className="text-red-600 " />
+                        ) : null}
+                      </div>
                     </span>
                     <div className="flex justify-between">
                       <span className="text-xs">
@@ -344,6 +347,29 @@ export function ProfileCateringBookings() {
                             >
                               {CATERING_BOOKING_STATUS[row.status].name}
                             </span>
+                          </DataTableCell>
+                          <DataTableCell align="left">
+                            {row.status === 9 ? (
+                              <>
+                                {row.survey_hash ? (
+                                  <Link
+                                    to={`/feedback/complete/${row.survey_hash}`}
+                                    className="font-bold text-green-700"
+                                  >
+                                    View Rate
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to={`/feedback/catering/${row.hash_key}`}
+                                    className="font-bold text-blue-800"
+                                  >
+                                    Rate Now
+                                  </Link>
+                                )}
+                              </>
+                            ) : (
+                              "-----"
+                            )}
                           </DataTableCell>
                           <DataTableCell align="left">
                             <Link

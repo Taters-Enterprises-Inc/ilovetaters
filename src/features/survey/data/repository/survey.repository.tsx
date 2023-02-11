@@ -1,4 +1,3 @@
-import { SurveyQuestionModel } from "features/survey/core/domain/survey-question.model";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   GetCustomerSurveyResponseParam,
@@ -6,17 +5,20 @@ import {
 } from "features/survey/core/survey.params";
 import { GetCustomerSurveyResponseModel } from "features/survey/core/domain/get-customer-survey-response.model";
 import axios from "axios";
+import { InsertCustomerSurveyResponseModel } from "features/survey/core/domain/insert-customer-survey-response.model";
+import { GetSurveysModel } from "features/survey/core/domain/get-surveys.model";
 
 export interface GetSurveyResponse {
   data: {
     message: string;
-    data: Array<SurveyQuestionModel>;
+    data: Array<GetSurveysModel>;
   };
 }
 
 export interface InsertCustomerSurveyResponseResponse {
   data: {
     message: string;
+    data: InsertCustomerSurveyResponseModel;
   };
 }
 
@@ -30,15 +32,12 @@ export interface GetCustomerSurveyResponseResponse {
 export function GetCustomerSurveyResponseRepository(
   param: GetCustomerSurveyResponseParam
 ): Promise<GetCustomerSurveyResponseResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/survey/answer?service=${param.service}&hash=${param.hash}`,
-    {
-      headers: {
-        "Content-type": "application/json",
-      },
-      withCredentials: true,
-    }
-  );
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/survey/answer/${param.hash}`, {
+    headers: {
+      "Content-type": "application/json",
+    },
+    withCredentials: true,
+  });
 }
 
 export function InsertCustomerSurveyResponseRepository(

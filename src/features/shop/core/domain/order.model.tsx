@@ -78,7 +78,7 @@ export interface OrderModel {
       product_image: string;
       quantity: number;
       remarks: string | null;
-      price: number;
+      price: number | null;
     }>;
     personnel: {
       name: string;

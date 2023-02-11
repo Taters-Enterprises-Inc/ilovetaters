@@ -1,13 +1,11 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { ProductModel } from "features/shared/core/domain/product.model";
 import { CartItemModel } from "features/shop/core/domain/cart-item.model";
-import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
 import { ProductSkuModel } from "features/shop/core/domain/product-sku.model";
-import { SnackShopOrderModel } from "features/profile/core/domain/snackshop-order.model";
 import { UserSessionModel } from "features/shop/core/domain/user-session.model";
 import {
   CheckoutOrdersParam,
@@ -18,11 +16,12 @@ import {
   AddToCartShopParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
+import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 
 export interface GetCategoryProductsResponse {
   data: {
     message: string;
-    data: Array<CategoryProductsModel>;
+    data: Array<CategoryProductModel>;
   };
 }
 
@@ -84,6 +83,18 @@ export interface GetEditCartItemResponse {
   };
 }
 
+export interface GetSnackshopDealsResponse {
+  data: {
+    message: string;
+    data: Array<SnackshopDealModel>;
+  };
+}
+
+export function GetSnackshopDealsRepository(): Promise<GetSnackshopDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/shop/deals`, {
+    withCredentials: true,
+  });
+}
 export function RemoveItemFromCartShopRepository(
   param: number
 ): Promise<RemoveItemFromCartShopResponse> {

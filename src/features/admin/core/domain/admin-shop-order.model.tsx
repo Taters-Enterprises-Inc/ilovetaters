@@ -12,6 +12,7 @@ export interface AdminShopOrderModel {
   giftcard_discount: string;
   cod_fee: string;
   invoice_num: string;
+  hash_key: string;
   client_name: string;
   add_name: string;
   payops: number;
@@ -26,8 +27,10 @@ export interface AdminShopOrderModel {
   fb_user_id: number | null;
   mobile_user_id: number | null;
   items: Array<{
-    price: number;
-    product_price: number;
+    order_item_id: number | null;
+    deal_order_item_id: number | null;
+    price: number | null;
+    product_price: number | null;
     quantity: number;
     remarks: string;
     name: string;

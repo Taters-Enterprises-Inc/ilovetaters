@@ -8,6 +8,7 @@ import {
 } from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
 import { getStoresAvailableSnackshopModal } from "../slices/get-stores-available-snackshop-modal.slice";
 import { ShopHeroCarousel } from "../carousels";
+import { selectGetProductDetails } from "../slices/get-product-details.slice";
 interface StoreChooserModalProps {
   open: boolean;
   onClose: any;
@@ -21,6 +22,8 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
   const shopStoreChooserModalState = useAppSelector(
     selectShopStoreChooserModal
   );
+
+  const getProductDetailsState = useAppSelector(selectGetProductDetails);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -53,50 +56,67 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
           Please search your address for delivery
         </h1>
 
-        <SearchAddress
-          value={
-            shopStoreChooserModalState.address
-              ? shopStoreChooserModalState.address
-              : ""
-          }
-          onDenied={() => {
-            dispatch(
-              getStoresAvailableSnackshopModal({
-                address: null,
-                service: "SNACKSHOP",
-              })
-            );
-          }}
-          onPrompt={() => {
-            dispatch(
-              getStoresAvailableSnackshopModal({
-                address: null,
-                service: "SNACKSHOP",
-              })
-            );
-          }}
-          onLocateCurrentAddress={(place: string) => {
-            dispatch(setAddressShopStoreChooserModal({ address: place }));
-            dispatch(
-              getStoresAvailableSnackshopModal({
-                address: place,
-                service: "SNACKSHOP",
-              })
-            );
-          }}
-          onChange={(value: string) => {
-            dispatch(setAddressShopStoreChooserModal({ address: value }));
-          }}
-          onPlaceSelected={(place: string) => {
-            dispatch(setAddressShopStoreChooserModal({ address: place }));
-            dispatch(
-              getStoresAvailableSnackshopModal({
-                address: place,
-                service: "SNACKSHOP",
-              })
-            );
-          }}
-        />
+        <div className="flex items-center justify-center mb-3">
+          <label className="w-full pure-material-textfield-outlined">
+            <SearchAddress
+              value={
+                shopStoreChooserModalState.address
+                  ? shopStoreChooserModalState.address
+                  : ""
+              }
+              onDenied={() => {
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: null,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
+              }}
+              onPrompt={() => {
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: null,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
+              }}
+              onLocateCurrentAddress={(place: string) => {
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: place,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
+              }}
+              onChange={(value: string) => {
+                dispatch(setAddressShopStoreChooserModal({ address: value }));
+              }}
+              onPlaceSelected={(place: string) => {
+                if (getProductDetailsState.data?.product.product_hash) {
+                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    getStoresAvailableSnackshopModal({
+                      address: place,
+                      service: "SNACKSHOP",
+                      hash: getProductDetailsState.data.product.product_hash,
+                    })
+                  );
+                }
+              }}
+            />
+            <span>Search Address</span>
+          </label>
+        </div>
         <ShopStoreCluster
           onClose={props.onClose}
           address={shopStoreChooserModalState.address}

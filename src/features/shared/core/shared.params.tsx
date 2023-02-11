@@ -21,6 +21,7 @@ export interface DiscountRegistrationParam {
 }
 
 export interface GetStoresAvailableParam {
+  hash?: string;
   address: string | null;
   service:
     | "SNACKSHOP"
@@ -73,4 +74,9 @@ export interface ForgotPasswordNewPasswordOtpParam {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface GetCustomerSurveyResponseInOrderServiceParam {
+  hash: string;
+  service: "snackshop" | "catering";
 }

@@ -10,6 +10,8 @@ export { AdminAvailabilityCatersPackage } from "./admin-availability-caters-pack
 export { AdminAvailabilityCatersPackageAddon } from "./admin-availability-caters-package-addon.page";
 export { AdminAvailabilityCatersProductAddon } from "./admin-availability-caters-product-addon.page";
 export { AdminAvailabilityProduct } from "./admin-availability-product.page";
+export { AdminAvailabilityCatersProduct } from "./admin-availability-caters-product.page";
+
 export { AdminSettingUser } from "./admin-setting-user.page";
 export { AdminSettingStore } from "./admin-setting-store.page";
 export { AdminSettingCreateUser } from "./admin-setting-create-user.page";

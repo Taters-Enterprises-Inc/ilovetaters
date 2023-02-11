@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { StoreClusterStoreVisit } from "../components";
+import { StoreVisitStoreCluster } from "../components";
 import { IoMdClose } from "react-icons/io";
 import { selectStoreVisitStoreChooserModal } from "../slices/store-visit-store-chooser-modal.slice";
-import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
+import { getStoreVisitAvailableStore } from "../slices/get-store-visit-available-stores.slice";
 import { useEffect } from "react";
 import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
 import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
@@ -22,7 +22,7 @@ export function StoreVisitStoreChooserModal(
 
   useEffect(() => {
     dispatch(
-      getStoresAvailablePopClubStoreVisit({
+      getStoreVisitAvailableStore({
         address: null,
         service: "POPCLUB-STORE-VISIT",
       })
@@ -67,7 +67,7 @@ export function StoreVisitStoreChooserModal(
           <StoreVisitStoreSearch label="Search Store" />
         </div>
 
-        <StoreClusterStoreVisit
+        <StoreVisitStoreCluster
           onClose={props.onClose}
           onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
           address={
