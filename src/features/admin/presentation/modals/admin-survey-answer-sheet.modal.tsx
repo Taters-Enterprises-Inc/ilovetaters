@@ -59,7 +59,7 @@ export function AdminSurveyAnswerSheetModal(
           ))}
           {getAdminSurveyVerificationState.data?.ratings ? (
             <div>
-              <h1 className="text-xl font-bold">Ratings</h1>
+              <h1 className="text-xl font-bold mb-2">Ratings</h1>
               <div className="space-y-2">
                 {getAdminSurveyVerificationState.data.ratings.map((survey) => (
                   <div>
