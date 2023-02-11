@@ -50,6 +50,8 @@ import {
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+import { IoMdClose } from "react-icons/io";
+import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -716,7 +718,7 @@ export function CateringCheckout() {
                     {getSessionState.data.orders.map((order, i) => (
                       <div
                         key={i}
-                        className="flex bg-secondary shadow-md  rounded-[10px]"
+                        className="flex bg-secondary shadow-md  rounded-[10px] relative"
                       >
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
@@ -770,6 +772,16 @@ export function CateringCheckout() {
                             )}
                           </h3>
                         </div>
+
+                        <button
+                          type="button"
+                          className="absolute text-white top-2 right-4 "
+                          onClick={() => {
+                            dispatch(removeItemFromCartCatering(i));
+                          }}
+                        >
+                          <IoMdClose />
+                        </button>
                       </div>
                     ))}
                   </div>

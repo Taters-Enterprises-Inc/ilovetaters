@@ -131,6 +131,10 @@ import {
   CateringSurveyGuard,
   ShopSurveyGuard,
 } from "features/survey/presentation/guards";
+import {
+  CateringCheckoutGuard,
+  CateringProductsGuard,
+} from "features/catering/presentation/guards";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -259,15 +263,18 @@ root.render(
                           element={<CateringContract />}
                         />
                         <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route path="products">
-                          <Route index element={<CateringProducts />} />
+                        <Route element={<CateringProductsGuard />}>
                           <Route
-                            path="build-your-own-package"
-                            element={<CateringBuildYourOwnPackage />}
+                            path="products"
+                            element={<CateringProducts />}
                           />
-                          <Route path=":hash" element={<CateringProduct />} />
                         </Route>
-                        <Route path="checkout" element={<CateringCheckout />} />
+                        <Route element={<CateringCheckoutGuard />}>
+                          <Route
+                            path="checkout"
+                            element={<CateringCheckout />}
+                          />
+                        </Route>
                         <Route path="*" element={<NotFound />} />
                       </Route>
 

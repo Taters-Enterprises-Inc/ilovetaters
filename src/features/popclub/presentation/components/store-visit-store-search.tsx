@@ -1,8 +1,7 @@
-import styled from "@emotion/styled";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
-  resetStoreSearch,
-  searchStores,
+  resetStoreVisitStoresSearch,
+  searchStoreVisitStores,
   selectGetStoreVisitAvailableStore,
 } from "../slices/get-store-visit-available-stores.slice";
 import { useEffect, useState } from "react";
@@ -21,12 +20,12 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    dispatch(resetStoreSearch());
-  }, []);
+    dispatch(resetStoreVisitStoresSearch());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!search) {
-      dispatch(resetStoreSearch());
+      dispatch(resetStoreVisitStoresSearch());
 
       return;
     }
@@ -48,7 +47,7 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
         );
       });
 
-      dispatch(searchStores({ stores: search_stores }));
+      dispatch(searchStoreVisitStores({ stores: search_stores }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);

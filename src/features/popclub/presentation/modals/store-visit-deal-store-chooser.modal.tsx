@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { selectStoreVisitDealStoreChooserModal } from "../slices/store-visit-deal-store-chooser-modal.slice";
 import { getStoreVisitDealAvailableStore } from "../slices/get-store-visit-deal-available-stores.slice";
 import { useEffect } from "react";
-import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
+import { StoreVisitDealStoreSearch } from "../components/store-visit-deal-store-search";
 import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 import { GetDealState, selectGetDeal } from "../slices/get-deal.slice";
 
@@ -33,7 +33,8 @@ export function StoreVisitDealStoreChooserModal(
         })
       );
     }
-  }, [getDealState]);
+  }, [getDealState, dispatch]);
+
   const storeVisitDealStoreChooserModalState = useAppSelector(
     selectStoreVisitDealStoreChooserModal
   );
@@ -70,7 +71,7 @@ export function StoreVisitDealStoreChooserModal(
         </h1>
 
         <div className="mb-4">
-          <StoreVisitStoreSearch label="Search Store" />
+          <StoreVisitDealStoreSearch label="Search Store" />
         </div>
 
         <StoreVisitDealStoreCluster
