@@ -34,7 +34,9 @@ export function SurveyRating(props: SurveyRatingProps) {
         <span className="text-sm font-bold text-center text-secondary">
           {props.rating.name}
         </span>
-        <span className="text-xs text-center">{props.rating.description}</span>
+        <span className="text-xs text-center whitespace-pre-line">
+          {props.rating.description}
+        </span>
       </div>
 
       <div className="flex flex-col space-y-2 w-[300px]">

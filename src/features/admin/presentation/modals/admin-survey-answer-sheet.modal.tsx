@@ -50,35 +50,34 @@ export function AdminSurveyAnswerSheetModal(
         <div className="px-4 py-2 space-y-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
           {getAdminSurveyVerificationState.data?.answers.map((survey) => (
             <div>
-              <span className="font-bold">{survey.question}</span>
-              <br />
-              <span>
-                <strong>Answer:</strong> {survey.answer} {survey.text}{" "}
+              <span className="font-bold">{survey.question} : </span>
+              <span className="font-bold text-green-800">
+                {survey.answer} {survey.text}
                 {survey.others}
               </span>
             </div>
           ))}
-
-          {getAdminSurveyVerificationState.data?.ratings.map((survey) => (
+          {getAdminSurveyVerificationState.data?.ratings ? (
             <div>
-              <span className="font-bold ">{survey.question}</span>
-              <br />
-              <span>
-                <span className="font-bold">{survey.name}:</span>{" "}
-                <span className="font-bold">{survey.rate}</span>
-              </span>
-              <div className="space-x-4">
-                <span>
-                  <span>{survey.lowest_rate_text} Answer:</span>{" "}
-                  <span className="font-bold">{survey.lowest_rate}</span>
-                </span>
-                <span>
-                  <span>{survey.highest_rate_text} Answer:</span>{" "}
-                  <span className="font-bold">{survey.highest_rate}</span>
-                </span>
+              <h1 className="text-xl font-bold">Ratings</h1>
+              <div className="space-y-2">
+                {getAdminSurveyVerificationState.data.ratings.map((survey) => (
+                  <div>
+                    <span>
+                      <span className="font-bold">{survey.name}:</span>{" "}
+                      <span className="font-bold text-green-800">
+                        {survey.rate}
+                      </span>
+                    </span>
+                    <div className="space-x-4 text-sm">
+                      {survey.lowest_rate} = {survey.lowest_rate_text} and{" "}
+                      {survey.highest_rate} = {survey.highest_rate_text}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          ) : null}
         </div>
       </div>
     </div>
