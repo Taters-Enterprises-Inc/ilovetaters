@@ -522,7 +522,7 @@ export interface CreateAdminSettingStoreResponse {
   };
 }
 
-export interface GetAdminStoreRegionsResponse {
+export interface GetAdminRegionStoreCombinationsResponse {
   data: {
     message: string;
     data: Array<AdminRegionModel>;
@@ -606,8 +606,8 @@ export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesRe
   });
 }
 
-export function GetAdminStoreRegionsRepository(): Promise<GetAdminStoreRegionsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/regions`, {
+export function GetAdminRegionStoreCombinationsRepository(): Promise<GetAdminRegionStoreCombinationsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/region-store-combination`, {
     withCredentials: true,
   });
 }

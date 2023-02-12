@@ -204,6 +204,7 @@ export interface CreateAdminSettingStoreParam {
   email: string;
   deliveryHours: string;
   operatingHours: string;
+  region: string;
   lat: number;
   lng: number;
   deliveryRate: string;
@@ -212,10 +213,10 @@ export interface CreateAdminSettingStoreParam {
   cateringMinimumRate: string;
   storeHash: string;
   locale: string;
+  image250x250: File | string;
   services: string;
   products: string;
   packages: string;
-  image250x250: File | string;
 }
 
 export interface GetAdminCateringPackageFlavorsParam {
@@ -240,7 +241,6 @@ export interface EditAdminSettingStoreParam {
   deliveryHours: string;
   operatingHours: string;
   region: string;
-  activeResellerRegionId: string;
   lat: number;
   lng: number;
   deliveryRate: string;

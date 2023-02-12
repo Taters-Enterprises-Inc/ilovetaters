@@ -166,7 +166,7 @@ import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-ad
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
 import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
-import getAdminStoreRegions from "features/admin/presentation/slices/get-admin-store-regions.slice";
+import getAdminRegionStoreCombinations from "features/admin/presentation/slices/get-admin-region-store-combinations.slice";
 import getAdminStoreLocales from "features/admin/presentation/slices/get-admin-store-locales.slice";
 import getAdminPackages from "features/admin/presentation/slices/get-admin-packages.slice";
 import getAdminDeals from "features/admin/presentation/slices/get-admin-deals.slice";
@@ -353,7 +353,7 @@ export const store = configureStore({
     getAdminOverallTotalSales,
     getAdminStoreMenus,
     createAdminSettingStore,
-    getAdminStoreRegions,
+    getAdminRegionStoreCombinations,
     getAdminStoreLocales,
     getAdminPackages,
     getAdminDeals,

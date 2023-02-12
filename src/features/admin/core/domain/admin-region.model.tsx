@@ -1,4 +1,5 @@
 export interface AdminRegionModel {
   id: number;
-  name: string;
+  region_name: string;
+  region_store_name: string;
 }

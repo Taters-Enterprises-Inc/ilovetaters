@@ -21,6 +21,7 @@ export interface GetAdminSettingStoreModel {
   store_menu_type_id: number;
   locale: string;
   region_id: number;
+  region_store_combination_tb_id: number;
   lat: number;
   lng: number;
   status: string;

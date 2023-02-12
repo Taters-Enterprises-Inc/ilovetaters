@@ -29,9 +29,9 @@ import {
 } from "../slices/create-admin-setting-store.slice";
 import { useNavigate } from "react-router-dom";
 import {
-  getAdminStoreRegions,
-  selectGetAdminStoreRegions,
-} from "../slices/get-admin-store-regions.slice";
+  getAdminRegionStoreCombinations,
+  selectGetAdminRegionStoreCombinations,
+} from "../slices/get-admin-region-store-combinations.slice";
 import {
   getAdminStoreLocales,
   selectGetAdminStoreLocales,
@@ -59,7 +59,6 @@ export function AdminSettingCreateStore() {
     deliveryHours: string;
     operatingHours: string;
     region: string;
-    activeResellerRegionId: string;
     lat: number;
     lng: number;
     deliveryRate: string;
@@ -92,7 +91,6 @@ export function AdminSettingCreateStore() {
     storeHash: "",
     locale: "",
     region: "",
-    activeResellerRegionId: "",
     image250x250: "",
     services: [
       "Snackshop",
@@ -107,7 +105,9 @@ export function AdminSettingCreateStore() {
   const getAdminStoreMenusState = useAppSelector(selectGetAdminStoreMenus);
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
   const getAdminPackagesState = useAppSelector(selectGetAdminPackages);
-  const getAdminStoreRegionsState = useAppSelector(selectGetAdminStoreRegions);
+  const getAdminRegionStoreCombinationsState = useAppSelector(
+    selectGetAdminRegionStoreCombinations
+  );
   const createAdminSettingStoreState = useAppSelector(
     selectCreateAdminSettingStore
   );
@@ -117,7 +117,7 @@ export function AdminSettingCreateStore() {
     dispatch(getAdminStoreMenus());
     dispatch(getAdminProducts());
     dispatch(getAdminPackages());
-    dispatch(getAdminStoreRegions());
+    dispatch(getAdminRegionStoreCombinations());
     dispatch(getAdminStoreLocales());
   }, [dispatch]);
 
@@ -203,7 +203,7 @@ export function AdminSettingCreateStore() {
           },
           className: "lg:h-[200px]",
           pageTitles: [
-            { name: "Stores", url: "/admin/setting/user" },
+            { name: "Stores", url: "/admin/setting/store" },
             {
               name: "Create new store",
               url: "/admin/setting/store/create-store",
@@ -423,49 +423,35 @@ export function AdminSettingCreateStore() {
               placeholder="Eg. TSS0191"
             />
 
-            <div className="grid grid-cols-2 gap-4">
-              <MaterialInput
-                colorTheme="black"
-                name="locale"
-                required
-                label="Locale"
-                select
-                fullWidth
-                value={formState.locale}
-                onChange={handleInputChange}
-              >
-                {getAdminStoreLocalesState.data?.map((locale) => (
-                  <MenuItem value={locale.id}>{locale.name}</MenuItem>
-                ))}
-              </MaterialInput>
-              <MaterialInput
-                colorTheme="black"
-                name="region"
-                required
-                label="Region"
-                select
-                fullWidth
-                value={formState.region}
-                onChange={handleInputChange}
-              >
-                {getAdminStoreRegionsState.data?.map((region) => (
-                  <MenuItem value={region.id}>{region.name}</MenuItem>
-                ))}
-              </MaterialInput>
-            </div>
+            <MaterialInput
+              colorTheme="black"
+              name="locale"
+              required
+              label="Locale"
+              select
+              fullWidth
+              value={formState.locale}
+              onChange={handleInputChange}
+            >
+              {getAdminStoreLocalesState.data?.map((locale) => (
+                <MenuItem value={locale.id}>{locale.name}</MenuItem>
+              ))}
+            </MaterialInput>
 
             <MaterialInput
               colorTheme="black"
-              name="activeResellerRegionId"
+              name="region"
               required
-              label="Active Reseller Region"
+              label="Region"
               select
               fullWidth
-              value={formState.activeResellerRegionId}
+              value={formState.region}
               onChange={handleInputChange}
             >
-              {getAdminStoreRegionsState.data?.map((region) => (
-                <MenuItem value={region.id}>{region.name}</MenuItem>
+              {getAdminRegionStoreCombinationsState.data?.map((region) => (
+                <MenuItem value={region.id}>
+                  {region.region_name} / {region.region_store_name}{" "}
+                </MenuItem>
               ))}
             </MaterialInput>
           </div>
