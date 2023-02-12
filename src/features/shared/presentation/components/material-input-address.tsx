@@ -11,7 +11,7 @@ function handleScriptLoad(
     formattedAddress: string;
   }) => void,
   autoCompleteRef: InputBaseComponentProps,
-  geolocate: any
+  geolocate: () => void
 ) {
   autoComplete = new window.google.maps.places.Autocomplete(
     autoCompleteRef.current,
@@ -19,6 +19,7 @@ function handleScriptLoad(
   );
 
   geolocate();
+
   autoComplete.addListener("place_changed", () => {
     var place = autoComplete.getPlace();
 
@@ -71,6 +72,8 @@ async function handlePlaceSelect() {
 }
 
 interface MaterialInputAddressProps {
+  colorTheme: "white" | "black" | "green" | "blue";
+  geolocate: boolean;
   onPrompt: () => void;
   onDenied: () => void;
   onChange: (address: string) => void;
@@ -91,7 +94,11 @@ export function MaterialInputAddress(props: MaterialInputAddressProps) {
   const autoCompleteRef = useRef();
 
   useEffect(() => {
-    handleScriptLoad(props.onPlaceSelected, autoCompleteRef, geolocate);
+    handleScriptLoad(
+      props.onPlaceSelected,
+      autoCompleteRef,
+      props.geolocate ? geolocate : () => {}
+    );
   }, []);
 
   const geolocate = () => {
@@ -153,7 +160,7 @@ export function MaterialInputAddress(props: MaterialInputAddressProps) {
   return (
     <MaterialInput
       inputRef={autoCompleteRef}
-      colorTheme="black"
+      colorTheme={props.colorTheme}
       value={props.value}
       onChange={(e) => props.onChange(e.target.value)}
       name=""

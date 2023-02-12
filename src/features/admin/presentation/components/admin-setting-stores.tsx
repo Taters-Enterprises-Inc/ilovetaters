@@ -31,7 +31,6 @@ export function AdminSettingStores() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
-  const storeId = query.get("store_id");
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getAdminSettingStoresState = useAppSelector(
@@ -266,7 +265,7 @@ export function AdminSettingStores() {
                       <DataTableCell>{row.menu_name}</DataTableCell>
                       <DataTableCell>
                         <Link
-                          to={`#`}
+                          to={row.store_id.toString()}
                           className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
                         >
                           Edit

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 
 interface AdminSearchStoreCoordinatesProps {
+  geolocate: boolean;
   lat: number;
   lng: number;
   onLatLngChanged: (latLng: { lat: number; lng: number }) => void;
@@ -13,6 +14,25 @@ export function AdminSearchStoreCoordinates(
 ) {
   const [center, setCenter] = useState<any>();
   const [address, setAddress] = useState("");
+
+  useEffect(() => {
+    const coordinates = {
+      lat: props.lat,
+      lng: props.lng,
+    };
+
+    setCenter(coordinates);
+    props.onLatLngChanged(coordinates);
+
+    var geocoder = new google.maps.Geocoder();
+    var location = new google.maps.LatLng(props.lat, props.lng);
+
+    geocoder.geocode({ location }, function (results, status) {
+      if (status === google.maps.GeocoderStatus.OK && results) {
+        setAddress(results[0].formatted_address);
+      }
+    });
+  }, [props.lat, props.lng]);
 
   const handleCoordinatesChanged = (place: {
     lat: number;
@@ -32,6 +52,8 @@ export function AdminSearchStoreCoordinates(
   return (
     <>
       <MaterialInputAddress
+        colorTheme="black"
+        geolocate={props.geolocate}
         value={address}
         onChange={(val) => {
           setAddress(val);

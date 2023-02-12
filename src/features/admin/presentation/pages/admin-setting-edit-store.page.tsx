@@ -21,13 +21,7 @@ import {
 } from "../slices/get-admin-store-menus.slice";
 import moment, { Moment } from "moment";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
-import {
-  createAdminSettingStore,
-  CreateAdminSettingStoreState,
-  resetCreateAdminSettingStoreState,
-  selectCreateAdminSettingStore,
-} from "../slices/create-admin-setting-store.slice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getAdminStoreRegions,
   selectGetAdminStoreRegions,
@@ -42,10 +36,23 @@ import {
   selectGetAdminPackages,
 } from "../slices/get-admin-packages.slice";
 import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import {
+  getAdminSettingStore,
+  GetAdminSettingStoreState,
+  selectGetAdminSettingStore,
+} from "../slices/get-admin-setting-store.slice";
+import {
+  resetEditAdminSettingStoreState,
+  editAdminSettingStore,
+  EditAdminSettingStoreState,
+  selectEditAdminSettingStore,
+} from "../slices/edit-admin-setting-store.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
-export function AdminSettingCreateStore() {
+export function AdminSettingEditStore() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [formState, setFormState] = useState<{
     name: string;
@@ -108,10 +115,11 @@ export function AdminSettingCreateStore() {
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
   const getAdminPackagesState = useAppSelector(selectGetAdminPackages);
   const getAdminStoreRegionsState = useAppSelector(selectGetAdminStoreRegions);
-  const createAdminSettingStoreState = useAppSelector(
-    selectCreateAdminSettingStore
-  );
   const getAdminStoreLocalesState = useAppSelector(selectGetAdminStoreLocales);
+  const getAdminSettingStoreState = useAppSelector(selectGetAdminSettingStore);
+  const editAdminSettingStoreState = useAppSelector(
+    selectEditAdminSettingStore
+  );
 
   useEffect(() => {
     dispatch(getAdminStoreMenus());
@@ -119,37 +127,66 @@ export function AdminSettingCreateStore() {
     dispatch(getAdminPackages());
     dispatch(getAdminStoreRegions());
     dispatch(getAdminStoreLocales());
-  }, [dispatch]);
+    if (id) {
+      dispatch(
+        getAdminSettingStore({
+          storeId: id,
+        })
+      );
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (
-      createAdminSettingStoreState.status ===
-      CreateAdminSettingStoreState.success
+      getAdminSettingStoreState.status === GetAdminSettingStoreState.success &&
+      getAdminSettingStoreState.data
+    ) {
+      setFormState({
+        storeMenu: getAdminSettingStoreState.data.store_menu_type_id.toString(),
+        availableStartTime: moment(
+          getAdminSettingStoreState.data.available_start_time,
+          "HH:mm:ss"
+        ),
+        availableEndTime: moment(
+          getAdminSettingStoreState.data.available_end_time,
+          "HH:mm:ss"
+        ),
+        name: getAdminSettingStoreState.data.name,
+        address: getAdminSettingStoreState.data.address,
+        phoneNumber: getAdminSettingStoreState.data.contact_number,
+        contactPerson: getAdminSettingStoreState.data.contact_person,
+        email: getAdminSettingStoreState.data.email,
+        deliveryHours: getAdminSettingStoreState.data.delivery_hours,
+        operatingHours: getAdminSettingStoreState.data.operating_hours,
+        lat: getAdminSettingStoreState.data.lat,
+        lng: getAdminSettingStoreState.data.lng,
+        deliveryRate: getAdminSettingStoreState.data.delivery_rate,
+        minimumRate: getAdminSettingStoreState.data.minimum_rate,
+        cateringDeliveryRate:
+          getAdminSettingStoreState.data.catering_delivery_rate,
+        cateringMinimumRate:
+          getAdminSettingStoreState.data.catering_minimum_rate,
+        storeHash: getAdminSettingStoreState.data.store_hash,
+        locale: getAdminSettingStoreState.data.locale,
+        region: getAdminSettingStoreState.data.region_id.toString(),
+        activeResellerRegionId:
+          getAdminSettingStoreState.data.active_reseller_region_id.toString(),
+        image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${getAdminSettingStoreState.data.store_image}`,
+        services: getAdminSettingStoreState.data.services ?? [],
+        products: getAdminSettingStoreState.data.products ?? [],
+        packages: getAdminSettingStoreState.data.packages ?? [],
+      });
+    }
+  }, [getAdminSettingStoreState]);
+
+  useEffect(() => {
+    if (
+      editAdminSettingStoreState.status === EditAdminSettingStoreState.success
     ) {
       navigate("/admin/setting/store");
-      dispatch(resetCreateAdminSettingStoreState());
+      dispatch(resetEditAdminSettingStoreState());
     }
-  }, [createAdminSettingStoreState, dispatch, navigate]);
-
-  useEffect(() => {
-    const products = getAdminProductsState.data;
-    if (
-      getAdminProductsState.status === GetAdminProductsState.success &&
-      products
-    ) {
-      setFormState((f) => ({ ...f, products }));
-    }
-  }, [getAdminProductsState]);
-
-  useEffect(() => {
-    const packages = getAdminPackagesState.data;
-    if (
-      getAdminPackagesState.status === GetAdminPackagesState.success &&
-      packages
-    ) {
-      setFormState((f) => ({ ...f, packages }));
-    }
-  }, [getAdminPackagesState]);
+  }, [editAdminSettingStoreState, dispatch, navigate, id]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -165,21 +202,16 @@ export function AdminSettingCreateStore() {
       return;
     }
 
-    if (formState.availableStartTime && formState.availableEndTime) {
+    if (id && formState.availableStartTime && formState.availableEndTime) {
       dispatch(
-        createAdminSettingStore({
+        editAdminSettingStore({
+          storeId: id,
           ...formState,
           availableStartTime: formState.availableStartTime.format("HH:mm:ss"),
           availableEndTime: formState.availableEndTime.format("HH:mm:ss"),
           services: JSON.stringify(formState.services),
-          products: formState.services.some(
-            (service) => service === "Snackshop"
-          )
-            ? JSON.stringify(formState.products)
-            : "",
-          packages: formState.services.some((service) => service === "Catering")
-            ? JSON.stringify(formState.packages)
-            : "",
+          products: JSON.stringify(formState.products),
+          packages: JSON.stringify(formState.packages),
         })
       );
     }
@@ -213,7 +245,7 @@ export function AdminSettingCreateStore() {
       />
       <section className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Create Store
+          Edit Store
         </span>
       </section>
 
@@ -453,7 +485,6 @@ export function AdminSettingCreateStore() {
                 ))}
               </MaterialInput>
             </div>
-
             <MaterialInput
               colorTheme="black"
               name="activeResellerRegionId"
@@ -488,7 +519,7 @@ export function AdminSettingCreateStore() {
           </div>
         </div>
         <AdminSearchStoreCoordinates
-          geolocate={true}
+          geolocate={false}
           lat={formState.lat}
           lng={formState.lng}
           onLatLngChanged={(coordinates) => {
@@ -549,13 +580,24 @@ export function AdminSettingCreateStore() {
             />
           </>
         ) : null}
+        <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+          >
+            Edit Store
+          </button>
 
-        <button
-          type="submit"
-          className="px-4 py-2 text-white rounded-lg bg-button w-fit"
-        >
-          Create Store
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              // setOpenDeleteMessageModal(true);
+            }}
+            className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
+          >
+            Delete Store
+          </button>
+        </div>
       </form>
     </>
   );

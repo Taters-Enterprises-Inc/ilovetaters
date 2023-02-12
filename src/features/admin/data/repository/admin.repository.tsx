@@ -29,6 +29,8 @@ import {
   GetAdminTotalSalesParam,
   CreateAdminSettingStoreParam,
   GetAdminCateringPackageFlavorsParam,
+  GetAdminSettingStoreParam,
+  EditAdminSettingStoreParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -69,6 +71,7 @@ import { AdminRegionModel } from "features/admin/core/domain/admin-region.model"
 import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-locale.model";
 import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
 import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
+import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-setting-store.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -546,6 +549,45 @@ export interface GetAdminStoreLocalesResponse {
   };
 }
 
+export interface GetAdminSettingStoreResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingStoreModel;
+  };
+}
+
+export interface EditAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingStoreRepository(
+  param: EditAdminSettingStoreParam
+): Promise<EditAdminSettingStoreResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-store`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingStoreRepository(
+  param: GetAdminSettingStoreParam
+): Promise<GetAdminSettingStoreResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/store?store-id=${param.storeId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminDealsRepository(): Promise<GetAdminDealsResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deals`, {
     withCredentials: true,
@@ -573,7 +615,7 @@ export function GetAdminStoreRegionsRepository(): Promise<GetAdminStoreRegionsRe
 export function CreateAdminSettingStoreRepository(
   param: CreateAdminSettingStoreParam
 ): Promise<CreateAdminSettingStoreResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/stores`, param, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/store`, param, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

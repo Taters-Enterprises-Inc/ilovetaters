@@ -182,6 +182,8 @@ import setCateringPackageStoreAndAddress from "features/catering/presentation/sl
 import getSnackshopDeals from "features/shop/presentation/slices/get-snackshop-deals.slice";
 import getCustomerSurveyResponseInOrderService from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 import getInbox from "features/profile/presentation/slices/get-inbox.slice";
+import getAdminSettingStore from "features/admin/presentation/slices/get-admin-setting-store.slice";
+import editAdminSettingStore from "features/admin/presentation/slices/edit-admin-setting-store.slice";
 
 export const store = configureStore({
   reducer: {
@@ -367,6 +369,8 @@ export const store = configureStore({
     getSnackshopDeals,
     getCustomerSurveyResponseInOrderService,
     getInbox,
+    getAdminSettingStore,
+    editAdminSettingStore,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

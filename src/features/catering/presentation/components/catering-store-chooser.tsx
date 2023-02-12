@@ -4,12 +4,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { SearchAddress } from "features/shared/presentation/components/search-address";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
+import { MaterialInputAddress } from "features/shared/presentation/components";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import moment from "moment";
@@ -188,7 +184,9 @@ export function CateringStoreChooser() {
         <div className="space-y-4">
           <div className="flex justify-center">
             <label className="pure-material-textfield-outlined w-[100%]">
-              <SearchAddress
+              <MaterialInputAddress
+                geolocate={true}
+                colorTheme="white"
                 value={
                   cateringHomePageState.address
                     ? cateringHomePageState.address
@@ -222,14 +220,18 @@ export function CateringStoreChooser() {
                     );
                   }
                 }}
-                onLocateCurrentAddress={(place: string) => {
+                onLocateCurrentAddress={(location) => {
                   if (
                     getCateringPackageDetailsState.data?.product.product_hash
                   ) {
-                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      setAddressCateringHomePage({
+                        address: location.formattedAddress,
+                      })
+                    );
                     dispatch(
                       getStoresAvailableCateringModal({
-                        address: place,
+                        address: location.formattedAddress,
                         service: "CATERING",
 
                         hash: getCateringPackageDetailsState.data.product
@@ -241,14 +243,18 @@ export function CateringStoreChooser() {
                 onChange={(value: string) => {
                   dispatch(setAddressCateringHomePage({ address: value }));
                 }}
-                onPlaceSelected={(place: string) => {
+                onPlaceSelected={(location) => {
                   if (
                     getCateringPackageDetailsState.data?.product.product_hash
                   ) {
-                    dispatch(setAddressCateringHomePage({ address: place }));
+                    dispatch(
+                      setAddressCateringHomePage({
+                        address: location.formattedAddress,
+                      })
+                    );
                     dispatch(
                       getStoresAvailableCateringModal({
-                        address: place,
+                        address: location.formattedAddress,
                         service: "CATERING",
 
                         hash: getCateringPackageDetailsState.data.product

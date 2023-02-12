@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { SearchAddress } from "features/shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { useEffect } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
@@ -36,7 +36,9 @@ export function ShopHome() {
           Please search your address for delivery
         </h1>
 
-        <SearchAddress
+        <MaterialInputAddress
+          geolocate={true}
+          colorTheme="white"
           value={shopHomePageState.address ? shopHomePageState.address : ""}
           onChange={(value: string) => {
             dispatch(setAddressShopHomePage({ address: value }));
@@ -57,20 +59,24 @@ export function ShopHome() {
               })
             );
           }}
-          onLocateCurrentAddress={(place: string) => {
-            dispatch(setAddressShopHomePage({ address: place }));
+          onLocateCurrentAddress={(location) => {
+            dispatch(
+              setAddressShopHomePage({ address: location.formattedAddress })
+            );
             dispatch(
               getStoresAvailableSnackshop({
-                address: place,
+                address: location.formattedAddress,
                 service: "SNACKSHOP",
               })
             );
           }}
-          onPlaceSelected={(place: string) => {
-            dispatch(setAddressShopHomePage({ address: place }));
+          onPlaceSelected={(location) => {
+            dispatch(
+              setAddressShopHomePage({ address: location.formattedAddress })
+            );
             dispatch(
               getStoresAvailableSnackshop({
-                address: place,
+                address: location.formattedAddress,
                 service: "SNACKSHOP",
               })
             );

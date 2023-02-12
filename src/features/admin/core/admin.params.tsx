@@ -222,3 +222,35 @@ export interface GetAdminCateringPackageFlavorsParam {
   packageId: number;
   type: string;
 }
+
+export interface GetAdminSettingStoreParam {
+  storeId: string;
+}
+
+export interface EditAdminSettingStoreParam {
+  storeId: string;
+  name: string;
+  address: string;
+  storeMenu: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  phoneNumber: string;
+  contactPerson: string;
+  email: string;
+  deliveryHours: string;
+  operatingHours: string;
+  region: string;
+  activeResellerRegionId: string;
+  lat: number;
+  lng: number;
+  deliveryRate: string;
+  minimumRate: string;
+  cateringDeliveryRate: string;
+  cateringMinimumRate: string;
+  storeHash: string;
+  locale: string;
+  image250x250: File | string;
+  services: string;
+  products: string;
+  packages: string;
+}

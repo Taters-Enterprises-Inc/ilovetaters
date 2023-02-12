@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { SearchAddress } from "features/shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useState } from "react";
@@ -159,7 +159,9 @@ export function CateringHome() {
         </h1>
 
         <div className="space-y-4">
-          <SearchAddress
+          <MaterialInputAddress
+            geolocate={true}
+            colorTheme="white"
             value={
               cateringHomePageState.address ? cateringHomePageState.address : ""
             }
@@ -179,11 +181,15 @@ export function CateringHome() {
                 })
               );
             }}
-            onLocateCurrentAddress={(place: string) => {
-              dispatch(setAddressCateringHomePage({ address: place }));
+            onLocateCurrentAddress={(location) => {
+              dispatch(
+                setAddressCateringHomePage({
+                  address: location.formattedAddress,
+                })
+              );
               dispatch(
                 getStoresAvailableCatering({
-                  address: place,
+                  address: location.formattedAddress,
                   service: "CATERING",
                 })
               );
@@ -191,12 +197,16 @@ export function CateringHome() {
             onChange={(value: string) => {
               dispatch(setAddressCateringHomePage({ address: value }));
             }}
-            onPlaceSelected={(place: string) => {
-              dispatch(setAddressCateringHomePage({ address: place }));
+            onPlaceSelected={(location) => {
+              dispatch(
+                setAddressCateringHomePage({
+                  address: location.formattedAddress,
+                })
+              );
 
               dispatch(
                 getStoresAvailableCatering({
-                  address: place,
+                  address: location.formattedAddress,
                   service: "CATERING",
                 })
               );

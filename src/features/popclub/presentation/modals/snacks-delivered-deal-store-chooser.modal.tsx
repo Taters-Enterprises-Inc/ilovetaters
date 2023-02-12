@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { SnacksDeliveredDealStoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { IoMdClose } from "react-icons/io";
 import { getSnacksDeliveredDealAvailableStores } from "../slices/get-snacks-delivered-deal-available-stores.slice";
 import {
@@ -58,7 +58,9 @@ export function SnacksDeliveredDealStoreChooserModal(
           Which store do you want to have your snacks delivered?
         </h1>
 
-        <SearchAddress
+        <MaterialInputAddress
+          geolocate={true}
+          colorTheme="white"
           value={
             snacksDeliveredDealStoreChooserModalState.address
               ? snacksDeliveredDealStoreChooserModalState.address
@@ -86,16 +88,16 @@ export function SnacksDeliveredDealStoreChooserModal(
               );
             }
           }}
-          onLocateCurrentAddress={(place: string) => {
+          onLocateCurrentAddress={(location) => {
             if (getDealState.data?.hash) {
               dispatch(
                 setAddressSnacksDeliveredDealStoreChooserModal({
-                  address: place,
+                  address: location.formattedAddress,
                 })
               );
               dispatch(
                 getSnacksDeliveredDealAvailableStores({
-                  address: place,
+                  address: location.formattedAddress,
                   service: "POPCLUB-ONLINE-DELIVERY",
                   hash: getDealState.data.hash,
                 })
@@ -109,16 +111,16 @@ export function SnacksDeliveredDealStoreChooserModal(
               })
             );
           }}
-          onPlaceSelected={(place: string) => {
+          onPlaceSelected={(location) => {
             if (getDealState.data?.hash) {
               dispatch(
                 setAddressSnacksDeliveredDealStoreChooserModal({
-                  address: place,
+                  address: location.formattedAddress,
                 })
               );
               dispatch(
                 getSnacksDeliveredDealAvailableStores({
-                  address: place,
+                  address: location.formattedAddress,
                   service: "POPCLUB-ONLINE-DELIVERY",
                   hash: getDealState.data.hash,
                 })

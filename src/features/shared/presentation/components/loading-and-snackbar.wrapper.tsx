@@ -318,6 +318,14 @@ import {
   selectSetCateringStoreAndAddress,
   SetCateringStoreAndAddressState,
 } from "features/catering/presentation/slices/set-catering-store-and-address.slice";
+import {
+  GetAdminSettingStoreState,
+  selectGetAdminSettingStore,
+} from "features/admin/presentation/slices/get-admin-setting-store.slice";
+import {
+  EditAdminSettingStoreState,
+  selectEditAdminSettingStore,
+} from "features/admin/presentation/slices/edit-admin-setting-store.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -485,6 +493,48 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminSettingStoreState = useAppSelector(
     selectCreateAdminSettingStore
   );
+
+  const getAdminSettingStoreState = useAppSelector(selectGetAdminSettingStore);
+  const editAdminSettingStoreState = useAppSelector(
+    selectEditAdminSettingStore
+  );
+
+  useEffect(() => {
+    switch (editAdminSettingStoreState.status) {
+      case EditAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingStoreState.success:
+        showAlert(setSuccessAlert, editAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingStoreState.fail:
+        showAlert(setFailsAlert, editAdminSettingStoreState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingStoreState]);
+
+  useEffect(() => {
+    switch (getAdminSettingStoreState.status) {
+      case GetAdminSettingStoreState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetAdminSettingStoreState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSettingStoreState.success:
+        setOpenBackdropLoading(false);
+        break;
+      case GetAdminSettingStoreState.fail:
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getAdminSettingStoreState]);
+
   useEffect(() => {
     switch (createAdminSettingStoreState.status) {
       case CreateAdminSettingStoreState.inProgress:

@@ -66,6 +66,7 @@ import {
   AdminSettingShopEditProduct,
   AdminSettingCreateStore,
   AdminAvailabilityCatersProduct,
+  AdminSettingEditStore,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -395,8 +396,12 @@ root.render(
                               <Route path="store">
                                 <Route index element={<AdminSettingStore />} />
                                 <Route
-                                  path={"create-store"}
+                                  path="create-store"
                                   element={<AdminSettingCreateStore />}
+                                />
+                                <Route
+                                  path=":id"
+                                  element={<AdminSettingEditStore />}
                                 />
                               </Route>
                               <Route path="product">

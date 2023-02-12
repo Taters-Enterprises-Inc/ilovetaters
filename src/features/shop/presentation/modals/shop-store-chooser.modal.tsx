@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { ShopStoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { IoMdClose } from "react-icons/io";
 import {
   selectShopStoreChooserModal,
@@ -58,7 +58,9 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
 
         <div className="flex items-center justify-center mb-3">
           <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
+            <MaterialInputAddress
+              geolocate={true}
+              colorTheme="white"
               value={
                 shopStoreChooserModalState.address
                   ? shopStoreChooserModalState.address
@@ -86,12 +88,16 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
                   );
                 }
               }}
-              onLocateCurrentAddress={(place: string) => {
+              onLocateCurrentAddress={(location) => {
                 if (getProductDetailsState.data?.product.product_hash) {
-                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    setAddressShopStoreChooserModal({
+                      address: location.formattedAddress,
+                    })
+                  );
                   dispatch(
                     getStoresAvailableSnackshopModal({
-                      address: place,
+                      address: location.formattedAddress,
                       service: "SNACKSHOP",
                       hash: getProductDetailsState.data.product.product_hash,
                     })
@@ -101,12 +107,16 @@ export function ShopStoreChooserModal(props: StoreChooserModalProps) {
               onChange={(value: string) => {
                 dispatch(setAddressShopStoreChooserModal({ address: value }));
               }}
-              onPlaceSelected={(place: string) => {
+              onPlaceSelected={(location) => {
                 if (getProductDetailsState.data?.product.product_hash) {
-                  dispatch(setAddressShopStoreChooserModal({ address: place }));
+                  dispatch(
+                    setAddressShopStoreChooserModal({
+                      address: location.formattedAddress,
+                    })
+                  );
                   dispatch(
                     getStoresAvailableSnackshopModal({
-                      address: place,
+                      address: location.formattedAddress,
                       service: "SNACKSHOP",
                       hash: getProductDetailsState.data.product.product_hash,
                     })
