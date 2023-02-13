@@ -22,7 +22,9 @@ export function ShopCheckoutGuard() {
       if (redeemData.deal_promo_price && redeemData.deal_promo_price <= 0) {
         return <Navigate to={"/delivery/products"} />;
       } else if (redeemData.deal_promo_price === null) {
-        return <Navigate to={"/delivery/products"} />;
+        if (orders.length <= 0) {
+          return <Navigate to={"/delivery/products"} />;
+        }
       }
     } else if (orders.length <= 0) {
       return <Navigate to={"/delivery/products"} />;
