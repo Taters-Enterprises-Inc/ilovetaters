@@ -5,7 +5,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { PaymentCardModal } from "../modals";
 
 type PaymentMethodType = "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT";
@@ -40,8 +40,19 @@ interface PaymentMethodProps {
 export function PaymentMethod(props: PaymentMethodProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const [openPaymentCardModal, setOpenPaymentCardModal] = useState(false);
-  const [paymentSelected, setPaymentSelected] =
-    useState<PaymentMethodType>("COD");
+  const [paymentSelected, setPaymentSelected] = useState<PaymentMethodType>();
+
+  useEffect(() => {
+    if (checkIfNotEmpty("COD")) {
+      setPaymentSelected("COD");
+    } else if (checkIfNotEmpty("E-WALLET")) {
+      setPaymentSelected("E-WALLET");
+    } else if (checkIfNotEmpty("BANK-ACCOUNT")) {
+      setPaymentSelected("BANK-ACCOUNT");
+    } else if (checkIfNotEmpty("CARD")) {
+      setPaymentSelected("CARD");
+    }
+  }, [getSessionState]);
 
   const handlePaymentMethodChange = (option: PaymentMethodOption) => {
     if (option.value === "CARD") {
