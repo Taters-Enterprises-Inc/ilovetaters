@@ -396,10 +396,10 @@ export function AdminSurveyVerifications() {
                             </span>
                           </DataTableCell>
                           <DataTableCell>
-                            <Moment format="lll">{row.dateadded}</Moment>
+                            <Moment format="lll">{row.order_date}</Moment>
                           </DataTableCell>
                           <DataTableCell>
-                            <Moment format="lll">{row.order_date}</Moment>
+                            <Moment format="lll">{row.dateadded}</Moment>
                           </DataTableCell>
                           <DataTableCell>{row.invoice_no}</DataTableCell>
                           <DataTableCell>{row.order_type}</DataTableCell>
