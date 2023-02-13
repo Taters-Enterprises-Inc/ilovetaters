@@ -66,10 +66,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 import { ShopProductFlavor } from "../components";
 import ReactGA from "react-ga";
-import {
-  getSnackshopDeals,
-  selectGetSnackshopDeals,
-} from "../slices/get-snackshop-deals.slice";
 import { ShopDeal } from "../components/shop-deal";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
@@ -124,7 +120,6 @@ export function ShopProduct() {
     selectAddToCartCheckoutShop
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
-  const getSnackshopDealsState = useAppSelector(selectGetSnackshopDeals);
   const redeemDealState = useAppSelector(selectRedeemDeal);
 
   useEffect(() => {
@@ -147,8 +142,6 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
-      dispatch(getSnackshopDeals());
-
       dispatch(redeemValidators());
     }
   }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
@@ -570,37 +563,6 @@ export function ShopProduct() {
                               .delivery_details,
                         }}
                       />
-                    </div>
-                  </ProductDetailsAccordion>
-                ) : null}
-
-                {getSnackshopDealsState.data &&
-                getSessionState.data?.redeem_data === null ? (
-                  <ProductDetailsAccordion
-                    title={{
-                      name: "PopClub Deals",
-                      prefixIcon: <TbTruckDelivery className="text-3xl" />,
-                    }}
-                  >
-                    <div className="space-y-6 overflow-y-auto max-h-[400px] px-[14px] py-[10px]">
-                      {getSnackshopDealsState.data.map((deal, i) => (
-                        <ShopDeal key={i} deal={deal} />
-                      ))}
-                      {getSnackshopDealsState.data.length === 0 ||
-                      getSnackshopDealsState.data === undefined ||
-                      getSnackshopDealsState.data === null ? (
-                        <span className="text-white text-base font-['Bebas_Neue'] tracking-[3px]">
-                          No Deals Available
-                        </span>
-                      ) : null}
-                    </div>
-                    <div
-                      onClick={() => {
-                        setOpenPlatformChooserModal(true);
-                      }}
-                      className="p-2 m-4 rounded-lg cursor-pointer text-center text-2xl font-['Bebas_Neue'] tracking-[3px] font-light text-white bg-button "
-                    >
-                      View more popclub deals
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
