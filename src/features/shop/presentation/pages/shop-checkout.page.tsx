@@ -583,16 +583,14 @@ export function ShopCheckout() {
                           Note:
                         </h2>
 
-                        {
-                          <ul
-                            className="mt-2 space-y-2 text-sm notes"
-                            dangerouslySetInnerHTML={{
-                              __html: getSessionState.data.cache_data?.moh_notes
-                                ? getSessionState.data.cache_data.moh_notes
-                                : "",
-                            }}
-                          />
-                        }
+                        <ul
+                          className="mt-2 space-y-2 text-sm notes"
+                          dangerouslySetInnerHTML={{
+                            __html: getSessionState.data.cache_data?.moh_notes
+                              ? getSessionState.data.cache_data.moh_notes
+                              : "",
+                          }}
+                        />
                       </div>
                     </>
                   ) : null}

@@ -34,7 +34,10 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
           <div className="space-y-3 text-secondary">
             <h1 className="text-lg font-bold">{props.inbox?.title}</h1>
 
-            <p className="text-sm whitespace-pre-line">{props.inbox?.body}</p>
+            <p
+              className="text-sm whitespace-pre-line"
+              dangerouslySetInnerHTML={{ __html: props.inbox?.body ?? "" }}
+            />
 
             <p className="text-sm">{props.inbox?.closing}</p>
 
@@ -53,7 +56,7 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
                 src={props.inbox.image_url}
                 alt={props.inbox?.image_title ?? ""}
               />
-              <span className="absolute bottom-[50%] z-10 text-2xl text-tertiary font-bold left-[46%]">
+              <span className="absolute bottom-[45%] z-10 text-2xl text-tertiary font-bold left-[45%]">
                 {props.inbox?.image_title}
               </span>
             </div>
