@@ -44,11 +44,11 @@ export function PrivacyPolicy() {
           <hr className="mt-2 mb-4 border-secondary" />
           <div className="space-y-4 text-secondary">
             <p>
-              Company name (the "Taters Enterprise, Inc.orporated") is committed
-              to the protection of the privacy of your personal information as
-              we are conscious of our responsibilities as a "personal
-              information controller" under Philippine Republic Act No. 10173 or
-              the Data Privacy Act of 2012.
+              Company name (the "Taters Enterprise, Inc.") is committed to the
+              protection of the privacy of your personal information as we are
+              conscious of our responsibilities as a "personal information
+              controller" under Philippine Republic Act No. 10173 or the Data
+              Privacy Act of 2012.
             </p>
 
             <p>
