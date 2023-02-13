@@ -762,36 +762,38 @@ export function AdminShopOrderCustomerInformation() {
                 {getAdminShopOrderState.data.items.map((item, i) => (
                   <div className="py-2 border-b">
                     <p className="mb-2 text-xs leading-1 text-semibold">
-                      {item.alias ? (
-                        <span className="font-bold">{item.alias}</span>
-                      ) : null}
-                      <br />
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: item.product_label
-                            ? item.product_label +
-                              " " +
-                              item.name +
-                              (item.add_details ? " , " + item.add_details : "")
-                            : item.name +
-                              (item.add_details
-                                ? " , " + item.add_details
-                                : ""),
-                        }}
-                      />
-                      {item.deal_name ? (
+                      {item.deal_order_item_id ? (
                         <>
-                          <br />
-                          <br />
                           <span className=" !text-green-700 font-bold">
                             Deal Applied:{" "}
                           </span>
                           <br />
+                          {item.alias ? (
+                            <span className="font-bold">{item.alias}</span>
+                          ) : null}
+                          <br />
                           <span className="whitespace-pre-wrap">
                             {item.deal_name}
+                            {item.deal_description}
                           </span>
                         </>
-                      ) : null}
+                      ) : (
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.product_label
+                              ? item.product_label +
+                                " " +
+                                item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : "")
+                              : item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : ""),
+                          }}
+                        />
+                      )}
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Remarks:</span>
