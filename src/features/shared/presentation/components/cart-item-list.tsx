@@ -1,4 +1,10 @@
 import { ListItemText, MenuItem } from "@mui/material";
+import {
+  removeItemFromCartCatering,
+  RemoveItemFromCartCateringState,
+  resetRemoveItemFromCartCatering,
+  selectRemoveItemFromCartCatering,
+} from "features/catering/presentation/slices/remove-item-from-cart-catering.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { forfeitRedeem } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -12,10 +18,11 @@ import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
-import { useNavigate } from "react-router-dom";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
+import { ActiveUrl } from "./header-nav";
 
 export interface CartListItemProps {
+  activeUrl: ActiveUrl;
   onProcessOrder: () => void;
 }
 
@@ -25,6 +32,9 @@ export function CartListItem(props: CartListItemProps) {
   const removeItemFromCartShopState = useAppSelector(
     selectRemoveItemFromCartShop
   );
+  const removeItemFromCartCateringState = useAppSelector(
+    selectRemoveItemFromCartCatering
+  );
 
   useEffect(() => {
     if (
@@ -33,7 +43,17 @@ export function CartListItem(props: CartListItemProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartShop());
     }
-  }, [removeItemFromCartShopState]);
+  }, [removeItemFromCartShopState, dispatch]);
+
+  useEffect(() => {
+    if (
+      removeItemFromCartCateringState.status ===
+      RemoveItemFromCartCateringState.success
+    ) {
+      dispatch(getSession());
+      dispatch(resetRemoveItemFromCartCatering());
+    }
+  }, [removeItemFromCartCateringState, dispatch]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
@@ -170,7 +190,16 @@ export function CartListItem(props: CartListItemProps) {
                         <button
                           className="absolute text-white top-2 right-4 "
                           onClick={() => {
-                            dispatch(removeItemFromCartShop(i));
+                            switch (props.activeUrl) {
+                              case "SNACKSHOP":
+                                dispatch(removeItemFromCartShop(i));
+
+                                break;
+                              case "CATERING":
+                                dispatch(removeItemFromCartCatering(i));
+
+                                break;
+                            }
                           }}
                         >
                           <IoMdClose />

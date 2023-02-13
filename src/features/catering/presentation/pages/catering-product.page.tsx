@@ -48,6 +48,11 @@ import { removeItemFromCartShop } from "features/shop/presentation/slices/remove
 import { CateringStoreChooserModal } from "../modals";
 import ReactGA from "react-ga";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const SweetAlert = withReactContent(Swal);
+
 const DEFAULT_CAROUSEL = [
   "table_setup",
   "rustic_cart",
@@ -70,6 +75,7 @@ export function CateringProduct() {
   const dispatch = useAppDispatch();
   let { hash } = useParams();
   const location = useLocation();
+  const cateringAddonsRef = useRef<null | HTMLDivElement>(null);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -124,7 +130,10 @@ export function CateringProduct() {
     }
   }, [addToCartCateringState, dispatch]);
 
-  const calculateFreeAddon = () => {
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: () => void;
+  }) => {
     if (
       getCateringProductDetailsState.data &&
       getSessionState.status === GetSessionState.success &&
@@ -137,35 +146,16 @@ export function CateringProduct() {
       let calculatedPrice = 0;
 
       const orders = getSessionState.data.orders;
-      let existingFreeOrder:
-        | undefined
-        | {
-            index: number;
-            data: any;
-          };
 
       if (orders) {
         for (let i = 0; i < orders.length; i++) {
           const order = orders[i];
           calculatedPrice += order.prod_calc_amount;
-          if (order.is_free_item) {
-            existingFreeOrder = { index: i, data: order };
-          }
         }
       }
       const totalPrice =
         getCateringProductDetailsState.data.product.price * quantity +
         calculatedPrice;
-
-      if (
-        existingFreeOrder &&
-        existingFreeOrder.data.free_threshold &&
-        existingFreeOrder.data.free_threshold >
-          getCateringProductDetailsState.data.product.price * quantity +
-            calculatedPrice
-      ) {
-        dispatch(removeItemFromCartCatering(existingFreeOrder.index));
-      }
 
       if (addons) {
         for (let i = 0; i < addons.length; i++) {
@@ -179,15 +169,32 @@ export function CateringProduct() {
       }
 
       if (freeItem.length > 0) {
-        return (
-          <div className="text-white ">
-            🎉 <strong>Claim</strong> FREE{" "}
-            <strong>{freeItem[freeItem.length - 1].name}</strong>
-          </div>
-        );
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable();
       }
+    }
+  };
 
-      return null;
+  const calculateFreeAddon = () => {
+    let freeItem: Array<ProductModel> = [];
+
+    checkFreeItem({
+      freeItemAvailable: (val) => {
+        freeItem = val;
+      },
+      freeItemNotAvailable: () => {
+        freeItem = [];
+      },
+    });
+
+    if (freeItem.length > 0) {
+      return (
+        <div className="text-white ">
+          🎉 <strong>Claim</strong> FREE{" "}
+          <strong>{freeItem[freeItem.length - 1].name}</strong>
+        </div>
+      );
     }
 
     return null;
@@ -349,6 +356,73 @@ export function CateringProduct() {
         prefix={"₱"}
       />
     );
+  };
+
+  const handleCheckout = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Check the free item",
+          denyButtonText: `Proceed to checkout`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setTimeout(() => {
+              if (cateringAddonsRef.current)
+                cateringAddonsRef.current.scrollIntoView();
+            }, 500);
+          } else if (result.isDenied) {
+            dispatchAddToCartCatering(() => {
+              setQuantity(1);
+              setCurrentMultiFlavors({});
+              navigate("/shop/checkout");
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatchAddToCartCatering(() => {
+          setQuantity(1);
+          setCurrentMultiFlavors({});
+          navigate("/shop/checkout");
+        });
+      },
+    });
+  };
+
+  const handleAddToCart = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showCancelButton: true,
+          confirmButtonText: "Add to cart, then check the item",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatchAddToCartCatering(() => {
+              setQuantity(1);
+              setCurrentMultiFlavors({});
+              setTimeout(() => {
+                if (cateringAddonsRef.current)
+                  cateringAddonsRef.current.scrollIntoView();
+              }, 500);
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatchAddToCartCatering(() => {
+          setQuantity(1);
+          setCurrentMultiFlavors({});
+        });
+      },
+    });
   };
 
   const pageTitles: Array<{
@@ -613,11 +687,7 @@ export function CateringProduct() {
                 getSessionState.data?.customer_address ? (
                   <div className="space-y-4">
                     <button
-                      onClick={() => {
-                        dispatchAddToCartCatering(() => {
-                          navigate("/shop/checkout");
-                        });
-                      }}
+                      onClick={handleCheckout}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
                       <BsFillBagCheckFill className="text-3xl" />
@@ -627,12 +697,7 @@ export function CateringProduct() {
                     </button>
 
                     <button
-                      onClick={() => {
-                        dispatchAddToCartCatering(() => {
-                          setQuantity(1);
-                          setCurrentMultiFlavors({});
-                        });
-                      }}
+                      onClick={handleAddToCart}
                       className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                     >
                       <BsFillCartPlusFill className="text-3xl" />
@@ -687,7 +752,10 @@ export function CateringProduct() {
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                    <div
+                      ref={cateringAddonsRef}
+                      className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
+                    >
                       {getCateringProductDetailsState.data.addons.map(
                         (product, i) => {
                           if (
@@ -748,6 +816,7 @@ export function CateringProduct() {
           </div>
         </div>
       </section>
+
       <LoginChooserModal
         open={openLoginChooserModal}
         onClose={() => {

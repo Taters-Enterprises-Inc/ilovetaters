@@ -54,13 +54,13 @@ export const getStoreVisitDealAvailableStoreSlice = createSlice({
   name: "getStoreVisitDealAvailableStore",
   initialState,
   reducers: {
-    searchStores: (
+    searchStoreVisitDealStores: (
       state,
       action: PayloadAction<{ stores: Array<StoreModel> }>
     ) => {
       state.search = action.payload.stores;
     },
-    resetStoreSearch: (state) => {
+    resetStoreVisitDealStoresSearch: (state) => {
       state.search = undefined;
     },
   },
@@ -88,7 +88,7 @@ export const getStoreVisitDealAvailableStoreSlice = createSlice({
 export const selectGetStoreVisitDealAvailableStore = (state: RootState) =>
   state.getStoreVisitDealAvailableStore;
 
-export const { searchStores, resetStoreSearch } =
+export const { searchStoreVisitDealStores, resetStoreVisitDealStoresSearch } =
   getStoreVisitDealAvailableStoreSlice.actions;
 
 export default getStoreVisitDealAvailableStoreSlice.reducer;

@@ -45,17 +45,19 @@ import {
   SeenNotificationState,
 } from "../slices/seen-notification.slice";
 
+export type ActiveUrl =
+  | "PROFILE"
+  | "SNACKSHOP"
+  | "CATERING"
+  | "POPCLUB"
+  | "HOME"
+  | "BRANCHES"
+  | "FRANCHISING"
+  | "SEE_ME";
+
 interface HeaderNavProps {
   className?: string;
-  activeUrl:
-    | "PROFILE"
-    | "SNACKSHOP"
-    | "CATERING"
-    | "POPCLUB"
-    | "HOME"
-    | "BRANCHES"
-    | "FRANCHISING"
-    | "SEE_ME";
+  activeUrl: ActiveUrl;
   logoProps: {
     src: string;
     alt: string;
@@ -648,6 +650,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
                       <div className="bg-white pointer-events-auto">
                         <CartListItem
+                          activeUrl={props.activeUrl}
                           onProcessOrder={() => {
                             setOpenCartMenu(null);
                             if (props.activeUrl === "CATERING") {

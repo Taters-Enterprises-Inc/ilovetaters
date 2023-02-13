@@ -2,10 +2,10 @@ import styled from "@emotion/styled";
 import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
-  resetStoreVisitStoresSearch,
-  searchStoreVisitStores,
-  selectGetStoreVisitAvailableStore,
-} from "../slices/get-store-visit-available-stores.slice";
+  searchStoreVisitDealStores,
+  resetStoreVisitDealStoresSearch,
+  selectGetStoreVisitDealAvailableStore,
+} from "../slices/get-store-visit-deal-available-stores.slice";
 import { useEffect } from "react";
 
 const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
@@ -31,27 +31,27 @@ const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
 interface StoreVisitStoreSearchProps {
   label: string;
 }
-export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
+export function StoreVisitDealStoreSearch(props: StoreVisitStoreSearchProps) {
   const dispatch = useAppDispatch();
 
-  const getStoreVisitAvailableStoreState = useAppSelector(
-    selectGetStoreVisitAvailableStore
+  const getStoreVisitDealAvailableStoreState = useAppSelector(
+    selectGetStoreVisitDealAvailableStore
   );
 
   useEffect(() => {
-    dispatch(resetStoreVisitStoresSearch());
-  }, []);
+    dispatch(resetStoreVisitDealStoresSearch());
+  }, [dispatch]);
 
   const handleOnChange = (event: any) => {
     const search = event.target.value;
     if (!search) {
-      dispatch(resetStoreVisitStoresSearch());
+      dispatch(resetStoreVisitDealStoresSearch());
 
       return;
     }
 
-    if (getStoreVisitAvailableStoreState.data) {
-      const regions = getStoreVisitAvailableStoreState.data;
+    if (getStoreVisitDealAvailableStoreState.data) {
+      const regions = getStoreVisitDealAvailableStoreState.data;
       const merged_stores = [];
 
       for (let i = 0; i < regions.length; i++) {
@@ -67,7 +67,7 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
         );
       });
 
-      dispatch(searchStoreVisitStores({ stores: search_stores }));
+      dispatch(searchStoreVisitDealStores({ stores: search_stores }));
     }
   };
 
