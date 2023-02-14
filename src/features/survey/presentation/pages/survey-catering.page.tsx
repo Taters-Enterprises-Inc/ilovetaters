@@ -30,13 +30,13 @@ import {
 import { CustomerSurveyQuestionResponseAnswer } from "features/survey/core/survey.interface";
 import { useNavigate, useParams } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { SurveyRating } from "../components";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export function SurveyCatering() {
   const dispatch = useAppDispatch();
@@ -47,8 +47,6 @@ export function SurveyCatering() {
     useState<CustomerSurveyQuestionResponseAnswer>({});
 
   const [surveySection, setSurveySection] = useState(0);
-
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
   const getSurveyState = useAppSelector(selectGetSurvey);
   const insertCustomerSurveyResponseState = useAppSelector(
@@ -61,9 +59,9 @@ export function SurveyCatering() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: true }));
     }
-  }, [getSessionState]);
+  }, [getSessionState, dispatch]);
 
   useEffect(() => {
     dispatch(getSurvey());
@@ -351,14 +349,6 @@ export function SurveyCatering() {
 
         <FooterNav activeUrl="HOME" />
       </main>
-
-      <LoginChooserModal
-        required
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
     </>
   );
 }

@@ -1,7 +1,6 @@
-import { useAppSelector } from "features/config/hooks";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { useState } from "react";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 export type CateringProductQuantityActionType =
@@ -19,7 +18,7 @@ let timeout: any;
 let interval: any;
 
 export function CateringProductQuantity(props: CateringProductQuantityProps) {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
+  const dispatch = useAppDispatch();
   const getSessionState = useAppSelector(selectGetSession);
 
   const quantityOnPressed = (
@@ -30,7 +29,7 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -74,73 +73,64 @@ export function CateringProductQuantity(props: CateringProductQuantityProps) {
   };
 
   return (
-    <>
-      <div className="h-[60px] w-full">
-        <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-          <button
-            onMouseDown={() => quantityOnPressed("minus")}
-            onMouseUp={quantityOffPressed}
-            onTouchStart={() => quantityOnPressed("minus", true)}
-            onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
-              props.quantity === 1 || isNaN(props.quantity)
-                ? "opacity-30 cursor-not-allowed"
-                : ""
-            }`}
-          >
-            <AiOutlineMinus className="text-3xl" />
-          </button>
+    <div className="h-[60px] w-full">
+      <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
+        <button
+          onMouseDown={() => quantityOnPressed("minus")}
+          onMouseUp={quantityOffPressed}
+          onTouchStart={() => quantityOnPressed("minus", true)}
+          onTouchEnd={quantityOffPressed}
+          className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
+            props.quantity === 1 || isNaN(props.quantity)
+              ? "opacity-30 cursor-not-allowed"
+              : ""
+          }`}
+        >
+          <AiOutlineMinus className="text-3xl" />
+        </button>
 
-          <input
-            onWheel={(event) => event.currentTarget.blur()}
-            value={props.quantity}
-            type="number"
-            onChange={(e) => {
-              if (
-                getSessionState.data?.userData == null ||
-                getSessionState.data?.userData === undefined
-              ) {
-                setOpenLoginChooserModal(true);
-                return;
+        <input
+          onWheel={(event) => event.currentTarget.blur()}
+          value={props.quantity}
+          type="number"
+          onChange={(e) => {
+            if (
+              getSessionState.data?.userData == null ||
+              getSessionState.data?.userData === undefined
+            ) {
+              dispatch(openLoginChooserModal({ required: false }));
+              return;
+            }
+
+            props.quantityChange(e.target.value);
+
+            if (e.target.value) {
+              const value = parseInt(e.target.value);
+              if (value >= 1) {
+                value >= 99999
+                  ? props.onChange("manual-input", 99999)
+                  : props.onChange("manual-input", value);
               }
+            }
+          }}
+          min="1"
+          max="99999"
+          className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+        />
 
-              props.quantityChange(e.target.value);
-
-              if (e.target.value) {
-                const value = parseInt(e.target.value);
-                if (value >= 1) {
-                  value >= 99999
-                    ? props.onChange("manual-input", 99999)
-                    : props.onChange("manual-input", value);
-                }
-              }
-            }}
-            min="1"
-            max="99999"
-            className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-          />
-
-          <button
-            onMouseDown={() => quantityOnPressed("plus")}
-            onMouseUp={quantityOffPressed}
-            onTouchStart={() => quantityOnPressed("plus", true)}
-            onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
-              props.quantity === 99999 ? "opacity-30 cursor-not-allowed" : ""
-            }`}
-            disabled={props.quantity === 99999 ? true : false}
-          >
-            <AiOutlinePlus className="text-3xl" />
-          </button>
-        </div>
+        <button
+          onMouseDown={() => quantityOnPressed("plus")}
+          onMouseUp={quantityOffPressed}
+          onTouchStart={() => quantityOnPressed("plus", true)}
+          onTouchEnd={quantityOffPressed}
+          className={`h-full w-[150px] rounded-l outline-none flex justify-center items-center bg-primary ${
+            props.quantity === 99999 ? "opacity-30 cursor-not-allowed" : ""
+          }`}
+          disabled={props.quantity === 99999 ? true : false}
+        >
+          <AiOutlinePlus className="text-3xl" />
+        </button>
       </div>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-    </>
+    </div>
   );
 }

@@ -33,7 +33,6 @@ import {
   CateringFlavors,
   CateringProductQuantity,
 } from "../components";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   addToCartCatering,
@@ -50,6 +49,7 @@ import ReactGA from "react-ga";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -79,7 +79,6 @@ export function CateringProduct() {
 
   const [quantity, setQuantity] = useState(1);
 
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openCateringStoreChooserModal, setOpenCateringStoreChooserModal] =
     useState(false);
 
@@ -256,7 +255,7 @@ export function CateringProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -264,7 +263,7 @@ export function CateringProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -816,13 +815,6 @@ export function CateringProduct() {
           </div>
         </div>
       </section>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
 
       <CateringStoreChooserModal
         open={openCateringStoreChooserModal}

@@ -11,7 +11,6 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { PROFILE_MENU, TABS } from "features/shared/constants";
@@ -48,6 +47,7 @@ import {
 } from "../slices/seen-notification.slice";
 import { CartListItem } from "./cart-item-list";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { openLoginChooserModal } from "../slices/login-chooser-modal.slice";
 
 export type ActiveUrl =
   | "PROFILE"
@@ -70,7 +70,6 @@ interface HeaderNavProps {
 }
 
 export function HeaderNav(props: HeaderNavProps) {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openShopCartModal, setOpenShopCartModal] = useState(false);
   const [openCateringCartModal, setOpenCateringCartModal] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
@@ -562,7 +561,9 @@ export function HeaderNav(props: HeaderNavProps) {
                 ) : getSessionState.data?.userData === null ? (
                   <>
                     <button
-                      onClick={() => setOpenLoginChooserModal(true)}
+                      onClick={() =>
+                        dispatch(openLoginChooserModal({ required: false }))
+                      }
                       className="flex flex-col items-center justify-center mt-1 mb-4 space-y-1 text-white rounded-xl"
                     >
                       <AiOutlineUser className="text-2xl" />
@@ -703,13 +704,6 @@ export function HeaderNav(props: HeaderNavProps) {
         open={openShopCartModal}
         onClose={() => {
           setOpenShopCartModal(false);
-        }}
-      />
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
         }}
       />
 

@@ -29,7 +29,6 @@ import {
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   getProductSku,
   GetProductSkuState,
@@ -72,6 +71,7 @@ import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 let quantityId: any;
 
@@ -92,7 +92,6 @@ export function ShopProduct() {
   let { hash } = useParams();
   const location = useLocation();
 
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [setDisabled] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -243,7 +242,7 @@ export function ShopProduct() {
       getSessionState.data?.userData === undefined
     ) {
       clearInterval(quantityId);
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
     } else {
       pressTimer(action);
     }
@@ -313,7 +312,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -395,7 +394,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -722,7 +721,9 @@ export function ShopProduct() {
                             getSessionState.data?.userData === undefined
                           ) {
                             clearInterval(quantityId);
-                            setOpenLoginChooserModal(true);
+                            dispatch(
+                              openLoginChooserModal({ required: false })
+                            );
                           } else {
                             if (isNaN(parseInt(value)) || value === "0") {
                               isQuantityNull.current = true;
@@ -985,13 +986,6 @@ export function ShopProduct() {
           </div>
         </div>
       </section>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
 
       <ShopStoreChooserModal
         open={shopOpenStoreChooserModal}

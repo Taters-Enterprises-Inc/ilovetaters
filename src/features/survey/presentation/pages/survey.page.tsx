@@ -36,13 +36,13 @@ import {
   selectGetAllStores,
 } from "features/shared/presentation/slices/get-all-stores.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import { SurveyRating } from "../components";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -63,7 +63,6 @@ export function Survey() {
   >();
 
   const [surveySection, setSurveySection] = useState(0);
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
   const getSurveyState = useAppSelector(selectGetSurvey);
   const insertCustomerSurveyResponseState = useAppSelector(
@@ -77,9 +76,9 @@ export function Survey() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: true }));
     }
-  }, [getSessionState]);
+  }, [getSessionState, dispatch]);
 
   useEffect(() => {
     dispatch(getSurvey());
@@ -175,9 +174,7 @@ export function Survey() {
                         required
                         options={getAllStoresState.data}
                         value={selectedStore ?? ""}
-                        getOptionLabel={(option) =>
-                          option.name + " (" + option.menu_name + ") "
-                        }
+                        getOptionLabel={(option) => option.name}
                         onChange={(event, value) => {
                           if (value) {
                             setSelectedStore(value);
@@ -435,14 +432,6 @@ export function Survey() {
 
         <FooterNav activeUrl="HOME" />
       </main>
-
-      <LoginChooserModal
-        required
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
     </>
   );
 }

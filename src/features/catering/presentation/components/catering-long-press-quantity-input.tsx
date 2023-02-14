@@ -1,10 +1,10 @@
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { CateringMultiFlavorsType } from "../pages/catering-product.page";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export type CateringFlavorQuantityActionType = "minus" | "plus";
 
@@ -22,7 +22,6 @@ let interval: any;
 export function CateringLongPressQuantityInput(
   props: LongPressQuantityInputProps
 ) {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [quantity, setQuantity] = useState<string>("0");
   const getSessionState = useAppSelector(selectGetSession);
   const dispatch = useAppDispatch();
@@ -59,7 +58,7 @@ export function CateringLongPressQuantityInput(
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -120,88 +119,77 @@ export function CateringLongPressQuantityInput(
   };
 
   return (
-    <>
-      <div className="w-full sm:w-[200px] h-12">
-        <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-          <button
-            onMouseDown={() => quantityOnPressed("minus")}
-            onMouseUp={quantityOffPressed}
-            onTouchStart={() => quantityOnPressed("minus", true)}
-            onTouchEnd={quantityOffPressed}
-            className={`w-[150px] h-full flex justify-center items-center rounded-l outline-none bg-primary ${
-              quantity === "0" || quantity === ""
-                ? "opacity-30 cursor-not-allowed"
-                : ""
-            }`}
-          >
-            <AiOutlineMinus className="text-2xl font-thin" />
-          </button>
+    <div className="w-full sm:w-[200px] h-12">
+      <div className="relative flex flex-row w-full h-12 mt-1 text-white bg-transparent border-2 border-white rounded-lg">
+        <button
+          onMouseDown={() => quantityOnPressed("minus")}
+          onMouseUp={quantityOffPressed}
+          onTouchStart={() => quantityOnPressed("minus", true)}
+          onTouchEnd={quantityOffPressed}
+          className={`w-[150px] h-full flex justify-center items-center rounded-l outline-none bg-primary ${
+            quantity === "0" || quantity === ""
+              ? "opacity-30 cursor-not-allowed"
+              : ""
+          }`}
+        >
+          <AiOutlineMinus className="text-2xl font-thin" />
+        </button>
 
-          <input
-            onWheel={(event) => event.currentTarget.blur()}
-            value={quantity}
-            onChange={(e) => {
-              if (
-                getSessionState.data?.userData == null ||
-                getSessionState.data?.userData === undefined
-              ) {
-                setOpenLoginChooserModal(true);
-                return;
+        <input
+          onWheel={(event) => event.currentTarget.blur()}
+          value={quantity}
+          onChange={(e) => {
+            if (
+              getSessionState.data?.userData == null ||
+              getSessionState.data?.userData === undefined
+            ) {
+              dispatch(openLoginChooserModal({ required: false }));
+              return;
+            }
+
+            if (e.target.value === "") {
+              props.onChange(0);
+
+              setQuantity(e.target.value);
+              return;
+            }
+
+            if (e.target.value) {
+              const value = parseInt(e.target.value);
+
+              const remainingNumberOfFlavorWithoutCurrentInput =
+                props.productQuantity -
+                totalMultiFlavorsQuantityWithoutCurrentInput;
+
+              if (remainingNumberOfFlavorWithoutCurrentInput >= value) {
+                setQuantity(value.toString());
+                props.onChange(value);
+              } else {
+                dispatch(
+                  popUpSnackBar({
+                    message: "Number of flavor exceeded",
+                    severity: "error",
+                  })
+                );
               }
+            }
+          }}
+          type="number"
+          className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+        />
 
-              if (e.target.value === "") {
-                props.onChange(0);
-
-                setQuantity(e.target.value);
-                return;
-              }
-
-              if (e.target.value) {
-                const value = parseInt(e.target.value);
-
-                const remainingNumberOfFlavorWithoutCurrentInput =
-                  props.productQuantity -
-                  totalMultiFlavorsQuantityWithoutCurrentInput;
-
-                if (remainingNumberOfFlavorWithoutCurrentInput >= value) {
-                  setQuantity(value.toString());
-                  props.onChange(value);
-                } else {
-                  dispatch(
-                    popUpSnackBar({
-                      message: "Number of flavor exceeded",
-                      severity: "error",
-                    })
-                  );
-                }
-              }
-            }}
-            type="number"
-            className="flex items-center w-full font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-          />
-
-          <button
-            onMouseDown={() => quantityOnPressed("plus")}
-            onMouseUp={quantityOffPressed}
-            onTouchStart={() => quantityOnPressed("plus", true)}
-            onTouchEnd={quantityOffPressed}
-            className={`h-full w-[150px] flex justify-center items-center rounded-r bg-primary ${
-              remainingNumberOfFlavor <= 0
-                ? "opacity-30 cursor-not-allowed"
-                : ""
-            }`}
-          >
-            <AiOutlinePlus className="text-2xl font-thin" />
-          </button>
-        </div>
+        <button
+          onMouseDown={() => quantityOnPressed("plus")}
+          onMouseUp={quantityOffPressed}
+          onTouchStart={() => quantityOnPressed("plus", true)}
+          onTouchEnd={quantityOffPressed}
+          className={`h-full w-[150px] flex justify-center items-center rounded-r bg-primary ${
+            remainingNumberOfFlavor <= 0 ? "opacity-30 cursor-not-allowed" : ""
+          }`}
+        >
+          <AiOutlinePlus className="text-2xl font-thin" />
+        </button>
       </div>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-    </>
+    </div>
   );
 }

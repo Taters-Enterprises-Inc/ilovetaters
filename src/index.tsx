@@ -76,6 +76,7 @@ import {
   UserNotificationWrapper,
   AnalyticsWrapper,
   SessionWrapper,
+  LoginChooserWrapper,
 } from "features/shared/presentation/wrappers";
 import {
   ShopCheckoutGuard,
@@ -163,7 +164,7 @@ root.render(
               <Route element={<ConsentWrapper />}>
                 <Route element={<SessionWrapper />}>
                   <Route element={<LoadingAndSnackbarWrapper />}>
-                    <Route>
+                    <Route element={<LoginChooserWrapper />}>
                       <Route element={<UserNotificationWrapper />}>
                         <Route path="/" element={<Home />} />
                         <Route path="branches" element={<Branches />}>
