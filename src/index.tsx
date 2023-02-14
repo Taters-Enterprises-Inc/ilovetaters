@@ -71,11 +71,12 @@ import {
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
 import {
-  AdminNotificationWrapper,
   ConsentWrapper,
   LoadingAndSnackbarWrapper,
   UserNotificationWrapper,
-} from "features/shared/presentation/components";
+  AnalyticsWrapper,
+  SessionWrapper,
+} from "features/shared/presentation/wrappers";
 import {
   ShopCheckoutGuard,
   ShopProductsGuard,
@@ -83,7 +84,6 @@ import {
 import { ProfileGuard } from "features/profile/presentation/guards";
 
 import { Admin } from "features/admin/presentation/pages/admin.page";
-import { AdminSidebarWrapper } from "features/admin/presentation/components/admin-sidebar-wrapper";
 import { AdminGuard } from "features/admin/presentation/guards/admin.guard";
 import {
   Profile,
@@ -120,8 +120,6 @@ import {
 
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
-import { SessionWrapper } from "features/shared/presentation/wrapper/session.wrapper";
-import { AnalyticsWrapper } from "features/shared/presentation/components/analytics.wrapper";
 import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 import {
   SeeMeCatering,
@@ -137,6 +135,10 @@ import {
   CateringCheckoutGuard,
   CateringProductsGuard,
 } from "features/catering/presentation/guards";
+import {
+  AdminNotificationWrapper,
+  AdminSidebarWrapper,
+} from "features/admin/presentation/wrapper";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -161,146 +163,161 @@ root.render(
               <Route element={<ConsentWrapper />}>
                 <Route element={<SessionWrapper />}>
                   <Route element={<LoadingAndSnackbarWrapper />}>
-                    <Route element={<UserNotificationWrapper />}>
-                      <Route path="/" element={<Home />} />
-                      <Route path="branches" element={<Branches />}>
-                        <Route index element={<BranchesHome />} />
-                      </Route>
-
-                      <Route path="franchising" element={<Franchising />} />
-                      <Route path="see_me">
-                        <Route index element={<SeeMeSnackshop />} />
-                        <Route path="catering" element={<SeeMeCatering />} />
-                        <Route path="popclub" element={<SeeMePopClub />} />
-                        <Route path="reseller" element={<SeeMeReseller />} />
-                      </Route>
-                      <Route
-                        path="privacy-policy"
-                        element={<PrivacyPolicy />}
-                      />
-
-                      <Route path="profile" element={<Profile />}>
-                        <Route element={<ProfileGuard />}>
-                          <Route index element={<ProfileHome />} />
-                          <Route path="inbox" element={<ProfileInbox />} />
-                          <Route
-                            path="snackshop-orders"
-                            element={<ProfileSnackshopOrders />}
-                          />
-                          <Route
-                            path="catering-bookings"
-                            element={<ProfileCateringBookings />}
-                          />
-                          <Route
-                            path="popclub-redeems"
-                            element={<ProfilePopclubRedeems />}
-                          />
-
-                          <Route
-                            path="user-discount"
-                            element={<ProfileUserDiscount />}
-                          />
+                    <Route>
+                      <Route element={<UserNotificationWrapper />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="branches" element={<Branches />}>
+                          <Route index element={<BranchesHome />} />
                         </Route>
-                        <Route path="*" element={<NotFound />} />
-                      </Route>
 
-                      <Route path="popclub" element={<PopClub />}>
-                        <Route index element={<PopClubIndexPage />} />
-                        <Route path=":platform" element={<PopClubHome />} />
-                        <Route path="deal/:hash" element={<PopClubDeal />} />
-                        <Route path="order/:hash" element={<PopclubOrder />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Route>
-
-                      <Route path="delivery" element={<Shop />}>
-                        <Route index element={<ShopHome />} />
-                        <Route
-                          path="products/cart/:cart_id"
-                          element={<ShopEditCartItem />}
-                        />
-                        <Route
-                          path="products/:hash"
-                          element={<ShopProduct />}
-                        />
-                        <Route path="order/:hash" element={<ShopOrder />} />
-
-                        <Route element={<ShopProductsGuard />}>
-                          <Route path="products" element={<ShopProducts />} />
+                        <Route path="franchising" element={<Franchising />} />
+                        <Route path="see_me">
+                          <Route index element={<SeeMeSnackshop />} />
+                          <Route path="catering" element={<SeeMeCatering />} />
+                          <Route path="popclub" element={<SeeMePopClub />} />
+                          <Route path="reseller" element={<SeeMeReseller />} />
                         </Route>
-                        <Route element={<ShopCheckoutGuard />}>
-                          <Route path="checkout" element={<ShopCheckout />} />
-                        </Route>
-                        <Route
-                          path="terms-and-conditions"
-                          element={<ShopTermsAndConditions />}
-                        />
-
                         <Route
                           path="privacy-policy"
-                          element={<ShopPrivacyPolicy />}
+                          element={<PrivacyPolicy />}
+                        />
+
+                        <Route path="profile" element={<Profile />}>
+                          <Route element={<ProfileGuard />}>
+                            <Route index element={<ProfileHome />} />
+                            <Route path="inbox" element={<ProfileInbox />} />
+                            <Route
+                              path="snackshop-orders"
+                              element={<ProfileSnackshopOrders />}
+                            />
+                            <Route
+                              path="catering-bookings"
+                              element={<ProfileCateringBookings />}
+                            />
+                            <Route
+                              path="popclub-redeems"
+                              element={<ProfilePopclubRedeems />}
+                            />
+
+                            <Route
+                              path="user-discount"
+                              element={<ProfileUserDiscount />}
+                            />
+                          </Route>
+                          <Route path="*" element={<NotFound />} />
+                        </Route>
+
+                        <Route path="popclub" element={<PopClub />}>
+                          <Route index element={<PopClubIndexPage />} />
+                          <Route path=":platform" element={<PopClubHome />} />
+                          <Route path="deal/:hash" element={<PopClubDeal />} />
+                          <Route
+                            path="order/:hash"
+                            element={<PopclubOrder />}
+                          />
+                          <Route path="*" element={<NotFound />} />
+                        </Route>
+
+                        <Route path="delivery" element={<Shop />}>
+                          <Route index element={<ShopHome />} />
+                          <Route
+                            path="products/cart/:cart_id"
+                            element={<ShopEditCartItem />}
+                          />
+                          <Route
+                            path="products/:hash"
+                            element={<ShopProduct />}
+                          />
+                          <Route path="order/:hash" element={<ShopOrder />} />
+
+                          <Route element={<ShopProductsGuard />}>
+                            <Route path="products" element={<ShopProducts />} />
+                          </Route>
+                          <Route element={<ShopCheckoutGuard />}>
+                            <Route path="checkout" element={<ShopCheckout />} />
+                          </Route>
+                          <Route
+                            path="terms-and-conditions"
+                            element={<ShopTermsAndConditions />}
+                          />
+
+                          <Route
+                            path="privacy-policy"
+                            element={<ShopPrivacyPolicy />}
+                          />
+                          <Route
+                            path="return-policy"
+                            element={<ShopReturnPolicy />}
+                          />
+                          <Route path="*" element={<NotFound />} />
+                        </Route>
+
+                        <Route
+                          path="catering"
+                          element={<Navigate to={"/shop"} />}
                         />
                         <Route
-                          path="return-policy"
-                          element={<ShopReturnPolicy />}
+                          path="shop/admin"
+                          element={<Navigate to={"/admin"} />}
                         />
+                        <Route
+                          path="shop/login"
+                          element={<Navigate to={"/admin"} />}
+                        />
+                        <Route path="shop" element={<Catering />}>
+                          <Route index element={<CateringHome />} />
+                          <Route
+                            path="contract/:hash"
+                            element={<CateringContract />}
+                          />
+                          <Route
+                            path="order/:hash"
+                            element={<CateringOrder />}
+                          />
+                          <Route element={<CateringProductsGuard />}>
+                            <Route path="products">
+                              <Route index element={<CateringProducts />} />
+                              <Route
+                                path="build-your-own-package"
+                                element={<CateringBuildYourOwnPackage />}
+                              />
+                              <Route
+                                path=":hash"
+                                element={<CateringProduct />}
+                              />
+                            </Route>
+                          </Route>
+                          <Route element={<CateringCheckoutGuard />}>
+                            <Route
+                              path="checkout"
+                              element={<CateringCheckout />}
+                            />
+                          </Route>
+                          <Route path="*" element={<NotFound />} />
+                        </Route>
+
+                        <Route path="feedback">
+                          <Route index element={<Survey />} />
+                          <Route element={<ShopSurveyGuard />}>
+                            <Route
+                              path="snackshop/:hash"
+                              element={<SurveySnackshop />}
+                            />
+                          </Route>
+                          <Route element={<CateringSurveyGuard />}>
+                            <Route
+                              path="catering/:hash"
+                              element={<SurveyCatering />}
+                            />
+                          </Route>
+                          <Route
+                            path="complete/:hash"
+                            element={<SurveyComplete />}
+                          />
+                        </Route>
+
                         <Route path="*" element={<NotFound />} />
                       </Route>
-
-                      <Route
-                        path="catering"
-                        element={<Navigate to={"/shop"} />}
-                      />
-                      <Route
-                        path="shop/admin"
-                        element={<Navigate to={"/admin"} />}
-                      />
-                      <Route
-                        path="shop/login"
-                        element={<Navigate to={"/admin"} />}
-                      />
-                      <Route path="shop" element={<Catering />}>
-                        <Route index element={<CateringHome />} />
-                        <Route
-                          path="contract/:hash"
-                          element={<CateringContract />}
-                        />
-                        <Route path="order/:hash" element={<CateringOrder />} />
-                        <Route element={<CateringProductsGuard />}>
-                          <Route
-                            path="products"
-                            element={<CateringProducts />}
-                          />
-                        </Route>
-                        <Route element={<CateringCheckoutGuard />}>
-                          <Route
-                            path="checkout"
-                            element={<CateringCheckout />}
-                          />
-                        </Route>
-                        <Route path="*" element={<NotFound />} />
-                      </Route>
-
-                      <Route path="feedback">
-                        <Route index element={<Survey />} />
-                        <Route element={<ShopSurveyGuard />}>
-                          <Route
-                            path="snackshop/:hash"
-                            element={<SurveySnackshop />}
-                          />
-                        </Route>
-                        <Route element={<CateringSurveyGuard />}>
-                          <Route
-                            path="catering/:hash"
-                            element={<SurveyCatering />}
-                          />
-                        </Route>
-                        <Route
-                          path="complete/:hash"
-                          element={<SurveyComplete />}
-                        />
-                      </Route>
-
-                      <Route path="*" element={<NotFound />} />
                     </Route>
 
                     <Route path="admin" element={<Admin />}>

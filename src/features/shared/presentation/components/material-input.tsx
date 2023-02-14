@@ -5,7 +5,7 @@ import { ChangeEventHandler } from "react";
 export interface MaterialInputProps extends StandardTextFieldProps {
   colorTheme: "white" | "black" | "green" | "blue";
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
-  value: string | null;
+  value?: string | null;
   name: string;
 }
 

@@ -34,7 +34,7 @@ import {
   GetStoresAvailableSnackshopState,
   selectGetStoresAvailableSnackshop,
 } from "features/shop/presentation/slices/get-stores-available-snackshop.slice";
-import { BackdropLoading } from "./backdrop-loading-wrapper";
+import { BackdropLoading } from "./backdrop-loading.wrapper";
 import {
   GetStoresAvailableCateringState,
   selectGetStoresAvailableCatering,
@@ -43,7 +43,7 @@ import {
   AddToCartShopState,
   selectAddToCartShop,
 } from "features/shop/presentation/slices/add-to-cart-shop.slice";
-import { SnackbarAlert } from "./snackbar-alert";
+import { SnackbarAlert } from "../components/snackbar-alert";
 import {
   popOutSnackBar,
   PopSnackBarState,

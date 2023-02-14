@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { AdminDrawerDesktop, AdminDrawerMobile } from ".";
+import { AdminDrawerDesktop, AdminDrawerMobile } from "../components";
 export function AdminSidebarWrapper() {
   const location = useLocation();
 

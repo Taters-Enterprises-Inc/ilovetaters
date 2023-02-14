@@ -102,7 +102,7 @@ export function CateringProducts() {
               className="bg-secondary shadow-tertiary flex  justify-center items-center flex-col shadow-md rounded-[10px] text-white h-full"
             >
               <img
-                src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/Popcorn_Catering_Taters_7.jpg`}
+                src={`${REACT_APP_DOMAIN_URL}api/assets/images/home/cards/taters_catering.jpg`}
                 className="rounded-t-[10px] w-full"
                 alt=""
               />

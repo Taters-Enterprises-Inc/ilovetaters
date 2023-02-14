@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Outlet } from "react-router-dom";
-import { UnExpiredRedeem } from "./unexpired-redeem";
+import { UnExpiredRedeem } from "../components/unexpired-redeem";
 import "react-toastify/dist/ReactToastify.css";
-import { SnackbarAlert } from "./snackbar-alert";
+import { SnackbarAlert } from "../components/snackbar-alert";
 import { selectGetSession } from "../slices/get-session.slice";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";

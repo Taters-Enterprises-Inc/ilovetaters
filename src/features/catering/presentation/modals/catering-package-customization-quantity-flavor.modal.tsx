@@ -306,7 +306,6 @@ export function CateringPackageCustomizationQuantityFlavorModal(
           <button
             className="absolute text-2xl text-white top-2 right-4 "
             onClick={() => {
-              document.body.classList.remove("overflow-hidden");
               props.onClose();
             }}
           >
