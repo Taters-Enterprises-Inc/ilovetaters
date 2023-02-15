@@ -10,7 +10,6 @@ import { MdFastfood } from "react-icons/md";
 import { ProductDetailsAccordion } from "features/shared/presentation/components/product-details-accordion";
 import { TbTruckDelivery } from "react-icons/tb";
 import { AiFillInfoCircle } from "react-icons/ai";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import Radio from "@mui/material/Radio";
 import { FaRegEdit } from "react-icons/fa";
@@ -32,7 +31,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
   const [quantity, setQuantity] = useState<number>(1);
   const [currentFlavor, setCurrentFlavor] = useState<string>("");
   const [currentSize, setCurrentSize] = useState<string>("");
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const dispatch = useAppDispatch();
   const getEditCartProduct = useAppSelector(selectGetCartItem);
   const editCartProductState = useAppSelector(selectEditCartItem);
@@ -421,13 +419,6 @@ export const ShopEditCartItem: React.FC = (): JSX.Element => {
           </div>
         </div>
       </section>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
     </section>
   );
 };

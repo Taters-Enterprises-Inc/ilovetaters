@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { DealValidationState } from "features/popclub/presentation/components/deal";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   redeemDeal,
@@ -15,6 +14,7 @@ import {
   getSession,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -30,8 +30,6 @@ interface ShopDealCardProps {
 
 export function ShopDeal(props: ShopDealCardProps) {
   const dispatch = useAppDispatch();
-
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
 
   const getSessionState = useAppSelector(selectGetSession);
   const redeemDealState = useAppSelector(selectRedeemDeal);
@@ -224,7 +222,7 @@ export function ShopDeal(props: ShopDealCardProps) {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
     dispatch(
@@ -235,88 +233,79 @@ export function ShopDeal(props: ShopDealCardProps) {
   };
 
   return (
-    <>
-      <div className="relative flex">
-        {dealValidationState === DealValidationState.valid ? null : (
-          <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
-            {dealIsNotAvailableMessage()}
-          </div>
-        )}
+    <div className="relative flex">
+      {dealValidationState === DealValidationState.valid ? null : (
+        <div className="p-1 text-center not-available-overlay rounded-[10px] flex flex-col">
+          {dealIsNotAvailableMessage()}
+        </div>
+      )}
 
-        <img
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.deal.product_image}`}
-          className="rounded-[10px] w-[75px] h-[75px]"
-          alt=""
-        />
-        <div className="flex flex-col flex-1 pt-2 pl-3 text-white">
-          <h3 className="text-sm w-[90%] font-bold leading-4 pr-3">
-            {props.deal.name}
-          </h3>
+      <img
+        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.deal.product_image}`}
+        className="rounded-[10px] w-[75px] h-[75px]"
+        alt=""
+      />
+      <div className="flex flex-col flex-1 pt-2 pl-3 text-white">
+        <h3 className="text-sm w-[90%] font-bold leading-4 pr-3">
+          {props.deal.name}
+        </h3>
 
-          <h3 className="pr-3 text-xs">{props.deal.description}</h3>
+        <h3 className="pr-3 text-xs">{props.deal.description}</h3>
 
-          <div className="py-2 space-y-2">
-            {props.deal.available_days ? (
-              <div className="flex items-end space-x-2">
-                <BsFillCalendar2WeekFill className="text-base text-white" />
-                <span className="text-[9px] lg:text-xs text-white">
-                  Valid Weekdays
-                </span>
-              </div>
-            ) : null}
+        <div className="py-2 space-y-2">
+          {props.deal.available_days ? (
+            <div className="flex items-end space-x-2">
+              <BsFillCalendar2WeekFill className="text-base text-white" />
+              <span className="text-[9px] lg:text-xs text-white">
+                Valid Weekdays
+              </span>
+            </div>
+          ) : null}
 
-            {availableStartTime && availableEndTime ? (
-              <div className="flex items-center space-x-1">
-                <HiClock className="text-base text-white" />
-                <span className="text-[10px] lg:text-xs text-white">
-                  {availableStartTime.format("LT")} -{" "}
-                  {availableEndTime.format("LT")}
-                </span>
-              </div>
-            ) : null}
+          {availableStartTime && availableEndTime ? (
+            <div className="flex items-center space-x-1">
+              <HiClock className="text-base text-white" />
+              <span className="text-[10px] lg:text-xs text-white">
+                {availableStartTime.format("LT")} -{" "}
+                {availableEndTime.format("LT")}
+              </span>
+            </div>
+          ) : null}
 
-            {availableStartDateTime && availableEndDateTime ? (
-              <div className="flex items-center space-x-1">
-                <HiClock className="text-base text-white" />
-                <span className="text-[10px] lg:text-xs text-white">
-                  {availableStartDateTime.format("ll") ===
-                  availableEndDateTime.format("ll")
-                    ? availableStartDateTime.format("ll")
-                    : `
+          {availableStartDateTime && availableEndDateTime ? (
+            <div className="flex items-center space-x-1">
+              <HiClock className="text-base text-white" />
+              <span className="text-[10px] lg:text-xs text-white">
+                {availableStartDateTime.format("ll") ===
+                availableEndDateTime.format("ll")
+                  ? availableStartDateTime.format("ll")
+                  : `
                     ${availableStartDateTime.format(
                       "ll"
                     )} - ${availableEndDateTime.format("ll")}`}
-                </span>
-              </div>
-            ) : null}
-
-            <div className="flex items-center space-x-1">
-              <RiTimerFlashFill className="text-base text-white" />
-              <span className="text-[9px] lg:text-xs text-white">
-                {secondsToHms(props.deal.seconds_before_expiration)} claim time
               </span>
             </div>
-          </div>
-
-          {dealValidationState === DealValidationState.valid ? (
-            <div className="flex items-center justify-end flex-1">
-              <button
-                onClick={handleRedeem}
-                className="px-3 py-1 text-sm font-bold rounded-lg bg-button"
-              >
-                Redeem
-              </button>
-            </div>
           ) : null}
-        </div>
-      </div>
 
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-    </>
+          <div className="flex items-center space-x-1">
+            <RiTimerFlashFill className="text-base text-white" />
+            <span className="text-[9px] lg:text-xs text-white">
+              {secondsToHms(props.deal.seconds_before_expiration)} claim time
+            </span>
+          </div>
+        </div>
+
+        {dealValidationState === DealValidationState.valid ? (
+          <div className="flex items-center justify-end flex-1">
+            <button
+              onClick={handleRedeem}
+              className="px-3 py-1 text-sm font-bold rounded-lg bg-button"
+            >
+              Redeem
+            </button>
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 }

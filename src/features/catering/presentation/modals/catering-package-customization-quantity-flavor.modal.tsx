@@ -18,7 +18,6 @@ import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import { ShopMultiFlavorType } from "features/shop/presentation/pages/shop-product.page";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import NumberFormat from "react-number-format";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -32,6 +31,7 @@ import {
 import { ShopProductFlavor } from "features/shop/presentation/components";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { CustomizePackageProduct } from "../pages/catering-build-your-own-package.page";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 let quantityId: any;
 
@@ -55,7 +55,6 @@ export function CateringPackageCustomizationQuantityFlavorModal(
   const [quantity, setQuantity] = useState(1);
   const [setDisabled] = useState(true);
   const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [currentSize, setCurrentSize] = useState<string>("");
 
   const [currentMultiFlavors, setCurrentMultiFlavors] =
@@ -132,7 +131,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
       getSessionState.data?.userData === undefined
     ) {
       clearInterval(quantityId);
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
     } else {
       pressTimer(action);
     }
@@ -213,7 +212,7 @@ export function CateringPackageCustomizationQuantityFlavorModal(
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -297,238 +296,226 @@ export function CateringPackageCustomizationQuantityFlavorModal(
   }
 
   return (
-    <>
-      <div
-        style={{ display: props.open ? "flex" : "none" }}
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
-      >
-        <div className="bg-secondary px-3 py-[30px] round w-[90%] sm:w-[60%] lg:w-[40%] relative rounded-[10px] mt-10 mb-[150px]">
-          <button
-            className="absolute text-2xl text-white top-2 right-4 "
-            onClick={() => {
-              props.onClose();
-            }}
+    <div
+      style={{ display: props.open ? "flex" : "none" }}
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm no-scrollbar no-scrollbar::-webkit-scrollbar"
+    >
+      <div className="bg-secondary px-3 py-[30px] round w-[90%] sm:w-[60%] lg:w-[40%] relative rounded-[10px] mt-10 mb-[150px]">
+        <button
+          className="absolute text-2xl text-white top-2 right-4 "
+          onClick={() => {
+            props.onClose();
+          }}
+        >
+          <IoMdClose />
+        </button>
+
+        <section className="px-2 py-4 space-y-3">
+          <Swiper
+            slidesPerView={"auto"}
+            autoplay={{ delay: 5000 }}
+            modules={[Navigation, Autoplay]}
+            navigation
+            className="w-full"
           >
-            <IoMdClose />
-          </button>
+            {getProductDetailsState.data?.product_images.map((name) => (
+              <SwiperSlide>
+                <img
+                  src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
+                  className="rounded-[10px] w-full h-full object-cover"
+                  alt=""
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className="flex flex-col flex-1 py-2 space-y-1 text-white">
+            <h3 className="text-lg w-[90%] font-bold leading-4">
+              {getProductDetailsState.data?.product.name}
+            </h3>
 
-          <section className="px-2 py-4 space-y-3">
-            <Swiper
-              slidesPerView={"auto"}
-              autoplay={{ delay: 5000 }}
-              modules={[Navigation, Autoplay]}
-              navigation
-              className="w-full"
-            >
-              {getProductDetailsState.data?.product_images.map((name) => (
-                <SwiperSlide>
-                  <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
-                    className="rounded-[10px] w-full h-full object-cover"
-                    alt=""
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className="flex flex-col flex-1 py-2 space-y-1 text-white">
-              <h3 className="text-lg w-[90%] font-bold leading-4">
-                {getProductDetailsState.data?.product.name}
-              </h3>
+            {getProductDetailsState.data?.product.add_details ? (
+              <span
+                className="text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: getProductDetailsState.data?.product.add_details,
+                }}
+              />
+            ) : null}
+          </div>
 
-              {getProductDetailsState.data?.product.add_details ? (
-                <span
-                  className="text-sm"
-                  dangerouslySetInnerHTML={{
-                    __html: getProductDetailsState.data?.product.add_details,
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="mt-4 text-4xl text-white">
+              <NumberFormat
+                value={(
+                  getProductDetailsState.data.product.price * quantity
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+
+          <div>
+            <h2 className="font-['Bebas_Neue'] text-3xl text-white tracking-[2px]">
+              Quantity
+            </h2>
+
+            <div className="h-[50px] w-full mt-2">
+              <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
+                <button
+                  onClick={() =>
+                    quantity <= 1 || isQuantityNull.current
+                      ? setDisabled
+                      : handleOnClick()
+                  }
+                  onMouseDown={() =>
+                    quantity <= 1 ? setDisabled : handleOnMouseDown("minus")
+                  }
+                  onMouseUp={handleOnMouseUp}
+                  onTouchStart={() =>
+                    quantity <= 1 ? setDisabled : handleOnMouseDown("minus")
+                  }
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleOnMouseUp();
+                  }}
+                  className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                    quantity <= 1 || isQuantityNull.current
+                      ? "opacity-30 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  <AiOutlineMinus className="mx-8 text-xl " />
+                </button>
+
+                <input
+                  value={quantity}
+                  type="number"
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    isQuantityNull.current = false;
+
+                    if (
+                      getSessionState.data?.userData == null ||
+                      getSessionState.data?.userData === undefined
+                    ) {
+                      clearInterval(quantityId);
+                      dispatch(openLoginChooserModal({ required: false }));
+                    } else {
+                      if (isNaN(parseInt(value)) || value === "0") {
+                        isQuantityNull.current = true;
+                      }
+                      if (parseInt(value) >= 1000) {
+                        setQuantity(1000);
+                      } else if (parseInt(value) < 0) {
+                        setQuantity(1);
+                      } else {
+                        setQuantity(parseInt(value));
+                      }
+                    }
+                  }}
+                  min="1"
+                  max="1000"
+                  className="flex items-center w-full text-xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+                  name="custom-input-number"
+                />
+
+                <button
+                  onClick={() =>
+                    quantity >= 1000 ? setDisabled : handleOnClick()
+                  }
+                  onMouseDown={() =>
+                    quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
+                  }
+                  onMouseUp={handleOnMouseUp}
+                  onTouchStart={() =>
+                    quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
+                  }
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+
+                    handleOnMouseUp();
+                  }}
+                  className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                    quantity >= 1000 ? "opacity-30 cursor-not-allowed" : ""
+                  }`}
+                >
+                  <AiOutlinePlus className="mx-8 text-xl" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {getProductDetailsState.data?.product_size &&
+          getProductDetailsState.data?.product_size.length > 0 ? (
+            <div>
+              <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+                Choose Size
+              </h2>
+              <FormControl>
+                <RadioGroup
+                  value={currentSize}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    const sizeId = (event.target as HTMLInputElement).value;
+
+                    setCurrentSize(sizeId);
+                    handleSizeAndFlavorChange(sizeId);
+                  }}
+                >
+                  {getProductDetailsState.data?.product_size.map((size, i) => {
+                    return (
+                      <FormControlLabel
+                        key={i}
+                        value={size.id}
+                        control={
+                          <Radio color="tertiary" sx={{ color: "white" }} />
+                        }
+                        label={<span className="!text-white">{size.name}</span>}
+                      />
+                    );
+                  })}
+                </RadioGroup>
+              </FormControl>
+            </div>
+          ) : null}
+
+          {getProductDetailsState.data?.product_flavor.map((flavor, i) => (
+            <>
+              {getProductDetailsState.data ? (
+                <ShopProductFlavor
+                  key={i}
+                  numberOfFlavors={
+                    getProductDetailsState.data.product.num_flavor
+                  }
+                  productQuantity={quantity}
+                  currentMultiFlavor={currentMultiFlavors[i]}
+                  flavor={flavor}
+                  onChangeMultiFlavor={(updatedMultiFlavors) => {
+                    const updateCurrentMultiFlavor = {
+                      ...currentMultiFlavors,
+                    };
+
+                    updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                    setCurrentMultiFlavors(updateCurrentMultiFlavor);
                   }}
                 />
               ) : null}
-            </div>
+            </>
+          ))}
 
-            {getProductDetailsState.data?.product.price ? (
-              <h2 className="mt-4 text-4xl text-white">
-                <NumberFormat
-                  value={(
-                    getProductDetailsState.data.product.price * quantity
-                  ).toFixed(2)}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={"₱"}
-                />
-              </h2>
-            ) : null}
-
-            <div>
-              <h2 className="font-['Bebas_Neue'] text-3xl text-white tracking-[2px]">
-                Quantity
-              </h2>
-
-              <div className="h-[50px] w-full mt-2">
-                <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-                  <button
-                    onClick={() =>
-                      quantity <= 1 || isQuantityNull.current
-                        ? setDisabled
-                        : handleOnClick()
-                    }
-                    onMouseDown={() =>
-                      quantity <= 1 ? setDisabled : handleOnMouseDown("minus")
-                    }
-                    onMouseUp={handleOnMouseUp}
-                    onTouchStart={() =>
-                      quantity <= 1 ? setDisabled : handleOnMouseDown("minus")
-                    }
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      handleOnMouseUp();
-                    }}
-                    className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                      quantity <= 1 || isQuantityNull.current
-                        ? "opacity-30 cursor-not-allowed"
-                        : ""
-                    }`}
-                  >
-                    <AiOutlineMinus className="mx-8 text-xl " />
-                  </button>
-
-                  <input
-                    value={quantity}
-                    type="number"
-                    onChange={(e) => {
-                      let value = e.target.value;
-                      isQuantityNull.current = false;
-
-                      if (
-                        getSessionState.data?.userData == null ||
-                        getSessionState.data?.userData === undefined
-                      ) {
-                        clearInterval(quantityId);
-                        setOpenLoginChooserModal(true);
-                      } else {
-                        if (isNaN(parseInt(value)) || value === "0") {
-                          isQuantityNull.current = true;
-                        }
-                        if (parseInt(value) >= 1000) {
-                          setQuantity(1000);
-                        } else if (parseInt(value) < 0) {
-                          setQuantity(1);
-                        } else {
-                          setQuantity(parseInt(value));
-                        }
-                      }
-                    }}
-                    min="1"
-                    max="1000"
-                    className="flex items-center w-full text-xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-                    name="custom-input-number"
-                  />
-
-                  <button
-                    onClick={() =>
-                      quantity >= 1000 ? setDisabled : handleOnClick()
-                    }
-                    onMouseDown={() =>
-                      quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
-                    }
-                    onMouseUp={handleOnMouseUp}
-                    onTouchStart={() =>
-                      quantity >= 1000 ? setDisabled : handleOnMouseDown("add")
-                    }
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-
-                      handleOnMouseUp();
-                    }}
-                    className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                      quantity >= 1000 ? "opacity-30 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    <AiOutlinePlus className="mx-8 text-xl" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {getProductDetailsState.data?.product_size &&
-            getProductDetailsState.data?.product_size.length > 0 ? (
-              <div>
-                <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                  Choose Size
-                </h2>
-                <FormControl>
-                  <RadioGroup
-                    value={currentSize}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                      const sizeId = (event.target as HTMLInputElement).value;
-
-                      setCurrentSize(sizeId);
-                      handleSizeAndFlavorChange(sizeId);
-                    }}
-                  >
-                    {getProductDetailsState.data?.product_size.map(
-                      (size, i) => {
-                        return (
-                          <FormControlLabel
-                            key={i}
-                            value={size.id}
-                            control={
-                              <Radio color="tertiary" sx={{ color: "white" }} />
-                            }
-                            label={
-                              <span className="!text-white">{size.name}</span>
-                            }
-                          />
-                        );
-                      }
-                    )}
-                  </RadioGroup>
-                </FormControl>
-              </div>
-            ) : null}
-
-            {getProductDetailsState.data?.product_flavor.map((flavor, i) => (
-              <>
-                {getProductDetailsState.data ? (
-                  <ShopProductFlavor
-                    key={i}
-                    numberOfFlavors={
-                      getProductDetailsState.data.product.num_flavor
-                    }
-                    productQuantity={quantity}
-                    currentMultiFlavor={currentMultiFlavors[i]}
-                    flavor={flavor}
-                    onChangeMultiFlavor={(updatedMultiFlavors) => {
-                      const updateCurrentMultiFlavor = {
-                        ...currentMultiFlavors,
-                      };
-
-                      updateCurrentMultiFlavor[i] = updatedMultiFlavors;
-
-                      setCurrentMultiFlavors(updateCurrentMultiFlavor);
-                    }}
-                  />
-                ) : null}
-              </>
-            ))}
-
-            <button
-              onClick={handleAddProductToPackage}
-              className="text-white !mt-8 text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-            >
-              <BsFillCartPlusFill className="text-3xl" />
-              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                Add product
-              </span>
-            </button>
-          </section>
-        </div>
+          <button
+            onClick={handleAddProductToPackage}
+            className="text-white !mt-8 text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
+          >
+            <BsFillCartPlusFill className="text-3xl" />
+            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+              Add product
+            </span>
+          </button>
+        </section>
       </div>
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-    </>
+    </div>
   );
 }
