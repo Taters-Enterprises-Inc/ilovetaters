@@ -37,8 +37,10 @@ import {
   selectUpdateStoreCateringProduct,
   updateStoreCateringProduct,
 } from "../slices/update-store-catering-product.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
@@ -482,6 +484,17 @@ export function AdminAvailabilityCatersProducts() {
                   {getAdminStoreCateringProductsState.data.products.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                            }}
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div

@@ -258,6 +258,10 @@ export function AdminSettingStores() {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${row.store_image}`}
                           alt="Taters Store"
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                          }}
                           className="rounded-[10px] w-[75px] h-[75px]"
                         />
                       </DataTableCell>

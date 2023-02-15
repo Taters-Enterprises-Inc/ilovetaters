@@ -1,7 +1,10 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import {
+  selectStoreReset,
+  storeReset,
+} from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useState } from "react";
 import { FaSearchLocation } from "react-icons/fa";
 import {
@@ -26,13 +29,14 @@ import { MaterialDateTimeInput } from "features/shared/presentation/components";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
-  const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
 
   const setCateringStoreAndAddressState = useAppSelector(
     selectSetCateringStoreAndAddress
   );
+  const cateringHomePageState = useAppSelector(selectCateringHomePage);
+  const storeResetState = useAppSelector(selectStoreReset);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,6 +60,10 @@ export function CateringHome() {
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getSession());
+  }, [storeResetState]);
 
   const disableDates = (date: Date) => {
     return moment(date) <= moment().add(13, "days");
@@ -212,7 +220,7 @@ export function CateringHome() {
               );
             }}
           />
-          <div className="space-y-4 lg:space-y-0 lg:space-x-4 flex flex-col sm:flex-row">
+          <div className="flex flex-col space-y-4 lg:space-y-0 lg:space-x-4 sm:flex-row">
             <MaterialDateTimeInput
               label="Select Event Start Date"
               colorTheme="white"

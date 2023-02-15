@@ -46,19 +46,15 @@ export function BranchesCard(props: BranchesCardProps) {
           </div>
         ) : null}
       </div>
-      {props.store.store_image ? (
-        <img
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${props.store.store_image}`}
-          alt=""
-          className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
-        />
-      ) : (
-        <img
-          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-          alt=""
-          className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
-        />
-      )}
+      <img
+        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${props.store.store_image}`}
+        alt=""
+        className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null;
+          currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+        }}
+      />
       <div
         className={`transition-all cursor-pointer flex border-b border-[#7b7982] w-full pb-2`}
       >

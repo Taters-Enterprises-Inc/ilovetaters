@@ -2,7 +2,10 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 import { useEffect } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
+import {
+  selectStoreReset,
+  storeReset,
+} from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
 import {
   selectShopHomePage,
@@ -10,10 +13,16 @@ import {
 } from "../slices/shop-home-page.slice";
 import { ShopHeroCarousel } from "../carousels";
 import { useLocation } from "react-router-dom";
+import { getSession } from "features/shared/presentation/slices/get-session.slice";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
   const shopHomePageState = useAppSelector(selectShopHomePage);
+  const storeResetState = useAppSelector(selectStoreReset);
+
+  useEffect(() => {
+    dispatch(getSession());
+  }, [storeResetState]);
 
   useEffect(() => {
     dispatch(storeReset());

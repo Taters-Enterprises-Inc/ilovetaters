@@ -136,19 +136,16 @@ export function StoreVisitStoreCluster(props: StoreVisitStoreClusterProps) {
                     ) : null}
                     <div className="text-sm uppercase ">{store.menu_name}</div>
 
-                    {store.store_image ? (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                        alt=""
-                        className="w-full"
-                      />
-                    ) : (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                        alt=""
-                        className="w-full"
-                      />
-                    )}
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+                      alt=""
+                      className="w-full"
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                      }}
+                    />
+
                     <div className="px-3 py-2">
                       <h1 className="mb-1 text-xs">{store.store_name}</h1>
                       <p className="text-[7px]">{store.store_address}</p>

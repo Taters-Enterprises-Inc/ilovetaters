@@ -76,19 +76,15 @@ export function CateringStoreCluster(props: StoreListProps) {
                         </div>
                       </div>
                     ) : null}
-                    {store.store_image ? (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                        alt=""
-                        className="w-full sm::w-[250px] sm::h-[250px] object-fit"
-                      />
-                    ) : (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                        alt=""
-                        className="w-full sm::w-[250px] sm::h-[250px] object-fit"
-                      />
-                    )}
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+                      alt=""
+                      className="w-full sm::w-[250px] sm::h-[250px] object-fit"
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                      }}
+                    />
                     <div className="p-4 space-y-2">
                       <h1 className="mb-1 text-sm font-bold leading-5">
                         {store.store_name}
