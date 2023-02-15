@@ -58,7 +58,7 @@ export function InboxViewerModal(props: InboxViewerModalProps) {
               />
 
               <div className="absolute bottom-[39%] z-10 left-[0px] w-[100%] h-[35%] flex items-center justify-center">
-                <span className="font-bold text-[2.5rem] sm:text-[5rem] text-secondary ">
+                <span className="font-bold text-[2rem] sm:text-[4rem] text-secondary ">
                   {props.inbox?.image_title}
                 </span>
               </div>
