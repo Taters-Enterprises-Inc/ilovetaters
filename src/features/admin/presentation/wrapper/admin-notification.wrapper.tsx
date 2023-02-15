@@ -15,6 +15,7 @@ import { pusher } from "features/shared/constants";
 import { getAdminNotifications } from "features/admin/presentation/slices/get-admin-notifications.slice";
 import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-shop-order.slice";
 import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
+import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -161,7 +162,7 @@ export function AdminNotificationWrapper() {
         )
       ) {
         toast("🦄 " + data.message);
-        dispatch(getAdminShopOrders(""));
+        dispatch(getAdminSurveyVerifications(""));
         dispatch(getAdminNotifications());
       }
     });

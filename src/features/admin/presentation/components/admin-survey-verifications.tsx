@@ -27,10 +27,7 @@ import {
 } from "../slices/get-admin-survey-verifications.slice";
 import { selectAdminSurveyVerificationChangeStatus } from "../slices/admin-survey-verification-change-status.slice";
 import { AdminChipsButton } from "./chips-button";
-import {
-  getAdminNotifications,
-  selectGetAdminNotifications,
-} from "../slices/get-admin-notifications.slice";
+import { selectGetAdminNotifications } from "../slices/get-admin-notifications.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
 import {
   selectUpdateAdminNotificationDateSeen,

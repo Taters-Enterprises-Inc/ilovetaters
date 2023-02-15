@@ -47,6 +47,29 @@ export function UserNotificationWrapper() {
   });
 
   useEffect(() => {
+    pusher.unsubscribe("user-inbox");
+    const inboxChannel = pusher.subscribe("user-inbox");
+
+    inboxChannel.bind(
+      "inbox-feedback-complete",
+      (data: {
+        fb_user_id?: number;
+        mobile_user_id?: number;
+        message: string;
+      }) => {
+        if (
+          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
+        ) {
+          showAlert(setSuccessAlert, data.message);
+
+          dispatch(getNotifications());
+        }
+      }
+    );
+  }, [getSessionState, dispatch]);
+
+  useEffect(() => {
     if (
       getCateringOrdersState.status === GetCateringOrdersState.success &&
       getCateringOrdersState.data
@@ -112,7 +135,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
-  }, [getCateringOrdersState]);
+  }, [getCateringOrdersState, getSessionState, dispatch]);
 
   useEffect(() => {
     if (
@@ -178,7 +201,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
-  }, [getOrdersState]);
+  }, [getOrdersState, getSessionState, dispatch]);
 
   useEffect(() => {
     if (getDealState.status === GetDealState.success && getDealState.data) {
