@@ -29,7 +29,7 @@ export function SurveyRating(props: SurveyRatingProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center py-4 space-y-2 md:items-start">
+    <div className="flex flex-col items-center justify-center py-4 space-y-4 ">
       <div className="flex flex-col ">
         <span className="text-sm font-bold text-center text-secondary">
           {props.rating.name}

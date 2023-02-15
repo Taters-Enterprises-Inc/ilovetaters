@@ -55,6 +55,10 @@ export function SurveyCatering() {
   const getSessionState = useAppSelector(selectGetSession);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [surveySection]);
+
+  useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
@@ -134,6 +138,10 @@ export function SurveyCatering() {
                 survey. We value your time and effort in completing this
                 endeavor.
               </p>
+
+              <div className='text-4xl font-bold text-center text-secondary font-["Bebas_Neue"]'>
+                {getSurveyState.data[surveySection].section_name}
+              </div>
 
               {getSurveyState.data[surveySection].surveys.map((survey) => (
                 <div className="pb-4">
@@ -280,7 +288,7 @@ export function SurveyCatering() {
                       </>
                     )}
                     {survey.ratings.length > 0 ? (
-                      <div className="flex flex-col w-full space-x-0 space-y-8 md:space-x-16 md:space-y-0 md:flex-row">
+                      <div className="flex flex-col w-full space-y-8 sm:items-start sm:justify-start ">
                         {survey.ratings.map((rating, i) => (
                           <SurveyRating
                             key={i}

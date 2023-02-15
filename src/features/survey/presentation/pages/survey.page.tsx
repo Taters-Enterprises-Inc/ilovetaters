@@ -86,6 +86,10 @@ export function Survey() {
   }, [dispatch]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [surveySection]);
+
+  useEffect(() => {
     if (
       insertCustomerSurveyResponseState.status ===
       InsertCustomerSurveyResponseState.success
@@ -210,6 +214,9 @@ export function Survey() {
                   </div>
                 ) : null}
 
+                <div className='text-4xl font-bold text-center text-secondary font-["Bebas_Neue"]'>
+                  {getSurveyState.data[surveySection].section_name}
+                </div>
                 {getSurveyState.data[surveySection].surveys.map((survey) => (
                   <div className="pb-4">
                     <span className="text-xl font-bold text-secondary">
@@ -359,7 +366,7 @@ export function Survey() {
                         </>
                       )}
                       {survey.ratings.length > 0 ? (
-                        <div className="flex flex-col w-full space-x-0 space-y-8 md:space-x-16 md:space-y-0 md:flex-row">
+                        <div className="flex flex-col w-full space-y-8 sm:items-center sm:justify-center ">
                           {survey.ratings.map((rating, i) => (
                             <SurveyRating
                               key={i}
