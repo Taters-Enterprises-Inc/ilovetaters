@@ -22,6 +22,7 @@ export function Shop() {
 
       <HeaderNav
         activeUrl="SNACKSHOP"
+        homePageUrl="/delivery"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

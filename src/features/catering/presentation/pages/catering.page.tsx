@@ -12,6 +12,7 @@ export function Catering() {
 
       <HeaderNav
         activeUrl="CATERING"
+        homePageUrl="/shop"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

@@ -19,6 +19,7 @@ export function SeeMeSnackshop() {
     <main className="bg-primary">
       <HeaderNav
         activeUrl="SEE_ME"
+        homePageUrl="/see_me"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

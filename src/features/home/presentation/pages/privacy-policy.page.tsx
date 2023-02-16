@@ -18,6 +18,7 @@ export function PrivacyPolicy() {
     <main className="min-h-screen bg-paper pb-36">
       <HeaderNav
         activeUrl="HOME"
+        homePageUrl="/privacy-policy"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

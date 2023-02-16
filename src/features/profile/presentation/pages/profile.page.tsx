@@ -12,6 +12,7 @@ export function Profile() {
 
       <HeaderNav
         activeUrl="PROFILE"
+        homePageUrl="/profile"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

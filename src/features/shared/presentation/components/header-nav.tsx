@@ -61,6 +61,7 @@ export type ActiveUrl =
 
 interface HeaderNavProps {
   className?: string;
+  homePageUrl: string;
   activeUrl: ActiveUrl;
   logoProps: {
     src: string;
@@ -260,7 +261,7 @@ export function HeaderNav(props: HeaderNavProps) {
           <nav
             className={`flex justify-between items-center container py-2 h-[64px]`}
           >
-            <Link to={"/"}>
+            <Link to={props.homePageUrl}>
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
 

@@ -25,6 +25,7 @@ export function Home() {
       <main className="min-h-screen bg-primary">
         <HeaderNav
           activeUrl="HOME"
+          homePageUrl="/"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +

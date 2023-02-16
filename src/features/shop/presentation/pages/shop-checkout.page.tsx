@@ -610,6 +610,7 @@ export function ShopCheckout() {
                     <Link
                       to="/delivery/terms-and-conditions"
                       className="text-primary"
+                      target="_blank"
                     >
                       Terms & Conditions
                     </Link>
