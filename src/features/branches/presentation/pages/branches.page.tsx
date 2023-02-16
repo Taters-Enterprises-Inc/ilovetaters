@@ -17,6 +17,7 @@ export function Branches() {
     <>
       <HeaderNav
         activeUrl="BRANCHES"
+        homePageUrl="/branches"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

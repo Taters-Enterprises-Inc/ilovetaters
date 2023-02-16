@@ -121,7 +121,7 @@ export function PopClubHome() {
         </div>
 
         <div className="overflow-y-auto w-full hide-scrollbar font-['Bebas_Neue'] mb-[13px] mt-[4px] sm:mt-[10px] md:mt-[23px] lg:mt-[10px]">
-          <ul className="flex items-start justify-start space-x-6 mt-2 w-[600px] lg:w-full">
+          <ul className="flex items-start justify-start space-x-6 mt-2 w-[800px] lg:w-full">
             <Link
               to={`?category=all`}
               className="flex items-center justify-center space-x-1 text-lg tracking-[3px] text-gray-500 lg:px-2 font-semi-bold "

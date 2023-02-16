@@ -67,7 +67,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
 import { ShopProductFlavor } from "../components";
 import ReactGA from "react-ga";
-import { ShopDeal } from "../components/shop-deal";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
@@ -94,7 +93,6 @@ export function ShopProduct() {
   const location = useLocation();
 
   const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
-  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
   const [setDisabled] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [currentSize, setCurrentSize] = useState<string>("");
@@ -126,12 +124,6 @@ export function ShopProduct() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
-
-  useEffect(() => {
-    if (resetMultiFlavors === true) {
-      setResetMultiFlavors(false);
-    }
-  }, [resetMultiFlavors]);
 
   useEffect(() => {
     if (forfeitRedeemState.status === ForfeitRedeemState.success) {
@@ -167,6 +159,9 @@ export function ShopProduct() {
         action: "Add to cart item",
       });
       dispatch(getSession());
+      setQuantity(1);
+      setCurrentSize("");
+      setCurrentMultiFlavors({});
     }
   }, [addToCartShopState, dispatch]);
 
@@ -196,6 +191,17 @@ export function ShopProduct() {
       setCurrentSize(getProductDetailsState.data.product_size[0].id.toString());
     }
   }, [getProductDetailsState, currentSize, hash]);
+
+  useEffect(() => {
+    if (currentSize !== "") {
+      dispatch(
+        getProductSku({
+          prod_flavor: "",
+          prod_size: currentSize,
+        })
+      );
+    }
+  }, [currentSize, dispatch]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
@@ -232,7 +238,6 @@ export function ShopProduct() {
         getProductDetailsState.data?.product.num_flavor > 0
       ) {
         setCurrentMultiFlavors({});
-        setResetMultiFlavors(true);
       }
     }
   }
@@ -468,17 +473,6 @@ export function ShopProduct() {
           prod_sku_id: -1,
           prod_sku: -1,
           prod_type: "main",
-        })
-      );
-    }
-  };
-
-  const handleSizeAndFlavorChange = (size: string) => {
-    if (getProductDetailsState.data) {
-      dispatch(
-        getProductSku({
-          prod_flavor: "",
-          prod_size: size,
         })
       );
     }
@@ -836,7 +830,6 @@ export function ShopProduct() {
                             .value;
 
                           setCurrentSize(sizeId);
-                          handleSizeAndFlavorChange(sizeId);
                         }}
                       >
                         {getProductDetailsState.data?.product_size.map(

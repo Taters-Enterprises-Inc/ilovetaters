@@ -19,6 +19,7 @@ export function SeeMeCatering() {
     <main className="bg-primary">
       <HeaderNav
         activeUrl="SEE_ME"
+        homePageUrl="/see_me/catering"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

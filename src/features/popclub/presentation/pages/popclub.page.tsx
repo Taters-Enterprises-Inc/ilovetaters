@@ -12,6 +12,7 @@ export function PopClub() {
 
       <HeaderNav
         activeUrl="POPCLUB"
+        homePageUrl="/popclub"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +

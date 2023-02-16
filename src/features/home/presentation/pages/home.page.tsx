@@ -7,7 +7,6 @@ import {
 } from "features/shared/constants";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch } from "features/config/hooks";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { Helmet } from "react-helmet";
 
@@ -31,6 +30,7 @@ export function Home() {
       <main className="min-h-screen bg-primary">
         <HeaderNav
           activeUrl="HOME"
+          homePageUrl="/"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +

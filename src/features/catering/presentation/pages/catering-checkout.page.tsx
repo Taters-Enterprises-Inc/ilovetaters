@@ -555,7 +555,8 @@ export function CateringCheckout() {
                     />
                   </RadioGroup>
                 </FormControl>
-                <div className="mt-4 text-secondary lg:mt-0">
+
+                <div className="hidden mt-4 text-secondary lg:mt-0 lg:block">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
@@ -703,6 +704,30 @@ export function CateringCheckout() {
                         </button>
                       </div>
                     ))}
+                  </div>
+
+                  <hr className="mt-1 mb-2 border-secondary lg:hidden" />
+
+                  <div className="mt-4 text-secondary lg:mt-0 lg:hidden">
+                    <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+                      Choose payment method
+                    </h2>
+                    <PaymentMethod
+                      onChange={(payment) => {
+                        if (
+                          getSessionState.data &&
+                          getSessionState.data.cash_delivery &&
+                          payment === "3"
+                        ) {
+                          setCashOnDelivery(
+                            parseInt(getSessionState.data.cash_delivery)
+                          );
+                        } else {
+                          setCashOnDelivery(undefined);
+                        }
+                      }}
+                    />
+                    {/* <CateringPaymentAccordion /> */}
                   </div>
 
                   <hr className="mt-1 mb-2 border-secondary" />
