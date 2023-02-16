@@ -34,6 +34,7 @@ export function SurveyComplete() {
       <main className="min-h-screen bg-paper">
         <HeaderNav
           activeUrl="HOME"
+          homePageUrl="/"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +
@@ -48,19 +49,17 @@ export function SurveyComplete() {
             Taters CUSTOMER SATISFACTION SURVEY
           </h1>
 
-          <div className="py-2 space-y-4 lg:flex-w-full lg:max-w bg-paper ">
-            <section className="text-lg text-secondary bg-paper">
-              <p>
-                <strong>
-                  We appreciate your feedback and looking forward to serve you
-                  again soon.
-                </strong>
-              </p>
-              <p className="text-lg text-secondary bg-paper">
-                We are also encouraging you to visit our website for more
-                information about our deals and information
-              </p>
-            </section>
+          <div className="text-lg space-y-4 sm:space-y-0 py-2 text-secondary bg-paper">
+            <p>
+              <strong>
+                We appreciate your feedback and looking forward to serve you
+                again soon.
+              </strong>
+            </p>
+            <p className="text-lg text-secondary bg-paper">
+              We are also encouraging you to visit our website for more
+              information about our deals and information.
+            </p>
           </div>
 
           <h1 className='text-secondary text-4xl mt-4 font-["Bebas_Neue"]'>

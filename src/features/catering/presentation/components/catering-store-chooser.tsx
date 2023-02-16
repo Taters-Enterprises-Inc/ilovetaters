@@ -61,23 +61,11 @@ export function CateringStoreChooser() {
   const getCateringPackageDetailsState = useAppSelector(
     selectGetCateringPackageDetails
   );
-
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
-
-  useEffect(() => {
-    if (
-      setCateringPackageStoreAndAddressState.status ===
-      SetCateringPackageStoreAndAddressState.success
-    ) {
-      dispatch(getSession());
-      document.body.classList.remove("overflow-hidden");
-    }
-  }, [setCateringPackageStoreAndAddressState, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(storeReset());
@@ -183,89 +171,78 @@ export function CateringStoreChooser() {
 
         <div className="space-y-4">
           <div className="flex justify-center">
-            <label className="pure-material-textfield-outlined w-[100%]">
-              <MaterialInputAddress
-                geolocate={true}
-                colorTheme="white"
-                value={
-                  cateringHomePageState.address
-                    ? cateringHomePageState.address
-                    : ""
+            <MaterialInputAddress
+              geolocate={true}
+              colorTheme="white"
+              value={
+                cateringHomePageState.address
+                  ? cateringHomePageState.address
+                  : ""
+              }
+              onDenied={() => {
+                if (getCateringPackageDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableCateringModal({
+                      address: null,
+                      service: "CATERING",
+                      hash: getCateringPackageDetailsState.data.product
+                        .product_hash,
+                    })
+                  );
                 }
-                onDenied={() => {
-                  if (
-                    getCateringPackageDetailsState.data?.product.product_hash
-                  ) {
-                    dispatch(
-                      getStoresAvailableCateringModal({
-                        address: null,
-                        service: "CATERING",
-                        hash: getCateringPackageDetailsState.data.product
-                          .product_hash,
-                      })
-                    );
-                  }
-                }}
-                onPrompt={() => {
-                  if (
-                    getCateringPackageDetailsState.data?.product.product_hash
-                  ) {
-                    dispatch(
-                      getStoresAvailableCateringModal({
-                        address: null,
-                        service: "CATERING",
-                        hash: getCateringPackageDetailsState.data.product
-                          .product_hash,
-                      })
-                    );
-                  }
-                }}
-                onLocateCurrentAddress={(location) => {
-                  if (
-                    getCateringPackageDetailsState.data?.product.product_hash
-                  ) {
-                    dispatch(
-                      setAddressCateringHomePage({
-                        address: location.formattedAddress,
-                      })
-                    );
-                    dispatch(
-                      getStoresAvailableCateringModal({
-                        address: location.formattedAddress,
-                        service: "CATERING",
+              }}
+              onPrompt={() => {
+                if (getCateringPackageDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    getStoresAvailableCateringModal({
+                      address: null,
+                      service: "CATERING",
+                      hash: getCateringPackageDetailsState.data.product
+                        .product_hash,
+                    })
+                  );
+                }
+              }}
+              onLocateCurrentAddress={(location) => {
+                if (getCateringPackageDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    setAddressCateringHomePage({
+                      address: location.formattedAddress,
+                    })
+                  );
+                  dispatch(
+                    getStoresAvailableCateringModal({
+                      address: location.formattedAddress,
+                      service: "CATERING",
 
-                        hash: getCateringPackageDetailsState.data.product
-                          .product_hash,
-                      })
-                    );
-                  }
-                }}
-                onChange={(value: string) => {
-                  dispatch(setAddressCateringHomePage({ address: value }));
-                }}
-                onPlaceSelected={(location) => {
-                  if (
-                    getCateringPackageDetailsState.data?.product.product_hash
-                  ) {
-                    dispatch(
-                      setAddressCateringHomePage({
-                        address: location.formattedAddress,
-                      })
-                    );
-                    dispatch(
-                      getStoresAvailableCateringModal({
-                        address: location.formattedAddress,
-                        service: "CATERING",
+                      hash: getCateringPackageDetailsState.data.product
+                        .product_hash,
+                    })
+                  );
+                }
+              }}
+              onChange={(value: string) => {
+                dispatch(setAddressCateringHomePage({ address: value }));
+              }}
+              onPlaceSelected={(location) => {
+                if (getCateringPackageDetailsState.data?.product.product_hash) {
+                  dispatch(
+                    setAddressCateringHomePage({
+                      address: location.formattedAddress,
+                    })
+                  );
+                  dispatch(
+                    getStoresAvailableCateringModal({
+                      address: location.formattedAddress,
+                      service: "CATERING",
 
-                        hash: getCateringPackageDetailsState.data.product
-                          .product_hash,
-                      })
-                    );
-                  }
-                }}
-              />
-              <span>Search Address</span>
-            </label>
+                      hash: getCateringPackageDetailsState.data.product
+                        .product_hash,
+                    })
+                  );
+                }
+              }}
+            />
           </div>
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -85,8 +85,6 @@ export function AdminSurveyVerificationIDInformation(
               <strong>Order Number :</strong>{" "}
               <span className="font-semibold">
                 {getAdminSurveyVerificationState.data?.invoice_no}
-                {getAdminSurveyVerificationState.data?.snackshop_tracking_no}
-                {getAdminSurveyVerificationState.data?.catering_tracking_no}
               </span>
             </div>
             <div>

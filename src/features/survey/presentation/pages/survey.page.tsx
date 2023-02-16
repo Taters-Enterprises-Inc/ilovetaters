@@ -144,6 +144,7 @@ export function Survey() {
       <main className="min-h-screen bg-paper">
         <HeaderNav
           activeUrl="HOME"
+          homePageUrl="/"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +

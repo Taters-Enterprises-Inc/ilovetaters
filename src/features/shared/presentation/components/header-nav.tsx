@@ -119,6 +119,7 @@ export function HeaderNav(props: HeaderNavProps) {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
+      getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
       setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
