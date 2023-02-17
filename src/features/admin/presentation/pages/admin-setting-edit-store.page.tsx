@@ -47,6 +47,7 @@ import {
   selectEditAdminSettingStore,
 } from "../slices/edit-admin-setting-store.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 export function AdminSettingEditStore() {
   const dispatch = useAppDispatch();
@@ -119,6 +120,7 @@ export function AdminSettingEditStore() {
   const editAdminSettingStoreState = useAppSelector(
     selectEditAdminSettingStore
   );
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
     dispatch(getAdminStoreMenus());
@@ -250,26 +252,29 @@ export function AdminSettingEditStore() {
       <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
         <div className="flex space-x-4">
           <div className="flex-1 space-y-3">
-            <MaterialInputAutoComplete
-              label="Select Services"
-              colorTheme="black"
-              multiple
-              options={[
-                "Snackshop",
-                "Catering",
-                "PopClub Store Visit",
-                "PopClub Online Delivery",
-              ]}
-              getOptionLabel={(option) => option}
-              value={formState.services ? [...formState.services] : []}
-              onChange={(e, services) => {
-                setFormState({
-                  ...formState,
-                  services,
-                });
-              }}
-              filterSelectedOptions
-            />
+            {getAdminSessionState.data?.admin.is_admin ||
+            getAdminSessionState.data?.admin.is_csr_admin ? (
+              <MaterialInputAutoComplete
+                label="Select Services"
+                colorTheme="black"
+                multiple
+                options={[
+                  "Snackshop",
+                  "Catering",
+                  "PopClub Store Visit",
+                  "PopClub Online Delivery",
+                ]}
+                getOptionLabel={(option) => option}
+                value={formState.services ? [...formState.services] : []}
+                onChange={(e, services) => {
+                  setFormState({
+                    ...formState,
+                    services,
+                  });
+                }}
+                filterSelectedOptions
+              />
+            ) : null}
             <div className="grid grid-cols-3 gap-4">
               <MaterialInput
                 colorTheme="black"

@@ -350,7 +350,7 @@ root.render(
                             <Route path="faq">
                               <Route index element={<AdminFaq />} />
                               <Route path="store" element={<AdminFaq />} />
-                              <Route path="" element={<AdminCFaq />} />
+                              <Route path="customer" element={<AdminCFaq />} />
                             </Route>
                             <Route path="availability">
                               <Route path="shop">

@@ -44,20 +44,6 @@ export function AdminSettingStores() {
     { id: "action", label: "" },
   ];
 
-  if (
-    !getAdminSessionState.data?.admin.is_admin &&
-    !getAdminSessionState.data?.admin.is_csr_admin
-  ) {
-    columns = columns.filter(
-      (column) =>
-        column.id !== "snackshop" &&
-        column.id !== "catering" &&
-        column.id !== "popclub-walk-in" &&
-        column.id !== "popclub-online-delivery" &&
-        column.id !== "branches"
-    );
-  }
-
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -76,17 +62,20 @@ export function AdminSettingStores() {
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           List of Stores
         </span>
-        <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
-          <div>
-            <Link
-              to="create-store"
-              className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
-            >
-              <AiFillFolderAdd size={20} />
-              <span>&nbsp;&nbsp;Create a new Store</span>
-            </Link>
+        {getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin ? (
+          <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
+            <div>
+              <Link
+                to="create-store"
+                className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
+              >
+                <AiFillFolderAdd size={20} />
+                <span>&nbsp;&nbsp;Create a new Store</span>
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
       {getAdminSettingStoresState.data?.stores ? (
         <>
