@@ -137,12 +137,12 @@ export function StoreVisitStoreCluster(props: StoreVisitStoreClusterProps) {
                     <div className="text-sm uppercase ">{store.menu_name}</div>
 
                     <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                      alt=""
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${store.store_image}`}
+                      alt={store.store_name}
                       className="w-full"
                       onError={({ currentTarget }) => {
                         currentTarget.onerror = null;
-                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
                       }}
                     />
 
@@ -218,19 +218,16 @@ export function StoreVisitStoreCluster(props: StoreVisitStoreClusterProps) {
                           {store.menu_name}
                         </div>
 
-                        {store.store_image ? (
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                            alt=""
-                            className="w-full"
-                          />
-                        ) : (
-                          <img
-                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                            alt=""
-                            className="w-full"
-                          />
-                        )}
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${store.store_image}`}
+                          className="w-full"
+                          alt={store.store_name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
+                        />
+
                         <div className="p-4 space-y-2">
                           <h1 className="mb-1 text-sm font-bold leading-5">
                             {store.store_name}

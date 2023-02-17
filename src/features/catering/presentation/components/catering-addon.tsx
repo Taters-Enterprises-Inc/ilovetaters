@@ -53,7 +53,11 @@ export function CateringAddon(props: AddonProps) {
         <img
           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${props.product.product_image}`}
           className="rounded-[10px] w-[100px] h-[100px]"
-          alt=""
+          alt={props.product.name}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+          }}
         />
         <div className="p-2 space-y-2">
           <h4 className="font-['Bebas_Neue'] text-lg tracking-[2px] leading-5">

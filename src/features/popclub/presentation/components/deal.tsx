@@ -259,9 +259,13 @@ export function Deal(props: DealProps) {
           </div>
         ) : null}
         <img
-          alt="..."
           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${props.deal.product_image}`}
           className="card-clickable h-[200px] lg:h-[350px] object-cover"
+          alt={props.deal.name}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+          }}
         />
 
         <div className="px-3 pt-4 pb-3 ">

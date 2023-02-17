@@ -53,7 +53,11 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
-                    alt=""
+                    alt={product.name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
                     <h2 className="text-sm leading-4 text-white">
@@ -120,7 +124,11 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
-                    alt=""
+                    alt={product.name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
                     <h2 className="text-sm leading-4 text-white">
@@ -180,7 +188,11 @@ export function ShopProductsCarousel(props: ShopProductsCarouselProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
-                    alt=""
+                    alt={product.name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
                     <h2 className="text-sm leading-4 text-white">

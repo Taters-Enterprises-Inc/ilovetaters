@@ -101,7 +101,11 @@ export function CateringSignedContractVerified() {
                 <img
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.product_image}`}
                   className="rounded-[10px] w-[92px] h-[92px]"
-                  alt=""
+                  alt={order.name}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                  }}
                 />
                 <div className="flex flex-col flex-1 px-3 py-2 text-white">
                   <h3 className="text-sm w-[90%]">{order.name}</h3>

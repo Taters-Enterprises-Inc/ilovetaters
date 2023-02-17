@@ -280,7 +280,7 @@ export function AdminSettingShopProducts() {
                             className="rounded-[10px] w-[75px] h-[75px]"
                             onError={({ currentTarget }) => {
                               currentTarget.onerror = null;
-                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
                             }}
                           />
                         </DataTableCell>

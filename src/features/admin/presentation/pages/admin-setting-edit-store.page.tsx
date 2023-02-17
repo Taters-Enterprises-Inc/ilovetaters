@@ -169,7 +169,7 @@ export function AdminSettingEditStore() {
         locale: getAdminSettingStoreState.data.locale,
         region:
           getAdminSettingStoreState.data.region_store_combination_tb_id.toString(),
-        image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${getAdminSettingStoreState.data.store_image}`,
+        image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${getAdminSettingStoreState.data.store_image}`,
         services: getAdminSettingStoreState.data.services ?? [],
         products: getAdminSettingStoreState.data.products ?? [],
         packages: getAdminSettingStoreState.data.packages ?? [],

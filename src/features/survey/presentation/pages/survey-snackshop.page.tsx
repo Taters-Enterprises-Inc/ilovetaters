@@ -284,7 +284,7 @@ export function SurveySnackshop() {
                       </>
                     )}
                     {survey.ratings.length > 0 ? (
-                      <div className="flex flex-col w-full space-y-8 sm:items-start sm:justify-start ">
+                      <div className="flex flex-col w-full space-y-8 sm:items-center sm:justify-center ">
                         {survey.ratings.map((rating, i) => (
                           <SurveyRating
                             key={i}

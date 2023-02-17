@@ -156,7 +156,11 @@ export function UnExpiredRedeem() {
                         showInfo ? "h-[75px] w-[75px]" : "h-[50px] w-[50px]"
                       } `}
                       src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
-                      alt="Deals"
+                      alt={getLatestUnexpiredRedeemState.data.name}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                      }}
                     />
                     {showInfo ? null : <CountdownTimerLatestRedeem />}
                   </button>
