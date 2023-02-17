@@ -25,7 +25,9 @@ export interface CateringOrderModel {
       hash_key: string;
       store: number;
       invoice_num: string;
-      discount: string;
+      discount: string | null;
+      discount_name: string | null;
+      discount_percentage: string | null;
       payment_plan: string;
       initial_payment: number;
       final_payment: number;

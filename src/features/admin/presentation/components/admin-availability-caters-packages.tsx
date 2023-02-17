@@ -4,26 +4,19 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { ExtractBtn } from "./extract-btn";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import NumberFormat from "react-number-format";
-import { ADMIN_SNACKSHOP_ORDER_STATUS } from "features/shared/constants";
-import Moment from "react-moment";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FaEye } from "react-icons/fa";
-import { DataList } from "features/shared/presentation/components";
-import { AdminShopOrderModel } from "features/admin/core/domain/admin-shop-order.model";
 import {
-  getAdminStores,
-  selectGetAdminStores,
-} from "../slices/get-admin-stores.slice";
+  DataList,
+  MaterialInput,
+  MaterialInputAutoComplete,
+} from "features/shared/presentation/components";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -40,11 +33,11 @@ import {
   updateStoreCatersPackage,
 } from "../slices/update-store-caters-packages.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
@@ -81,7 +74,7 @@ export function AdminAvailabilityCatersPackages() {
 
   useEffect(() => {
     const defaultStoreId =
-      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
+      getAdminSessionState.data?.admin.user_details.stores[0].store_id ?? 3;
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
@@ -171,12 +164,15 @@ export function AdminAvailabilityCatersPackages() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
-              options={getAdminSessionState.data.user_details.stores}
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               sx={{ width: 328 }}
               size="small"
-              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              options={getAdminSessionState.data.admin.user_details.stores}
+              defaultValue={
+                getAdminSessionState.data.admin.user_details.stores[0]
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
@@ -199,52 +195,50 @@ export function AdminAvailabilityCatersPackages() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
       </div>
       <div className="px-4 py-2">
         {getCatersPackageCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
-            <InputLabel>Filter by category</InputLabel>
+          <MaterialInput
+            colorTheme="black"
+            select
+            label="Filter by category"
+            name="category"
+            className="!min-w-[150px]"
+            size="small"
+            value={categoryId ?? "all"}
+            onChange={(event) => {
+              if (event.target.value !== status) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: status,
+                  store_id: storeId,
+                  category_id:
+                    event.target.value === "all" ? null : event.target.value,
+                  search: search,
+                };
 
-            <Select
-              label="Filter by category"
-              defaultValue={categoryId ?? "all"}
-              onChange={(event) => {
-                if (event.target.value !== status) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    status: status,
-                    store_id: storeId,
-                    category_id:
-                      event.target.value === "all" ? null : event.target.value,
-                    search: search,
-                  };
+                const queryParams = createQueryParams(params);
 
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="all">
-                <span className="text-xs lg:text-base">All</span>
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
+            }}
+          >
+            <MenuItem value="all">
+              <span className="text-xs lg:text-base">All</span>
+            </MenuItem>
+            {getCatersPackageCategoriesState.data?.map((category, index) => (
+              <MenuItem key={index} value={category.id}>
+                <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>
-              {getCatersPackageCategoriesState.data?.map((category, index) => (
-                <MenuItem key={index} value={category.id}>
-                  <span className="text-xs lg:text-base">{category.name}</span>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            ))}
+          </MaterialInput>
         ) : null}
       </div>
 
@@ -486,6 +480,17 @@ export function AdminAvailabilityCatersPackages() {
                   {getAdminStoreCatersPackagesState.data.caters_packages.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div

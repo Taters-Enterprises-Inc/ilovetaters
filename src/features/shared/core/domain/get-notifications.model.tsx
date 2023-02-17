@@ -21,4 +21,9 @@ export interface GetNotificationsModel {
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;
   };
+  inbox: {
+    notifications: Array<NotificationModel>;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
+  };
 }

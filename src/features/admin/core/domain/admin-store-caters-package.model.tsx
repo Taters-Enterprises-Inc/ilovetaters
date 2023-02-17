@@ -4,4 +4,5 @@ export interface AdminStoreCatersPackageModel {
   store_id: number;
   add_details: string;
   category_name: string;
+  product_image: string;
 }

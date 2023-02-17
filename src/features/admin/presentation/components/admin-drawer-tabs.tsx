@@ -13,11 +13,11 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-
 import {
   FaRegListAlt,
   FaCartArrowDown,
   FaQuestionCircle,
+  FaUserCheck,
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -27,6 +27,11 @@ import {
 } from "react-icons/md";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { IoIosArrowForward } from "react-icons/io";
+import { useState } from "react";
+import { truncate } from "fs";
+import { AiOutlineIdcard } from "react-icons/ai";
+import { TbFileCheck } from "react-icons/tb";
+
 import Badge from "@mui/material/Badge";
 import { TbLogout } from "react-icons/tb";
 import {
@@ -166,9 +171,9 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             </NavLink>
           </li>
 
-          {getAdminSessionState.data?.is_admin ||
-          getAdminSessionState.data?.is_catering_admin ||
-          getAdminSessionState.data?.is_csr_admin ? (
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_catering_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -236,6 +241,70 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
+            <li>
+              <NavLink
+                to="/admin/user-discount"
+                onClick={() => {
+                  if (props.mobile) dispatch(closeAdminSideBar());
+                }}
+                className={(navData) =>
+                  navData.isActive ? "flex bg-white text-secondary" : "flex"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    <AiOutlineIdcard size={20} />
+
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      User Discount
+                    </span>
+                  </span>
+                </span>
+              </NavLink>
+            </li>
+          ) : null}
+
+          <li>
+            <NavLink
+              to="/admin/survey-verification"
+              onClick={() => {
+                if (props.mobile) dispatch(closeAdminSideBar());
+              }}
+              className={(navData) =>
+                navData.isActive ? "flex bg-white text-secondary" : "flex"
+              }
+            >
+              <span className="flex items-center px-4 ">
+                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                  <Badge
+                    badgeContent={
+                      getAdminNotificationsState.data?.survey_verification
+                        .unseen_notifications_count
+                    }
+                    color="primary"
+                  >
+                    <TbFileCheck size={20} />
+                  </Badge>
+
+                  <span
+                    className={`whitespace-pre duration-300 ${
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                    }`}
+                  >
+                    Survey Verification
+                  </span>
+                </span>
+              </span>
+            </NavLink>
+          </li>
+
           <li>
             <div className="flex px-4">
               <div className="flex-1">
@@ -353,6 +422,36 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                         }`}
                                       >
                                         Packages
+                                      </span>
+                                    </span>
+                                  </span>
+                                </NavLink>
+                              </li>
+
+                              <li>
+                                <NavLink
+                                  to="/admin/availability/catering/build-your-own-package"
+                                  onClick={() => {
+                                    if (props.mobile)
+                                      dispatch(closeAdminSideBar());
+                                  }}
+                                  className={(navData) =>
+                                    navData.isActive
+                                      ? "flex bg-white text-secondary"
+                                      : "flex"
+                                  }
+                                >
+                                  <span className="flex items-center ">
+                                    <span className="flex pl-[2rem] py-[0.85rem] space-x-4 items-center">
+                                      <IoIosArrowForward size={20} />
+
+                                      <span
+                                        className={`whitespace-pre duration-300 ${
+                                          !adminSideBarState.status &&
+                                          "opacity-0 overflow-hidden"
+                                        }`}
+                                      >
+                                        BYOP
                                       </span>
                                     </span>
                                   </span>
@@ -479,6 +578,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </div>
             </div>
           </li>
+
           <li>
             <div className="flex px-4">
               <div className="flex-1">
@@ -501,35 +601,66 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
-                      {getAdminSessionState.data?.is_admin ? (
-                        <li>
-                          <NavLink
-                            to="/admin/setting/user"
-                            onClick={() => {
-                              if (props.mobile) dispatch(closeAdminSideBar());
-                            }}
-                            className={(navData) =>
-                              navData.isActive
-                                ? "flex bg-white text-secondary"
-                                : "flex"
-                            }
-                          >
-                            <span className="flex items-center ">
-                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                                <IoIosArrowForward size={20} />
+                      {getAdminSessionState.data?.admin.is_admin ? (
+                        <>
+                          <li>
+                            <NavLink
+                              to="/admin/setting/user"
+                              onClick={() => {
+                                if (props.mobile) dispatch(closeAdminSideBar());
+                              }}
+                              className={(navData) =>
+                                navData.isActive
+                                  ? "flex bg-white text-secondary"
+                                  : "flex"
+                              }
+                            >
+                              <span className="flex items-center ">
+                                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                  <IoIosArrowForward size={20} />
 
-                                <span
-                                  className={`whitespace-pre duration-300 ${
-                                    !adminSideBarState.status &&
-                                    "opacity-0 overflow-hidden"
-                                  }`}
-                                >
-                                  Users
+                                  <span
+                                    className={`whitespace-pre duration-300 ${
+                                      !adminSideBarState.status &&
+                                      "opacity-0 overflow-hidden"
+                                    }`}
+                                  >
+                                    Users
+                                  </span>
                                 </span>
                               </span>
-                            </span>
-                          </NavLink>
-                        </li>
+                            </NavLink>
+                          </li>
+
+                          <li>
+                            <NavLink
+                              to="/admin/setting/product"
+                              onClick={() => {
+                                if (props.mobile) dispatch(closeAdminSideBar());
+                              }}
+                              className={(navData) =>
+                                navData.isActive
+                                  ? "flex bg-white text-secondary"
+                                  : "flex"
+                              }
+                            >
+                              <span className="flex items-center ">
+                                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                  <IoIosArrowForward size={20} />
+
+                                  <span
+                                    className={`whitespace-pre duration-300 ${
+                                      !adminSideBarState.status &&
+                                      "opacity-0 overflow-hidden"
+                                    }`}
+                                  >
+                                    Products
+                                  </span>
+                                </span>
+                              </span>
+                            </NavLink>
+                          </li>
+                        </>
                       ) : null}
                       <li>
                         <NavLink
@@ -554,7 +685,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                   "opacity-0 overflow-hidden"
                                 }`}
                               >
-                                Store
+                                Stores
                               </span>
                             </span>
                           </span>
@@ -566,6 +697,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </div>
             </div>
           </li>
+
           <li>
             <NavLink
               to="/admin/reports"
@@ -617,6 +749,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+
           <li>
             <button
               onClick={() => {

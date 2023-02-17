@@ -122,7 +122,11 @@ export function CateringSignedContractIsRequired() {
                 <img
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.product_image}`}
                   className="rounded-[10px] w-[92px] h-[92px]"
-                  alt=""
+                  alt={order.name}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                  }}
                 />
                 <div className="flex flex-col flex-1 px-3 py-2 text-white">
                   <h3 className="text-sm w-[90%]">{order.name}</h3>
@@ -162,6 +166,7 @@ export function CateringSignedContractIsRequired() {
           <div className="grid grid-cols-2 text-secondary">
             <span>Subtotal:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.order.clients_info.purchase_amount
@@ -175,6 +180,8 @@ export function CateringSignedContractIsRequired() {
               <>
                 <span>10% Service Charge:</span>
                 <span className="text-end">
+                  {" "}
+                  +
                   <NumberFormat
                     value={getCateringOrdersState.data.service_fee.toFixed(2)}
                     displayType={"text"}
@@ -186,6 +193,7 @@ export function CateringSignedContractIsRequired() {
             ) : null}
             <span>Transportation Fee:</span>
             <span className="text-end">
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.transportation_fee
@@ -197,6 +205,8 @@ export function CateringSignedContractIsRequired() {
             </span>
             <span>Additional Hour Fee:</span>
             <span className="text-end">
+              {" "}
+              +
               <NumberFormat
                 value={parseInt(
                   getCateringOrdersState.data.additional_hour_fee
@@ -208,6 +218,8 @@ export function CateringSignedContractIsRequired() {
             </span>
             <span>Night Differential Fee:</span>
             <span className="text-end">
+              {" "}
+              +
               <NumberFormat
                 value={getCateringOrdersState.data.night_diff_charge.toFixed(2)}
                 displayType={"text"}
@@ -215,11 +227,39 @@ export function CateringSignedContractIsRequired() {
                 prefix={"₱"}
               />
             </span>
+
+            {getCateringOrdersState.data.order.clients_info.discount &&
+            getCateringOrdersState.data.order.clients_info.discount_name &&
+            getCateringOrdersState.data.order.clients_info
+              .discount_percentage ? (
+              <>
+                <span>
+                  {parseFloat(
+                    getCateringOrdersState.data?.order.clients_info
+                      .discount_percentage
+                  ) * 100}
+                  %{" "}
+                  {getCateringOrdersState.data.order.clients_info.discount_name}
+                </span>
+                <span className="text-end">
+                  -{" "}
+                  <NumberFormat
+                    value={parseInt(
+                      getCateringOrdersState.data.order.clients_info.discount
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </span>
+              </>
+            ) : null}
             {getCateringOrdersState.data.cod_fee &&
             getCateringOrdersState.data.cod_fee !== "0" ? (
               <>
                 <span>Cash On Delivery Charge :</span>
                 <span className="text-end">
+                  +{" "}
                   <NumberFormat
                     value={parseInt(
                       getCateringOrdersState.data.cod_fee

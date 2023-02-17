@@ -9,7 +9,7 @@ import {
 import { BiUserCircle } from "react-icons/bi";
 import { FaFileContract } from "react-icons/fa";
 import NumberFormat from "react-number-format";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   getCateringOrders,
   selectGetCateringOrders,
@@ -24,6 +24,10 @@ import {
   cateringUploadProofOfPayment,
   selectCateringUploadProofOfPayment,
 } from "../slices/catering-upload-proof-of-payment.slice";
+import {
+  selectGetCustomerSurveyResponseInOrderService,
+  getCustomerSurveyResponseInOrderService,
+} from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 
 export function CateringOrder() {
   const dispatch = useAppDispatch();
@@ -31,6 +35,9 @@ export function CateringOrder() {
   const getCateringOrdersState = useAppSelector(selectGetCateringOrders);
   const cateringUploadProofOfPaymentState = useAppSelector(
     selectCateringUploadProofOfPayment
+  );
+  const getCustomerSurveyResponseInOrderServiceState = useAppSelector(
+    selectGetCustomerSurveyResponseInOrderService
   );
 
   const { hash } = useParams();
@@ -40,6 +47,12 @@ export function CateringOrder() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringOrders({ hash }));
+      dispatch(
+        getCustomerSurveyResponseInOrderService({
+          hash,
+          service: "catering",
+        })
+      );
     }
   }, [cateringUploadProofOfPaymentState, dispatch, hash]);
 
@@ -323,7 +336,11 @@ export function CateringOrder() {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={order.name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
@@ -429,239 +446,134 @@ export function CateringOrder() {
 
             {getCateringOrdersState.data &&
             getCateringOrdersState.data.package_selection ? (
-              <div className="space-y-4 lg:flex-[0_0_36%] bg-paper w-full lg:max-w-[36%] lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
-                <h2 className="font-['Bebas_Neue'] text-4xl  text-secondary tracking-[3px] text-center">
-                  Order Summary
-                </h2>
-                <div className="grid grid-cols-2 text-secondary">
-                  <span>Subtotal:</span>
-                  <span className="text-end">
-                    <NumberFormat
-                      value={parseInt(
-                        getCateringOrdersState.data.order.clients_info
-                          .purchase_amount
-                      ).toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  {getCateringOrdersState.data.service_fee ? (
-                    <>
-                      <span>10% Service Charge:</span>
-                      <span className="text-end">
-                        <NumberFormat
-                          value={getCateringOrdersState.data.service_fee.toFixed(
-                            2
-                          )}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </>
-                  ) : null}
-                  <span>Transportation Fee:</span>
-                  <span className="text-end">
-                    <NumberFormat
-                      value={parseInt(
-                        getCateringOrdersState.data.transportation_fee
-                      ).toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  <span>Additional Hour Fee:</span>
-                  <span className="text-end">
-                    <NumberFormat
-                      value={parseInt(
-                        getCateringOrdersState.data.additional_hour_fee
-                      ).toFixed(2)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  <span>Night Differential Fee:</span>
-                  <span className="text-end">
-                    <NumberFormat
-                      value={getCateringOrdersState.data.night_diff_charge.toFixed(
-                        2
-                      )}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  {getCateringOrdersState.data.cod_fee &&
-                  getCateringOrdersState.data.cod_fee !== "0" ? (
-                    <>
-                      <span>Cash On Delivery Charge:</span>
-                      <span className="text-end">
-                        <NumberFormat
-                          value={parseInt(
-                            getCateringOrdersState.data.cod_fee
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </>
-                  ) : null}
-                </div>
-                <hr className="mt-1 border-secondary" />
-
-                {getCateringOrdersState.data.order.clients_info.payment_plan ===
-                "full" ? (
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-4xl text-center text-secondary">
+              <div className="lg:flex-[0_0_36%] lg:max-w-[36%] w-full  space-y-6">
+                <div className="space-y-4 lg:shadow-secondary bg-paper lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+                  <h2 className="font-['Bebas_Neue'] text-4xl  text-secondary tracking-[3px] text-center">
+                    Order Summary
+                  </h2>
+                  <div className="grid grid-cols-2 text-secondary">
+                    <span>Subtotal:</span>
+                    <span className="text-end">
+                      +
                       <NumberFormat
-                        value={getCateringOrdersState.data.grand_total.toFixed(
+                        value={parseInt(
+                          getCateringOrdersState.data.order.clients_info
+                            .purchase_amount
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                    {getCateringOrdersState.data.service_fee ? (
+                      <>
+                        <span>10% Service Charge:</span>
+                        <span className="text-end">
+                          +
+                          <NumberFormat
+                            value={getCateringOrdersState.data.service_fee.toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
+                    <span>Transportation Fee:</span>
+                    <span className="text-end">
+                      +
+                      <NumberFormat
+                        value={parseInt(
+                          getCateringOrdersState.data.transportation_fee
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                    <span>Additional Hour Fee:</span>
+                    <span className="text-end">
+                      +
+                      <NumberFormat
+                        value={parseInt(
+                          getCateringOrdersState.data.additional_hour_fee
+                        ).toFixed(2)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                      />
+                    </span>
+                    <span>Night Differential Fee:</span>
+                    <span className="text-end">
+                      +
+                      <NumberFormat
+                        value={getCateringOrdersState.data.night_diff_charge.toFixed(
                           2
                         )}
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={"₱"}
                       />
-                    </h1>
-
-                    <span className="text-lg text-center text-secondary">
-                      Final Payment
                     </span>
+
+                    {getCateringOrdersState.data.order.clients_info.discount &&
+                    getCateringOrdersState.data.order.clients_info
+                      .discount_name &&
+                    getCateringOrdersState.data.order.clients_info
+                      .discount_percentage ? (
+                      <>
+                        <span>
+                          {parseFloat(
+                            getCateringOrdersState.data?.order.clients_info
+                              .discount_percentage
+                          ) * 100}
+                          %{" "}
+                          {
+                            getCateringOrdersState.data.order.clients_info
+                              .discount_name
+                          }
+                        </span>
+                        <span className="text-end">
+                          -{" "}
+                          <NumberFormat
+                            value={parseInt(
+                              getCateringOrdersState.data.order.clients_info
+                                .discount
+                            ).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
+
+                    {getCateringOrdersState.data.cod_fee &&
+                    getCateringOrdersState.data.cod_fee !== "0" ? (
+                      <>
+                        <span>Cash On Delivery Charge:</span>
+                        <span className="text-end">
+                          +{" "}
+                          <NumberFormat
+                            value={parseInt(
+                              getCateringOrdersState.data.cod_fee
+                            ).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
                   </div>
-                ) : null}
-
-                {getCateringOrdersState.data.order.clients_info.payment_plan ===
-                "half" ? (
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-4xl text-center text-secondary">
-                      <NumberFormat
-                        value={(
-                          getCateringOrdersState.data.grand_total / 2
-                        ).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h1>
-
-                    <span className="text-lg text-center text-secondary">
-                      Initial Payment
-                    </span>
-                  </div>
-                ) : null}
-
-                <hr className="mt-1 border-secondary" />
-
-                <div className="grid grid-cols-2 text-secondary">
-                  <span className="font-bold">Payment Plan :</span>
-                  <span className="font-bold uppercase text-end">
-                    {
-                      getCateringOrdersState.data.order.clients_info
-                        .payment_plan
-                    }
-                  </span>
-
-                  {getCateringOrdersState.data.order.clients_info
-                    .payment_plan === "half" ? (
-                    <>
-                      <span
-                        className={`${
-                          getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 7 ||
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        Initial Payment :
-                      </span>
-                      <span
-                        className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 6 ||
-                          getCateringOrdersState.data.status === 7 ||
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        <NumberFormat
-                          value={(
-                            getCateringOrdersState.data.grand_total / 2
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-
-                      <span
-                        className={`${
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        Final Payment :
-                      </span>
-                      <span
-                        className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        <NumberFormat
-                          value={(
-                            getCateringOrdersState.data.grand_total / 2
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-
-                      <span>Total :</span>
-                      <span className="uppercase text-end">
-                        <NumberFormat
-                          value={getCateringOrdersState.data.grand_total.toFixed(
-                            2
-                          )}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
-                    </>
-                  ) : null}
+                  <hr className="mt-1 border-secondary" />
 
                   {getCateringOrdersState.data.order.clients_info
                     .payment_plan === "full" ? (
-                    <>
-                      <span
-                        className={`${
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        Final Payment :
-                      </span>
-                      <span
-                        className={`text-end uppercase ${
-                          getCateringOrdersState.data.status === 8 ||
-                          getCateringOrdersState.data.status === 9
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl text-center text-secondary">
                         <NumberFormat
                           value={getCateringOrdersState.data.grand_total.toFixed(
                             2
@@ -670,137 +582,311 @@ export function CateringOrder() {
                           thousandSeparator={true}
                           prefix={"₱"}
                         />
+                      </h1>
+
+                      <span className="text-lg text-center text-secondary">
+                        Final Payment
                       </span>
+                    </div>
+                  ) : null}
+
+                  {getCateringOrdersState.data.order.clients_info
+                    .payment_plan === "half" ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl text-center text-secondary">
+                        <NumberFormat
+                          value={(
+                            getCateringOrdersState.data.grand_total / 2
+                          ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </h1>
+
+                      <span className="text-lg text-center text-secondary">
+                        Initial Payment
+                      </span>
+                    </div>
+                  ) : null}
+
+                  <hr className="mt-1 border-secondary" />
+
+                  <div className="grid grid-cols-2 text-secondary">
+                    <span className="font-bold">Payment Plan :</span>
+                    <span className="font-bold uppercase text-end">
+                      {
+                        getCateringOrdersState.data.order.clients_info
+                          .payment_plan
+                      }
+                    </span>
+
+                    {getCateringOrdersState.data.order.clients_info
+                      .payment_plan === "half" ? (
+                      <>
+                        <span
+                          className={`${
+                            getCateringOrdersState.data.status === 6 ||
+                            getCateringOrdersState.data.status === 7 ||
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          Initial Payment :
+                        </span>
+                        <span
+                          className={`text-end uppercase ${
+                            getCateringOrdersState.data.status === 6 ||
+                            getCateringOrdersState.data.status === 7 ||
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          +{" "}
+                          <NumberFormat
+                            value={(
+                              getCateringOrdersState.data.grand_total / 2
+                            ).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+
+                        <span
+                          className={`${
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          Final Payment :
+                        </span>
+                        <span
+                          className={`text-end uppercase ${
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          +{" "}
+                          <NumberFormat
+                            value={(
+                              getCateringOrdersState.data.grand_total / 2
+                            ).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+
+                        <span>Total :</span>
+                        <span className="uppercase text-end">
+                          <NumberFormat
+                            value={getCateringOrdersState.data.grand_total.toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
+
+                    {getCateringOrdersState.data.order.clients_info
+                      .payment_plan === "full" ? (
+                      <>
+                        <span
+                          className={`${
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          Final Payment :
+                        </span>
+                        <span
+                          className={`text-end uppercase ${
+                            getCateringOrdersState.data.status === 8 ||
+                            getCateringOrdersState.data.status === 9
+                              ? "line-through"
+                              : ""
+                          }`}
+                        >
+                          <NumberFormat
+                            value={getCateringOrdersState.data.grand_total.toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+
+                  {getCateringOrdersState.data?.order.clients_info.status ===
+                    4 ||
+                  getCateringOrdersState.data?.order.clients_info.status ===
+                    6 ||
+                  getCateringOrdersState.data?.order.clients_info.status ===
+                    22 ||
+                  getCateringOrdersState.data?.order.clients_info.status ===
+                    23 ? (
+                    <>
+                      <h2 className="font-['Bebas_Neue'] text-xl  text-secondary tracking-[3px] text-center">
+                        {getCateringOrdersState.data?.order.clients_info
+                          .status === 4 &&
+                        getCateringOrdersState.data.order.clients_info
+                          .payment_plan === "half"
+                          ? "Upload Initial Proof of Payment"
+                          : ""}
+                        {getCateringOrdersState.data?.order.clients_info
+                          .status === 4 &&
+                        getCateringOrdersState.data.order.clients_info
+                          .payment_plan === "full"
+                          ? "Upload Proof of Payment"
+                          : ""}
+
+                        {getCateringOrdersState.data?.order.clients_info
+                          .status === 6
+                          ? "Upload Final Proof of Payment"
+                          : ""}
+                      </h2>
+
+                      <form onSubmit={handleProofOfPayment}>
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="tracking_no"
+                          value={
+                            getCateringOrdersState.data?.order.clients_info
+                              .tracking_no
+                          }
+                          readOnly
+                        />
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="payment_plan"
+                          value={
+                            getCateringOrdersState.data?.order.clients_info
+                              .payment_plan
+                          }
+                          readOnly
+                        />
+
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="status"
+                          value={getCateringOrdersState.data?.status}
+                          readOnly
+                        />
+                        <input
+                          type="text"
+                          className="hidden"
+                          name="trans_id"
+                          value={
+                            getCateringOrdersState.data?.order.clients_info.id
+                          }
+                          readOnly
+                        />
+
+                        <div>
+                          <div
+                            {...getRootProps()}
+                            className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
+                          >
+                            <input
+                              type="file"
+                              name="uploaded_file"
+                              {...getInputProps()}
+                            />
+
+                            {isDragActive ? (
+                              <span className="text-lg text-secondary">
+                                Drop the files here ...
+                              </span>
+                            ) : (
+                              <>
+                                {images ? (
+                                  <img
+                                    src={images.src}
+                                    className="object-contain h-[150px] w-[150px]"
+                                    alt="upload file"
+                                  />
+                                ) : (
+                                  <>
+                                    <AiOutlineCloudUpload className="text-5xl text-secondary" />
+                                    <span className="text-lg text-secondary">
+                                      Drag and drop here to upload
+                                    </span>
+                                    <button
+                                      type="button"
+                                      className="px-3 py-1 text-lg text-white rounded-lg bg-secondary"
+                                    >
+                                      Or select file
+                                    </button>
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="bg-button border border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
+                          >
+                            Upload
+                          </button>
+
+                          <h4 className="mt-1 text-sm leading-5 text-secondary">
+                            <strong>Note:</strong> Supported file types: JPG,
+                            JPEG, PNG and GIF. Maximum file size is 2MB.
+                          </h4>
+                        </div>
+                      </form>
                     </>
+                  ) : getCateringOrdersState.data?.order.clients_info.status ===
+                    2 ? (
+                    <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
+                      <AiFillCheckCircle className="text-2xl" />
+                      <span>Proof of Payment Uploaded</span>
+                    </h2>
                   ) : null}
                 </div>
-
-                {getCateringOrdersState.data?.order.clients_info.status === 4 ||
-                getCateringOrdersState.data?.order.clients_info.status === 6 ||
-                getCateringOrdersState.data?.order.clients_info.status === 22 ||
-                getCateringOrdersState.data?.order.clients_info.status ===
-                  23 ? (
+                {getCateringOrdersState.data.order.clients_info.status === 9 ? (
                   <>
-                    <h2 className="font-['Bebas_Neue'] text-xl  text-secondary tracking-[3px] text-center">
-                      {getCateringOrdersState.data?.order.clients_info
-                        .status === 4 &&
-                      getCateringOrdersState.data.order.clients_info
-                        .payment_plan === "half"
-                        ? "Upload Initial Proof of Payment"
-                        : ""}
-                      {getCateringOrdersState.data?.order.clients_info
-                        .status === 4 &&
-                      getCateringOrdersState.data.order.clients_info
-                        .payment_plan === "full"
-                        ? "Upload Proof of Payment"
-                        : ""}
-
-                      {getCateringOrdersState.data?.order.clients_info
-                        .status === 6
-                        ? "Upload Final Proof of Payment"
-                        : ""}
-                    </h2>
-
-                    <form onSubmit={handleProofOfPayment}>
-                      <input
-                        type="text"
-                        className="hidden"
-                        name="tracking_no"
-                        value={
-                          getCateringOrdersState.data?.order.clients_info
-                            .tracking_no
-                        }
-                        readOnly
-                      />
-                      <input
-                        type="text"
-                        className="hidden"
-                        name="payment_plan"
-                        value={
-                          getCateringOrdersState.data?.order.clients_info
-                            .payment_plan
-                        }
-                        readOnly
-                      />
-
-                      <input
-                        type="text"
-                        className="hidden"
-                        name="status"
-                        value={getCateringOrdersState.data?.status}
-                        readOnly
-                      />
-                      <input
-                        type="text"
-                        className="hidden"
-                        name="trans_id"
-                        value={
-                          getCateringOrdersState.data?.order.clients_info.id
-                        }
-                        readOnly
-                      />
-
-                      <div>
-                        <div
-                          {...getRootProps()}
-                          className="border-dashed border-t-2 border-l-2 border-r-2 border-secondary h-[200px] rounded-lg flex justify-center items-center flex-col space-y-2"
-                        >
-                          <input
-                            type="file"
-                            name="uploaded_file"
-                            {...getInputProps()}
-                          />
-
-                          {isDragActive ? (
-                            <span className="text-lg text-secondary">
-                              Drop the files here ...
-                            </span>
-                          ) : (
-                            <>
-                              {images ? (
-                                <img
-                                  src={images.src}
-                                  className="object-contain h-[150px] w-[150px]"
-                                  alt="upload file"
-                                />
-                              ) : (
-                                <>
-                                  <AiOutlineCloudUpload className="text-5xl text-secondary" />
-                                  <span className="text-lg text-secondary">
-                                    Drag and drop here to upload
-                                  </span>
-                                  <button
-                                    type="button"
-                                    className="px-3 py-1 text-lg text-white rounded-lg bg-secondary"
-                                  >
-                                    Or select file
-                                  </button>
-                                </>
-                              )}
-                            </>
-                          )}
-                        </div>
-
-                        <button
-                          type="submit"
-                          className="bg-button border border-secondary w-full text-white font-['Bebas_Neue'] tracking-[2px] text-2xl py-2 rounded-b-lg mt-[-10px]"
-                        >
-                          Upload
-                        </button>
-
-                        <h4 className="mt-1 text-sm leading-5 text-secondary">
-                          <strong>Note:</strong> Supported file types: JPG,
-                          JPEG, PNG and GIF. Maximum file size is 2MB.
-                        </h4>
-                      </div>
-                    </form>
+                    {getCustomerSurveyResponseInOrderServiceState.data ? (
+                      <Link
+                        to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                        className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                      >
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          VIEW YOUR RATING
+                        </span>
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/feedback/catering/${getCateringOrdersState.data?.order.clients_info.hash_key}`}
+                        className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                      >
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          RATE US
+                        </span>
+                      </Link>
+                    )}
                   </>
-                ) : getCateringOrdersState.data?.order.clients_info.status ===
-                  2 ? (
-                  <h2 className="font-['Bebas_Neue'] text-xl flex justify-center items-center space-x-2 text-white rounded-xl bg-green-700 py-2 tracking-[3px] text-center">
-                    <AiFillCheckCircle className="text-2xl" />
-                    <span>Proof of Payment Uploaded</span>
-                  </h2>
                 ) : null}
               </div>
             ) : null}

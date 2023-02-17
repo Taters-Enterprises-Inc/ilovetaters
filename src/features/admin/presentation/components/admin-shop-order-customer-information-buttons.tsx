@@ -29,22 +29,17 @@ export function AdminShopOrderCustomerInformationButtons() {
     }
   }, [dispatch, trackingNo, adminShopOrderUpdateStatusState]);
 
-  const handleUpdateStatus = (status: string) => {
+  const handleUpdateStatus = (status: number) => {
     if (getAdminShopOrderState.data) {
-      const formData = new FormData();
-      formData.append("trans_id", getAdminShopOrderState.data.id.toString());
-      formData.append("status", status);
-      if (getAdminShopOrderState.data.fb_user_id)
-        formData.append(
-          "fb_user_id",
-          getAdminShopOrderState.data.fb_user_id.toString()
-        );
-      if (getAdminShopOrderState.data.mobile_user_id)
-        formData.append(
-          "mobile_user_id",
-          getAdminShopOrderState.data.mobile_user_id.toString()
-        );
-      dispatch(adminShopOrderUpdateStatus(formData));
+      dispatch(
+        adminShopOrderUpdateStatus({
+          transactionId: getAdminShopOrderState.data.id,
+          transactionHash: getAdminShopOrderState.data.hash_key,
+          fbUserId: getAdminShopOrderState.data.fb_user_id,
+          mobileUserId: getAdminShopOrderState.data.mobile_user_id,
+          status,
+        })
+      );
     }
   };
 
@@ -61,7 +56,7 @@ export function AdminShopOrderCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("7");
+              handleUpdateStatus(7);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -69,7 +64,7 @@ export function AdminShopOrderCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
+              handleUpdateStatus(4);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -81,7 +76,7 @@ export function AdminShopOrderCustomerInformationButtons() {
                 category: "Admin Snackshop Order",
                 action: "Confirm order",
               });
-              handleUpdateStatus("3");
+              handleUpdateStatus(3);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -100,7 +95,7 @@ export function AdminShopOrderCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("7");
+              handleUpdateStatus(7);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -108,7 +103,7 @@ export function AdminShopOrderCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
+              handleUpdateStatus(4);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -134,7 +129,7 @@ export function AdminShopOrderCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
-            handleUpdateStatus("8");
+            handleUpdateStatus(8);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >
@@ -152,7 +147,7 @@ export function AdminShopOrderCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
-            handleUpdateStatus("9");
+            handleUpdateStatus(9);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >
@@ -170,11 +165,11 @@ export function AdminShopOrderCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
-            handleUpdateStatus("6");
             ReactGA.event({
               category: "Admin Snackshop Order",
               action: "Complete order",
             });
+            handleUpdateStatus(6);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >

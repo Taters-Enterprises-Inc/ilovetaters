@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ValidateReferenceNumberParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   ValidateReferenceNumberAdminRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const validateReferenceNumberAdmin = createAsyncThunk(
   "validateReferenceNumberAdmin",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (param: ValidateReferenceNumberParam, { rejectWithValue }) => {
     try {
       const response: ValidateReferenceNumberAdminResponse =
-        await ValidateReferenceNumberAdminRepository(formData);
+        await ValidateReferenceNumberAdminRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

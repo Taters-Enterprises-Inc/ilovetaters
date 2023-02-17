@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { LoginAdminParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   LoginAdminRepository,
@@ -24,7 +25,7 @@ const initialState: InitialState = {
 
 export const loginAdmin = createAsyncThunk(
   "loginAdmin",
-  async (param: FormData, { rejectWithValue }) => {
+  async (param: LoginAdminParam, { rejectWithValue }) => {
     try {
       const response: LoginAdminResponse = await LoginAdminRepository(param);
       return response.data;

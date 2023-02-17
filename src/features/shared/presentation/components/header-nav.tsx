@@ -1,49 +1,53 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { TABS } from "features/shared/constants";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { AiOutlineUser } from "react-icons/ai";
-import { BsCart4 } from "react-icons/bs";
-import { ShopCartModal } from "../../../shop/presentation/modals";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
-import NumberFormat from "react-number-format";
+import Box from "@mui/material/Box";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Popover from "@mui/material/Popover";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
+import { PROFILE_MENU, TABS } from "features/shared/constants";
 import {
   facebookLogout,
   FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
-import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
-import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
-import { MdLocationPin } from "react-icons/md";
-import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
-import { MessageModal } from "../modals";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuList from "@mui/material/MenuList";
-import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
-import { RiShoppingBag3Fill } from "react-icons/ri";
+import { BsCart4 } from "react-icons/bs";
+import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
 import { GiPopcorn } from "react-icons/gi";
-import { CartListItem } from "./cart-item-list";
+import { HiDocumentText } from "react-icons/hi";
+import { MdLocationPin } from "react-icons/md";
+import { RiShoppingBag3Fill } from "react-icons/ri";
+import { VscCircleFilled } from "react-icons/vsc";
+import NumberFormat from "react-number-format";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ShopCartModal } from "../../../shop/presentation/modals";
+import { MessageModal } from "../modals";
 import {
   getNotifications,
   selectGetNotifications,
 } from "../slices/get-notifications.slice";
-import { VscCircleFilled } from "react-icons/vsc";
 import {
-  selectSeenNotification,
   SeenNotificationState,
+  selectSeenNotification,
 } from "../slices/seen-notification.slice";
+import { CartListItem } from "./cart-item-list";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { openLoginChooserModal } from "../slices/login-chooser-modal.slice";
 
 export type ActiveUrl =
   | "PROFILE"
@@ -67,7 +71,6 @@ interface HeaderNavProps {
 }
 
 export function HeaderNav(props: HeaderNavProps) {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openShopCartModal, setOpenShopCartModal] = useState(false);
   const [openCateringCartModal, setOpenCateringCartModal] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
@@ -116,6 +119,7 @@ export function HeaderNav(props: HeaderNavProps) {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
+      getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
       setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
@@ -134,26 +138,6 @@ export function HeaderNav(props: HeaderNavProps) {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     setOpenProfileMenu(event.currentTarget);
-  };
-
-  const handleMyProfile = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile");
-  };
-
-  const handleSnackshopOrders = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/snackshop-orders");
-  };
-
-  const handleCateringBooking = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/catering-bookings");
-  };
-
-  const handlePopClubRedeem = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/popclub-redeems");
   };
 
   const handleLogout = () => {
@@ -263,43 +247,6 @@ export function HeaderNav(props: HeaderNavProps) {
     prevOpen.current = open;
   }, [open]);
 
-  const profileMenu = [
-    {
-      id: 1,
-      text: getSessionState.data?.userData
-        ? getSessionState.data?.userData.first_name +
-          " " +
-          getSessionState.data?.userData.last_name
-        : "",
-      icon: <FaUserAlt />,
-      action: handleMyProfile,
-    },
-    {
-      id: 2,
-      text: "Snack Shop Orders",
-      icon: <FaShoppingBag />,
-      action: handleSnackshopOrders,
-    },
-    {
-      id: 3,
-      text: "Catering Bookings",
-      icon: <RiShoppingBag3Fill />,
-      action: handleCateringBooking,
-    },
-    {
-      id: 4,
-      text: "Popclub Redeems",
-      icon: <GiPopcorn />,
-      action: handlePopClubRedeem,
-    },
-    {
-      id: 5,
-      text: " Logout",
-      icon: <BiLogOut />,
-      action: handleLogout,
-    },
-  ];
-
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setOpenCartMenu(event.currentTarget);
   };
@@ -307,33 +254,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const handlePopoverClose = () => {
     setOpenCartMenu(null);
   };
-  const menuList = profileMenu.map((item) => {
-    const { text, icon, action, id } = item;
-
-    return (
-      <div>
-        <MenuItem onClick={action} className="bg-secondary">
-          <ListItemIcon className="text-[20px] sm:text-xl">
-            {icon}
-            {(id === 2 &&
-              getNotificationsState.data?.snackshop_order
-                .unseen_notifications_count) ||
-            (id === 3 &&
-              getNotificationsState.data?.catering_booking
-                .unseen_notifications_count) ||
-            (id === 4 &&
-              getNotificationsState.data?.popclub_redeem
-                .unseen_notifications_count) ? (
-              <VscCircleFilled className="text-xs text-red-600 " />
-            ) : null}
-          </ListItemIcon>
-
-          <ListItemText primary={text} />
-        </MenuItem>
-        {id === 1 || id === 4 ? <hr /> : null}
-      </div>
-    );
-  });
 
   return (
     <>
@@ -564,13 +484,88 @@ export function HeaderNav(props: HeaderNavProps) {
                           },
                         }}
                       />
-                      <div className="bg-white">{menuList}</div>
+                      <div className="bg-white">
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+                            navigate(`/profile`);
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <FaUserAlt />
+                          </ListItemIcon>
+
+                          <ListItemText
+                            primary={
+                              getSessionState.data?.userData
+                                ? getSessionState.data?.userData.first_name +
+                                  " " +
+                                  getSessionState.data?.userData.last_name
+                                : ""
+                            }
+                          />
+                        </MenuItem>
+                        <hr />
+                        {PROFILE_MENU.map((menu) => (
+                          <MenuItem
+                            onClick={() => {
+                              setOpenProfileMenu(null);
+                              navigate(`/profile/${menu.urlId}`);
+                            }}
+                            className="bg-secondary"
+                          >
+                            <ListItemIcon className="text-[20px] sm:text-xl">
+                              {menu.icon}
+                              {(menu.urlId === "snackshop-orders" &&
+                                getNotificationsState.data?.snackshop_order
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "inbox" &&
+                                getNotificationsState.data?.inbox
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "catering-bookings" &&
+                                getNotificationsState.data?.catering_booking
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "popclub-redeems" &&
+                                getNotificationsState.data?.popclub_redeem
+                                  .unseen_notifications_count) ? (
+                                <VscCircleFilled className="text-xs text-red-600 " />
+                              ) : null}
+                            </ListItemIcon>
+
+                            <ListItemText primary={menu.name} />
+                          </MenuItem>
+                        ))}
+                        <hr />
+
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+
+                            if (currentLocation.pathname === "/profile") {
+                              dispatch(facebookLogout());
+                              navigate("/");
+                            } else {
+                              dispatch(facebookLogout());
+                            }
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <BiLogOut />
+                          </ListItemIcon>
+
+                          <ListItemText primary="Logout" />
+                        </MenuItem>
+                      </div>
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
                   <>
                     <button
-                      onClick={() => setOpenLoginChooserModal(true)}
+                      onClick={() =>
+                        dispatch(openLoginChooserModal({ required: false }))
+                      }
                       className="flex flex-col items-center justify-center mt-1 mb-4 space-y-1 text-white rounded-xl"
                     >
                       <AiOutlineUser className="text-2xl" />
@@ -711,13 +706,6 @@ export function HeaderNav(props: HeaderNavProps) {
         open={openShopCartModal}
         onClose={() => {
           setOpenShopCartModal(false);
-        }}
-      />
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
         }}
       />
 

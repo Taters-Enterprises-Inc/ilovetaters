@@ -1,8 +1,7 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { ProductModel } from "features/shared/core/domain/product.model";
 import { CartItemModel } from "features/shop/core/domain/cart-item.model";
-import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
 import { EditCartItemModel } from "features/shop/core/domain/edit-cart-item.model";
 import { OrderModel } from "features/shop/core/domain/order.model";
 import { ProductDetailsModel } from "features/shop/core/domain/product-details.model";
@@ -22,7 +21,7 @@ import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.mod
 export interface GetCategoryProductsResponse {
   data: {
     message: string;
-    data: Array<CategoryProductsModel>;
+    data: Array<CategoryProductModel>;
   };
 }
 

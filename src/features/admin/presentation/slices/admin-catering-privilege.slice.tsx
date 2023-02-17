@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AdminPrivilegeParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   AdminCateringPrivilegeRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const adminCateringPrivilege = createAsyncThunk(
   "adminCateringPrivilege",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (param: AdminPrivilegeParam, { rejectWithValue }) => {
     try {
       const response: AdminCateringPrivilegeResponse =
-        await AdminCateringPrivilegeRepository(formData);
+        await AdminCateringPrivilegeRepository(param);
 
       return response.data;
     } catch (error) {

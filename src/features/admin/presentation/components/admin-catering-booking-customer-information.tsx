@@ -10,8 +10,6 @@ import {
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import NumberFormat from "react-number-format";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormEvent, useEffect, useState } from "react";
 import {
@@ -28,24 +26,30 @@ import {
 import { AdminCateringBookingCustomerInformationButtons } from "./admin-catering-booking-customer-information-buttons";
 import {
   getAdminCateringBooking,
+  GetAdminCateringBookingState,
   selectGetAdminCateringBooking,
 } from "../slices/get-admin-catering-booking.slice";
 import Moment from "react-moment";
 import moment from "moment";
-import { AiFillEdit } from "react-icons/ai";
-import { BiEdit } from "react-icons/bi";
+import { MaterialInput } from "features/shared/presentation/components";
 import { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
 import { selectUpdateAdminCateringOrderItemRemarks } from "../slices/update-admin-catering-order-item-remarks.slice";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
   const dispatch = useAppDispatch();
-  const [openAdminPasswordModal, setOpenAdminPasswordModal] = useState<{
-    status: boolean;
-    formData?: FormData;
-  }>({
-    status: false,
-  });
+
+  const [status, setStatus] = useState<string>("");
+  const [store, setStore] = useState<string>("");
+
+  const [
+    openAdminPasswordStoreChangeModal,
+    setOpenAdminPasswordStoreChangeModal,
+  ] = useState<boolean>(false);
+  const [
+    openAdminPasswordStatusChangeModal,
+    setOpenAdminPasswordStatusChangeModal,
+  ] = useState<boolean>(false);
 
   const trackingNo = query.get("tracking_no");
 
@@ -64,10 +68,22 @@ export function AdminCateringBookingCustomerInformation() {
 
   useEffect(() => {
     if (
+      getAdminCateringBookingState.status ===
+        GetAdminCateringBookingState.success &&
+      getAdminCateringBookingState.data
+    ) {
+      setStatus(getAdminCateringBookingState.data.status.toString());
+      setStore(getAdminCateringBookingState.data.store.toString());
+    }
+  }, [getAdminCateringBookingState]);
+
+  useEffect(() => {
+    if (
       adminCateringPrivilegeState.status === AdminCateringPrivilegeState.success
     ) {
       dispatch(resetAdminCateringPrivilege());
-      setOpenAdminPasswordModal({ status: false });
+      setOpenAdminPasswordStatusChangeModal(false);
+      setOpenAdminPasswordStoreChangeModal(false);
     }
   }, [adminCateringPrivilegeState, dispatch]);
 
@@ -86,11 +102,11 @@ export function AdminCateringBookingCustomerInformation() {
     dispatch(getAdminStores());
   }, [dispatch]);
 
-  const calculateWithZeroIfNoValue = (value: number) => {
+  const calculateWithZeroIfNoValue = (value: string) => {
     if (value)
       return (
         <NumberFormat
-          value={value.toFixed(2)}
+          value={parseInt(value).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -102,7 +118,6 @@ export function AdminCateringBookingCustomerInformation() {
 
   const calculateGrandTotal = () => {
     let calculatedPrice = 0;
-
     const orders = getAdminCateringBookingState.data?.items;
 
     if (orders) {
@@ -130,6 +145,13 @@ export function AdminCateringBookingCustomerInformation() {
       calculatedPrice += getAdminCateringBookingState.data?.night_diff_fee;
     }
 
+    if (
+      getAdminCateringBookingState.data &&
+      getAdminCateringBookingState.data.discount
+    ) {
+      calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount);
+    }
+
     if (getAdminCateringBookingState.data?.cod_fee) {
       calculatedPrice += parseInt(getAdminCateringBookingState.data?.cod_fee);
     }
@@ -141,17 +163,6 @@ export function AdminCateringBookingCustomerInformation() {
         prefix={"₱"}
       />
     );
-  };
-
-  const handleOnSubmitAdminCateringPrivilege = (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    setOpenAdminPasswordModal({
-      status: true,
-      formData,
-    });
   };
 
   return (
@@ -247,26 +258,16 @@ export function AdminCateringBookingCustomerInformation() {
           <hr />
 
           <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
-            <form
-              onSubmit={handleOnSubmitAdminCateringPrivilege}
-              className="flex flex-col flex-1 lg:flex-row"
-            >
-              <input
-                readOnly
-                hidden
-                name="trans_id"
-                value={getAdminCateringBookingState.data?.id}
-              />
-              <input
-                readOnly
-                hidden
-                name="from_status_id"
-                value={getAdminCateringBookingState.data?.status}
-              />
-              <Select
+            <div className="flex flex-col flex-1 lg:flex-row">
+              <MaterialInput
+                colorTheme="black"
                 size="small"
-                name="to_status_id"
-                defaultValue={getAdminCateringBookingState.data?.status}
+                select
+                name="toStatusId"
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value as string);
+                }}
               >
                 {ADMIN_CATERING_BOOKING_STATUS.map((value, index) => {
                   if (index === 0 || value.name === "") {
@@ -278,54 +279,46 @@ export function AdminCateringBookingCustomerInformation() {
                     </MenuItem>
                   );
                 })}
-              </Select>
+              </MaterialInput>
               <button
-                type="submit"
+                onClick={() => {
+                  setOpenAdminPasswordStatusChangeModal(true);
+                }}
                 className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
               >
                 Change Booking Status
               </button>
-            </form>
+            </div>
           </div>
 
           <hr />
 
-          <form
-            onSubmit={handleOnSubmitAdminCateringPrivilege}
-            className="flex flex-col flex-1 lg:flex-row"
-          >
-            <input
-              readOnly
-              hidden
-              name="trans_id"
-              value={getAdminCateringBookingState.data?.id}
-            />
-
-            <input
-              readOnly
-              hidden
-              name="from_store_id"
-              value={getAdminCateringBookingState.data?.store}
-            />
-
-            <Select
+          <div className="flex flex-col flex-1 lg:flex-row">
+            <MaterialInput
+              colorTheme="black"
               size="small"
-              defaultValue={getAdminCateringBookingState.data?.store}
-              name="to_store_id"
+              select
+              value={store}
+              onChange={(e) => {
+                setStore(e.target.value as string);
+              }}
+              name="toStoreId"
             >
               {getAdminStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
                   {store.name}
                 </MenuItem>
               ))}
-            </Select>
+            </MaterialInput>
             <button
-              type="submit"
+              onClick={() => {
+                setOpenAdminPasswordStoreChangeModal(true);
+              }}
               className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
             >
               Transfer to Store
             </button>
-          </form>
+          </div>
         </div>
 
         <hr className="mt-1" />
@@ -562,11 +555,12 @@ export function AdminCateringBookingCustomerInformation() {
                       </td>
                     </tr>
                   ))}
-                  <tr className="text-end">
+                  <tr className="text-end ">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -581,7 +575,8 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -592,13 +587,34 @@ export function AdminCateringBookingCustomerInformation() {
                       />
                     </td>
                   </tr>
+
+                  {getAdminCateringBookingState.data.discount &&
+                  getAdminCateringBookingState.data.discount_percentage &&
+                  getAdminCateringBookingState.data.discount_name ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold ">
+                        {parseFloat(
+                          getAdminCateringBookingState.data.discount_percentage
+                        ) * 100}
+                        % {getAdminCateringBookingState.data.discount_name}
+                      </td>
+                      <td className="px-6 py-2 w-[150px]">
+                        -{" "}
+                        {calculateWithZeroIfNoValue(
+                          getAdminCateringBookingState.data.discount
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Service Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.service_fee
+                        getAdminCateringBookingState.data.service_fee.toString()
                       )}
                     </td>
                   </tr>
@@ -606,11 +622,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Transportation Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        parseInt(
-                          getAdminCateringBookingState.data.distance_price
-                        )
+                        getAdminCateringBookingState.data.distance_price
                       )}
                     </td>
                   </tr>
@@ -618,9 +633,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Additional Hour Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.additional_hour_charge
+                        getAdminCateringBookingState.data.additional_hour_charge.toString()
                       )}
                     </td>
                   </tr>
@@ -628,9 +644,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Night differential Charge:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.night_diff_fee
+                        getAdminCateringBookingState.data.night_diff_fee.toString()
                       )}
                     </td>
                   </tr>
@@ -642,8 +659,9 @@ export function AdminCateringBookingCustomerInformation() {
                         COD Additional Charges:
                       </td>
                       <td className="px-6 py-2">
+                        +{" "}
                         {calculateWithZeroIfNoValue(
-                          parseInt(getAdminCateringBookingState.data.cod_fee)
+                          getAdminCateringBookingState.data.cod_fee
                         )}
                       </td>
                     </tr>
@@ -653,7 +671,9 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -715,6 +735,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -728,6 +749,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -738,19 +760,40 @@ export function AdminCateringBookingCustomerInformation() {
                     />
                   </span>
                 </div>
+
+                {getAdminCateringBookingState.data.discount &&
+                getAdminCateringBookingState.data.discount_percentage &&
+                getAdminCateringBookingState.data.discount_name ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {parseFloat(
+                        getAdminCateringBookingState.data.discount_percentage
+                      ) * 100}
+                      % {getAdminCateringBookingState.data.discount_name}:
+                    </span>
+                    <span className="text-sm text-end">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.discount
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Service Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.service_fee
+                      getAdminCateringBookingState.data.service_fee.toString()
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Transportation Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      parseInt(getAdminCateringBookingState.data.distance_price)
+                      getAdminCateringBookingState.data.distance_price
                     )}
                   </span>
                 </div>
@@ -759,8 +802,9 @@ export function AdminCateringBookingCustomerInformation() {
                     Additional Hour Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.additional_hour_charge
+                      getAdminCateringBookingState.data.additional_hour_charge.toString()
                     )}
                   </span>
                 </div>
@@ -769,8 +813,9 @@ export function AdminCateringBookingCustomerInformation() {
                     Night differential Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.night_diff_fee
+                      getAdminCateringBookingState.data.night_diff_fee.toString()
                     )}
                   </span>
                 </div>
@@ -782,7 +827,7 @@ export function AdminCateringBookingCustomerInformation() {
                     </span>
                     <span className="text-sm text-end">
                       {calculateWithZeroIfNoValue(
-                        parseInt(getAdminCateringBookingState.data.cod_fee)
+                        getAdminCateringBookingState.data.cod_fee
                       )}
                     </span>
                   </div>
@@ -814,17 +859,44 @@ export function AdminCateringBookingCustomerInformation() {
       </div>
 
       <AdminPasswordModal
-        open={openAdminPasswordModal.status}
+        open={openAdminPasswordStatusChangeModal}
         onEnterPassword={(password: string) => {
-          if (openAdminPasswordModal.formData) {
-            openAdminPasswordModal.formData.append("password", password);
-            dispatch(adminCateringPrivilege(openAdminPasswordModal.formData));
-          }
+          if (getAdminCateringBookingState.data)
+            dispatch(
+              adminCateringPrivilege({
+                password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
+                transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
+                fromStatusId: getAdminCateringBookingState.data.status,
+                toStatusId: status,
+              })
+            );
         }}
         onClose={() => {
-          setOpenAdminPasswordModal({
-            status: false,
-          });
+          setOpenAdminPasswordStatusChangeModal(false);
+        }}
+      />
+
+      <AdminPasswordModal
+        open={openAdminPasswordStoreChangeModal}
+        onEnterPassword={(password: string) => {
+          if (getAdminCateringBookingState.data)
+            dispatch(
+              adminCateringPrivilege({
+                password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
+                transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
+                fromStoreId: getAdminCateringBookingState.data.store,
+                toStoreId: store,
+              })
+            );
+        }}
+        onClose={() => {
+          setOpenAdminPasswordStoreChangeModal(false);
         }}
       />
     </div>

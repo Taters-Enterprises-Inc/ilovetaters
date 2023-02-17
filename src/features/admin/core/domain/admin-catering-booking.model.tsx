@@ -11,6 +11,10 @@ export interface AdminCateringBookingModel {
   message: string;
   event_class: string;
   company_name: string;
+  discount_user_id: string;
+  discount: string | null;
+  discount_name: string | null;
+  discount_percentage: string | null;
   hash_key: string;
 
   service_fee: number;
@@ -37,8 +41,8 @@ export interface AdminCateringBookingModel {
   account_name: string;
   account_email: string;
 
-  fb_user_id: number;
-  mobile_user_id: number;
+  fb_user_id: number | null;
+  mobile_user_id: number | null;
 
   distance_price: string;
   reference_num: string;
@@ -55,5 +59,6 @@ export interface AdminCateringBookingModel {
     description: string;
     add_details: string;
     product_label: string;
+    type: string;
   }>;
 }

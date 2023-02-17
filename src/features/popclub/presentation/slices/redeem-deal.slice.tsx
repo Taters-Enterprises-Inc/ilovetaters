@@ -15,10 +15,12 @@ export enum RedeemDealState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: RedeemDealState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: RedeemDealState.initial,
   message: "",
 };

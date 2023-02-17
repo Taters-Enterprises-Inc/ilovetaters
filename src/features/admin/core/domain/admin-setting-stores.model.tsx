@@ -3,6 +3,7 @@ export interface AdminSettingStores {
   name: string;
   menu_name: string;
   status: string;
+  store_image: string;
   catering_status: number;
   popclub_walk_in_status: number;
   popclub_online_delivery_status: number;

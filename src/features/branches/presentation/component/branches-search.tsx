@@ -1,49 +1,28 @@
-import styled from "@emotion/styled";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect } from "react";
+import { MaterialInput } from "features/shared/presentation/components";
+import { useEffect, useState } from "react";
 import {
   resetBranchesSearch,
   searchBranches,
   selectGetStoresAvailableBranches,
 } from "../slices/get-stores-available-branches.slice";
 
-const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
-  <TextField {...props} />
-))(({ theme }) => ({
-  "& input": {
-    color: "white !important",
-    "-webkit-text-fill-color": "white !important",
-  },
-  "& label": {
-    color: "white !important",
-  },
-  "& fieldset": {
-    borderColor: "white !important",
-  },
-  "&:hover fieldset": {
-    borderColor: "white !important",
-  },
-  "&.Mui-focused fieldset": {
-    borderColor: "white !important",
-  },
-}));
 interface BranchesSearchProps {
   label: string;
 }
 export function BranchesSearch(props: BranchesSearchProps) {
+  const dispatch = useAppDispatch();
+
   const getStoresAvailableBranchesState = useAppSelector(
     selectGetStoresAvailableBranches
   );
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     dispatch(resetBranchesSearch());
   }, []);
 
-  const dispatch = useAppDispatch();
-
-  const handleOnChange = (event: any) => {
-    const search = event.target.value;
+  useEffect(() => {
     if (!search) {
       dispatch(resetBranchesSearch());
 
@@ -69,12 +48,17 @@ export function BranchesSearch(props: BranchesSearchProps) {
 
       dispatch(searchBranches({ stores: search_stores }));
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   return (
-    <WhiteTextFiled
-      variant="outlined"
-      onChange={handleOnChange}
+    <MaterialInput
+      colorTheme="white"
+      value={search}
+      onChange={(e) => {
+        setSearch(e.target.value);
+      }}
+      name="search"
       fullWidth
       label={props.label}
     />

@@ -1,12 +1,18 @@
 import createTheme from "@mui/material/styles/createTheme";
-import { FaShoppingBag, FaUserAlt, FaStoreAlt } from "react-icons/fa";
+import {
+  FaShoppingBag,
+  FaUserAlt,
+  FaStoreAlt,
+  FaEnvelope,
+} from "react-icons/fa";
 import { MdPolicy, MdRule } from "react-icons/md";
 import { RiShoppingBag3Fill, RiUserHeartLine } from "react-icons/ri";
 import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
+import { HiDocumentText } from "react-icons/hi";
 import Pusher from "pusher-js";
-
+import { ReactElement, ReactNode } from "react";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 
@@ -173,6 +179,27 @@ export const SNACKSHOP_TERMS_AND_CONDITIONS_TABS: Array<TabModel> = [
   },
 ];
 
+export const BSC_TERMS_AND_POLICY_TABS: Array<TabModel> = [
+  {
+    name: "Terms And Conditions",
+    active: "bsc-terms-and-conditions",
+    url: "/bsc/terms-and-condition",
+    icon: <MdRule />,
+  },
+  {
+    name: "Privacy Policy",
+    active: "bsc-privacy-policy",
+    url: "/bsc/privacy-policy",
+    icon: <MdPolicy />,
+  },
+  {
+    name: "Return Policy",
+    active: "bsc-return-policy",
+    url: "/bsc/return-policy",
+    icon: <GoLaw />,
+  },
+];
+
 export const ADMIN_FAQ: Array<TabModel> = [
   {
     name: "Store",
@@ -211,12 +238,18 @@ export const SEE_ME_TAB_FAQ: Array<TabModel> = [
   },
 ];
 
-export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
+export const PROFILE_TABS: Array<TabModel> = [
   {
     name: "My Profile",
     active: "profile",
     icon: <FaUserAlt />,
     url: "/profile",
+  },
+  {
+    name: "Inbox",
+    active: "inbox",
+    icon: <FaEnvelope />,
+    url: "/profile/inbox",
   },
   {
     name: "Snack Shop Orders",
@@ -235,6 +268,12 @@ export const SNACKSHOP_PROFILE_TABS: Array<TabModel> = [
     active: "popclub",
     icon: <GiPopcorn />,
     url: "/profile/popclub-redeems",
+  },
+  {
+    name: "User Discount",
+    active: "user-discount",
+    icon: <HiDocumentText />,
+    url: "/profile/user-discount",
   },
 ];
 
@@ -260,170 +299,6 @@ export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
     url: "remarks",
   },
 ];
-
-declare module "@mui/material/styles" {
-  interface Palette {
-    tertiary: Palette["primary"];
-  }
-
-  // allow configuration using `createTheme`
-  interface PaletteOptions {
-    tertiary?: PaletteOptions["primary"];
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Radio" {
-  interface RadioPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Checkbox" {
-  interface CheckboxPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/CircularProgress" {
-  interface CircularProgressPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-// Update the Button's color prop options
-declare module "@mui/material/Tabs" {
-  interface TabsPropsColorOverrides {
-    tertiary: true;
-  }
-}
-
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#a21013",
-    },
-    secondary: {
-      main: "#22201A",
-    },
-    tertiary: {
-      main: "#ffcd17",
-    },
-  },
-  components: {
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& fieldset": {
-            borderColor: "#22201A",
-          },
-          "&:hover fieldset": {
-            borderColor: "#22201A",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          ".Mui-error .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#22201A",
-          },
-          // "&.Mui-focused fieldset": {
-          //   borderColor: "blue !important",
-          // },
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: "#22201A",
-          "-webkit-text-fill-color": "#22201A !important",
-        },
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        iconOutlined: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        indicator: {
-          backgroundColor: "#22201A",
-        },
-        root: {
-          "& .MuiTab-root.Mui-selected": {
-            color: "#22201A",
-          },
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          color: "#22201A",
-        },
-      },
-    },
-    MuiTableSortLabel: {
-      styleOverrides: {
-        root: {
-          color: "white !important",
-          "&:hover": {
-            color: "white !important",
-          },
-          "&$active": {
-            color: "white !important",
-          },
-          "& .MuiSvgIcon-root": {
-            color: "white !important",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& label.Mui-focused": {
-            color: "#22201A",
-          },
-          "& label": {
-            color: "#22201A !important",
-          },
-        },
-      },
-    },
-  },
-});
 
 export const ADMIN_SNACKSHOP_ORDER_STATUS: Array<{
   name: string;
@@ -506,6 +381,54 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
   {
     name: "Completed",
     color: "#004d00",
+  },
+];
+
+export const ADMIN_USER_DISCOUNT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#cca300",
+  },
+  {
+    name: "Approved",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
   },
 ];
 
@@ -753,6 +676,339 @@ export const ORDER_STATUS: Array<{
   },
   {
     name: "Order Placed in System",
+    color: "#004d00",
+  },
+  {
+    name: "Payment under Verification",
+    color: "#cca300",
+  },
+  {
+    name: "Payment Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Order Declined",
+    color: "#a21013",
+  },
+  {
+    name: "Order Cancelled",
+    color: "#a21013",
+  },
+  {
+    name: "Product Received by Customer",
+    color: "#004d00",
+  },
+  {
+    name: "Order Rejected due to Incorrect/Incomplete Payment",
+    color: "#a21013",
+  },
+  {
+    name: "Product currently being prepared",
+    color: "#004d00",
+  },
+  {
+    name: "Product en route to Customer",
+    color: "#004d00",
+  },
+];
+
+export const BSC_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "New",
+    color: "#cca300",
+  },
+  {
+    name: "Verified",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+declare module "@mui/material/styles" {
+  interface Palette {
+    tertiary: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    tertiary?: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Radio" {
+  interface RadioPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Checkbox" {
+  interface CheckboxPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/CircularProgress" {
+  interface CircularProgressPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Tabs" {
+  interface TabsPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#a21013",
+    },
+    secondary: {
+      main: "#22201A",
+    },
+    tertiary: {
+      main: "#ffcd17",
+    },
+  },
+  components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "& label.Mui-focused": {
+            color: "#22201A",
+          },
+          "& label": {
+            color: "#22201A !important",
+          },
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#22201A",
+        },
+        root: {
+          "& .MuiTab-root.Mui-selected": {
+            color: "#22201A",
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#22201A",
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          color: "white !important",
+          "&:hover": {
+            color: "white !important",
+          },
+          "&$active": {
+            color: "white !important",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "white !important",
+          },
+        },
+      },
+    },
+  },
+});
+
+export const BRANCHES_INFO: Array<{
+  icon: ReactElement;
+  title: string;
+  subtitle: string;
+  link: string;
+}> = [
+  {
+    icon: (
+      <svg
+        className="w-8 h-8 stroke-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+        ></path>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+        ></path>
+      </svg>
+    ),
+    title: "Head Office Address",
+    subtitle:
+      "TEI Center, 3536 Hilario Street, Brgy. Palanan Makati City, 1235 PH",
+    link: "https://www.google.com/maps/place/TEI+Center/@14.558713,120.9935478,15z/data=!4m12!1m6!3m5!1s0x3397c9710636ea31:0xf042ad0583cb4d42!2sTEI+Center!8m2!3d14.5587046!4d121.0022656!3m4!1s0x3397c9710636ea31:0xf042ad0583cb4d42!8m2!3d14.5587046!4d121.0022656",
+  },
+  {
+    icon: (
+      <svg
+        className="w-8 h-8 stroke-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+    ),
+    title: "Working Hours",
+    subtitle: "Mon - Fri: 9AM - 6PM",
+    link: "/one",
+  },
+  {
+    icon: (
+      <svg
+        className="w-8 h-8 stroke-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+        ></path>
+      </svg>
+    ),
+    title: "Phone Numbers",
+    subtitle: "Hotline: (+63) 997-275-5595",
+    link: "tel:09972755595",
+  },
+  {
+    icon: (
+      <svg
+        className="w-8 h-8 stroke-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+        ></path>
+      </svg>
+    ),
+    title: "Email Address",
+    subtitle: "contact: tei.csr@tatersgroup.com",
+    link: "mailto:tei.csr@tatersgroup.com",
+  },
+];
+
+export const PRODUCT_TYPE: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Main",
+    color: "#004d00",
+  },
+  {
+    name: "Addons",
+    color: "#ffcd17",
+  },
+];
+
+export const PROFILE_MENU: Array<{
+  name: string;
+  icon: ReactNode;
+  urlId: string;
+}> = [
+  {
+    name: "Inbox",
+    icon: <FaEnvelope />,
+    urlId: "inbox",
+  },
+  {
+    name: "Snack Shop Orders",
+    icon: <FaShoppingBag />,
+    urlId: "snackshop-orders",
+  },
+  {
+    name: "Catering Bookings",
+    icon: <RiShoppingBag3Fill />,
+    urlId: "catering-bookings",
+  },
+  {
+    name: "Popclub Redeems",
+    icon: <GiPopcorn />,
+    urlId: "popclub-redeems",
+  },
+  {
+    name: "User Discount",
+    icon: <HiDocumentText />,
+    urlId: "user-discount",
+  },
+];
+
+export const SHOP_ORDER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Incomplete Transaction",
+    color: "#a21013",
+  },
+  {
+    name: "Order Placed In System",
     color: "#004d00",
   },
   {

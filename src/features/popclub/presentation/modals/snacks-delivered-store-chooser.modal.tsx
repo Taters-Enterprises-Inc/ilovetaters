@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { SnacksDeliveredStoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { IoMdClose } from "react-icons/io";
 import { getSnacksDeliveredAvailableStores } from "../slices/get-snacks-delivered-available-stores.slice";
 import {
@@ -55,62 +55,62 @@ export function SnacksDeliveredStoreChooserModal(
         <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store do you want to have your snacks delivered?
         </h1>
-
-        <div className="flex items-center justify-center mb-3">
-          <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
-              value={
-                snacksDeliveredStoreChooserModalState.address
-                  ? snacksDeliveredStoreChooserModalState.address
-                  : ""
-              }
-              onDenied={() => {
-                dispatch(
-                  getSnacksDeliveredAvailableStores({
-                    address: null,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onPrompt={() => {
-                dispatch(
-                  getSnacksDeliveredAvailableStores({
-                    address: null,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onLocateCurrentAddress={(place: string) => {
-                dispatch(
-                  setAddressSnacksDeliveredStoreChooserModal({ address: place })
-                );
-                dispatch(
-                  getSnacksDeliveredAvailableStores({
-                    address: place,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-              onChange={(value: string) => {
-                dispatch(
-                  setAddressSnacksDeliveredStoreChooserModal({ address: value })
-                );
-              }}
-              onPlaceSelected={(place: string) => {
-                dispatch(
-                  setAddressSnacksDeliveredStoreChooserModal({ address: place })
-                );
-                dispatch(
-                  getSnacksDeliveredAvailableStores({
-                    address: place,
-                    service: "POPCLUB-ONLINE-DELIVERY",
-                  })
-                );
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
+        <MaterialInputAddress
+          geolocate={true}
+          colorTheme="white"
+          value={
+            snacksDeliveredStoreChooserModalState.address
+              ? snacksDeliveredStoreChooserModalState.address
+              : ""
+          }
+          onDenied={() => {
+            dispatch(
+              getSnacksDeliveredAvailableStores({
+                address: null,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onPrompt={() => {
+            dispatch(
+              getSnacksDeliveredAvailableStores({
+                address: null,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onLocateCurrentAddress={(location) => {
+            dispatch(
+              setAddressSnacksDeliveredStoreChooserModal({
+                address: location.formattedAddress,
+              })
+            );
+            dispatch(
+              getSnacksDeliveredAvailableStores({
+                address: location.formattedAddress,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+          onChange={(value: string) => {
+            dispatch(
+              setAddressSnacksDeliveredStoreChooserModal({ address: value })
+            );
+          }}
+          onPlaceSelected={(location) => {
+            dispatch(
+              setAddressSnacksDeliveredStoreChooserModal({
+                address: location.formattedAddress,
+              })
+            );
+            dispatch(
+              getSnacksDeliveredAvailableStores({
+                address: location.formattedAddress,
+                service: "POPCLUB-ONLINE-DELIVERY",
+              })
+            );
+          }}
+        />
         <SnacksDeliveredStoreCluster
           onClose={props.onClose}
           address={snacksDeliveredStoreChooserModalState.address}

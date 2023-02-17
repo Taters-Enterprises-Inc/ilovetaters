@@ -28,6 +28,7 @@ import moment from "moment";
 import { createQueryParams } from "features/config/helpers";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
+import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -35,6 +36,7 @@ const columns: Array<Column> = [
   { id: "redeem_code", label: "Redeem Code" },
   { id: "purchase_amount", label: "Purchase Amount" },
   { id: "status", label: "Redeem Status" },
+  { id: "view", label: "View" },
 ];
 
 export function ProfilePopclubRedeems() {
@@ -160,8 +162,14 @@ export function ProfilePopclubRedeems() {
                   );
 
                 return (
-                  <div
+                  <Link
                     key={i}
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(seenNotification(notification.id));
+                      }
+                    }}
+                    to={`/popclub/order/${row.hash_key}`}
                     className={`flex flex-col px-4 py-2 border-b ${
                       notification ? "bg-gray-200" : ""
                     }`}
@@ -202,7 +210,7 @@ export function ProfilePopclubRedeems() {
                         {calculateGrandTotal(row)}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </DataList>
@@ -230,23 +238,25 @@ export function ProfilePopclubRedeems() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected !== "view") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetPopclubRedeemsHistoryStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -305,8 +315,8 @@ export function ProfilePopclubRedeems() {
 
                     return (
                       <DataTableRow
-                        className={`${notification ? "bg-gray-200" : ""}`}
                         key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
                       >
                         <DataTableCell>
                           <Moment format="LLL">{row.dateadded}</Moment>
@@ -342,6 +352,18 @@ export function ProfilePopclubRedeems() {
                               {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
                             </span>
                           )}
+                        </DataTableCell>
+                        <DataTableCell align="left">
+                          <Link
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(seenNotification(notification.id));
+                              }
+                            }}
+                            to={`/popclub/order/${row.hash_key}`}
+                          >
+                            <FaEye className="text-lg" />
+                          </Link>
                         </DataTableCell>
                       </DataTableRow>
                     );

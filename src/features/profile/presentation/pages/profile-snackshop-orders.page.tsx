@@ -27,6 +27,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
 import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
+import { SHOP_ORDER_STATUS } from "features/shared/constants";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -34,6 +35,7 @@ const columns: Array<Column> = [
   { id: "purchase_amount", label: "Purchase Amount" },
   { id: "raffle_code", label: "Raffle Code" },
   { id: "raffle_status", label: "Raffle Status" },
+  { id: "survey", label: "Survey" },
   { id: "view", label: "View" },
 ];
 
@@ -182,9 +184,22 @@ export function ProfileSnackshopOrders() {
                         <span className="text-lg text-gray-600">
                           #{row.tracking_no}
                         </span>
-                        {notification ? (
-                          <VscCircleFilled className="text-red-600 " />
-                        ) : null}
+
+                        <div className="flex">
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                SHOP_ORDER_STATUS[row.status].color,
+                            }}
+                          >
+                            {SHOP_ORDER_STATUS[row.status].name}
+                          </span>
+                          {notification ? (
+                            <VscCircleFilled className="text-red-600 " />
+                          ) : null}
+                        </div>
                       </span>
                       <div className="flex justify-between">
                         <span className="text-xs">
@@ -223,23 +238,25 @@ export function ProfileSnackshopOrders() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected !== "view") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetSnackShopOrderHistoryStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetSnackShopOrderHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -310,6 +327,29 @@ export function ProfileSnackshopOrders() {
                         </DataTableCell>
                         <DataTableCell>N/A</DataTableCell>
                         <DataTableCell>N/A</DataTableCell>
+                        <DataTableCell align="left">
+                          {row.status === 6 ? (
+                            <>
+                              {row.survey_hash ? (
+                                <Link
+                                  to={`/feedback/complete/${row.survey_hash}`}
+                                  className="font-bold text-green-700"
+                                >
+                                  View Rate
+                                </Link>
+                              ) : (
+                                <Link
+                                  to={`/feedback/snackshop/${row.hash_key}`}
+                                  className="font-bold text-blue-800"
+                                >
+                                  Rate Now
+                                </Link>
+                              )}
+                            </>
+                          ) : (
+                            "-----"
+                          )}
+                        </DataTableCell>
                         <DataTableCell align="left">
                           <Link
                             onClick={() => {

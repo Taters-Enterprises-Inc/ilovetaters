@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import {
   getDeal,
   GetDealState,
@@ -28,7 +28,6 @@ import {
   selectGetRedeem,
 } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
-import { LoginChooserModal } from "../modals/login-chooser.modal";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
@@ -57,9 +56,9 @@ import { StoreVisitDealStoreChooserModal } from "../modals/store-visit-deal-stor
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
 import { SnacksDeliveredDealStoreChooserModal } from "../modals/snacks-delivered-deal-store-chooser.modal";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export function PopClubDeal() {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getDealState = useAppSelector(selectGetDeal);
   const getDealProductVariantsState = useAppSelector(
     selectGetDealProductVariants
@@ -213,7 +212,7 @@ export function PopClubDeal() {
   };
 
   const loginToRedeem = () => {
-    setOpenLoginChooserModal(true);
+    dispatch(openLoginChooserModal({ required: false }));
   };
 
   const redeemButton = () => {
@@ -614,7 +613,11 @@ export function PopClubDeal() {
                 ) : null}
                 <img
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
-                  alt="Deals"
+                  alt={getDealState.data.name}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                  }}
                 />
                 <CountdownTimer />
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
@@ -664,12 +667,6 @@ export function PopClubDeal() {
         }}
       />
 
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
       <MessageModal
         open={openForfeitModalMessage}
         onClose={() => {

@@ -32,25 +32,17 @@ export function AdminCateringBookingCustomerInformationButtons() {
     }
   }, [dispatch, trackingNo, adminCateringBookingUpdateStatusState]);
 
-  const handleUpdateStatus = (status: string) => {
+  const handleUpdateStatus = (status: number) => {
     if (getAdminCateringBookingState.data) {
-      const formData = new FormData();
-      formData.append(
-        "trans_id",
-        getAdminCateringBookingState.data.id.toString()
+      dispatch(
+        adminCateringBookingUpdateStatus({
+          transactionId: getAdminCateringBookingState.data.id,
+          fbUserId: getAdminCateringBookingState.data.fb_user_id,
+          mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
+          transactionHash: getAdminCateringBookingState.data.hash_key,
+          status,
+        })
       );
-      if (getAdminCateringBookingState.data.fb_user_id)
-        formData.append(
-          "fb_user_id",
-          getAdminCateringBookingState.data.fb_user_id.toString()
-        );
-      if (getAdminCateringBookingState.data.mobile_user_id)
-        formData.append(
-          "mobile_user_id",
-          getAdminCateringBookingState.data.mobile_user_id.toString()
-        );
-      formData.append("status", status);
-      dispatch(adminCateringBookingUpdateStatus(formData));
     }
   };
 
@@ -60,7 +52,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("20");
+              handleUpdateStatus(20);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -72,7 +64,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
                 category: "Admin Catering Order",
                 action: "Confirm order",
               });
-              handleUpdateStatus("2");
+              handleUpdateStatus(2);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -95,7 +87,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("21");
+              handleUpdateStatus(21);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -103,7 +95,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
+              handleUpdateStatus(4);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -126,7 +118,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("22");
+              handleUpdateStatus(22);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -134,7 +126,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("6");
+              handleUpdateStatus(6);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -157,7 +149,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
         <>
           <button
             onClick={() => {
-              handleUpdateStatus("23");
+              handleUpdateStatus(23);
             }}
             className="px-3 py-1 mb-2 text-base text-white rounded-md shadow-md bg-secondary lg:mb-0"
           >
@@ -165,7 +157,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("8");
+              handleUpdateStatus(8);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -191,7 +183,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
               category: "Admin Catering Order",
               action: "Complete order",
             });
-            handleUpdateStatus("9");
+            handleUpdateStatus(9);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
         >
@@ -214,7 +206,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
                 category: "Admin Catering Order",
                 action: "Confirm order",
               });
-              handleUpdateStatus("2");
+              handleUpdateStatus(2);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -234,7 +226,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("4");
+              handleUpdateStatus(4);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -254,7 +246,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("6");
+              handleUpdateStatus(6);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >
@@ -274,7 +266,7 @@ export function AdminCateringBookingCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
-              handleUpdateStatus("8");
+              handleUpdateStatus(8);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
           >

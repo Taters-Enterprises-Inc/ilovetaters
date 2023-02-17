@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import {
   changeForgotPasswordStatus,
   changeForgotPasswordStatusAddPhoneNumber,
@@ -13,9 +13,9 @@ import {
   resetForgotPasswordGenerateOTP,
   selectForgotPasswordGenerateOTP,
 } from "../slices/forgot-password-generate-otp.slice";
-import { MobileLoginPhoneInput } from "./mobile-login-phone-input";
 
 import { useEffect } from "react";
+import { MaterialPhoneInput } from "./material-phone-input";
 
 interface ForgotPasswordFormElements extends HTMLFormControlsCollection {
   phoneNumber: HTMLInputElement;
@@ -30,6 +30,8 @@ export function MobileForgotPasswordOtp() {
   const forgotPasswordGenerateOTPState = useAppSelector(
     selectForgotPasswordGenerateOTP
   );
+
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   useEffect(() => {
     if (
@@ -47,17 +49,19 @@ export function MobileForgotPasswordOtp() {
   }, [forgotPasswordGenerateOTPState, dispatch]);
 
   const handleOnSubmit = (e: FormEvent<ForgotPasswordFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget as ForgotPasswordFormElement);
-
-    dispatch(forgotPasswordGenerateOTP(formData));
+    dispatch(
+      forgotPasswordGenerateOTP({
+        phoneNumber,
+      })
+    );
 
     dispatch(
       changeForgotPasswordStatusAddPhoneNumber({
-        phoneNumber: e.currentTarget.elements.phoneNumber.value,
+        phoneNumber: phoneNumber,
       })
     );
+
+    e.preventDefault();
   };
 
   return (
@@ -77,7 +81,17 @@ export function MobileForgotPasswordOtp() {
             Please Enter Your Mobile Number To Receive a OTP Code
           </p>
 
-          <MobileLoginPhoneInput />
+          <MaterialPhoneInput
+            colorTheme="white"
+            value={phoneNumber}
+            required
+            size="small"
+            fullWidth
+            name="phoneNumber"
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+            }}
+          />
 
           <button
             type="submit"

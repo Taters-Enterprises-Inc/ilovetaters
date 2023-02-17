@@ -1,7 +1,7 @@
-import { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { Fragment } from "react";
 import {
   selectAdminSideBar,
   toggleAdminSideBar,
@@ -64,20 +64,22 @@ export function AdminDrawerMobile() {
           {getAdminSessionState.data ? (
             <div>
               <div className="text-base">
-                {getAdminSessionState.data.user_details.first_name}{" "}
-                {getAdminSessionState.data.user_details.last_name}
+                {getAdminSessionState.data.admin.user_details.first_name}{" "}
+                {getAdminSessionState.data.admin.user_details.last_name}
               </div>
 
               <div className="text-xs">
-                {getAdminSessionState.data.user_details.groups.map(
+                {getAdminSessionState.data.admin.user_details.groups.map(
                   (group, i) => (
-                    <>
+                    <span key={i}>
                       {getAdminSessionState.data &&
                       i !==
-                        getAdminSessionState.data.user_details.groups.length - 1
+                        getAdminSessionState.data.admin.user_details.groups
+                          .length -
+                          1
                         ? group.name + ", "
                         : group.name}
-                    </>
+                    </span>
                   )
                 )}
               </div>

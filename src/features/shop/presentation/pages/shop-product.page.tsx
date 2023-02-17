@@ -29,7 +29,6 @@ import {
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   getProductSku,
   GetProductSkuState,
@@ -39,7 +38,6 @@ import { ProductDetailsAccordion } from "features/shared/presentation/components
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
-
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
@@ -72,6 +70,7 @@ import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 let quantityId: any;
 
@@ -92,7 +91,6 @@ export function ShopProduct() {
   let { hash } = useParams();
   const location = useLocation();
 
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [setDisabled] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [currentSize, setCurrentSize] = useState<string>("");
@@ -249,7 +247,7 @@ export function ShopProduct() {
       getSessionState.data?.userData === undefined
     ) {
       clearInterval(quantityId);
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
     } else {
       pressTimer(action);
     }
@@ -319,7 +317,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -401,7 +399,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -519,7 +517,11 @@ export function ShopProduct() {
                       <img
                         src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
-                        alt=""
+                        alt={name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                        }}
                       />
                     </SwiperSlide>
                   ))}
@@ -577,7 +579,11 @@ export function ShopProduct() {
                           <img
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                             className="rounded-[10px] w-[75px] h-[75px]"
-                            alt=""
+                            alt={order.prod_name}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
                             <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -717,7 +723,9 @@ export function ShopProduct() {
                             getSessionState.data?.userData === undefined
                           ) {
                             clearInterval(quantityId);
-                            setOpenLoginChooserModal(true);
+                            dispatch(
+                              openLoginChooserModal({ required: false })
+                            );
                           } else {
                             if (isNaN(parseInt(value)) || value === "0") {
                               isQuantityNull.current = true;
@@ -979,13 +987,6 @@ export function ShopProduct() {
           </div>
         </div>
       </section>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
 
       <ShopStoreChooserModal
         open={shopOpenStoreChooserModal}

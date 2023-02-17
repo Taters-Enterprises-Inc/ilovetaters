@@ -11,6 +11,8 @@ export interface RedeemDealModel {
   product_image: string;
   description: string;
 
+  redeem_hash: string;
+
   original_price: number | null;
   promo_price: number | null;
   promo_discount_percentage: string | null;

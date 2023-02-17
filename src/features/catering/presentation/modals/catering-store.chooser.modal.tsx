@@ -1,14 +1,16 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import {
+  resetCateringPackageStoreAndAddress,
   selectSetCateringPackageStoreAndAddress,
   SetCateringPackageStoreAndAddressState,
 } from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
 import { useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 import { CateringStoreChooser } from "../components/catering-store-chooser";
+import { getCateringPackageDetails } from "../slices/get-catering-package-details.slice";
 
 interface CateringStoreChooserModalProps {
   open: boolean;
@@ -17,23 +19,26 @@ interface CateringStoreChooserModalProps {
 export function CateringStoreChooserModal(
   props: CateringStoreChooserModalProps
 ) {
+  let { hash } = useParams();
+
   const setCateringPackageStoreAndAddressState = useAppSelector(
     selectSetCateringPackageStoreAndAddress
   );
   const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (
       setCateringPackageStoreAndAddressState.status ===
       SetCateringPackageStoreAndAddressState.success
     ) {
+      if (hash !== undefined) {
+        dispatch(getCateringPackageDetails({ hash }));
+      }
       dispatch(getSession());
+      dispatch(resetCateringPackageStoreAndAddress());
       props.onClose();
-      document.body.classList.remove("overflow-hidden");
     }
-  }, [setCateringPackageStoreAndAddressState, navigate, dispatch, props]);
+  }, [setCateringPackageStoreAndAddressState, hash, dispatch, props]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");

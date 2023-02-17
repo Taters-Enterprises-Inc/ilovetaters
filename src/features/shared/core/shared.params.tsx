@@ -16,6 +16,10 @@ export interface UploadProofOfPaymentParam {
   formData: FormData;
 }
 
+export interface DiscountRegistrationParam {
+  formData: FormData;
+}
+
 export interface GetStoresAvailableParam {
   hash?: string;
   address: string | null;
@@ -43,4 +47,36 @@ export interface SetSessionParam {
 
 export interface FacebookLoginPointParam {
   currentUrl: string;
+}
+
+export interface SignInMobileUserParam {
+  phoneNumber: string;
+  password: string;
+}
+
+export interface SignUpMobileUserParam {
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface ForgotPasswordGenerateOtpParam {
+  phoneNumber: string;
+}
+
+export interface ForgotPasswordValidateOTPParam {
+  phoneNumber: string;
+  otpCode: string;
+}
+
+export interface ForgotPasswordNewPasswordOtpParam {
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface GetCustomerSurveyResponseInOrderServiceParam {
+  hash: string;
+  service: "snackshop" | "catering";
 }

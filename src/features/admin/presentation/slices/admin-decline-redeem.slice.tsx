@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AdminDeclineRedeemParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   AdminDeclineRedeemRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const adminDeclineRedeem = createAsyncThunk(
   "adminDeclineRedeem",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (param: AdminDeclineRedeemParam, { rejectWithValue }) => {
     try {
       const response: AdminDeclineRedeemResponse =
-        await AdminDeclineRedeemRepository(formData);
+        await AdminDeclineRedeemRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

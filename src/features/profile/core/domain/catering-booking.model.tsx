@@ -12,4 +12,5 @@ export interface CateringBookingModel {
 
   status: number;
   hash_key: string;
+  survey_hash: string;
 }

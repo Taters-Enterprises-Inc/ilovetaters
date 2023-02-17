@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import { GetAdminCateringPackageFlavorsParam } from "features/admin/core/admin.params";
 import {
   GetAdminCateringPackageFlavorsRepository,
   GetAdminCateringPackageFlavorsResponse,
@@ -28,11 +29,11 @@ const initialState: InitialState = {
 
 export const getAdminCateringPackageFlavors = createAsyncThunk(
   "getAdminCateringPackageFlavors",
-  async (packageId: number, { rejectWithValue }) => {
+  async (param: GetAdminCateringPackageFlavorsParam, { rejectWithValue }) => {
     try {
       const response: GetAdminCateringPackageFlavorsResponse =
-        await GetAdminCateringPackageFlavorsRepository(packageId);
-      return { packageId, response: response.data };
+        await GetAdminCateringPackageFlavorsRepository(param);
+      return { packageId: param.packageId, response: response.data };
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {

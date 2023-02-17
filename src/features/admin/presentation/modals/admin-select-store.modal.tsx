@@ -1,6 +1,4 @@
 import { IoMdClose } from "react-icons/io";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import {
   useAppDispatch,
   useAppSelector,
@@ -20,6 +18,7 @@ import {
   updateAdminUserStores,
   UpdateAdminUserStoresState,
 } from "../slices/update-user-stores.slice";
+import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 interface AdminShopOrdersModalProps {
   open: boolean;
   onClose: () => void;
@@ -54,17 +53,19 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
   }
 
   const handleUpdateStore = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     if (
       getAdminUserStoresState.status === GetAdminUserStoresState.success &&
       getAdminUserStoresState.data &&
       userId
     ) {
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
-      formData.append("user_id", userId);
-      formData.append("stores", JSON.stringify(getAdminUserStoresState.data));
-      dispatch(updateAdminUserStores(formData));
+      dispatch(
+        updateAdminUserStores({
+          userId,
+          stores: getAdminUserStoresState.data,
+        })
+      );
     }
+    e.preventDefault();
   };
 
   return (
@@ -89,7 +90,9 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
               {getAdminUserStateState.data?.last_name}
             </span>
 
-            <Autocomplete
+            <MaterialInputAutoComplete
+              label="Select Stores"
+              colorTheme="black"
               multiple
               options={getAdminStoresState.data}
               getOptionLabel={(option) => option.name}
@@ -102,13 +105,6 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
                 dispatch(getAdminUserStoresUpdateStores({ stores }));
               }}
               filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Select Store"
-                  placeholder="Stores"
-                />
-              )}
             />
 
             <div className="flex items-center justify-end">

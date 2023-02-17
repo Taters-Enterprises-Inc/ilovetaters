@@ -1,4 +1,4 @@
-import { Tabs } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
 import { ReactNode, useEffect } from "react";
 import { VscCircleFilled } from "react-icons/vsc";
 import { Link } from "react-router-dom";
@@ -26,7 +26,7 @@ export function Tab(props: TabProps) {
 
   return (
     <div className="flex flex-col items-start justify-start">
-      <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)]">
+      <ul className="py-2 overflow-hidden text-white lg:flex lg:py-0 lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] lg:ml-[0%] ml-[5%]">
         {props.tabs.map((tab, i) => (
           <li
             key={i}
@@ -62,6 +62,13 @@ export function Tab(props: TabProps) {
                 getNotificationsState.data &&
                 getNotificationsState.data.popclub_redeem
                   .unseen_notifications_count > 0 ? (
+                  <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
+                ) : null}
+
+                {tab.active === "inbox" &&
+                getNotificationsState.data &&
+                getNotificationsState.data.inbox.unseen_notifications_count >
+                  0 ? (
                   <VscCircleFilled className="absolute top-[-5px] right-[-8px] text-xs text-red-600" />
                 ) : null}
               </div>

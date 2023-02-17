@@ -14,10 +14,12 @@ export enum EditAdminUserState {
   fail,
 }
 
-const initialState: {
+interface InitialState {
   status: EditAdminUserState;
   message: string;
-} = {
+}
+
+const initialState: InitialState = {
   status: EditAdminUserState.initial,
   message: "",
 };

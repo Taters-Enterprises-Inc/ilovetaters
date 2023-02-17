@@ -22,6 +22,10 @@ export function AdminReports() {
     openGeneratePopClubSnacksDeliveredModal,
     setOpenGeneratePopClubSnacksDeliveredModal,
   ] = useState<boolean>(false);
+  const [
+    openGenerateCustomerFeedbackModal,
+    setOpenGenerateCustomerFeedbackModal,
+  ] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -44,12 +48,12 @@ export function AdminReports() {
           Reports
         </h1>
         <main>
-          <div className="flex p-4 space-x-4">
+          <div className="flex p-4 flex-wrap space-y-4">
             <button
               onClick={() => {
                 setOpenGeneratePmixModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+              className="flex flex-col items-center mr-4 justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
               <GrDocumentConfig className="text-6xl" />
               <div className="flex items-center justify-center mt-2 space-x-1">
@@ -61,7 +65,7 @@ export function AdminReports() {
               onClick={() => {
                 setOpenGenerateTransactionModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
               <GrDocumentConfig className="text-6xl" />
               <div className="flex items-center justify-center mt-2 space-x-1">
@@ -74,7 +78,7 @@ export function AdminReports() {
               onClick={() => {
                 setOpenGeneratePopClubStoreVisitModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
               <GrDocumentConfig className="text-6xl" />
               <div className="flex items-center justify-center mt-2 space-x-1">
@@ -89,13 +93,28 @@ export function AdminReports() {
               onClick={() => {
                 setOpenGeneratePopClubSnacksDeliveredModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
               <GrDocumentConfig className="text-6xl" />
               <div className="flex items-center justify-center mt-2 space-x-1">
                 <GrAttachment className="text-lg font-semibold" />
                 <span className="text-lg font-semibold">
                   PopClub_Snacks_Delivered.xls
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpenGenerateCustomerFeedbackModal(true);
+              }}
+              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+            >
+              <GrDocumentConfig className="text-6xl" />
+              <div className="flex items-center justify-center mt-2 space-x-1">
+                <GrAttachment className="text-lg font-semibold" />
+                <span className="text-lg font-semibold">
+                  Customer_Feedback.xls
                 </span>
               </div>
             </button>
@@ -191,6 +210,29 @@ export function AdminReports() {
         }}
         onClose={() => {
           setOpenGeneratePopClubSnacksDeliveredModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGenerateCustomerFeedbackModal}
+        title="Generate Customer Feedback"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-customer-feedback/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGenerateCustomerFeedbackModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate customer feedback report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGenerateCustomerFeedbackModal(false);
         }}
       />
     </>

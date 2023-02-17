@@ -11,30 +11,31 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { DataList } from "features/shared/presentation/components";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
+import {
+  DataList,
+  MaterialInputAutoComplete,
+  MaterialInput,
+} from "features/shared/presentation/components";
 import {
   getAdminStoreProducts,
   resetGetAdminStoreProductsStatus,
   selectGetAdminStoreProducts,
 } from "../slices/get-admin-stores-products.slice";
 import {
-  getProductCategories,
-  selectGetProductCategories,
-} from "../slices/get-product-categories.slice";
+  getAdminProductCategories,
+  selectGetAdminProductCategories,
+} from "../slices/get-admin-product-categories.slice";
 import {
   selectUpdateStoreProduct,
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
@@ -58,16 +59,18 @@ export function AdminAvailabilityProducts() {
     selectGetAdminStoreProducts
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getProductCategoriesState = useAppSelector(selectGetProductCategories);
+  const getAdminProductCategoriesState = useAppSelector(
+    selectGetAdminProductCategories
+  );
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
 
   useEffect(() => {
-    dispatch(getProductCategories());
+    dispatch(getAdminProductCategories());
   }, [dispatch]);
 
   useEffect(() => {
     const defaultStoreId =
-      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
+      getAdminSessionState.data?.admin.user_details.stores[0].store_id ?? 3;
 
     const query = createQueryParams({
       page_no: pageNo,
@@ -158,12 +161,15 @@ export function AdminAvailabilityProducts() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
-              options={getAdminSessionState.data.user_details.stores}
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               sx={{ width: 328 }}
               size="small"
-              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              options={getAdminSessionState.data.admin.user_details.stores}
+              defaultValue={
+                getAdminSessionState.data.admin.user_details.stores[0]
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
@@ -186,52 +192,50 @@ export function AdminAvailabilityProducts() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
       </div>
       <div className="px-4 py-2">
-        {getProductCategoriesState.data ? (
-          <FormControl sx={{ minWidth: 150, marginTop: 1 }} size="small">
-            <InputLabel>Filter by category</InputLabel>
+        {getAdminProductCategoriesState.data ? (
+          <MaterialInput
+            colorTheme="black"
+            label="Filter by category"
+            className="!min-w-[150px]"
+            size="small"
+            select
+            name="category"
+            value={categoryId ?? "all"}
+            onChange={(event) => {
+              if (event.target.value !== status) {
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: status,
+                  store_id: storeId,
+                  category_id:
+                    event.target.value === "all" ? null : event.target.value,
+                  search: search,
+                };
 
-            <Select
-              label="Filter by category"
-              defaultValue={categoryId ?? "all"}
-              onChange={(event) => {
-                if (event.target.value !== status) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    status: status,
-                    store_id: storeId,
-                    category_id:
-                      event.target.value === "all" ? null : event.target.value,
-                    search: search,
-                  };
+                const queryParams = createQueryParams(params);
 
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="all">
-                <span className="text-xs lg:text-base">All</span>
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }
+            }}
+          >
+            <MenuItem value="all">
+              <span className="text-xs lg:text-base">All</span>
+            </MenuItem>
+            {getAdminProductCategoriesState.data?.map((category, index) => (
+              <MenuItem key={index} value={category.id}>
+                <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>
-              {getProductCategoriesState.data?.map((category, index) => (
-                <MenuItem key={index} value={category.id}>
-                  <span className="text-xs lg:text-base">{category.name}</span>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            ))}
+          </MaterialInput>
         ) : null}
       </div>
 
@@ -384,7 +388,7 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                if (column_selected != "action") {
+                if (column_selected !== "action") {
                   const isAsc = orderBy === column_selected && order === "asc";
 
                   const params = {
@@ -461,6 +465,17 @@ export function AdminAvailabilityProducts() {
                 <>
                   {getAdminStoreProductsState.data.products.map((row, i) => (
                     <DataTableRow key={i}>
+                      <DataTableCell>
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                          alt="Deal Product"
+                          className="rounded-[10px] w-[75px] h-[75px]"
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
                         <div

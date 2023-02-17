@@ -8,9 +8,29 @@ import {
   UpdateStoreProductParam,
   UpdateStoreCatersPackageAddonParam,
   UpdateStoreCatersProductAddonParam,
+  CreateAdminUserParam,
+  LoginAdminParam,
+  AdminPrivilegeParam,
+  ValidateReferenceNumberParam,
+  UpdateUserStoresParam,
+  CreateAdminGroupParam,
+  AdminUserDiscountChangeStatusParam,
+  AdminDeclineRedeemParam,
+  AdminCompleteRedeemParam,
+  AdminCateringBookingUpdateStatusParam,
+  AdminShopOrderUpdateStatusParam,
+  AdminSurveyVerificationChangeStatusParam,
+  CreateAdminSettingShopProductParam,
+  EditAdminSettingShopProductParam,
+  UpdateAdminSettingShopProductStatusParam,
+  UpdateStoreCateringProductParam,
   UpdateAdminCateringOrderItemRemarksParam,
   GetAdminSalesParam,
   GetAdminTotalSalesParam,
+  CreateAdminSettingStoreParam,
+  GetAdminCateringPackageFlavorsParam,
+  GetAdminSettingStoreParam,
+  EditAdminSettingStoreParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -33,10 +53,25 @@ import { GetAdminStoreCatersProductAddonsModel } from "features/admin/core/domai
 import { ShopTransactionLogsModel } from "features/admin/core/domain/shop-transaction-logs.model";
 import { CateringTransactionLogsModel } from "features/admin/core/domain/catering-transaction-logs.model";
 import { GetAdminNotificationModel } from "features/admin/core/domain/get-admin-notification.model";
+import { GetAdminUserDiscountsModel } from "features/admin/core/domain/get-admin-user-discounts.model";
+import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-discount.model";
 import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
+import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
+import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
+import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
+import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
+import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
+import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/get-admin-store-catering-products.model";
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
 import { SaleModel } from "features/admin/core/domain/sale.model";
 import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
+import { StoreMenuModel } from "../../core/domain/store-menu.model";
+import { AdminRegionModel } from "features/admin/core/domain/admin-region.model";
+import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-locale.model";
+import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
+import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-setting-store.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -82,6 +117,34 @@ export interface GetAdminPopclubRedeemResponse {
   data: {
     message: string;
     data: AdminPopclubRedeemModel;
+  };
+}
+
+export interface GetAdminUserDiscountsResponse {
+  data: {
+    message: string;
+    data: GetAdminUserDiscountsModel;
+  };
+}
+
+export interface GetAdminUserDiscountResponse {
+  data: {
+    message: string;
+    data: AdminUserDiscountModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationResponse {
+  data: {
+    message: string;
+    data: AdminSurveyVerificationModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminSurveyVerificationsModel;
   };
 }
 
@@ -225,7 +288,7 @@ export interface GetAdminStoreProductsResponse {
   };
 }
 
-export interface GetProductCategoriesResponse {
+export interface GetAdminProductCategoriesResponse {
   data: {
     message: string;
     data: Array<CategoryModel>;
@@ -245,25 +308,12 @@ export interface GetAdminSettingStoresResponse {
   };
 }
 
-export interface UpdateAdminSettingStoreResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetAdminStoreResponse {
   data: {
     message: string;
     data: AdminStoreModel;
   };
 }
-
-export interface UpdateAdminSettingStoreOperatingHoursResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetCatersPackageCategoriesResponse {
   data: {
     message: string;
@@ -343,10 +393,98 @@ export interface UpdateAdminNotificationDateSeenResponse {
     message: string;
   };
 }
+export interface AdminUserDiscountChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
 
+export interface AdminSurveyVerificationChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminStoreCateringProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCateringProductsModel;
+  };
+}
+export interface UpdateStoreCateringProductResponse {
+  data: {
+    message: string;
+  };
+}
 export interface UpdateAdminCateringOrderItemRemarksResponse {
   data: {
     message: string;
+  };
+}
+
+export interface GetAdminSurveyVerificationResponse {
+  data: {
+    message: string;
+    data: AdminSurveyVerificationModel;
+  };
+}
+
+export interface GetAdminSurveyVerificationsResponse {
+  data: {
+    message: string;
+    data: GetAdminSurveyVerificationsModel;
+  };
+}
+
+export interface GetAdminSettingShopProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductsModel;
+  };
+}
+
+export interface CreateAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingShopProductResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductModel;
+  };
+}
+
+export interface EditAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface DeleteAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingShopProductStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingShopProductTypesResponse {
+  data: {
+    message: string;
+    data: Array<ProductTypeModel>;
+  };
+}
+
+export interface GetAdminProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
   };
 }
 
@@ -370,6 +508,139 @@ export interface GetAdminTotalSalesResponse {
     data: TotalSalesModel;
   };
 }
+
+export interface GetAdminStoreMenusResponse {
+  data: {
+    message: string;
+    data: Array<StoreMenuModel>;
+  };
+}
+
+export interface CreateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminRegionStoreCombinationsResponse {
+  data: {
+    message: string;
+    data: Array<AdminRegionModel>;
+  };
+}
+
+export interface GetAdminPackagesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPackageModel>;
+  };
+}
+export interface GetAdminDealsResponse {
+  data: {
+    message: string;
+    data: Array<AdminDealModel>;
+  };
+}
+
+export interface GetAdminStoreLocalesResponse {
+  data: {
+    message: string;
+    data: Array<AdminStoreLocaleModel>;
+  };
+}
+
+export interface GetAdminSettingStoreResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingStoreModel;
+  };
+}
+
+export interface EditAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingStoreRepository(
+  param: EditAdminSettingStoreParam
+): Promise<EditAdminSettingStoreResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-store`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingStoreRepository(
+  param: GetAdminSettingStoreParam
+): Promise<GetAdminSettingStoreResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/store?store-id=${param.storeId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDealsRepository(): Promise<GetAdminDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deals`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminPackagesRepository(): Promise<GetAdminPackagesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/packages`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/locales`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminRegionStoreCombinationsRepository(): Promise<GetAdminRegionStoreCombinationsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/region-store-combination`, {
+    withCredentials: true,
+  });
+}
+
+export function CreateAdminSettingStoreRepository(
+  param: CreateAdminSettingStoreParam
+): Promise<CreateAdminSettingStoreResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/store`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreMenusRepository(): Promise<GetAdminStoreMenusResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/store-menu`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStoreCateringProductRepository(
+  param: UpdateStoreCateringProductParam
+): Promise<UpdateStoreCateringProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminTotalSalesRepository(
   param: GetAdminTotalSalesParam
 ): Promise<GetAdminTotalSalesResponse> {
@@ -389,11 +660,135 @@ export function GetAdminSalesRepository(
   });
 }
 
+export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/products`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product/type`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminCateringPackageFlavorsRepository(
-  packageId: number
+  param: GetAdminCateringPackageFlavorsParam
 ): Promise<GetAdminCateringPackageFlavorsResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${packageId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${param.packageId}?type=${param.type}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateAdminSettingShopProductStatusRepository(
+  param: UpdateAdminSettingShopProductStatusParam
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function DeleteAdminSettingShopProductRepository(
+  productId: string
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/delete-shop-product?id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function EditAdminSettingShopProductRepository(
+  param: EditAdminSettingShopProductParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingShopProductRepository(
+  productId: string
+): Promise<GetAdminSettingShopProductResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product?product-id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingShopProductRepository(
+  param: CreateAdminSettingShopProductParam
+): Promise<CreateAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingShopProductsRepository(
+  query: string
+): Promise<GetAdminSettingShopProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-products${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSurveyVerificationsRepository(
+  query: string
+): Promise<GetAdminSurveyVerificationsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verifications${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSurveyVerificationRepository(
+  id: string
+): Promise<GetAdminSurveyVerificationResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verification/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminUserDiscountChangeStatusRepository(
+  param: AdminUserDiscountChangeStatusParam
+): Promise<AdminUserDiscountChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/discount/user-discount-change-status`,
+    param,
     {
       withCredentials: true,
     }
@@ -412,12 +807,22 @@ export function UpdateAdminCateringOrderItemRemarksRepository(
   );
 }
 
+export function GetAdminStoreCateringProductsRepository(
+  query: string
+): Promise<GetAdminStoreCateringProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
-): Promise<UpdateAdminNotificationDateSeenResponse> {
-  return axios.put(
+) {
+  return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/notification/${notificationId}/seen`,
-    new FormData(),
     {
       withCredentials: true,
     }
@@ -536,18 +941,6 @@ export function GetCatersPackageCategoriesRepository(): Promise<GetCatersPackage
   );
 }
 
-export function UpdateAdminSettingStoreOperatingHoursRepository(
-  param: UpdateAdminSettingStoreOperatingHoursParam
-): Promise<UpdateAdminSettingStoreOperatingHoursResponse> {
-  return axios.put(
-    `${REACT_APP_DOMAIN_URL}api/admin/store-operating-hours`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
 export function GetAdminStoreRepository(
   storeId: string
 ): Promise<GetAdminStoreResponse> {
@@ -560,23 +953,15 @@ export function GetAdminStoreRepository(
 }
 
 export function AdminDeclineRedeemRepository(
-  formData: FormData
+  param: AdminDeclineRedeemParam
 ): Promise<AdminDeclineRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/decline-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
   );
-}
-
-export function UpdateAdminSettingStoreRepository(
-  param: UpdateAdminSettingStoreParam
-): Promise<UpdateStoreProductResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/store`, param, {
-    withCredentials: true,
-  });
 }
 
 export function GetAdminSettingStoresRepository(
@@ -599,7 +984,7 @@ export function UpdateStoreProductRepository(
   );
 }
 
-export function GetProductCategoriesRepository(): Promise<GetProductCategoriesResponse> {
+export function GetAdminProductCategoriesRepository(): Promise<GetAdminProductCategoriesResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/product-categories`, {
     withCredentials: true,
   });
@@ -640,11 +1025,11 @@ export function GetAdminStoreDealsRepository(
 }
 
 export function AdminCateringBookingUpdateStatusRepository(
-  formData: FormData
+  param: AdminCateringBookingUpdateStatusParam
 ): Promise<AdminCateringBookingUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/catering-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -667,11 +1052,11 @@ export function GetAdminCateringBookingsRepository(
 }
 
 export function AdminCateringPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminCateringPrivilegeResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/admin-catering-privilege`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -679,23 +1064,19 @@ export function AdminCateringPrivilegeRepository(
 }
 
 export function AdminPrivilegeRepository(
-  formData: FormData
+  param: AdminPrivilegeParam
 ): Promise<AdminPrivilegeResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/admin-privilege`, param, {
+    withCredentials: true,
+  });
 }
 
 export function AdminShopOrderUpdateStatusRepository(
-  formData: FormData
+  param: AdminShopOrderUpdateStatusParam
 ): Promise<AdminShopOrderUpdateStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/shop-update-status`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -703,15 +1084,11 @@ export function AdminShopOrderUpdateStatusRepository(
 }
 
 export function ValidateReferenceNumberAdminRepository(
-  formData: FormData
+  param: ValidateReferenceNumberParam
 ): Promise<ValidateReferenceNumberAdminResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/reference-num/`,
-    formData,
-    {
-      withCredentials: true,
-    }
-  );
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/reference-num/`, param, {
+    withCredentials: true,
+  });
 }
 
 export function UploadProofOfPaymentAdminRepository(
@@ -726,17 +1103,17 @@ export function UploadProofOfPaymentAdminRepository(
 }
 
 export function CreateAdminGroupRepository(
-  formData: FormData
+  param: CreateAdminGroupParam
 ): Promise<CreateAdminGroupResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-group`, param, {
     withCredentials: true,
   });
 }
 
 export function UpdateAdminUserStoresRepository(
-  formData: FormData
+  param: UpdateUserStoresParam
 ): Promise<GetAdminUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, param, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -766,7 +1143,7 @@ export function EditAdminUserRepository(
 ): Promise<EditAdminUserResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/auth/edit-user/${param.userId}`,
-    param.formData,
+    param.body,
     {
       withCredentials: true,
     }
@@ -774,7 +1151,7 @@ export function EditAdminUserRepository(
 }
 
 export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/groups`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/groups`, {
     withCredentials: true,
   });
 }
@@ -782,15 +1159,15 @@ export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
 export function GetAdminUserRepository(
   userId: string
 ): Promise<GetAdminUserResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/user/${userId}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/user/${userId}`, {
     withCredentials: true,
   });
 }
 
 export function CreateAdminUserRepository(
-  formData: FormData
+  param: CreateAdminUserParam
 ): Promise<CreateAdminUserResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create_user`, formData, {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/create-user`, param, {
     withCredentials: true,
   });
 }
@@ -798,17 +1175,17 @@ export function CreateAdminUserRepository(
 export function GetAdminUsersRepository(
   query: string
 ): Promise<GetAdminUsersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/users${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/users${query}`, {
     withCredentials: true,
   });
 }
 
 export function AdminCompleteRedeemRepository(
-  formData: FormData
+  param: AdminCompleteRedeemParam
 ): Promise<AdminCompleteRedeemResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/popclub/complete-redeem`,
-    formData,
+    param,
     {
       withCredentials: true,
     }
@@ -829,6 +1206,34 @@ export function GetAdminPopclubRedeemsRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/popclub${query}`, {
     withCredentials: true,
   });
+}
+
+export function GetAdminUserDiscountRepository(
+  id: string
+): Promise<GetAdminUserDiscountResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discount/${id}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminUserDiscountsRepository(
+  query: string
+): Promise<GetAdminUserDiscountsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/discounts${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function AdminSurveyVerificationChangeStatusRepository(
+  param: AdminSurveyVerificationChangeStatusParam
+): Promise<AdminSurveyVerificationChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/survey-verification/survey-verification-change-status`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminShopOrderRepository(
@@ -854,7 +1259,7 @@ export function GetAdminSessionRepository(): Promise<GetAdminSessionResponse> {
 }
 
 export function LoginAdminRepository(
-  param: FormData
+  param: LoginAdminParam
 ): Promise<LoginAdminResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/login`, param, {
     withCredentials: true,

@@ -1,33 +1,12 @@
-import styled from "@emotion/styled";
-import TextField, { OutlinedTextFieldProps } from "@mui/material/TextField";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   resetStoreVisitStoresSearch,
   searchStoreVisitStores,
   selectGetStoreVisitAvailableStore,
 } from "../slices/get-store-visit-available-stores.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MaterialInput } from "features/shared/presentation/components";
 
-const WhiteTextFiled = styled((props: OutlinedTextFieldProps) => (
-  <TextField {...props} />
-))(({ theme }) => ({
-  "& input": {
-    color: "white !important",
-    "-webkit-text-fill-color": "white !important",
-  },
-  "& label": {
-    color: "white !important",
-  },
-  "& fieldset": {
-    borderColor: "white !important",
-  },
-  "&:hover fieldset": {
-    borderColor: "white !important",
-  },
-  "&.Mui-focused fieldset": {
-    borderColor: "white !important",
-  },
-}));
 interface StoreVisitStoreSearchProps {
   label: string;
 }
@@ -38,12 +17,13 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
     selectGetStoreVisitAvailableStore
   );
 
+  const [search, setSearch] = useState<string>("");
+
   useEffect(() => {
     dispatch(resetStoreVisitStoresSearch());
-  }, []);
+  }, [dispatch]);
 
-  const handleOnChange = (event: any) => {
-    const search = event.target.value;
+  useEffect(() => {
     if (!search) {
       dispatch(resetStoreVisitStoresSearch());
 
@@ -69,12 +49,17 @@ export function StoreVisitStoreSearch(props: StoreVisitStoreSearchProps) {
 
       dispatch(searchStoreVisitStores({ stores: search_stores }));
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   return (
-    <WhiteTextFiled
-      variant="outlined"
-      onChange={handleOnChange}
+    <MaterialInput
+      colorTheme="white"
+      value={search}
+      name="search"
+      onChange={(e) => {
+        setSearch(e.target.value);
+      }}
       fullWidth
       label={props.label}
     />

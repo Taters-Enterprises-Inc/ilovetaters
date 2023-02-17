@@ -17,7 +17,6 @@ export function FooterNav(props: FooterNavProps) {
   const navigate = useNavigate();
   const getSessionState = useAppSelector(selectGetSession);
   const currentLocation = useLocation();
-  const dispatch = useAppDispatch();
 
   function isMoreActive() {
     const loc = currentLocation.pathname;
@@ -59,6 +58,7 @@ export function FooterNav(props: FooterNavProps) {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
+      getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
       setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({

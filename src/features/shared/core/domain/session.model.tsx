@@ -10,21 +10,21 @@ export interface SessionModel {
     moh_notes?: string;
   };
 
-  customer_address?: string;
+  customer_address: string;
 
   userData: {
-    oauth_provider: string;
-    oauth_uid: string;
+    oauth_provider?: string;
+    oauth_uid?: string;
     first_name: string;
     last_name: string;
     email: string;
-    gender: string;
-    picture: string;
-    link: string;
-    login_type: "mobile" | "facebook";
-    mobile_user_id: number;
-    fb_user_id: number;
-    mobile_number: string;
+    gender?: string;
+    picture?: string;
+    link?: string;
+    login_type?: "mobile" | "facebook";
+    mobile_user_id?: number;
+    fb_user_id?: number;
+    mobile_number?: string;
   };
 
   popclub_data: {

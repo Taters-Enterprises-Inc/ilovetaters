@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
+import { SignUpMobileUserParam } from "features/shared/core/shared.params";
 import {
   SignUpMobileUserRepository,
   SignUpMobileUserResponse,
@@ -25,7 +26,7 @@ const initialState: InitialState = {
 
 export const signUpMobileUser = createAsyncThunk(
   "signUpMobileUser",
-  async (param: FormData, { rejectWithValue }) => {
+  async (param: SignUpMobileUserParam, { rejectWithValue }) => {
     try {
       const response: SignUpMobileUserResponse =
         await SignUpMobileUserRepository(param);

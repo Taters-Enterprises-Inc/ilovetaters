@@ -1,4 +1,4 @@
-import { SNACKSHOP_PROFILE_TABS } from "features/shared/constants";
+import { PROFILE_TABS } from "features/shared/constants";
 import { Tab } from "features/shared/presentation/components";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { ReactNode } from "react";
@@ -12,7 +12,9 @@ interface ProfileContainerProps {
     | "catering"
     | "popclub"
     | "raffle"
-    | "gift-cards";
+    | "gift-cards"
+    | "user-discount"
+    | "inbox";
 }
 
 export function ProfileContainer(props: ProfileContainerProps) {
@@ -23,7 +25,7 @@ export function ProfileContainer(props: ProfileContainerProps) {
       <section className="min-h-screen lg:space-x-4 pb-36">
         <div className="lg:-mt-[80px] lg:space-y-8">
           <div className="container">
-            <Tab tabs={SNACKSHOP_PROFILE_TABS} activeTab={props.activeTab}>
+            <Tab tabs={PROFILE_TABS} activeTab={props.activeTab}>
               <div className="space-y-6">{props.children}</div>
             </Tab>
           </div>

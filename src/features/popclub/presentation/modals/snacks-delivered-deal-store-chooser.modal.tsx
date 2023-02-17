@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { SnacksDeliveredDealStoreCluster } from "../components";
-import { SearchAddress } from "../../../shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { IoMdClose } from "react-icons/io";
 import { getSnacksDeliveredDealAvailableStores } from "../slices/get-snacks-delivered-deal-available-stores.slice";
 import {
@@ -58,79 +58,76 @@ export function SnacksDeliveredDealStoreChooserModal(
           Which store do you want to have your snacks delivered?
         </h1>
 
-        <div className="flex items-center justify-center mb-3">
-          <label className="w-full pure-material-textfield-outlined">
-            <SearchAddress
-              value={
-                snacksDeliveredDealStoreChooserModalState.address
-                  ? snacksDeliveredDealStoreChooserModalState.address
-                  : ""
-              }
-              onDenied={() => {
-                if (getDealState.data?.hash) {
-                  dispatch(
-                    getSnacksDeliveredDealAvailableStores({
-                      address: null,
-                      service: "POPCLUB-ONLINE-DELIVERY",
-                      hash: getDealState.data.hash,
-                    })
-                  );
-                }
-              }}
-              onPrompt={() => {
-                if (getDealState.data?.hash) {
-                  dispatch(
-                    getSnacksDeliveredDealAvailableStores({
-                      address: null,
-                      service: "POPCLUB-ONLINE-DELIVERY",
-                      hash: getDealState.data.hash,
-                    })
-                  );
-                }
-              }}
-              onLocateCurrentAddress={(place: string) => {
-                if (getDealState.data?.hash) {
-                  dispatch(
-                    setAddressSnacksDeliveredDealStoreChooserModal({
-                      address: place,
-                    })
-                  );
-                  dispatch(
-                    getSnacksDeliveredDealAvailableStores({
-                      address: place,
-                      service: "POPCLUB-ONLINE-DELIVERY",
-                      hash: getDealState.data.hash,
-                    })
-                  );
-                }
-              }}
-              onChange={(value: string) => {
-                dispatch(
-                  setAddressSnacksDeliveredDealStoreChooserModal({
-                    address: value,
-                  })
-                );
-              }}
-              onPlaceSelected={(place: string) => {
-                if (getDealState.data?.hash) {
-                  dispatch(
-                    setAddressSnacksDeliveredDealStoreChooserModal({
-                      address: place,
-                    })
-                  );
-                  dispatch(
-                    getSnacksDeliveredDealAvailableStores({
-                      address: place,
-                      service: "POPCLUB-ONLINE-DELIVERY",
-                      hash: getDealState.data.hash,
-                    })
-                  );
-                }
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
+        <MaterialInputAddress
+          geolocate={true}
+          colorTheme="white"
+          value={
+            snacksDeliveredDealStoreChooserModalState.address
+              ? snacksDeliveredDealStoreChooserModalState.address
+              : ""
+          }
+          onDenied={() => {
+            if (getDealState.data?.hash) {
+              dispatch(
+                getSnacksDeliveredDealAvailableStores({
+                  address: null,
+                  service: "POPCLUB-ONLINE-DELIVERY",
+                  hash: getDealState.data.hash,
+                })
+              );
+            }
+          }}
+          onPrompt={() => {
+            if (getDealState.data?.hash) {
+              dispatch(
+                getSnacksDeliveredDealAvailableStores({
+                  address: null,
+                  service: "POPCLUB-ONLINE-DELIVERY",
+                  hash: getDealState.data.hash,
+                })
+              );
+            }
+          }}
+          onLocateCurrentAddress={(location) => {
+            if (getDealState.data?.hash) {
+              dispatch(
+                setAddressSnacksDeliveredDealStoreChooserModal({
+                  address: location.formattedAddress,
+                })
+              );
+              dispatch(
+                getSnacksDeliveredDealAvailableStores({
+                  address: location.formattedAddress,
+                  service: "POPCLUB-ONLINE-DELIVERY",
+                  hash: getDealState.data.hash,
+                })
+              );
+            }
+          }}
+          onChange={(value: string) => {
+            dispatch(
+              setAddressSnacksDeliveredDealStoreChooserModal({
+                address: value,
+              })
+            );
+          }}
+          onPlaceSelected={(location) => {
+            if (getDealState.data?.hash) {
+              dispatch(
+                setAddressSnacksDeliveredDealStoreChooserModal({
+                  address: location.formattedAddress,
+                })
+              );
+              dispatch(
+                getSnacksDeliveredDealAvailableStores({
+                  address: location.formattedAddress,
+                  service: "POPCLUB-ONLINE-DELIVERY",
+                  hash: getDealState.data.hash,
+                })
+              );
+            }
+          }}
+        />
         <SnacksDeliveredDealStoreCluster
           onClose={props.onClose}
           address={snacksDeliveredDealStoreChooserModalState.address}

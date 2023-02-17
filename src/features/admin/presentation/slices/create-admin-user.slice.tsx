@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { CreateAdminUserParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   CreateAdminUserRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const createAdminUser = createAsyncThunk(
   "createAdminUser",
-  async (fromData: FormData, { rejectWithValue }) => {
+  async (param: CreateAdminUserParam, { rejectWithValue }) => {
     try {
       const response: CreateAdminUserResponse = await CreateAdminUserRepository(
-        fromData
+        param
       );
       return response.data;
     } catch (error) {

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { CreateAdminGroupParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   CreateAdminGroupRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const createAdminGroup = createAsyncThunk(
   "createAdminGroup",
-  async (fromData: FormData, { rejectWithValue }) => {
+  async (param: CreateAdminGroupParam, { rejectWithValue }) => {
     try {
       const response: CreateAdminGroupResponse =
-        await CreateAdminGroupRepository(fromData);
+        await CreateAdminGroupRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

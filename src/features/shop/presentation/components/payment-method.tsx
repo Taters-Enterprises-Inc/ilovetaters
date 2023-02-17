@@ -145,22 +145,21 @@ export function PaymentMethod(props: PaymentMethodProps) {
         >
           {paymentSelected === "COD" ? (
             <>
-              {getSessionState.data?.payops_list.map((payops, i) => (
-                <>
-                  {payops.name === "CASH" ? (
-                    <FormControlLabel
-                      value={payops.id}
-                      control={<Radio required />}
-                      label={
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
-                          alt=""
-                        />
-                      }
-                    />
-                  ) : null}
-                </>
-              ))}
+              {getSessionState.data?.payops_list.map((payops, i) =>
+                payops.name === "CASH" ? (
+                  <FormControlLabel
+                    key={i}
+                    value={payops.id}
+                    control={<Radio required />}
+                    label={
+                      <img
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
+                        alt=""
+                      />
+                    }
+                  />
+                ) : null
+              )}
             </>
           ) : null}
 

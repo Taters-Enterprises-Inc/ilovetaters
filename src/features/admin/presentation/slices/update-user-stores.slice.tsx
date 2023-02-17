@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UpdateUserStoresParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   UpdateAdminUserStoresRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const updateAdminUserStores = createAsyncThunk(
   "updateAdminUserStores",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (param: UpdateUserStoresParam, { rejectWithValue }) => {
     try {
       const response: UpdateAdminUserStoresResponse =
-        await UpdateAdminUserStoresRepository(formData);
+        await UpdateAdminUserStoresRepository(param);
 
       return response.data;
     } catch (error) {

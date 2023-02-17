@@ -11,11 +11,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  changeCateringProductPrice,
-  getCateringProductDetails,
-  GetCateringProductDetailsState,
-  selectGetCateringProductDetails,
-} from "../slices/get-catering-product-details.slice";
+  changeCateringPackagePrice,
+  getCateringPackageDetails,
+  GetCateringPackageDetailsState,
+  selectGetCateringPackageDetails,
+} from "../slices/get-catering-package-details.slice";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
@@ -33,7 +33,6 @@ import {
   CateringFlavors,
   CateringProductQuantity,
 } from "../components";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   addToCartCatering,
@@ -50,6 +49,7 @@ import ReactGA from "react-ga";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -79,12 +79,11 @@ export function CateringProduct() {
 
   const [quantity, setQuantity] = useState(1);
 
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openCateringStoreChooserModal, setOpenCateringStoreChooserModal] =
     useState(false);
 
-  const getCateringProductDetailsState = useAppSelector(
-    selectGetCateringProductDetails
+  const getCateringPackageDetailsState = useAppSelector(
+    selectGetCateringPackageDetails
   );
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartCateringState = useAppSelector(selectAddToCartCatering);
@@ -94,15 +93,15 @@ export function CateringProduct() {
 
   const checkBaseProduct = (updatedQuantity: number) => {
     if (
-      getCateringProductDetailsState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success
+      getCateringPackageDetailsState.data &&
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success
     ) {
-      const productPrices = getCateringProductDetailsState.data.product_prices;
+      const productPrices = getCateringPackageDetailsState.data.product_prices;
       for (let i = 0; i < productPrices.length; i++) {
         if (productPrices[i].min_qty <= updatedQuantity) {
           dispatch(
-            changeCateringProductPrice({ price: productPrices[i].price })
+            changeCateringPackagePrice({ price: productPrices[i].price })
           );
         }
       }
@@ -115,7 +114,7 @@ export function CateringProduct() {
 
   useEffect(() => {
     if (hash !== undefined) {
-      dispatch(getCateringProductDetails({ hash }));
+      dispatch(getCateringPackageDetails({ hash }));
       dispatch(getSession());
     }
   }, [location, dispatch, hash]);
@@ -135,13 +134,13 @@ export function CateringProduct() {
     freeItemNotAvailable: () => void;
   }) => {
     if (
-      getCateringProductDetailsState.data &&
+      getCateringPackageDetailsState.data &&
       getSessionState.status === GetSessionState.success &&
       getSessionState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success
     ) {
-      const addons = getCateringProductDetailsState.data.addons;
+      const addons = getCateringPackageDetailsState.data.addons;
       let freeItem: Array<ProductModel> = [];
       let calculatedPrice = 0;
 
@@ -154,7 +153,7 @@ export function CateringProduct() {
         }
       }
       const totalPrice =
-        getCateringProductDetailsState.data.product.price * quantity +
+        getCateringPackageDetailsState.data.product.price * quantity +
         calculatedPrice;
 
       if (addons) {
@@ -202,16 +201,16 @@ export function CateringProduct() {
 
   const calculateTotalSavings = () => {
     if (
-      getCateringProductDetailsState.data &&
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success &&
-      getCateringProductDetailsState.data.product.base_price &&
-      getCateringProductDetailsState.data.product.base_price !==
-        getCateringProductDetailsState.data.product.price
+      getCateringPackageDetailsState.data &&
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success &&
+      getCateringPackageDetailsState.data.product.base_price &&
+      getCateringPackageDetailsState.data.product.base_price !==
+        getCateringPackageDetailsState.data.product.price
     ) {
       const totalSavings =
-        getCateringProductDetailsState.data.product.base_price * quantity -
-        getCateringProductDetailsState.data.product.price * quantity;
+        getCateringPackageDetailsState.data.product.base_price * quantity -
+        getCateringPackageDetailsState.data.product.price * quantity;
       return (
         <div className="text-white ">
           total savings:{" "}
@@ -256,7 +255,7 @@ export function CateringProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -264,22 +263,22 @@ export function CateringProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
     if (
-      getCateringProductDetailsState.status ===
-        GetCateringProductDetailsState.success &&
-      getCateringProductDetailsState.data
+      getCateringPackageDetailsState.status ===
+        GetCateringPackageDetailsState.success &&
+      getCateringPackageDetailsState.data
     ) {
       if (
-        getCateringProductDetailsState.data?.product_flavor &&
-        getCateringProductDetailsState.data.product_flavor.length
+        getCateringPackageDetailsState.data?.product_flavor &&
+        getCateringPackageDetailsState.data.product_flavor.length
       ) {
         for (
           let i = 0;
-          i < getCateringProductDetailsState.data.product_flavor.length;
+          i < getCateringPackageDetailsState.data.product_flavor.length;
           i++
         ) {
           let totalMultiFlavorsQuantity = 0;
@@ -317,15 +316,15 @@ export function CateringProduct() {
 
       dispatch(
         addToCartCatering({
-          prod_id: getCateringProductDetailsState.data.product.id,
+          prod_id: getCateringPackageDetailsState.data.product.id,
           prod_image_name:
-            getCateringProductDetailsState.data.product.product_image,
-          prod_name: getCateringProductDetailsState.data.product.name,
+            getCateringPackageDetailsState.data.product.product_image,
+          prod_name: getCateringPackageDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_price: getCateringProductDetailsState.data.product.price,
+          prod_price: getCateringPackageDetailsState.data.product.price,
           prod_calc_amount:
-            getCateringProductDetailsState.data.product.price * quantity,
-          prod_category: getCateringProductDetailsState.data.product.category,
+            getCateringPackageDetailsState.data.product.price * quantity,
+          prod_category: getCateringPackageDetailsState.data.product.category,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -436,7 +435,7 @@ export function CateringProduct() {
   ) {
     pageTitles.push({ name: "Products", url: "/shop/products" });
   }
-  pageTitles.push({ name: getCateringProductDetailsState.data?.product.name });
+  pageTitles.push({ name: getCateringPackageDetailsState.data?.product.name });
 
   return (
     <main className="bg-secondary">
@@ -445,7 +444,7 @@ export function CateringProduct() {
           title: "Catering",
           url: "/shop",
         }}
-        title={getCateringProductDetailsState.data?.product.name}
+        title={getCateringPackageDetailsState.data?.product.name}
         pageTitles={pageTitles}
       />
       <section className="min-h-screen lg:space-x-4 pb-36">
@@ -460,13 +459,17 @@ export function CateringProduct() {
                   navigation
                   className="w-full"
                 >
-                  {getCateringProductDetailsState.data?.product_images.map(
+                  {getCateringPackageDetailsState.data?.product_images.map(
                     (name) => (
                       <SwiperSlide>
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                           className="lg:rounded-[20px] w-full h-full object-cover"
-                          alt=""
+                          alt={name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                       </SwiperSlide>
                     )
@@ -476,7 +479,11 @@ export function CateringProduct() {
                       <img
                         src={`${REACT_APP_DOMAIN_URL}api/assets/images/catering/carousel/${name}.jpg`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
-                        alt=""
+                        alt={name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                        }}
                       />
                     </SwiperSlide>
                   ))}
@@ -484,7 +491,7 @@ export function CateringProduct() {
               </div>
 
               <div className="container flex-1 space-y-10 lg:px-0">
-                {getCateringProductDetailsState.data?.product.add_details ? (
+                {getCateringPackageDetailsState.data?.product.add_details ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Info",
@@ -496,7 +503,7 @@ export function CateringProduct() {
                         className="mt-2 space-y-2 text-sm"
                         dangerouslySetInnerHTML={{
                           __html:
-                            getCateringProductDetailsState.data.product
+                            getCateringPackageDetailsState.data.product
                               .add_details,
                         }}
                       />
@@ -519,7 +526,11 @@ export function CateringProduct() {
                           <img
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                             className="rounded-[10px] w-[75px] h-[75px]"
-                            alt=""
+                            alt={order.prod_name}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
                             <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -616,11 +627,11 @@ export function CateringProduct() {
                         setQuantity(parseInt(value));
                       }}
                     />
-                    {getCateringProductDetailsState.data ? (
+                    {getCateringPackageDetailsState.data ? (
                       <span className="text-base text-white">
                         base price:{" "}
                         <NumberFormat
-                          value={getCateringProductDetailsState.data.product.price.toFixed(
+                          value={getCateringPackageDetailsState.data.product.price.toFixed(
                             2
                           )}
                           displayType={"text"}
@@ -634,11 +645,11 @@ export function CateringProduct() {
                     {calculateFreeAddon()}
                   </div>
 
-                  {getCateringProductDetailsState.data?.product.price ? (
+                  {getCateringPackageDetailsState.data?.product.price ? (
                     <h2 className="mt-4 text-4xl text-white">
                       <NumberFormat
                         value={(
-                          getCateringProductDetailsState.data.product.price *
+                          getCateringPackageDetailsState.data.product.price *
                           quantity
                         ).toFixed(2)}
                         displayType={"text"}
@@ -649,8 +660,8 @@ export function CateringProduct() {
                   ) : null}
                 </div>
 
-                {getCateringProductDetailsState.data?.product_flavor &&
-                getCateringProductDetailsState.data?.product_flavor.length >
+                {getCateringPackageDetailsState.data?.product_flavor &&
+                getCateringPackageDetailsState.data?.product_flavor.length >
                   0 ? (
                   <div>
                     <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px] mb-4">
@@ -658,7 +669,7 @@ export function CateringProduct() {
                     </h2>
 
                     <ul className="space-y-6">
-                      {getCateringProductDetailsState.data?.product_flavor.map(
+                      {getCateringPackageDetailsState.data?.product_flavor.map(
                         (product_flavor, i) => (
                           <CateringFlavors
                             key={i}
@@ -722,8 +733,8 @@ export function CateringProduct() {
                   </div>
                 )}
 
-                {getCateringProductDetailsState.data?.product_addons &&
-                getCateringProductDetailsState.data.addons.length !== 0 ? (
+                {getCateringPackageDetailsState.data?.product_addons &&
+                getCateringPackageDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Product Add-ons",
@@ -731,7 +742,7 @@ export function CateringProduct() {
                     }}
                   >
                     <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
-                      {getCateringProductDetailsState.data?.product_addons.map(
+                      {getCateringPackageDetailsState.data?.product_addons.map(
                         (product, i) => (
                           <Addon
                             key={i}
@@ -744,8 +755,8 @@ export function CateringProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
-                {getCateringProductDetailsState.data?.addons &&
-                getCateringProductDetailsState.data.addons.length !== 0 ? (
+                {getCateringPackageDetailsState.data?.addons &&
+                getCateringPackageDetailsState.data.addons.length !== 0 ? (
                   <ProductDetailsAccordion
                     title={{
                       name: "Catering Add-ons",
@@ -756,10 +767,10 @@ export function CateringProduct() {
                       ref={cateringAddonsRef}
                       className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
                     >
-                      {getCateringProductDetailsState.data.addons.map(
+                      {getCateringPackageDetailsState.data.addons.map(
                         (product, i) => {
                           if (
-                            getCateringProductDetailsState.data &&
+                            getCateringPackageDetailsState.data &&
                             getSessionState.data
                           ) {
                             let calculatedPrice = 0;
@@ -786,7 +797,7 @@ export function CateringProduct() {
 
                             let isFreeItemButAddToCartFirst =
                               product.free_threshold
-                                ? getCateringProductDetailsState.data.product
+                                ? getCateringPackageDetailsState.data.product
                                     .price *
                                     quantity +
                                     calculatedPrice >=
@@ -816,13 +827,6 @@ export function CateringProduct() {
           </div>
         </div>
       </section>
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
 
       <CateringStoreChooserModal
         open={openCateringStoreChooserModal}

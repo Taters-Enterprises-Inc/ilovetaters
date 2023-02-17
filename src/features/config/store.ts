@@ -24,7 +24,7 @@ import facebookLogin from "../shared/presentation/slices/facebook-login.slice";
 import facebookLoginPoint from "../shared/presentation/slices/facebook-login-point.slice";
 import facebookLogout from "../shared/presentation/slices/facebook-logout.slice";
 import storeReset from "../shared/presentation/slices/store-reset.slice";
-import getCateringCategoryProducts from "../catering/presentation/slices/get-catering-category-products.slice";
+import getCateringCategoryPackages from "../catering/presentation/slices/get-catering-category-packages.slice";
 import getProductSku from "../shop/presentation/slices/get-product-sku.slice";
 import removeItemFromCartShop from "../shop/presentation/slices/remove-item-from-cart-shop.slice";
 import uploadProofOfPayment from "../shared/presentation/slices/upload-proof-of-payment.slice";
@@ -35,8 +35,8 @@ import getContacts from "../shared/presentation/slices/get-contacts.slice";
 import getStoresAvailableSnackshop from "../shop/presentation/slices/get-stores-available-snackshop.slice";
 import getStoresAvailableCatering from "../catering/presentation/slices/get-stores-available-catering.slice";
 import getStoresAvailableBranches from "../branches/presentation/slices/get-stores-available-branches.slice";
+import getCateringPackageDetails from "../catering/presentation/slices/get-catering-package-details.slice";
 import getSnacksDeliveredAvailableStores from "../popclub/presentation/slices/get-snacks-delivered-available-stores.slice";
-import getCateringProductDetails from "../catering/presentation/slices/get-catering-product-details.slice";
 import getCartItem from "features/shop/presentation/slices/get-cart-item.slice";
 import editCartItem from "features/shop/presentation/slices/edit-cart-item.slice";
 import addToCartCatering from "../catering/presentation/slices/add-to-cart-catering.slice";
@@ -91,13 +91,11 @@ import redeemValidators from "features/popclub/presentation/slices/redeem-valida
 import getAdminStoreDeals from "features/admin/presentation/slices/get-admin-stores-deals.slice";
 import updateStoreDeal from "features/admin/presentation/slices/update-store-deal.slice";
 import getAdminStoreProducts from "features/admin/presentation/slices/get-admin-stores-products.slice";
-import getProductCategories from "features/admin/presentation/slices/get-product-categories.slice";
+import getAdminProductCategories from "features/admin/presentation/slices/get-admin-product-categories.slice";
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
-import updateAdminSettingStore from "features/admin/presentation/slices/update-setting-store.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
 import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
-import updateAdminSettingStoreOperatingHours from "features/admin/presentation/slices/update-setting-store-operating-hours.slice";
 import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
 import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
 import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
@@ -111,11 +109,54 @@ import adminCateringPrivilege from "features/admin/presentation/slices/admin-cat
 import getCateringTransactionLogs from "features/admin/presentation/slices/get-catering-transaction-logs.slice";
 import getAdminNotifications from "features/admin/presentation/slices/get-admin-notifications.slice";
 import updateAdminNotificationDateSeen from "features/admin/presentation/slices/update-admin-notification-dateseen.slice";
+import discountRegistration from "features/profile/presentation/slices/discount-registration.slice";
+import getDealOrder from "features/popclub/presentation/slices/get-deal-order.slice";
+import getAdminUserDiscounts from "features/admin/presentation/slices/get-admin-user-discounts.slice";
+import getAdminUserDiscount from "features/admin/presentation/slices/get-admin-discount-verification.slice";
+import applyUserDiscount from "features/profile/presentation/slices/apply-user-discount.slice";
+import getUserDiscount from "features/profile/presentation/slices/get-user-discount.slice";
+import BSCSideBar from "features/bsc/presentation/slices/bsc-sidebar.slice";
+import adminUserDiscountChangeStatus from "features/admin/presentation/slices/admin-user-discount-change-status.slice";
+import updateUserDiscount from "features/profile/presentation/slices/update-user-discount.slice";
+import loginBsc from "features/bsc/presentation/slices/login-bsc.slice";
+import getBscSession from "features/bsc/presentation/slices/get-bsc-session.slice";
+import logoutBsc from "features/bsc/presentation/slices/logout-bsc.slice";
+import getAvailableUserDiscount from "features/shared/presentation/slices/get-available-user-discount.slice";
+import getAllStores from "features/shared/presentation/slices/get-all-stores.slice";
+import getAllCompanies from "features/shared/presentation/slices/get-all-companies.slice";
+import createBscUser from "features/bsc/presentation/slices/create-bsc-user.slice";
+import getBscUsers from "features/bsc/presentation/slices/get-bsc-users.slice";
+import getBscUser from "features/bsc/presentation/slices/get-bsc-user.slice";
+import getBscUserStores from "features/bsc/presentation/slices/get-bsc-user-stores.slice";
+import getBscStores from "features/bsc/presentation/slices/get-bsc-stores.slice";
+import updateBscUserStores from "features/bsc/presentation/slices/bsc-update-user-stores.slice";
+import updateBscUser from "features/bsc/presentation/slices/bsc-update-user.slice";
+import getBscGroups from "features/bsc/presentation/slices/get-bsc-groups.slice";
+import createBscGroup from "features/bsc/presentation/slices/bsc-create-group.slice";
+import updateBscUserStatus from "features/bsc/presentation/slices/update-bsc-user-status.slice";
+import getAdminSurveyVerification from "features/admin/presentation/slices/get-admin-survey-verification.slice";
+import getAdminSurveyVerifications from "features/admin/presentation/slices/get-admin-survey-verifications.slice";
+import adminSurveyVerificationChangeStatus from "features/admin/presentation/slices/admin-survey-verification-change-status.slice";
 import getNotifications from "features/shared/presentation/slices/get-notifications.slice";
 import seenNotification from "features/shared/presentation/slices/seen-notification.slice";
 import shopStoreChooserModal from "features/shop/presentation/slices/shop-store-chooser-modal.slice";
 import getStoresAvailableSnackshopModal from "features/shop/presentation/slices/get-stores-available-snackshop-modal.slice";
 import getStoresAvailableCateringModal from "features/catering/presentation/slices/get-stores-available-catering-modal.slice";
+import getSurvey from "features/survey/presentation/slices/get-survey.slice";
+import insertCustomerSurveyResponse from "features/survey/presentation/slices/insert-customer-survey-response.slice";
+import getCustomerSurveyResponse from "features/survey/presentation/slices/get-customer-survey-response.slice";
+import getAdminSettingShopProducts from "features/admin/presentation/slices/get-admin-setting-shop-products.slice";
+import createAdminSettingShopProduct from "features/admin/presentation/slices/create-admin-setting-shop-product.slice";
+import getAdminSettingShopProduct from "features/admin/presentation/slices/get-admin-setting-shop-product.slice";
+import editAdminSettingShopProduct from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
+import deleteAdminSettingShopProduct from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
+import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
+import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
+import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
+import addToCartCateringProducts from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
+import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
+import getAdminStoreCateringProducts from "features/admin/presentation/slices/get-admin-stores-catering-products.slice";
+import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
 import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
@@ -123,6 +164,12 @@ import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-
 import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
 import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
 import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
+import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
+import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
+import getAdminRegionStoreCombinations from "features/admin/presentation/slices/get-admin-region-store-combinations.slice";
+import getAdminStoreLocales from "features/admin/presentation/slices/get-admin-store-locales.slice";
+import getAdminPackages from "features/admin/presentation/slices/get-admin-packages.slice";
+import getAdminDeals from "features/admin/presentation/slices/get-admin-deals.slice";
 import snacksDeliveredDealStoreChooserModal from "features/popclub/presentation/slices/snacks-delivered-deal-store-chooser-modal.slice";
 import getSnacksDeliveredDealAvailableStores from "features/popclub/presentation/slices/get-snacks-delivered-deal-available-stores.slice";
 import setSnacksDeliveredDealStoreAndAddress from "features/popclub/presentation/slices/set-snacks-delivered-deal-store-and-address.slice";
@@ -133,6 +180,11 @@ import setSnackshopStoreAndAddress from "features/shop/presentation/slices/set-s
 import setCateringStoreAndAddress from "features/catering/presentation/slices/set-catering-store-and-address.slice";
 import setCateringPackageStoreAndAddress from "features/catering/presentation/slices/set-catering-package-store-and-address.slice";
 import getSnackshopDeals from "features/shop/presentation/slices/get-snackshop-deals.slice";
+import getCustomerSurveyResponseInOrderService from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
+import getInbox from "features/profile/presentation/slices/get-inbox.slice";
+import getAdminSettingStore from "features/admin/presentation/slices/get-admin-setting-store.slice";
+import editAdminSettingStore from "features/admin/presentation/slices/edit-admin-setting-store.slice";
+import loginChooserModal from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -167,7 +219,7 @@ export const store = configureStore({
     facebookLoginPoint,
     facebookLogout,
     storeReset,
-    getCateringCategoryProducts,
+    getCateringCategoryPackages,
     getProductSku,
     removeItemFromCartShop,
     uploadProofOfPayment,
@@ -175,7 +227,7 @@ export const store = configureStore({
     updateContact,
     deleteContact,
     getContacts,
-    getCateringProductDetails,
+    getCateringPackageDetails,
     addToCartCatering,
     removeItemFromCartCatering,
     popSnackBar,
@@ -227,13 +279,11 @@ export const store = configureStore({
     getAdminStoreDeals,
     updateStoreDeal,
     getAdminStoreProducts,
-    getProductCategories,
+    getAdminProductCategories,
     updateStoreProduct,
     getAdminSettingStores,
-    updateAdminSettingStore,
     adminDeclineRedeem,
     getAdminStore,
-    updateAdminSettingStoreOperatingHours,
     getCatersPackageCategories,
     getAdminStoreCatersPackages,
     updateStoreCatersPackage,
@@ -247,11 +297,54 @@ export const store = configureStore({
     getCateringTransactionLogs,
     getAdminNotifications,
     updateAdminNotificationDateSeen,
+    discountRegistration,
+    getDealOrder,
+    getAdminUserDiscounts,
+    getAdminUserDiscount,
+    applyUserDiscount,
+    getUserDiscount,
+    BSCSideBar,
+    adminUserDiscountChangeStatus,
+    updateUserDiscount,
+    loginBsc,
+    getBscSession,
+    logoutBsc,
+    getAvailableUserDiscount,
+    getAllStores,
+    getAllCompanies,
+    createBscUser,
+    getBscUsers,
+    getBscUser,
+    getBscUserStores,
+    getBscStores,
+    updateBscUserStores,
+    updateBscUser,
+    getBscGroups,
+    createBscGroup,
+    updateBscUserStatus,
+    getAdminSurveyVerification,
+    getAdminSurveyVerifications,
+    adminSurveyVerificationChangeStatus,
     getNotifications,
     seenNotification,
     shopStoreChooserModal,
     getStoresAvailableSnackshopModal,
     getStoresAvailableCateringModal,
+    getSurvey,
+    insertCustomerSurveyResponse,
+    getCustomerSurveyResponse,
+    getAdminSettingShopProducts,
+    createAdminSettingShopProduct,
+    getAdminSettingShopProduct,
+    editAdminSettingShopProduct,
+    deleteAdminSettingShopProduct,
+    updateAdminSettingShopProductStatus,
+    getAdminSettingShopProductTypes,
+    getAdminProducts,
+    addToCartCateringProducts,
+    getCateringCategoryProducts,
+    getAdminStoreCateringProducts,
+    updateStoreCateringProduct,
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
     getAdminSales,
@@ -259,6 +352,12 @@ export const store = configureStore({
     getAdminCateringTotalSales,
     getAdminPopClubTotalSales,
     getAdminOverallTotalSales,
+    getAdminStoreMenus,
+    createAdminSettingStore,
+    getAdminRegionStoreCombinations,
+    getAdminStoreLocales,
+    getAdminPackages,
+    getAdminDeals,
     snacksDeliveredDealStoreChooserModal,
     getSnacksDeliveredDealAvailableStores,
     setSnacksDeliveredDealStoreAndAddress,
@@ -269,6 +368,11 @@ export const store = configureStore({
     setCateringStoreAndAddress,
     setCateringPackageStoreAndAddress,
     getSnackshopDeals,
+    getCustomerSurveyResponseInOrderService,
+    getInbox,
+    getAdminSettingStore,
+    editAdminSettingStore,
+    loginChooserModal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

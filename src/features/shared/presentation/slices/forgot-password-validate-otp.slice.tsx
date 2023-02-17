@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
+import { ForgotPasswordValidateOTPParam } from "features/shared/core/shared.params";
 import {
   ForgotPasswordValidateOTPRepository,
   ForgotPasswordValidateOTPResponse,
@@ -25,7 +26,7 @@ const initialState: InitialState = {
 
 export const forgotPasswordValidateOTP = createAsyncThunk(
   "forgotPasswordValidateOTP",
-  async (param: FormData, { rejectWithValue }) => {
+  async (param: ForgotPasswordValidateOTPParam, { rejectWithValue }) => {
     try {
       const response: ForgotPasswordValidateOTPResponse =
         await ForgotPasswordValidateOTPRepository(param);

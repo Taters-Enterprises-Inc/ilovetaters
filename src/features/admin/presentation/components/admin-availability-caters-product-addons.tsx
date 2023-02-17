@@ -11,7 +11,10 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import { DataList } from "features/shared/presentation/components";
+import {
+  DataList,
+  MaterialInputAutoComplete,
+} from "features/shared/presentation/components";
 import {
   getAdminStoreCatersProductAddons,
   resetGetAdminStoreCatersProductAddonsStatus,
@@ -22,11 +25,11 @@ import {
   updateStoreCatersProductAddon,
 } from "../slices/update-store-caters-product-addons.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "action", label: "Action" },
@@ -55,7 +58,7 @@ export function AdminAvailabilityCatersProductAddons() {
 
   useEffect(() => {
     const defaultStoreId =
-      getAdminSessionState.data?.user_details.stores[0].store_id ?? 3;
+      getAdminSessionState.data?.admin.user_details.stores[0].store_id ?? 3;
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
@@ -143,12 +146,15 @@ export function AdminAvailabilityCatersProductAddons() {
           </div>
 
           {getAdminSessionState.data ? (
-            <Autocomplete
-              disablePortal
-              options={getAdminSessionState.data.user_details.stores}
+            <MaterialInputAutoComplete
+              label="Select store"
+              colorTheme="black"
               sx={{ width: 328 }}
               size="small"
-              defaultValue={getAdminSessionState.data.user_details.stores[0]}
+              options={getAdminSessionState.data.admin.user_details.stores}
+              defaultValue={
+                getAdminSessionState.data.admin.user_details.stores[0]
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
@@ -171,9 +177,6 @@ export function AdminAvailabilityCatersProductAddons() {
                   });
                 }
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Select store" />
-              )}
             />
           ) : null}
         </div>
@@ -417,6 +420,17 @@ export function AdminAvailabilityCatersProductAddons() {
                   {getAdminStoreCatersProductAddonsState.data.caters_product_addons.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div

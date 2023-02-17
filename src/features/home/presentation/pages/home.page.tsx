@@ -1,5 +1,5 @@
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import {
   REACT_APP_DOMAIN_URL,
   SERVICES_DESKTOP,
@@ -11,16 +11,11 @@ import { storeReset } from "features/shared/presentation/slices/store-reset.slic
 import { Helmet } from "react-helmet";
 
 export function Home() {
-  const location = useLocation();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
 
   return (
     <>

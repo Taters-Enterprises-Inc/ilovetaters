@@ -117,7 +117,11 @@ export function ShopCartModal(props: ShopCartModalProps) {
                       <img
                         src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                         className="rounded-[10px] w-[92px] h-[92px]"
-                        alt=""
+                        alt={order.prod_name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                        }}
                       />
                       <div className="flex flex-col flex-1 px-3 py-2 text-white">
                         <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -203,7 +207,11 @@ export function ShopCartModal(props: ShopCartModalProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
                     className="rounded-[10px] w-[92px] h-[92px]"
-                    alt=""
+                    alt={getSessionState.data.redeem_data.deal_name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
                     <h3 className="text-sm w-[90%] font-bold leading-4">

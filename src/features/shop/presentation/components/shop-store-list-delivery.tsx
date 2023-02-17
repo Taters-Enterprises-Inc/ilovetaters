@@ -125,11 +125,9 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                       )}
                     </span>
                   ) : null}
-
                   <div className="py-1 text-sm uppercase">
                     {store.menu_name}
                   </div>
-
                   {props.address ? (
                     <div className="absolute flex flex-col items-stretch w-full mt-8 space-y-2">
                       <div className="flex justify-end">
@@ -139,20 +137,15 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                       </div>
                     </div>
                   ) : null}
-
-                  {store.store_image ? (
-                    <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                      alt=""
-                      className="w-full sm::w-[250px] sm::h-[250px] object-fit"
-                    />
-                  ) : (
-                    <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                      alt=""
-                      className="w-full sm::w-[250px] sm::h-[250px] object-fit"
-                    />
-                  )}
+                  <img
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+                    className="w-full sm::w-[250px] sm::h-[250px] object-fit"
+                    alt={store.store_name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
+                  />
                   <div className="p-4 space-y-2">
                     <h1 className="mb-1 text-sm font-bold leading-5">
                       {store.store_name}

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AdminCompleteRedeemParam } from "features/admin/core/admin.params";
 import { AxiosError } from "axios";
 import {
   AdminCompleteRedeemRepository,
@@ -25,10 +26,10 @@ const initialState: InitialState = {
 
 export const adminCompleteRedeem = createAsyncThunk(
   "adminCompleteRedeem",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (param: AdminCompleteRedeemParam, { rejectWithValue }) => {
     try {
       const response: AdminCompleteRedeemResponse =
-        await AdminCompleteRedeemRepository(formData);
+        await AdminCompleteRedeemRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
