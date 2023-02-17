@@ -47,7 +47,7 @@ export function BranchesCard(props: BranchesCardProps) {
         ) : null}
       </div>
       <img
-        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${props.store.store_image}`}
+        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${props.store.store_image}`}
         alt=""
         className="w-full sm::w-[250px] sm::h-[250px] h-auto cursor-pointer"
         onError={({ currentTarget }) => {

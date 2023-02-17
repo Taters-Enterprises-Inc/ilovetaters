@@ -137,7 +137,7 @@ export function StoreVisitStoreCluster(props: StoreVisitStoreClusterProps) {
                     <div className="text-sm uppercase ">{store.menu_name}</div>
 
                     <img
-                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${store.store_image}`}
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                       alt={store.store_name}
                       className="w-full"
                       onError={({ currentTarget }) => {
@@ -219,7 +219,7 @@ export function StoreVisitStoreCluster(props: StoreVisitStoreClusterProps) {
                         </div>
 
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${store.store_image}`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                           className="w-full"
                           alt={store.store_name}
                           onError={({ currentTarget }) => {

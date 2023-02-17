@@ -138,7 +138,7 @@ export function ShopStoreListDelivery(props: StoreListDeliveryProps) {
                     </div>
                   ) : null}
                   <img
-                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${store.store_image}`}
+                    src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
                     className="w-full sm::w-[250px] sm::h-[250px] object-fit"
                     alt={store.store_name}
                     onError={({ currentTarget }) => {

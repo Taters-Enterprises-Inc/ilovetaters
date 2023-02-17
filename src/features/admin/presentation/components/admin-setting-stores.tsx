@@ -256,7 +256,7 @@ export function AdminSettingStores() {
                     <DataTableRow key={i}>
                       <DataTableCell>
                         <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/${row.store_image}`}
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${row.store_image}`}
                           alt="Taters Store"
                           onError={({ currentTarget }) => {
                             currentTarget.onerror = null;
