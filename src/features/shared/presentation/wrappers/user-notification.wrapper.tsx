@@ -268,7 +268,7 @@ export function UserNotificationWrapper() {
         }
       );
     }
-  }, [getDealState]);
+  }, [getDealState, getSessionState, dispatch]);
 
   useEffect(() => {
     dispatch(getNotifications());
