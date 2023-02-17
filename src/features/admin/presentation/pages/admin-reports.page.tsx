@@ -14,6 +14,14 @@ export function AdminReports() {
     useState<boolean>(false);
   const [openGenerateTransactionModal, setOpenGenerateTransactionModal] =
     useState<boolean>(false);
+  const [
+    openGeneratePopClubStoreVisitModal,
+    setOpenGeneratePopClubStoreVisitModal,
+  ] = useState<boolean>(false);
+  const [
+    openGeneratePopClubSnacksDeliveredModal,
+    setOpenGeneratePopClubSnacksDeliveredModal,
+  ] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -59,6 +67,36 @@ export function AdminReports() {
               <div className="flex items-center justify-center mt-2 space-x-1">
                 <GrAttachment className="text-lg font-semibold" />
                 <span className="text-lg font-semibold">Transaction.xls</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpenGeneratePopClubStoreVisitModal(true);
+              }}
+              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+            >
+              <GrDocumentConfig className="text-6xl" />
+              <div className="flex items-center justify-center mt-2 space-x-1">
+                <GrAttachment className="text-lg font-semibold" />
+                <span className="text-lg font-semibold">
+                  PopClub_Store_Visit.xls
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpenGeneratePopClubSnacksDeliveredModal(true);
+              }}
+              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
+            >
+              <GrDocumentConfig className="text-6xl" />
+              <div className="flex items-center justify-center mt-2 space-x-1">
+                <GrAttachment className="text-lg font-semibold" />
+                <span className="text-lg font-semibold">
+                  PopClub_Snacks_Delivered.xls
+                </span>
               </div>
             </button>
           </div>
@@ -107,6 +145,52 @@ export function AdminReports() {
         }}
         onClose={() => {
           setOpenGenerateTransactionModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGeneratePopClubStoreVisitModal}
+        title="Generate PopClub Store Visit Report"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-popclub-store-visit/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGeneratePopClubStoreVisitModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate PopClub Store Visit report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGeneratePopClubStoreVisitModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGeneratePopClubSnacksDeliveredModal}
+        title="Generate PopClub Snacks Delivered Report"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-popclub-snacks-delivered/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGeneratePopClubSnacksDeliveredModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate PopClub Snacks Delivered report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGeneratePopClubSnacksDeliveredModal(false);
         }}
       />
     </>
