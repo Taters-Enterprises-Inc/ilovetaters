@@ -632,7 +632,7 @@ export function CateringCheckout() {
                   </RadioGroup>
                 </FormControl>
 
-                <div className="hidden mt-4 text-secondary lg:mt-0">
+                <div className="mt-4  text-secondary lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
