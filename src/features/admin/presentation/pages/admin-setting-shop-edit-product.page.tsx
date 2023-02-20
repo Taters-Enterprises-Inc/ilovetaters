@@ -104,7 +104,7 @@ export function AdminSettingShopEditProduct() {
       editAdminSettingShopProductState.status ===
       EditAdminSettingShopProductState.success
     ) {
-      navigate("/admin/setting/product");
+      // navigate("/admin/setting/product");
       dispatch(resetEditAdminSettingShopProductState());
     }
   }, [editAdminSettingShopProductState, dispatch, navigate, id]);
@@ -116,7 +116,7 @@ export function AdminSettingShopEditProduct() {
     addDetails: string;
     price: string;
     category: string;
-    productType: string;
+    productTypeId: string;
     uom: string;
     numFlavor: string;
     variants: Array<Variant>;
@@ -133,7 +133,7 @@ export function AdminSettingShopEditProduct() {
     addDetails: "",
     price: "",
     category: "",
-    productType: "",
+    productTypeId: "",
     uom: "",
     variants: [],
     stores: [],
@@ -169,7 +169,7 @@ export function AdminSettingShopEditProduct() {
         addDetails: getAdminSettingShopProductState.data.add_details,
         price: getAdminSettingShopProductState.data.price.toString(),
         category: getAdminSettingShopProductState.data.category.toString(),
-        productType:
+        productTypeId:
           getAdminSettingShopProductState.data.product_type_id.toString(),
         uom: getAdminSettingShopProductState.data.uom,
         variants: getAdminSettingShopProductState.data.variants
@@ -331,7 +331,7 @@ export function AdminSettingShopEditProduct() {
               </MaterialInput>
 
               {getAdminProductCategoriesState.data &&
-              formState.productType === "1" ? (
+              formState.productTypeId === "1" ? (
                 <MaterialInput
                   colorTheme="black"
                   required
@@ -355,7 +355,7 @@ export function AdminSettingShopEditProduct() {
                   name="productType"
                   label="Product Type"
                   select
-                  value={formState.productType}
+                  value={formState.productTypeId}
                   onChange={handleInputChange}
                   className="flex-1"
                 >
@@ -433,7 +433,7 @@ export function AdminSettingShopEditProduct() {
               fullWidth
             />
 
-            {formState.productType === "1" ? (
+            {formState.productTypeId === "1" ? (
               <>
                 <h1 className="text-2xl font-bold text-secondary !my-2">
                   Product Variant Creator
@@ -653,7 +653,7 @@ export function AdminSettingShopEditProduct() {
           </div>
         </div>
 
-        {getAdminStoresState.data && formState.productType === "1" ? (
+        {getAdminStoresState.data && formState.productTypeId === "1" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
@@ -677,7 +677,7 @@ export function AdminSettingShopEditProduct() {
           </>
         ) : null}
 
-        {getAdminProductsState.data && formState.productType === "2" ? (
+        {getAdminProductsState.data && formState.productTypeId === "2" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Product Selection
@@ -701,7 +701,7 @@ export function AdminSettingShopEditProduct() {
           </>
         ) : null}
 
-        {getAdminStoresState.data && formState.productType === "2" ? (
+        {getAdminStoresState.data && formState.productTypeId === "2" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Catering Store Selection

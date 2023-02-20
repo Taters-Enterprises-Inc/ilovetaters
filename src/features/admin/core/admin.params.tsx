@@ -164,11 +164,12 @@ export interface EditAdminSettingShopProductParam {
   addDetails: string;
   price: string;
   category: string;
+  productTypeId: string;
   uom: string;
+  numFlavor: string;
   variants: string;
   stores: string;
   products: string;
-  numFlavor: string;
   image500x500: File | string;
   image250x250: File | string;
   image150x150: File | string;
