@@ -507,6 +507,7 @@ export function ShopCheckout() {
                         <MaterialPhoneInput
                           colorTheme="black"
                           fullWidth
+                          required
                           onChange={handleInputChange}
                           value={formState.phoneNumber}
                           name="phoneNumber"

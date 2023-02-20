@@ -76,9 +76,9 @@ export function Survey() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      dispatch(openLoginChooserModal({ required: true }));
+      navigate("/feedback/login");
     }
-  }, [getSessionState, dispatch]);
+  }, [getSessionState, navigate]);
 
   useEffect(() => {
     dispatch(getSurvey());

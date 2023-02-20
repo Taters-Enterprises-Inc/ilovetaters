@@ -99,6 +99,7 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 
 import {
   Survey,
+  SurveyLogin,
   SurveyCatering,
   SurveyComplete,
   SurveySnackshop,
@@ -301,6 +302,9 @@ root.render(
 
                         <Route path="feedback">
                           <Route index element={<Survey />} />
+
+                          <Route path="login" element={<SurveyLogin />} />
+
                           <Route element={<ShopSurveyGuard />}>
                             <Route
                               path="snackshop/:hash"

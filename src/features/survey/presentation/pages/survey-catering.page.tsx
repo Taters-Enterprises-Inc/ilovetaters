@@ -36,7 +36,6 @@ import {
 } from "features/shared/presentation/slices/get-session.slice";
 import { SurveyRating } from "../components";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
-import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export function SurveyCatering() {
   const dispatch = useAppDispatch();
@@ -63,9 +62,9 @@ export function SurveyCatering() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      dispatch(openLoginChooserModal({ required: true }));
+      navigate("/feedback/login?service=catering");
     }
-  }, [getSessionState, dispatch]);
+  }, [getSessionState, navigate]);
 
   useEffect(() => {
     dispatch(getSurvey());
