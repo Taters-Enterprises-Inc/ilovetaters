@@ -28,7 +28,7 @@ export function AdminDashboardSalesLineChart() {
 
         <Area
           type="monotone"
-          dataKey="purchase_amount"
+          dataKey="quantity"
           stroke="#22201A"
           fill="url(#color)"
           fillOpacity={1}
@@ -46,14 +46,10 @@ export function AdminDashboardSalesLineChart() {
         />
 
         <YAxis
-          dataKey="purchase_amount"
+          dataKey="quantity"
           axisLine={false}
           tickLine={false}
-          width={80}
           padding={{ bottom: 15 }}
-          tickFormatter={(number) =>
-            `₱ ${new Intl.NumberFormat("en").format(number)}`
-          }
         />
 
         <Tooltip content={<CustomTooltip />} />
@@ -70,20 +66,18 @@ function CustomTooltip({
   label,
 }: {
   active?: boolean;
-  payload?: Array<{ value: number }>;
+  payload?: Array<{ value: number; payload: { purchase_amount: number } }>;
   label?: string;
 }) {
   if (active && label && payload) {
+    console.log(payload[0]);
     return (
       <div className="p-2 bg-white tooltip">
         <h4>{moment(label).format("LL")}</h4>
 
-        <NumberFormat
-          value={payload[0].value.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
+        <span>
+          <b>Orders:</b> {payload[0].value}
+        </span>
       </div>
     );
   }
