@@ -10,6 +10,11 @@ export interface AdminSessionModel {
     is_catering_admin: boolean;
     is_csr_admin: boolean;
 
+    is_snackshop_available: boolean;
+    is_catering_available: boolean;
+    is_popclub_store_visit_available: boolean;
+    is_popclub_snacks_delivered_available: boolean;
+
     user_details: {
       id: number;
       first_name: string;

@@ -136,44 +136,45 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+          {getAdminSessionState.data?.admin.is_snackshop_available ||
+          getAdminSessionState.data?.admin
+            .is_popclub_snacks_delivered_available ? (
+            <li>
+              <NavLink
+                to="/admin/order"
+                onClick={() => {
+                  if (props.mobile) dispatch(closeAdminSideBar());
+                }}
+                className={(navData) =>
+                  navData.isActive ? "flex bg-white text-secondary" : "flex"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.snackshop_order
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
+                      <FaRegListAlt size={20} />
+                    </Badge>
 
-          <li>
-            <NavLink
-              to="/admin/order"
-              onClick={() => {
-                if (props.mobile) dispatch(closeAdminSideBar());
-              }}
-              className={(navData) =>
-                navData.isActive ? "flex bg-white text-secondary" : "flex"
-              }
-            >
-              <span className="flex items-center px-4 ">
-                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <Badge
-                    badgeContent={
-                      getAdminNotificationsState.data?.snackshop_order
-                        .unseen_notifications_count
-                    }
-                    color="primary"
-                  >
-                    <FaRegListAlt size={20} />
-                  </Badge>
-
-                  <span
-                    className={`whitespace-pre duration-300 ${
-                      !adminSideBarState.status && "opacity-0 overflow-hidden"
-                    }`}
-                  >
-                    Orders
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      Orders
+                    </span>
                   </span>
                 </span>
-              </span>
-            </NavLink>
-          </li>
+              </NavLink>
+            </li>
+          ) : null}
 
-          {getAdminSessionState.data?.admin.is_admin ||
-          getAdminSessionState.data?.admin.is_catering_admin ||
-          getAdminSessionState.data?.admin.is_csr_admin ? (
+          {getAdminSessionState.data?.admin.is_catering_available ? (
             <li>
               <NavLink
                 to="/admin/catering"
@@ -209,38 +210,40 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             </li>
           ) : null}
 
-          <li>
-            <NavLink
-              to="/admin/popclub"
-              onClick={() => {
-                if (props.mobile) dispatch(closeAdminSideBar());
-              }}
-              className={(navData) =>
-                navData.isActive ? "flex bg-white text-secondary" : "flex"
-              }
-            >
-              <span className="flex items-center px-4 ">
-                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <Badge
-                    badgeContent={
-                      getAdminNotificationsState.data?.popclub_redeem
-                        .unseen_notifications_count
-                    }
-                    color="primary"
-                  >
-                    <FaCartArrowDown size={20} />
-                  </Badge>
-                  <span
-                    className={`whitespace-pre duration-300 ${
-                      !adminSideBarState.status && "opacity-0 overflow-hidden"
-                    }`}
-                  >
-                    PopClub
+          {getAdminSessionState.data?.admin.is_popclub_store_visit_available ? (
+            <li>
+              <NavLink
+                to="/admin/popclub"
+                onClick={() => {
+                  if (props.mobile) dispatch(closeAdminSideBar());
+                }}
+                className={(navData) =>
+                  navData.isActive ? "flex bg-white text-secondary" : "flex"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.popclub_redeem
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
+                      <FaCartArrowDown size={20} />
+                    </Badge>
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      PopClub
+                    </span>
                   </span>
                 </span>
-              </span>
-            </NavLink>
-          </li>
+              </NavLink>
+            </li>
+          ) : null}
 
           {getAdminSessionState.data?.admin.is_admin ||
           getAdminSessionState.data?.admin.is_csr_admin ? (
