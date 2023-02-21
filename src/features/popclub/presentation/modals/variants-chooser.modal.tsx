@@ -20,6 +20,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { PopClubQuantityInput } from "../components";
 
 export type PopClubFlavorType = {
   [key: string]: {
@@ -47,7 +48,13 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
 
-  const [optionsSelected, setOptionsSelected] = useState({});
+  // const [optionsSelected, setOptionsSelected] = useState({});
+
+  
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<PopClubMultiFlavorsType>({});
+
+
   const dispatch = useAppDispatch();
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -86,21 +93,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
 
     if (getDealProductVariantsState.data) {
       const dealProductVariants = getDealProductVariantsState.data;
-      let remarks = Object.values(optionsSelected).join("");
-
-      for (let i = 0; i < dealProductVariants.length; i++) {
-        const dealProductVariant = dealProductVariants[i];
-
-        if (dealProductVariant.product_variants.length <= 0) {
-          remarks +=
-            "<strong>" +
-            dealProductVariant.quantity +
-            "</strong> - " +
-            dealProductVariant.product.name +
-            "<br/>";
-        }
-      }
-
+      let remarks = "";
       if (getDealState.data?.hash && remarks) {
         dispatch(
           redeemDeal({
@@ -110,26 +103,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         );
       }
     }
-  };
-
-  const handleFormChange = (
-    event: any,
-    dealProductVariant: DealProductVariantsModel
-  ) => {
-    const data: any = optionsSelected;
-    const optionName = event.target.value;
-    const productName = dealProductVariant.product.name;
-    const quantity = dealProductVariant.quantity;
-
-    data[event.target.name] =
-      "<strong>" +
-      quantity +
-      "</strong> - " +
-      productName +
-      " (" +
-      optionName +
-      ")<br/>";
-    setOptionsSelected(data);
   };
 
   return (
@@ -160,45 +133,56 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
                 {dealProductVariant.product_variants.map(
                   (productVariant, i) => (
                     <div key={i}>
-                      <FormControl>
-                        <RadioGroup
-                          name={
-                            dealProductVariant.option_id +
-                            "_" +
-                            productVariant.id
-                          }
-                          onChange={(e) =>
-                            handleFormChange(e, dealProductVariant)
-                          }
-                        >
-                          <h2 className="text-base uppercase">
-                            PICK A {productVariant.name}
-                          </h2>
-                          <ul className="w-full mt-2 text-sm font-medium text-white rounded-lg bg-secondary">
-                            {productVariant.options.map((option, i) => (
-                              <li key={i} className="w-full ">
-                                <div className="flex items-center pl-3">
-                                  <FormControlLabel
-                                    value={option.name}
-                                    control={
-                                      <Radio
-                                        required
-                                        color="tertiary"
-                                        sx={{ color: "white" }}
-                                      />
-                                    }
-                                    label={
-                                      <span className="py-3 ml-2 w-full text-sm font-medium !text-white">
-                                        {option.name}
-                                      </span>
-                                    }
+                      <h2 className="text-base uppercase">
+                        PICK A {productVariant.name}
+                      </h2>
+                      <ul className="w-full mt-2 text-sm font-medium text-white rounded-lg bg-secondary">
+                        {productVariant.options.map((option, i) => (
+                          <li key={i} className="w-full ">
+                            {/* <div className="flex items-center pl-3">
+                              <FormControlLabel
+                                value={option.name}
+                                control={
+                                  <Radio
+                                    required
+                                    color="tertiary"
+                                    sx={{ color: "white" }}
                                   />
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </RadioGroup>
-                      </FormControl>
+                                }
+                                label={
+                                  <span className="py-3 ml-2 w-full text-sm font-medium !text-white">
+                                    {option.name}
+                                  </span>
+                                }
+                              />
+                            </div> */}
+                            
+                            <span className="text-sm text-white">{option.name}</span>
+                            <PopClubQuantityInput
+                              flavorId={option.id}
+                              productQuantity={dealProductVariant.quantity}
+                              parent_index={1}
+                              currentMultiFlavors={currentMultiFlavors}
+                              onChange={(value) => {
+                                // const currentMultiFlavors = currentMultiFlavors[
+                                //   props.parent_index
+                                // ]
+                                //   ? props.currentMultiFlavors[props.parent_index]
+                                //   : {};
+
+                                // if (value !== undefined) {
+                                //   currentMultiFlavors[flavor.id] = {
+                                //     name: flavor.name,
+                                //     quantity: value,
+                                //   };
+
+                                //   props.onChange(currentMultiFlavors);
+                                // }
+                              }}
+                            />
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )
                 )}

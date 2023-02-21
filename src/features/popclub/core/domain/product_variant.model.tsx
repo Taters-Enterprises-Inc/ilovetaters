@@ -10,6 +10,5 @@ export interface ProductVariantModel {
     product_variant_id: number;
     name: string;
     status: number;
-    options: Array<ProductVariantOptionsModel>;
   }>;
 }

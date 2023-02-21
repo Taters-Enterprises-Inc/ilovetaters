@@ -33,6 +33,8 @@ export const getDealProductVariants = createAsyncThunk(
     try {
       const response: GetDealProductVariantsResponse =
         await GetDealProductVariantsRepository(param);
+
+        console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
