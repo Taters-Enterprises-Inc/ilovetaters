@@ -90,15 +90,15 @@ export function Franchising() {
 
           <div className="flex flex-col justify-center mt-6 space-y-2 sm:space-x-2 sm:space-y-0 sm:flex-row">
             <a
-              href="FranchiseApplicationForm.pdf"
-              download="FranchiseApplicationForm.pdf"
+              href={require("assets/FranchiseApplicationForm.pdf")}
+              download
               className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center"
             >
               Application Form
             </a>
             <a
-              href="TatersFranchiseKit.pdf"
-              download="TatersFranchiseKit.pdf"
+              href={require("assets/TatersFranchiseKit.pdf")}
+              download
               className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center"
             >
               Franchise Kit
