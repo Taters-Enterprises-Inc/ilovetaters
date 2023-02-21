@@ -7,3 +7,5 @@ export { Deal } from "./deal";
 export { SnacksDeliveredDealStoreCluster } from "./snacks-delivered-deal-store-cluster";
 export { StoreVisitDealStoreCluster } from "./store-visit-deal-store-cluster";
 export { StoreVisitDealStoreSearch } from "./store-visit-deal-store-search";
+export { PopClubQuantityInput } from './popclub-quantity-input';
+export { PopClubFlavors } from './popclub-flavors';

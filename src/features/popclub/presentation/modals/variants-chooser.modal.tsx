@@ -20,6 +20,18 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+
+export type PopClubFlavorType = {
+  [key: string]: {
+    name: string;
+    quantity: number;
+  };
+};
+
+export type PopClubMultiFlavorsType = {
+  [key: string]: PopClubFlavorType;
+};
+
 interface VariantChooserModalProps {
   open: boolean;
   onClose: () => void;
