@@ -6,18 +6,14 @@ import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
 import { ChangeEvent, useState, useEffect } from "react";
-import { PaymentCardModal } from "../modals";
+import { PaymentCardModal } from "features/shared/presentation/modals";
 
-type PaymentMethodType = "COD" | "E-WALLET" | "CARD" | "BANK-ACCOUNT";
-interface PaymentMethodOption {
+type CateringPaymentMethodType = "E-WALLET" | "CARD" | "BANK-ACCOUNT";
+interface CateringPaymentMethodOption {
   name: string;
-  value: PaymentMethodType;
+  value: CateringPaymentMethodType;
 }
-const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
-  {
-    name: "COD",
-    value: "COD",
-  },
+const PAYMENT_OPTIONS: Array<CateringPaymentMethodOption> = [
   {
     name: "E-Wallet",
     value: "E-WALLET",
@@ -33,19 +29,18 @@ const PAYMENT_OPTIONS: Array<PaymentMethodOption> = [
   // },
 ];
 
-interface PaymentMethodProps {
+interface CateringPaymentMethodProps {
   onChange: (payment: string) => void;
 }
 
-export function PaymentMethod(props: PaymentMethodProps) {
+export function CateringPaymentMethod(props: CateringPaymentMethodProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const [openPaymentCardModal, setOpenPaymentCardModal] = useState(false);
-  const [paymentSelected, setPaymentSelected] = useState<PaymentMethodType>();
+  const [paymentSelected, setPaymentSelected] =
+    useState<CateringPaymentMethodType>();
 
   useEffect(() => {
-    if (checkIfNotEmpty("COD")) {
-      setPaymentSelected("COD");
-    } else if (checkIfNotEmpty("E-WALLET")) {
+    if (checkIfNotEmpty("E-WALLET")) {
       setPaymentSelected("E-WALLET");
     } else if (checkIfNotEmpty("BANK-ACCOUNT")) {
       setPaymentSelected("BANK-ACCOUNT");
@@ -54,7 +49,9 @@ export function PaymentMethod(props: PaymentMethodProps) {
     }
   }, [getSessionState]);
 
-  const handlePaymentMethodChange = (option: PaymentMethodOption) => {
+  const handleCateringPaymentMethodChange = (
+    option: CateringPaymentMethodOption
+  ) => {
     if (option.value === "CARD") {
       setOpenPaymentCardModal(true);
       return;
@@ -62,29 +59,20 @@ export function PaymentMethod(props: PaymentMethodProps) {
     setPaymentSelected(option.value);
   };
 
-  const checkIfNotEmpty = (type: PaymentMethodType) => {
+  const checkIfNotEmpty = (type: CateringPaymentMethodType) => {
     let isNotEmpty = false;
     if (getSessionState.data?.payops_list) {
       for (let i = 0; i < getSessionState.data.payops_list.length; i++) {
         let payop = getSessionState.data.payops_list[i];
 
         switch (type) {
-          case "COD":
-            if (payop.name === "CASH") {
-              isNotEmpty = true;
-            }
-            break;
           case "E-WALLET":
             if (payop.name === "GCASH" || payop.name === "PAYMAYA") {
               isNotEmpty = true;
             }
             break;
           case "BANK-ACCOUNT":
-            if (
-              payop.name !== "GCASH" &&
-              payop.name !== "PAYMAYA" &&
-              payop.name !== "CASH"
-            ) {
+            if (payop.name !== "GCASH" && payop.name !== "PAYMAYA") {
               isNotEmpty = true;
             }
             break;
@@ -103,7 +91,7 @@ export function PaymentMethod(props: PaymentMethodProps) {
             <li>
               <button
                 type="button"
-                onClick={() => handlePaymentMethodChange(option)}
+                onClick={() => handleCateringPaymentMethodChange(option)}
                 className={`relative px-4 py-3 font-semibold border w-full text-sm lg:text-base lg:w-fit ${
                   option.value === paymentSelected
                     ? "text-green-900 border-green-900"
@@ -143,33 +131,11 @@ export function PaymentMethod(props: PaymentMethodProps) {
             props.onChange((event.target as HTMLInputElement).value);
           }}
         >
-          {paymentSelected === "COD" ? (
-            <>
-              {getSessionState.data?.payops_list.map((payops, i) =>
-                payops.name === "CASH" ? (
-                  <FormControlLabel
-                    key={i}
-                    value={payops.id}
-                    control={<Radio required />}
-                    label={
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/payops/payops${payops.id}.png`}
-                        alt=""
-                      />
-                    }
-                  />
-                ) : null
-              )}
-            </>
-          ) : null}
-
           {paymentSelected === "BANK-ACCOUNT" ? (
             <>
               {getSessionState.data?.payops_list.map((payops, i) => (
                 <>
-                  {payops.name !== "GCASH" &&
-                  payops.name !== "PAYMAYA" &&
-                  payops.name !== "CASH" ? (
+                  {payops.name !== "GCASH" && payops.name !== "PAYMAYA" ? (
                     <FormControlLabel
                       value={payops.id}
                       control={<Radio required />}
