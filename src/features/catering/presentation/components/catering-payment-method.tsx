@@ -135,7 +135,9 @@ export function CateringPaymentMethod(props: CateringPaymentMethodProps) {
             <>
               {getSessionState.data?.payops_list.map((payops, i) => (
                 <>
-                  {payops.name !== "GCASH" && payops.name !== "PAYMAYA" ? (
+                  {payops.name !== "GCASH" &&
+                  payops.name !== "PAYMAYA" &&
+                  payops.name !== "CASH" ? (
                     <FormControlLabel
                       value={payops.id}
                       control={<Radio required />}
