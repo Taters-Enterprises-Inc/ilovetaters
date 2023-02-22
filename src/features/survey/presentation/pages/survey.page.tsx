@@ -76,7 +76,7 @@ export function Survey() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      navigate("/feedback/login");
+      navigate("/feedback");
     }
   }, [getSessionState, navigate]);
 
@@ -96,7 +96,9 @@ export function Survey() {
     ) {
       dispatch(getNotifications());
       dispatch(resetInsertCustomerSurveyResponse());
-      navigate(`complete/${insertCustomerSurveyResponseState.data?.hash}`);
+      navigate(
+        `/feedback/complete/${insertCustomerSurveyResponseState.data?.hash}`
+      );
     }
   }, [dispatch, insertCustomerSurveyResponseState, navigate]);
 

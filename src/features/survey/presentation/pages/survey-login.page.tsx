@@ -18,6 +18,7 @@ export function SurveyLogin() {
   const query = useQuery();
 
   const service = query.get("service");
+  const hash = query.get("hash");
 
   const getSessionState = useAppSelector(selectGetSession);
 
@@ -35,13 +36,13 @@ export function SurveyLogin() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData
     ) {
-      if (service) {
-        navigate("/feedback/" + service);
+      if (service && hash) {
+        navigate("/feedback/" + service + "/" + hash);
       } else {
-        navigate("/feedback");
+        navigate("/feedback/walk-in");
       }
     }
-  }, [getSessionState, navigate, service]);
+  }, [getSessionState, navigate, service, hash]);
 
   return <div></div>;
 }

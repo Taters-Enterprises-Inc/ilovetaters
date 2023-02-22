@@ -55,11 +55,12 @@ export function SurveySnackshop() {
   useEffect(() => {
     if (
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.userData === null
+      getSessionState.data?.userData === null &&
+      hash
     ) {
-      navigate("/feedback/login?service=snackshop");
+      navigate("/feedback?service=snackshop&hash=" + hash);
     }
-  }, [getSessionState, navigate]);
+  }, [getSessionState, navigate, hash]);
 
   useEffect(() => {
     dispatch(getSurvey());

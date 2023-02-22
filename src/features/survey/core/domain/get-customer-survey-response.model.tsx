@@ -1,6 +1,8 @@
 export interface GetCustomerSurveyResponseModel {
   id: number;
   order_date: string;
+  invoice_no: string;
+  store_name: string;
   answers: Array<{
     id: number;
     text: string | null;

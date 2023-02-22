@@ -24,10 +24,6 @@ import {
   cateringUploadProofOfPayment,
   selectCateringUploadProofOfPayment,
 } from "../slices/catering-upload-proof-of-payment.slice";
-import {
-  selectGetCustomerSurveyResponseInOrderService,
-  getCustomerSurveyResponseInOrderService,
-} from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 
 export function CateringOrder() {
   const dispatch = useAppDispatch();
@@ -36,10 +32,6 @@ export function CateringOrder() {
   const cateringUploadProofOfPaymentState = useAppSelector(
     selectCateringUploadProofOfPayment
   );
-  const getCustomerSurveyResponseInOrderServiceState = useAppSelector(
-    selectGetCustomerSurveyResponseInOrderService
-  );
-
   const { hash } = useParams();
   const [images, setImages] = useState<any>();
   const [uploadedFile, setUploadedFile] = useState<any>([]);
@@ -47,12 +39,6 @@ export function CateringOrder() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getCateringOrders({ hash }));
-      dispatch(
-        getCustomerSurveyResponseInOrderService({
-          hash,
-          service: "catering",
-        })
-      );
     }
   }, [cateringUploadProofOfPaymentState, dispatch, hash]);
 
@@ -865,29 +851,6 @@ export function CateringOrder() {
                     </h2>
                   ) : null}
                 </div>
-                {getCateringOrdersState.data.order.clients_info.status === 9 ? (
-                  <>
-                    {getCustomerSurveyResponseInOrderServiceState.data ? (
-                      <Link
-                        to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
-                        className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                      >
-                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                          VIEW YOUR RATING
-                        </span>
-                      </Link>
-                    ) : (
-                      <Link
-                        to={`/feedback/catering/${getCateringOrdersState.data?.order.clients_info.hash_key}`}
-                        className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                      >
-                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                          RATE US
-                        </span>
-                      </Link>
-                    )}
-                  </>
-                ) : null}
               </div>
             ) : null}
           </div>

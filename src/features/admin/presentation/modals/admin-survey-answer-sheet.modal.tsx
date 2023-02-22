@@ -48,6 +48,18 @@ export function AdminSurveyAnswerSheetModal(
         </div>
 
         <div className="px-4 py-2 space-y-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary ">
+          <div>
+            <span className="font-bold">Store Name : </span>
+            <span className="font-bold text-green-800">
+              {getAdminSurveyVerificationState.data?.store_name}
+            </span>
+          </div>
+          <div>
+            <span className="font-bold">Invoice Number : </span>
+            <span className="font-bold text-green-800">
+              {getAdminSurveyVerificationState.data?.invoice_no}
+            </span>
+          </div>
           {getAdminSurveyVerificationState.data?.answers.map((survey) => (
             <div>
               <span className="font-bold">{survey.question} : </span>
@@ -59,7 +71,7 @@ export function AdminSurveyAnswerSheetModal(
           ))}
           {getAdminSurveyVerificationState.data?.ratings ? (
             <div>
-              <h1 className="text-xl font-bold mb-2">Ratings</h1>
+              <h1 className="mb-2 text-xl font-bold">Ratings</h1>
               <div className="space-y-2">
                 {getAdminSurveyVerificationState.data.ratings.map((survey) => (
                   <div>

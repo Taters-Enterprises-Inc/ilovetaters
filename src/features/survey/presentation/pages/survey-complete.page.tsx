@@ -49,7 +49,7 @@ export function SurveyComplete() {
             Taters CUSTOMER SATISFACTION SURVEY
           </h1>
 
-          <div className="text-lg space-y-4 sm:space-y-0 py-2 text-secondary bg-paper">
+          <div className="py-2 space-y-4 text-lg sm:space-y-0 text-secondary bg-paper">
             <p>
               <strong>
                 We appreciate your feedback and looking forward to serve you
@@ -67,6 +67,18 @@ export function SurveyComplete() {
           </h1>
 
           <div className="space-y-3">
+            <div>
+              <span className="font-bold">Invoice Number :</span>{" "}
+              <span className="font-bold text-green-800">
+                {getCustomerSurveyResponseState.data?.invoice_no}
+              </span>
+            </div>
+            <div>
+              <span className="font-bold">Store :</span>{" "}
+              <span className="font-bold text-green-800">
+                {getCustomerSurveyResponseState.data?.store_name}
+              </span>
+            </div>
             {getCustomerSurveyResponseState.data?.answers.map((survey) => (
               <div>
                 <span className="font-bold">{survey.question}:</span>{" "}
@@ -77,7 +89,7 @@ export function SurveyComplete() {
             ))}
             {getCustomerSurveyResponseState.data?.ratings ? (
               <div>
-                <h1 className="text-xl font-bold mb-2">Ratings</h1>
+                <h1 className="mb-2 text-xl font-bold">Ratings</h1>
                 <div className="space-y-2">
                   {getCustomerSurveyResponseState.data.ratings.map((survey) => (
                     <div>

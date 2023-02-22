@@ -100,7 +100,6 @@ import { Bsc } from "features/bsc/presentation/pages/bsc.page";
 import {
   Survey,
   SurveyLogin,
-  SurveyCatering,
   SurveyComplete,
   SurveySnackshop,
 } from "features/survey/presentation/pages";
@@ -129,10 +128,7 @@ import {
   SeeMePopClub,
 } from "features/see-me/presentation/pages";
 import { SeeMeReseller } from "features/see-me/presentation/pages/see-me-reseller.page";
-import {
-  CateringSurveyGuard,
-  ShopSurveyGuard,
-} from "features/survey/presentation/guards";
+import { ShopSurveyGuard } from "features/survey/presentation/guards";
 import {
   CateringCheckoutGuard,
   CateringProductsGuard,
@@ -301,20 +297,14 @@ root.render(
                         </Route>
 
                         <Route path="feedback">
-                          <Route index element={<Survey />} />
+                          <Route index element={<SurveyLogin />} />
 
-                          <Route path="login" element={<SurveyLogin />} />
+                          <Route path="walk-in" element={<Survey />} />
 
                           <Route element={<ShopSurveyGuard />}>
                             <Route
                               path="snackshop/:hash"
                               element={<SurveySnackshop />}
-                            />
-                          </Route>
-                          <Route element={<CateringSurveyGuard />}>
-                            <Route
-                              path="catering/:hash"
-                              element={<SurveyCatering />}
                             />
                           </Route>
                           <Route

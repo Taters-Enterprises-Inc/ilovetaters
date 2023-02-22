@@ -82,7 +82,24 @@ export function AdminSurveyVerificationIDInformation(
 
           <div className="grid-cols-2 gap-4 lg:grid ">
             <div>
-              <strong>Order Number :</strong>{" "}
+              <strong>Store Name :</strong>{" "}
+              <span className="font-semibold">
+                {getAdminSurveyVerificationState.data?.store_name}
+              </span>
+            </div>
+            <div>
+              <strong>Invoice No :</strong>{" "}
+              <span className="font-semibold">
+                {getAdminSurveyVerificationState.data?.invoice_no}
+              </span>
+            </div>
+          </div>
+
+          <hr />
+
+          <div className="grid-cols-2 gap-4 lg:grid ">
+            <div>
+              <strong>Invoice Number :</strong>{" "}
               <span className="font-semibold">
                 {getAdminSurveyVerificationState.data?.invoice_no}
               </span>
