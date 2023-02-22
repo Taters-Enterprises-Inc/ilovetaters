@@ -42,7 +42,6 @@ import {
 } from "features/shared/presentation/slices/get-session.slice";
 import { SurveyRating } from "../components";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
-import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 export function Survey() {
   const dispatch = useAppDispatch();
@@ -217,13 +216,14 @@ export function Survey() {
                   </div>
                 ) : null}
 
-                <div className='text-4xl font-bold text-center text-secondary font-["Bebas_Neue"]'>
+                <div className='text-4xl font-bold text-center mt-4 text-secondary font-["Bebas_Neue"]'>
                   {getSurveyState.data[surveySection].section_name}
                 </div>
                 {getSurveyState.data[surveySection].surveys.map((survey) => (
                   <div className="pb-4">
                     <span className="text-xl font-bold text-secondary">
-                      {survey.description}
+                      {survey.description}{" "}
+                      {survey.is_required ? "" : "( Optional )"}
                     </span>
                     <div className="flex flex-col">
                       {survey.answers.length > 0 ? (
@@ -254,7 +254,7 @@ export function Survey() {
                                 value={answer.id}
                                 control={
                                   <Radio
-                                    required
+                                    required={survey.is_required}
                                     size="small"
                                     color="secondary"
                                   />
@@ -340,7 +340,7 @@ export function Survey() {
                               multiline
                               rows={4}
                               fullWidth
-                              required
+                              required={survey.is_required}
                             />
                           ) : null}
                           {survey.is_text_field ? (
@@ -363,7 +363,7 @@ export function Survey() {
                               }}
                               name={survey.id.toString()}
                               fullWidth
-                              required
+                              required={survey.is_required}
                             />
                           ) : null}
                         </>

@@ -332,7 +332,7 @@ export function ProfileSnackshopOrders() {
                             <>
                               {row.survey_hash ? (
                                 <Link
-                                  to={`/feedback/complete/${row.survey_hash}`}
+                                  to={`/feedback/snackshop/complete/${row.survey_hash}`}
                                   className="font-bold text-green-700"
                                 >
                                   View Rate

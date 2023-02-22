@@ -102,6 +102,7 @@ import {
   SurveyLogin,
   SurveyComplete,
   SurveySnackshop,
+  SurveySnackshopComplete,
 } from "features/survey/presentation/pages";
 
 import {
@@ -301,16 +302,22 @@ root.render(
 
                           <Route path="walk-in" element={<Survey />} />
 
+                          <Route
+                            path="complete/:hash"
+                            element={<SurveyComplete />}
+                          />
+
+                          <Route
+                            path="snackshop/complete/:hash"
+                            element={<SurveySnackshopComplete />}
+                          />
+
                           <Route element={<ShopSurveyGuard />}>
                             <Route
                               path="snackshop/:hash"
                               element={<SurveySnackshop />}
                             />
                           </Route>
-                          <Route
-                            path="complete/:hash"
-                            element={<SurveyComplete />}
-                          />
                         </Route>
                       </Route>
                     </Route>
