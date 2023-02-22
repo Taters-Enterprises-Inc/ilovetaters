@@ -117,6 +117,29 @@ export function AdminReports() {
               </div>
             </button>
           </div>
+
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            Survey
+          </h1>
+
+          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+            <button
+              onClick={() => {
+                setOpenGenerateCustomerFeedbackModal(true);
+              }}
+            >
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">Customer</span>
+                  <span className="text-xs font-semibold">Feedback</span>
+                </div>
+              </div>
+            </button>
+          </div>
         </main>
       </div>
       <AdminGenerateReportModal
