@@ -1,19 +1,35 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { HeaderNav, FooterNav } from "features/shared/presentation/components";
+import {
+  GetSessionState,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 import { selectGetCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 
 export function SurveyComplete() {
   const { hash } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const getCustomerSurveyResponseState = useAppSelector(
     selectGetCustomerSurveyResponse
   );
+
+  const getSessionState = useAppSelector(selectGetSession);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.userData === null
+    ) {
+      navigate("/");
+    }
+  }, [getSessionState, navigate, hash]);
 
   useEffect(() => {
     if (hash) {

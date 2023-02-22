@@ -3,17 +3,33 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { HeaderNav, FooterNav } from "features/shared/presentation/components";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 import { selectGetCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
+import {
+  GetSessionState,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 
 export function SurveySnackshopComplete() {
   const { hash } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const getCustomerSurveyResponseState = useAppSelector(
     selectGetCustomerSurveyResponse
   );
+
+  const getSessionState = useAppSelector(selectGetSession);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data?.userData === null
+    ) {
+      navigate("/");
+    }
+  }, [getSessionState, navigate, hash]);
 
   useEffect(() => {
     if (hash) {
