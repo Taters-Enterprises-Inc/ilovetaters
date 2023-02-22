@@ -75,7 +75,7 @@ export function Survey() {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.userData === null
     ) {
-      navigate("/feedback");
+      navigate("/");
     }
   }, [getSessionState, navigate]);
 
