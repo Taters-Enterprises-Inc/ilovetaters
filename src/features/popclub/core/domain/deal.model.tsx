@@ -35,4 +35,5 @@ export interface DealModel {
   deal_id: number;
   category_name: string;
   platform_id?: number;
+  is_free_delivery: number;
 }

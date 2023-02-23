@@ -55,7 +55,6 @@ export function AdminCateringEditFlavor(props: AdminCateringEditFlavorProps) {
   );
 
   useEffect(() => {
-    console.log(props.orderItem);
     dispatch(
       getAdminCateringPackageFlavors({
         packageId: props.orderItem.product_id,

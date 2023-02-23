@@ -70,7 +70,6 @@ function CustomTooltip({
   label?: string;
 }) {
   if (active && label && payload) {
-    console.log(payload[0]);
     return (
       <div className="p-2 bg-white tooltip">
         <h4>{moment(label).format("LL")}</h4>

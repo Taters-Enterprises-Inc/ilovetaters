@@ -97,12 +97,15 @@ export function UnExpiredRedeem() {
                   >
                     <div className="flex-1 h-full px-4 py-2 overflow-auto text-xs sm:overflow-hidden">
                       {getLatestUnexpiredRedeemState.data.remarks ? (
-                        <span
-                          className="font-bold"
-                          dangerouslySetInnerHTML={{
-                            __html: getLatestUnexpiredRedeemState.data.remarks,
-                          }}
-                        />
+                        <>
+                          <span
+                            className="text-xs"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                getLatestUnexpiredRedeemState.data.remarks,
+                            }}
+                          />
+                        </>
                       ) : (
                         <>
                           <span className="font-bold">
