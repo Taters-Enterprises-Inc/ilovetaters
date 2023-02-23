@@ -38,7 +38,7 @@ import {
   MaterialInput,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { PaymentMethod } from "../components";
+import { ShopPaymentMethod } from "../components";
 import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   getAvailableUserDiscount,
@@ -600,7 +600,7 @@ export function ShopCheckout() {
                     <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                       Choose payment method
                     </h2>
-                    <PaymentMethod onChange={handlePaymentMethodChange} />
+                    <ShopPaymentMethod onChange={handlePaymentMethodChange} />
 
                     {/* <PaymentAccordion /> */}
                   </div>
@@ -796,7 +796,7 @@ export function ShopCheckout() {
                       <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                         Choose payment method
                       </h2>
-                      <PaymentMethod onChange={handlePaymentMethodChange} />
+                      <ShopPaymentMethod onChange={handlePaymentMethodChange} />
 
                       {/* <PaymentAccordion /> */}
                     </div>

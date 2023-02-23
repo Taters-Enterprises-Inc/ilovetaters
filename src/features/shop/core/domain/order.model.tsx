@@ -19,7 +19,7 @@ export interface OrderModel {
       dateadded: string;
       hash_key: string;
       store: number;
-      invoice_num: string;
+      invoice_num: string | null;
       reseller_id: number;
       reseller_discount: string;
       discount: string;

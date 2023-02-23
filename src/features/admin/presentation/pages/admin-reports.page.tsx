@@ -44,48 +44,59 @@ export function AdminReports() {
         }}
       />
       <div className="relative block h-screen">
-        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-1 text-secondary max-h-screen">
+        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-1 text-secondary">
           Reports
         </h1>
         <main>
-          <div className="flex p-4 flex-wrap space-y-4">
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            Snackshop
+          </h1>
+          <div className="flex px-4 pb-4 flex-wrap justify-start items-start space-x-4">
             <button
               onClick={() => {
                 setOpenGeneratePmixModal(true);
               }}
-              className="flex flex-col items-center mr-4 justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
-              <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">PMIX.xls</span>
+              <div className="p-4 border shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
               </div>
-            </button>
-            <button
-              onClick={() => {
-                setOpenGenerateTransactionModal(true);
-              }}
-              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
-            >
-              <GrDocumentConfig className="text-6xl" />
               <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">Transaction.xls</span>
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">PMIX</span>
               </div>
             </button>
 
             <button
               onClick={() => {
+                setOpenGenerateTransactionModal(true);
+              }}
+            >
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-center justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">Transaction</span>
+              </div>
+            </button>
+          </div>
+
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            PopClub
+          </h1>
+
+          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+            <button
+              onClick={() => {
                 setOpenGeneratePopClubStoreVisitModal(true);
               }}
-              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
-              <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">
-                  PopClub_Store_Visit.xls
-                </span>
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">Store Visit</span>
               </div>
             </button>
 
@@ -93,29 +104,39 @@ export function AdminReports() {
               onClick={() => {
                 setOpenGeneratePopClubSnacksDeliveredModal(true);
               }}
-              className="flex flex-col items-center mr-4  justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
-              <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">
-                  PopClub_Snacks_Delivered.xls
-                </span>
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 ">
+                <GrAttachment className="text-xs font-semibold" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">Snacks</span>
+                  <span className="text-xs font-semibold">Delivered</span>
+                </div>
               </div>
             </button>
+          </div>
 
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            Survey
+          </h1>
+
+          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
             <button
               onClick={() => {
                 setOpenGenerateCustomerFeedbackModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
-              <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">
-                  Customer_Feedback.xls
-                </span>
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">Customer</span>
+                  <span className="text-xs font-semibold">Feedback</span>
+                </div>
               </div>
             </button>
           </div>

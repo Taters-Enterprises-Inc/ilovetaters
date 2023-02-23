@@ -1,17 +1,17 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { HeaderNav, FooterNav } from "features/shared/presentation/components";
+import { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
+import { selectGetCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { useNavigate, useParams } from "react-router-dom";
-import { getCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
-import { selectGetCustomerSurveyResponse } from "../slices/get-customer-survey-response.slice";
 
-export function SurveyComplete() {
+export function SurveySnackshopComplete() {
   const { hash } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -77,6 +77,15 @@ export function SurveyComplete() {
               information about our deals and information.
             </p>
           </div>
+
+          <Link
+            to={"/profile/snackshop-orders"}
+            className={`text-white border border-secondary order-1 text-xl flex space-x-2 justify-center items-center bg-secondary py-2 w-[300px]  rounded-lg shadow-lg`}
+          >
+            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+              Go Back To Profile
+            </span>
+          </Link>
 
           <h1 className='text-secondary text-4xl mt-4 font-["Bebas_Neue"]'>
             Answers

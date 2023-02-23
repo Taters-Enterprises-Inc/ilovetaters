@@ -279,6 +279,13 @@ export function ShopOrder() {
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
                   </div>
+                  {getOrdersState.data &&
+                  getOrdersState.data.order.clients_info.invoice_num ? (
+                    <div className="text-xs">
+                      <strong>Invoice No :</strong>{" "}
+                      {getOrdersState.data.order.clients_info.invoice_num}
+                    </div>
+                  ) : null}
                 </div>
               </div>
               <div className="text-secondary">
