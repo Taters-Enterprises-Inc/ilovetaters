@@ -110,6 +110,7 @@ export function PopClubDeal() {
           dispatch(
             redeemDeal({
               hash: getDealState.data?.hash,
+              remarks: "",
             })
           );
         }
@@ -157,7 +158,10 @@ export function PopClubDeal() {
         })
       );
 
-      if (getDealState.data.promo_discount_percentage) {
+      if (
+        getDealState.data.promo_discount_percentage ||
+        getDealState.data.is_free_delivery
+      ) {
         navigate("/delivery/products");
       }
 
@@ -417,7 +421,8 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.promo_discount_percentage ? (
+              {getRedeemState.data.promo_discount_percentage ||
+              getRedeemState.data.is_free_delivery ? (
                 <button
                   onClick={() => {
                     navigate("/delivery/products");

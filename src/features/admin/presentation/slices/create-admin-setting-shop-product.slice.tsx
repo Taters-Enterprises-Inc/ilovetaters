@@ -38,7 +38,6 @@ export const createAdminSettingShopProduct = createAsyncThunk(
           throw error;
         }
 
-        console.log(error.response.data.message);
         throw rejectWithValue(error.response.data.message);
       }
     }

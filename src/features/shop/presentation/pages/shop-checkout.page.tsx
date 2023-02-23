@@ -767,7 +767,7 @@ export function ShopCheckout() {
                             ) : null}
 
                             <span
-                              className="text-xs"
+                              className="text-tertiary text-xs"
                               dangerouslySetInnerHTML={{
                                 __html:
                                   getSessionState.data.redeem_data.deal_remarks,

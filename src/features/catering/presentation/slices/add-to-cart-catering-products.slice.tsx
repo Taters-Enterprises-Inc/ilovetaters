@@ -30,7 +30,6 @@ export const addToCartCateringProducts = createAsyncThunk(
     try {
       const response: AddToCartCateringProductsResponse =
         await AddToCartCateringProductsRepository(param);
-      console.log(response.data);
 
       return response.data;
     } catch (error) {
@@ -38,7 +37,6 @@ export const addToCartCateringProducts = createAsyncThunk(
         if (!error.response) {
           throw error;
         }
-        console.log(error.response.data.message);
 
         throw rejectWithValue(error.response.data.message);
       }

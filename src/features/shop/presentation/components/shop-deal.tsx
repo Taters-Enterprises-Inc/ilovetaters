@@ -228,6 +228,7 @@ export function ShopDeal(props: ShopDealCardProps) {
     dispatch(
       redeemDeal({
         hash: props.deal.hash,
+        remarks: "",
       })
     );
   };

@@ -31,8 +31,6 @@ export const createAdminSettingStore = createAsyncThunk(
       const response: CreateAdminSettingStoreResponse =
         await CreateAdminSettingStoreRepository(param);
 
-      console.log(response.data);
-
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -40,7 +38,6 @@ export const createAdminSettingStore = createAsyncThunk(
           throw error;
         }
 
-        console.log(error.response.data.message);
         throw rejectWithValue(error.response.data.message);
       }
     }
