@@ -6,7 +6,6 @@ import {
 } from "../slices/message-modal.slice";
 
 export interface MessageModalButtonProps {
-  id: string;
   text: string;
   color: string;
   onClick: () => void;

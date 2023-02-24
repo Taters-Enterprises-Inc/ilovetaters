@@ -51,7 +51,6 @@ export function FooterNav(props: FooterNavProps) {
           message: `This would remove all your cart items, store selection and send you to the ${id} home page. Are you sure you want to proceed?`,
           buttons: [
             {
-              id,
               color: "#CC5801",
               text: "Yes",
               onClick: () => {
@@ -80,7 +79,6 @@ export function FooterNav(props: FooterNavProps) {
               },
             },
             {
-              id: "No",
               color: "#22201A",
               text: "No",
               onClick: () => {

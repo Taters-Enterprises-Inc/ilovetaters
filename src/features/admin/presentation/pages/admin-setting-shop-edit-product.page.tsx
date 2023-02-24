@@ -741,8 +741,7 @@ export function AdminSettingShopEditProduct() {
                   message: `Are you sure you want to delete ${getAdminSettingShopProductState.data?.name} product?`,
                   buttons: [
                     {
-                      id: "Yes",
-                      color: "",
+                      color: "#CC5801",
                       text: "Yes",
                       onClick: () => {
                         if (id) {
@@ -752,8 +751,7 @@ export function AdminSettingShopEditProduct() {
                       },
                     },
                     {
-                      id: "No",
-                      color: "",
+                      color: "#22201A",
                       text: "No",
                       onClick: () => {
                         dispatch(closeMessageModal());

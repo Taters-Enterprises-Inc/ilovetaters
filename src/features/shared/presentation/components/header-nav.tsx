@@ -117,7 +117,6 @@ export function HeaderNav(props: HeaderNavProps) {
           message: `This would remove all your cart items, store selection and send you to the ${id} home page. Are you sure you want to proceed?`,
           buttons: [
             {
-              id: "No",
               color: "#22201A",
               text: "No",
               onClick: () => {
@@ -125,7 +124,6 @@ export function HeaderNav(props: HeaderNavProps) {
               },
             },
             {
-              id,
               color: "#CC5801",
               text: "Yes",
               onClick: () => {

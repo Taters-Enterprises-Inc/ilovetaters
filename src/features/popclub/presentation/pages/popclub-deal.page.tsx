@@ -454,8 +454,7 @@ export function PopClubDeal() {
                         "Are you sure you want to cancel the redemption?",
                       buttons: [
                         {
-                          id: "Yes",
-                          color: "",
+                          color: "#CC5801",
                           text: "Yes",
                           onClick: () => {
                             dispatch(forfeitRedeem());
@@ -463,8 +462,7 @@ export function PopClubDeal() {
                           },
                         },
                         {
-                          id: "No",
-                          color: "",
+                          color: "#22201A",
                           text: "No",
                           onClick: () => {
                             dispatch(closeMessageModal());
@@ -505,8 +503,7 @@ export function PopClubDeal() {
                         "Are you sure you want to cancel the redemption?",
                       buttons: [
                         {
-                          id: "Yes",
-                          color: "",
+                          color: "#CC5801",
                           text: "Yes",
                           onClick: () => {
                             dispatch(forfeitRedeem());
@@ -514,8 +511,7 @@ export function PopClubDeal() {
                           },
                         },
                         {
-                          id: "No",
-                          color: "",
+                          color: "#22201A",
                           text: "No",
                           onClick: () => {
                             dispatch(closeMessageModal());
