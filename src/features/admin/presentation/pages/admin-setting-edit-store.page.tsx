@@ -579,9 +579,7 @@ export function AdminSettingEditStore() {
 
           <button
             type="button"
-            onClick={() => {
-              // setOpenDeleteMessageModal(true);
-            }}
+            onClick={() => {}}
             className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
           >
             Delete Store

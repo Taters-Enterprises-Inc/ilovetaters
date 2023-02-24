@@ -57,6 +57,10 @@ import { getNotifications } from "features/shared/presentation/slices/get-notifi
 import ReactGA from "react-ga";
 import { SnacksDeliveredDealStoreChooserModal } from "../modals/snacks-delivered-deal-store-chooser.modal";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export function PopClubDeal() {
   const getDealState = useAppSelector(selectGetDeal);
@@ -79,7 +83,7 @@ export function PopClubDeal() {
   const getSessionState = useAppSelector(selectGetSession);
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
-  const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
+
   const [
     openStoreVisitDealStoreChooserModal,
     setOpenStoreVisitDealStoreChooserModal,
@@ -444,7 +448,31 @@ export function PopClubDeal() {
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
-                  setOpenForfeitModalMessage(true);
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to cancel the redemption?",
+                      buttons: [
+                        {
+                          id: "Yes",
+                          color: "",
+                          text: "Yes",
+                          onClick: () => {
+                            dispatch(forfeitRedeem());
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          id: "No",
+                          color: "",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
                 }}
               >
                 Cancel Redeem
@@ -471,7 +499,31 @@ export function PopClubDeal() {
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
-                  setOpenForfeitModalMessage(true);
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to cancel the redemption?",
+                      buttons: [
+                        {
+                          id: "Yes",
+                          color: "",
+                          text: "Yes",
+                          onClick: () => {
+                            dispatch(forfeitRedeem());
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          id: "No",
+                          color: "",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
                 }}
               >
                 Cancel Redeem
@@ -670,18 +722,6 @@ export function PopClubDeal() {
             dispatch(getDeal(hash));
           }
         }}
-      />
-
-      <MessageModal
-        open={openForfeitModalMessage}
-        onClose={() => {
-          setOpenForfeitModalMessage(false);
-        }}
-        onYes={() => {
-          dispatch(forfeitRedeem());
-          setOpenForfeitModalMessage(false);
-        }}
-        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

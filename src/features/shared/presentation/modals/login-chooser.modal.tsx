@@ -15,17 +15,17 @@ import { IoMdClose } from "react-icons/io";
 import { HiOutlinePhone } from "react-icons/hi";
 import { MobileLoginModal } from "features/shared/presentation/modals";
 import ReactGA from "react-ga";
+import {
+  closeLoginChooserModal,
+  selectLoginChooserModal,
+} from "../slices/login-chooser-modal.slice";
 
-interface LoginChooserModalProps {
-  open: boolean;
-  required?: boolean;
-  onClose: () => void;
-}
+export function LoginChooserModal() {
+  const dispatch = useAppDispatch();
 
-export function LoginChooserModal(props: LoginChooserModalProps) {
   const facebookLoginState = useAppSelector(selectFacebookLogin);
   const facebookLoginPointState = useAppSelector(selectFacebookLoginPoint);
-  const dispatch = useAppDispatch();
+  const loginChooserModalState = useAppSelector(selectLoginChooserModal);
 
   useEffect(() => {
     if (facebookLoginState.status === FacebookLoginState.success) {
@@ -48,7 +48,7 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
   }, [facebookLoginPointState, facebookLoginState]);
 
   const facebook = () => {
-    props.onClose();
+    dispatch(closeLoginChooserModal());
     dispatch(facebookLogin());
   };
 
@@ -57,14 +57,16 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
   return (
     <>
       <div
-        style={{ display: props.open ? "flex" : "none" }}
+        style={{ display: loginChooserModalState.status ? "flex" : "none" }}
         className="fixed inset-0 z-30 flex items-center justify-center bg-secondary bg-opacity-30 backdrop-blur-sm "
       >
         <div className="bg-secondary px-4 py-8 round w-[90%] sm:w-[400px] rounded-lg relative text-white">
-          {props.required ? null : (
+          {loginChooserModalState.data.required ? null : (
             <button
               className="absolute text-2xl text-white top-2 right-4"
-              onClick={props.onClose}
+              onClick={() => {
+                dispatch(closeLoginChooserModal());
+              }}
             >
               <IoMdClose />
             </button>
@@ -85,7 +87,7 @@ export function LoginChooserModal(props: LoginChooserModalProps) {
           </button>
           <button
             onClick={() => {
-              props.onClose();
+              dispatch(closeLoginChooserModal());
               setOpenMobileLoginModal(true);
             }}
             className="flex items-center justify-center w-full py-2 mt-4 rounded-lg bg-button"

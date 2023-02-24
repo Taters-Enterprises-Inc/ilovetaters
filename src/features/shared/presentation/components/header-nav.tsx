@@ -27,16 +27,12 @@ import { useEffect, useRef, useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { BsCart4 } from "react-icons/bs";
-import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
-import { GiPopcorn } from "react-icons/gi";
-import { HiDocumentText } from "react-icons/hi";
+import { FaUserAlt, FaUserCircle } from "react-icons/fa";
 import { MdLocationPin } from "react-icons/md";
-import { RiShoppingBag3Fill } from "react-icons/ri";
 import { VscCircleFilled } from "react-icons/vsc";
 import NumberFormat from "react-number-format";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShopCartModal } from "../../../shop/presentation/modals";
-import { MessageModal } from "../modals";
 import {
   getNotifications,
   selectGetNotifications,
@@ -48,6 +44,11 @@ import {
 import { CartListItem } from "./cart-item-list";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { openLoginChooserModal } from "../slices/login-chooser-modal.slice";
+
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export type ActiveUrl =
   | "PROFILE"
@@ -96,41 +97,90 @@ export function HeaderNav(props: HeaderNavProps) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const [
-    openMessageModalWhenSwitchingTabWhenCacheDataExist,
-    setOpenMessageModalWhenSwitchingTabWhenCacheDataExist,
-  ] = useState<{
-    status: boolean;
-    message: string;
-    url?: string;
-    onYes?: () => void;
-  }>({
-    status: false,
-    message: "",
-  });
-
-  const handleSwitchTab = (param: {
-    url?: string;
-    tabName: string;
-    onYes?: () => void;
-  }) => {
-    setOpen(false);
-
+  const handleSwitchTab = (
+    id:
+      | "home"
+      | "popclub"
+      | "snackshop"
+      | "catering"
+      | "branches"
+      | "franchising"
+  ) => {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
       getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
-      setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-        status: true,
-        url: param.url,
-        onYes: param.onYes,
-        message: `This would remove all your cart items, store selection and send you to the ${param.tabName} home page. Are you sure you want to proceed?`,
-      });
+      dispatch(
+        openMessageModal({
+          message: `This would remove all your cart items, store selection and send you to the ${id} home page. Are you sure you want to proceed?`,
+          buttons: [
+            {
+              id: "No",
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              id,
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                switch (id) {
+                  case "home":
+                    navigate("/");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "popclub":
+                    setOpenPlatformChooserModal(true);
+                    dispatch(closeMessageModal());
+                    break;
+                  case "snackshop":
+                    navigate("/delivery");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "catering":
+                    navigate("/shop");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "branches":
+                    navigate("/branches");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "franchising":
+                    navigate("/franchising");
+                    dispatch(closeMessageModal());
+                    break;
+                }
+              },
+            },
+          ],
+        })
+      );
     } else {
-      if (param.url) navigate(param.url);
-      if (param.onYes) param.onYes();
+      switch (id) {
+        case "home":
+          navigate("/");
+          break;
+        case "popclub":
+          setOpenPlatformChooserModal(true);
+          break;
+        case "snackshop":
+          navigate("/delivery");
+          break;
+        case "catering":
+          navigate("/shop");
+          break;
+        case "branches":
+          navigate("/branches");
+          break;
+        case "franchising":
+          navigate("/franchising");
+          break;
+      }
     }
   };
 
@@ -138,17 +188,6 @@ export function HeaderNav(props: HeaderNavProps) {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     setOpenProfileMenu(event.currentTarget);
-  };
-
-  const handleLogout = () => {
-    setOpenProfileMenu(null);
-
-    if (currentLocation.pathname === "/profile") {
-      dispatch(facebookLogout());
-      navigate("/");
-    } else {
-      dispatch(facebookLogout());
-    }
   };
 
   useEffect(() => {
@@ -276,10 +315,7 @@ export function HeaderNav(props: HeaderNavProps) {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      handleSwitchTab({
-                        url: "/",
-                        tabName: "HOME",
-                      });
+                      handleSwitchTab("home");
                     }}
                   >
                     Home
@@ -293,18 +329,14 @@ export function HeaderNav(props: HeaderNavProps) {
                       : "text-white"
                   }`}
                 >
-                  <Link
-                    to="/branches"
+                  <div
                     className="cursor-pointer"
                     onClick={() => {
-                      handleSwitchTab({
-                        url: "/",
-                        tabName: "BRANCHES",
-                      });
+                      handleSwitchTab("branches");
                     }}
                   >
                     Branches
-                  </Link>
+                  </div>
                 </li>
 
                 <li className="flex items-center justify-center px-4 pb-1">
@@ -355,33 +387,15 @@ export function HeaderNav(props: HeaderNavProps) {
                             >
                               {TABS.map((tab, i) => {
                                 return (
-                                  <div key={i}>
-                                    {tab.name === "POPCLUB" ? (
-                                      <MenuItem
-                                        onClick={() => {
-                                          handleSwitchTab({
-                                            onYes: () => {
-                                              setOpenPlatformChooserModal(true);
-                                            },
-                                            tabName: "popclub",
-                                          });
-                                        }}
-                                      >
-                                        {tab.name}
-                                      </MenuItem>
-                                    ) : (
-                                      <MenuItem
-                                        onClick={() => {
-                                          handleSwitchTab({
-                                            url: tab.url,
-                                            tabName: tab.name.toLowerCase(),
-                                          });
-                                        }}
-                                      >
-                                        {tab.name}
-                                      </MenuItem>
-                                    )}
-                                  </div>
+                                  <MenuItem
+                                    key={i}
+                                    onClick={() => {
+                                      handleSwitchTab(tab.name);
+                                    }}
+                                    className="uppercase"
+                                  >
+                                    {tab.name}
+                                  </MenuItem>
                                 );
                               })}
                             </MenuList>
@@ -739,32 +753,6 @@ export function HeaderNav(props: HeaderNavProps) {
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
-      />
-
-      <MessageModal
-        open={openMessageModalWhenSwitchingTabWhenCacheDataExist.status}
-        onClose={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-        }}
-        onYes={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.url)
-            navigate(openMessageModalWhenSwitchingTabWhenCacheDataExist.url);
-
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes)
-            openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes();
-        }}
-        message={openMessageModalWhenSwitchingTabWhenCacheDataExist.message}
       />
     </>
   );

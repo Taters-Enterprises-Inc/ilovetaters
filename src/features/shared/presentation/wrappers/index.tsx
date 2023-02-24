@@ -5,3 +5,4 @@ export { LoadingAndSnackbarWrapper } from "./loading-and-snackbar.wrapper";
 export { SessionWrapper } from "./session.wrapper";
 export { UserNotificationWrapper } from "./user-notification.wrapper";
 export { LoginChooserWrapper } from "./login-chooser.wrapper";
+export { MessageModalWrapper } from "./message-modal.wrapper";

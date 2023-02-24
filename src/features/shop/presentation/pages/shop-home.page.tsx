@@ -2,10 +2,6 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 import { useEffect } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
-import {
-  selectStoreReset,
-  storeReset,
-} from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
 import {
   selectShopHomePage,
@@ -13,22 +9,17 @@ import {
 } from "../slices/shop-home-page.slice";
 import { ShopHeroCarousel } from "../carousels";
 import { useLocation } from "react-router-dom";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
   const shopHomePageState = useAppSelector(selectShopHomePage);
-  const storeResetState = useAppSelector(selectStoreReset);
 
-  useEffect(() => {
-    dispatch(getSession());
-  }, [storeResetState]);
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
-
-  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });

@@ -1,10 +1,8 @@
 import { useAppDispatch } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
-import ReactPlayer from "react-player";
 import { useLocation } from "react-router-dom";
 import CustomizedAccordions from "../components/faqs";
 

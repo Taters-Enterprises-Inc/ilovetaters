@@ -1,10 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputAddress } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
-import {
-  selectStoreReset,
-  storeReset,
-} from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useState } from "react";
 import { FaSearchLocation } from "react-icons/fa";
 import {
@@ -26,6 +22,7 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 import { MaterialDateTimeInput } from "features/shared/presentation/components";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
@@ -36,10 +33,13 @@ export function CateringHome() {
     selectSetCateringStoreAndAddress
   );
   const cateringHomePageState = useAppSelector(selectCateringHomePage);
-  const storeResetState = useAppSelector(selectStoreReset);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    dispatch(storeReset());
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -56,14 +56,6 @@ export function CateringHome() {
       document.body.classList.remove("overflow-hidden");
     }
   }, [setCateringStoreAndAddressState, navigate, dispatch]);
-
-  useEffect(() => {
-    dispatch(storeReset());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSession());
-  }, [storeResetState]);
 
   const disableDates = (date: Date) => {
     return moment(date) <= moment().add(13, "days");

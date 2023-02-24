@@ -1,13 +1,16 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
 import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
 import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
 import MoreDrawer from "./more-drawer.component";
-import { MessageModal } from "../modals";
 import { selectGetSession } from "../slices/get-session.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface FooterNavProps {
   activeUrl:
@@ -22,6 +25,8 @@ interface FooterNavProps {
 
 export function FooterNav(props: FooterNavProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const getSessionState = useAppSelector(selectGetSession);
 
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
@@ -32,39 +37,77 @@ export function FooterNav(props: FooterNavProps) {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
-  const [
-    openMessageModalWhenSwitchingTabWhenCacheDataExist,
-    setOpenMessageModalWhenSwitchingTabWhenCacheDataExist,
-  ] = useState<{
-    status: boolean;
-    message: string;
-    url?: string;
-    onYes?: () => void;
-  }>({
-    status: false,
-    message: "",
-  });
-
-  const handleSwitchTab = (param: {
-    url?: string;
-    tabName: string;
-    onYes?: () => void;
-  }) => {
+  const handleSwitchTab = (
+    id: "home" | "popclub" | "snackshop" | "catering" | "branches"
+  ) => {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
       getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
-      setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-        status: true,
-        url: param.url,
-        onYes: param.onYes,
-        message: `This would remove all your cart items, store selection and send you to the ${param.tabName} home page. Are you sure you want to proceed?`,
-      });
+      dispatch(
+        openMessageModal({
+          message: `This would remove all your cart items, store selection and send you to the ${id} home page. Are you sure you want to proceed?`,
+          buttons: [
+            {
+              id,
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                switch (id) {
+                  case "home":
+                    navigate("/");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "popclub":
+                    setOpenPlatformChooserModal(true);
+                    dispatch(closeMessageModal());
+                    break;
+                  case "snackshop":
+                    navigate("/delivery");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "catering":
+                    navigate("/shop");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "branches":
+                    navigate("/branches");
+                    dispatch(closeMessageModal());
+                    break;
+                }
+              },
+            },
+            {
+              id: "No",
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
+        })
+      );
     } else {
-      if (param.url) navigate(param.url);
-      if (param.onYes) param.onYes();
+      switch (id) {
+        case "home":
+          navigate("/");
+          break;
+        case "popclub":
+          setOpenPlatformChooserModal(true);
+          break;
+        case "snackshop":
+          navigate("/delivery");
+          break;
+        case "catering":
+          navigate("/shop");
+          break;
+        case "branches":
+          navigate("/branches");
+          break;
+      }
     }
   };
 
@@ -76,7 +119,9 @@ export function FooterNav(props: FooterNavProps) {
             <ul className="flex h-full py-1 text-white item-stretch md:px-10">
               <li className="flex-1">
                 <div
-                  onClick={() => handleSwitchTab({ url: "/", tabName: "home" })}
+                  onClick={() => {
+                    handleSwitchTab("home");
+                  }}
                   className="flex flex-col items-center justify-center h-full pt-1 cursor-pointer"
                 >
                   <img
@@ -100,12 +145,7 @@ export function FooterNav(props: FooterNavProps) {
               <li className="flex-1">
                 <div
                   onClick={() => {
-                    handleSwitchTab({
-                      onYes: () => {
-                        setOpenPlatformChooserModal(true);
-                      },
-                      tabName: "popclub",
-                    });
+                    handleSwitchTab("popclub");
                   }}
                   className="flex flex-col items-center justify-center h-full pt-1 cursor-pointer"
                 >
@@ -129,9 +169,9 @@ export function FooterNav(props: FooterNavProps) {
               </li>
               <li className="flex-1">
                 <div
-                  onClick={() =>
-                    handleSwitchTab({ url: "/delivery", tabName: "snackshop" })
-                  }
+                  onClick={() => {
+                    handleSwitchTab("snackshop");
+                  }}
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
                   <img
@@ -154,9 +194,9 @@ export function FooterNav(props: FooterNavProps) {
               </li>
               <li className="flex-1">
                 <div
-                  onClick={() =>
-                    handleSwitchTab({ url: "/shop", tabName: "catering" })
-                  }
+                  onClick={() => {
+                    handleSwitchTab("catering");
+                  }}
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-2 cursor-pointer"
                 >
                   <img
@@ -179,9 +219,9 @@ export function FooterNav(props: FooterNavProps) {
               </li>
               <li className="flex-1">
                 <div
-                  onClick={() =>
-                    handleSwitchTab({ url: "/branches", tabName: "branches" })
-                  }
+                  onClick={() => {
+                    handleSwitchTab("branches");
+                  }}
                   className="flex flex-col items-center justify-center h-full pt-[5px] sm:pt-[5px] md:pt-1 cursor-pointer"
                 >
                   <img
@@ -245,32 +285,6 @@ export function FooterNav(props: FooterNavProps) {
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
-      />
-
-      <MessageModal
-        open={openMessageModalWhenSwitchingTabWhenCacheDataExist.status}
-        onClose={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-        }}
-        onYes={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.url)
-            navigate(openMessageModalWhenSwitchingTabWhenCacheDataExist.url);
-
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes)
-            openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes();
-        }}
-        message={openMessageModalWhenSwitchingTabWhenCacheDataExist.message}
       />
     </>
   );

@@ -185,6 +185,7 @@ import getInbox from "features/profile/presentation/slices/get-inbox.slice";
 import getAdminSettingStore from "features/admin/presentation/slices/get-admin-setting-store.slice";
 import editAdminSettingStore from "features/admin/presentation/slices/edit-admin-setting-store.slice";
 import loginChooserModal from "features/shared/presentation/slices/login-chooser-modal.slice";
+import messageModal from "features/shared/presentation/slices/message-modal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -373,6 +374,7 @@ export const store = configureStore({
     getAdminSettingStore,
     editAdminSettingStore,
     loginChooserModal,
+    messageModal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

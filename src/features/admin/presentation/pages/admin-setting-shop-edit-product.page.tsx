@@ -1,4 +1,3 @@
-import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -10,7 +9,7 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
   getAdminProductCategories,
@@ -39,7 +38,6 @@ import {
   resetDeleteAdminSettingShopProductState,
   selectDeleteAdminSettingShopProduct,
 } from "../slices/delete-admin-setting-shop-product.slice";
-import { MessageModal } from "features/shared/presentation/modals";
 import {
   getAdminSettingShopProductTypes,
   selectGetAdminSettingShopProductTypes,
@@ -49,6 +47,10 @@ import {
   selectGetAdminProducts,
 } from "../slices/get-admin-products.slice";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export interface Variant {
   name: string;
@@ -65,8 +67,6 @@ export function AdminSettingShopEditProduct() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-
-  const [openDeleteMessageModal, setOpenDeleteMessageModal] = useState(false);
 
   const getAdminProductCategoriesState = useAppSelector(
     selectGetAdminProductCategories
@@ -104,7 +104,7 @@ export function AdminSettingShopEditProduct() {
       editAdminSettingShopProductState.status ===
       EditAdminSettingShopProductState.success
     ) {
-      // navigate("/admin/setting/product");
+      navigate("/admin/setting/product");
       dispatch(resetEditAdminSettingShopProductState());
     }
   }, [editAdminSettingShopProductState, dispatch, navigate, id]);
@@ -736,7 +736,32 @@ export function AdminSettingShopEditProduct() {
           <button
             type="button"
             onClick={() => {
-              setOpenDeleteMessageModal(true);
+              dispatch(
+                openMessageModal({
+                  message: `Are you sure you want to delete ${getAdminSettingShopProductState.data?.name} product?`,
+                  buttons: [
+                    {
+                      id: "Yes",
+                      color: "",
+                      text: "Yes",
+                      onClick: () => {
+                        if (id) {
+                          dispatch(deleteAdminSettingShopProduct(id));
+                          dispatch(closeMessageModal());
+                        }
+                      },
+                    },
+                    {
+                      id: "No",
+                      color: "",
+                      text: "No",
+                      onClick: () => {
+                        dispatch(closeMessageModal());
+                      },
+                    },
+                  ],
+                })
+              );
             }}
             className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
           >
@@ -744,19 +769,6 @@ export function AdminSettingShopEditProduct() {
           </button>
         </div>
       </form>
-
-      <MessageModal
-        open={openDeleteMessageModal}
-        onClose={() => {
-          setOpenDeleteMessageModal(false);
-        }}
-        onYes={() => {
-          if (id) {
-            dispatch(deleteAdminSettingShopProduct(id));
-          }
-        }}
-        message={`Are you sure you want to delete ${getAdminSettingShopProductState.data?.name} product?`}
-      />
     </>
   );
 }

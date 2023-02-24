@@ -20,8 +20,6 @@ import { IoMdClose } from "react-icons/io";
 import { MdFastfood } from "react-icons/md";
 import NumberFormat from "react-number-format";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CateringAddon } from "../components";
-import { CateringPackageCustomizationQuantityFlavorModal } from "../modals";
 import {
   addToCartCateringProducts,
   AddToCartCateringProductsState,
@@ -37,6 +35,12 @@ import {
   GetCateringCategoryProductsState,
   selectGetCateringCategoryProducts,
 } from "../slices/get-catering-category-products.slice";
+import { Autoplay, Navigation } from "swiper";
+import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+
+import { CateringAddon } from "../components";
+import { CateringPackageCustomizationQuantityFlavorModal } from "../modals";
+
 import ReactGA from "react-ga";
 import { Addon } from "features/shared/presentation/components";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -44,13 +48,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 
-import { Autoplay, Navigation } from "swiper";
-import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { ProductModel } from "features/shared/core/domain/product.model";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { FiArrowLeft } from "react-icons/fi";
-import { MessageModal } from "features/shared/presentation/modals";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -88,8 +93,6 @@ export function CateringBuildYourOwnPackage() {
   const [customizePackage, setCustomizePackage] = useState<
     Array<CustomizePackageProduct>
   >([]);
-  const [openMessageModalGoBackToPackage, setOpenMessageModalGoBackToPackage] =
-    useState(false);
 
   const [
     openCateringPackageCustomizationQuantityFlavor,
@@ -848,7 +851,31 @@ export function CateringBuildYourOwnPackage() {
             <div className="block ">
               <button
                 onClick={() => {
-                  setOpenMessageModalGoBackToPackage(true);
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "This would remove your created package and send you to the catering packages page. Are you sure you want to proceed?",
+                      buttons: [
+                        {
+                          id: "Yes",
+                          color: "",
+                          text: "Yes",
+                          onClick: () => {
+                            navigate("/shop/products");
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          id: "No",
+                          color: "",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
                 }}
                 className="flex items-center justify-center px-2 py-1 space-x-2 text-white shadow-lg sm:max-h-fit rounded-xl bg-button"
               >
@@ -862,20 +889,6 @@ export function CateringBuildYourOwnPackage() {
           </div>
         </div>
       </main>
-
-      <MessageModal
-        open={openMessageModalGoBackToPackage}
-        onClose={() => {
-          setOpenMessageModalGoBackToPackage(false);
-        }}
-        onYes={() => {
-          setOpenMessageModalGoBackToPackage(false);
-          navigate("/shop/products");
-        }}
-        message={
-          "This would remove your created package and send you to the catering packages page. Are you sure you want to proceed?"
-        }
-      />
 
       <CateringPackageCustomizationQuantityFlavorModal
         open={openCateringPackageCustomizationQuantityFlavor}

@@ -139,21 +139,24 @@ export const SERVICES_MOBILE = [
   },
 ];
 
-export const TABS: Array<{ name: string; url: string }> = [
+export const TABS: Array<{
+  name: "snackshop" | "popclub" | "catering" | "franchising";
+  url: string;
+}> = [
   {
-    name: "POPCLUB",
-    url: "/popclub",
-  },
-  {
-    name: "SNACKSHOP",
+    name: "snackshop",
     url: "/delivery",
   },
   {
-    name: "CATERING",
+    name: "popclub",
+    url: "/popclub",
+  },
+  {
+    name: "catering",
     url: "/shop",
   },
   {
-    name: "FRANCHISING",
+    name: "franchising",
     url: "/franchising",
   },
 ];
