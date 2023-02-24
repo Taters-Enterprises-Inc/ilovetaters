@@ -58,7 +58,7 @@ export function AdminDashboard() {
             url: "/admin",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Orders", url: "/admin/order" }],
+          pageTitles: [{ name: "Dashboard", url: "/admin/dashboard" }],
         }}
       />
 
@@ -66,7 +66,7 @@ export function AdminDashboard() {
         <div className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           Dashboard
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-2 mb-8">
+        <div className="grid grid-cols-1 gap-4 mt-2 mb-8 sm:grid-cols-2 lg:grid-cols-4">
           <AdminTotalSalesCard
             title="Snackshop Sales"
             totalCompletedTransaction={
