@@ -24,7 +24,7 @@ export function Profile() {
 
       <Outlet />
 
-      <FooterNav activeUrl="SNACKSHOP" />
+      <FooterNav activeUrl="PROFILE" />
     </>
   );
 }

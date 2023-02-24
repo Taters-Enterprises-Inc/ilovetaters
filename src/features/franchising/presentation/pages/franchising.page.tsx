@@ -107,7 +107,7 @@ export function Franchising() {
         </div>
       </section>
 
-      <FooterNav activeUrl="HOME" />
+      <FooterNav activeUrl="FRANCHISING" />
     </main>
   );
 }

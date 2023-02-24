@@ -14,7 +14,7 @@ import {
   getProductDetails,
   selectGetProductDetails,
 } from "features/shop/presentation/slices/get-product-details.slice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsFillBagCheckFill, BsFillCartPlusFill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { MdFastfood } from "react-icons/md";
@@ -34,6 +34,7 @@ import {
 } from "../slices/add-to-cart-catering.slice";
 import {
   getCateringCategoryProducts,
+  GetCateringCategoryProductsState,
   selectGetCateringCategoryProducts,
 } from "../slices/get-catering-category-products.slice";
 import ReactGA from "react-ga";
@@ -45,6 +46,13 @@ import "swiper/css/autoplay";
 
 import { Autoplay, Navigation } from "swiper";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
+import { ProductModel } from "features/shared/core/domain/product.model";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { FiArrowLeft } from "react-icons/fi";
+import { MessageModal } from "features/shared/presentation/modals";
+
+const SweetAlert = withReactContent(Swal);
 
 export interface CustomizePackageProduct {
   prod_id: number;
@@ -75,9 +83,13 @@ export function CateringBuildYourOwnPackage() {
 
   const hash = query.get("hash");
 
+  const cateringAddonsRef = useRef<null | HTMLDivElement>(null);
+
   const [customizePackage, setCustomizePackage] = useState<
     Array<CustomizePackageProduct>
   >([]);
+  const [openMessageModalGoBackToPackage, setOpenMessageModalGoBackToPackage] =
+    useState(false);
 
   const [
     openCateringPackageCustomizationQuantityFlavor,
@@ -117,8 +129,6 @@ export function CateringBuildYourOwnPackage() {
         category: "Catering Order",
         action: "Add to cart item",
       });
-
-      navigate("/shop/products");
       dispatch(getSession());
       dispatch(resetAddToCartCateringProductsState());
     }
@@ -145,6 +155,30 @@ export function CateringBuildYourOwnPackage() {
       );
     }
   }, [getSessionState, dispatch]);
+
+  const calculateFreeAddon = () => {
+    let freeItem: Array<ProductModel> = [];
+
+    checkFreeItem({
+      freeItemAvailable: (val) => {
+        freeItem = val;
+      },
+      freeItemNotAvailable: () => {
+        freeItem = [];
+      },
+    });
+
+    if (freeItem.length > 0) {
+      return (
+        <div className="text-white ">
+          🎉 <strong>Claim</strong> FREE{" "}
+          <strong>{freeItem[freeItem.length - 1].name}</strong>
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   const calculateTotalQuantity = () => {
     let totalQuantity = 0;
@@ -173,6 +207,129 @@ export function CateringBuildYourOwnPackage() {
       res.push(chunk);
     }
     return res;
+  };
+
+  const checkFreeItem = (param: {
+    freeItemAvailable: (freeItem: Array<ProductModel>) => void;
+    freeItemNotAvailable: () => void;
+  }) => {
+    if (
+      getCateringCategoryProductsState.data &&
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getCateringCategoryProductsState.status ===
+        GetCateringCategoryProductsState.success
+    ) {
+      const addons = getCateringCategoryProductsState.data.addons;
+      let freeItem: Array<ProductModel> = [];
+      let calculatedPrice = 0;
+
+      const orders = getSessionState.data.orders;
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i];
+          calculatedPrice += order.prod_calc_amount;
+        }
+      }
+      const totalPrice = calculateTotalPackagePrice() + calculatedPrice;
+
+      if (addons) {
+        for (let i = 0; i < addons.length; i++) {
+          const freeThreshold = addons[i].free_threshold;
+          if (freeThreshold) {
+            if (totalPrice >= freeThreshold) {
+              freeItem.push(addons[i]);
+            }
+          }
+        }
+      }
+
+      if (freeItem.length > 0) {
+        param.freeItemAvailable(freeItem);
+      } else {
+        param.freeItemNotAvailable();
+      }
+    }
+  };
+
+  const handleAddToCart = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showCancelButton: true,
+          confirmButtonText: "Add to cart, then check the item",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(
+              addToCartCateringProducts({
+                products: customizePackage,
+              })
+            ).then(() => {
+              setCustomizePackage([]);
+              setTimeout(() => {
+                if (cateringAddonsRef.current)
+                  cateringAddonsRef.current.scrollIntoView();
+              }, 500);
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatch(
+          addToCartCateringProducts({
+            products: customizePackage,
+          })
+        ).then(() => {
+          setCustomizePackage([]);
+        });
+      },
+    });
+  };
+
+  const handleCheckout = () => {
+    checkFreeItem({
+      freeItemAvailable: () => {
+        SweetAlert.fire({
+          title: "Claim you free item!",
+          text: "You're eligible to claim a free item!",
+          icon: "info",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Check the free item",
+          denyButtonText: `Proceed to checkout`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setTimeout(() => {
+              if (cateringAddonsRef.current)
+                cateringAddonsRef.current.scrollIntoView();
+            }, 500);
+          } else if (result.isDenied) {
+            dispatch(
+              addToCartCateringProducts({
+                products: customizePackage,
+              })
+            ).then(() => {
+              setCustomizePackage([]);
+              navigate("/shop/checkout");
+            });
+          }
+        });
+      },
+      freeItemNotAvailable() {
+        dispatch(
+          addToCartCateringProducts({
+            products: customizePackage,
+          })
+        ).then(() => {
+          setCustomizePackage([]);
+          navigate("/shop/checkout");
+        });
+      },
+    });
   };
 
   return (
@@ -457,6 +614,7 @@ export function CateringBuildYourOwnPackage() {
 
               <div className="space-y-4">
                 <div>
+                  {calculateFreeAddon()}
                   <div className="flex">
                     <span className="text-lg text-white">
                       Package Quantity:
@@ -483,16 +641,7 @@ export function CateringBuildYourOwnPackage() {
 
                 <div className="mt-4 space-y-4">
                   <button
-                    onClick={() => {
-                      dispatch(
-                        addToCartCateringProducts({
-                          products: customizePackage,
-                        })
-                      ).then(() => {
-                        setCustomizePackage([]);
-                        navigate("/shop/checkout");
-                      });
-                    }}
+                    onClick={handleCheckout}
                     className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillBagCheckFill className="text-3xl" />
@@ -502,15 +651,7 @@ export function CateringBuildYourOwnPackage() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      dispatch(
-                        addToCartCateringProducts({
-                          products: customizePackage,
-                        })
-                      ).then(() => {
-                        setCustomizePackage([]);
-                      });
-                    }}
+                    onClick={handleAddToCart}
                     className="text-white text-xl border border-white flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
                   >
                     <BsFillCartPlusFill className="text-3xl" />
@@ -547,7 +688,10 @@ export function CateringBuildYourOwnPackage() {
                     prefixIcon: <MdFastfood className="text-3xl" />,
                   }}
                 >
-                  <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                  <div
+                    ref={cateringAddonsRef}
+                    className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
+                  >
                     {getCateringCategoryProductsState.data.addons.map(
                       (product, i) => {
                         if (
@@ -637,7 +781,10 @@ export function CateringBuildYourOwnPackage() {
                       prefixIcon: <MdFastfood className="text-3xl" />,
                     }}
                   >
-                    <div className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4">
+                    <div
+                      ref={cateringAddonsRef}
+                      className="max-h-[500px] overflow-y-auto flex flex-col py-4 px-4"
+                    >
                       {getCateringCategoryProductsState.data.addons.map(
                         (product, i) => {
                           if (
@@ -695,7 +842,40 @@ export function CateringBuildYourOwnPackage() {
             </div>
           )}
         </section>
+
+        <div className="fixed bottom-[100px] sm:bottom-[120px] lg:bottom-[50px] z-10 h-1 w-full">
+          <div className="container flex items-start justify-end">
+            <div className="block ">
+              <button
+                onClick={() => {
+                  setOpenMessageModalGoBackToPackage(true);
+                }}
+                className="flex items-center justify-center px-2 py-1 space-x-2 text-white shadow-lg sm:max-h-fit rounded-xl bg-button"
+              >
+                <FiArrowLeft className="text-xl lg:text-2xl" />
+
+                <span className="text-base lg:text-lg font-['Bebas_Neue'] tracking-[3px] mt-1">
+                  Go Back to Packages
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
+
+      <MessageModal
+        open={openMessageModalGoBackToPackage}
+        onClose={() => {
+          setOpenMessageModalGoBackToPackage(false);
+        }}
+        onYes={() => {
+          setOpenMessageModalGoBackToPackage(false);
+          navigate("/shop/products");
+        }}
+        message={
+          "This would remove your created package and send you to the catering packages page. Are you sure you want to proceed?"
+        }
+      />
 
       <CateringPackageCustomizationQuantityFlavorModal
         open={openCateringPackageCustomizationQuantityFlavor}

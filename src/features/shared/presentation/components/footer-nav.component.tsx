@@ -10,24 +10,19 @@ import { MessageModal } from "../modals";
 import { selectGetSession } from "../slices/get-session.slice";
 
 interface FooterNavProps {
-  activeUrl: "SNACKSHOP" | "CATERING" | "POPCLUB" | "BRANCHES" | "HOME";
+  activeUrl:
+    | "SNACKSHOP"
+    | "CATERING"
+    | "POPCLUB"
+    | "BRANCHES"
+    | "HOME"
+    | "PROFILE"
+    | "FRANCHISING";
 }
 
 export function FooterNav(props: FooterNavProps) {
   const navigate = useNavigate();
   const getSessionState = useAppSelector(selectGetSession);
-  const currentLocation = useLocation();
-
-  function isMoreActive() {
-    const loc = currentLocation.pathname;
-    if (
-      loc === "/franchising" ||
-      loc === "/profile" ||
-      loc === "/delivery/terms-and-conditions"
-    ) {
-      return true;
-    }
-  }
 
   const [openPlatformChooserModal, setOpenPlatformChooserModal] =
     useState(false);
@@ -86,16 +81,14 @@ export function FooterNav(props: FooterNavProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home${
-                      props.activeUrl === "HOME" && !isMoreActive()
-                        ? "-active"
-                        : ""
+                      props.activeUrl === "HOME" ? "-active" : ""
                     }.png`}
                     className="w-[28px] sm:w-[40px] lg:w-[30px]"
                     alt="Entertainment Snacks est. 1994."
                   />
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
-                      props.activeUrl === "HOME" && !isMoreActive()
+                      props.activeUrl === "HOME"
                         ? "text-tertiary"
                         : "text-white"
                     }`}
@@ -143,16 +136,14 @@ export function FooterNav(props: FooterNavProps) {
                 >
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop${
-                      props.activeUrl === "SNACKSHOP" && !isMoreActive()
-                        ? "-active"
-                        : ""
+                      props.activeUrl === "SNACKSHOP" ? "-active" : ""
                     }.png`}
                     className="w-[24px] sm:w-[30px] lg:w-[23px]"
                     alt="Snacks cravings delivered."
                   ></img>
                   <span
                     className={`text-[8px] sm:text-[14px] lg:text-[11px] pt-[3px] pb-[5px] ${
-                      props.activeUrl === "SNACKSHOP" && !isMoreActive()
+                      props.activeUrl === "SNACKSHOP"
                         ? "text-tertiary"
                         : "text-white"
                     }`}
@@ -212,7 +203,12 @@ export function FooterNav(props: FooterNavProps) {
                 </div>
               </li>
               <li className="flex-1">
-                <MoreDrawer isMoreActive={isMoreActive() ? true : false} />
+                <MoreDrawer
+                  isMoreActive={
+                    props.activeUrl === "PROFILE" ||
+                    props.activeUrl === "FRANCHISING"
+                  }
+                />
               </li>
             </ul>
           </nav>
