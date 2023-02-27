@@ -79,6 +79,19 @@ export interface OrderModel {
       quantity: number;
       remarks: string | null;
       price: number | null;
+      deal_products_promo_include: Array<{
+        id: number;
+        quantity: number;
+        product_id: number;
+        product_hash: string;
+        product_variant_option_tb_id: number | null;
+        obtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }>;
+      }>;
     }>;
     personnel: {
       name: string;

@@ -27,6 +27,8 @@ export interface AdminShopOrderModel {
   fb_user_id: number | null;
   mobile_user_id: number | null;
   items: Array<{
+    deal_id: number | null;
+    product_id: number | null;
     order_item_id: number | null;
     deal_order_item_id: number | null;
     price: number | null;
@@ -42,5 +44,19 @@ export interface AdminShopOrderModel {
     deal_name?: string;
     deal_description?: string;
     promo_discount_percentage?: string;
+
+    deal_products_promo_include: Array<{
+      id: number;
+      quantity: number;
+      product_id: number;
+      product_hash: string;
+      product_variant_option_tb_id: number | null;
+      obtainable: Array<{
+        product_id: number;
+        price: number;
+        product_variant_option_tb_id: number;
+        promo_discount_percentage: string;
+      }>;
+    }>;
   }>;
 }

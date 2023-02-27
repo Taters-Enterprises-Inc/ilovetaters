@@ -44,6 +44,19 @@ export interface SessionModel {
     minimum_purchase: number | null;
     deal_original_price: number | null;
     deal_promo_price: number | null;
+    deal_products_promo_include: Array<{
+      id: number;
+      quantity: number;
+      product_id: number;
+      product_hash: string;
+      product_variant_option_tb_id: number | null;
+      obtainable: Array<{
+        product_id: number;
+        price: number;
+        product_variant_option_tb_id: number;
+        promo_discount_percentage: string;
+      }>;
+    }>;
   } | null;
 
   orders?: Array<{

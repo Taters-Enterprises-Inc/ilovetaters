@@ -24,6 +24,7 @@ import NumberFormat from "react-number-format";
 
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
@@ -200,6 +201,33 @@ export function ShopProduct() {
       );
     }
   }, [currentSize, dispatch]);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getSessionState.data.redeem_data &&
+      getProductDetailsState.data
+    ) {
+      const deal_products_promo_includes =
+        getSessionState.data.redeem_data.deal_products_promo_include;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id ===
+            getProductDetailsState.data.product.id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          setQuantity(deal_products_promo_include.quantity + 1);
+          setCurrentSize(
+            deal_products_promo_include.product_variant_option_tb_id.toString()
+          );
+        }
+      }
+    }
+  }, [getSessionState]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
@@ -472,6 +500,159 @@ export function ShopProduct() {
           prod_sku: -1,
           prod_type: "main",
         })
+      );
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    const deal_products_promo_includes =
+      getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+    if (getProductDetailsState.data && deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id ===
+            getProductDetailsState.data.product.id &&
+          deal_products_promo_include.product_variant_option_tb_id &&
+          quantity >= deal_products_promo_include.quantity + 1
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        return (
+          <div>
+            <h2 className="mt-4 text-2xl text-white line-through">
+              <NumberFormat
+                value={(
+                  getProductDetailsState.data?.product.price * quantity
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+            {getProductDetailsState.data?.product.price ? (
+              <h2 className="text-4xl text-white">
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    getProductDetailsState.data?.product.price * quantity -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+            ) : null}
+          </div>
+        );
+      } else {
+        return (
+          <>
+            {getProductDetailsState.data?.product.price ? (
+              <h2 className="mt-4 text-4xl text-white">
+                <NumberFormat
+                  value={(
+                    getProductDetailsState.data.product.price * quantity
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+            ) : null}
+          </>
+        );
+      }
+    } else if (getProductDetailsState.data?.product.promo_discount_percentage) {
+      return (
+        <div>
+          <h2 className="mt-4 text-2xl text-white line-through">
+            <NumberFormat
+              value={(
+                getProductDetailsState.data?.product.price * quantity
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h2>
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="text-4xl text-white">
+              <NumberFormat
+                value={(
+                  (getProductDetailsState.data.product.price -
+                    getProductDetailsState.data.product.price *
+                      parseFloat(
+                        getProductDetailsState.data.product
+                          .promo_discount_percentage
+                      )) *
+                  quantity
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+        </div>
+      );
+    } else {
+      return (
+        <>
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="mt-4 text-4xl text-white">
+              <NumberFormat
+                value={(
+                  getProductDetailsState.data.product.price * quantity
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+        </>
       );
     }
   };
@@ -775,54 +956,7 @@ export function ShopProduct() {
                   </div>
                 </div>
 
-                {getProductDetailsState.data?.product
-                  .promo_discount_percentage ? (
-                  <div>
-                    <h2 className="mt-4 text-2xl text-white line-through">
-                      <NumberFormat
-                        value={(
-                          getProductDetailsState.data?.product.price * quantity
-                        ).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h2>
-                    {getProductDetailsState.data?.product.price ? (
-                      <h2 className="text-4xl text-white">
-                        <NumberFormat
-                          value={(
-                            (getProductDetailsState.data.product.price -
-                              getProductDetailsState.data.product.price *
-                                parseFloat(
-                                  getProductDetailsState.data.product
-                                    .promo_discount_percentage
-                                )) *
-                            quantity
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </h2>
-                    ) : null}
-                  </div>
-                ) : (
-                  <>
-                    {getProductDetailsState.data?.product.price ? (
-                      <h2 className="mt-4 text-4xl text-white">
-                        <NumberFormat
-                          value={(
-                            getProductDetailsState.data.product.price * quantity
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </h2>
-                    ) : null}
-                  </>
-                )}
+                {calculateTotalPrice()}
 
                 {getProductDetailsState.data?.product_size &&
                 getProductDetailsState.data?.product_size.length > 0 ? (

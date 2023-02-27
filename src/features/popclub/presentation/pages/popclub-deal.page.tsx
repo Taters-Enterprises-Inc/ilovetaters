@@ -162,7 +162,23 @@ export function PopClubDeal() {
         })
       );
 
-      if (
+      if (getDealState.data.deal_products_promo_include.length > 0) {
+        const deal_products_promo_include =
+          getDealState.data.deal_products_promo_include;
+
+        if (deal_products_promo_include[0].obtainable.length >= 1) {
+          navigate(
+            "/delivery/products/" + deal_products_promo_include[0].product_hash
+          );
+        } else if (
+          deal_products_promo_include[0].obtainable.length > 1 &&
+          deal_products_promo_include.length > 1
+        ) {
+          navigate("/delivery/products");
+        } else {
+          navigate("/delivery/products");
+        }
+      } else if (
         getDealState.data.promo_discount_percentage ||
         getDealState.data.is_free_delivery
       ) {
@@ -215,6 +231,84 @@ export function PopClubDeal() {
         getDealProductVariants({
           hash,
         })
+      );
+    }
+  };
+  const goButtons = () => {
+    if (
+      getRedeemState.data &&
+      getRedeemState.data.deal_products_promo_include
+    ) {
+      const deal_products_promo_include =
+        getRedeemState.data.deal_products_promo_include;
+
+      if (deal_products_promo_include) {
+        if (deal_products_promo_include[0].obtainable.length >= 1) {
+          return (
+            <button
+              onClick={() => {
+                navigate(
+                  "/delivery/products/" +
+                    deal_products_promo_include[0].product_hash
+                );
+              }}
+              className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+            >
+              Go Back to Product
+            </button>
+          );
+        } else if (
+          deal_products_promo_include[0].obtainable.length > 1 &&
+          deal_products_promo_include.length > 1
+        ) {
+          return (
+            <button
+              onClick={() => {
+                navigate("/delivery/products");
+              }}
+              className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+            >
+              Go Back to Products
+            </button>
+          );
+        } else {
+          return (
+            <button
+              onClick={() => {
+                navigate("/delivery/products");
+              }}
+              className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+            >
+              Go Back to Products
+            </button>
+          );
+        }
+      }
+    } else if (
+      getRedeemState.data &&
+      (getRedeemState.data.promo_discount_percentage ||
+        getRedeemState.data.is_free_delivery)
+    ) {
+      return (
+        <button
+          onClick={() => {
+            navigate("/delivery/products");
+          }}
+          className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+        >
+          Go Back to Products
+        </button>
+      );
+    } else {
+      return (
+        <button
+          onClick={() => {
+            navigate("/delivery/checkout");
+          }}
+          className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+        >
+          Go Back to Checkout
+        </button>
       );
     }
   };
@@ -425,26 +519,7 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.promo_discount_percentage ||
-              getRedeemState.data.is_free_delivery ? (
-                <button
-                  onClick={() => {
-                    navigate("/delivery/products");
-                  }}
-                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-                >
-                  Go Back to Products
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    navigate("/delivery/checkout");
-                  }}
-                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-                >
-                  Go Back to Checkout
-                </button>
-              )}
+              {goButtons()}
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
@@ -689,12 +764,14 @@ export function PopClubDeal() {
         ) : null}
       </section>
 
-      <VariantsChooserModal
-        open={openVariantChooserModal}
-        onClose={() => {
-          setOpenVariantChooserModal(false);
-        }}
-      />
+      {openVariantChooserModal ? (
+        <VariantsChooserModal
+          open={openVariantChooserModal}
+          onClose={() => {
+            setOpenVariantChooserModal(false);
+          }}
+        />
+      ) : null}
 
       <StoreVisitDealStoreChooserModal
         open={openStoreVisitDealStoreChooserModal}

@@ -75,8 +75,8 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
       getSessionState.status === GetSessionState.success &&
       getSessionState.data?.popclub_data.platform === "store-visit"
     ) {
-      props.onClose();
       dispatch(resetRedeemDeal());
+      props.onClose();
     }
   }, [
     getSessionState,

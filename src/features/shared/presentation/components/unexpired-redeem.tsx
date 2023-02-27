@@ -108,7 +108,9 @@ export function UnExpiredRedeem() {
                           </span>
 
                           {getLatestUnexpiredRedeemState.data
-                            .promo_discount_percentage ? (
+                            .promo_discount_percentage ||
+                          getLatestUnexpiredRedeemState.data
+                            .deal_products_promo_include.length > 0 ? (
                             <>
                               <br />
                               <span>
