@@ -473,13 +473,13 @@ export function AdminAvailabilityDeals() {
                       <DataTableCell>{row.alias}</DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
-                        {status === null || status === "0" ? (
+                        {status === null || status === "1" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreDeal({
-                                    status: "1",
+                                    status: "0",
                                     id: row.id.toString(),
                                   })
                                 );
@@ -488,13 +488,13 @@ export function AdminAvailabilityDeals() {
                           >
                             Disable
                           </button>
-                        ) : status === "1" ? (
+                        ) : status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreDeal({
-                                    status: "0",
+                                    status: "1",
                                     id: row.id.toString(),
                                   })
                                 );

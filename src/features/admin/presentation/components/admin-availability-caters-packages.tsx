@@ -501,13 +501,13 @@ export function AdminAvailabilityCatersPackages() {
                         </DataTableCell>
                         <DataTableCell>{row.category_name}</DataTableCell>
                         <DataTableCell>
-                          {status === null || status === "0" ? (
+                          {status === null || status === "1" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCatersPackage({
-                                      status: "1",
+                                      status: "0",
                                       id: row.id.toString(),
                                     })
                                   );
@@ -516,13 +516,13 @@ export function AdminAvailabilityCatersPackages() {
                             >
                               Disable
                             </button>
-                          ) : status === "1" ? (
+                          ) : status === "0" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCatersPackage({
-                                      status: "0",
+                                      status: "1",
                                       id: row.id.toString(),
                                     })
                                   );

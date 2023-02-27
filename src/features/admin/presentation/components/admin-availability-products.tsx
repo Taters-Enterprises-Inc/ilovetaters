@@ -486,13 +486,13 @@ export function AdminAvailabilityProducts() {
                       </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
-                        {status === null || status === "0" ? (
+                        {status === null || status === "1" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreProduct({
-                                    status: "1",
+                                    status: "0",
                                     id: row.id.toString(),
                                   })
                                 );
@@ -501,13 +501,13 @@ export function AdminAvailabilityProducts() {
                           >
                             Disable
                           </button>
-                        ) : status === "1" ? (
+                        ) : status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreProduct({
-                                    status: "0",
+                                    status: "1",
                                     id: row.id.toString(),
                                   })
                                 );
