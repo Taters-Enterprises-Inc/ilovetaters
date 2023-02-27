@@ -124,7 +124,10 @@ export function ShopOrder() {
   }) => {
     let deal_products_promo_includes = null;
 
-    if (getOrdersState.data?.order.deals_details) {
+    if (
+      getOrdersState.data &&
+      getOrdersState.data.order.deals_details.length > 0
+    ) {
       deal_products_promo_includes =
         getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
     }
