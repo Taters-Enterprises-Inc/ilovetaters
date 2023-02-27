@@ -122,8 +122,13 @@ export function ShopOrder() {
     deal_description?: string;
     promo_discount_percentage?: string;
   }) => {
-    const deal_products_promo_includes =
-      getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
+    let deal_products_promo_includes = null;
+
+    if (getOrdersState.data?.order.deals_details) {
+      deal_products_promo_includes =
+        getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
+    }
+
     if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
