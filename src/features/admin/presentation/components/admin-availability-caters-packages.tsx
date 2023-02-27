@@ -114,7 +114,7 @@ export function AdminAvailabilityCatersPackages() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 0,
+                  status: 1,
                   category_id: categoryId,
                   store_id: storeId,
                   search: search,
@@ -129,7 +129,7 @@ export function AdminAvailabilityCatersPackages() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status === null || status === "0"
+                status === null || status === "1"
                   ? "text-base"
                   : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
@@ -141,7 +141,7 @@ export function AdminAvailabilityCatersPackages() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 1,
+                  status: 0,
                   store_id: storeId,
                   category_id: categoryId,
                   search: search,
@@ -156,7 +156,7 @@ export function AdminAvailabilityCatersPackages() {
                 });
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
-                status && status === "1" ? "text-base" : "text-xs opacity-40"
+                status && status === "0" ? "text-base" : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
             >
               Not Available

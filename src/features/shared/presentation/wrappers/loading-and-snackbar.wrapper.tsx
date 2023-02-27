@@ -163,17 +163,17 @@ import {
   selectEditAdminUser,
 } from "features/admin/presentation/slices/edit-admin-user.slice";
 import {
-  GetAdminUserStoresState,
-  selectGetAdminUserStores,
-} from "features/admin/presentation/slices/get-admin-user-stores.slice";
+  GetAdminSettingUserStoreState,
+  selectGetAdminSettingUserStore,
+} from "features/admin/presentation/slices/get-admin-setting-user-store.slice";
 import {
-  GetAdminStoresState,
-  selectGetAdminStores,
-} from "features/admin/presentation/slices/get-admin-stores.slice";
+  GetAdminSettingUserStoresState,
+  selectGetAdminSettingUserStores,
+} from "features/admin/presentation/slices/get-admin-setting-user-stores.slice";
 import {
-  selectUpdateAdminUserStores,
-  UpdateAdminUserStoresState,
-} from "features/admin/presentation/slices/update-user-stores.slice";
+  selectUpdateAdminSettingUserStores,
+  UpdateAdminSettingUserStoresState,
+} from "features/admin/presentation/slices/update-admin-setting-user-stores.slice";
 import {
   CreateAdminGroupState,
   selectCreateAdminGroup,
@@ -206,10 +206,6 @@ import {
   AdminDeclineRedeemState,
   selectAdminDeclineRedeem,
 } from "features/admin/presentation/slices/admin-decline-redeem.slice";
-import {
-  GetAdminStoreState,
-  selectGetAdminStore,
-} from "features/admin/presentation/slices/get-admin-store.slice";
 import {
   GetAdminSettingStoresState,
   selectGetAdminSettingStores,
@@ -420,9 +416,15 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminUserState = useAppSelector(selectEditAdminUser);
   const getAdminUserState = useAppSelector(selectGetAdminUser);
   const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
-  const getAdminUserStores = useAppSelector(selectGetAdminUserStores);
-  const getAdminStores = useAppSelector(selectGetAdminStores);
-  const updateAdminUserStores = useAppSelector(selectUpdateAdminUserStores);
+  const getAdminSettingUserStoreState = useAppSelector(
+    selectGetAdminSettingUserStore
+  );
+  const getAdminSettingUserStoresState = useAppSelector(
+    selectGetAdminSettingUserStores
+  );
+  const updateAdminSettingUserStores = useAppSelector(
+    selectUpdateAdminSettingUserStores
+  );
   const createAdminGroupState = useAppSelector(selectCreateAdminGroup);
   const uploadProofOfPaymentAdminState = useAppSelector(
     selectUploadProofOfPaymentAdmin
@@ -442,7 +444,7 @@ export function LoadingAndSnackbarWrapper() {
   const updateStoreDealState = useAppSelector(selectUpdateStoreDeal);
 
   const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
-  const getAdminStoreState = useAppSelector(selectGetAdminStore);
+
   const getAdminSettingStoresState = useAppSelector(
     selectGetAdminSettingStores
   );
@@ -1073,23 +1075,6 @@ export function LoadingAndSnackbarWrapper() {
   }, [getAdminSettingStoresState]);
 
   useEffect(() => {
-    switch (getAdminStoreState.status) {
-      case GetAdminStoreState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case GetAdminStoreState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminStoreState.success:
-        setOpenBackdropLoading(false);
-        break;
-      case GetAdminStoreState.fail:
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [getAdminStoreState]);
-
-  useEffect(() => {
     switch (adminDeclineRedeemState.status) {
       case AdminDeclineRedeemState.inProgress:
         setOpenBackdropLoading(true);
@@ -1245,57 +1230,57 @@ export function LoadingAndSnackbarWrapper() {
   }, [createAdminGroupState]);
 
   useEffect(() => {
-    switch (updateAdminUserStores.status) {
-      case UpdateAdminUserStoresState.inProgress:
+    switch (updateAdminSettingUserStores.status) {
+      case UpdateAdminSettingUserStoresState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case UpdateAdminUserStoresState.initial:
+      case UpdateAdminSettingUserStoresState.initial:
         setOpenBackdropLoading(false);
         break;
-      case UpdateAdminUserStoresState.success:
-        showAlert(setSuccessAlert, updateAdminUserStores.message);
+      case UpdateAdminSettingUserStoresState.success:
+        showAlert(setSuccessAlert, updateAdminSettingUserStores.message);
         setOpenBackdropLoading(false);
         break;
-      case UpdateAdminUserStoresState.fail:
-        showAlert(setFailsAlert, updateAdminUserStores.message);
+      case UpdateAdminSettingUserStoresState.fail:
+        showAlert(setFailsAlert, updateAdminSettingUserStores.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [updateAdminUserStores]);
+  }, [updateAdminSettingUserStores]);
 
   useEffect(() => {
-    switch (getAdminStores.status) {
-      case GetAdminStoresState.inProgress:
+    switch (getAdminSettingUserStoresState.status) {
+      case GetAdminSettingUserStoresState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case GetAdminStoresState.initial:
+      case GetAdminSettingUserStoresState.initial:
         setOpenBackdropLoading(false);
         break;
-      case GetAdminStoresState.success:
+      case GetAdminSettingUserStoresState.success:
         setOpenBackdropLoading(false);
         break;
-      case GetAdminStoresState.fail:
+      case GetAdminSettingUserStoresState.fail:
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminStores]);
+  }, [getAdminSettingUserStoresState]);
 
   useEffect(() => {
-    switch (getAdminUserStores.status) {
-      case GetAdminUserStoresState.inProgress:
+    switch (getAdminSettingUserStoreState.status) {
+      case GetAdminSettingUserStoreState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case GetAdminUserStoresState.initial:
+      case GetAdminSettingUserStoreState.initial:
         setOpenBackdropLoading(false);
         break;
-      case GetAdminUserStoresState.success:
+      case GetAdminSettingUserStoreState.success:
         setOpenBackdropLoading(false);
         break;
-      case GetAdminUserStoresState.fail:
+      case GetAdminSettingUserStoreState.fail:
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getAdminUserStores]);
+  }, [getAdminSettingUserStoreState]);
 
   useEffect(() => {
     switch (editAdminUserState.status) {

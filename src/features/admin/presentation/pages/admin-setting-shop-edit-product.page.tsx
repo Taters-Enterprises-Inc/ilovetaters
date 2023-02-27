@@ -22,9 +22,9 @@ import {
   selectGetAdminSettingShopProduct,
 } from "../slices/get-admin-setting-shop-product.slice";
 import {
-  getAdminStores,
-  selectGetAdminStores,
-} from "../slices/get-admin-stores.slice";
+  getAdminSnackshopStores,
+  selectGetAdminSnackshopStores,
+} from "../slices/get-admin-snackshop-stores.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   editAdminSettingShopProduct,
@@ -71,7 +71,9 @@ export function AdminSettingShopEditProduct() {
   const getAdminProductCategoriesState = useAppSelector(
     selectGetAdminProductCategories
   );
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminSnackshopStoresState = useAppSelector(
+    selectGetAdminSnackshopStores
+  );
   const getAdminSettingShopProductState = useAppSelector(
     selectGetAdminSettingShopProduct
   );
@@ -147,7 +149,7 @@ export function AdminSettingShopEditProduct() {
 
   useEffect(() => {
     dispatch(getAdminProductCategories());
-    dispatch(getAdminStores());
+    dispatch(getAdminSnackshopStores());
     dispatch(getAdminProducts());
     dispatch(getAdminSettingShopProductTypes());
     if (id) {
@@ -653,7 +655,8 @@ export function AdminSettingShopEditProduct() {
           </div>
         </div>
 
-        {getAdminStoresState.data && formState.productTypeId === "1" ? (
+        {getAdminSnackshopStoresState.data &&
+        formState.productTypeId === "1" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
@@ -663,7 +666,7 @@ export function AdminSettingShopEditProduct() {
               label="Select Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
               value={formState.stores ? [...formState.stores] : []}
               onChange={(e, stores) => {
@@ -701,7 +704,8 @@ export function AdminSettingShopEditProduct() {
           </>
         ) : null}
 
-        {getAdminStoresState.data && formState.productTypeId === "2" ? (
+        {getAdminSnackshopStoresState.data &&
+        formState.productTypeId === "2" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Catering Store Selection
@@ -711,7 +715,7 @@ export function AdminSettingShopEditProduct() {
               label="Select Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
               value={formState.stores ? [...formState.stores] : []}
               onChange={(e, stores) => {

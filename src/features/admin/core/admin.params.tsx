@@ -88,7 +88,7 @@ export interface ValidateReferenceNumberParam {
   transactionId: number;
 }
 
-export interface UpdateUserStoresParam {
+export interface UpdateAdminSettingUserStoresParam {
   userId: string;
   stores: Array<AdminStoreModel>;
 }
@@ -147,7 +147,8 @@ export interface CreateAdminSettingShopProductParam {
   productType: string;
   uom: string;
   variants: string;
-  stores: string;
+  snackshopStores: string;
+  cateringStores: string;
   products: string;
   numFlavor: string;
   image500x500: File | string;

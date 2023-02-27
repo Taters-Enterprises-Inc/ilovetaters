@@ -1,8 +1,6 @@
 import axios from "axios";
 import {
   EditAdminUserParam,
-  UpdateAdminSettingStoreOperatingHoursParam,
-  UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
   UpdateStoreCatersPackageParam,
   UpdateStoreProductParam,
@@ -12,7 +10,7 @@ import {
   LoginAdminParam,
   AdminPrivilegeParam,
   ValidateReferenceNumberParam,
-  UpdateUserStoresParam,
+  UpdateAdminSettingUserStoresParam,
   CreateAdminGroupParam,
   AdminUserDiscountChangeStatusParam,
   AdminDeclineRedeemParam,
@@ -72,6 +70,8 @@ import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-lo
 import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
 import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
 import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-setting-store.model";
+import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
+import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -193,14 +193,14 @@ export interface EditAdminUserResponse {
   };
 }
 
-export interface GetAdminStoresResponse {
+export interface GetAdminSettingUserStoresResponse {
   data: {
     message: string;
     data: Array<AdminStoreModel>;
   };
 }
 
-export interface GetAdminUserStoresResponse {
+export interface GetAdminSettingUserStoreResponse {
   data: {
     message: string;
     data: Array<AdminStoreModel>;
@@ -561,6 +561,37 @@ export interface EditAdminSettingStoreResponse {
     message: string;
   };
 }
+export interface UpdateAdminSettingUserStoresResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSnackshopStoresResponse {
+  data: {
+    message: string;
+    data: Array<SnackshopStoreModel>;
+  };
+}
+
+export interface GetAdminCateringStoresResponse {
+  data: {
+    message: string;
+    data: Array<CateringStoreModel>;
+  };
+}
+
+export function GetAdminCateringStoresRepository(): Promise<GetAdminCateringStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/catering`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSnackshopStoresRepository(): Promise<GetAdminSnackshopStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/snackshop`, {
+    withCredentials: true,
+  });
+}
 
 export function EditAdminSettingStoreRepository(
   param: EditAdminSettingStoreParam
@@ -607,9 +638,12 @@ export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesRe
 }
 
 export function GetAdminRegionStoreCombinationsRepository(): Promise<GetAdminRegionStoreCombinationsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/region-store-combination`, {
-    withCredentials: true,
-  });
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/region-store-combination`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function CreateAdminSettingStoreRepository(
@@ -1110,30 +1144,34 @@ export function CreateAdminGroupRepository(
   });
 }
 
-export function UpdateAdminUserStoresRepository(
-  param: UpdateUserStoresParam
-): Promise<GetAdminUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+export function UpdateAdminSettingUserStoresRepository(
+  param: UpdateAdminSettingUserStoresParam
+): Promise<UpdateAdminSettingUserStoresResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
-export function GetAdminUserStoresRepository(
+export function GetAdminSettingUserStoreRepository(
   userId: string
-): Promise<GetAdminUserStoresResponse> {
+): Promise<GetAdminSettingUserStoreResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/stores?user_id=${userId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores?user_id=${userId}`,
     {
       withCredentials: true,
     }
   );
 }
 
-export function GetAdminStoresRepository(): Promise<GetAdminStoresResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores`, {
+export function GetAdminSettingUserStoresRepository(): Promise<GetAdminSettingUserStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores`, {
     withCredentials: true,
   });
 }

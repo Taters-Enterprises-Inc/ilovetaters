@@ -4,20 +4,20 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { selectGetAdminStores } from "../slices/get-admin-stores.slice";
+import { selectGetAdminSettingUserStores } from "../slices/get-admin-setting-user-stores.slice";
 import {
-  GetAdminUserStoresState,
-  selectGetAdminUserStores,
-  getAdminUserStoresUpdateStores,
-} from "../slices/get-admin-user-stores.slice";
+  GetAdminSettingUserStoreState,
+  selectGetAdminSettingUserStore,
+  getAdminSettingUserStoreUpdateStore,
+} from "../slices/get-admin-setting-user-store.slice";
 import { selectGetAdminUser } from "../slices/get-admin-user.slice";
 import { FormEvent, useEffect } from "react";
 import {
-  resetUpdateAdminUserStoresStatus,
-  selectUpdateAdminUserStores,
-  updateAdminUserStores,
-  UpdateAdminUserStoresState,
-} from "../slices/update-user-stores.slice";
+  resetUpdateAdminSettingUserStoresStatus,
+  selectUpdateAdminSettingUserStores,
+  updateAdminSettingUserStores,
+  UpdateAdminSettingUserStoresState,
+} from "../slices/update-admin-setting-user-stores.slice";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 interface AdminShopOrdersModalProps {
   open: boolean;
@@ -25,11 +25,15 @@ interface AdminShopOrdersModalProps {
 }
 
 export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
-  const getAdminUserStoresState = useAppSelector(selectGetAdminUserStores);
+  const getAdminSettingUserStoresState = useAppSelector(
+    selectGetAdminSettingUserStores
+  );
+  const getAdminSettingUserStoreState = useAppSelector(
+    selectGetAdminSettingUserStore
+  );
   const getAdminUserStateState = useAppSelector(selectGetAdminUser);
-  const updateAdminUserStoresState = useAppSelector(
-    selectUpdateAdminUserStores
+  const updateAdminSettingUserStoresState = useAppSelector(
+    selectUpdateAdminSettingUserStores
   );
 
   const dispatch = useAppDispatch();
@@ -38,12 +42,13 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
 
   useEffect(() => {
     if (
-      updateAdminUserStoresState.status === UpdateAdminUserStoresState.success
+      updateAdminSettingUserStoresState.status ===
+      UpdateAdminSettingUserStoresState.success
     ) {
       props.onClose();
-      dispatch(resetUpdateAdminUserStoresStatus());
+      dispatch(resetUpdateAdminSettingUserStoresStatus());
     }
-  }, [updateAdminUserStoresState, props]);
+  }, [updateAdminSettingUserStoresState, props, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -54,14 +59,15 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
 
   const handleUpdateStore = (e: FormEvent<HTMLFormElement>) => {
     if (
-      getAdminUserStoresState.status === GetAdminUserStoresState.success &&
-      getAdminUserStoresState.data &&
+      getAdminSettingUserStoreState.status ===
+        GetAdminSettingUserStoreState.success &&
+      getAdminSettingUserStoreState.data &&
       userId
     ) {
       dispatch(
-        updateAdminUserStores({
+        updateAdminSettingUserStores({
           userId,
-          stores: getAdminUserStoresState.data,
+          stores: getAdminSettingUserStoreState.data,
         })
       );
     }
@@ -83,7 +89,7 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
             <IoMdClose />
           </button>
         </div>
-        {getAdminStoresState.data ? (
+        {getAdminSettingUserStoresState.data ? (
           <form onSubmit={handleUpdateStore} className="p-4 space-y-4 bg-paper">
             <span className="text-xl text-secondary">
               Account Name: {getAdminUserStateState.data?.first_name}{" "}
@@ -94,15 +100,15 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
               label="Select Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={getAdminSettingUserStoresState.data}
               getOptionLabel={(option) => option.name}
               value={
-                getAdminUserStoresState.data
-                  ? [...getAdminUserStoresState.data]
+                getAdminSettingUserStoreState.data
+                  ? [...getAdminSettingUserStoreState.data]
                   : []
               }
               onChange={(e, stores) => {
-                dispatch(getAdminUserStoresUpdateStores({ stores }));
+                dispatch(getAdminSettingUserStoreUpdateStore({ stores }));
               }}
               filterSelectedOptions
             />

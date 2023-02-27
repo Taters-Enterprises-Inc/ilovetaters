@@ -118,7 +118,7 @@ export function AdminAvailabilityCatersProducts() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 0,
+                  status: 1,
                   category_id: categoryId,
                   store_id: storeId,
                   search: search,
@@ -133,7 +133,7 @@ export function AdminAvailabilityCatersProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status === null || status === "0"
+                status === null || status === "1"
                   ? "text-base"
                   : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
@@ -145,7 +145,7 @@ export function AdminAvailabilityCatersProducts() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 1,
+                  status: 0,
                   store_id: storeId,
                   category_id: categoryId,
                   search: search,
@@ -160,7 +160,7 @@ export function AdminAvailabilityCatersProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
-                status && status === "1" ? "text-base" : "text-xs opacity-40"
+                status && status === "0" ? "text-base" : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
             >
               Not Available
@@ -505,13 +505,13 @@ export function AdminAvailabilityCatersProducts() {
                         </DataTableCell>
                         <DataTableCell>{row.category_name}</DataTableCell>
                         <DataTableCell>
-                          {status === null || status === "0" ? (
+                          {status === null || status === "1" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCateringProduct({
-                                      status: "1",
+                                      status: "0",
                                       id: row.id.toString(),
                                     })
                                   );
@@ -520,13 +520,13 @@ export function AdminAvailabilityCatersProducts() {
                             >
                               Disable
                             </button>
-                          ) : status === "1" ? (
+                          ) : status === "0" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCateringProduct({
-                                      status: "0",
+                                      status: "1",
                                       id: row.id.toString(),
                                     })
                                   );
