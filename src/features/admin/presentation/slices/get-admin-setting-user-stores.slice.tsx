@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import {
-  GetAdminStoresRepository,
-  GetAdminStoresResponse,
+  GetAdminSettingUserStoresRepository,
+  GetAdminSettingUserStoresResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetAdminStoresState {
+export enum GetAdminSettingUserStoresState {
   initial,
   inProgress,
   success,
@@ -15,22 +15,23 @@ export enum GetAdminStoresState {
 }
 
 interface InitialState {
-  status: GetAdminStoresState;
+  status: GetAdminSettingUserStoresState;
   message: string;
   data: Array<AdminStoreModel> | undefined;
 }
 
 const initialState: InitialState = {
-  status: GetAdminStoresState.initial,
+  status: GetAdminSettingUserStoresState.initial,
   message: "",
   data: undefined,
 };
 
-export const getAdminStores = createAsyncThunk(
-  "getAdminStores",
+export const getAdminSettingUserStores = createAsyncThunk(
+  "getAdminSettingUserStores",
   async (_, { rejectWithValue }) => {
     try {
-      const response: GetAdminStoresResponse = await GetAdminStoresRepository();
+      const response: GetAdminSettingUserStoresResponse =
+        await GetAdminSettingUserStoresRepository();
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -44,31 +45,32 @@ export const getAdminStores = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getAdminStoresSlice = createSlice({
-  name: "getAdminStores",
+export const getAdminSettingUserStoresSlice = createSlice({
+  name: "getAdminSettingUserStores",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAdminStores.pending, (state) => {
-        state.status = GetAdminStoresState.inProgress;
+      .addCase(getAdminSettingUserStores.pending, (state) => {
+        state.status = GetAdminSettingUserStoresState.inProgress;
       })
-      .addCase(getAdminStores.fulfilled, (state, action) => {
+      .addCase(getAdminSettingUserStores.fulfilled, (state, action) => {
         if (action.payload) {
           const { message, data } = action.payload;
-          state.status = GetAdminStoresState.success;
+          state.status = GetAdminSettingUserStoresState.success;
           state.message = message;
           state.data = data;
         }
       })
-      .addCase(getAdminStores.rejected, (state, action) => {
-        state.status = GetAdminStoresState.fail;
+      .addCase(getAdminSettingUserStores.rejected, (state, action) => {
+        state.status = GetAdminSettingUserStoresState.fail;
         state.message = action.payload as string;
         state.data = undefined;
       });
   },
 });
 
-export const selectGetAdminStores = (state: RootState) => state.getAdminStores;
+export const selectGetAdminSettingUserStores = (state: RootState) =>
+  state.getAdminSettingUserStores;
 
-export default getAdminStoresSlice.reducer;
+export default getAdminSettingUserStoresSlice.reducer;

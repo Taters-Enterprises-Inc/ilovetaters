@@ -75,9 +75,9 @@ import createAdminUser from "features/admin/presentation/slices/create-admin-use
 import getAdminUser from "features/admin/presentation/slices/get-admin-user.slice";
 import getAdminGroups from "features/admin/presentation/slices/get-admin-groups.slice";
 import editAdminUser from "features/admin/presentation/slices/edit-admin-user.slice";
-import getAdminUserStores from "features/admin/presentation/slices/get-admin-user-stores.slice";
-import getAdminStores from "features/admin/presentation/slices/get-admin-stores.slice";
-import updateAdminUserStores from "features/admin/presentation/slices/update-user-stores.slice";
+import getAdminSettingUserStore from "features/admin/presentation/slices/get-admin-setting-user-store.slice";
+import getAdminSettingUserStores from "features/admin/presentation/slices/get-admin-setting-user-stores.slice";
+import updateAdminSettingUserStores from "features/admin/presentation/slices/update-admin-setting-user-stores.slice";
 import createAdminGroup from "features/admin/presentation/slices/create-admin-group.slice";
 import uploadProofOfPaymentAdmin from "features/admin/presentation/slices/upload-proof-of-payment-admin.slice";
 import validateReferenceNumberAdmin from "features/admin/presentation/slices/validate-reference-number.slice";
@@ -95,7 +95,6 @@ import getAdminProductCategories from "features/admin/presentation/slices/get-ad
 import updateStoreProduct from "features/admin/presentation/slices/update-store-product.slice";
 import getAdminSettingStores from "features/admin/presentation/slices/get-admin-setting-stores.slice";
 import adminDeclineRedeem from "features/admin/presentation/slices/admin-decline-redeem.slice";
-import getAdminStore from "features/admin/presentation/slices/get-admin-store.slice";
 import getCatersPackageCategories from "features/admin/presentation/slices/get-caters-package-categories.slice";
 import getAdminStoreCatersPackages from "features/admin/presentation/slices/get-admin-stores-caters-packages.slice";
 import updateStoreCatersPackage from "features/admin/presentation/slices/update-store-caters-packages.slice";
@@ -186,6 +185,8 @@ import getAdminSettingStore from "features/admin/presentation/slices/get-admin-s
 import editAdminSettingStore from "features/admin/presentation/slices/edit-admin-setting-store.slice";
 import loginChooserModal from "features/shared/presentation/slices/login-chooser-modal.slice";
 import messageModal from "features/shared/presentation/slices/message-modal.slice";
+import getAdminSnackshopStores from "features/admin/presentation/slices/get-admin-snackshop-stores.slice";
+import getAdminCateringStores from "features/admin/presentation/slices/get-admin-catering-stores.slice";
 
 export const store = configureStore({
   reducer: {
@@ -264,9 +265,9 @@ export const store = configureStore({
     getAdminUser,
     getAdminGroups,
     editAdminUser,
-    getAdminUserStores,
-    getAdminStores,
-    updateAdminUserStores,
+    getAdminSettingUserStore,
+    getAdminSettingUserStores,
+    updateAdminSettingUserStores,
     createAdminGroup,
     uploadProofOfPaymentAdmin,
     validateReferenceNumberAdmin,
@@ -284,7 +285,6 @@ export const store = configureStore({
     updateStoreProduct,
     getAdminSettingStores,
     adminDeclineRedeem,
-    getAdminStore,
     getCatersPackageCategories,
     getAdminStoreCatersPackages,
     updateStoreCatersPackage,
@@ -375,6 +375,8 @@ export const store = configureStore({
     editAdminSettingStore,
     loginChooserModal,
     messageModal,
+    getAdminSnackshopStores,
+    getAdminCateringStores,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

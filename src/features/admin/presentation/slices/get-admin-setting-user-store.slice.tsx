@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import {
-  GetAdminUserStoresRepository,
-  GetAdminUserStoresResponse,
+  GetAdminSettingUserStoreRepository,
+  GetAdminSettingUserStoreResponse,
 } from "features/admin/data/repository/admin.repository";
 import { RootState } from "features/config/store";
 
-export enum GetAdminUserStoresState {
+export enum GetAdminSettingUserStoreState {
   initial,
   inProgress,
   success,
@@ -15,22 +15,22 @@ export enum GetAdminUserStoresState {
 }
 
 interface InitialState {
-  status: GetAdminUserStoresState;
+  status: GetAdminSettingUserStoreState;
   message: string;
   data: Array<AdminStoreModel> | undefined;
 }
 const initialState: InitialState = {
-  status: GetAdminUserStoresState.initial,
+  status: GetAdminSettingUserStoreState.initial,
   message: "",
   data: undefined,
 };
 
-export const getAdminUserStores = createAsyncThunk(
-  "getAdminUserStores",
+export const getAdminSettingUserStore = createAsyncThunk(
+  "getAdminSettingUserStore",
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response: GetAdminUserStoresResponse =
-        await GetAdminUserStoresRepository(userId);
+      const response: GetAdminSettingUserStoreResponse =
+        await GetAdminSettingUserStoreRepository(userId);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -44,11 +44,11 @@ export const getAdminUserStores = createAsyncThunk(
 );
 
 /* Main Slice */
-export const getAdminUserStoresSlice = createSlice({
-  name: "getAdminUserStores",
+export const GetAdminSettingUserStoreSlice = createSlice({
+  name: "getAdminSettingUserStore",
   initialState,
   reducers: {
-    getAdminUserStoresUpdateStores: (
+    getAdminSettingUserStoreUpdateStore: (
       state,
       action: PayloadAction<{ stores: Array<AdminStoreModel> }>
     ) => {
@@ -57,28 +57,28 @@ export const getAdminUserStoresSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAdminUserStores.pending, (state) => {
-        state.status = GetAdminUserStoresState.inProgress;
+      .addCase(getAdminSettingUserStore.pending, (state) => {
+        state.status = GetAdminSettingUserStoreState.inProgress;
       })
-      .addCase(getAdminUserStores.fulfilled, (state, action) => {
+      .addCase(getAdminSettingUserStore.fulfilled, (state, action) => {
         if (action.payload) {
           const { message, data } = action.payload;
-          state.status = GetAdminUserStoresState.success;
+          state.status = GetAdminSettingUserStoreState.success;
           state.message = message;
           state.data = data;
         }
       })
-      .addCase(getAdminUserStores.rejected, (state, action) => {
-        state.status = GetAdminUserStoresState.fail;
+      .addCase(getAdminSettingUserStore.rejected, (state, action) => {
+        state.status = GetAdminSettingUserStoreState.fail;
         state.message = action.payload as string;
         state.data = undefined;
       });
   },
 });
 
-export const selectGetAdminUserStores = (state: RootState) =>
-  state.getAdminUserStores;
+export const selectGetAdminSettingUserStore = (state: RootState) =>
+  state.getAdminSettingUserStore;
 
-export const { getAdminUserStoresUpdateStores } =
-  getAdminUserStoresSlice.actions;
-export default getAdminUserStoresSlice.reducer;
+export const { getAdminSettingUserStoreUpdateStore } =
+  GetAdminSettingUserStoreSlice.actions;
+export default GetAdminSettingUserStoreSlice.reducer;

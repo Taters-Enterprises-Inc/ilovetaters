@@ -19,10 +19,6 @@ import { AdminShopOrderCustomerInformationButtons } from "./admin-shop-order-cus
 import MenuItem from "@mui/material/MenuItem";
 import { FormEvent, useEffect, useState } from "react";
 import {
-  selectGetAdminStores,
-  getAdminStores,
-} from "../slices/get-admin-stores.slice";
-import {
   selectUploadProofOfPaymentAdmin,
   uploadProofOfPaymentAdmin,
 } from "../slices/upload-proof-of-payment-admin.slice";
@@ -38,6 +34,10 @@ import {
   resetAdminPrivilege,
 } from "../slices/admin-privilege.slice";
 import { MaterialInput } from "features/shared/presentation/components";
+import {
+  getAdminSnackshopStores,
+  selectGetAdminSnackshopStores,
+} from "../slices/get-admin-snackshop-stores.slice";
 
 export function AdminShopOrderCustomerInformation() {
   const query = useQuery();
@@ -59,7 +59,9 @@ export function AdminShopOrderCustomerInformation() {
   const trackingNo = query.get("tracking_no");
 
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminSnackshopStoresState = useAppSelector(
+    selectGetAdminSnackshopStores
+  );
   const uploadProofOfPaymentAdminState = useAppSelector(
     selectUploadProofOfPaymentAdmin
   );
@@ -100,7 +102,7 @@ export function AdminShopOrderCustomerInformation() {
   ]);
 
   useEffect(() => {
-    dispatch(getAdminStores());
+    dispatch(getAdminSnackshopStores());
   }, [dispatch]);
 
   const calculateWithZeroIfNoValue = (value: string | null) => {
@@ -820,7 +822,7 @@ export function AdminShopOrderCustomerInformation() {
               }}
               name="toStoreId"
             >
-              {getAdminStoresState.data?.map((store, index) => (
+              {getAdminSnackshopStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
                   {store.name}
                 </MenuItem>

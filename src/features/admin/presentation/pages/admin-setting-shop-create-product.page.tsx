@@ -1,6 +1,8 @@
 import MenuItem from "@mui/material/MenuItem";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
+import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
+import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
@@ -19,6 +21,11 @@ import {
   selectCreateAdminSettingShopProduct,
 } from "../slices/create-admin-setting-shop-product.slice";
 import {
+  getAdminCateringStores,
+  GetAdminCateringStoresState,
+  selectGetAdminCateringStores,
+} from "../slices/get-admin-catering-stores.slice";
+import {
   getAdminProductCategories,
   selectGetAdminProductCategories,
 } from "../slices/get-admin-product-categories.slice";
@@ -32,10 +39,10 @@ import {
   getAdminSettingShopProductTypes,
 } from "../slices/get-admin-setting-shop-product-types.slice";
 import {
-  getAdminStores,
-  GetAdminStoresState,
-  selectGetAdminStores,
-} from "../slices/get-admin-stores.slice";
+  getAdminSnackshopStores,
+  GetAdminSnackshopStoresState,
+  selectGetAdminSnackshopStores,
+} from "../slices/get-admin-snackshop-stores.slice";
 
 export interface Variant {
   name: string;
@@ -63,7 +70,8 @@ export function AdminSettingShopCreateProduct() {
     uom: string;
     numFlavor: string;
     variants: Array<Variant>;
-    stores: Array<AdminStoreModel>;
+    snackshopStores: Array<SnackshopStoreModel>;
+    cateringStores: Array<CateringStoreModel>;
     products: Array<AdminProductModel>;
     image500x500: File | string;
     image250x250: File | string;
@@ -79,7 +87,8 @@ export function AdminSettingShopCreateProduct() {
     productType: "",
     uom: "",
     variants: [],
-    stores: [],
+    snackshopStores: [],
+    cateringStores: [],
     products: [],
     numFlavor: "",
     image500x500: "",
@@ -92,7 +101,13 @@ export function AdminSettingShopCreateProduct() {
     selectGetAdminProductCategories
   );
 
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminSnackshopStoresState = useAppSelector(
+    selectGetAdminSnackshopStores
+  );
+
+  const getAdminCateringStoresState = useAppSelector(
+    selectGetAdminCateringStores
+  );
   const getAdminProductsState = useAppSelector(selectGetAdminProducts);
 
   const createAdminSettingShopProductState = useAppSelector(
@@ -117,15 +132,31 @@ export function AdminSettingShopCreateProduct() {
     dispatch(getAdminProductCategories());
     dispatch(getAdminSettingShopProductTypes());
     dispatch(getAdminProducts());
-    dispatch(getAdminStores());
+    dispatch(getAdminSnackshopStores());
+    dispatch(getAdminCateringStores());
   }, [dispatch]);
 
   useEffect(() => {
-    const stores = getAdminStoresState.data;
-    if (getAdminStoresState.status === GetAdminStoresState.success && stores) {
+    const stores = getAdminSnackshopStoresState.data;
+    if (
+      getAdminSnackshopStoresState.status ===
+        GetAdminSnackshopStoresState.success &&
+      stores
+    ) {
       setFormState((f) => ({ ...f, stores }));
     }
-  }, [getAdminStoresState]);
+  }, [getAdminSnackshopStoresState]);
+
+  useEffect(() => {
+    const stores = getAdminCateringStoresState.data;
+    if (
+      getAdminCateringStoresState.status ===
+        GetAdminCateringStoresState.success &&
+      stores
+    ) {
+      setFormState((f) => ({ ...f, stores }));
+    }
+  }, [getAdminCateringStoresState]);
 
   useEffect(() => {
     const products = getAdminProductsState.data;
@@ -216,7 +247,8 @@ export function AdminSettingShopCreateProduct() {
     dispatch(
       createAdminSettingShopProduct({
         ...formState,
-        stores: JSON.stringify(formState.stores),
+        snackshopStores: JSON.stringify(formState.snackshopStores),
+        cateringStores: JSON.stringify(formState.cateringStores),
         variants: JSON.stringify(formState.variants),
         products: JSON.stringify(formState.products),
       })
@@ -597,23 +629,25 @@ export function AdminSettingShopCreateProduct() {
           </div>
         </div>
 
-        {getAdminStoresState.data && formState.productType === "1" ? (
+        {getAdminSnackshopStoresState.data && formState.productType === "1" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
-              Store Selection
+              Store Selection for Catering
             </h1>
 
             <MaterialInputAutoComplete
-              label="Select Stores"
+              label="Select Catering Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
-              value={formState.stores ? [...formState.stores] : []}
+              value={
+                formState.cateringStores ? [...formState.cateringStores] : []
+              }
               onChange={(e, stores) => {
                 setFormState({
                   ...formState,
-                  stores,
+                  cateringStores: stores,
                 });
               }}
               filterSelectedOptions
@@ -645,23 +679,25 @@ export function AdminSettingShopCreateProduct() {
           </>
         ) : null}
 
-        {getAdminStoresState.data && formState.productType === "2" ? (
+        {getAdminSnackshopStoresState.data && formState.productType === "2" ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
-              Catering Store Selection
+              Store Selection for Snackshop
             </h1>
 
             <MaterialInputAutoComplete
-              label="Select Stores"
+              label="Select Snackshop Stores"
               colorTheme="black"
               multiple
-              options={getAdminStoresState.data}
+              options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
-              value={formState.stores ? [...formState.stores] : []}
+              value={
+                formState.snackshopStores ? [...formState.snackshopStores] : []
+              }
               onChange={(e, stores) => {
                 setFormState({
                   ...formState,
-                  stores,
+                  snackshopStores: stores,
                 });
               }}
               filterSelectedOptions

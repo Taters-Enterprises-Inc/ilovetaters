@@ -11,11 +11,11 @@ import {
 } from "features/shared/constants";
 import NumberFormat from "react-number-format";
 import MenuItem from "@mui/material/MenuItem";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  selectGetAdminStores,
-  getAdminStores,
-} from "../slices/get-admin-stores.slice";
+  selectGetAdminCateringStores,
+  getAdminCateringStores,
+} from "../slices/get-admin-catering-stores.slice";
 import { AdminPasswordModal } from "../modals";
 import {
   adminCateringPrivilege,
@@ -56,7 +56,9 @@ export function AdminCateringBookingCustomerInformation() {
   const getAdminCateringBookingState = useAppSelector(
     selectGetAdminCateringBooking
   );
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminCateringStoresState = useAppSelector(
+    selectGetAdminCateringStores
+  );
 
   const adminCateringPrivilegeState = useAppSelector(
     selectAdminCateringPrivilege
@@ -99,7 +101,7 @@ export function AdminCateringBookingCustomerInformation() {
   ]);
 
   useEffect(() => {
-    dispatch(getAdminStores());
+    dispatch(getAdminCateringStores());
   }, [dispatch]);
 
   const calculateWithZeroIfNoValue = (value: string) => {
@@ -304,7 +306,7 @@ export function AdminCateringBookingCustomerInformation() {
               }}
               name="toStoreId"
             >
-              {getAdminStoresState.data?.map((store, index) => (
+              {getAdminCateringStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
                   {store.name}
                 </MenuItem>
