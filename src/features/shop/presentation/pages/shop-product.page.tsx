@@ -518,10 +518,10 @@ export function ShopProduct() {
           deal_products_promo_include.product_id ===
             getProductDetailsState.data.product.id &&
           deal_products_promo_include.product_variant_option_tb_id &&
-          quantity >= deal_products_promo_include.quantity + 1
+          quantity >= deal_products_promo_include.quantity + 1 && 
+          deal_products_promo_include.product_variant_option_tb_id.toString() === currentSize
         ) {
           deal_products_promo_include_match = deal_products_promo_include;
-
           break;
         }
       }
