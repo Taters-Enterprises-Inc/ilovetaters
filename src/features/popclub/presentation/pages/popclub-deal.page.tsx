@@ -725,7 +725,7 @@ export function PopClubDeal() {
               <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
                 {getDealState.data.original_price &&
                 getDealState.data.promo_price ? (
-                  <div className="absolute top-0 left-0">
+                  <div className="absolute top-0 left-0 flex flex-col items-start">
                     <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
                       {Math.floor(
                         ((getDealState.data.original_price -
