@@ -393,7 +393,7 @@ export function AdminSurveyVerifications() {
                             </span>
                           </DataTableCell>
                           <DataTableCell>
-                            <Moment format="lll">{row.order_date}</Moment>
+                            <Moment format="ll">{row.order_date}</Moment>
                           </DataTableCell>
                           <DataTableCell>
                             <Moment format="lll">{row.dateadded}</Moment>
