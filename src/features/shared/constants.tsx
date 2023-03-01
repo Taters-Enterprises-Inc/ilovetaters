@@ -418,10 +418,6 @@ export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
   color: string;
 }> = [
   {
-    name: "",
-    color: "",
-  },
-  {
     name: "Pending",
     color: "#cca300",
   },
