@@ -144,11 +144,9 @@ export interface CreateAdminSettingShopProductParam {
   addDetails: string;
   price: string;
   category: string;
-  productType: string;
   uom: string;
   variants: string;
-  snackshopStores: string;
-  cateringStores: string;
+  stores: string;
   products: string;
   numFlavor: string;
   image500x500: File | string;
@@ -165,7 +163,6 @@ export interface EditAdminSettingShopProductParam {
   addDetails: string;
   price: string;
   category: string;
-  productTypeId: string;
   uom: string;
   numFlavor: string;
   variants: string;

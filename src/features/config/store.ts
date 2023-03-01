@@ -150,7 +150,6 @@ import getAdminSettingShopProduct from "features/admin/presentation/slices/get-a
 import editAdminSettingShopProduct from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 import deleteAdminSettingShopProduct from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
-import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
 import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
 import addToCartCateringProducts from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
@@ -340,7 +339,6 @@ export const store = configureStore({
     editAdminSettingShopProduct,
     deleteAdminSettingShopProduct,
     updateAdminSettingShopProductStatus,
-    getAdminSettingShopProductTypes,
     getAdminProducts,
     addToCartCateringProducts,
     getCateringCategoryProducts,

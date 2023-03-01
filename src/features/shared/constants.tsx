@@ -952,24 +952,6 @@ export const BRANCHES_INFO: Array<{
   },
 ];
 
-export const PRODUCT_TYPE: Array<{
-  name: string;
-  color: string;
-}> = [
-  {
-    name: "",
-    color: "",
-  },
-  {
-    name: "Main",
-    color: "#004d00",
-  },
-  {
-    name: "Addons",
-    color: "#ffcd17",
-  },
-];
-
 export const PROFILE_MENU: Array<{
   name: string;
   icon: ReactNode;

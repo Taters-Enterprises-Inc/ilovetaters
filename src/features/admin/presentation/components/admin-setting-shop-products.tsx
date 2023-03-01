@@ -18,7 +18,7 @@ import {
   resetGetAdminSettingShopProductsStatus,
   selectGetAdminSettingShopProducts,
 } from "../slices/get-admin-setting-shop-products.slice";
-import { PRODUCT_TYPE, REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
 import {
@@ -41,7 +41,6 @@ export function AdminSettingShopProducts() {
     { id: "image", label: "Image" },
     { id: "name", label: "Name", minWidth: 220 },
     { id: "description", label: "Description" },
-    { id: "product type", label: "Product Type", minWidth: 150 },
     {
       id: "status",
       label: "Status",
@@ -291,19 +290,6 @@ export function AdminSettingShopProducts() {
                               __html: row.description + " " + row.add_details,
                             }}
                           />
-                        </DataTableCell>
-
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                PRODUCT_TYPE[row.product_type_id].color,
-                            }}
-                          >
-                            {PRODUCT_TYPE[row.product_type_id].name}
-                          </span>
                         </DataTableCell>
 
                         <DataTableCell>
