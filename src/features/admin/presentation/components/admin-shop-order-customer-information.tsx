@@ -185,8 +185,18 @@ export function AdminShopOrderCustomerInformation() {
                   addedObtainable.push(val);
                 }
               }
-              calculatedPrice +=
-                obtainableDiscountedPrice + order.price - obtainablePrice;
+
+              if (deal_products_promo_include_match.obtainable.length > 0) {
+                calculatedPrice +=
+                  obtainableDiscountedPrice + order.price - obtainablePrice;
+              } else {
+                calculatedPrice +=
+                  order.price -
+                  order.price *
+                    parseFloat(
+                      deal_products_promo_include_match.promo_discount_percentage
+                    );
+              }
             } else {
               calculatedPrice += order.price - discount;
             }
@@ -278,8 +288,17 @@ export function AdminShopOrderCustomerInformation() {
                   addedObtainable.push(val);
                 }
               }
-              calculatedPrice +=
-                obtainableDiscountedPrice + order.price - obtainablePrice;
+              if (deal_products_promo_include_match.obtainable.length > 0) {
+                calculatedPrice +=
+                  obtainableDiscountedPrice + order.price - obtainablePrice;
+              } else {
+                calculatedPrice +=
+                  order.price -
+                  order.price *
+                    parseFloat(
+                      deal_products_promo_include_match.promo_discount_percentage
+                    );
+              }
             } else {
               calculatedPrice += order.price - discount;
             }
@@ -365,8 +384,17 @@ export function AdminShopOrderCustomerInformation() {
                   addedObtainable.push(val);
                 }
               }
-              calculatedPrice +=
-                obtainableDiscountedPrice + order.price - obtainablePrice;
+              if (deal_products_promo_include_match.obtainable.length > 0) {
+                calculatedPrice +=
+                  obtainableDiscountedPrice + order.price - obtainablePrice;
+              } else {
+                calculatedPrice +=
+                  order.price -
+                  order.price *
+                    parseFloat(
+                      deal_products_promo_include_match.promo_discount_percentage
+                    );
+              }
             } else {
               calculatedPrice += order.price - discount;
             }
@@ -521,60 +549,62 @@ export function AdminShopOrderCustomerInformation() {
           }
         }
 
-        return (
-          <>
-            <span className="text-sm line-through">
-              <NumberFormat
-                value={(item.price ?? 0).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            </span>
-            <br />
-            <span>
-              <NumberFormat
-                value={(
-                  obtainableDiscountedPrice +
-                  (item.price ?? 0) -
-                  obtainablePrice
-                ).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            </span>
-          </>
-        );
-      } else if (deal_products_promo_includes.length === 1) {
-        const deal_products_promo_include = deal_products_promo_includes[0];
-        return (
-          <>
-            <span className="text-sm line-through">
-              <NumberFormat
-                value={(item.price ?? 0).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            </span>
-            <br />
-            <span>
-              <NumberFormat
-                value={(
-                  (item.price ?? 0) -
-                  (item.price ?? 0) *
-                    parseFloat(
-                      deal_products_promo_include.promo_discount_percentage
-                    )
-                ).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            </span>
-          </>
-        );
+        if (deal_products_promo_include_match.obtainable.length > 0) {
+          return (
+            <>
+              <span className="text-sm line-through">
+                <NumberFormat
+                  value={(item.price ?? 0).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+              <br />
+              <span>
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    (item.price ?? 0) -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+            </>
+          );
+        } else {
+          const deal_products_promo_include = deal_products_promo_includes[0];
+          return (
+            <>
+              <span className="text-sm line-through">
+                <NumberFormat
+                  value={(item.price ?? 0).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+              <br />
+              <span>
+                <NumberFormat
+                  value={(
+                    (item.price ?? 0) -
+                    (item.price ?? 0) *
+                      parseFloat(
+                        deal_products_promo_include.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+            </>
+          );
+        }
       } else {
         return (
           <NumberFormat

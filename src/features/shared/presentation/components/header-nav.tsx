@@ -295,10 +295,20 @@ export function HeaderNav(props: HeaderNavProps) {
                 addedObtainable.push(val);
               }
             }
-            calculatedPrice +=
-              obtainableDiscountedPrice +
-              order.prod_calc_amount -
-              obtainablePrice;
+
+            if (deal_products_promo_include_match.obtainable.length > 0) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                order.prod_calc_amount -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                order.prod_calc_amount -
+                order.prod_calc_amount *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
           } else {
             calculatedPrice += order.prod_calc_amount - discount;
           }

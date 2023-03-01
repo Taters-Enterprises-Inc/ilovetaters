@@ -122,7 +122,7 @@ export function AdminShopOrders() {
     let calculatedPrice = 0;
 
     if (row.purchase_amount) {
-      calculatedPrice += parseInt(row.purchase_amount);
+      calculatedPrice += parseFloat(row.purchase_amount);
     }
 
     if (row.distance_price) {

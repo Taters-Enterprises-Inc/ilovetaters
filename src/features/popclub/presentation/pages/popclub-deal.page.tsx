@@ -166,11 +166,14 @@ export function PopClubDeal() {
         const deal_products_promo_include =
           getDealState.data.deal_products_promo_include;
 
-        if (deal_products_promo_include.length === 1 && deal_products_promo_include[0].obtainable.length === 0 ){
+        if (
+          deal_products_promo_include.length === 1 &&
+          deal_products_promo_include[0].obtainable.length === 0
+        ) {
           navigate(
             "/delivery/products/" + deal_products_promo_include[0].product_hash
           );
-        }else if (deal_products_promo_include[0].obtainable.length >= 1) {
+        } else if (deal_products_promo_include[0].obtainable.length >= 1) {
           navigate(
             "/delivery/products/" + deal_products_promo_include[0].product_hash
           );
@@ -261,18 +264,18 @@ export function PopClubDeal() {
               Go Back to Product
             </button>
           );
-        } else if (
-          deal_products_promo_include[0].obtainable.length > 1 &&
-          deal_products_promo_include.length > 1
-        ) {
+        } else if (deal_products_promo_include.length === 1) {
           return (
             <button
               onClick={() => {
-                navigate("/delivery/products");
+                navigate(
+                  "/delivery/products/" +
+                    deal_products_promo_include[0].product_hash
+                );
               }}
               className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
             >
-              Go Back to Products
+              Go Back to Product
             </button>
           );
         } else {
