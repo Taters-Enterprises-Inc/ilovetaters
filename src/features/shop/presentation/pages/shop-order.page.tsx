@@ -132,7 +132,31 @@ export function ShopOrder() {
         getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
     }
 
-    if (deal_products_promo_includes) {
+    if (order.promo_discount_percentage) {
+      return (
+        <>
+          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+            <NumberFormat
+              value={order.calc_price.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+          <h3 className="flex items-end justify-end flex-1 text-base">
+            <NumberFormat
+              value={(
+                order.calc_price -
+                order.calc_price * parseFloat(order.promo_discount_percentage)
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        </>
+      );
+    } else if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
@@ -205,6 +229,34 @@ export function ShopOrder() {
             </h3>
           </>
         );
+      } else if (deal_products_promo_includes.length === 1) {
+        const deal_products_promo_include = deal_products_promo_includes[0];
+        return (
+          <>
+            <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+              <NumberFormat
+                value={order.calc_price.toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h3>
+            <h3 className="flex items-end justify-end flex-1 text-base">
+              <NumberFormat
+                value={(
+                  order.calc_price -
+                  order.calc_price *
+                    parseFloat(
+                      deal_products_promo_include.promo_discount_percentage
+                    )
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h3>
+          </>
+        );
       } else {
         return (
           <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
@@ -217,30 +269,6 @@ export function ShopOrder() {
           </h3>
         );
       }
-    } else if (order.promo_discount_percentage) {
-      return (
-        <>
-          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-            <NumberFormat
-              value={order.calc_price.toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-          <h3 className="flex items-end justify-end flex-1 text-base">
-            <NumberFormat
-              value={(
-                order.calc_price -
-                order.calc_price * parseFloat(order.promo_discount_percentage)
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-        </>
-      );
     } else {
       return (
         <h3 className="flex items-end justify-end flex-1 text-base">

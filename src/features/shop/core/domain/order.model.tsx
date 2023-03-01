@@ -85,6 +85,7 @@ export interface OrderModel {
         product_id: number;
         product_hash: string;
         product_variant_option_tb_id: number | null;
+        promo_discount_percentage: string;
         obtainable: Array<{
           product_id: number;
           price: number;

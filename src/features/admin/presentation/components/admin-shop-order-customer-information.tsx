@@ -436,6 +436,7 @@ export function AdminShopOrderCustomerInformation() {
       product_id: number;
       product_hash: string;
       product_variant_option_tb_id: number | null;
+      promo_discount_percentage: string;
       obtainable: Array<{
         product_id: number;
         price: number;
@@ -445,7 +446,33 @@ export function AdminShopOrderCustomerInformation() {
     }>;
   }) => {
     const deal_products_promo_includes = item.deal_products_promo_include;
-    if (deal_products_promo_includes) {
+
+    if (item.promo_discount_percentage) {
+      return (
+        <>
+          <span className="text-sm line-through">
+            <NumberFormat
+              value={(item.price ?? 0).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+          <br />
+          <span>
+            <NumberFormat
+              value={(
+                (item.price ?? 0) -
+                (item.price ?? 0) * parseFloat(item.promo_discount_percentage)
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    } else if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
@@ -519,6 +546,35 @@ export function AdminShopOrderCustomerInformation() {
             </span>
           </>
         );
+      } else if (deal_products_promo_includes.length === 1) {
+        const deal_products_promo_include = deal_products_promo_includes[0];
+        return (
+          <>
+            <span className="text-sm line-through">
+              <NumberFormat
+                value={(item.price ?? 0).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </span>
+            <br />
+            <span>
+              <NumberFormat
+                value={(
+                  (item.price ?? 0) -
+                  (item.price ?? 0) *
+                    parseFloat(
+                      deal_products_promo_include.promo_discount_percentage
+                    )
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </span>
+          </>
+        );
       } else {
         return (
           <NumberFormat
@@ -529,31 +585,6 @@ export function AdminShopOrderCustomerInformation() {
           />
         );
       }
-    } else if (item.promo_discount_percentage) {
-      return (
-        <>
-          <span className="text-sm line-through">
-            <NumberFormat
-              value={(item.price ?? 0).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </span>
-          <br />
-          <span>
-            <NumberFormat
-              value={(
-                (item.price ?? 0) -
-                (item.price ?? 0) * parseFloat(item.promo_discount_percentage)
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </span>
-        </>
-      );
     } else {
       return (
         <NumberFormat
