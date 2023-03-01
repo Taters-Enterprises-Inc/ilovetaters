@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
 import { AdminSurveyVerificationIDInformation } from "../components/admin-survey-verification-id-information";
+import { AdminSurveyVerificationAudit } from "../components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,10 +82,14 @@ export function AdminSurveyVerificationModal(
             aria-label="basic tabs example"
           >
             <Tab label="ID Information" {...a11yProps(0)} />
+            <Tab label="Audit Logs" {...a11yProps(1)} />
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
             <AdminSurveyVerificationIDInformation onClose={props.onClose} />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <AdminSurveyVerificationAudit />
           </TabPanel>
         </div>
       </div>

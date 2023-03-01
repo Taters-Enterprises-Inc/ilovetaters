@@ -99,7 +99,15 @@ export function SurveyComplete() {
               <div>
                 <span className="font-bold">{survey.question}:</span>{" "}
                 <span className="font-bold text-green-800">
-                  {survey.answer} {survey.text} {survey.others}
+                  {survey.answer || survey.others || survey.text ? (
+                    <>
+                      {survey.answer}
+                      {survey.text}
+                      {survey.others}
+                    </>
+                  ) : (
+                    "N/A"
+                  )}
                 </span>
               </div>
             ))}
