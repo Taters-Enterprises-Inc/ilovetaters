@@ -978,6 +978,7 @@ export function AdminShopOrderCustomerInformation() {
                             <br />
                             <span className="whitespace-pre-wrap">
                               {item.deal_name}
+                              <br />
                               {item.deal_description}
                             </span>
                           </>
@@ -1143,6 +1144,7 @@ export function AdminShopOrderCustomerInformation() {
                           <br />
                           <span className="whitespace-pre-wrap">
                             {item.deal_name}
+                            <br />
                             {item.deal_description}
                           </span>
                         </>
