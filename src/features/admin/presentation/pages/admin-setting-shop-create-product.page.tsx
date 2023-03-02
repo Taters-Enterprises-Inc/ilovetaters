@@ -125,16 +125,6 @@ export function AdminSettingShopCreateProduct() {
     }
   }, [getAdminSnackshopStoresState]);
 
-  useEffect(() => {
-    const products = getAdminProductsState.data;
-    if (
-      getAdminProductsState.status === GetAdminProductsState.success &&
-      products
-    ) {
-      setFormState((f) => ({ ...f, products }));
-    }
-  }, [getAdminProductsState]);
-
   const handleAddProductVariant = () => {
     setFormState({
       ...formState,
@@ -585,6 +575,30 @@ export function AdminSettingShopCreateProduct() {
                 setFormState({
                   ...formState,
                   stores,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
+        {getAdminProductsState.data ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Add-on Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Products"
+              colorTheme="black"
+              multiple
+              options={getAdminProductsState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.products ? [...formState.products] : []}
+              onChange={(e, products) => {
+                setFormState({
+                  ...formState,
+                  products,
                 });
               }}
               filterSelectedOptions

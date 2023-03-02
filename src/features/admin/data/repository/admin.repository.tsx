@@ -573,6 +573,23 @@ export interface GetAdminCateringStoresResponse {
   };
 }
 
+export interface GetAdminSettingProductAddonsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
+  };
+}
+export function GetAdminSettingProductAddonsRepository(
+  productId: string
+): Promise<GetAdminSettingProductAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/product-addons?productId=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function GetAdminCateringStoresRepository(): Promise<GetAdminCateringStoresResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/catering`, {
     withCredentials: true,

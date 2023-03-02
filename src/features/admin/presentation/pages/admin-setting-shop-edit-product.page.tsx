@@ -47,6 +47,11 @@ import {
   closeMessageModal,
   openMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
+import {
+  selectGetAdminSettingProductAddons,
+  getAdminSettingProductAddons,
+  GetAdminSettingProductAddonsState,
+} from "../slices/get-admin-setting-product-addons.slice";
 
 export interface Variant {
   name: string;
@@ -81,6 +86,10 @@ export function AdminSettingShopEditProduct() {
 
   const deleteAdminSettingShopProductState = useAppSelector(
     selectDeleteAdminSettingShopProduct
+  );
+
+  const getAdminSettingProductAddonsState = useAppSelector(
+    selectGetAdminSettingProductAddons
   );
 
   useEffect(() => {
@@ -144,6 +153,7 @@ export function AdminSettingShopEditProduct() {
     if (id) {
       dispatch(resetGetAdminSettingShopProductState());
       dispatch(getAdminSettingShopProduct(id));
+      dispatch(getAdminSettingProductAddons(id));
     }
   }, [dispatch, id]);
 
@@ -176,6 +186,17 @@ export function AdminSettingShopEditProduct() {
       });
     }
   }, [getAdminSettingShopProductState]);
+
+  useEffect(() => {
+    const products = getAdminSettingProductAddonsState.data;
+    if (
+      getAdminSettingProductAddonsState.status ===
+        GetAdminSettingProductAddonsState.success &&
+      products
+    ) {
+      setFormState((f) => ({ ...f, products }));
+    }
+  }, [getAdminSettingProductAddonsState]);
 
   const handleAddProductVariant = () => {
     setFormState({
@@ -616,6 +637,7 @@ export function AdminSettingShopEditProduct() {
             </h4>
           </div>
         </div>
+
         {getAdminSnackshopStoresState.data ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
@@ -639,6 +661,31 @@ export function AdminSettingShopEditProduct() {
             />
           </>
         ) : null}
+
+        {getAdminProductsState.data ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Add-on Selection
+            </h1>
+
+            <MaterialInputAutoComplete
+              label="Select Products"
+              colorTheme="black"
+              multiple
+              options={getAdminProductsState.data}
+              getOptionLabel={(option) => option.name}
+              value={formState.products ? [...formState.products] : []}
+              onChange={(e, products) => {
+                setFormState({
+                  ...formState,
+                  products,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
         <div className="flex space-x-2">
           <button
             type="submit"
