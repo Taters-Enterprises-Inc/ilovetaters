@@ -9,7 +9,6 @@ export interface GetAdminSettingShopProductsModel {
     name: string;
     description: string;
     price: number;
-    product_type_id: number;
     add_details: string;
     status: number;
   }>;

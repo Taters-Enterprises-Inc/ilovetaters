@@ -58,7 +58,6 @@ import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
 import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
-import { ProductTypeModel } from "features/shared/core/domain/product_type.model";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/get-admin-store-catering-products.model";
 import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
@@ -475,13 +474,6 @@ export interface UpdateAdminSettingShopProductStatusResponse {
   };
 }
 
-export interface GetAdminSettingShopProductTypesResponse {
-  data: {
-    message: string;
-    data: Array<ProductTypeModel>;
-  };
-}
-
 export interface GetAdminProductsResponse {
   data: {
     message: string;
@@ -582,11 +574,29 @@ export interface GetAdminCateringStoresResponse {
   };
 }
 
+export interface GetAdminSettingProductAddonsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
+  };
+}
+
 export interface GetCustomerSurveyResponseLogsResponse {
   data: {
     message: string;
     data: Array<CustomerSurveyResponseLogsModel>;
   };
+}
+
+export function GetAdminSettingProductAddonsRepository(
+  productId: string
+): Promise<GetAdminSettingProductAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/product-addons?productId=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetCustomerSurveyResponseLogsRepository(
@@ -717,15 +727,6 @@ export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> 
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/products`, {
     withCredentials: true,
   });
-}
-
-export function GetAdminSettingShopProductTypesRepository(): Promise<GetAdminSettingShopProductTypesResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product/type`,
-    {
-      withCredentials: true,
-    }
-  );
 }
 
 export function GetAdminCateringPackageFlavorsRepository(

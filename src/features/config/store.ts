@@ -150,7 +150,6 @@ import getAdminSettingShopProduct from "features/admin/presentation/slices/get-a
 import editAdminSettingShopProduct from "features/admin/presentation/slices/edit-admin-setting-shop-product.slice";
 import deleteAdminSettingShopProduct from "features/admin/presentation/slices/delete-admin-setting-shop-product.slice";
 import updateAdminSettingShopProductStatus from "features/admin/presentation/slices/update-admin-setting-shop-product-status.slice";
-import getAdminSettingShopProductTypes from "features/admin/presentation/slices/get-admin-setting-shop-product-types.slice";
 import getAdminProducts from "features/admin/presentation/slices/get-admin-products.slice";
 import addToCartCateringProducts from "features/catering/presentation/slices/add-to-cart-catering-products.slice";
 import getCateringCategoryProducts from "features/catering/presentation/slices/get-catering-category-products.slice";
@@ -187,6 +186,7 @@ import loginChooserModal from "features/shared/presentation/slices/login-chooser
 import messageModal from "features/shared/presentation/slices/message-modal.slice";
 import getAdminSnackshopStores from "features/admin/presentation/slices/get-admin-snackshop-stores.slice";
 import getAdminCateringStores from "features/admin/presentation/slices/get-admin-catering-stores.slice";
+import getAdminSettingProductAddons from "features/admin/presentation/slices/get-admin-setting-product-addons.slice";
 import getCustomerSurveyResponseLogs from "features/admin/presentation/slices/get-customer-survey-response-logs.slice";
 
 export const store = configureStore({
@@ -341,7 +341,6 @@ export const store = configureStore({
     editAdminSettingShopProduct,
     deleteAdminSettingShopProduct,
     updateAdminSettingShopProductStatus,
-    getAdminSettingShopProductTypes,
     getAdminProducts,
     addToCartCateringProducts,
     getCateringCategoryProducts,
@@ -378,6 +377,7 @@ export const store = configureStore({
     messageModal,
     getAdminSnackshopStores,
     getAdminCateringStores,
+    getAdminSettingProductAddons,
     getCustomerSurveyResponseLogs,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
