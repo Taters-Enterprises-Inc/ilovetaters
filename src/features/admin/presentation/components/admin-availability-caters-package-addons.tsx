@@ -158,6 +158,10 @@ export function AdminAvailabilityCatersPackageAddons() {
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
+              }
               onChange={(event, value) => {
                 if (value) {
                   const params = {

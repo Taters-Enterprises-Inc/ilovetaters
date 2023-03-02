@@ -170,6 +170,10 @@ export function AdminAvailabilityProducts() {
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
               }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
+              }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
               }

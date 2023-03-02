@@ -30,7 +30,6 @@ export const createAdminSettingShopProduct = createAsyncThunk(
     try {
       const response: CreateAdminSettingShopProductResponse =
         await CreateAdminSettingShopProductRepository(param);
-
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

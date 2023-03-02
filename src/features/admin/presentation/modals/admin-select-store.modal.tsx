@@ -102,6 +102,9 @@ export function AdminSelectStoreModal(props: AdminShopOrdersModalProps) {
               multiple
               options={getAdminSettingUserStoresState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={
                 getAdminSettingUserStoreState.data
                   ? [...getAdminSettingUserStoreState.data]

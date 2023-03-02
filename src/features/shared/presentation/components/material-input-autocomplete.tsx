@@ -26,6 +26,7 @@ interface MaterialInputAutoCompleteProps {
   size?: "small" | "medium" | undefined;
   fullWidth?: boolean;
   required?: boolean;
+  isOptionEqualToValue: (option: any, value: any) => boolean;
 }
 
 export function MaterialInputAutoComplete(
@@ -44,12 +45,12 @@ export function MaterialInputAutoComplete(
       getOptionLabel={props.getOptionLabel}
       onChange={props.onChange}
       filterSelectedOptions={props.filterSelectedOptions}
+      isOptionEqualToValue={props.isOptionEqualToValue}
       renderInput={(params) => (
         <MaterialInput
           {...params}
           colorTheme={props.colorTheme}
           onChange={() => {}}
-          value=""
           required={props.required}
           name=""
           label={props.label}

@@ -132,6 +132,9 @@ export function BscSignUp() {
                     options={getAllCompaniesState.data}
                     defaultValue={getAllCompaniesState.data[0]}
                     getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) =>
+                      option.name === value.name
+                    }
                     onChange={(event, value) => {
                       if (value) {
                         setFormState({
@@ -154,6 +157,9 @@ export function BscSignUp() {
                     options={getAllStoresState.data}
                     defaultValue={getAllStoresState.data[0]}
                     getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) =>
+                      option.name === value.name
+                    }
                     onChange={(event, value) => {
                       if (value) {
                         setFormState({
