@@ -85,6 +85,35 @@ export function Survey() {
   }, [dispatch]);
 
   useEffect(() => {
+    let temp = {};
+    if (getSurveyState.data) {
+      for (let i = 0; i < getSurveyState.data.length; i++) {
+        const section = getSurveyState.data[i];
+
+        for (let x = 0; x < section.surveys.length; x++) {
+          const survey = section.surveys[x];
+
+          if (
+            survey.is_text_field ||
+            survey.is_text_area ||
+            survey.is_text_area ||
+            survey.others
+          ) {
+            temp = {
+              ...temp,
+              [survey.id]: {
+                surveyQuestionId: survey.id,
+              },
+            };
+          }
+        }
+      }
+
+      setFormState(temp);
+    }
+  }, [getSurveyState]);
+
+  useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [surveySection]);
 

@@ -304,8 +304,10 @@ export function Deal(props: DealProps) {
                     ? availableStartDateTime.format("ll")
                     : `
                     ${availableStartDateTime.format(
-                      "ll"
-                    )} - ${availableEndDateTime.format("ll")}`}
+                      "MMM D"
+                    )} - ${availableEndDateTime.format(
+                        "MMM D"
+                      )}, ${availableEndDateTime.format("YYYY")}`}
                 </span>
               </div>
             ) : null}

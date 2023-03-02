@@ -71,6 +71,7 @@ import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
 import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-setting-store.model";
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
+import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -579,11 +580,30 @@ export interface GetAdminSettingProductAddonsResponse {
     data: Array<AdminProductModel>;
   };
 }
+
+export interface GetCustomerSurveyResponseLogsResponse {
+  data: {
+    message: string;
+    data: Array<CustomerSurveyResponseLogsModel>;
+  };
+}
+
 export function GetAdminSettingProductAddonsRepository(
   productId: string
 ): Promise<GetAdminSettingProductAddonsResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/setting/product-addons?productId=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCustomerSurveyResponseLogsRepository(
+  customerSurveyVerificationId: number
+): Promise<GetCustomerSurveyResponseLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/customer-survey-response-logs/${customerSurveyVerificationId}`,
     {
       withCredentials: true,
     }
