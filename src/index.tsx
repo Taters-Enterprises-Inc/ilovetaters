@@ -63,6 +63,7 @@ import {
   AdminSurveyVerification,
   AdminSettingShopProduct,
   AdminSettingShopCreateProduct,
+  AdminSettingShopCopyProduct,
   AdminSettingShopEditProduct,
   AdminSettingCreateStore,
   AdminAvailabilityCatersProduct,
@@ -461,6 +462,11 @@ root.render(
                                   <Route
                                     path="create-product"
                                     element={<AdminSettingShopCreateProduct />}
+                                  />
+
+                                  <Route
+                                    path="copy/:id"
+                                    element={<AdminSettingShopCopyProduct />}
                                   />
 
                                   <Route

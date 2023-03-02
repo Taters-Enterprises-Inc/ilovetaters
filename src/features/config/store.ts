@@ -188,6 +188,7 @@ import getAdminSnackshopStores from "features/admin/presentation/slices/get-admi
 import getAdminCateringStores from "features/admin/presentation/slices/get-admin-catering-stores.slice";
 import getAdminSettingProductAddons from "features/admin/presentation/slices/get-admin-setting-product-addons.slice";
 import getCustomerSurveyResponseLogs from "features/admin/presentation/slices/get-customer-survey-response-logs.slice";
+import copyAdminSettingShopProduct from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
 
 export const store = configureStore({
   reducer: {
@@ -379,6 +380,7 @@ export const store = configureStore({
     getAdminCateringStores,
     getAdminSettingProductAddons,
     getCustomerSurveyResponseLogs,
+    copyAdminSettingShopProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

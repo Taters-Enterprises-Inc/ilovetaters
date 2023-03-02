@@ -24,3 +24,4 @@ export { AdminSettingShopCreateProduct } from "./admin-setting-shop-create-produ
 export { AdminSettingShopEditProduct } from "./admin-setting-shop-edit-product.page";
 export { AdminSettingCreateStore } from "./admin-setting-create-store.page";
 export { AdminSettingEditStore } from "./admin-setting-edit-store.page";
+export { AdminSettingShopCopyProduct } from "./admin-setting-shop-copy-product.page";

@@ -318,12 +318,20 @@ export function AdminSettingShopProducts() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          <Link
-                            to={`${row.id}`}
-                            className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
-                          >
-                            Edit
-                          </Link>
+                          <div className="flex flex-col items-start justify-start space-y-2">
+                            <Link
+                              to={`${row.id}`}
+                              className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                            >
+                              Edit
+                            </Link>
+                            <Link
+                              to={`copy/${row.id}`}
+                              className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                            >
+                              Copy
+                            </Link>
+                          </div>
                         </DataTableCell>
                       </DataTableRow>
                     )

@@ -152,7 +152,6 @@ export interface CreateAdminSettingShopProductParam {
   numFlavor: string;
   image500x500: File | string;
   image250x250: File | string;
-  image150x150: File | string;
   image75x75: File | string;
 }
 
@@ -172,7 +171,25 @@ export interface EditAdminSettingShopProductParam {
   products: string;
   image500x500: File | string;
   image250x250: File | string;
-  image150x150: File | string;
+  image75x75: File | string;
+}
+
+export interface CopyAdminSettingShopProductParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  productAvailability: boolean | "";
+  stores: string;
+  products: string;
+  image500x500: File | string;
+  image250x250: File | string;
   image75x75: File | string;
 }
 

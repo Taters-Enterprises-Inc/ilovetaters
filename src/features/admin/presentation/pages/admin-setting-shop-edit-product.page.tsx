@@ -128,7 +128,6 @@ export function AdminSettingShopEditProduct() {
     products: Array<AdminProductModel>;
     image500x500: File | string;
     image250x250: File | string;
-    image150x150: File | string;
     image75x75: File | string;
   }>({
     name: "",
@@ -145,7 +144,6 @@ export function AdminSettingShopEditProduct() {
     numFlavor: "",
     image500x500: "",
     image250x250: "",
-    image150x150: "",
     image75x75: "",
   });
 
@@ -185,7 +183,6 @@ export function AdminSettingShopEditProduct() {
         numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
         image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingShopProductState.data.product_image}`,
         image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${getAdminSettingShopProductState.data.product_image}`,
-        image150x150: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/150/${getAdminSettingShopProductState.data.product_image}`,
         image75x75: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getAdminSettingShopProductState.data.product_image}`,
       });
     }
@@ -265,7 +262,6 @@ export function AdminSettingShopEditProduct() {
     if (
       formState.image500x500 === "" ||
       formState.image250x250 === "" ||
-      formState.image150x150 === "" ||
       formState.image75x75 === ""
     ) {
       dispatch(
@@ -615,16 +611,6 @@ export function AdminSettingShopEditProduct() {
                 description="250x250"
               />
               <UploadFile
-                image={formState.image150x150}
-                onChange={(file) => {
-                  setFormState({
-                    ...formState,
-                    image150x150: file,
-                  });
-                }}
-                description="150x150"
-              />
-              <UploadFile
                 image={formState.image75x75}
                 onChange={(file) => {
                   setFormState({
@@ -690,7 +676,7 @@ export function AdminSettingShopEditProduct() {
                 Open Availability Switch
               </button>
             ) : (
-              <div className="flex flex-col space-y-1 py-2">
+              <div className="flex flex-col py-2 space-y-1">
                 <button
                   type="button"
                   onClick={() => {

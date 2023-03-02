@@ -1,6 +1,4 @@
 import MenuItem from "@mui/material/MenuItem";
-import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
-import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
@@ -11,27 +9,40 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AdminHead } from "../components";
-import {
-  createAdminSettingShopProduct,
-  CreateAdminSettingShopProductState,
-  resetCreateAdminSettingShopProductState,
-  selectCreateAdminSettingShopProduct,
-} from "../slices/create-admin-setting-shop-product.slice";
 import {
   getAdminProductCategories,
   selectGetAdminProductCategories,
 } from "../slices/get-admin-product-categories.slice";
 import {
+  getAdminSettingShopProduct,
+  GetAdminSettingShopProductState,
+  resetGetAdminSettingShopProductState,
+  selectGetAdminSettingShopProduct,
+} from "../slices/get-admin-setting-shop-product.slice";
+import {
+  getAdminSnackshopStores,
+  selectGetAdminSnackshopStores,
+} from "../slices/get-admin-snackshop-stores.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
   getAdminProducts,
   selectGetAdminProducts,
 } from "../slices/get-admin-products.slice";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import {
-  getAdminSnackshopStores,
-  GetAdminSnackshopStoresState,
-  selectGetAdminSnackshopStores,
-} from "../slices/get-admin-snackshop-stores.slice";
+  selectGetAdminSettingProductAddons,
+  getAdminSettingProductAddons,
+  GetAdminSettingProductAddonsState,
+} from "../slices/get-admin-setting-product-addons.slice";
+import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
+import {
+  copyAdminSettingShopProduct,
+  CopyAdminSettingShopProductState,
+  resetCopyAdminSettingShopProductState,
+  selectCopyAdminSettingShopProduct,
+} from "../slices/copy-admin-setting-shop-product.slice";
 
 export interface Variant {
   name: string;
@@ -44,9 +55,39 @@ interface VariantOption {
   price: string | null;
 }
 
-export function AdminSettingShopCreateProduct() {
+export function AdminSettingShopCopyProduct() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const getAdminProductCategoriesState = useAppSelector(
+    selectGetAdminProductCategories
+  );
+  const getAdminSnackshopStoresState = useAppSelector(
+    selectGetAdminSnackshopStores
+  );
+  const getAdminSettingShopProductState = useAppSelector(
+    selectGetAdminSettingShopProduct
+  );
+  const getAdminProductsState = useAppSelector(selectGetAdminProducts);
+
+  const copyAdminSettingShopProductState = useAppSelector(
+    selectCopyAdminSettingShopProduct
+  );
+
+  const getAdminSettingProductAddonsState = useAppSelector(
+    selectGetAdminSettingProductAddons
+  );
+
+  useEffect(() => {
+    if (
+      copyAdminSettingShopProductState.status ===
+      CopyAdminSettingShopProductState.success
+    ) {
+      navigate("/admin/setting/product");
+      dispatch(resetCopyAdminSettingShopProductState());
+    }
+  }, [copyAdminSettingShopProductState, dispatch, navigate, id]);
 
   const [formState, setFormState] = useState<{
     name: string;
@@ -82,46 +123,57 @@ export function AdminSettingShopCreateProduct() {
     image75x75: "",
   });
 
-  const getAdminProductCategoriesState = useAppSelector(
-    selectGetAdminProductCategories
-  );
-
-  const getAdminSnackshopStoresState = useAppSelector(
-    selectGetAdminSnackshopStores
-  );
-
-  const getAdminProductsState = useAppSelector(selectGetAdminProducts);
-
-  const createAdminSettingShopProductState = useAppSelector(
-    selectCreateAdminSettingShopProduct
-  );
-
-  useEffect(() => {
-    if (
-      createAdminSettingShopProductState.status ===
-      CreateAdminSettingShopProductState.success
-    ) {
-      navigate("/admin/setting/product");
-      dispatch(resetCreateAdminSettingShopProductState());
-    }
-  }, [createAdminSettingShopProductState, dispatch, navigate]);
-
   useEffect(() => {
     dispatch(getAdminProductCategories());
-    dispatch(getAdminProducts());
     dispatch(getAdminSnackshopStores());
-  }, [dispatch]);
+    dispatch(getAdminProducts());
+    if (id) {
+      dispatch(resetGetAdminSettingShopProductState());
+      dispatch(getAdminSettingShopProduct(id));
+      dispatch(getAdminSettingProductAddons(id));
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
-    const stores = getAdminSnackshopStoresState.data;
     if (
-      getAdminSnackshopStoresState.status ===
-        GetAdminSnackshopStoresState.success &&
-      stores
+      getAdminSettingShopProductState.status ===
+        GetAdminSettingShopProductState.success &&
+      getAdminSettingShopProductState.data
     ) {
-      setFormState((f) => ({ ...f, stores }));
+      setFormState({
+        name: getAdminSettingShopProductState.data.name,
+        description: getAdminSettingShopProductState.data.description,
+        deliveryDetails: getAdminSettingShopProductState.data.delivery_details,
+        addDetails: getAdminSettingShopProductState.data.add_details,
+        price: getAdminSettingShopProductState.data.price.toString(),
+        category: getAdminSettingShopProductState.data.category.toString(),
+        uom: getAdminSettingShopProductState.data.uom,
+        variants: getAdminSettingShopProductState.data.variants
+          ? JSON.parse(
+              JSON.stringify(getAdminSettingShopProductState.data.variants)
+            )
+          : [],
+        productAvailability: false,
+        stores: getAdminSettingShopProductState.data.stores ?? [],
+        products: getAdminSettingShopProductState.data.products ?? [],
+        numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
+        image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingShopProductState.data.product_image}`,
+        image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${getAdminSettingShopProductState.data.product_image}`,
+        image75x75: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getAdminSettingShopProductState.data.product_image}`,
+      });
     }
-  }, [getAdminSnackshopStoresState]);
+  }, [getAdminSettingShopProductState]);
+
+  useEffect(() => {
+    const products = getAdminSettingProductAddonsState.data;
+    if (
+      getAdminSettingProductAddonsState.status ===
+        GetAdminSettingProductAddonsState.success &&
+      products
+    ) {
+      setFormState((f) => ({ ...f, products }));
+    }
+  }, [getAdminSettingProductAddonsState]);
 
   const handleAddProductVariant = () => {
     setFormState({
@@ -198,14 +250,17 @@ export function AdminSettingShopCreateProduct() {
       return;
     }
 
-    dispatch(
-      createAdminSettingShopProduct({
-        ...formState,
-        stores: JSON.stringify(formState.stores),
-        variants: JSON.stringify(formState.variants),
-        products: JSON.stringify(formState.products),
-      })
-    );
+    if (id) {
+      dispatch(
+        copyAdminSettingShopProduct({
+          id,
+          ...formState,
+          stores: JSON.stringify(formState.stores),
+          variants: JSON.stringify(formState.variants),
+          products: JSON.stringify(formState.products),
+        })
+      );
+    }
   };
 
   return (
@@ -220,15 +275,15 @@ export function AdminSettingShopCreateProduct() {
           pageTitles: [
             { name: "Products", url: "/admin/setting/product" },
             {
-              name: "Create Product",
-              url: "/admin/setting/product/create-product",
+              name: "Copy Product",
+              url: "/admin/setting/product/" + id,
             },
           ],
         }}
       />
       <section className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Create Product
+          Copy Product
         </span>
       </section>
       <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
@@ -260,6 +315,7 @@ export function AdminSettingShopCreateProduct() {
                 <MenuItem value="SANDWICH">SANDWICH</MenuItem>
                 <MenuItem value="CUP">CUP</MenuItem>
               </MaterialInput>
+
               {getAdminProductCategoriesState.data ? (
                 <MaterialInput
                   colorTheme="black"
@@ -342,119 +398,37 @@ export function AdminSettingShopCreateProduct() {
               label="Number of Flavor"
               fullWidth
             />
-            <>
-              <h1 className="text-2xl font-bold text-secondary !my-2">
-                Product Variant Creator
-              </h1>
 
-              {formState.variants.map((variant, variantIndex) => (
-                <div key={variantIndex} className="space-y-2">
-                  <div className="flex space-x-2">
-                    <MaterialInput
-                      colorTheme="green"
-                      onChange={(e) => {
-                        const copyVariants = [...formState.variants];
-                        copyVariants[variantIndex].name = e.target.value;
-                        setFormState({
-                          ...formState,
-                          variants: copyVariants,
-                        });
-                      }}
-                      value={variant.name}
-                      name="variant"
-                      required
-                      label="Variant Name"
-                      fullWidth
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        let copyVariants = [...formState.variants];
-                        copyVariants = copyVariants.filter(
-                          (value, index) => index !== variantIndex
-                        );
-                        setFormState({
-                          ...formState,
-                          variants: copyVariants,
-                        });
-                      }}
-                      className="text-2xl"
-                    >
-                      <AiOutlineClose />
-                    </button>
-                  </div>
-
-                  {variant.options.map((option, optionIndex) => (
-                    <div className="flex space-x-2" key={optionIndex}>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Product Variant Creator
+            </h1>
+            {formState.variants ? (
+              <>
+                {formState.variants.map((variant, variantIndex) => (
+                  <div key={variantIndex} className="space-y-2">
+                    <div className="flex space-x-2">
                       <MaterialInput
-                        size="small"
-                        required
-                        colorTheme="blue"
+                        colorTheme="green"
                         onChange={(e) => {
                           const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options[optionIndex].name =
-                            e.target.value;
+                          copyVariants[variantIndex].name = e.target.value;
                           setFormState({
                             ...formState,
                             variants: copyVariants,
                           });
                         }}
-                        value={option.name}
+                        value={variant.name}
                         name="variant"
-                        label="Variant Option Name"
+                        required
+                        label="Variant Name"
                         fullWidth
                       />
-                      {option.sku !== null ? (
-                        <MaterialInput
-                          size="small"
-                          required
-                          colorTheme="blue"
-                          onChange={(e) => {
-                            const copyVariants = [...formState.variants];
-                            copyVariants[variantIndex].options[
-                              optionIndex
-                            ].sku = e.target.value;
-                            setFormState({
-                              ...formState,
-                              variants: copyVariants,
-                            });
-                          }}
-                          value={option.sku}
-                          name="sku"
-                          label="SKU"
-                          fullWidth
-                        />
-                      ) : null}
-                      {option.price !== null ? (
-                        <MaterialInput
-                          size="small"
-                          type="number"
-                          required
-                          colorTheme="blue"
-                          onChange={(e) => {
-                            const copyVariants = [...formState.variants];
-                            copyVariants[variantIndex].options[
-                              optionIndex
-                            ].price = e.target.value;
-                            setFormState({
-                              ...formState,
-                              variants: copyVariants,
-                            });
-                          }}
-                          value={option.price}
-                          name="price"
-                          label="Price"
-                          fullWidth
-                        />
-                      ) : null}
                       <button
                         type="button"
                         onClick={(e) => {
-                          const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options = copyVariants[
-                            variantIndex
-                          ].options.filter(
-                            (value, index) => index !== optionIndex
+                          let copyVariants = [...formState.variants];
+                          copyVariants = copyVariants.filter(
+                            (value, index) => index !== variantIndex
                           );
                           setFormState({
                             ...formState,
@@ -466,43 +440,128 @@ export function AdminSettingShopCreateProduct() {
                         <AiOutlineClose />
                       </button>
                     </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleAddProductVariantOptionWithPrice(variantIndex)
-                    }
-                    className="flex items-center text-[#003399] space-x-1"
-                  >
-                    <AiOutlinePlus className="text-sm" />
-                    <span className="text-sm font-semibold ">
-                      Add Product Variant Option with Price
-                    </span>
-                  </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleAddProductVariantOption(variantIndex)}
-                    className="flex items-center space-x-1 text-[#003399]"
-                  >
-                    <AiOutlinePlus className="text-sm" />
-                    <span className="text-sm font-semibold">
-                      Add Product Variant Option
-                    </span>
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={handleAddProductVariant}
-                className="flex items-center space-x-1 text-[#006600]"
-              >
-                <AiOutlinePlus className="text-sm" />
-                <span className="text-sm font-semibold">
-                  Add Product Variant
-                </span>
-              </button>
-            </>
+                    {variant.options.map((option, optionIndex) => (
+                      <div className="flex space-x-2" key={optionIndex}>
+                        <MaterialInput
+                          size="small"
+                          required
+                          colorTheme="blue"
+                          onChange={(e) => {
+                            const copyVariants = [...formState.variants];
+                            copyVariants[variantIndex].options[
+                              optionIndex
+                            ].name = e.target.value;
+                            setFormState({
+                              ...formState,
+                              variants: copyVariants,
+                            });
+                          }}
+                          value={option.name}
+                          name="variant"
+                          label="Variant Option Name"
+                          fullWidth
+                        />
+                        {option.sku !== null ? (
+                          <MaterialInput
+                            size="small"
+                            required
+                            colorTheme="blue"
+                            onChange={(e) => {
+                              const copyVariants = [...formState.variants];
+                              copyVariants[variantIndex].options[
+                                optionIndex
+                              ].sku = e.target.value;
+                              setFormState({
+                                ...formState,
+                                variants: copyVariants,
+                              });
+                            }}
+                            value={option.sku}
+                            name="sku"
+                            label="SKU"
+                            fullWidth
+                          />
+                        ) : null}
+                        {option.price !== null ? (
+                          <MaterialInput
+                            size="small"
+                            type="number"
+                            required
+                            colorTheme="blue"
+                            onChange={(e) => {
+                              const copyVariants = [...formState.variants];
+                              copyVariants[variantIndex].options[
+                                optionIndex
+                              ].price = e.target.value;
+                              setFormState({
+                                ...formState,
+                                variants: copyVariants,
+                              });
+                            }}
+                            value={option.price}
+                            name="price"
+                            label="Price"
+                            fullWidth
+                          />
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            const copyVariants = [...formState.variants];
+                            copyVariants[variantIndex].options = copyVariants[
+                              variantIndex
+                            ].options.filter(
+                              (value, index) => index !== optionIndex
+                            );
+                            setFormState({
+                              ...formState,
+                              variants: copyVariants,
+                            });
+                          }}
+                          className="text-2xl"
+                        >
+                          <AiOutlineClose />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddProductVariantOptionWithPrice(variantIndex)
+                      }
+                      className="flex items-center text-[#003399] space-x-1"
+                    >
+                      <AiOutlinePlus className="text-sm" />
+                      <span className="text-sm font-semibold ">
+                        Add Product Variant Option with Price
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddProductVariantOption(variantIndex)
+                      }
+                      className="flex items-center space-x-1 text-[#003399]"
+                    >
+                      <AiOutlinePlus className="text-sm" />
+                      <span className="text-sm font-semibold">
+                        Add Product Variant Option
+                      </span>
+                    </button>
+                  </div>
+                ))}
+              </>
+            ) : null}
+            <button
+              type="button"
+              onClick={handleAddProductVariant}
+              className="flex items-center space-x-1 text-[#006600]"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold">Add Product Variant</span>
+            </button>
           </div>
 
           <div>
@@ -546,10 +605,18 @@ export function AdminSettingShopCreateProduct() {
         </div>
 
         {getAdminSnackshopStoresState.data ? (
-          <>
+          <div>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
             </h1>
+
+            <h4 className="mt-1 text-sm leading-5 text-secondary">
+              <strong className="text-yellow-600">Warning:</strong> If you click
+              the button below it open the switch that will force the product to
+              be available or not be available to all the listed stores below.
+              Please always check this.
+            </h4>
+
             <MaterialSwitch
               label={
                 "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
@@ -569,10 +636,10 @@ export function AdminSettingShopCreateProduct() {
               multiple
               options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
+              value={formState.stores ? [...formState.stores] : []}
               isOptionEqualToValue={(option, value) =>
                 option.name === value.name
               }
-              value={formState.stores ? [...formState.stores] : []}
               onChange={(e, stores) => {
                 setFormState({
                   ...formState,
@@ -581,7 +648,7 @@ export function AdminSettingShopCreateProduct() {
               }}
               filterSelectedOptions
             />
-          </>
+          </div>
         ) : null}
 
         {getAdminProductsState.data ? (
@@ -611,12 +678,14 @@ export function AdminSettingShopCreateProduct() {
           </>
         ) : null}
 
-        <button
-          type="submit"
-          className="px-4 py-2 text-white rounded-lg bg-button w-fit"
-        >
-          Create Product
-        </button>
+        <div className="flex space-x-2">
+          <button
+            type="submit"
+            className="px-4 py-2 text-white rounded-lg bg-button w-fit"
+          >
+            Copy Product
+          </button>
+        </div>
       </form>
     </>
   );

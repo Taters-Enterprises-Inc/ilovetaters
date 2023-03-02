@@ -322,6 +322,10 @@ import {
   EditAdminSettingStoreState,
   selectEditAdminSettingStore,
 } from "features/admin/presentation/slices/edit-admin-setting-store.slice";
+import {
+  CopyAdminSettingShopProductState,
+  selectCopyAdminSettingShopProduct,
+} from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -500,6 +504,29 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingStoreState = useAppSelector(
     selectEditAdminSettingStore
   );
+
+  const copyAdminSettingShopProductState = useAppSelector(
+    selectCopyAdminSettingShopProduct
+  );
+
+  useEffect(() => {
+    switch (copyAdminSettingShopProductState.status) {
+      case CopyAdminSettingShopProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CopyAdminSettingShopProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CopyAdminSettingShopProductState.success:
+        showAlert(setSuccessAlert, copyAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CopyAdminSettingShopProductState.fail:
+        showAlert(setFailsAlert, copyAdminSettingShopProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [copyAdminSettingShopProductState]);
 
   useEffect(() => {
     switch (editAdminSettingStoreState.status) {
