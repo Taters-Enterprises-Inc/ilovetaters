@@ -25,6 +25,7 @@ import {
   selectUpdateAdminSettingShopProductStatus,
   updateAdminSettingShopProductStatus,
 } from "../slices/update-admin-setting-shop-product-status.slice";
+import NumberFormat from "react-number-format";
 
 export function AdminSettingShopProducts() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ export function AdminSettingShopProducts() {
     { id: "image", label: "Image" },
     { id: "name", label: "Name", minWidth: 220 },
     { id: "description", label: "Description" },
+    { id: "price", label: "Price" },
     {
       id: "status",
       label: "Status",
@@ -289,6 +291,14 @@ export function AdminSettingShopProducts() {
                             dangerouslySetInnerHTML={{
                               __html: row.description + " " + row.add_details,
                             }}
+                          />
+                        </DataTableCell>
+                        <DataTableCell>
+                          <NumberFormat
+                            value={row.price.toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
                           />
                         </DataTableCell>
 

@@ -33,12 +33,14 @@ import {
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import NumberFormat from "react-number-format";
 
 const columns: Array<Column> = [
   { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
+  { id: "price", label: "Price" },
   { id: "action", label: "Action" },
 ];
 
@@ -489,6 +491,14 @@ export function AdminAvailabilityProducts() {
                         />
                       </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
+                      <DataTableCell>
+                        <NumberFormat
+                          value={row.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </DataTableCell>
                       <DataTableCell>
                         {status === null || status === "1" ? (
                           <button
