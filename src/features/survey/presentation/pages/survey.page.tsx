@@ -210,6 +210,9 @@ export function Survey() {
                         options={getAllStoresState.data}
                         value={selectedStore ?? ""}
                         getOptionLabel={(option) => option.name}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.name
+                        }
                         onChange={(event, value) => {
                           if (value) {
                             setSelectedStore(value);

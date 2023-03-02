@@ -25,3 +25,4 @@ export { MaterialPhoneInput } from "./material-phone-input";
 
 export { UploadFile } from "./upload-file";
 export { MaterialInputAddress } from "./material-input-address";
+export { MaterialSwitch } from "./material-switch";

@@ -231,6 +231,7 @@ export function AdminSettingCreateStore() {
                 "PopClub Online Delivery",
               ]}
               getOptionLabel={(option) => option}
+              isOptionEqualToValue={(option, value) => option === value}
               value={formState.services ? [...formState.services] : []}
               onChange={(e, services) => {
                 setFormState({
@@ -499,6 +500,9 @@ export function AdminSettingCreateStore() {
               multiple
               options={getAdminProductsState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={formState.products ? [...formState.products] : []}
               onChange={(e, products) => {
                 setFormState({
@@ -524,6 +528,9 @@ export function AdminSettingCreateStore() {
               multiple
               options={getAdminPackagesState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={formState.packages ? [...formState.packages] : []}
               onChange={(e, packages) => {
                 setFormState({

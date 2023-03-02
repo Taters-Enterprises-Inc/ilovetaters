@@ -1,9 +1,9 @@
 import MenuItem from "@mui/material/MenuItem";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
   MaterialInputAutoComplete,
+  MaterialSwitch,
   UploadFile,
 } from "features/shared/presentation/components";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
@@ -52,6 +52,7 @@ import {
   getAdminSettingProductAddons,
   GetAdminSettingProductAddonsState,
 } from "../slices/get-admin-setting-product-addons.slice";
+import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 
 export interface Variant {
   name: string;
@@ -122,7 +123,8 @@ export function AdminSettingShopEditProduct() {
     uom: string;
     numFlavor: string;
     variants: Array<Variant>;
-    stores: Array<AdminStoreModel>;
+    productAvailability: boolean | "";
+    stores: Array<SnackshopStoreModel>;
     products: Array<AdminProductModel>;
     image500x500: File | string;
     image250x250: File | string;
@@ -137,6 +139,7 @@ export function AdminSettingShopEditProduct() {
     category: "",
     uom: "",
     variants: [],
+    productAvailability: "",
     stores: [],
     products: [],
     numFlavor: "",
@@ -176,6 +179,7 @@ export function AdminSettingShopEditProduct() {
               JSON.stringify(getAdminSettingShopProductState.data.variants)
             )
           : [],
+        productAvailability: "",
         stores: getAdminSettingShopProductState.data.stores ?? [],
         products: getAdminSettingShopProductState.data.products ?? [],
         numFlavor: getAdminSettingShopProductState.data.num_flavor.toString(),
@@ -639,10 +643,81 @@ export function AdminSettingShopEditProduct() {
         </div>
 
         {getAdminSnackshopStoresState.data ? (
-          <>
+          <div>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
             </h1>
+
+            <h4 className="mt-1 text-sm leading-5 text-secondary">
+              <strong className="text-yellow-600">Warning:</strong> If you click
+              the button below it open the switch that will force the product to
+              be available or not be available to all the listed stores below.
+              Please always check this.
+            </h4>
+            {formState.productAvailability === "" ? (
+              <button
+                type="button"
+                onClick={() => {
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to open the availability switch, it will force the product to be available or not be available to all the listed stores below. Please always check this.",
+                      buttons: [
+                        {
+                          color: "#CC5801",
+                          text: "Yes",
+                          onClick: () => {
+                            setFormState({
+                              ...formState,
+                              productAvailability: false,
+                            });
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          color: "#22201A",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
+                }}
+                className="px-4 py-2 my-4 text-white rounded-lg bg-secondary w-fit"
+              >
+                Open Availability Switch
+              </button>
+            ) : (
+              <div className="flex flex-col space-y-1 py-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState({
+                      ...formState,
+                      productAvailability: "",
+                    });
+                  }}
+                  className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
+                >
+                  Close Availability Switch
+                </button>
+
+                <MaterialSwitch
+                  label={
+                    "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
+                  }
+                  checked={formState.productAvailability}
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      productAvailability: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+            )}
 
             <MaterialInputAutoComplete
               label="Select Stores"
@@ -651,6 +726,9 @@ export function AdminSettingShopEditProduct() {
               options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
               value={formState.stores ? [...formState.stores] : []}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               onChange={(e, stores) => {
                 setFormState({
                   ...formState,
@@ -659,7 +737,7 @@ export function AdminSettingShopEditProduct() {
               }}
               filterSelectedOptions
             />
-          </>
+          </div>
         ) : null}
 
         {getAdminProductsState.data ? (
@@ -674,6 +752,9 @@ export function AdminSettingShopEditProduct() {
               multiple
               options={getAdminProductsState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={formState.products ? [...formState.products] : []}
               onChange={(e, products) => {
                 setFormState({
@@ -691,7 +772,7 @@ export function AdminSettingShopEditProduct() {
             type="submit"
             className="px-4 py-2 text-white rounded-lg bg-button w-fit"
           >
-            Edit Product
+            Update Product
           </button>
 
           <button

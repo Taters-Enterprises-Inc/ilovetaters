@@ -1,12 +1,11 @@
 import MenuItem from "@mui/material/MenuItem";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
-import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
   MaterialInputAutoComplete,
+  MaterialSwitch,
   UploadFile,
 } from "features/shared/presentation/components";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
@@ -26,7 +25,6 @@ import {
 } from "../slices/get-admin-product-categories.slice";
 import {
   getAdminProducts,
-  GetAdminProductsState,
   selectGetAdminProducts,
 } from "../slices/get-admin-products.slice";
 import {
@@ -60,6 +58,7 @@ export function AdminSettingShopCreateProduct() {
     uom: string;
     numFlavor: string;
     variants: Array<Variant>;
+    productAvailability: boolean;
     stores: Array<SnackshopStoreModel>;
     products: Array<AdminProductModel>;
     image500x500: File | string;
@@ -75,6 +74,7 @@ export function AdminSettingShopCreateProduct() {
     category: "",
     uom: "",
     variants: [],
+    productAvailability: false,
     stores: [],
     products: [],
     numFlavor: "",
@@ -563,6 +563,18 @@ export function AdminSettingShopCreateProduct() {
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
             </h1>
+            <MaterialSwitch
+              label={
+                "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
+              }
+              checked={formState.productAvailability}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  productAvailability: e.target.checked,
+                });
+              }}
+            />
 
             <MaterialInputAutoComplete
               label="Select Stores"
@@ -570,6 +582,9 @@ export function AdminSettingShopCreateProduct() {
               multiple
               options={getAdminSnackshopStoresState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={formState.stores ? [...formState.stores] : []}
               onChange={(e, stores) => {
                 setFormState({
@@ -594,6 +609,9 @@ export function AdminSettingShopCreateProduct() {
               multiple
               options={getAdminProductsState.data}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               value={formState.products ? [...formState.products] : []}
               onChange={(e, products) => {
                 setFormState({

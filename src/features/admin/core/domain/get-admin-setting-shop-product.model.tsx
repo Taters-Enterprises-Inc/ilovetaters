@@ -1,6 +1,6 @@
 import { Variant } from "features/admin/presentation/pages/admin-setting-shop-edit-product.page";
 import { AdminProductModel } from "./admin-product.model";
-import { AdminStoreModel } from "./admin-store.model";
+import { SnackshopStoreModel } from "./snackshop-store.model";
 
 export interface GetAdminSettingShopProductModel {
   id: string;
@@ -16,6 +16,6 @@ export interface GetAdminSettingShopProductModel {
   num_flavor: number;
   dateadded: string;
   variants: Array<Variant>;
-  stores: Array<AdminStoreModel>;
+  stores: Array<SnackshopStoreModel>;
   products: Array<AdminProductModel>;
 }
