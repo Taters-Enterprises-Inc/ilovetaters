@@ -73,6 +73,7 @@ import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
+import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -593,6 +594,24 @@ export interface CopyAdminSettingShopProductResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingCateringPackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingCateringPackagesModel;
+  };
+}
+
+export function GetAdminSettingCateringPackagesRepository(
+  query: string
+): Promise<GetAdminSettingCateringPackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-packages${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function CopyAdminSettingShopProductRepository(
