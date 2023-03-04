@@ -190,6 +190,10 @@ import getAdminSettingProductAddons from "features/admin/presentation/slices/get
 import getCustomerSurveyResponseLogs from "features/admin/presentation/slices/get-customer-survey-response-logs.slice";
 import copyAdminSettingShopProduct from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
 import getAdminSettingCateringPackages from "features/admin/presentation/slices/get-admin-setting-catering-packages.slice";
+import getAdminPackageCategories from "features/admin/presentation/slices/get-admin-package-categories.slice";
+import createAdminSettingCateringPackage from "features/admin/presentation/slices/create-admin-setting-catering-package.slice";
+import getAdminSettingCateringPackage from "features/admin/presentation/slices/get-admin-setting-catering-package.slice";
+import editAdminSettingCateringPackage from "features/admin/presentation/slices/edit-admin-setting-catering-package.slice";
 
 export const store = configureStore({
   reducer: {
@@ -383,6 +387,10 @@ export const store = configureStore({
     getCustomerSurveyResponseLogs,
     copyAdminSettingShopProduct,
     getAdminSettingCateringPackages,
+    getAdminPackageCategories,
+    createAdminSettingCateringPackage,
+    getAdminSettingCateringPackage,
+    editAdminSettingCateringPackage,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

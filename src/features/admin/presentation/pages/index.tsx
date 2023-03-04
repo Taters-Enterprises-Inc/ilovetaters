@@ -27,3 +27,4 @@ export { AdminSettingEditStore } from "./admin-setting-edit-store.page";
 export { AdminSettingShopCopyProduct } from "./admin-setting-shop-copy-product.page";
 export { AdminSettingCateringPackage } from "./admin-setting-catering-package.page";
 export { AdminSettingCateringCreatePackage } from "./admin-setting-catering-create-package.page";
+export { AdminSettingCateringEditPackage } from "./admin-setting-catering-edit-package.page";

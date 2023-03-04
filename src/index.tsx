@@ -70,6 +70,7 @@ import {
   AdminSettingEditStore,
   AdminSettingCateringPackage,
   AdminSettingCateringCreatePackage,
+  AdminSettingCateringEditPackage,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -487,6 +488,13 @@ root.render(
                                     path="create-package"
                                     element={
                                       <AdminSettingCateringCreatePackage />
+                                    }
+                                  />
+
+                                  <Route
+                                    path=":id"
+                                    element={
+                                      <AdminSettingCateringEditPackage />
                                     }
                                   />
                                 </Route>

@@ -326,6 +326,14 @@ import {
   CopyAdminSettingShopProductState,
   selectCopyAdminSettingShopProduct,
 } from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
+import {
+  CreateAdminSettingCateringPackageState,
+  selectCreateAdminSettingCateringPackage,
+} from "features/admin/presentation/slices/create-admin-setting-catering-package.slice";
+import {
+  EditAdminSettingCateringPackageState,
+  selectEditAdminSettingCateringPackage,
+} from "features/admin/presentation/slices/edit-admin-setting-catering-package.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -508,6 +516,59 @@ export function LoadingAndSnackbarWrapper() {
   const copyAdminSettingShopProductState = useAppSelector(
     selectCopyAdminSettingShopProduct
   );
+  const createAdminSettingCateringPackageState = useAppSelector(
+    selectCreateAdminSettingCateringPackage
+  );
+  const editAdminSettingCateringPackageState = useAppSelector(
+    selectEditAdminSettingCateringPackage
+  );
+
+  useEffect(() => {
+    switch (editAdminSettingCateringPackageState.status) {
+      case EditAdminSettingCateringPackageState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingCateringPackageState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingCateringPackageState.success:
+        showAlert(
+          setSuccessAlert,
+          editAdminSettingCateringPackageState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingCateringPackageState.fail:
+        showAlert(setFailsAlert, editAdminSettingCateringPackageState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingCateringPackageState]);
+
+  useEffect(() => {
+    switch (createAdminSettingCateringPackageState.status) {
+      case CreateAdminSettingCateringPackageState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingCateringPackageState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingCateringPackageState.success:
+        showAlert(
+          setSuccessAlert,
+          createAdminSettingCateringPackageState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingCateringPackageState.fail:
+        showAlert(
+          setFailsAlert,
+          createAdminSettingCateringPackageState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingCateringPackageState]);
 
   useEffect(() => {
     switch (copyAdminSettingShopProductState.status) {

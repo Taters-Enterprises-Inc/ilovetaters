@@ -1,6 +1,5 @@
 import MenuItem from "@mui/material/MenuItem";
-import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
-import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
+import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
@@ -14,34 +13,29 @@ import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
-  createAdminSettingShopProduct,
-  CreateAdminSettingShopProductState,
-  resetCreateAdminSettingShopProductState,
-  selectCreateAdminSettingShopProduct,
-} from "../slices/create-admin-setting-shop-product.slice";
+  createAdminSettingCateringPackage,
+  CreateAdminSettingCateringPackageState,
+  resetCreateAdminSettingCateringPackageState,
+  selectCreateAdminSettingCateringPackage,
+} from "../slices/create-admin-setting-catering-package.slice";
 import {
-  getAdminProductCategories,
-  selectGetAdminProductCategories,
-} from "../slices/get-admin-product-categories.slice";
+  getAdminPackageCategories,
+  selectGetAdminPackageCategories,
+} from "../slices/get-admin-package-categories.slice";
 import {
-  getAdminProducts,
-  selectGetAdminProducts,
-} from "../slices/get-admin-products.slice";
-import {
-  getAdminSnackshopStores,
-  GetAdminSnackshopStoresState,
-  selectGetAdminSnackshopStores,
-} from "../slices/get-admin-snackshop-stores.slice";
+  getAdminCateringStores,
+  GetAdminCateringStoresState,
+  selectGetAdminCateringStores,
+} from "../slices/get-admin-catering-stores.slice";
+import { AdminCateringDynamicPrice } from "features/admin/core/domain/admin-catering-dynamic-price.model";
 
-export interface Variant {
+interface Variant {
   name: string;
   options: Array<VariantOption>;
 }
 
 interface VariantOption {
   name: string;
-  sku: string | null;
-  price: string | null;
 }
 
 export function AdminSettingCateringCreatePackage() {
@@ -57,10 +51,11 @@ export function AdminSettingCateringCreatePackage() {
     category: string;
     uom: string;
     numFlavor: string;
+    freeThreshold: string;
     variants: Array<Variant>;
-    productAvailability: boolean;
-    stores: Array<SnackshopStoreModel>;
-    products: Array<AdminProductModel>;
+    dynamicPrices: Array<AdminCateringDynamicPrice>;
+    packageAvailability: boolean;
+    stores: Array<CateringStoreModel>;
     image500x500: File | string;
     image250x250: File | string;
     image75x75: File | string;
@@ -73,55 +68,53 @@ export function AdminSettingCateringCreatePackage() {
     category: "",
     uom: "",
     variants: [],
-    productAvailability: false,
+    dynamicPrices: [],
+    packageAvailability: false,
     stores: [],
-    products: [],
     numFlavor: "",
+    freeThreshold: "",
     image500x500: "",
     image250x250: "",
     image75x75: "",
   });
 
-  const getAdminProductCategoriesState = useAppSelector(
-    selectGetAdminProductCategories
+  const getAdminPackageCategoriesState = useAppSelector(
+    selectGetAdminPackageCategories
   );
 
-  const getAdminSnackshopStoresState = useAppSelector(
-    selectGetAdminSnackshopStores
+  const getAdminCateringStoresState = useAppSelector(
+    selectGetAdminCateringStores
   );
 
-  const getAdminProductsState = useAppSelector(selectGetAdminProducts);
-
-  const createAdminSettingShopProductState = useAppSelector(
-    selectCreateAdminSettingShopProduct
+  const createAdminSettingCateringPackageState = useAppSelector(
+    selectCreateAdminSettingCateringPackage
   );
 
   useEffect(() => {
     if (
-      createAdminSettingShopProductState.status ===
-      CreateAdminSettingShopProductState.success
+      createAdminSettingCateringPackageState.status ===
+      CreateAdminSettingCateringPackageState.success
     ) {
-      navigate("/admin/setting/product");
-      dispatch(resetCreateAdminSettingShopProductState());
+      navigate("/admin/setting/package");
+      dispatch(resetCreateAdminSettingCateringPackageState());
     }
-  }, [createAdminSettingShopProductState, dispatch, navigate]);
+  }, [createAdminSettingCateringPackageState, dispatch, navigate]);
 
   useEffect(() => {
-    dispatch(getAdminProductCategories());
-    dispatch(getAdminProducts());
-    dispatch(getAdminSnackshopStores());
+    dispatch(getAdminPackageCategories());
+    dispatch(getAdminCateringStores());
   }, [dispatch]);
 
   useEffect(() => {
-    const stores = getAdminSnackshopStoresState.data;
+    const stores = getAdminCateringStoresState.data;
     if (
-      getAdminSnackshopStoresState.status ===
-        GetAdminSnackshopStoresState.success &&
+      getAdminCateringStoresState.status ===
+        GetAdminCateringStoresState.success &&
       stores
     ) {
       setFormState((f) => ({ ...f, stores }));
     }
-  }, [getAdminSnackshopStoresState]);
+  }, [getAdminCateringStoresState]);
 
   const handleAddProductVariant = () => {
     setFormState({
@@ -133,10 +126,21 @@ export function AdminSettingCateringCreatePackage() {
           options: [
             {
               name: "",
-              price: null,
-              sku: null,
             },
           ],
+        },
+      ],
+    });
+  };
+
+  const handleAddDynamicPrice = () => {
+    setFormState({
+      ...formState,
+      dynamicPrices: [
+        ...formState.dynamicPrices,
+        {
+          price: "",
+          min_qty: "",
         },
       ],
     });
@@ -147,23 +151,6 @@ export function AdminSettingCateringCreatePackage() {
 
     copyVariants[index].options.push({
       name: "",
-      price: null,
-      sku: null,
-    });
-
-    setFormState({
-      ...formState,
-      variants: copyVariants,
-    });
-  };
-
-  const handleAddProductVariantOptionWithPrice = (index: number) => {
-    const copyVariants = [...formState.variants];
-
-    copyVariants[index].options.push({
-      name: "",
-      sku: "",
-      price: "",
     });
 
     setFormState({
@@ -199,11 +186,11 @@ export function AdminSettingCateringCreatePackage() {
     }
 
     dispatch(
-      createAdminSettingShopProduct({
+      createAdminSettingCateringPackage({
         ...formState,
         stores: JSON.stringify(formState.stores),
+        dynamicPrices: JSON.stringify(formState.dynamicPrices),
         variants: JSON.stringify(formState.variants),
-        products: JSON.stringify(formState.products),
       })
     );
   };
@@ -245,22 +232,10 @@ export function AdminSettingCateringCreatePackage() {
                 onChange={handleInputChange}
                 className="flex-1"
               >
-                <MenuItem value="PACK">PACK</MenuItem>
-                <MenuItem value="SET">SET</MenuItem>
-                <MenuItem value="BAG">BAG</MenuItem>
                 <MenuItem value="BUNDLE">BUNDLE</MenuItem>
-                <MenuItem value="DOZEN">DOZEN</MenuItem>
-                <MenuItem value="CAN">CAN</MenuItem>
-                <MenuItem value="BOTTLE">BOTTLE</MenuItem>
-                <MenuItem value="EXTRA">EXTRA</MenuItem>
-                <MenuItem value="LADDLE">LADDLE</MenuItem>
-                <MenuItem value="SCOOP">SCOOP</MenuItem>
-                <MenuItem value="BOUQUET">BOUQUET</MenuItem>
-                <MenuItem value="STICK">STICK</MenuItem>
-                <MenuItem value="SANDWICH">SANDWICH</MenuItem>
-                <MenuItem value="CUP">CUP</MenuItem>
+                <MenuItem value="PC">PC</MenuItem>
               </MaterialInput>
-              {getAdminProductCategoriesState.data ? (
+              {getAdminPackageCategoriesState.data ? (
                 <MaterialInput
                   colorTheme="black"
                   required
@@ -271,7 +246,7 @@ export function AdminSettingCateringCreatePackage() {
                   onChange={handleInputChange}
                   className="flex-1"
                 >
-                  {getAdminProductCategoriesState.data.map((category) => (
+                  {getAdminPackageCategoriesState.data.map((category) => (
                     <MenuItem value={category.id}>{category.name}</MenuItem>
                   ))}
                 </MaterialInput>
@@ -342,36 +317,152 @@ export function AdminSettingCateringCreatePackage() {
               label="Number of Flavor"
               fullWidth
             />
-            <>
-              <h1 className="text-2xl font-bold text-secondary !my-2">
-                Product Variant Creator
-              </h1>
+            <MaterialInput
+              colorTheme="black"
+              type="number"
+              onChange={handleInputChange}
+              value={formState.freeThreshold}
+              name="freeThreshold"
+              label="Free Threshold"
+              fullWidth
+            />
 
-              {formState.variants.map((variant, variantIndex) => (
-                <div key={variantIndex} className="space-y-2">
-                  <div className="flex space-x-2">
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Dynamic Price
+            </h1>
+
+            {formState.dynamicPrices.map((dynamicPrice, dynamicPriceIndex) => (
+              <div className="flex space-x-2">
+                <MaterialInput
+                  colorTheme="black"
+                  onChange={(e) => {
+                    const copyDynamicPrices = [...formState.dynamicPrices];
+                    copyDynamicPrices[dynamicPriceIndex].price = e.target.value;
+                    setFormState({
+                      ...formState,
+                      dynamicPrices: copyDynamicPrices,
+                    });
+                  }}
+                  value={dynamicPrice.price}
+                  name="price"
+                  required
+                  label="Price"
+                  fullWidth
+                />
+                <MaterialInput
+                  colorTheme="black"
+                  onChange={(e) => {
+                    const copyDynamicPrices = [...formState.dynamicPrices];
+                    copyDynamicPrices[dynamicPriceIndex].min_qty =
+                      e.target.value;
+                    setFormState({
+                      ...formState,
+                      dynamicPrices: copyDynamicPrices,
+                    });
+                  }}
+                  value={dynamicPrice.min_qty}
+                  name="min_qty"
+                  required
+                  label="Minimum Quantity"
+                  fullWidth
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    let copyDynamicPrices = [...formState.dynamicPrices];
+                    copyDynamicPrices = copyDynamicPrices.filter(
+                      (value, index) => index !== dynamicPriceIndex
+                    );
+                    setFormState({
+                      ...formState,
+                      dynamicPrices: copyDynamicPrices,
+                    });
+                  }}
+                  className="text-2xl"
+                >
+                  <AiOutlineClose />
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={handleAddDynamicPrice}
+              className="flex items-center space-x-1 text-[#006600]"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold">Add Dynamic Price</span>
+            </button>
+
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Package Variant Creator
+            </h1>
+
+            {formState.variants.map((variant, variantIndex) => (
+              <div key={variantIndex} className="space-y-2">
+                <div className="flex space-x-2">
+                  <MaterialInput
+                    colorTheme="green"
+                    onChange={(e) => {
+                      const copyVariants = [...formState.variants];
+                      copyVariants[variantIndex].name = e.target.value;
+                      setFormState({
+                        ...formState,
+                        variants: copyVariants,
+                      });
+                    }}
+                    value={variant.name}
+                    name="variant"
+                    required
+                    label="Variant Name"
+                    fullWidth
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      let copyVariants = [...formState.variants];
+                      copyVariants = copyVariants.filter(
+                        (value, index) => index !== variantIndex
+                      );
+                      setFormState({
+                        ...formState,
+                        variants: copyVariants,
+                      });
+                    }}
+                    className="text-2xl"
+                  >
+                    <AiOutlineClose />
+                  </button>
+                </div>
+
+                {variant.options.map((option, optionIndex) => (
+                  <div className="flex space-x-2" key={optionIndex}>
                     <MaterialInput
-                      colorTheme="green"
+                      size="small"
+                      required
+                      colorTheme="blue"
                       onChange={(e) => {
                         const copyVariants = [...formState.variants];
-                        copyVariants[variantIndex].name = e.target.value;
+                        copyVariants[variantIndex].options[optionIndex].name =
+                          e.target.value;
                         setFormState({
                           ...formState,
                           variants: copyVariants,
                         });
                       }}
-                      value={variant.name}
+                      value={option.name}
                       name="variant"
-                      required
-                      label="Variant Name"
+                      label="Variant Option Name"
                       fullWidth
                     />
                     <button
                       type="button"
                       onClick={(e) => {
-                        let copyVariants = [...formState.variants];
-                        copyVariants = copyVariants.filter(
-                          (value, index) => index !== variantIndex
+                        const copyVariants = [...formState.variants];
+                        copyVariants[variantIndex].options = copyVariants[
+                          variantIndex
+                        ].options.filter(
+                          (value, index) => index !== optionIndex
                         );
                         setFormState({
                           ...formState,
@@ -383,126 +474,27 @@ export function AdminSettingCateringCreatePackage() {
                       <AiOutlineClose />
                     </button>
                   </div>
-
-                  {variant.options.map((option, optionIndex) => (
-                    <div className="flex space-x-2" key={optionIndex}>
-                      <MaterialInput
-                        size="small"
-                        required
-                        colorTheme="blue"
-                        onChange={(e) => {
-                          const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options[optionIndex].name =
-                            e.target.value;
-                          setFormState({
-                            ...formState,
-                            variants: copyVariants,
-                          });
-                        }}
-                        value={option.name}
-                        name="variant"
-                        label="Variant Option Name"
-                        fullWidth
-                      />
-                      {option.sku !== null ? (
-                        <MaterialInput
-                          size="small"
-                          required
-                          colorTheme="blue"
-                          onChange={(e) => {
-                            const copyVariants = [...formState.variants];
-                            copyVariants[variantIndex].options[
-                              optionIndex
-                            ].sku = e.target.value;
-                            setFormState({
-                              ...formState,
-                              variants: copyVariants,
-                            });
-                          }}
-                          value={option.sku}
-                          name="sku"
-                          label="SKU"
-                          fullWidth
-                        />
-                      ) : null}
-                      {option.price !== null ? (
-                        <MaterialInput
-                          size="small"
-                          type="number"
-                          required
-                          colorTheme="blue"
-                          onChange={(e) => {
-                            const copyVariants = [...formState.variants];
-                            copyVariants[variantIndex].options[
-                              optionIndex
-                            ].price = e.target.value;
-                            setFormState({
-                              ...formState,
-                              variants: copyVariants,
-                            });
-                          }}
-                          value={option.price}
-                          name="price"
-                          label="Price"
-                          fullWidth
-                        />
-                      ) : null}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          const copyVariants = [...formState.variants];
-                          copyVariants[variantIndex].options = copyVariants[
-                            variantIndex
-                          ].options.filter(
-                            (value, index) => index !== optionIndex
-                          );
-                          setFormState({
-                            ...formState,
-                            variants: copyVariants,
-                          });
-                        }}
-                        className="text-2xl"
-                      >
-                        <AiOutlineClose />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleAddProductVariantOptionWithPrice(variantIndex)
-                    }
-                    className="flex items-center text-[#003399] space-x-1"
-                  >
-                    <AiOutlinePlus className="text-sm" />
-                    <span className="text-sm font-semibold ">
-                      Add Product Variant Option with Price
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleAddProductVariantOption(variantIndex)}
-                    className="flex items-center space-x-1 text-[#003399]"
-                  >
-                    <AiOutlinePlus className="text-sm" />
-                    <span className="text-sm font-semibold">
-                      Add Product Variant Option
-                    </span>
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={handleAddProductVariant}
-                className="flex items-center space-x-1 text-[#006600]"
-              >
-                <AiOutlinePlus className="text-sm" />
-                <span className="text-sm font-semibold">
-                  Add Product Variant
-                </span>
-              </button>
-            </>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => handleAddProductVariantOption(variantIndex)}
+                  className="flex items-center space-x-1 text-[#003399]"
+                >
+                  <AiOutlinePlus className="text-sm" />
+                  <span className="text-sm font-semibold">
+                    Add Product Variant Option
+                  </span>
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddProductVariant}
+              className="flex items-center space-x-1 text-[#006600]"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold">Add Product Variant</span>
+            </button>
           </div>
 
           <div>
@@ -545,20 +537,20 @@ export function AdminSettingCateringCreatePackage() {
           </div>
         </div>
 
-        {getAdminSnackshopStoresState.data ? (
+        {getAdminCateringStoresState.data ? (
           <>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
             </h1>
             <MaterialSwitch
               label={
-                "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
+                "Make the package available to store selected. ( If the switch is off the store will be the one who enable it )"
               }
-              checked={formState.productAvailability}
+              checked={formState.packageAvailability}
               onChange={(e) => {
                 setFormState({
                   ...formState,
-                  productAvailability: e.target.checked,
+                  packageAvailability: e.target.checked,
                 });
               }}
             />
@@ -567,7 +559,7 @@ export function AdminSettingCateringCreatePackage() {
               label="Select Stores"
               colorTheme="black"
               multiple
-              options={getAdminSnackshopStoresState.data}
+              options={getAdminCateringStoresState.data}
               getOptionLabel={(option) => option.name}
               isOptionEqualToValue={(option, value) =>
                 option.name === value.name
@@ -583,34 +575,6 @@ export function AdminSettingCateringCreatePackage() {
             />
           </>
         ) : null}
-
-        {getAdminProductsState.data ? (
-          <>
-            <h1 className="text-2xl font-bold text-secondary !my-2">
-              Add-on Selection
-            </h1>
-
-            <MaterialInputAutoComplete
-              label="Select Products"
-              colorTheme="black"
-              multiple
-              options={getAdminProductsState.data}
-              getOptionLabel={(option) => option.name}
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              value={formState.products ? [...formState.products] : []}
-              onChange={(e, products) => {
-                setFormState({
-                  ...formState,
-                  products,
-                });
-              }}
-              filterSelectedOptions
-            />
-          </>
-        ) : null}
-
         <button
           type="submit"
           className="px-4 py-2 text-white rounded-lg bg-button w-fit"
