@@ -311,3 +311,28 @@ export interface EditAdminSettingCateringPackageParam {
   image250x250: File | string;
   image75x75: File | string;
 }
+
+export interface CopyAdminSettingCateringPackageParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  packageAvailability: boolean;
+  freeThreshold: string;
+  dynamicPrices: string;
+  stores: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface UpdateAdminSettingCateringPackageStatusParam {
+  package_id: number;
+  status: number;
+}

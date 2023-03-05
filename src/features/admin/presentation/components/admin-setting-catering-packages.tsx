@@ -21,10 +21,7 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
-import {
-  selectUpdateAdminSettingShopProductStatus,
-  updateAdminSettingShopProductStatus,
-} from "../slices/update-admin-setting-shop-product-status.slice";
+import { updateAdminSettingCateringPackageStatus } from "../slices/update-admin-setting-catering-package-status.slice";
 import NumberFormat from "react-number-format";
 
 export function AdminSettingCateringPackages() {
@@ -54,10 +51,6 @@ export function AdminSettingCateringPackages() {
     selectGetAdminSettingCateringPackages
   );
 
-  const updateAdminSettingShopProductStatusState = useAppSelector(
-    selectUpdateAdminSettingShopProductStatus
-  );
-
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -68,15 +61,7 @@ export function AdminSettingCateringPackages() {
     });
 
     dispatch(getAdminSettingCateringPackages(query));
-  }, [
-    updateAdminSettingShopProductStatusState,
-    dispatch,
-    pageNo,
-    perPage,
-    orderBy,
-    order,
-    search,
-  ]);
+  }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
   return (
     <>
@@ -306,14 +291,14 @@ export function AdminSettingCateringPackages() {
                           <Checkbox
                             onChange={(e) => {
                               dispatch(
-                                updateAdminSettingShopProductStatus({
-                                  product_id: row.id,
+                                updateAdminSettingCateringPackageStatus({
+                                  package_id: row.id,
                                   status: e.target.checked ? 1 : 0,
                                 })
                               );
                             }}
                             color="primary"
-                            checked={row.status === 1 ? true : false}
+                            defaultChecked={row.status === 1 ? true : false}
                           />
                         </DataTableCell>
 

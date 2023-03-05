@@ -32,6 +32,8 @@ import {
   CopyAdminSettingShopProductParam,
   CreateAdminSettingCateringPackageParam,
   EditAdminSettingCateringPackageParam,
+  CopyAdminSettingCateringPackageParam,
+  UpdateAdminSettingCateringPackageStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -632,6 +634,45 @@ export interface EditAdminSettingCateringPackageResponse {
   };
 }
 
+export interface CopyAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingCateringPackageStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingCateringPackageStatusRepository(
+  param: UpdateAdminSettingCateringPackageStatusParam
+): Promise<UpdateAdminSettingCateringPackageStatusResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CopyAdminSettingCateringPackageRepository(
+  param: CopyAdminSettingCateringPackageParam
+): Promise<CopyAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/copy-catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
 export function EditAdminSettingCateringPackageRepository(
   param: EditAdminSettingCateringPackageParam
 ): Promise<EditAdminSettingCateringPackageResponse> {
@@ -859,7 +900,7 @@ export function GetAdminCateringPackageFlavorsRepository(
 
 export function UpdateAdminSettingShopProductStatusRepository(
   param: UpdateAdminSettingShopProductStatusParam
-): Promise<DeleteAdminSettingShopProductResponse> {
+): Promise<UpdateAdminSettingShopProductStatusResponse> {
   return axios.put(
     `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
     param,

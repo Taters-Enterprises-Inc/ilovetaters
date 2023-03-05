@@ -334,6 +334,10 @@ import {
   EditAdminSettingCateringPackageState,
   selectEditAdminSettingCateringPackage,
 } from "features/admin/presentation/slices/edit-admin-setting-catering-package.slice";
+import {
+  CopyAdminSettingCateringPackageState,
+  selectCopyAdminSettingCateringPackage,
+} from "features/admin/presentation/slices/copy-admin-setting-catering-package.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -522,6 +526,31 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingCateringPackageState = useAppSelector(
     selectEditAdminSettingCateringPackage
   );
+  const copyAdminSettingCateringPackageState = useAppSelector(
+    selectCopyAdminSettingCateringPackage
+  );
+
+  useEffect(() => {
+    switch (copyAdminSettingCateringPackageState.status) {
+      case CopyAdminSettingCateringPackageState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CopyAdminSettingCateringPackageState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CopyAdminSettingCateringPackageState.success:
+        showAlert(
+          setSuccessAlert,
+          copyAdminSettingCateringPackageState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case CopyAdminSettingCateringPackageState.fail:
+        showAlert(setFailsAlert, copyAdminSettingCateringPackageState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [copyAdminSettingCateringPackageState]);
 
   useEffect(() => {
     switch (editAdminSettingCateringPackageState.status) {
