@@ -240,12 +240,33 @@ export function AdminSettingCateringEditPackage() {
 
     if (id) {
       dispatch(
-        editAdminSettingCateringPackage({
-          id,
-          ...formState,
-          stores: JSON.stringify(formState.stores),
-          variants: JSON.stringify(formState.variants),
-          dynamicPrices: JSON.stringify(formState.dynamicPrices),
+        openMessageModal({
+          message: "Are you sure you want to update the package ?",
+          buttons: [
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                dispatch(
+                  editAdminSettingCateringPackage({
+                    id,
+                    ...formState,
+                    stores: JSON.stringify(formState.stores),
+                    variants: JSON.stringify(formState.variants),
+                    dynamicPrices: JSON.stringify(formState.dynamicPrices),
+                  })
+                );
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
         })
       );
     }

@@ -21,8 +21,15 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
-import { updateAdminSettingShopProductStatus } from "../slices/update-admin-setting-shop-product-status.slice";
+import {
+  updateAdminSettingShopProductStatus,
+  selectUpdateAdminSettingShopProductStatus,
+} from "../slices/update-admin-setting-shop-product-status.slice";
 import NumberFormat from "react-number-format";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export function AdminSettingShopProducts() {
   const dispatch = useAppDispatch();
@@ -51,6 +58,10 @@ export function AdminSettingShopProducts() {
     selectGetAdminSettingShopProducts
   );
 
+  const updateAdminSettingShopProductStatusState = useAppSelector(
+    selectUpdateAdminSettingShopProductStatus
+  );
+
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -61,7 +72,15 @@ export function AdminSettingShopProducts() {
     });
 
     dispatch(getAdminSettingShopProducts(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+  }, [
+    updateAdminSettingShopProductStatusState,
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+  ]);
 
   return (
     <>
@@ -290,15 +309,39 @@ export function AdminSettingShopProducts() {
                         <DataTableCell>
                           <Checkbox
                             onChange={(e) => {
+                              const checked = e.target.checked;
                               dispatch(
-                                updateAdminSettingShopProductStatus({
-                                  product_id: row.id,
-                                  status: e.target.checked ? 1 : 0,
+                                openMessageModal({
+                                  message: `Are you sure you want to ${
+                                    checked ? "enable" : "disable"
+                                  } the product ?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(
+                                          updateAdminSettingShopProductStatus({
+                                            product_id: row.id,
+                                            status: checked ? 1 : 0,
+                                          })
+                                        );
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                  ],
                                 })
                               );
                             }}
                             color="primary"
-                            defaultChecked={row.status === 1 ? true : false}
+                            checked={row.status === 1 ? true : false}
                           />
                         </DataTableCell>
 
