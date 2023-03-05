@@ -30,6 +30,10 @@ import {
   GetAdminSettingStoreParam,
   EditAdminSettingStoreParam,
   CopyAdminSettingShopProductParam,
+  CreateAdminSettingCateringPackageParam,
+  EditAdminSettingCateringPackageParam,
+  CopyAdminSettingCateringPackageParam,
+  UpdateAdminSettingCateringPackageStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -73,6 +77,8 @@ import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
+import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
+import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/get-admin-setting-catering-package.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -595,6 +601,136 @@ export interface CopyAdminSettingShopProductResponse {
   };
 }
 
+export interface GetAdminSettingCateringPackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingCateringPackagesModel;
+  };
+}
+
+export interface GetAdminPackageCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface CreateAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingCateringPackageModel;
+  };
+}
+
+export interface EditAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CopyAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingCateringPackageStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingCateringPackageStatusRepository(
+  param: UpdateAdminSettingCateringPackageStatusParam
+): Promise<UpdateAdminSettingCateringPackageStatusResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CopyAdminSettingCateringPackageRepository(
+  param: CopyAdminSettingCateringPackageParam
+): Promise<CopyAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/copy-catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function EditAdminSettingCateringPackageRepository(
+  param: EditAdminSettingCateringPackageParam
+): Promise<EditAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingCateringPackageRepository(
+  packageId: string
+): Promise<GetAdminSettingCateringPackageResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package?package-id=${packageId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingCateringPackageRepository(
+  param: CreateAdminSettingCateringPackageParam
+): Promise<CreateAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPackageCategoriesRepository(): Promise<GetAdminPackageCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/package-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingCateringPackagesRepository(
+  query: string
+): Promise<GetAdminSettingCateringPackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-packages${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function CopyAdminSettingShopProductRepository(
   param: CopyAdminSettingShopProductParam
 ): Promise<CopyAdminSettingShopProductResponse> {
@@ -764,7 +900,7 @@ export function GetAdminCateringPackageFlavorsRepository(
 
 export function UpdateAdminSettingShopProductStatusRepository(
   param: UpdateAdminSettingShopProductStatusParam
-): Promise<DeleteAdminSettingShopProductResponse> {
+): Promise<UpdateAdminSettingShopProductStatusResponse> {
   return axios.put(
     `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
     param,

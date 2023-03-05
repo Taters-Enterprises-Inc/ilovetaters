@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
-import { GetAdminSettingStoresModel } from "features/admin/core/domain/get-admin-setting-stores.model";
 import {
   GetAdminSettingShopProductRepository,
   GetAdminSettingShopProductResponse,

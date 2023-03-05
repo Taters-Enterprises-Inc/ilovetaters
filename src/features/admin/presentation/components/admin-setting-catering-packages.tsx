@@ -14,17 +14,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
-  getAdminSettingShopProducts,
-  resetGetAdminSettingShopProductsStatus,
-  selectGetAdminSettingShopProducts,
-} from "../slices/get-admin-setting-shop-products.slice";
+  getAdminSettingCateringPackages,
+  resetGetAdminSettingCateringPackagesStatus,
+  selectGetAdminSettingCateringPackages,
+} from "../slices/get-admin-setting-catering-packages.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
-import { updateAdminSettingShopProductStatus } from "../slices/update-admin-setting-shop-product-status.slice";
+import { updateAdminSettingCateringPackageStatus } from "../slices/update-admin-setting-catering-package-status.slice";
 import NumberFormat from "react-number-format";
 
-export function AdminSettingShopProducts() {
+export function AdminSettingCateringPackages() {
   const dispatch = useAppDispatch();
 
   const query = useQuery();
@@ -47,8 +47,8 @@ export function AdminSettingShopProducts() {
     { id: "action", label: "" },
   ];
 
-  const getAdminSettingShopProductsState = useAppSelector(
-    selectGetAdminSettingShopProducts
+  const getAdminSettingCateringPackagesState = useAppSelector(
+    selectGetAdminSettingCateringPackages
   );
 
   useEffect(() => {
@@ -60,33 +60,33 @@ export function AdminSettingShopProducts() {
       search: search,
     });
 
-    dispatch(getAdminSettingShopProducts(query));
+    dispatch(getAdminSettingCateringPackages(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
   return (
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          List of Products
+          List of Packages
         </span>
         <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
           <div>
             <Link
-              to="create-product"
+              to="create-package"
               className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
             >
               <AiFillFolderAdd size={20} />
-              <span>&nbsp;&nbsp;Create a new Product</span>
+              <span>&nbsp;&nbsp;Create a new Package</span>
             </Link>
           </div>
         </div>
       </div>
-      {getAdminSettingShopProductsState.data?.shop_products ? (
+      {getAdminSettingCateringPackagesState.data?.catering_packages ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No products yet."
+              emptyMessage="No packages yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -113,7 +113,7 @@ export function AdminSettingShopProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingShopProductsStatus());
+                  dispatch(resetGetAdminSettingCateringPackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -131,7 +131,7 @@ export function AdminSettingShopProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingShopProductsStatus());
+                  dispatch(resetGetAdminSettingCateringPackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -139,15 +139,15 @@ export function AdminSettingShopProducts() {
                 }
               }}
               totalRows={
-                getAdminSettingShopProductsState.data.pagination.total_rows
+                getAdminSettingCateringPackagesState.data.pagination.total_rows
               }
               perPage={
-                getAdminSettingShopProductsState.data.pagination.per_page
+                getAdminSettingCateringPackagesState.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminSettingShopProductsState.data.shop_products.map(
+              {getAdminSettingCateringPackagesState.data.catering_packages.map(
                 (row, i) => (
                   <div
                     className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
@@ -198,7 +198,7 @@ export function AdminSettingShopProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingShopProductsStatus());
+                  dispatch(resetGetAdminSettingCateringPackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -218,7 +218,7 @@ export function AdminSettingShopProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingShopProductsStatus());
+                  dispatch(resetGetAdminSettingCateringPackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -238,7 +238,7 @@ export function AdminSettingShopProducts() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingShopProductsStatus());
+                  dispatch(resetGetAdminSettingCateringPackagesStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -246,17 +246,17 @@ export function AdminSettingShopProducts() {
                 }
               }}
               totalRows={
-                getAdminSettingShopProductsState.data.pagination.total_rows
+                getAdminSettingCateringPackagesState.data.pagination.total_rows
               }
               perPage={
-                getAdminSettingShopProductsState.data.pagination.per_page
+                getAdminSettingCateringPackagesState.data.pagination.per_page
               }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminSettingShopProductsState.data.shop_products !==
+              {getAdminSettingCateringPackagesState.data.catering_packages !==
               undefined ? (
                 <>
-                  {getAdminSettingShopProductsState.data.shop_products.map(
+                  {getAdminSettingCateringPackagesState.data.catering_packages.map(
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>
@@ -291,8 +291,8 @@ export function AdminSettingShopProducts() {
                           <Checkbox
                             onChange={(e) => {
                               dispatch(
-                                updateAdminSettingShopProductStatus({
-                                  product_id: row.id,
+                                updateAdminSettingCateringPackageStatus({
+                                  package_id: row.id,
                                   status: e.target.checked ? 1 : 0,
                                 })
                               );
