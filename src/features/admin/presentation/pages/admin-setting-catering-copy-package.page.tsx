@@ -240,12 +240,33 @@ export function AdminSettingCateringCopyPackage() {
 
     if (id) {
       dispatch(
-        copyAdminSettingCateringPackage({
-          id,
-          ...formState,
-          stores: JSON.stringify(formState.stores),
-          variants: JSON.stringify(formState.variants),
-          dynamicPrices: JSON.stringify(formState.dynamicPrices),
+        openMessageModal({
+          message: "Are you sure you want to copy the package ?",
+          buttons: [
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                dispatch(
+                  copyAdminSettingCateringPackage({
+                    id,
+                    ...formState,
+                    stores: JSON.stringify(formState.stores),
+                    variants: JSON.stringify(formState.variants),
+                    dynamicPrices: JSON.stringify(formState.dynamicPrices),
+                  })
+                );
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
         })
       );
     }

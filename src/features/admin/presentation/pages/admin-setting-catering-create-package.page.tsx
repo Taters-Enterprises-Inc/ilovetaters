@@ -28,6 +28,10 @@ import {
   selectGetAdminCateringStores,
 } from "../slices/get-admin-catering-stores.slice";
 import { AdminCateringDynamicPrice } from "features/admin/core/domain/admin-catering-dynamic-price.model";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 interface Variant {
   name: string;
@@ -186,11 +190,32 @@ export function AdminSettingCateringCreatePackage() {
     }
 
     dispatch(
-      createAdminSettingCateringPackage({
-        ...formState,
-        stores: JSON.stringify(formState.stores),
-        dynamicPrices: JSON.stringify(formState.dynamicPrices),
-        variants: JSON.stringify(formState.variants),
+      openMessageModal({
+        message: "Are you sure you want to create the package ?",
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              dispatch(
+                createAdminSettingCateringPackage({
+                  ...formState,
+                  stores: JSON.stringify(formState.stores),
+                  dynamicPrices: JSON.stringify(formState.dynamicPrices),
+                  variants: JSON.stringify(formState.variants),
+                })
+              );
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
       })
     );
   };

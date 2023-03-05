@@ -43,6 +43,10 @@ import {
   resetCopyAdminSettingShopProductState,
   selectCopyAdminSettingShopProduct,
 } from "../slices/copy-admin-setting-shop-product.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export interface Variant {
   name: string;
@@ -252,12 +256,33 @@ export function AdminSettingShopCopyProduct() {
 
     if (id) {
       dispatch(
-        copyAdminSettingShopProduct({
-          id,
-          ...formState,
-          stores: JSON.stringify(formState.stores),
-          variants: JSON.stringify(formState.variants),
-          products: JSON.stringify(formState.products),
+        openMessageModal({
+          message: "Are you sure you want to copy the product ?",
+          buttons: [
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                dispatch(
+                  copyAdminSettingShopProduct({
+                    id,
+                    ...formState,
+                    stores: JSON.stringify(formState.stores),
+                    variants: JSON.stringify(formState.variants),
+                    products: JSON.stringify(formState.products),
+                  })
+                );
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
         })
       );
     }

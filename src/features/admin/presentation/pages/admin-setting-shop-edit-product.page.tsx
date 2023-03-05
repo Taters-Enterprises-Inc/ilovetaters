@@ -276,12 +276,33 @@ export function AdminSettingShopEditProduct() {
 
     if (id) {
       dispatch(
-        editAdminSettingShopProduct({
-          id,
-          ...formState,
-          stores: JSON.stringify(formState.stores),
-          variants: JSON.stringify(formState.variants),
-          products: JSON.stringify(formState.products),
+        openMessageModal({
+          message: "Are you sure you want to update the product ?",
+          buttons: [
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                dispatch(
+                  editAdminSettingShopProduct({
+                    id,
+                    ...formState,
+                    stores: JSON.stringify(formState.stores),
+                    variants: JSON.stringify(formState.variants),
+                    products: JSON.stringify(formState.products),
+                  })
+                );
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+          ],
         })
       );
     }
@@ -759,39 +780,6 @@ export function AdminSettingShopEditProduct() {
             className="px-4 py-2 text-white rounded-lg bg-button w-fit"
           >
             Update Product
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(
-                openMessageModal({
-                  message: `Are you sure you want to delete ${getAdminSettingShopProductState.data?.name} product?`,
-                  buttons: [
-                    {
-                      color: "#CC5801",
-                      text: "Yes",
-                      onClick: () => {
-                        if (id) {
-                          dispatch(deleteAdminSettingShopProduct(id));
-                          dispatch(closeMessageModal());
-                        }
-                      },
-                    },
-                    {
-                      color: "#22201A",
-                      text: "No",
-                      onClick: () => {
-                        dispatch(closeMessageModal());
-                      },
-                    },
-                  ],
-                })
-              );
-            }}
-            className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
-          >
-            Delete Product
           </button>
         </div>
       </form>

@@ -8,6 +8,10 @@ import {
   MaterialSwitch,
   UploadFile,
 } from "features/shared/presentation/components";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
@@ -199,11 +203,32 @@ export function AdminSettingShopCreateProduct() {
     }
 
     dispatch(
-      createAdminSettingShopProduct({
-        ...formState,
-        stores: JSON.stringify(formState.stores),
-        variants: JSON.stringify(formState.variants),
-        products: JSON.stringify(formState.products),
+      openMessageModal({
+        message: "Are you sure you want to create the product ?",
+        buttons: [
+          {
+            color: "#CC5801",
+            text: "Yes",
+            onClick: () => {
+              dispatch(
+                createAdminSettingShopProduct({
+                  ...formState,
+                  stores: JSON.stringify(formState.stores),
+                  variants: JSON.stringify(formState.variants),
+                  products: JSON.stringify(formState.products),
+                })
+              );
+              dispatch(closeMessageModal());
+            },
+          },
+          {
+            color: "#22201A",
+            text: "No",
+            onClick: () => {
+              dispatch(closeMessageModal());
+            },
+          },
+        ],
       })
     );
   };

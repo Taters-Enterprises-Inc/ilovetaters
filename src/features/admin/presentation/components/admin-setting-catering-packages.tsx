@@ -21,8 +21,15 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
 import Checkbox from "@mui/material/Checkbox";
-import { updateAdminSettingCateringPackageStatus } from "../slices/update-admin-setting-catering-package-status.slice";
+import {
+  updateAdminSettingCateringPackageStatus,
+  selectUpdateAdminSettingCateringPackageStatus,
+} from "../slices/update-admin-setting-catering-package-status.slice";
 import NumberFormat from "react-number-format";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export function AdminSettingCateringPackages() {
   const dispatch = useAppDispatch();
@@ -51,6 +58,10 @@ export function AdminSettingCateringPackages() {
     selectGetAdminSettingCateringPackages
   );
 
+  const updateAdminSettingCateringPackageStatusState = useAppSelector(
+    selectUpdateAdminSettingCateringPackageStatus
+  );
+
   useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
@@ -61,7 +72,15 @@ export function AdminSettingCateringPackages() {
     });
 
     dispatch(getAdminSettingCateringPackages(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+  }, [
+    updateAdminSettingCateringPackageStatusState,
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+  ]);
 
   return (
     <>
@@ -290,15 +309,41 @@ export function AdminSettingCateringPackages() {
                         <DataTableCell>
                           <Checkbox
                             onChange={(e) => {
+                              const checked = e.target.checked;
                               dispatch(
-                                updateAdminSettingCateringPackageStatus({
-                                  package_id: row.id,
-                                  status: e.target.checked ? 1 : 0,
+                                openMessageModal({
+                                  message: `Are you sure you want to ${
+                                    checked ? "enable" : "disable"
+                                  } the package ?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(
+                                          updateAdminSettingCateringPackageStatus(
+                                            {
+                                              package_id: row.id,
+                                              status: checked ? 1 : 0,
+                                            }
+                                          )
+                                        );
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                  ],
                                 })
                               );
                             }}
                             color="primary"
-                            defaultChecked={row.status === 1 ? true : false}
+                            checked={row.status === 1 ? true : false}
                           />
                         </DataTableCell>
 
