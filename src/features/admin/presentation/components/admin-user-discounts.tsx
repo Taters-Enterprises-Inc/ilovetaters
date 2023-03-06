@@ -25,6 +25,15 @@ import { AdminUserDiscountModal } from "../modals";
 import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
 import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
 import { AdminChipsButton } from "./chips-button";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -55,9 +64,20 @@ export function AdminUserDiscounts() {
     selectGetAdminUserDiscounts
   );
 
-  const adminUserDicountChangeStatusState = useAppSelector(
+  const adminUserDiscountChangeStatusState = useAppSelector(
     selectAdminUserDiscountChangeStatus
   );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (id) {
@@ -85,7 +105,7 @@ export function AdminUserDiscounts() {
     orderBy,
     order,
     search,
-    adminUserDicountChangeStatusState,
+    adminUserDiscountChangeStatusState,
   ]);
 
   return (
@@ -325,58 +345,75 @@ export function AdminUserDiscounts() {
             >
               {getAdminUserDiscountsStates.data.discounts !== undefined ? (
                 <>
-                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_USER_DISCOUNT_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="lll">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.discount_name}</DataTableCell>
-                      <DataTableCell>
-                        {row.first_name} {row.middle_name} {row.last_name}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
+                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.user_discount.unseen_notifications.find(
+                        (notification) =>
+                          notification.discount_user_id === row.id
+                      );
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="lll">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.discount_name}</DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="ll">{row.birthday}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.id_number}</DataTableCell>
 
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              id: row.id,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                id: row.id,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

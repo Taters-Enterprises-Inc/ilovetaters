@@ -26,4 +26,9 @@ export interface GetAdminNotificationModel {
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;
   };
+  user_discount: {
+    notifications: Array<NotificationModel>;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
+  };
 }
