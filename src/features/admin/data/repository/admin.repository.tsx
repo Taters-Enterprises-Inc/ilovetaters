@@ -79,6 +79,7 @@ import { CateringStoreModel } from "features/admin/core/domain/catering-store.mo
 import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
 import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
 import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/get-admin-setting-catering-package.model";
+import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get-admin-setting-popclub-deals.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -644,6 +645,24 @@ export interface UpdateAdminSettingCateringPackageStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingPopclubDealsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealsModel;
+  };
+}
+
+export function GetAdminSettingPopclubDealsRepository(
+  query: string
+): Promise<GetAdminSettingPopclubDealsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deals${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminSettingCateringPackageStatusRepository(

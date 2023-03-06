@@ -196,6 +196,7 @@ import getAdminSettingCateringPackage from "features/admin/presentation/slices/g
 import editAdminSettingCateringPackage from "features/admin/presentation/slices/edit-admin-setting-catering-package.slice";
 import copyAdminSettingCateringPackage from "features/admin/presentation/slices/copy-admin-setting-catering-package.slice";
 import updateAdminSettingCateringPackageStatus from "features/admin/presentation/slices/update-admin-setting-catering-package-status.slice";
+import getAdminSettingPopclubDeals from "features/admin/presentation/slices/get-admin-setting-popclub-deals.slice";
 
 export const store = configureStore({
   reducer: {
@@ -395,6 +396,7 @@ export const store = configureStore({
     editAdminSettingCateringPackage,
     copyAdminSettingCateringPackage,
     updateAdminSettingCateringPackageStatus,
+    getAdminSettingPopclubDeals,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
