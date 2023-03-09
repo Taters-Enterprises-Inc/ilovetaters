@@ -26,7 +26,6 @@ export interface OrderModel {
       discount_name?: string;
       discount_percentage?: string;
       voucher_id: number;
-      table_number: null;
       store_name: string;
       store_address: string;
       store_contact: string;
