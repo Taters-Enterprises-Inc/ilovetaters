@@ -220,10 +220,14 @@ export function ShopProduct() {
             getProductDetailsState.data.product.id &&
           deal_products_promo_include.product_variant_option_tb_id
         ) {
-          setQuantity(deal_products_promo_include.quantity + 1);
+          if (deal_products_promo_include.quantity)
+            setQuantity(deal_products_promo_include.quantity + 1);
+
           setCurrentSize(
             deal_products_promo_include.product_variant_option_tb_id.toString()
           );
+
+          break;
         }
       }
     }
@@ -552,7 +556,6 @@ export function ShopProduct() {
           deal_products_promo_include.product_id ===
             getProductDetailsState.data.product.id &&
           deal_products_promo_include.product_variant_option_tb_id &&
-          quantity >= deal_products_promo_include.quantity + 1 &&
           deal_products_promo_include.product_variant_option_tb_id.toString() ===
             currentSize
         ) {
@@ -593,7 +596,11 @@ export function ShopProduct() {
           }
         }
 
-        if (deal_products_promo_include_match.obtainable.length > 0) {
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          quantity >= deal_products_promo_include_match.quantity
+        ) {
           return (
             <div>
               <h2 className="mt-4 text-2xl text-white line-through">

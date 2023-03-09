@@ -29,4 +29,5 @@ export { AdminSettingCateringPackage } from "./admin-setting-catering-package.pa
 export { AdminSettingCateringCreatePackage } from "./admin-setting-catering-create-package.page";
 export { AdminSettingCateringEditPackage } from "./admin-setting-catering-edit-package.page";
 export { AdminSettingCateringCopyPackage } from "./admin-setting-catering-copy-package.page";
-export { AdminSettingPopClubDeal } from './admin-setting-popclub-deal.page';
+export { AdminSettingPopClubDeal } from "./admin-setting-popclub-deal.page";
+export { AdminSettingPopclubCreateDeal } from "./admin-setting-popclub-create-deal.page";

@@ -80,6 +80,8 @@ import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/cust
 import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
 import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/get-admin-setting-catering-package.model";
 import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get-admin-setting-popclub-deals.model";
+import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-category.model";
+import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -652,6 +654,34 @@ export interface GetAdminSettingPopclubDealsResponse {
     message: string;
     data: GetAdminSettingPopclubDealsModel;
   };
+}
+
+export interface GetAdminPopclubCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubCategory>;
+  };
+}
+
+export interface GetAdminSettingDealProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubProduct>;
+  };
+}
+export function GetAdminSettingDealProductsRepository(): Promise<GetAdminSettingDealProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/deal-shop-products`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubCategoriesRepository(): Promise<GetAdminPopclubCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/popclub/categories`, {
+    withCredentials: true,
+  });
 }
 
 export function GetAdminSettingPopclubDealsRepository(

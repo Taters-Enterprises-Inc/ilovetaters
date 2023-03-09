@@ -42,7 +42,8 @@ export function AdminSettingPopclubDeals() {
     { id: "image", label: "Image" },
     { id: "name", label: "Name", minWidth: 220 },
     { id: "description", label: "Description" },
-    { id: "price", label: "Price" },
+    { id: "original_price", label: "Original Price" },
+    { id: "promo_price", label: "Promo Price" },
     {
       id: "status",
       label: "Status",
@@ -75,7 +76,7 @@ export function AdminSettingPopclubDeals() {
         <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
           <div>
             <Link
-              to="create-package"
+              to="create-deal"
               className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
             >
               <AiFillFolderAdd size={20} />
@@ -282,12 +283,28 @@ export function AdminSettingPopclubDeals() {
                           />
                         </DataTableCell>
                         <DataTableCell>
-                          <NumberFormat
-                            value={row.original_price.toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
+                          {row.original_price ? (
+                            <NumberFormat
+                              value={row.original_price.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          ) : (
+                            "------"
+                          )}
+                        </DataTableCell>
+                        <DataTableCell>
+                          {row.promo_price ? (
+                            <NumberFormat
+                              value={row.promo_price.toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          ) : (
+                            "------"
+                          )}
                         </DataTableCell>
 
                         <DataTableCell>

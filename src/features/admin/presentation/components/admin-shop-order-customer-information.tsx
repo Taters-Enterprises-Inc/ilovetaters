@@ -127,82 +127,84 @@ export function AdminShopOrderCustomerInformation() {
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
-        if (order.price) {
-          const discountPercentage = order.promo_discount_percentage;
-          const discount = discountPercentage
-            ? order.price * parseFloat(discountPercentage)
-            : 0;
+        const discountPercentage = order.promo_discount_percentage;
+        const discount = discountPercentage
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
+          : 0;
 
-          let deal_products_promo_includes = order.deal_products_promo_include;
+        let deal_products_promo_includes = order.deal_products_promo_include;
 
-          if (deal_products_promo_includes) {
-            let deal_products_promo_include_match = null;
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
 
-            for (let x = 0; x < deal_products_promo_includes.length; x++) {
-              const deal_products_promo_include =
-                deal_products_promo_includes[x];
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
 
               if (
-                deal_products_promo_include.product_id === order.product_id &&
-                deal_products_promo_include.product_variant_option_tb_id &&
-                order.quantity >= deal_products_promo_include.quantity + 1
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
               ) {
-                deal_products_promo_include_match = deal_products_promo_include;
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
 
-                break;
+                addedObtainable.push(val);
               }
             }
 
-            if (deal_products_promo_include_match) {
-              let addedObtainable: Array<{
-                product_id: number;
-                price: number;
-                product_variant_option_tb_id: number;
-                promo_discount_percentage: string;
-              }> = [];
-              let obtainableDiscountedPrice = 0;
-              let obtainablePrice = 0;
-
-              for (
-                let y = 0;
-                y < deal_products_promo_include_match.obtainable.length;
-                y++
-              ) {
-                const val = deal_products_promo_include_match.obtainable[y];
-
-                if (
-                  val.price &&
-                  val.promo_discount_percentage &&
-                  !addedObtainable.some(
-                    (value) => value.product_id === val.product_id
-                  )
-                ) {
-                  obtainableDiscountedPrice +=
-                    val.price -
-                    val.price * parseFloat(val.promo_discount_percentage);
-                  obtainablePrice += val.price;
-
-                  addedObtainable.push(val);
-                }
-              }
-
-              if (deal_products_promo_include_match.obtainable.length > 0) {
-                calculatedPrice +=
-                  obtainableDiscountedPrice + order.price - obtainablePrice;
-              } else {
-                calculatedPrice +=
-                  order.price -
-                  order.price *
-                    parseFloat(
-                      deal_products_promo_include_match.promo_discount_percentage
-                    );
-              }
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
             } else {
-              calculatedPrice += order.price - discount;
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
             }
           } else {
-            calculatedPrice += order.price - discount;
+            calculatedPrice += parseFloat(order.price) - discount;
           }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
         }
       }
     }
@@ -231,80 +233,82 @@ export function AdminShopOrderCustomerInformation() {
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
-        if (order.price) {
-          const discountPercentage = order.promo_discount_percentage;
-          const discount = discountPercentage
-            ? order.price * parseFloat(discountPercentage)
-            : 0;
-          let deal_products_promo_includes = order.deal_products_promo_include;
+        const discountPercentage = order.promo_discount_percentage;
+        const discount = discountPercentage
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
+          : 0;
+        let deal_products_promo_includes = order.deal_products_promo_include;
 
-          if (deal_products_promo_includes) {
-            let deal_products_promo_include_match = null;
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
 
-            for (let x = 0; x < deal_products_promo_includes.length; x++) {
-              const deal_products_promo_include =
-                deal_products_promo_includes[x];
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
 
               if (
-                deal_products_promo_include.product_id === order.product_id &&
-                deal_products_promo_include.product_variant_option_tb_id &&
-                order.quantity >= deal_products_promo_include.quantity + 1
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
               ) {
-                deal_products_promo_include_match = deal_products_promo_include;
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
 
-                break;
+                addedObtainable.push(val);
               }
             }
-
-            if (deal_products_promo_include_match) {
-              let addedObtainable: Array<{
-                product_id: number;
-                price: number;
-                product_variant_option_tb_id: number;
-                promo_discount_percentage: string;
-              }> = [];
-              let obtainableDiscountedPrice = 0;
-              let obtainablePrice = 0;
-
-              for (
-                let y = 0;
-                y < deal_products_promo_include_match.obtainable.length;
-                y++
-              ) {
-                const val = deal_products_promo_include_match.obtainable[y];
-
-                if (
-                  val.price &&
-                  val.promo_discount_percentage &&
-                  !addedObtainable.some(
-                    (value) => value.product_id === val.product_id
-                  )
-                ) {
-                  obtainableDiscountedPrice +=
-                    val.price -
-                    val.price * parseFloat(val.promo_discount_percentage);
-                  obtainablePrice += val.price;
-
-                  addedObtainable.push(val);
-                }
-              }
-              if (deal_products_promo_include_match.obtainable.length > 0) {
-                calculatedPrice +=
-                  obtainableDiscountedPrice + order.price - obtainablePrice;
-              } else {
-                calculatedPrice +=
-                  order.price -
-                  order.price *
-                    parseFloat(
-                      deal_products_promo_include_match.promo_discount_percentage
-                    );
-              }
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
             } else {
-              calculatedPrice += order.price - discount;
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
             }
           } else {
-            calculatedPrice += order.price - discount;
+            calculatedPrice += parseFloat(order.price) - discount;
           }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
         }
       }
     }
@@ -327,80 +331,82 @@ export function AdminShopOrderCustomerInformation() {
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
-        if (order.price) {
-          const discountPercentage = order.promo_discount_percentage;
-          const discount = discountPercentage
-            ? order.price * parseFloat(discountPercentage)
-            : 0;
-          let deal_products_promo_includes = order.deal_products_promo_include;
+        const discountPercentage = order.promo_discount_percentage;
+        const discount = discountPercentage
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
+          : 0;
+        let deal_products_promo_includes = order.deal_products_promo_include;
 
-          if (deal_products_promo_includes) {
-            let deal_products_promo_include_match = null;
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
 
-            for (let x = 0; x < deal_products_promo_includes.length; x++) {
-              const deal_products_promo_include =
-                deal_products_promo_includes[x];
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
 
               if (
-                deal_products_promo_include.product_id === order.product_id &&
-                deal_products_promo_include.product_variant_option_tb_id &&
-                order.quantity >= deal_products_promo_include.quantity + 1
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
               ) {
-                deal_products_promo_include_match = deal_products_promo_include;
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
 
-                break;
+                addedObtainable.push(val);
               }
             }
-
-            if (deal_products_promo_include_match) {
-              let addedObtainable: Array<{
-                product_id: number;
-                price: number;
-                product_variant_option_tb_id: number;
-                promo_discount_percentage: string;
-              }> = [];
-              let obtainableDiscountedPrice = 0;
-              let obtainablePrice = 0;
-
-              for (
-                let y = 0;
-                y < deal_products_promo_include_match.obtainable.length;
-                y++
-              ) {
-                const val = deal_products_promo_include_match.obtainable[y];
-
-                if (
-                  val.price &&
-                  val.promo_discount_percentage &&
-                  !addedObtainable.some(
-                    (value) => value.product_id === val.product_id
-                  )
-                ) {
-                  obtainableDiscountedPrice +=
-                    val.price -
-                    val.price * parseFloat(val.promo_discount_percentage);
-                  obtainablePrice += val.price;
-
-                  addedObtainable.push(val);
-                }
-              }
-              if (deal_products_promo_include_match.obtainable.length > 0) {
-                calculatedPrice +=
-                  obtainableDiscountedPrice + order.price - obtainablePrice;
-              } else {
-                calculatedPrice +=
-                  order.price -
-                  order.price *
-                    parseFloat(
-                      deal_products_promo_include_match.promo_discount_percentage
-                    );
-              }
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
             } else {
-              calculatedPrice += order.price - discount;
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
             }
           } else {
-            calculatedPrice += order.price - discount;
+            calculatedPrice += parseFloat(order.price) - discount;
           }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
         }
       }
     }
@@ -442,25 +448,20 @@ export function AdminShopOrderCustomerInformation() {
   const calculateTotalPrice = (item: {
     order_item_id: number | null;
     product_id: number | null;
-    deal_id: number | null;
-    deal_order_item_id: number | null;
-    price: number | null;
-    product_price: number | null;
+    price: string;
+    product_price: string;
     quantity: number;
     remarks: string;
     name: string;
     description: string;
     add_details: string;
-    product_label?: string;
-    alias?: string;
+    product_label: string | null;
 
-    deal_name?: string;
-    deal_description?: string;
-    promo_discount_percentage?: string;
+    promo_discount_percentage: string | null;
 
     deal_products_promo_include: Array<{
       id: number;
-      quantity: number;
+      quantity: number | null;
       product_id: number;
       product_hash: string;
       product_variant_option_tb_id: number | null;
@@ -480,7 +481,7 @@ export function AdminShopOrderCustomerInformation() {
         <>
           <span className="text-sm line-through">
             <NumberFormat
-              value={(item.price ?? 0).toFixed(2)}
+              value={parseFloat(item.price).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
               prefix={"₱"}
@@ -490,8 +491,9 @@ export function AdminShopOrderCustomerInformation() {
           <span>
             <NumberFormat
               value={(
-                (item.price ?? 0) -
-                (item.price ?? 0) * parseFloat(item.promo_discount_percentage)
+                parseFloat(item.price) -
+                parseFloat(item.price) *
+                  parseFloat(item.promo_discount_percentage)
               ).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
@@ -508,8 +510,7 @@ export function AdminShopOrderCustomerInformation() {
 
         if (
           deal_products_promo_include.product_id === item.product_id &&
-          deal_products_promo_include.product_variant_option_tb_id &&
-          item.quantity >= deal_products_promo_include.quantity + 1
+          deal_products_promo_include.product_variant_option_tb_id
         ) {
           deal_products_promo_include_match = deal_products_promo_include;
 
@@ -549,12 +550,16 @@ export function AdminShopOrderCustomerInformation() {
           }
         }
 
-        if (deal_products_promo_include_match.obtainable.length > 0) {
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          item.quantity >= deal_products_promo_include_match.quantity + 1
+        ) {
           return (
             <>
               <span className="text-sm line-through">
                 <NumberFormat
-                  value={(item.price ?? 0).toFixed(2)}
+                  value={parseFloat(item.price).toFixed(2)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={"₱"}
@@ -565,7 +570,7 @@ export function AdminShopOrderCustomerInformation() {
                 <NumberFormat
                   value={(
                     obtainableDiscountedPrice +
-                    (item.price ?? 0) -
+                    parseFloat(item.price) -
                     obtainablePrice
                   ).toFixed(2)}
                   displayType={"text"}
@@ -581,7 +586,7 @@ export function AdminShopOrderCustomerInformation() {
             <>
               <span className="text-sm line-through">
                 <NumberFormat
-                  value={(item.price ?? 0).toFixed(2)}
+                  value={parseFloat(item.price).toFixed(2)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={"₱"}
@@ -591,8 +596,8 @@ export function AdminShopOrderCustomerInformation() {
               <span>
                 <NumberFormat
                   value={(
-                    (item.price ?? 0) -
-                    (item.price ?? 0) *
+                    parseFloat(item.price) -
+                    parseFloat(item.price) *
                       parseFloat(
                         deal_products_promo_include.promo_discount_percentage
                       )
@@ -608,7 +613,7 @@ export function AdminShopOrderCustomerInformation() {
       } else {
         return (
           <NumberFormat
-            value={(item.price ?? 0).toFixed(2)}
+            value={parseFloat(item.price).toFixed(2)}
             displayType={"text"}
             thousandSeparator={true}
             prefix={"₱"}
@@ -618,7 +623,7 @@ export function AdminShopOrderCustomerInformation() {
     } else {
       return (
         <NumberFormat
-          value={(item.price ?? 0).toFixed(2)}
+          value={parseFloat(item.price).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -966,39 +971,21 @@ export function AdminShopOrderCustomerInformation() {
                         scope="row"
                         className="px-6 py-4 font-medium text-secondary"
                       >
-                        {item.deal_order_item_id ? (
-                          <>
-                            <span className=" !text-green-700 font-bold">
-                              Deal Applied:{" "}
-                            </span>
-                            <br />
-                            {item.alias ? (
-                              <span className="font-bold">{item.alias}</span>
-                            ) : null}
-                            <br />
-                            <span className="whitespace-pre-wrap">
-                              {item.deal_name}
-                              <br />
-                              {item.deal_description}
-                            </span>
-                          </>
-                        ) : (
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: item.product_label
-                                ? item.product_label +
-                                  " " +
-                                  item.name +
-                                  (item.add_details
-                                    ? " , " + item.add_details
-                                    : "")
-                                : item.name +
-                                  (item.add_details
-                                    ? " , " + item.add_details
-                                    : ""),
-                            }}
-                          />
-                        )}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.product_label
+                              ? item.product_label +
+                                " " +
+                                item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : "")
+                              : item.name +
+                                (item.add_details
+                                  ? " , " + item.add_details
+                                  : ""),
+                          }}
+                        />
                       </th>
                       <td className="px-6 py-4">
                         <span
@@ -1013,7 +1000,9 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={(item.product_price ?? 0).toFixed(2)}
+                                value={parseFloat(item.product_price).toFixed(
+                                  2
+                                )}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -1023,8 +1012,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  (item.product_price ?? 0) -
-                                  (item.product_price ?? 0) *
+                                  parseFloat(item.product_price) -
+                                  parseFloat(item.product_price) *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -1035,7 +1024,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={(item.product_price ?? 0).toFixed(2)}
+                            value={parseFloat(item.product_price).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -1044,6 +1033,63 @@ export function AdminShopOrderCustomerInformation() {
                       </td>
                       <td className="px-6 py-4 text-end">
                         {calculateTotalPrice(item)}
+                      </td>
+                    </tr>
+                  ))}
+
+                  {getAdminShopOrderState.data.deal_items.map((item, i) => (
+                    <tr key={i}>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-secondary"
+                      >
+                        <>
+                          <span className=" !text-green-700 font-bold">
+                            Deal Applied:{" "}
+                          </span>
+                          <br />
+                          {item.alias ? (
+                            <span className="font-bold">{item.alias}</span>
+                          ) : null}
+                          <br />
+                          <span className="whitespace-pre-wrap">
+                            {item.name}
+                            <br />
+                            {item.description}
+                          </span>
+                        </>
+                      </th>
+                      <td className="px-6 py-4">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.remarks,
+                          }}
+                        />
+                      </td>
+                      <td className="px-6 py-4">{item.quantity}</td>
+                      <td className="px-6 py-4 text-end">
+                        {item.product_price ? (
+                          <NumberFormat
+                            value={parseFloat(item.product_price).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        ) : (
+                          "₱0.00"
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-end">
+                        {item.price ? (
+                          <NumberFormat
+                            value={parseFloat(item.price).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        ) : (
+                          "₱0.00"
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -1132,39 +1178,19 @@ export function AdminShopOrderCustomerInformation() {
                 {getAdminShopOrderState.data.items.map((item, i) => (
                   <div className="py-2 border-b">
                     <p className="mb-2 text-xs leading-1 text-semibold">
-                      {item.deal_order_item_id ? (
-                        <>
-                          <span className=" !text-green-700 font-bold">
-                            Deal Applied:{" "}
-                          </span>
-                          <br />
-                          {item.alias ? (
-                            <span className="font-bold">{item.alias}</span>
-                          ) : null}
-                          <br />
-                          <span className="whitespace-pre-wrap">
-                            {item.deal_name}
-                            <br />
-                            {item.deal_description}
-                          </span>
-                        </>
-                      ) : (
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: item.product_label
-                              ? item.product_label +
-                                " " +
-                                item.name +
-                                (item.add_details
-                                  ? " , " + item.add_details
-                                  : "")
-                              : item.name +
-                                (item.add_details
-                                  ? " , " + item.add_details
-                                  : ""),
-                          }}
-                        />
-                      )}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: item.product_label
+                            ? item.product_label +
+                              " " +
+                              item.name +
+                              (item.add_details ? " , " + item.add_details : "")
+                            : item.name +
+                              (item.add_details
+                                ? " , " + item.add_details
+                                : ""),
+                        }}
+                      />
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Remarks:</span>
@@ -1186,7 +1212,7 @@ export function AdminShopOrderCustomerInformation() {
                           <span className="text-xs font-bold">Price:</span>
                           <span className="text-xs line-through">
                             <NumberFormat
-                              value={item.product_price.toFixed(2)}
+                              value={parseFloat(item.product_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -1201,8 +1227,8 @@ export function AdminShopOrderCustomerInformation() {
                           <span className="text-xs">
                             <NumberFormat
                               value={(
-                                item.product_price -
-                                item.product_price *
+                                parseFloat(item.product_price) -
+                                parseFloat(item.product_price) *
                                   parseFloat(item.promo_discount_percentage)
                               ).toFixed(2)}
                               displayType={"text"}
@@ -1217,7 +1243,7 @@ export function AdminShopOrderCustomerInformation() {
                         <span className="text-xs font-bold">Price:</span>
                         <span className="text-xs">
                           <NumberFormat
-                            value={(item.product_price ?? 0).toFixed(2)}
+                            value={parseFloat(item.product_price).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -1230,11 +1256,68 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={(item.price ?? 0).toFixed(2)}
+                          value={parseFloat(item.price).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
                         />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+
+                {getAdminShopOrderState.data.deal_items.map((item, i) => (
+                  <div className="py-2 border-b">
+                    <p className="mb-2 text-xs leading-1 text-semibold">
+                      <span className=" !text-green-700 font-bold">
+                        Deal Applied:{" "}
+                      </span>
+                      <br />
+                      {item.alias ? (
+                        <span className="font-bold">{item.alias}</span>
+                      ) : null}
+                      <br />
+                      <span className="whitespace-pre-wrap">
+                        {item.name}
+                        <br />
+                        {item.description}
+                      </span>
+                    </p>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Remarks:</span>
+                      <span className="text-xs">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.remarks,
+                          }}
+                        />
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Quantity:</span>
+                      <span className="text-xs">{item.quantity}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Price:</span>
+                      <span className="text-xs">
+                        {/* <NumberFormat
+                          value={parseFloat(item.product_price).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        /> */}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Total:</span>
+                      <span className="text-xs">
+                        {/* <NumberFormat
+                          value={parseFloat(item.price).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        /> */}
                       </span>
                     </div>
                   </div>

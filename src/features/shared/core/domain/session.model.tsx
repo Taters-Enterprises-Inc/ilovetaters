@@ -46,7 +46,7 @@ export interface SessionModel {
     deal_promo_price: number | null;
     deal_products_promo_include: Array<{
       id: number;
-      quantity: number;
+      quantity: number | null;
       product_id: number;
       product_hash: string;
       product_variant_option_tb_id: number | null;

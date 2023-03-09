@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   getDeal,
   GetDealState,
