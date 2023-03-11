@@ -34,6 +34,7 @@ import {
   EditAdminSettingCateringPackageParam,
   CopyAdminSettingCateringPackageParam,
   UpdateAdminSettingCateringPackageStatusParam,
+  CreateAdminSettingPopclubDealParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -82,6 +83,7 @@ import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/
 import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get-admin-setting-popclub-deals.model";
 import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-category.model";
 import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
+import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -668,6 +670,40 @@ export interface GetAdminSettingDealProductsResponse {
     message: string;
     data: Array<AdminPopclubProduct>;
   };
+}
+
+export interface GetAdminPopclubStoresResponse {
+  data: {
+    message: string;
+    data: Array<PopclubStoreModel>;
+  };
+}
+
+export interface CreateAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function CreateAdminSettingPopclubDealRepository(
+  param: CreateAdminSettingPopclubDealParam
+): Promise<CreateAdminSettingPopclubDealResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubStoresRepository(): Promise<GetAdminPopclubStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/popclub`, {
+    withCredentials: true,
+  });
 }
 export function GetAdminSettingDealProductsRepository(): Promise<GetAdminSettingDealProductsResponse> {
   return axios.get(

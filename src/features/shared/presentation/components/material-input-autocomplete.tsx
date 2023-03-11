@@ -6,7 +6,7 @@ import { SxProps, Theme } from "@mui/material/styles";
 import { MaterialInput } from "./material-input";
 
 interface MaterialInputAutoCompleteProps {
-  colorTheme: "black" | "white";
+  colorTheme: "black" | "white" | "blue" | "green";
   options: readonly any[];
   defaultValue?: any;
   multiple?: any;

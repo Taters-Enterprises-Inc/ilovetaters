@@ -336,3 +336,31 @@ export interface UpdateAdminSettingCateringPackageStatusParam {
   package_id: number;
   status: number;
 }
+
+export interface CreateAdminSettingPopclubDealParam {
+  alias: string;
+  name: string;
+  originalPrice: string;
+  promoPrice: string;
+  promoDiscountPercentage: string;
+  minimumPurchase: string;
+  isFreeDelivery: boolean;
+  description: string;
+  secondsBeforeExpiration: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  availableStartDateTime: string;
+  availableEndDateTime: string;
+  dealAvailability: boolean;
+
+  availableDays: string;
+  categories: string;
+  excludedProducts: string;
+  includedProducts: string;
+  products: string;
+  stores: string;
+
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}

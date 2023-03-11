@@ -199,6 +199,8 @@ import updateAdminSettingCateringPackageStatus from "features/admin/presentation
 import getAdminSettingPopclubDeals from "features/admin/presentation/slices/get-admin-setting-popclub-deals.slice";
 import getAdminPopclubCategories from "features/admin/presentation/slices/get-admin-popclub-categories.slice";
 import getAdminSettingDealProducts from "features/admin/presentation/slices/get-admin-setting-deal-products.slice";
+import getAdminPopclubStores from "features/admin/presentation/slices/get-admin-popclub-stores.slice";
+import createAdminSettingPopclubDeal from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
 
 export const store = configureStore({
   reducer: {
@@ -401,6 +403,8 @@ export const store = configureStore({
     getAdminSettingPopclubDeals,
     getAdminPopclubCategories,
     getAdminSettingDealProducts,
+    getAdminPopclubStores,
+    createAdminSettingPopclubDeal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

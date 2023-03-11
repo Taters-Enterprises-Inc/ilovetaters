@@ -30,9 +30,34 @@ import {
   selectGetAdminSettingDealProducts,
 } from "../slices/get-admin-setting-deal-products.slice";
 import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
+import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
+import {
+  selectGetAdminPopclubStores,
+  getAdminPopclubStores,
+  GetAdminPopclubStoresState,
+} from "../slices/get-admin-popclub-stores.slice";
+import {
+  createAdminSettingPopclubDeal,
+  CreateAdminSettingPopclubDealState,
+  resetCreateAdminSettingPopclubDealState,
+  selectCreateAdminSettingPopclubDeal,
+} from "../slices/create-admin-setting-popclub-deal.slice";
 
 interface ExcludedProduct {
   product: AdminPopclubProduct | null;
+}
+
+interface ObtainableProduct {
+  product: AdminPopclubProduct | null;
+  quantity: string;
+  promoDiscountPercentage: string;
+}
+
+interface IncludedProduct {
+  product: AdminPopclubProduct | null;
+  quantity: string;
+  promoDiscountPercentage: string;
+  obtainableProducts: Array<ObtainableProduct>;
 }
 
 interface DealProduct {
@@ -61,10 +86,13 @@ export function AdminSettingPopclubCreateDeal() {
     availableEndTime: Moment | null;
     availableStartDateTime: Moment | null;
     availableEndDateTime: Moment | null;
+    dealAvailability: boolean;
     availableDays: Array<string>;
     categories: Array<AdminPopclubCategory>;
     excludedProducts: Array<ExcludedProduct>;
+    includedProducts: Array<IncludedProduct>;
     products: Array<DealProduct>;
+    stores: Array<PopclubStoreModel>;
     image500x500: File | string;
     image250x250: File | string;
     image75x75: File | string;
@@ -82,9 +110,12 @@ export function AdminSettingPopclubCreateDeal() {
     availableEndTime: null,
     availableStartDateTime: null,
     availableEndDateTime: null,
+    dealAvailability: false,
     availableDays: [],
     products: [],
+    stores: [],
     excludedProducts: [],
+    includedProducts: [],
     categories: [],
     image500x500: "",
     image250x250: "",
@@ -99,10 +130,40 @@ export function AdminSettingPopclubCreateDeal() {
     selectGetAdminSettingDealProducts
   );
 
+  const getAdminPopclubStoresState = useAppSelector(
+    selectGetAdminPopclubStores
+  );
+
+  const createAdminSettingPopclubDealState = useAppSelector(
+    selectCreateAdminSettingPopclubDeal
+  );
+
   useEffect(() => {
     dispatch(getAdminPopclubCategories());
     dispatch(getAdminSettingDealProducts());
+    dispatch(getAdminPopclubStores());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      createAdminSettingPopclubDealState.status ===
+      CreateAdminSettingPopclubDealState.success
+    ) {
+      navigate("/admin/setting/deal");
+      dispatch(resetCreateAdminSettingPopclubDealState());
+    }
+  }, [createAdminSettingPopclubDealState, dispatch, navigate]);
+
+  useEffect(() => {
+    const stores = getAdminPopclubStoresState.data;
+    if (
+      getAdminPopclubStoresState.status ===
+        GetAdminPopclubStoresState.success &&
+      stores
+    ) {
+      setFormState((f) => ({ ...f, stores }));
+    }
+  }, [getAdminPopclubStoresState]);
 
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
@@ -132,12 +193,45 @@ export function AdminSettingPopclubCreateDeal() {
 
     dispatch(
       openMessageModal({
-        message: "Are you sure you want to create the package ?",
+        message: "Are you sure you want to create the deal ?",
         buttons: [
           {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
+              if (
+                formState.availableStartTime &&
+                formState.availableEndTime &&
+                formState.availableStartDateTime &&
+                formState.availableEndDateTime
+              ) {
+                dispatch(
+                  createAdminSettingPopclubDeal({
+                    ...formState,
+                    availableStartTime:
+                      formState.availableStartTime.format("HH:mm:ss"),
+                    availableEndTime:
+                      formState.availableEndTime.format("HH:mm:ss"),
+                    availableStartDateTime:
+                      formState.availableStartDateTime.format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      ),
+                    availableEndDateTime: formState.availableEndDateTime.format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    ),
+                    stores: JSON.stringify(formState.stores),
+                    categories: JSON.stringify(formState.categories),
+                    excludedProducts: JSON.stringify(
+                      formState.excludedProducts
+                    ),
+                    includedProducts: JSON.stringify(
+                      formState.includedProducts
+                    ),
+                    products: JSON.stringify(formState.products),
+                    availableDays: formState.availableDays.toString(),
+                  })
+                );
+              }
               dispatch(closeMessageModal());
             },
           },
@@ -163,6 +257,36 @@ export function AdminSettingPopclubCreateDeal() {
           quantity: "",
         },
       ],
+    });
+  };
+
+  const handleIncludedProducts = () => {
+    setFormState({
+      ...formState,
+      includedProducts: [
+        ...formState.includedProducts,
+        {
+          product: null,
+          quantity: "",
+          promoDiscountPercentage: "",
+          obtainableProducts: [],
+        },
+      ],
+    });
+  };
+
+  const handleAddObtainable = (index: number) => {
+    const copyIncludedProducts = [...formState.includedProducts];
+
+    copyIncludedProducts[index].obtainableProducts.push({
+      product: null,
+      quantity: "",
+      promoDiscountPercentage: "",
+    });
+
+    setFormState({
+      ...formState,
+      includedProducts: copyIncludedProducts,
     });
   };
 
@@ -222,116 +346,46 @@ export function AdminSettingPopclubCreateDeal() {
               fullWidth
             />
 
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.originalPrice}
-              name="originalPrice"
-              label="Original Price"
-              fullWidth
-            />
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.promoPrice}
-              name="promoPrice"
-              label="Promo Price"
-              fullWidth
-            />
-
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.promoDiscountPercentage}
-              name="promoDiscountPercentage"
-              label="Promo Discount Percentage"
-              fullWidth
-            />
-
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.minimumPurchase}
-              name="minimumPurchase"
-              label="Minimum Purchase"
-              fullWidth
-            />
-
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.secondsBeforeExpiration}
-              name="secondsBeforeExpiration"
-              label="Seconds Before Expiration"
-              fullWidth
-            />
-
-            <div className="space-x-2">
-              <MaterialTimeInput
+            <div className="flex space-x-2">
+              <MaterialInput
                 colorTheme="black"
-                label="Available Start Time"
-                onChange={(newValue) => {
-                  if (newValue)
-                    setFormState({
-                      ...formState,
-                      availableStartTime: moment(newValue, "HH:mm:ss"),
-                    });
-                }}
-                value={formState.availableStartTime}
+                onChange={handleInputChange}
+                value={formState.originalPrice}
+                name="originalPrice"
+                label="Original Price"
+                type="number"
+                fullWidth
               />
-
-              <MaterialTimeInput
+              <MaterialInput
                 colorTheme="black"
-                label="Available End Time"
-                onChange={(newValue) => {
-                  if (newValue)
-                    setFormState({
-                      ...formState,
-                      availableEndTime: moment(newValue, "HH:mm:ss"),
-                    });
-                }}
-                value={formState.availableEndTime}
+                onChange={handleInputChange}
+                value={formState.promoPrice}
+                name="promoPrice"
+                label="Promo Price"
+                type="number"
+                fullWidth
               />
             </div>
 
             <div className="flex space-x-2">
-              <MaterialDateTimeInput
+              <MaterialInput
                 colorTheme="black"
-                label="Available Start Date Time"
-                openCalendar={openStartEventCalendar}
-                setOpenCalendar={(val) => {
-                  setOpenStartEventCalendar(val);
-                }}
-                onChange={(newValue) => {
-                  if (newValue)
-                    setFormState({
-                      ...formState,
-                      availableStartDateTime: moment(newValue, "HH:mm:ss"),
-                    });
-                }}
-                value={formState.availableStartDateTime}
+                onChange={handleInputChange}
+                value={formState.promoDiscountPercentage}
+                name="promoDiscountPercentage"
+                label="Promo Discount Percentage"
+                type="number"
+                fullWidth
               />
 
-              <MaterialDateTimeInput
+              <MaterialInput
                 colorTheme="black"
-                label="Available End Date Time"
-                openCalendar={openEndEventCalendar}
-                setOpenCalendar={(val) => {
-                  setOpenEndEventCalendar(val);
-                }}
-                onChange={(newValue) => {
-                  if (newValue)
-                    setFormState({
-                      ...formState,
-                      availableEndDateTime: moment(newValue, "HH:mm:ss"),
-                    });
-                }}
-                value={formState.availableEndDateTime}
+                onChange={handleInputChange}
+                value={formState.minimumPurchase}
+                name="minimumPurchase"
+                label="Minimum Purchase"
+                fullWidth
+                type="number"
               />
             </div>
 
@@ -360,16 +414,6 @@ export function AdminSettingPopclubCreateDeal() {
               filterSelectedOptions
             />
 
-            <MaterialSwitch
-              label="Is Free Delivery"
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  isFreeDelivery: e.target.checked,
-                });
-              }}
-              checked={formState.isFreeDelivery}
-            />
             {getAdminPopclubCategoriesState.data ? (
               <MaterialInputAutoComplete
                 label="Select Categories"
@@ -393,6 +437,96 @@ export function AdminSettingPopclubCreateDeal() {
               />
             ) : null}
 
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.secondsBeforeExpiration}
+              name="secondsBeforeExpiration"
+              label="Seconds Before Expiration"
+              type="number"
+              fullWidth
+            />
+
+            <div className="flex space-x-2 ">
+              <MaterialTimeInput
+                colorTheme="black"
+                label="Available Start Time"
+                onChange={(newValue) => {
+                  if (newValue)
+                    setFormState({
+                      ...formState,
+                      availableStartTime: moment(newValue, "HH:mm:ss"),
+                    });
+                }}
+                fullWidth
+                value={formState.availableStartTime}
+              />
+
+              <MaterialTimeInput
+                colorTheme="black"
+                label="Available End Time"
+                onChange={(newValue) => {
+                  if (newValue)
+                    setFormState({
+                      ...formState,
+                      availableEndTime: moment(newValue, "HH:mm:ss"),
+                    });
+                }}
+                fullWidth
+                value={formState.availableEndTime}
+              />
+            </div>
+
+            <div className="flex space-x-2">
+              <MaterialDateTimeInput
+                colorTheme="black"
+                label="Available Start Date Time"
+                openCalendar={openStartEventCalendar}
+                setOpenCalendar={(val) => {
+                  setOpenStartEventCalendar(val);
+                }}
+                onChange={(newValue) => {
+                  if (newValue)
+                    setFormState({
+                      ...formState,
+                      availableStartDateTime: moment(newValue, "HH:mm:ss"),
+                    });
+                }}
+                fullWidth
+                value={formState.availableStartDateTime}
+              />
+
+              <MaterialDateTimeInput
+                colorTheme="black"
+                label="Available End Date Time"
+                openCalendar={openEndEventCalendar}
+                setOpenCalendar={(val) => {
+                  setOpenEndEventCalendar(val);
+                }}
+                onChange={(newValue) => {
+                  if (newValue)
+                    setFormState({
+                      ...formState,
+                      availableEndDateTime: moment(newValue, "HH:mm:ss"),
+                    });
+                }}
+                fullWidth
+                value={formState.availableEndDateTime}
+              />
+            </div>
+
+            <MaterialSwitch
+              label="Is Free Delivery"
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  isFreeDelivery: e.target.checked,
+                });
+              }}
+              checked={formState.isFreeDelivery}
+            />
+
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Products
             </h1>
@@ -409,7 +543,7 @@ export function AdminSettingPopclubCreateDeal() {
                     isOptionEqualToValue={(option, value) =>
                       option.id === value.id
                     }
-                    value={formState.products[productIndex]}
+                    value={formState.products[productIndex].product}
                     onChange={(e, product) => {
                       const copyProducts = [...formState.products];
                       copyProducts[productIndex].product = product;
@@ -423,6 +557,7 @@ export function AdminSettingPopclubCreateDeal() {
 
                 <MaterialInput
                   colorTheme="black"
+                  type="number"
                   onChange={(e) => {
                     const copyProducts = [...formState.products];
                     copyProducts[productIndex].quantity = e.target.value;
@@ -463,6 +598,236 @@ export function AdminSettingPopclubCreateDeal() {
             >
               <AiOutlinePlus className="text-sm" />
               <span className="text-sm font-semibold">Add Product</span>
+            </button>
+
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Included Products
+            </h1>
+
+            {formState.includedProducts.map(
+              (includedProduct, includedProductIndex) => (
+                <div key={includedProductIndex} className="space-y-2">
+                  <div className="flex space-x-2">
+                    {getAdminSettingDealProductsState.data ? (
+                      <MaterialInputAutoComplete
+                        label="Select Product"
+                        fullWidth
+                        colorTheme="green"
+                        options={getAdminSettingDealProductsState.data}
+                        getOptionLabel={(option) => option.name ?? ""}
+                        isOptionEqualToValue={(option, value) =>
+                          option.id === value.id
+                        }
+                        value={
+                          formState.includedProducts[includedProductIndex]
+                            .product
+                        }
+                        onChange={(e, product) => {
+                          const copyIncludedProducts = [
+                            ...formState.includedProducts,
+                          ];
+                          copyIncludedProducts[includedProductIndex].product =
+                            product;
+                          setFormState({
+                            ...formState,
+                            includedProducts: copyIncludedProducts,
+                          });
+                        }}
+                      />
+                    ) : null}
+
+                    <MaterialInput
+                      colorTheme="green"
+                      onChange={(e) => {
+                        const copyIncludedProducts = [
+                          ...formState.includedProducts,
+                        ];
+                        copyIncludedProducts[includedProductIndex].quantity =
+                          e.target.value;
+                        setFormState({
+                          ...formState,
+                          includedProducts: copyIncludedProducts,
+                        });
+                      }}
+                      value={includedProduct.quantity}
+                      name="quantity"
+                      required
+                      label="Quantity"
+                      type="number"
+                      fullWidth
+                    />
+
+                    <MaterialInput
+                      colorTheme="green"
+                      onChange={(e) => {
+                        const copyIncludedProducts = [
+                          ...formState.includedProducts,
+                        ];
+                        copyIncludedProducts[
+                          includedProductIndex
+                        ].promoDiscountPercentage = e.target.value;
+                        setFormState({
+                          ...formState,
+                          includedProducts: copyIncludedProducts,
+                        });
+                      }}
+                      value={includedProduct.promoDiscountPercentage}
+                      name="promoDiscountPercentage"
+                      required
+                      label="Discount Percentage"
+                      type="number"
+                      fullWidth
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        let copyIncludedProducts = [
+                          ...formState.includedProducts,
+                        ];
+                        copyIncludedProducts = copyIncludedProducts.filter(
+                          (value, index) => index !== includedProductIndex
+                        );
+                        setFormState({
+                          ...formState,
+                          includedProducts: copyIncludedProducts,
+                        });
+                      }}
+                      className="text-2xl"
+                    >
+                      <AiOutlineClose />
+                    </button>
+                  </div>
+                  {includedProduct.obtainableProducts.map(
+                    (obtainableProduct, obtainableProductsIndex) => (
+                      <div
+                        key={obtainableProductsIndex}
+                        className="flex space-x-2"
+                      >
+                        {getAdminSettingDealProductsState.data ? (
+                          <MaterialInputAutoComplete
+                            label="Select Product"
+                            fullWidth
+                            colorTheme="blue"
+                            options={getAdminSettingDealProductsState.data}
+                            getOptionLabel={(option) => option.name ?? ""}
+                            isOptionEqualToValue={(option, value) =>
+                              option.id === value.id
+                            }
+                            value={obtainableProduct.product}
+                            onChange={(e, product) => {
+                              const copyIncludedProducts = [
+                                ...formState.includedProducts,
+                              ];
+                              copyIncludedProducts[
+                                includedProductIndex
+                              ].obtainableProducts[
+                                obtainableProductsIndex
+                              ].product = product;
+                              setFormState({
+                                ...formState,
+                                includedProducts: copyIncludedProducts,
+                              });
+                            }}
+                          />
+                        ) : null}
+
+                        <MaterialInput
+                          colorTheme="blue"
+                          onChange={(e) => {
+                            const copyIncludedProducts = [
+                              ...formState.includedProducts,
+                            ];
+                            copyIncludedProducts[
+                              includedProductIndex
+                            ].obtainableProducts[
+                              obtainableProductsIndex
+                            ].quantity = e.target.value;
+                            setFormState({
+                              ...formState,
+                              includedProducts: copyIncludedProducts,
+                            });
+                          }}
+                          value={obtainableProduct.quantity}
+                          name="quantity"
+                          required
+                          label="Quantity"
+                          type="number"
+                          fullWidth
+                        />
+
+                        <MaterialInput
+                          colorTheme="blue"
+                          onChange={(e) => {
+                            const copyIncludedProducts = [
+                              ...formState.includedProducts,
+                            ];
+                            copyIncludedProducts[
+                              includedProductIndex
+                            ].obtainableProducts[
+                              obtainableProductsIndex
+                            ].promoDiscountPercentage = e.target.value;
+                            setFormState({
+                              ...formState,
+                              includedProducts: copyIncludedProducts,
+                            });
+                          }}
+                          value={obtainableProduct.promoDiscountPercentage}
+                          name="promoDiscountPercentage"
+                          required
+                          label="Discount Percentage"
+                          fullWidth
+                        />
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            let copyIncludedProducts = [
+                              ...formState.includedProducts,
+                            ];
+                            copyIncludedProducts[
+                              includedProductIndex
+                            ].obtainableProducts = copyIncludedProducts[
+                              includedProductIndex
+                            ].obtainableProducts.filter(
+                              (value, index) =>
+                                index !== obtainableProductsIndex
+                            );
+                            setFormState({
+                              ...formState,
+                              includedProducts: copyIncludedProducts,
+                            });
+                          }}
+                          className="text-2xl"
+                        >
+                          <AiOutlineClose />
+                        </button>
+                      </div>
+                    )
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddObtainable(includedProductIndex)}
+                    className="flex items-center text-[#003399] space-x-1"
+                  >
+                    <AiOutlinePlus className="text-sm" />
+                    <span className="text-sm font-semibold ">
+                      Add Obtainable
+                    </span>
+                  </button>
+                </div>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={handleIncludedProducts}
+              className="flex items-center space-x-1 text-[#006600]"
+            >
+              <AiOutlinePlus className="text-sm" />
+              <span className="text-sm font-semibold">
+                Add Included Product
+              </span>
             </button>
 
             {getAdminSettingDealProductsState.data ? (
@@ -533,11 +898,50 @@ export function AdminSettingPopclubCreateDeal() {
           </div>
         </div>
 
+        {getAdminPopclubStoresState.data ? (
+          <>
+            <h1 className="text-2xl font-bold text-secondary !my-2">
+              Store Selection
+            </h1>
+            <MaterialSwitch
+              label={
+                "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
+              }
+              checked={formState.dealAvailability}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  dealAvailability: e.target.checked,
+                });
+              }}
+            />
+
+            <MaterialInputAutoComplete
+              label="Select Stores"
+              colorTheme="black"
+              multiple
+              options={getAdminPopclubStoresState.data}
+              getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              value={formState.stores ? [...formState.stores] : []}
+              onChange={(e, stores) => {
+                setFormState({
+                  ...formState,
+                  stores,
+                });
+              }}
+              filterSelectedOptions
+            />
+          </>
+        ) : null}
+
         <button
           type="submit"
           className="px-4 py-2 text-white rounded-lg bg-button w-fit"
         >
-          Create Product
+          Create Deal
         </button>
       </form>
     </>
