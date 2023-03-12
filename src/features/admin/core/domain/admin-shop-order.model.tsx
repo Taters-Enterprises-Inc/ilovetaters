@@ -27,27 +27,20 @@ export interface AdminShopOrderModel {
   fb_user_id: number | null;
   mobile_user_id: number | null;
   items: Array<{
-    deal_id: number | null;
-    product_id: number | null;
-    order_item_id: number | null;
-    deal_order_item_id: number | null;
-    price: number | null;
-    product_price: number | null;
+    product_id: number;
+    order_item_id: number;
+    price: string;
+    product_price: string;
     quantity: number;
     remarks: string;
     name: string;
     description: string;
     add_details: string;
-    product_label?: string;
-    alias?: string;
-
-    deal_name?: string;
-    deal_description?: string;
-    promo_discount_percentage?: string;
-
+    product_label: string | null;
+    promo_discount_percentage: string | null;
     deal_products_promo_include: Array<{
       id: number;
-      quantity: number;
+      quantity: number | null;
       product_id: number;
       product_hash: string;
       product_variant_option_tb_id: number | null;
@@ -59,5 +52,16 @@ export interface AdminShopOrderModel {
         promo_discount_percentage: string;
       }>;
     }>;
+  }>;
+  deal_items: Array<{
+    deal_id: string;
+    deal_order_item_id: string;
+    price: string | null;
+    product_price: string | null;
+    quantity: number;
+    remarks: string;
+    name: string;
+    alias: string;
+    description: string;
   }>;
 }

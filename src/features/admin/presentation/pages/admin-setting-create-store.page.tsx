@@ -232,7 +232,7 @@ export function AdminSettingCreateStore() {
               ]}
               getOptionLabel={(option) => option}
               isOptionEqualToValue={(option, value) => option === value}
-              value={formState.services ? [...formState.services] : []}
+              value={formState.services}
               onChange={(e, services) => {
                 setFormState({
                   ...formState,

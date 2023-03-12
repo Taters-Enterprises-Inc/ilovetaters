@@ -338,6 +338,10 @@ import {
   CopyAdminSettingCateringPackageState,
   selectCopyAdminSettingCateringPackage,
 } from "features/admin/presentation/slices/copy-admin-setting-catering-package.slice";
+import {
+  CreateAdminSettingPopclubDealState,
+  selectCreateAdminSettingPopclubDeal,
+} from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -529,6 +533,28 @@ export function LoadingAndSnackbarWrapper() {
   const copyAdminSettingCateringPackageState = useAppSelector(
     selectCopyAdminSettingCateringPackage
   );
+  const createAdminSettingPopclubDealState = useAppSelector(
+    selectCreateAdminSettingPopclubDeal
+  );
+
+  useEffect(() => {
+    switch (createAdminSettingPopclubDealState.status) {
+      case CreateAdminSettingPopclubDealState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingPopclubDealState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingPopclubDealState.success:
+        showAlert(setSuccessAlert, createAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingPopclubDealState.fail:
+        showAlert(setFailsAlert, createAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingPopclubDealState]);
 
   useEffect(() => {
     switch (copyAdminSettingCateringPackageState.status) {

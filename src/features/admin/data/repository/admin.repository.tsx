@@ -34,6 +34,7 @@ import {
   EditAdminSettingCateringPackageParam,
   CopyAdminSettingCateringPackageParam,
   UpdateAdminSettingCateringPackageStatusParam,
+  CreateAdminSettingPopclubDealParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -79,6 +80,11 @@ import { CateringStoreModel } from "features/admin/core/domain/catering-store.mo
 import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
 import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
 import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/get-admin-setting-catering-package.model";
+import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get-admin-setting-popclub-deals.model";
+import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-category.model";
+import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
+import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
+import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -644,6 +650,104 @@ export interface UpdateAdminSettingCateringPackageStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingPopclubDealsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealsModel;
+  };
+}
+
+export interface GetAdminPopclubCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubCategory>;
+  };
+}
+
+export interface GetAdminSettingDealProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubProduct>;
+  };
+}
+
+export interface GetAdminPopclubStoresResponse {
+  data: {
+    message: string;
+    data: Array<PopclubStoreModel>;
+  };
+}
+
+export interface CreateAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealModel;
+  };
+}
+
+export function GetAdminSettingPopclubDealRepository(
+  dealId: string
+): Promise<GetAdminSettingPopclubDealResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal?deal-id=${dealId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingPopclubDealRepository(
+  param: CreateAdminSettingPopclubDealParam
+): Promise<CreateAdminSettingPopclubDealResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubStoresRepository(): Promise<GetAdminPopclubStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/popclub`, {
+    withCredentials: true,
+  });
+}
+export function GetAdminSettingDealProductsRepository(): Promise<GetAdminSettingDealProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/deal-shop-products`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubCategoriesRepository(): Promise<GetAdminPopclubCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/popclub/categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingPopclubDealsRepository(
+  query: string
+): Promise<GetAdminSettingPopclubDealsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deals${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function UpdateAdminSettingCateringPackageStatusRepository(

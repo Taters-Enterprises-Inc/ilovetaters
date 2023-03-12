@@ -53,6 +53,7 @@ interface MaterialDateTimeInputProps {
   shouldDisableDate?: ((day: Date) => boolean) | undefined;
   defaultCalendarMonth?: Date | undefined;
   value: any;
+  fullWidth?: boolean;
   openCalendar: boolean;
   setOpenCalendar: (newValue: boolean) => void;
   onChange: (
@@ -64,35 +65,34 @@ interface MaterialDateTimeInputProps {
 export function MaterialDateTimeInput(props: MaterialDateTimeInputProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="space-y-4 lg:space-y-0 lg:space-x-4">
-        <DateTimePicker
-          label={props.label}
-          shouldDisableDate={props.shouldDisableDate}
-          open={props.openCalendar}
-          defaultCalendarMonth={props.defaultCalendarMonth}
-          onOpen={() => props.setOpenCalendar(true)}
-          onClose={() => props.setOpenCalendar(false)}
-          value={props.value}
-          onChange={props.onChange}
-          renderInput={(params) => (
-            <MaterialInput
-              colorTheme={props.colorTheme}
-              {...params}
-              sx={{
-                svg: { color: "white" },
-                input: { color: "white" },
-                label: { color: "white" },
-                borderColor: "white !important",
-              }}
-              autoComplete="off"
-              onClick={() => {
-                props.setOpenCalendar(true);
-              }}
-              className="w-full lg:w-fit"
-            />
-          )}
-        />
-      </div>
+      <DateTimePicker
+        label={props.label}
+        shouldDisableDate={props.shouldDisableDate}
+        open={props.openCalendar}
+        defaultCalendarMonth={props.defaultCalendarMonth}
+        onOpen={() => props.setOpenCalendar(true)}
+        onClose={() => props.setOpenCalendar(false)}
+        value={props.value}
+        onChange={props.onChange}
+        renderInput={(params) => (
+          <MaterialInput
+            colorTheme={props.colorTheme}
+            {...params}
+            fullWidth={props.fullWidth}
+            sx={{
+              svg: { color: "white" },
+              input: { color: "white" },
+              label: { color: "white" },
+              borderColor: "white !important",
+            }}
+            autoComplete="off"
+            onClick={() => {
+              props.setOpenCalendar(true);
+            }}
+            className="w-full lg:w-fit"
+          />
+        )}
+      />
     </LocalizationProvider>
   );
 }

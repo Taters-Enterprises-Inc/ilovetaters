@@ -26,7 +26,6 @@ export interface OrderModel {
       discount_name?: string;
       discount_percentage?: string;
       voucher_id: number;
-      table_number: null;
       store_name: string;
       store_address: string;
       store_contact: string;
@@ -51,8 +50,8 @@ export interface OrderModel {
       promo_price: string;
       sku: null;
       sku_id: null;
-      calc_price: number;
-      product_price: number;
+      calc_price: string;
+      product_price: string;
       product_image: string;
       name: string;
       description: string;

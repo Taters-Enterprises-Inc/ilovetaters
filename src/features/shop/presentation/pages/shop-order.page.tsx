@@ -100,8 +100,8 @@ export function ShopOrder() {
     promo_price: string;
     sku: null;
     sku_id: null;
-    calc_price: number;
-    product_price: number;
+    calc_price: string;
+    product_price: string;
     product_image: string;
     name: string;
     description: string;
@@ -137,7 +137,7 @@ export function ShopOrder() {
         <>
           <h3 className="flex items-end justify-end flex-1 text-sm line-through">
             <NumberFormat
-              value={order.calc_price.toFixed(2)}
+              value={parseFloat(order.calc_price).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
               prefix={"₱"}
@@ -146,8 +146,9 @@ export function ShopOrder() {
           <h3 className="flex items-end justify-end flex-1 text-base">
             <NumberFormat
               value={(
-                order.calc_price -
-                order.calc_price * parseFloat(order.promo_discount_percentage)
+                parseFloat(order.calc_price) -
+                parseFloat(order.calc_price) *
+                  parseFloat(order.promo_discount_percentage)
               ).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
@@ -164,8 +165,7 @@ export function ShopOrder() {
 
         if (
           deal_products_promo_include.product_id === order.product_id &&
-          deal_products_promo_include.product_variant_option_tb_id &&
-          order.quantity >= deal_products_promo_include.quantity + 1
+          deal_products_promo_include.product_variant_option_tb_id
         ) {
           deal_products_promo_include_match = deal_products_promo_include;
 
@@ -205,12 +205,16 @@ export function ShopOrder() {
           }
         }
 
-        if (deal_products_promo_include_match.obtainable.length > 0) {
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          order.quantity >= deal_products_promo_include_match.quantity + 1
+        ) {
           return (
             <>
               <h3 className="flex items-end justify-end flex-1 text-sm line-through">
                 <NumberFormat
-                  value={order.calc_price.toFixed(2)}
+                  value={parseFloat(order.calc_price).toFixed(2)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={"₱"}
@@ -220,7 +224,7 @@ export function ShopOrder() {
                 <NumberFormat
                   value={(
                     obtainableDiscountedPrice +
-                    order.calc_price -
+                    parseFloat(order.calc_price) -
                     obtainablePrice
                   ).toFixed(2)}
                   displayType={"text"}
@@ -236,7 +240,7 @@ export function ShopOrder() {
             <>
               <h3 className="flex items-end justify-end flex-1 text-sm line-through">
                 <NumberFormat
-                  value={order.calc_price.toFixed(2)}
+                  value={parseFloat(order.calc_price).toFixed(2)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={"₱"}
@@ -245,8 +249,8 @@ export function ShopOrder() {
               <h3 className="flex items-end justify-end flex-1 text-base">
                 <NumberFormat
                   value={(
-                    order.calc_price -
-                    order.calc_price *
+                    parseFloat(order.calc_price) -
+                    parseFloat(order.calc_price) *
                       parseFloat(
                         deal_products_promo_include.promo_discount_percentage
                       )
@@ -263,7 +267,7 @@ export function ShopOrder() {
         return (
           <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
             <NumberFormat
-              value={order.calc_price.toFixed(2)}
+              value={parseFloat(order.calc_price).toFixed(2)}
               displayType={"text"}
               thousandSeparator={true}
               prefix={"₱"}
@@ -275,7 +279,7 @@ export function ShopOrder() {
       return (
         <h3 className="flex items-end justify-end flex-1 text-base">
           <NumberFormat
-            value={Number(order.calc_price).toFixed(2)}
+            value={parseFloat(order.calc_price).toFixed(2)}
             displayType={"text"}
             thousandSeparator={true}
             prefix={"₱"}
@@ -650,7 +654,7 @@ export function ShopOrder() {
                     <NumberFormat
                       value={
                         getOrdersState.data?.subtotal
-                          ? parseInt(getOrdersState.data.subtotal).toFixed(2)
+                          ? parseFloat(getOrdersState.data.subtotal).toFixed(2)
                           : 0.0
                       }
                       displayType={"text"}

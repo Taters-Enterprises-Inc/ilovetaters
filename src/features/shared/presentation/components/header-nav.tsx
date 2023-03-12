@@ -254,8 +254,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
             if (
               deal_products_promo_include.product_id === order.prod_id &&
-              deal_products_promo_include.product_variant_option_tb_id &&
-              order.prod_qty >= deal_products_promo_include.quantity + 1
+              deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
 
@@ -296,7 +295,11 @@ export function HeaderNav(props: HeaderNavProps) {
               }
             }
 
-            if (deal_products_promo_include_match.obtainable.length > 0) {
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+            ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
                 order.prod_calc_amount -
