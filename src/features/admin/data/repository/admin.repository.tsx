@@ -84,6 +84,7 @@ import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get
 import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-category.model";
 import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
 import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
+import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -683,6 +684,24 @@ export interface CreateAdminSettingPopclubDealResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealModel;
+  };
+}
+
+export function GetAdminSettingPopclubDealRepository(
+  dealId: string
+): Promise<GetAdminSettingPopclubDealResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal?deal-id=${dealId}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function CreateAdminSettingPopclubDealRepository(

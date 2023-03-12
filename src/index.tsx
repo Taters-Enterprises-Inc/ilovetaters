@@ -74,6 +74,7 @@ import {
   AdminSettingCateringCopyPackage,
   AdminSettingPopClubDeal,
   AdminSettingPopclubCreateDeal,
+  AdminSettingPopclubEditDeal,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -516,6 +517,11 @@ root.render(
                                   <Route
                                     path="create-deal"
                                     element={<AdminSettingPopclubCreateDeal />}
+                                  />
+
+                                  <Route
+                                    path=":id"
+                                    element={<AdminSettingPopclubEditDeal />}
                                   />
                                 </Route>
                               </Route>

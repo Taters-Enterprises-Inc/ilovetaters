@@ -12,7 +12,7 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { FormEvent, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
   closeMessageModal,
@@ -49,10 +49,18 @@ import {
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
 import { AdminDealIncludedProductModel } from "features/admin/core/domain/admin-deal-include-product.model";
 import { AdminDealProductModel } from "features/admin/core/domain/admin-deal-product.model";
+import {
+  getAdminSettingPopclubDeal,
+  GetAdminSettingPopclubDealState,
+  resetGetAdminSettingPopclubDealState,
+  selectGetAdminSettingPopclubDeal,
+} from "../slices/get-admin-setting-popclub-deal.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
-export function AdminSettingPopclubCreateDeal() {
+export function AdminSettingPopclubEditDeal() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
@@ -123,13 +131,20 @@ export function AdminSettingPopclubCreateDeal() {
   const createAdminSettingPopclubDealState = useAppSelector(
     selectCreateAdminSettingPopclubDeal
   );
+  const getAdminSettingPopclubDealState = useAppSelector(
+    selectGetAdminSettingPopclubDeal
+  );
 
   useEffect(() => {
     dispatch(getAdminPopclubCategories());
     dispatch(getAdminSettingDealProducts());
     dispatch(getAdminPopclubStores());
     dispatch(getAdminProducts());
-  }, [dispatch]);
+    if (id) {
+      dispatch(resetGetAdminSettingPopclubDealState());
+      dispatch(getAdminSettingPopclubDeal(id));
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (
@@ -151,6 +166,66 @@ export function AdminSettingPopclubCreateDeal() {
       setFormState((f) => ({ ...f, stores }));
     }
   }, [getAdminPopclubStoresState]);
+
+  useEffect(() => {
+    if (
+      getAdminSettingPopclubDealState.status ===
+        GetAdminSettingPopclubDealState.success &&
+      getAdminSettingPopclubDealState.data
+    ) {
+      setFormState({
+        alias: getAdminSettingPopclubDealState.data.alias,
+        name: getAdminSettingPopclubDealState.data.name,
+        originalPrice: getAdminSettingPopclubDealState.data.original_price,
+        promoPrice: getAdminSettingPopclubDealState.data.promo_price,
+        promoDiscountPercentage:
+          getAdminSettingPopclubDealState.data.promo_discount_price,
+        minimumPurchase: getAdminSettingPopclubDealState.data.minimum_purchase,
+        isFreeDelivery: getAdminSettingPopclubDealState.data.is_free_delivery,
+        description: getAdminSettingPopclubDealState.data.description,
+        secondsBeforeExpiration:
+          getAdminSettingPopclubDealState.data.seconds_before_expiration,
+        availableStartTime: moment(
+          getAdminSettingPopclubDealState.data.available_start_time,
+          "HH:mm:ss"
+        ),
+        availableEndTime: moment(
+          getAdminSettingPopclubDealState.data.available_end_time,
+          "HH:mm:ss"
+        ),
+        availableStartDateTime: moment(
+          getAdminSettingPopclubDealState.data.available_start_datetime,
+          "YYYY-MM-DD HH:mm:ss"
+        ),
+        availableEndDateTime: moment(
+          getAdminSettingPopclubDealState.data.available_end_datetime,
+          "YYYY-MM-DD HH:mm:ss"
+        ),
+        dealAvailability: false,
+        availableDays:
+          getAdminSettingPopclubDealState.data.avialable_days ?? [],
+        products: getAdminSettingPopclubDealState.data.products
+          ? JSON.parse(
+              JSON.stringify(getAdminSettingPopclubDealState.data.products)
+            )
+          : [],
+        stores: getAdminSettingPopclubDealState.data.stores ?? [],
+        excludedProducts:
+          getAdminSettingPopclubDealState.data.excluded_products ?? [],
+        includedProducts: getAdminSettingPopclubDealState.data.included_products
+          ? JSON.parse(
+              JSON.stringify(
+                getAdminSettingPopclubDealState.data.included_products
+              )
+            )
+          : [],
+        categories: getAdminSettingPopclubDealState.data.categories ?? [],
+        image500x500: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getAdminSettingPopclubDealState.data.product_image}`,
+        image250x250: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${getAdminSettingPopclubDealState.data.product_image}`,
+        image75x75: `${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getAdminSettingPopclubDealState.data.product_image}`,
+      });
+    }
+  }, [getAdminSettingPopclubDealState]);
 
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;

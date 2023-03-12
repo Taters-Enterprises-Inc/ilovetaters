@@ -31,3 +31,4 @@ export { AdminSettingCateringEditPackage } from "./admin-setting-catering-edit-p
 export { AdminSettingCateringCopyPackage } from "./admin-setting-catering-copy-package.page";
 export { AdminSettingPopClubDeal } from "./admin-setting-popclub-deal.page";
 export { AdminSettingPopclubCreateDeal } from "./admin-setting-popclub-create-deal.page";
+export { AdminSettingPopclubEditDeal } from "./admin-setting-popclub-edit-deal.page";
