@@ -202,6 +202,12 @@ import getAdminSettingDealProducts from "features/admin/presentation/slices/get-
 import getAdminPopclubStores from "features/admin/presentation/slices/get-admin-popclub-stores.slice";
 import createAdminSettingPopclubDeal from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
 import getAdminSettingPopclubDeal from "features/admin/presentation/slices/get-admin-setting-popclub-deal.slice";
+import applyInfluencer from "features/profile/presentation/slices/apply-influencer.slice";
+import getInfluencer from "features/profile/presentation/slices/get-influencer.slice";
+import updateInfluencer from "features/profile/presentation/slices/update-influencer.slice";
+import getAdminInfluencers from "features/admin/presentation/slices/get-admin-influencers.slice";
+import getAdminInfluencer from "features/admin/presentation/slices/get-admin-influencer.slice";
+import adminInfluencerChangeStatus from "features/admin/presentation/slices/admin-influencer-change-status.slice";
 
 export const store = configureStore({
   reducer: {
@@ -407,6 +413,12 @@ export const store = configureStore({
     getAdminPopclubStores,
     createAdminSettingPopclubDeal,
     getAdminSettingPopclubDeal,
+    applyInfluencer,
+    getInfluencer,
+    updateInfluencer,
+    getAdminInfluencers,
+    getAdminInfluencer,
+    adminInfluencerChangeStatus,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

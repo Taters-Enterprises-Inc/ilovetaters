@@ -30,3 +30,5 @@ export { AdminSearchStoreCoordinates } from "./admin-search-store-coordinates";
 export { AdminSurveyVerificationAudit } from "./admin-survey-verification-audit";
 export { AdminSettingCateringPackages } from "./admin-setting-catering-packages";
 export { AdminSettingPopclubDeals } from "./admin-setting-popclub-deals";
+export { AdminInfluencers } from "./admin-influencers";
+export { AdminIdInfluencerInformation } from "./admin-influencer-id-information";

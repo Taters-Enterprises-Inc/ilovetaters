@@ -39,7 +39,7 @@ export function Tab(props: TabProps) {
                 props.activeTab === tab.active
                   ? "profile-tab-active lg:shadow-[0_3px_10px_rgb(0,0,0,0.5)] text-primary lg:text-secondary"
                   : "text-secondary"
-              } flex w-full font-semibold active space-x-2 items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
+              } flex w-full font-semibold active space-x-2 h-full items-center text-base text-start py-2 lg:py-4 lg:px-6 bg-paper`}
             >
               <div className="relative">
                 {tab.icon}

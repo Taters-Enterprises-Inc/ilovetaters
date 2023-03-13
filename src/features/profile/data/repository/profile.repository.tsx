@@ -4,11 +4,14 @@ import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
+  ApplyInfluencerParam,
   ApplyUserDiscountParam,
+  UpdateInfluencerParam,
   UpdateUserDiscountParam,
 } from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
+import { InfluencerModel } from "features/shared/core/domain/influencer.model";
 
 export interface GetCateringBookingHistoryResponse {
   data: {
@@ -55,6 +58,57 @@ export interface GetInboxResponse {
     message: string;
     data: GetInboxModel;
   };
+}
+
+export interface ApplyInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetInfluencerResponse {
+  data: {
+    message: string;
+    data: InfluencerModel;
+  };
+}
+
+export interface UpdateInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateInfluencerRepository(
+  param: UpdateInfluencerParam
+): Promise<UpdateInfluencerResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/update-influencer`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetInfluencerRepository(): Promise<GetInfluencerResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/influencer`, {
+    withCredentials: true,
+  });
+}
+
+export function ApplyInfluencerRepository(
+  param: ApplyInfluencerParam
+): Promise<ApplyInfluencerResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/profile/influencer`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetInboxRepository(query: string): Promise<GetInboxResponse> {

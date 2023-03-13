@@ -342,6 +342,18 @@ import {
   CreateAdminSettingPopclubDealState,
   selectCreateAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
+import {
+  ApplyInfluencerState,
+  selectApplyInfluencer,
+} from "features/profile/presentation/slices/apply-influencer.slice";
+import {
+  selectUpdateInfluencer,
+  UpdateInfluencerState,
+} from "features/profile/presentation/slices/update-influencer.slice";
+import {
+  AdminInfluencerChangeStatusState,
+  selectAdminInfluencerChangeStatus,
+} from "features/admin/presentation/slices/admin-influencer-change-status.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -536,6 +548,68 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminSettingPopclubDealState = useAppSelector(
     selectCreateAdminSettingPopclubDeal
   );
+  const applyInfluencerState = useAppSelector(selectApplyInfluencer);
+  const updateInfluencerState = useAppSelector(selectUpdateInfluencer);
+  const adminInfluencerChangeStatusState = useAppSelector(
+    selectAdminInfluencerChangeStatus
+  );
+
+  useEffect(() => {
+    switch (adminInfluencerChangeStatusState.status) {
+      case AdminInfluencerChangeStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminInfluencerChangeStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminInfluencerChangeStatusState.success:
+        showAlert(setSuccessAlert, adminInfluencerChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case AdminInfluencerChangeStatusState.fail:
+        showAlert(setFailsAlert, adminInfluencerChangeStatusState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminInfluencerChangeStatusState]);
+
+  useEffect(() => {
+    switch (updateInfluencerState.status) {
+      case UpdateInfluencerState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UpdateInfluencerState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateInfluencerState.success:
+        showAlert(setSuccessAlert, updateInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UpdateInfluencerState.fail:
+        showAlert(setFailsAlert, updateInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateInfluencerState]);
+
+  useEffect(() => {
+    switch (applyInfluencerState.status) {
+      case ApplyInfluencerState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ApplyInfluencerState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyInfluencerState.success:
+        showAlert(setSuccessAlert, applyInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case ApplyInfluencerState.fail:
+        showAlert(setFailsAlert, applyInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [applyInfluencerState]);
 
   useEffect(() => {
     switch (createAdminSettingPopclubDealState.status) {

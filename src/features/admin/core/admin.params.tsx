@@ -103,6 +103,11 @@ export interface AdminUserDiscountChangeStatusParam {
   status: number;
 }
 
+export interface AdminInfluencerChangeStatusParam {
+  influencerUserId: number;
+  status: number;
+}
+
 export interface AdminSurveyVerificationChangeStatusParam {
   surveyVerificationId: number;
   invoiceNo: string;

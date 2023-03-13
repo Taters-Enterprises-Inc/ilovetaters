@@ -11,6 +11,7 @@ import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
 import { HiDocumentText } from "react-icons/hi";
+import { BsFillPersonBadgeFill } from "react-icons/bs";
 import Pusher from "pusher-js";
 import { ReactElement, ReactNode } from "react";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
@@ -278,6 +279,12 @@ export const PROFILE_TABS: Array<TabModel> = [
     icon: <HiDocumentText />,
     url: "/profile/user-discount",
   },
+  {
+    name: "Influencer",
+    active: "influencer",
+    icon: <BsFillPersonBadgeFill />,
+    url: "/profile/influencer",
+  },
 ];
 
 export const ADMIN_ORDER_MODAL_TABS: Array<TabModel> = [
@@ -388,6 +395,32 @@ export const ADMIN_POPCLUB_REDEEM_STATUS: Array<{
 ];
 
 export const ADMIN_USER_DISCOUNT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Under Review",
+    color: "#cca300",
+  },
+  {
+    name: "Approved",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_INFLUENCER_STATUS: Array<{
   name: string;
   color: string;
 }> = [
@@ -981,6 +1014,11 @@ export const PROFILE_MENU: Array<{
     name: "User Discount",
     icon: <HiDocumentText />,
     urlId: "user-discount",
+  },
+  {
+    name: "Influencer",
+    icon: <BsFillPersonBadgeFill />,
+    urlId: "influencer",
   },
 ];
 

@@ -60,6 +60,7 @@ import {
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
   AdminUserDiscount,
+  AdminInfluencer,
   AdminSurveyVerification,
   AdminSettingShopProduct,
   AdminSettingShopCreateProduct,
@@ -102,6 +103,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
   ProfileInbox,
+  ProfileInfluencer,
 } from "features/profile/presentation/pages";
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
@@ -219,6 +221,11 @@ root.render(
                               <Route
                                 path="user-discount"
                                 element={<ProfileUserDiscount />}
+                              />
+
+                              <Route
+                                path="influencer"
+                                element={<ProfileInfluencer />}
                               />
                             </Route>
                           </Route>
@@ -374,6 +381,11 @@ root.render(
                                 path="user-discount"
                                 element={<AdminUserDiscount />}
                               />
+                              <Route
+                                path="influencer"
+                                element={<AdminInfluencer />}
+                              />
+
                               <Route
                                 path="survey-verification"
                                 element={<AdminSurveyVerification />}

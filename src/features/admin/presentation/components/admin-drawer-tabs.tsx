@@ -44,6 +44,7 @@ import {
 } from "../slices/get-admin-notifications.slice";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { BsFillPersonBadgeFill } from "react-icons/bs";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -264,6 +265,35 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                       }`}
                     >
                       User Discount
+                    </span>
+                  </span>
+                </span>
+              </NavLink>
+            </li>
+          ) : null}
+
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
+            <li>
+              <NavLink
+                to="/admin/influencer"
+                onClick={() => {
+                  if (props.mobile) dispatch(closeAdminSideBar());
+                }}
+                className={(navData) =>
+                  navData.isActive ? "flex bg-white text-secondary" : "flex"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    <BsFillPersonBadgeFill size={20} />
+
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      Influencer
                     </span>
                   </span>
                 </span>
