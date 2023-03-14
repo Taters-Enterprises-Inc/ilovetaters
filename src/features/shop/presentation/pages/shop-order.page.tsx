@@ -7,7 +7,7 @@ import {
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { getOrders, selectGetOrders } from "../slices/get-orders.slice";
 import NumberFormat from "react-number-format";
 import { useDropzone } from "react-dropzone";
@@ -17,19 +17,49 @@ import {
   uploadProofOfPayment,
 } from "features/shared/presentation/slices/upload-proof-of-payment.slice";
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  SHOP_ORDER_STATUS,
+} from "features/shared/constants";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  selectGetCustomerSurveyResponseInOrderService,
+  getCustomerSurveyResponseInOrderService,
+} from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
 
 export function ShopOrder() {
-  const getOrdersState = useAppSelector(selectGetOrders);
-  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
-
-  const [images, setImages] = useState<any>();
   const dispatch = useAppDispatch();
   let { hash } = useParams();
-  const [uploadedFile, setUploadedFile] = useState<any>([]);
   const location = useLocation();
+
+  const [uploadedFile, setUploadedFile] = useState<any>([]);
+  const [images, setImages] = useState<any>();
+
+  const getOrdersState = useAppSelector(selectGetOrders);
+  const uploadProofOfPaymentState = useAppSelector(selectUploadProofOfPayment);
+  const getCustomerSurveyResponseInOrderServiceState = useAppSelector(
+    selectGetCustomerSurveyResponseInOrderService
+  );
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [location]);
+
+  useEffect(() => {
+    dispatch(getLatestUnexpiredRedeem());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (hash !== undefined) {
+      dispatch(getOrders({ hash }));
+      dispatch(
+        getCustomerSurveyResponseInOrderService({
+          hash,
+          service: "snackshop",
+        })
+      );
+    }
+  }, [uploadProofOfPaymentState, dispatch, hash]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     setUploadedFile(acceptedFiles[0]);
@@ -44,106 +74,10 @@ export function ShopOrder() {
     });
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  }, [location]);
-
-  useEffect(() => {
-    dispatch(getLatestUnexpiredRedeem());
-  }, [dispatch]);
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
   });
-
-  useEffect(() => {
-    if (hash !== undefined) {
-      dispatch(getOrders({ hash }));
-    }
-  }, [uploadProofOfPaymentState, dispatch, hash]);
-
-  const getStatus = (
-    status: number | undefined,
-    payops: number | undefined
-  ) => {
-    switch (status) {
-      case 0:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Incomplete Transaction
-          </span>
-        );
-      case 1:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Order Placed In System
-          </span>
-        );
-      case 2:
-        return (
-          <span className="rounded-full bg-[#cca300] text-white px-2 py-1 text-[10px]">
-            Payment under Verification
-          </span>
-        );
-      case 3:
-        if (payops === 3) {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Order Confirmed
-            </span>
-          );
-        } else {
-          return (
-            <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-              Payment Confirmed
-            </span>
-          );
-        }
-      case 4:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Declined
-          </span>
-        );
-      case 5:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Cancelled
-          </span>
-        );
-      case 6:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product Received by Customer
-          </span>
-        );
-      case 7:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Order Rejected due to Incorrect/Incomplete Payment
-          </span>
-        );
-      case 8:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product currently being prepared
-          </span>
-        );
-      case 9:
-        return (
-          <span className="rounded-full bg-[#004d00] text-white px-2 py-1 text-[10px]">
-            Product en route to Customer
-          </span>
-        );
-      default:
-        return (
-          <span className="rounded-full bg-[#a21013] text-white px-2 py-1 text-[10px]">
-            Error Transaction
-          </span>
-        );
-    }
-  };
 
   const handleProofOfPayment = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -155,10 +89,204 @@ export function ShopOrder() {
     }
   };
 
-  const navigate = useNavigate();
+  const calculateOrderPrice = (order: {
+    product_id: number;
+    combination_id: number;
+    type: string;
+    quantity: number;
+    status: number;
+    remarks: string;
+    promo_id: number;
+    promo_price: string;
+    sku: null;
+    sku_id: null;
+    calc_price: string;
+    product_price: string;
+    product_image: string;
+    name: string;
+    description: string;
+    delivery_details: string;
+    uom: string;
+    add_details: string;
+    add_remarks: number;
+    product_hash: string;
+    note: null;
+    product_code: string;
+    product_label: string;
+    addon_drink: string;
+    addon_flav: string;
+    addon_butter: string;
+    addon_base_product: null;
+    freebie_prod_name: null;
+    deal_name?: string;
+    deal_description?: string;
+    promo_discount_percentage?: string;
+  }) => {
+    let deal_products_promo_includes = null;
 
-  const navigateToCustomerSurvey = () => {
-    navigate("/survey");
+    if (
+      getOrdersState.data &&
+      getOrdersState.data.order.deals_details.length > 0
+    ) {
+      deal_products_promo_includes =
+        getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
+    }
+
+    if (order.promo_discount_percentage) {
+      return (
+        <>
+          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+            <NumberFormat
+              value={parseFloat(order.calc_price).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+          <h3 className="flex items-end justify-end flex-1 text-base">
+            <NumberFormat
+              value={(
+                parseFloat(order.calc_price) -
+                parseFloat(order.calc_price) *
+                  parseFloat(order.promo_discount_percentage)
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        </>
+      );
+    } else if (deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id === order.product_id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          order.quantity >= deal_products_promo_include_match.quantity + 1
+        ) {
+          return (
+            <>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={parseFloat(order.calc_price).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    parseFloat(order.calc_price) -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </>
+          );
+        } else {
+          const deal_products_promo_include = deal_products_promo_includes[0];
+          return (
+            <>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={parseFloat(order.calc_price).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    parseFloat(order.calc_price) -
+                    parseFloat(order.calc_price) *
+                      parseFloat(
+                        deal_products_promo_include.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </>
+          );
+        }
+      } else {
+        return (
+          <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
+            <NumberFormat
+              value={parseFloat(order.calc_price).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        );
+      }
+    } else {
+      return (
+        <h3 className="flex items-end justify-end flex-1 text-base">
+          <NumberFormat
+            value={parseFloat(order.calc_price).toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        </h3>
+      );
+    }
   };
 
   return (
@@ -325,14 +453,39 @@ export function ShopOrder() {
                   </div>
                   <div className="space-x-2 text-xs">
                     <strong>Status:</strong>{" "}
-                    {getStatus(
-                      getOrdersState.data?.order.clients_info.status,
-                      getOrdersState.data?.order.clients_info.payops
-                    )}
+                    {getOrdersState.data?.order.clients_info.status &&
+                    getOrdersState.data?.order.clients_info.payops ? (
+                      <span
+                        className="rounded-full text-white px-2 py-1 text-[10px]"
+                        style={{
+                          background:
+                            SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].color,
+                        }}
+                      >
+                        {getOrdersState.data.order.clients_info.status === 3
+                          ? getOrdersState.data.order.clients_info.payops === 3
+                            ? "Order Confirmed"
+                            : SHOP_ORDER_STATUS[
+                                getOrdersState.data.order.clients_info.status
+                              ].name
+                          : SHOP_ORDER_STATUS[
+                              getOrdersState.data.order.clients_info.status
+                            ].name}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="text-xs">
                     <strong>Mode of handling:</strong> Delivery
                   </div>
+                  {getOrdersState.data &&
+                  getOrdersState.data.order.clients_info.invoice_num ? (
+                    <div className="text-xs">
+                      <strong>Invoice No :</strong>{" "}
+                      {getOrdersState.data.order.clients_info.invoice_num}
+                    </div>
+                  ) : null}
                 </div>
               </div>
               <div className="text-secondary">
@@ -352,7 +505,11 @@ export function ShopOrder() {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={order.name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
@@ -375,52 +532,7 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          {order.promo_discount_percentage ? (
-                            <div>
-                              <br />
-                              <span className=" !text-green-400 font-bold text-sm">
-                                Deal Applied:{" "}
-                              </span>
-                              <br />
-                              <span className="text-xs leading-3 whitespace-pre-wrap">
-                                {order.deal_name}
-                                {order.deal_description}
-                              </span>
-                              <br />
-
-                              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-                                <NumberFormat
-                                  value={order.calc_price.toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
-                              <h3 className="flex items-end justify-end flex-1 text-base">
-                                <NumberFormat
-                                  value={(
-                                    order.calc_price -
-                                    order.calc_price *
-                                      parseFloat(
-                                        order.promo_discount_percentage
-                                      )
-                                  ).toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
-                            </div>
-                          ) : (
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={Number(order.calc_price).toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          )}
+                          {calculateOrderPrice(order)}
                         </div>
                       </div>
                     )
@@ -435,7 +547,11 @@ export function ShopOrder() {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={deal.name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">{deal.name}</h3>
@@ -456,14 +572,16 @@ export function ShopOrder() {
                               />
                             </h3>
                           ) : null}
-                          <h3 className="flex items-end justify-end flex-1 text-base">
-                            <NumberFormat
-                              value={deal.price.toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </h3>
+                          {deal.price ? (
+                            <h3 className="flex items-end justify-end flex-1 text-base">
+                              <NumberFormat
+                                value={deal.price.toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </h3>
+                          ) : null}
                         </div>
                       </div>
                     )
@@ -524,8 +642,8 @@ export function ShopOrder() {
               </div>
             </div>
 
-            <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%]  py-6 lg:px-4">
-              <div className="space-y-4 lg:flex-w-full lg:max-w bg-paper lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
+            <div className="space-y-4 lg:flex-[0_0_36%] w-full lg:max-w-[36%] py-6 lg:px-4">
+              <div className="space-y-4 lg:flex-w-full lg:max-w  bg-paper  lg:shadow-secondary lg:shadow-md lg:rounded-[30px] py-6 lg:px-4">
                 <h2 className="font-['Bebas_Neue'] text-4xl text-secondary tracking-[3px] text-center">
                   Order Summary
                 </h2>
@@ -536,21 +654,7 @@ export function ShopOrder() {
                     <NumberFormat
                       value={
                         getOrdersState.data?.subtotal
-                          ? parseInt(getOrdersState.data.subtotal).toFixed(2)
-                          : 0.0
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"₱"}
-                    />
-                  </span>
-                  <span>Delivery Fee:</span>
-                  <span className="text-end ">
-                    +{" "}
-                    <NumberFormat
-                      value={
-                        getOrdersState.data?.grand_total
-                          ? getOrdersState.data.grand_total.toFixed(2)
+                          ? parseFloat(getOrdersState.data.subtotal).toFixed(2)
                           : 0.0
                       }
                       displayType={"text"}
@@ -559,10 +663,39 @@ export function ShopOrder() {
                     />
                   </span>
 
-                  {getOrdersState.data?.order.clients_info.discount_name &&
-                  getOrdersState.data?.order.clients_info.discount ? (
+                  {getOrdersState.data?.order.clients_info.discount ? (
                     <>
-                      <span>
+                      <span>Discount:</span>
+                      <span className="text-end">
+                        -{" "}
+                        <NumberFormat
+                          value={
+                            getOrdersState.data?.order.clients_info.discount
+                              ? parseInt(
+                                  getOrdersState.data.order.clients_info
+                                    .discount
+                                ).toFixed(2)
+                              : 0.0
+                          }
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
+
+                  {getOrdersState.data?.order.clients_info.discount_name &&
+                  getOrdersState.data?.order.clients_info.discount &&
+                  getOrdersState.data?.order.clients_info
+                    .discount_percentage ? (
+                    <>
+                      <span className="w-[300px]">
+                        {parseFloat(
+                          getOrdersState.data?.order.clients_info
+                            .discount_percentage
+                        ) * 100}
+                        %{" "}
                         {getOrdersState.data?.order.clients_info.discount_name}:
                       </span>
                       <span className="text-end">
@@ -571,6 +704,41 @@ export function ShopOrder() {
                           value={parseInt(
                             getOrdersState.data?.order.clients_info.discount
                           ).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </>
+                  ) : null}
+
+                  <span>Delivery Fee:</span>
+                  <span className="text-end ">
+                    +{" "}
+                    <NumberFormat
+                      value={
+                        getOrdersState.data?.delivery_fee
+                          ? parseInt(getOrdersState.data.delivery_fee).toFixed(
+                              2
+                            )
+                          : 0.0
+                      }
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </span>
+
+                  {getOrdersState.data?.cod_fee &&
+                  getOrdersState.data?.cod_fee !== "0" ? (
+                    <>
+                      <span>COD Charge:</span>
+                      <span className="text-end">
+                        +{" "}
+                        <NumberFormat
+                          value={parseInt(getOrdersState.data.cod_fee).toFixed(
+                            2
+                          )}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -682,16 +850,29 @@ export function ShopOrder() {
                   </h2>
                 ) : null}
               </div>
-              <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                <button
-                  onClick={navigateToCustomerSurvey}
-                  className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
-                >
-                  <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                    RATE US
-                  </span>
-                </button>
-              </div>
+              {getOrdersState.data?.order.clients_info.status === 6 ? (
+                <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
+                  {getCustomerSurveyResponseInOrderServiceState.data ? (
+                    <Link
+                      to={`/feedback/complete/${getCustomerSurveyResponseInOrderServiceState.data.hash}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        VIEW YOUR RATING
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/feedback/snackshop/${getOrdersState.data?.order.clients_info.hash_key}`}
+                      className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
+                    >
+                      <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                        RATE US
+                      </span>
+                    </Link>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

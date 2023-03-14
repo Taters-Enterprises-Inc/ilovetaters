@@ -8,9 +8,9 @@ export interface UserDiscountModel {
   id_front: string;
   id_back: string;
   dateadded: string;
-  discount_type_id: number;
+  discount_id: number;
   status: number;
 
-  discount_type_name: string;
+  discount_name: string;
   percentage: string;
 }

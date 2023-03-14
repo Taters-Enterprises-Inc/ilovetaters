@@ -85,7 +85,7 @@ export function AdminShopOrders() {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, [updateAdminNotificationDateSeenState]);
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (trackingNo) {
@@ -122,7 +122,7 @@ export function AdminShopOrders() {
     let calculatedPrice = 0;
 
     if (row.purchase_amount) {
-      calculatedPrice += parseInt(row.purchase_amount);
+      calculatedPrice += parseFloat(row.purchase_amount);
     }
 
     if (row.distance_price) {
@@ -165,7 +165,7 @@ export function AdminShopOrders() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_SNACKSHOP_ORDER_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminShopOrdersStatus());
         }}
         status={status}
@@ -253,8 +253,7 @@ export function AdminShopOrders() {
               {getAdminShopOrdersState.data.orders.map((row, i) => {
                 const notification: NotificationModel | undefined =
                   getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
-                    (notification) =>
-                      notification.tracking_no === row.tracking_no
+                    (notification) => notification.transaction_tb_id === row.id
                   );
                 return (
                   <div
@@ -419,7 +418,7 @@ export function AdminShopOrders() {
                     const notification: NotificationModel | undefined =
                       getAdminNotificationsState.data?.snackshop_order.unseen_notifications.find(
                         (notification) =>
-                          notification.tracking_no === row.tracking_no
+                          notification.transaction_tb_id === row.id
                       );
                     return (
                       <DataTableRow

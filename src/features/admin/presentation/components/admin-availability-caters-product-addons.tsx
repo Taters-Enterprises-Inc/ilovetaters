@@ -26,8 +26,10 @@ import {
 } from "../slices/update-store-caters-product-addons.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "action", label: "Action" },
@@ -84,7 +86,7 @@ export function AdminAvailabilityCatersProductAddons() {
     <>
       <div className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Caters Package Add-ons Availability
+          Caters Product Add-ons Availability
         </span>
 
         <div className="flex flex-col space-y-4 lg:items-center lg:justify-center lg:space-y-0 lg:space-x-2 lg:flex-row">
@@ -155,6 +157,10 @@ export function AdminAvailabilityCatersProductAddons() {
               }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
               }
               onChange={(event, value) => {
                 if (value) {
@@ -418,6 +424,17 @@ export function AdminAvailabilityCatersProductAddons() {
                   {getAdminStoreCatersProductAddonsState.data.caters_product_addons.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div

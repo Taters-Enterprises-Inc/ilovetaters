@@ -1,27 +1,21 @@
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import {
   REACT_APP_DOMAIN_URL,
   SERVICES_DESKTOP,
   SERVICES_MOBILE,
 } from "features/shared/constants";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "features/config/hooks";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { Helmet } from "react-helmet";
 
 export function Home() {
-  const location = useLocation();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
-
-  useEffect(() => {
-    // window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location]);
 
   return (
     <>
@@ -31,6 +25,7 @@ export function Home() {
       <main className="min-h-screen bg-primary">
         <HeaderNav
           activeUrl="HOME"
+          homePageUrl="/"
           logoProps={{
             src:
               REACT_APP_DOMAIN_URL +
@@ -58,7 +53,7 @@ export function Home() {
             }
             alt="The best pop corn in town"
             style={{ visibility: "hidden" }}
-          ></img>
+          />
         </section>
         <img
           src={
@@ -67,7 +62,7 @@ export function Home() {
           }
           className="hidden w-full sm:block"
           alt="The best pop corn in town"
-        ></img>
+        />
         <section className="container lg:mx-auto pb-[100px] grid-cols-3 gap-4 pt-4 hidden sm:grid">
           {SERVICES_DESKTOP.map(function (service_desktop, i) {
             return (

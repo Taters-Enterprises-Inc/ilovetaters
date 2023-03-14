@@ -104,7 +104,6 @@ export function BscEditPersonalInformation() {
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (id) {
-      console.log(formState);
       dispatch(
         updateBscUser({
           userId: id,

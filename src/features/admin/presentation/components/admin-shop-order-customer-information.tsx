@@ -19,10 +19,6 @@ import { AdminShopOrderCustomerInformationButtons } from "./admin-shop-order-cus
 import MenuItem from "@mui/material/MenuItem";
 import { FormEvent, useEffect, useState } from "react";
 import {
-  selectGetAdminStores,
-  getAdminStores,
-} from "../slices/get-admin-stores.slice";
-import {
   selectUploadProofOfPaymentAdmin,
   uploadProofOfPaymentAdmin,
 } from "../slices/upload-proof-of-payment-admin.slice";
@@ -38,6 +34,10 @@ import {
   resetAdminPrivilege,
 } from "../slices/admin-privilege.slice";
 import { MaterialInput } from "features/shared/presentation/components";
+import {
+  getAdminSnackshopStores,
+  selectGetAdminSnackshopStores,
+} from "../slices/get-admin-snackshop-stores.slice";
 
 export function AdminShopOrderCustomerInformation() {
   const query = useQuery();
@@ -59,7 +59,9 @@ export function AdminShopOrderCustomerInformation() {
   const trackingNo = query.get("tracking_no");
 
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminSnackshopStoresState = useAppSelector(
+    selectGetAdminSnackshopStores
+  );
   const uploadProofOfPaymentAdminState = useAppSelector(
     selectUploadProofOfPaymentAdmin
   );
@@ -100,10 +102,10 @@ export function AdminShopOrderCustomerInformation() {
   ]);
 
   useEffect(() => {
-    dispatch(getAdminStores());
+    dispatch(getAdminSnackshopStores());
   }, [dispatch]);
 
-  const calculateWithZeroIfNoValue = (value: string) => {
+  const calculateWithZeroIfNoValue = (value: string | null) => {
     if (value)
       return (
         <NumberFormat
@@ -124,16 +126,87 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += orders[i].price - discount;
-      }
-    }
 
-    if (getAdminShopOrderState.data?.discount) {
-      calculatedPrice -= parseInt(getAdminShopOrderState.data?.discount);
+        let deal_products_promo_includes = order.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += parseFloat(order.price) - discount;
+          }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
+        }
+      }
     }
 
     if (getAdminShopOrderState.data?.reseller_discount) {
@@ -159,11 +232,84 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += orders[i].price - discount;
+        let deal_products_promo_includes = order.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += parseFloat(order.price) - discount;
+          }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
+        }
       }
     }
 
@@ -184,11 +330,84 @@ export function AdminShopOrderCustomerInformation() {
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].price * parseFloat(discountPercentage)
+          ? parseFloat(order.price) * parseFloat(discountPercentage)
           : 0;
-        calculatedPrice += orders[i].price - discount;
+        let deal_products_promo_includes = order.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let x = 0; x < deal_products_promo_includes.length; x++) {
+            const deal_products_promo_include = deal_products_promo_includes[x];
+
+            if (
+              deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.quantity >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                parseFloat(order.price) -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                parseFloat(order.price) -
+                parseFloat(order.price) *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += parseFloat(order.price) - discount;
+          }
+        } else {
+          calculatedPrice += parseFloat(order.price) - discount;
+        }
       }
     }
 
@@ -224,6 +443,193 @@ export function AdminShopOrderCustomerInformation() {
         prefix={"₱"}
       />
     );
+  };
+
+  const calculateTotalPrice = (item: {
+    order_item_id: number | null;
+    product_id: number | null;
+    price: string;
+    product_price: string;
+    quantity: number;
+    remarks: string;
+    name: string;
+    description: string;
+    add_details: string;
+    product_label: string | null;
+
+    promo_discount_percentage: string | null;
+
+    deal_products_promo_include: Array<{
+      id: number;
+      quantity: number | null;
+      product_id: number;
+      product_hash: string;
+      product_variant_option_tb_id: number | null;
+      promo_discount_percentage: string;
+      obtainable: Array<{
+        product_id: number;
+        price: number;
+        product_variant_option_tb_id: number;
+        promo_discount_percentage: string;
+      }>;
+    }>;
+  }) => {
+    const deal_products_promo_includes = item.deal_products_promo_include;
+
+    if (item.promo_discount_percentage) {
+      return (
+        <>
+          <span className="text-sm line-through">
+            <NumberFormat
+              value={parseFloat(item.price).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+          <br />
+          <span>
+            <NumberFormat
+              value={(
+                parseFloat(item.price) -
+                parseFloat(item.price) *
+                  parseFloat(item.promo_discount_percentage)
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </span>
+        </>
+      );
+    } else if (deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id === item.product_id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          item.quantity >= deal_products_promo_include_match.quantity + 1
+        ) {
+          return (
+            <>
+              <span className="text-sm line-through">
+                <NumberFormat
+                  value={parseFloat(item.price).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+              <br />
+              <span>
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    parseFloat(item.price) -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+            </>
+          );
+        } else {
+          const deal_products_promo_include = deal_products_promo_includes[0];
+          return (
+            <>
+              <span className="text-sm line-through">
+                <NumberFormat
+                  value={parseFloat(item.price).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+              <br />
+              <span>
+                <NumberFormat
+                  value={(
+                    parseFloat(item.price) -
+                    parseFloat(item.price) *
+                      parseFloat(
+                        deal_products_promo_include.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </span>
+            </>
+          );
+        }
+      } else {
+        return (
+          <NumberFormat
+            value={parseFloat(item.price).toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        );
+      }
+    } else {
+      return (
+        <NumberFormat
+          value={parseFloat(item.price).toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
+    }
   };
 
   const handleOnSubmitPayment = (e: FormEvent<HTMLFormElement>) => {
@@ -482,7 +888,7 @@ export function AdminShopOrderCustomerInformation() {
               }}
               name="toStoreId"
             >
-              {getAdminStoresState.data?.map((store, index) => (
+              {getAdminSnackshopStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
                   {store.name}
                 </MenuItem>
@@ -565,10 +971,6 @@ export function AdminShopOrderCustomerInformation() {
                         scope="row"
                         className="px-6 py-4 font-medium text-secondary"
                       >
-                        {item.alias ? (
-                          <span className="font-bold">{item.alias}</span>
-                        ) : null}
-                        <br />
                         <span
                           dangerouslySetInnerHTML={{
                             __html: item.product_label
@@ -584,20 +986,6 @@ export function AdminShopOrderCustomerInformation() {
                                   : ""),
                           }}
                         />
-                        {item.deal_name ? (
-                          <>
-                            <br />
-                            <br />
-                            <span className=" !text-green-700 font-bold">
-                              Deal Applied:{" "}
-                            </span>
-                            <br />
-                            <span className="whitespace-pre-wrap">
-                              {item.deal_name}
-                              {item.deal_description}
-                            </span>
-                          </>
-                        ) : null}
                       </th>
                       <td className="px-6 py-4">
                         <span
@@ -612,7 +1000,9 @@ export function AdminShopOrderCustomerInformation() {
                           <>
                             <span className="text-sm line-through">
                               <NumberFormat
-                                value={item.product_price.toFixed(2)}
+                                value={parseFloat(item.product_price).toFixed(
+                                  2
+                                )}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}
@@ -622,8 +1012,8 @@ export function AdminShopOrderCustomerInformation() {
                             <span>
                               <NumberFormat
                                 value={(
-                                  item.product_price -
-                                  item.product_price *
+                                  parseFloat(item.product_price) -
+                                  parseFloat(item.product_price) *
                                     parseFloat(item.promo_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
@@ -634,7 +1024,7 @@ export function AdminShopOrderCustomerInformation() {
                           </>
                         ) : (
                           <NumberFormat
-                            value={item.product_price.toFixed(2)}
+                            value={parseFloat(item.product_price).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -642,37 +1032,63 @@ export function AdminShopOrderCustomerInformation() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-end">
-                        {item.promo_discount_percentage ? (
-                          <>
-                            <span className="text-sm line-through">
-                              <NumberFormat
-                                value={item.price.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </span>
+                        {calculateTotalPrice(item)}
+                      </td>
+                    </tr>
+                  ))}
+
+                  {getAdminShopOrderState.data.deal_items.map((item, i) => (
+                    <tr key={i}>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-secondary"
+                      >
+                        <>
+                          <span className=" !text-green-700 font-bold">
+                            Deal Applied:{" "}
+                          </span>
+                          <br />
+                          {item.alias ? (
+                            <span className="font-bold">{item.alias}</span>
+                          ) : null}
+                          <br />
+                          <span className="whitespace-pre-wrap">
+                            {item.name}
                             <br />
-                            <span>
-                              <NumberFormat
-                                value={(
-                                  item.price -
-                                  item.price *
-                                    parseFloat(item.promo_discount_percentage)
-                                ).toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </span>
-                          </>
-                        ) : (
+                            {item.description}
+                          </span>
+                        </>
+                      </th>
+                      <td className="px-6 py-4">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.remarks,
+                          }}
+                        />
+                      </td>
+                      <td className="px-6 py-4">{item.quantity}</td>
+                      <td className="px-6 py-4 text-end">
+                        {item.product_price ? (
                           <NumberFormat
-                            value={item.price.toFixed(2)}
+                            value={parseFloat(item.product_price).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
                           />
+                        ) : (
+                          "₱0.00"
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-end">
+                        {item.price ? (
+                          <NumberFormat
+                            value={parseFloat(item.price).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        ) : (
+                          "₱0.00"
                         )}
                       </td>
                     </tr>
@@ -681,41 +1097,56 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">{calculateOrderTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateOrderTotal()}
+                    </td>
                   </tr>
-                  {getAdminShopOrderState.data.discount ? (
+                  <tr className="text-end">
+                    <td colSpan={4} className="px-6 py-2 font-bold ">
+                      Discount:
+                    </td>
+                    <td className="px-6 py-2 w-[150px]">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminShopOrderState.data.discount
+                      )}
+                    </td>
+                  </tr>
+
+                  {getAdminShopOrderState.data.discount &&
+                  getAdminShopOrderState.data.discount_percentage &&
+                  getAdminShopOrderState.data.discount_name ? (
                     <tr className="text-end">
                       <td colSpan={4} className="px-6 py-2 font-bold ">
-                        {getAdminShopOrderState.data.discount_name}
+                        {parseFloat(
+                          getAdminShopOrderState.data.discount_percentage
+                        ) * 100}
+                        % {getAdminShopOrderState.data.discount_name}
                       </td>
-                      <td className="px-6 py-2">
+                      <td className="px-6 py-2 w-[150px]">
+                        -{" "}
                         {calculateWithZeroIfNoValue(
                           getAdminShopOrderState.data.discount
                         )}
                       </td>
                     </tr>
                   ) : null}
-                  <tr className="text-end">
-                    <td colSpan={4} className="px-6 py-2 font-bold">
-                      Gift Card No.[ 0 ]:
-                    </td>
-                    <td className="px-6 py-2">
-                      {calculateWithZeroIfNoValue(
-                        getAdminShopOrderState.data.giftcard_discount
-                      )}
-                    </td>
-                  </tr>
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">{calculateSubTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateSubTotal()}
+                    </td>
                   </tr>
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Delivery Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.distance_price
                       )}
@@ -725,7 +1156,8 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       COD Additional Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +{" "}
                       {calculateWithZeroIfNoValue(
                         getAdminShopOrderState.data.cod_fee
                       )}
@@ -735,7 +1167,9 @@ export function AdminShopOrderCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -744,10 +1178,6 @@ export function AdminShopOrderCustomerInformation() {
                 {getAdminShopOrderState.data.items.map((item, i) => (
                   <div className="py-2 border-b">
                     <p className="mb-2 text-xs leading-1 text-semibold">
-                      {item.alias ? (
-                        <span className="font-bold">{item.alias}</span>
-                      ) : null}
-                      <br />
                       <span
                         dangerouslySetInnerHTML={{
                           __html: item.product_label
@@ -761,19 +1191,6 @@ export function AdminShopOrderCustomerInformation() {
                                 : ""),
                         }}
                       />
-                      {item.deal_name ? (
-                        <>
-                          <br />
-                          <br />
-                          <span className=" !text-green-700 font-bold">
-                            Deal Applied:{" "}
-                          </span>
-                          <br />
-                          <span className="whitespace-pre-wrap">
-                            {item.deal_name}
-                          </span>
-                        </>
-                      ) : null}
                     </p>
                     <div className="flex justify-between">
                       <span className="text-xs font-bold">Remarks:</span>
@@ -789,13 +1206,13 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Quantity:</span>
                       <span className="text-xs">{item.quantity}</span>
                     </div>
-                    {item.promo_discount_percentage ? (
+                    {item.promo_discount_percentage && item.product_price ? (
                       <>
                         <div className="flex justify-between">
                           <span className="text-xs font-bold">Price:</span>
                           <span className="text-xs line-through">
                             <NumberFormat
-                              value={item.product_price.toFixed(2)}
+                              value={parseFloat(item.product_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -810,8 +1227,8 @@ export function AdminShopOrderCustomerInformation() {
                           <span className="text-xs">
                             <NumberFormat
                               value={(
-                                item.product_price -
-                                item.product_price *
+                                parseFloat(item.product_price) -
+                                parseFloat(item.product_price) *
                                   parseFloat(item.promo_discount_percentage)
                               ).toFixed(2)}
                               displayType={"text"}
@@ -826,7 +1243,7 @@ export function AdminShopOrderCustomerInformation() {
                         <span className="text-xs font-bold">Price:</span>
                         <span className="text-xs">
                           <NumberFormat
-                            value={item.product_price.toFixed(2)}
+                            value={parseFloat(item.product_price).toFixed(2)}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={"₱"}
@@ -839,7 +1256,7 @@ export function AdminShopOrderCustomerInformation() {
                       <span className="text-xs font-bold">Total:</span>
                       <span className="text-xs">
                         <NumberFormat
-                          value={item.price.toFixed(2)}
+                          value={parseFloat(item.price).toFixed(2)}
                           displayType={"text"}
                           thousandSeparator={true}
                           prefix={"₱"}
@@ -848,25 +1265,73 @@ export function AdminShopOrderCustomerInformation() {
                     </div>
                   </div>
                 ))}
+
+                {getAdminShopOrderState.data.deal_items.map((item, i) => (
+                  <div className="py-2 border-b">
+                    <p className="mb-2 text-xs leading-1 text-semibold">
+                      <span className=" !text-green-700 font-bold">
+                        Deal Applied:{" "}
+                      </span>
+                      <br />
+                      {item.alias ? (
+                        <span className="font-bold">{item.alias}</span>
+                      ) : null}
+                      <br />
+                      <span className="whitespace-pre-wrap">
+                        {item.name}
+                        <br />
+                        {item.description}
+                      </span>
+                    </p>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Remarks:</span>
+                      <span className="text-xs">
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: item.remarks,
+                          }}
+                        />
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Quantity:</span>
+                      <span className="text-xs">{item.quantity}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Price:</span>
+                      <span className="text-xs">
+                        {/* <NumberFormat
+                          value={parseFloat(item.product_price).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        /> */}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-xs font-bold">Total:</span>
+                      <span className="text-xs">
+                        {/* <NumberFormat
+                          value={parseFloat(item.price).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        /> */}
+                      </span>
+                    </div>
+                  </div>
+                ))}
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
-                    {calculateOrderTotal()}
+                    + {calculateOrderTotal()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm font-bold">
-                    Code[ ] Voucher Discount:
-                  </span>
+                  <span className="text-sm font-bold">Discount:</span>
                   <span className="text-sm text-end">
-                    {calculateWithZeroIfNoValue(
-                      getAdminShopOrderState.data.discount
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-bold">Gift Card No.[ 0 ]:</span>
-                  <span className="text-sm text-end">
+                    -{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.discount
                     )}
@@ -875,12 +1340,31 @@ export function AdminShopOrderCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
-                    {calculateSubTotal()}
+                    + {calculateSubTotal()}
                   </span>
                 </div>
+                {getAdminShopOrderState.data.discount &&
+                getAdminShopOrderState.data.discount_percentage &&
+                getAdminShopOrderState.data.discount_name ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {parseFloat(
+                        getAdminShopOrderState.data.discount_percentage
+                      ) * 100}
+                      % {getAdminShopOrderState.data.discount_name}:
+                    </span>
+                    <span className="text-sm text-end">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminShopOrderState.data.discount
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Delivery Fee:</span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.distance_price
                     )}
@@ -891,6 +1375,7 @@ export function AdminShopOrderCustomerInformation() {
                     COD Additional Charges:
                   </span>
                   <span className="text-sm text-end">
+                    +{" "}
                     {calculateWithZeroIfNoValue(
                       getAdminShopOrderState.data.cod_fee
                     )}
@@ -941,7 +1426,10 @@ export function AdminShopOrderCustomerInformation() {
             dispatch(
               adminPrivilege({
                 password,
+                fbUserId: getAdminShopOrderState.data.fb_user_id,
+                mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
+                transactionHash: getAdminShopOrderState.data.hash_key,
                 fromStatusId: getAdminShopOrderState.data.status,
                 toStatusId: status,
               })
@@ -959,7 +1447,10 @@ export function AdminShopOrderCustomerInformation() {
             dispatch(
               adminPrivilege({
                 password,
+                fbUserId: getAdminShopOrderState.data.fb_user_id,
+                mobileUserId: getAdminShopOrderState.data.mobile_user_id,
                 transactionId: getAdminShopOrderState.data.id,
+                transactionHash: getAdminShopOrderState.data.hash_key,
                 fromStoreId: getAdminShopOrderState.data.store,
                 toStoreId: store,
               })

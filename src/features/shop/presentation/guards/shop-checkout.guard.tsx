@@ -15,11 +15,19 @@ export function ShopCheckoutGuard() {
     const orders = getSessionState.data.orders
       ? getSessionState.data.orders
       : [];
-    const deals = getSessionState.data.deals ? getSessionState.data.deals : [];
-    const total = orders.length + deals.length;
 
-    if (total <= 0) {
-      return <Navigate to={"/"} />;
+    const redeemData = getSessionState.data.redeem_data;
+
+    if (redeemData) {
+      if (redeemData.deal_promo_price && redeemData.deal_promo_price <= 0) {
+        return <Navigate to={"/delivery/products"} />;
+      } else if (redeemData.deal_promo_price === null) {
+        if (orders.length <= 0) {
+          return <Navigate to={"/delivery/products"} />;
+        }
+      }
+    } else if (orders.length <= 0) {
+      return <Navigate to={"/delivery/products"} />;
     }
   }
 

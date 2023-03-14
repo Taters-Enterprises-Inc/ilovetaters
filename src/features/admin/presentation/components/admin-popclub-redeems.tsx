@@ -26,6 +26,15 @@ import { DataList } from "features/shared/presentation/components";
 import moment from "moment";
 import { AdminChipsButton } from "./chips-button";
 import { createQueryParams } from "features/config/helpers";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status", minWidth: 200 },
@@ -55,6 +64,17 @@ export function AdminPopClubRedeems() {
   const getAdminPopclubRedeemsState = useAppSelector(
     selectGetAdminPopclubRedeems
   );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (redeemCode) {
@@ -96,7 +116,7 @@ export function AdminPopClubRedeems() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_POPCLUB_REDEEM_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminPopclubRedeemsStatus());
         }}
         status={status}
@@ -180,75 +200,90 @@ export function AdminPopClubRedeems() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminPopclubRedeemsState.data.redeems.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      redeem_code: row.redeem_code,
-                      search: search,
-                    };
+              {getAdminPopclubRedeemsState.data.redeems.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getAdminNotificationsState.data?.popclub_redeem.unseen_notifications.find(
+                    (notification) =>
+                      notification.deals_redeems_tb_id === row.id
+                  );
 
-                    const queryParams = createQueryParams(params);
+                return (
+                  <div
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(
+                          updateAdminNotificationDateSeen(notification.id)
+                        );
+                      }
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        redeem_code: row.redeem_code,
+                        search: search,
+                      };
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>{row.client_name}</span>
-                    <span className="text-lg text-gray-600">
-                      #{row.redeem_code}
+                      const queryParams = createQueryParams(params);
+
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>{row.client_name}</span>
+                      <span className="text-lg text-gray-600">
+                        #{row.redeem_code}
+                      </span>
+                      {row.status === 1 &&
+                      moment(row.expiration).isBefore(moment()) ? (
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor: "#a21013",
+                          }}
+                        >
+                          Expired
+                        </span>
+                      ) : (
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                          }}
+                        >
+                          {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                        </span>
+                      )}
                     </span>
-                    {row.status === 1 &&
-                    moment(row.expiration).isBefore(moment()) ? (
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor: "#a21013",
-                        }}
-                      >
-                        Expired
-                      </span>
-                    ) : (
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                        }}
-                      >
-                        {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
-                      </span>
-                    )}
-                  </span>
-                  <span className="text-xs">
-                    <strong>Hub:</strong> {row.store_name}
-                  </span>
-
-                  <div className="flex justify-between">
                     <span className="text-xs">
-                      <Moment format="LLL">{row.dateadded}</Moment>
+                      <strong>Hub:</strong> {row.store_name}
                     </span>
-                    <span className="text-lg font-semibold">
-                      <NumberFormat
-                        value={parseInt(row.purchase_amount).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </span>
+
+                    <div className="flex justify-between">
+                      <span className="text-xs">
+                        <Moment format="LLL">{row.dateadded}</Moment>
+                      </span>
+                      <span className="text-lg font-semibold">
+                        <NumberFormat
+                          value={parseInt(row.purchase_amount).toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -348,76 +383,95 @@ export function AdminPopClubRedeems() {
             >
               {getAdminPopclubRedeemsState.data.redeems !== undefined ? (
                 <>
-                  {getAdminPopclubRedeemsState.data.redeems.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        {row.status === 1 &&
-                        moment(row.expiration).isBefore(moment()) ? (
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor: "#a21013",
+                  {getAdminPopclubRedeemsState.data.redeems.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.popclub_redeem.unseen_notifications.find(
+                        (notification) =>
+                          notification.deals_redeems_tb_id === row.id
+                      );
+
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          {row.status === 1 &&
+                          moment(row.expiration).isBefore(moment()) ? (
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor: "#a21013",
+                              }}
+                            >
+                              Expired
+                            </span>
+                          ) : (
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                              }}
+                            >
+                              {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                            </span>
+                          )}
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.expiration}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.redeem_code}</DataTableCell>
+                        <DataTableCell>{row.client_name}</DataTableCell>
+                        <DataTableCell>
+                          <NumberFormat
+                            value={parseInt(row.purchase_amount).toFixed(2)}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </DataTableCell>
+                        <DataTableCell>{row.store_name}</DataTableCell>
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
+
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                redeem_code: row.redeem_code,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
+
+                              const queryParams = createQueryParams(params);
+
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
                             }}
                           >
-                            Expired
-                          </span>
-                        ) : (
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                            }}
-                          >
-                            {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
-                          </span>
-                        )}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.expiration}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.redeem_code}</DataTableCell>
-                      <DataTableCell>{row.client_name}</DataTableCell>
-                      <DataTableCell>
-                        <NumberFormat
-                          value={parseInt(row.purchase_amount).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </DataTableCell>
-                      <DataTableCell>{row.store_name}</DataTableCell>
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              redeem_code: row.redeem_code,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
-
-                            const queryParams = createQueryParams(params);
-
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

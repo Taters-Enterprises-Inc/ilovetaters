@@ -259,7 +259,9 @@ export function CateringContractViewer() {
                 </td>
               </tr>
 
-              {getCateringOrdersState.data.order.clients_info.discount ? (
+              {getCateringOrdersState.data.order.clients_info.discount &&
+              getCateringOrdersState.data.order.clients_info
+                .discount_percentage ? (
                 <tr>
                   <td></td>
                   <td></td>
@@ -356,6 +358,25 @@ export function CateringContractViewer() {
                   />
                 </td>
               </tr>
+
+              {getCateringOrdersState.data.cod_fee &&
+              getCateringOrdersState.data.cod_fee !== "0" ? (
+                <tr>
+                  <td></td>
+                  <td>Cash On Delivery Charge:</td>
+                  <td></td>
+                  <td style={{ textAlign: "right" }}>
+                    <NumberFormat
+                      value={parseInt(
+                        getCateringOrdersState.data.cod_fee
+                      ).toFixed(2)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"₱"}
+                    />
+                  </td>
+                </tr>
+              ) : null}
 
               <tr>
                 <td style={{ height: 40 }}></td>

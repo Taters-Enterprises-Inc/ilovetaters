@@ -28,7 +28,6 @@ import {
   selectGetRedeem,
 } from "../slices/get-redeem.slice";
 import { resetGetRedeem } from "../slices/get-redeem.slice";
-import { LoginChooserModal } from "../modals/login-chooser.modal";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
 import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
@@ -53,11 +52,17 @@ import {
   selectRedeemValidators,
 } from "../slices/redeem-validators.slice";
 import moment from "moment";
-import { StoreVisitStoreChooserModal } from "../modals/store-visit-store-chooser.modal";
-import { StoreChooserModal } from "../modals/store-chooser.modal";
+import { StoreVisitDealStoreChooserModal } from "../modals/store-visit-deal-store-chooser.modal";
+import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
+import { SnacksDeliveredDealStoreChooserModal } from "../modals/snacks-delivered-deal-store-chooser.modal";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
 
 export function PopClubDeal() {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getDealState = useAppSelector(selectGetDeal);
   const getDealProductVariantsState = useAppSelector(
     selectGetDealProductVariants
@@ -78,10 +83,15 @@ export function PopClubDeal() {
   const getSessionState = useAppSelector(selectGetSession);
 
   const [openVariantChooserModal, setOpenVariantChooserModal] = useState(false);
-  const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
-  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
-    useState(false);
-  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+
+  const [
+    openStoreVisitDealStoreChooserModal,
+    setOpenStoreVisitDealStoreChooserModal,
+  ] = useState(false);
+  const [
+    openSnacksDeliveredDealStoreChooserModal,
+    setOpenSnacksDeliveredDealStoreChooserModal,
+  ] = useState(false);
 
   const location = useLocation();
   const facebookLogoutState = useAppSelector(selectFacebookLogout);
@@ -104,6 +114,7 @@ export function PopClubDeal() {
           dispatch(
             redeemDeal({
               hash: getDealState.data?.hash,
+              remarks: "",
             })
           );
         }
@@ -140,17 +151,54 @@ export function PopClubDeal() {
       getDealState.data &&
       redeemDealState.status === RedeemDealState.success
     ) {
+      ReactGA.event({
+        category: "PopClub Deals",
+        action: "Redeem deals",
+      });
+      dispatch(getNotifications());
       dispatch(
         getRedeem({
           deal_id: getDealState.data.id,
         })
       );
 
-      if (
-        getDealState.data.minimum_purchase ||
-        getDealState.data.promo_discount_percentage
-      ) {
-        navigate("/delivery/products");
+      if (getDealState.data.platform_id === 2) {
+        if (getDealState.data.deal_products_promo_include.length > 0) {
+          const deal_products_promo_include =
+            getDealState.data.deal_products_promo_include;
+
+          if (
+            deal_products_promo_include.length === 1 &&
+            deal_products_promo_include[0].obtainable.length === 0
+          ) {
+            navigate(
+              "/delivery/products/" +
+                deal_products_promo_include[0].product_hash
+            );
+          } else if (deal_products_promo_include[0].obtainable.length >= 1) {
+            navigate(
+              "/delivery/products/" +
+                deal_products_promo_include[0].product_hash
+            );
+          } else if (
+            deal_products_promo_include[0].obtainable.length > 1 &&
+            deal_products_promo_include.length > 1
+          ) {
+            navigate("/delivery/products");
+          } else {
+            navigate("/delivery/products");
+          }
+        } else if (
+          getDealState.data.promo_discount_percentage ||
+          getDealState.data.is_free_delivery
+        ) {
+          navigate("/delivery/products");
+        } else if (
+          getDealState.data.promo_price &&
+          getDealState.data.original_price
+        ) {
+          navigate("/delivery/checkout");
+        }
       }
 
       dispatch(resetRedeemDeal());
@@ -202,9 +250,85 @@ export function PopClubDeal() {
       );
     }
   };
+  const goButtons = () => {
+    if (
+      getRedeemState.data &&
+      getRedeemState.data.deal_products_promo_include.length > 0
+    ) {
+      const deal_products_promo_include =
+        getRedeemState.data.deal_products_promo_include;
+
+      if (deal_products_promo_include[0].obtainable.length > 0) {
+        return (
+          <button
+            onClick={() => {
+              navigate(
+                "/delivery/products/" +
+                  deal_products_promo_include[0].product_hash
+              );
+            }}
+            className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+          >
+            Go Back to Product
+          </button>
+        );
+      } else if (deal_products_promo_include.length === 1) {
+        return (
+          <button
+            onClick={() => {
+              navigate(
+                "/delivery/products/" +
+                  deal_products_promo_include[0].product_hash
+              );
+            }}
+            className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+          >
+            Go Back to Product
+          </button>
+        );
+      } else {
+        return (
+          <button
+            onClick={() => {
+              navigate("/delivery/products");
+            }}
+            className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+          >
+            Go Back to Products
+          </button>
+        );
+      }
+    } else if (
+      getRedeemState.data &&
+      (getRedeemState.data.promo_discount_percentage ||
+        getRedeemState.data.is_free_delivery)
+    ) {
+      return (
+        <button
+          onClick={() => {
+            navigate("/delivery/products");
+          }}
+          className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+        >
+          Go Back to Products
+        </button>
+      );
+    } else {
+      return (
+        <button
+          onClick={() => {
+            navigate("/delivery/checkout");
+          }}
+          className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+        >
+          Go Back to Checkout
+        </button>
+      );
+    }
+  };
 
   const loginToRedeem = () => {
-    setOpenLoginChooserModal(true);
+    dispatch(openLoginChooserModal({ required: false }));
   };
 
   const redeemButton = () => {
@@ -245,7 +369,7 @@ export function PopClubDeal() {
 
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -261,7 +385,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -287,7 +417,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
@@ -320,7 +450,7 @@ export function PopClubDeal() {
     } else if (!isAvailableStartDateTime) {
       const pad = (number: number) => ("0" + number).slice(-2);
 
-      const renderer = ({ hours, minutes, seconds, completed }: any) => {
+      const renderer = ({ days, hours, minutes, seconds, completed }: any) => {
         if (completed) {
           if (
             getDealState.status === GetDealState.success &&
@@ -336,7 +466,13 @@ export function PopClubDeal() {
         } else if (!completed) {
           let timeName = "";
 
-          if (hours > 0) {
+          if (days > 0) {
+            if (days === 1) {
+              timeName = "day";
+            } else {
+              timeName = "days";
+            }
+          } else if (hours > 0) {
             if (hours === 1) {
               timeName = "hour";
             } else {
@@ -362,7 +498,7 @@ export function PopClubDeal() {
                 <AiOutlineFieldTime className="mr-3 text-4xl" />
                 <div className="font-['Bebas_Neue'] tracking-[4px]">
                   <span>
-                    {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+                    {pad(days)}:{pad(hours)}:{pad(minutes)}:{pad(seconds)}
                   </span>
                   <span className="ml-2 text-sm">{timeName}</span>
                 </div>
@@ -397,30 +533,33 @@ export function PopClubDeal() {
         <>
           {getSessionState.data.popclub_data.platform === "online-delivery" ? (
             <>
-              {getRedeemState.data.minimum_purchase ||
-              getRedeemState.data.promo_discount_percentage ? (
-                <button
-                  onClick={() => {
-                    navigate("/delivery/products");
-                  }}
-                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-                >
-                  Go Back to Products
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    navigate("/delivery/checkout");
-                  }}
-                  className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
-                >
-                  Go Back to Checkout
-                </button>
-              )}
+              {goButtons()}
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
-                  setOpenForfeitModalMessage(true);
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to cancel the redemption?",
+                      buttons: [
+                        {
+                          color: "#CC5801",
+                          text: "Yes",
+                          onClick: () => {
+                            dispatch(forfeitRedeem());
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          color: "#22201A",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
                 }}
               >
                 Cancel Redeem
@@ -447,7 +586,29 @@ export function PopClubDeal() {
               <button
                 className="w-full py-3 mt-4 font-bold text-white uppercase border border-white bg-primary rounded-xl"
                 onClick={() => {
-                  setOpenForfeitModalMessage(true);
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to cancel the redemption?",
+                      buttons: [
+                        {
+                          color: "#CC5801",
+                          text: "Yes",
+                          onClick: () => {
+                            dispatch(forfeitRedeem());
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          color: "#22201A",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
                 }}
               >
                 Cancel Redeem
@@ -522,10 +683,10 @@ export function PopClubDeal() {
             onClick={() => {
               switch (getDealState.data?.platform_id) {
                 case 1:
-                  setOpenStoreVisitStoreChooserModal(true);
+                  setOpenStoreVisitDealStoreChooserModal(true);
                   break;
                 case 2:
-                  setOpenStoreChooserModal(true);
+                  setOpenSnacksDeliveredDealStoreChooserModal(true);
                   break;
               }
             }}
@@ -571,7 +732,7 @@ export function PopClubDeal() {
               <div className="relative flex flex-col flex-1 w-full pb-10 shadow-lg bg-secondary ">
                 {getDealState.data.original_price &&
                 getDealState.data.promo_price ? (
-                  <div className="absolute top-0 left-0">
+                  <div className="absolute top-0 left-0 flex flex-col items-start">
                     <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
                       {Math.floor(
                         ((getDealState.data.original_price -
@@ -594,7 +755,11 @@ export function PopClubDeal() {
                 ) : null}
                 <img
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
-                  alt="Deals"
+                  alt={getDealState.data.name}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                  }}
                 />
                 <CountdownTimer />
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">
@@ -613,17 +778,19 @@ export function PopClubDeal() {
         ) : null}
       </section>
 
-      <VariantsChooserModal
-        open={openVariantChooserModal}
-        onClose={() => {
-          setOpenVariantChooserModal(false);
-        }}
-      />
+      {openVariantChooserModal ? (
+        <VariantsChooserModal
+          open={openVariantChooserModal}
+          onClose={() => {
+            setOpenVariantChooserModal(false);
+          }}
+        />
+      ) : null}
 
-      <StoreVisitStoreChooserModal
-        open={openStoreVisitStoreChooserModal}
+      <StoreVisitDealStoreChooserModal
+        open={openStoreVisitDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreVisitStoreChooserModal(false);
+          setOpenStoreVisitDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {
@@ -632,34 +799,16 @@ export function PopClubDeal() {
         }}
       />
 
-      <StoreChooserModal
-        open={openStoreChooserModal}
+      <SnacksDeliveredDealStoreChooserModal
+        open={openSnacksDeliveredDealStoreChooserModal}
         onClose={() => {
-          setOpenStoreChooserModal(false);
+          setOpenSnacksDeliveredDealStoreChooserModal(false);
         }}
         onDefaultStoreSelectHandler={() => {
           if (hash) {
             dispatch(getDeal(hash));
           }
         }}
-      />
-
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-      <MessageModal
-        open={openForfeitModalMessage}
-        onClose={() => {
-          setOpenForfeitModalMessage(false);
-        }}
-        onYes={() => {
-          dispatch(forfeitRedeem());
-          setOpenForfeitModalMessage(false);
-        }}
-        message={"Are you sure you want to cancel the redemption?"}
       />
     </>
   );

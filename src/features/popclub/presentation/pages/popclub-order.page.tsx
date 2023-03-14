@@ -7,7 +7,7 @@ import {
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   getDealOrder,
   selectGetDealOrder,
@@ -76,12 +76,6 @@ export function PopclubOrder() {
       formData.append("uploaded_file", uploadedFile);
       dispatch(uploadProofOfPayment({ formData }));
     }
-  };
-
-  const navigate = useNavigate();
-
-  const navigateToCustomerSurvey = () => {
-    navigate("/survey/walk-in");
   };
 
   return (
@@ -206,18 +200,18 @@ export function PopclubOrder() {
                     From:{" "}
                   </h2>
                   <h3 className="text-xs font-semibold">
-                    {getDealOrderState.data?.client_info.store_name}
+                    {getDealOrderState.data?.clients_info.store_name}
                   </h3>
                   <h3 className="text-xs">
-                    {getDealOrderState.data?.client_info.store_address}
+                    {getDealOrderState.data?.clients_info.store_address}
                   </h3>
                   <div className="text-xs">
                     <strong>Contact #</strong>{" "}
-                    {getDealOrderState.data?.client_info.store_contact_number}
+                    {getDealOrderState.data?.clients_info.store_contact_number}
                   </div>
                   <div className="text-xs">
                     <strong>Email :</strong>{" "}
-                    {getDealOrderState.data?.client_info.store_email}
+                    {getDealOrderState.data?.clients_info.store_email}
                   </div>
                 </div>
 
@@ -273,7 +267,11 @@ export function PopclubOrder() {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={deal.name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">{deal.name}</h3>
@@ -353,14 +351,14 @@ export function PopclubOrder() {
                 </h1>
               </div>
               <div className="flex justify-center py-6 space-y-4 lg:flex-w-full lg:max-w lg:px-4 ">
-                <button
-                  onClick={navigateToCustomerSurvey}
+                <Link
+                  to={`/survey?service=POPCLUB-STORE-VISIT&hash=${getDealOrderState.data?.clients_info.hash_key}`}
                   className={`text-white border border-secondary text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg`}
                 >
                   <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
                     RATE US
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

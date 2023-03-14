@@ -20,8 +20,8 @@ import {
 } from "../slices/get-admin-users.slice";
 import { MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { AdminSelectStoreModal } from "../modals";
-import { getAdminUserStores } from "../slices/get-admin-user-stores.slice";
-import { getAdminStores } from "../slices/get-admin-stores.slice";
+import { getAdminSettingUserStore } from "../slices/get-admin-setting-user-store.slice";
+import { getAdminSettingUserStores } from "../slices/get-admin-setting-user-stores.slice";
 import { getAdminUser } from "../slices/get-admin-user.slice";
 import { createQueryParams } from "features/config/helpers";
 
@@ -31,8 +31,8 @@ const columns: Array<Column> = [
   { id: "email", label: "Email" },
   { id: "groups", label: "Groups" },
   { id: "status", label: "Status" },
-  { id: "action", label: "Actions" },
   { id: "store", label: "Store" },
+  { id: "action", label: "" },
 ];
 
 export function AdminSettingUsers() {
@@ -52,7 +52,7 @@ export function AdminSettingUsers() {
   const getAdminUsersState = useAppSelector(selectGetAdminUsers);
 
   useEffect(() => {
-    dispatch(getAdminStores());
+    dispatch(getAdminSettingUserStores());
 
     const query = createQueryParams({
       page_no: pageNo,
@@ -64,7 +64,7 @@ export function AdminSettingUsers() {
     dispatch(getAdminUsers(query));
     if (userId) {
       dispatch(getAdminUser(userId));
-      dispatch(getAdminUserStores(userId)).then(() => {
+      dispatch(getAdminSettingUserStore(userId)).then(() => {
         setOpenAdminSelectStoreModal(true);
       });
     }
@@ -306,16 +306,8 @@ export function AdminSettingUsers() {
                         )}
                       </DataTableCell>
                       <DataTableCell>
-                        <Link
-                          to={`/admin/setting/user/edit-user/${row.id}`}
-                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
-                        >
-                          Edit
-                        </Link>
-                      </DataTableCell>
-                      <DataTableCell>
                         {row.groups.some(
-                          (group) => group.id == 1 || group.id == 10
+                          (group) => group.id === 1 || group.id === 10
                         ) ? null : (
                           <button
                             onClick={() => {
@@ -340,6 +332,14 @@ export function AdminSettingUsers() {
                             Choose
                           </button>
                         )}
+                      </DataTableCell>
+                      <DataTableCell>
+                        <Link
+                          to={`/admin/setting/user/edit-user/${row.id}`}
+                          className="px-3 py-1 border rounded-lg border-secondary font-['Varela_Round']"
+                        >
+                          Edit
+                        </Link>
                       </DataTableCell>
                     </DataTableRow>
                   ))}

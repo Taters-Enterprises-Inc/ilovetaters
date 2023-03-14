@@ -4,8 +4,7 @@ import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
-import { BranchesList } from "../component/branches-list";
-
+import { Outlet } from "react-router-dom";
 export function Branches() {
   const dispatch = useAppDispatch();
 
@@ -17,6 +16,7 @@ export function Branches() {
     <>
       <HeaderNav
         activeUrl="BRANCHES"
+        homePageUrl="/branches"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
@@ -25,7 +25,8 @@ export function Branches() {
           className: "w-[150px] lg:w-[120px]",
         }}
       />
-      <BranchesList />
+
+      <Outlet />
       <FooterNav activeUrl="BRANCHES" />
     </>
   );

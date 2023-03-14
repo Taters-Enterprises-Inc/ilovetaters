@@ -172,7 +172,7 @@ export function ProfileCateringBookings() {
                 const notification: NotificationModel | undefined =
                   getNotificationsState.data?.catering_booking.unseen_notifications.find(
                     (notification) =>
-                      notification.catering_tracking_no === row.tracking_no
+                      notification.catering_transaction_tb_id === row.id
                   );
 
                 return (
@@ -195,19 +195,21 @@ export function ProfileCateringBookings() {
                         #{row.tracking_no}
                       </span>
 
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            CATERING_BOOKING_STATUS[row.status].color,
-                        }}
-                      >
-                        {CATERING_BOOKING_STATUS[row.status].name}
-                      </span>
-                      {notification ? (
-                        <VscCircleFilled className="text-red-600 " />
-                      ) : null}
+                      <div className="flex">
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              CATERING_BOOKING_STATUS[row.status].color,
+                          }}
+                        >
+                          {CATERING_BOOKING_STATUS[row.status].name}
+                        </span>
+                        {notification ? (
+                          <VscCircleFilled className="text-red-600 " />
+                        ) : null}
+                      </div>
                     </span>
                     <div className="flex justify-between">
                       <span className="text-xs">
@@ -245,23 +247,25 @@ export function ProfileCateringBookings() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected !== "view") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetCateringBookingHistoryStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetCateringBookingHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -316,8 +320,7 @@ export function ProfileCateringBookings() {
                       const notification: NotificationModel | undefined =
                         getNotificationsState.data?.catering_booking.unseen_notifications.find(
                           (notification) =>
-                            notification.catering_tracking_no ===
-                            row.tracking_no
+                            notification.catering_transaction_tb_id === row.id
                         );
 
                       return (

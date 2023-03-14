@@ -18,14 +18,14 @@ export enum GetStoresAvailableBranchesState {
 
 interface InitialState {
   status: GetStoresAvailableBranchesState;
-  data: Array<RegionModel>;
+  data: Array<RegionModel> | undefined;
   search: Array<StoreModel> | undefined;
   message: string;
 }
 
 const initialState: InitialState = {
   status: GetStoresAvailableBranchesState.initial,
-  data: [],
+  data: undefined,
   message: "",
   search: undefined,
 };
@@ -81,6 +81,7 @@ export const getStoresAvailableBranchesSlice = createSlice({
       .addCase(getStoresAvailableBranches.rejected, (state, action) => {
         state.status = GetStoresAvailableBranchesState.fail;
         state.message = action.payload as string;
+        state.data = undefined;
       });
   },
 });

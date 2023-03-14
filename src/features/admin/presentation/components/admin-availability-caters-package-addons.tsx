@@ -26,8 +26,10 @@ import {
 } from "../slices/update-store-caters-package-addons.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Name" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
   { id: "action", label: "Action" },
@@ -94,7 +96,7 @@ export function AdminAvailabilityCatersPackageAddons() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 0,
+                  status: 1,
 
                   store_id: storeId,
                   search: search,
@@ -109,7 +111,7 @@ export function AdminAvailabilityCatersPackageAddons() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status === null || status === "0"
+                status === null || status === "1"
                   ? "text-base"
                   : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
@@ -121,7 +123,7 @@ export function AdminAvailabilityCatersPackageAddons() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 1,
+                  status: 0,
                   store_id: storeId,
 
                   search: search,
@@ -136,7 +138,7 @@ export function AdminAvailabilityCatersPackageAddons() {
                 });
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
-                status && status === "1" ? "text-base" : "text-xs opacity-40"
+                status && status === "0" ? "text-base" : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
             >
               Not Available
@@ -155,6 +157,10 @@ export function AdminAvailabilityCatersPackageAddons() {
               }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
               }
               onChange={(event, value) => {
                 if (value) {
@@ -418,6 +424,17 @@ export function AdminAvailabilityCatersPackageAddons() {
                   {getAdminStoreCatersPackageAddonsState.data.caters_package_addons.map(
                     (row, i) => (
                       <DataTableRow key={i}>
+                        <DataTableCell>
+                          <img
+                            src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                            alt="Deal Product"
+                            className="rounded-[10px] w-[75px] h-[75px]"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
+                          />
+                        </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>
                         <DataTableCell>
                           <div
@@ -427,13 +444,13 @@ export function AdminAvailabilityCatersPackageAddons() {
                           />
                         </DataTableCell>
                         <DataTableCell>
-                          {status === null || status === "0" ? (
+                          {status === null || status === "1" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCatersPackageAddon({
-                                      status: "1",
+                                      status: "0",
                                       id: row.id.toString(),
                                     })
                                   );
@@ -442,13 +459,13 @@ export function AdminAvailabilityCatersPackageAddons() {
                             >
                               Disable
                             </button>
-                          ) : status === "1" ? (
+                          ) : status === "0" ? (
                             <button
                               onClick={() => {
                                 if (row.id)
                                   dispatch(
                                     updateStoreCatersPackageAddon({
-                                      status: "0",
+                                      status: "1",
                                       id: row.id.toString(),
                                     })
                                   );

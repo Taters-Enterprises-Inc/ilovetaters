@@ -1,15 +1,11 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getAllAvailableStores } from "../slices/get-all-available-stores.slice";
-import { StoreClusterStoreVisit } from "../components";
+import { StoreVisitStoreCluster } from "../components";
 import { IoMdClose } from "react-icons/io";
-import { SearchAddress } from "features/shared/presentation/components";
-import {
-  selectStoreVisitStoreChooserModal,
-  setAddressStoreVisitStoreChooserModal,
-} from "../slices/store-visit-store-chooser-modal.slice";
-import { getStoresAvailablePopClubStoreVisit } from "../slices/get-stores-available-popclub-store-visit.slice";
+import { selectStoreVisitStoreChooserModal } from "../slices/store-visit-store-chooser-modal.slice";
+import { getStoreVisitAvailableStore } from "../slices/get-store-visit-available-stores.slice";
 import { useEffect } from "react";
 import { StoreVisitStoreSearch } from "../components/store-visit-store-search";
+import { PopclubHeroCarousel } from "../components/popclub-hero.carousel";
 
 interface StoreVisitStoreChooserModalProps {
   open: boolean;
@@ -26,7 +22,7 @@ export function StoreVisitStoreChooserModal(
 
   useEffect(() => {
     dispatch(
-      getStoresAvailablePopClubStoreVisit({
+      getStoreVisitAvailableStore({
         address: null,
         service: "POPCLUB-STORE-VISIT",
       })
@@ -58,6 +54,11 @@ export function StoreVisitStoreChooserModal(
         >
           <IoMdClose />
         </button>
+
+        <div className="mt-4">
+          <PopclubHeroCarousel />
+        </div>
+
         <h1 className="pt-4 text-sm text-center text-white uppercase font-['Bebas_Neue'] tracking-[2px] lg:text-lg pb-2">
           Which store are you visiting?
         </h1>
@@ -66,7 +67,7 @@ export function StoreVisitStoreChooserModal(
           <StoreVisitStoreSearch label="Search Store" />
         </div>
 
-        <StoreClusterStoreVisit
+        <StoreVisitStoreCluster
           onClose={props.onClose}
           onDefaultStoreSelectHandler={props.onDefaultStoreSelectHandler}
           address={

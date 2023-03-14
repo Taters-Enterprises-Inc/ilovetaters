@@ -20,12 +20,29 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { PopClubQuantityInput } from "../components";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
+
+export type PopClubFlavorType = {
+  [key: string]: {
+    productName: string;
+    name: string;
+    quantity: number;
+  };
+};
+
+export type PopClubMultiFlavorsType = {
+  [key: string]: PopClubFlavorType;
+};
+
 interface VariantChooserModalProps {
   open: boolean;
   onClose: () => void;
 }
 
 export function VariantsChooserModal(props: VariantChooserModalProps) {
+  const dispatch = useAppDispatch();
+
   const getDealProductVariantsState = useAppSelector(
     selectGetDealProductVariants
   );
@@ -35,8 +52,9 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
   const getSessionState = useAppSelector(selectGetSession);
   const navigate = useNavigate();
 
-  const [optionsSelected, setOptionsSelected] = useState({});
-  const dispatch = useAppDispatch();
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<PopClubMultiFlavorsType>({});
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -47,8 +65,7 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     if (
       redeemDealState.status === RedeemDealState.success &&
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery" &&
-      redeemDealState.data
+      getSessionState.data?.popclub_data.platform === "online-delivery"
     ) {
       navigate("/delivery/checkout");
       dispatch(getSession());
@@ -56,33 +73,101 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     } else if (
       redeemDealState.status === RedeemDealState.success &&
       getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "store-visit" &&
-      redeemDealState.data
+      getSessionState.data?.popclub_data.platform === "store-visit"
     ) {
-      props.onClose();
       dispatch(resetRedeemDeal());
+      props.onClose();
     }
-  }, [getSessionState, navigate, redeemDealState, getRedeemsState, props]);
+  }, [
+    getSessionState,
+    navigate,
+    redeemDealState,
+    getRedeemsState,
+    props,
+    dispatch,
+  ]);
+
+  const createFlavorDetails = (): string | undefined => {
+    if (currentMultiFlavors === undefined) return undefined;
+    let result = "";
+    let isFirst = true;
+
+    Object.keys(currentMultiFlavors).forEach((key) => {
+      const multiFlavorsArray: Array<{
+        productName: string;
+        name: string;
+        quantity: number;
+      }> = Object.values(currentMultiFlavors[key]);
+
+      result +=
+        (isFirst ? "" : "<br>") + multiFlavorsArray[0].productName + "<br>";
+      isFirst = false;
+
+      for (let i = 0; i < multiFlavorsArray.length; i++) {
+        if (multiFlavorsArray[i].quantity > 0)
+          result += `<strong>${multiFlavorsArray[
+            i
+          ].quantity.toString()}</strong> - ${multiFlavorsArray[i].name}<br>`;
+      }
+    });
+
+    return result;
+  };
 
   const onSubmit = (event: any) => {
     event.preventDefault();
 
-    if (getDealProductVariantsState.data) {
-      const dealProductVariants = getDealProductVariantsState.data;
-      let remarks = Object.values(optionsSelected).join("");
+    if (
+      getDealProductVariantsState.data &&
+      getDealProductVariantsState.data.length
+    ) {
+      let dealWithoutFlavor = "";
 
-      for (let i = 0; i < dealProductVariants.length; i++) {
-        const dealProductVariant = dealProductVariants[i];
-
-        if (dealProductVariant.product_variants.length <= 0) {
-          remarks +=
+      for (let i = 0; i < getDealProductVariantsState.data.length; i++) {
+        const dealProductVariant = getDealProductVariantsState.data[i];
+        if (dealProductVariant.product_variants.length === 0) {
+          dealWithoutFlavor +=
             "<strong>" +
             dealProductVariant.quantity +
             "</strong> - " +
             dealProductVariant.product.name +
             "<br/>";
+          continue;
+        }
+        let totalMultiFlavorsQuantity = 0;
+
+        if (currentMultiFlavors[i] === undefined) {
+          dispatch(
+            popUpSnackBar({
+              message: "Please meet the required number of flavors.",
+              severity: "error",
+            })
+          );
+
+          return;
+        }
+
+        Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+          const currentFlavor = currentMultiFlavors[i];
+          totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+        });
+
+        if (totalMultiFlavorsQuantity !== dealProductVariant.quantity) {
+          dispatch(
+            popUpSnackBar({
+              message: "Please meet the required number of flavors.",
+              severity: "error",
+            })
+          );
+
+          return;
         }
       }
+
+      let flavors_details = createFlavorDetails();
+
+      const remarks =
+        (dealWithoutFlavor ? dealWithoutFlavor + "<br>" : "") + flavors_details;
 
       if (getDealState.data?.hash && remarks) {
         dispatch(
@@ -93,26 +178,6 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
         );
       }
     }
-  };
-
-  const handleFormChange = (
-    event: any,
-    dealProductVariant: DealProductVariantsModel
-  ) => {
-    const data: any = optionsSelected;
-    const optionName = event.target.value;
-    const productName = dealProductVariant.product.name;
-    const quantity = dealProductVariant.quantity;
-
-    data[event.target.name] =
-      "<strong>" +
-      quantity +
-      "</strong> - " +
-      productName +
-      " (" +
-      optionName +
-      ")<br/>";
-    setOptionsSelected(data);
   };
 
   return (
@@ -128,66 +193,76 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
           X
         </button>
         <form onSubmit={onSubmit}>
-          {getDealProductVariantsState.data?.map((dealProductVariant, i) => {
-            return (
-              <div
-                key={i}
-                className={`${
-                  dealProductVariant.product_variants.length > 0 ? "pb-4" : ""
-                }`}
-              >
-                <h1 className="text-lg font-bold">
-                  {dealProductVariant.quantity}{" "}
-                  {dealProductVariant.product.name}
-                </h1>
-                {dealProductVariant.product_variants.map(
-                  (productVariant, i) => (
-                    <div key={i}>
-                      <FormControl>
-                        <RadioGroup
-                          name={
-                            dealProductVariant.option_id +
-                            "_" +
-                            productVariant.id
-                          }
-                          onChange={(e) =>
-                            handleFormChange(e, dealProductVariant)
-                          }
-                        >
-                          <h2 className="text-base uppercase">
-                            PICK A {productVariant.name}
-                          </h2>
-                          <ul className="w-full mt-2 text-sm font-medium text-white rounded-lg bg-secondary">
-                            {productVariant.options.map((option, i) => (
-                              <li key={i} className="w-full ">
-                                <div className="flex items-center pl-3">
-                                  <FormControlLabel
-                                    value={option.name}
-                                    control={
-                                      <Radio
-                                        required
-                                        color="tertiary"
-                                        sx={{ color: "white" }}
-                                      />
-                                    }
-                                    label={
-                                      <span className="py-3 ml-2 w-full text-sm font-medium !text-white">
-                                        {option.name}
-                                      </span>
-                                    }
-                                  />
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </RadioGroup>
-                      </FormControl>
-                    </div>
-                  )
-                )}
-              </div>
-            );
-          })}
+          {getDealProductVariantsState.data?.map(
+            (dealProductVariant, dealProductVariantId) => {
+              return (
+                <div
+                  key={dealProductVariantId}
+                  className={`${
+                    dealProductVariant.product_variants.length > 0 ? "pb-4" : ""
+                  }`}
+                >
+                  <h1 className="text-lg font-bold">
+                    {dealProductVariant.quantity}{" "}
+                    {dealProductVariant.product.name}
+                  </h1>
+                  {dealProductVariant.product_variants.map(
+                    (productVariant, productVariantId) => (
+                      <div key={productVariantId}>
+                        <h2 className="text-base uppercase">
+                          PICK A {productVariant.name}
+                        </h2>
+                        <ul className="w-full mt-2 text-sm font-medium text-white rounded-lg bg-secondary">
+                          {productVariant.options.map((option, optionId) => (
+                            <li key={optionId} className="w-full ">
+                              <span className="text-sm text-white">
+                                {option.name}
+                              </span>
+                              <PopClubQuantityInput
+                                flavorId={option.id}
+                                productQuantity={dealProductVariant.quantity}
+                                parent_index={dealProductVariantId}
+                                currentMultiFlavors={currentMultiFlavors}
+                                onChange={(value) => {
+                                  const tempCurrentMultiFlavors =
+                                    currentMultiFlavors[dealProductVariantId]
+                                      ? currentMultiFlavors[
+                                          dealProductVariantId
+                                        ]
+                                      : {};
+
+                                  if (value !== undefined) {
+                                    tempCurrentMultiFlavors[option.id] = {
+                                      productName:
+                                        dealProductVariant.product.name,
+                                      name: option.name,
+                                      quantity: value,
+                                    };
+
+                                    const updateCurrentMultiFlavor = {
+                                      ...currentMultiFlavors,
+                                    };
+
+                                    updateCurrentMultiFlavor[
+                                      dealProductVariantId
+                                    ] = tempCurrentMultiFlavors;
+
+                                    setCurrentMultiFlavors(
+                                      updateCurrentMultiFlavor
+                                    );
+                                  }
+                                }}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                  )}
+                </div>
+              );
+            }
+          )}
 
           <button
             type="submit"

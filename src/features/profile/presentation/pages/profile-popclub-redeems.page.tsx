@@ -26,6 +26,9 @@ import {
 import { PopclubRedeemModel } from "features/profile/core/domain/popclub-redeem.model";
 import moment from "moment";
 import { createQueryParams } from "features/config/helpers";
+import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Order Date" },
@@ -38,16 +41,21 @@ const columns: Array<Column> = [
 
 export function ProfilePopclubRedeems() {
   const dispatch = useAppDispatch();
+
   const query = useQuery();
   const navigate = useNavigate();
-  const getPopclubRedeemsHistoryState = useAppSelector(
-    selectGetPopclubRedeemsHistory
-  );
+
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+
+  const getPopclubRedeemsHistoryState = useAppSelector(
+    selectGetPopclubRedeemsHistory
+  );
+
+  const getNotificationsState = useAppSelector(selectGetNotifications);
 
   useEffect(() => {
     const query = createQueryParams({
@@ -146,46 +154,65 @@ export function ProfilePopclubRedeems() {
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => (
-                <div className="flex flex-col px-4 py-2 border-b" key={i}>
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span className="text-lg text-gray-600">
-                      {row.redeem_code}
-                    </span>
-                    {row.status === 1 &&
-                    moment(row.expiration).isBefore(moment()) ? (
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor: "#a21013",
-                        }}
-                      >
-                        Expired
+              {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getNotificationsState.data?.popclub_redeem.unseen_notifications.find(
+                    (notification) =>
+                      notification.deals_redeems_tb_id === row.id
+                  );
+
+                return (
+                  <Link
+                    key={i}
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(seenNotification(notification.id));
+                      }
+                    }}
+                    to={`/popclub/order/${row.hash_key}`}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span className="text-lg text-gray-600">
+                        {row.redeem_code}
                       </span>
-                    ) : (
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                        }}
-                      >
-                        {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                      {row.status === 1 &&
+                      moment(row.expiration).isBefore(moment()) ? (
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor: "#a21013",
+                          }}
+                        >
+                          Expired
+                        </span>
+                      ) : (
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                          }}
+                        >
+                          {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                        </span>
+                      )}
+                    </span>
+                    <div className="flex justify-between">
+                      <span className="text-xs">
+                        <Moment format="LLL">{row.dateadded}</Moment>
                       </span>
-                    )}
-                  </span>
-                  <div className="flex justify-between">
-                    <span className="text-xs">
-                      <Moment format="LLL">{row.dateadded}</Moment>
-                    </span>
-                    <span className="text-lg font-semibold">
-                      {calculateGrandTotal(row)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                      <span className="text-lg font-semibold">
+                        {calculateGrandTotal(row)}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden lg:block">
@@ -211,23 +238,25 @@ export function ProfilePopclubRedeems() {
                 });
               }}
               onRequestSort={(column_selected) => {
-                const isAsc = orderBy === column_selected && order === "asc";
+                if (column_selected !== "view") {
+                  const isAsc = orderBy === column_selected && order === "asc";
 
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  order_by: column_selected,
-                  order: isAsc ? "desc" : "asc",
-                  search: search,
-                };
+                  const params = {
+                    page_no: pageNo,
+                    per_page: perPage,
+                    order_by: column_selected,
+                    order: isAsc ? "desc" : "asc",
+                    search: search,
+                  };
 
-                const queryParams = createQueryParams(params);
+                  const queryParams = createQueryParams(params);
 
-                dispatch(resetGetPopclubRedeemsHistoryStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
+                  dispatch(resetGetPopclubRedeemsHistoryStatus());
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }
               }}
               columns={columns}
               onRowsPerPageChange={(event) => {
@@ -277,48 +306,68 @@ export function ProfilePopclubRedeems() {
             >
               {getPopclubRedeemsHistoryState.data.redeems !== undefined ? (
                 <>
-                  {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="LLL">{row.expiration}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.redeem_code}</DataTableCell>
-                      <DataTableCell>{calculateGrandTotal(row)}</DataTableCell>
-                      <DataTableCell>
-                        {row.status === 1 &&
-                        moment(row.expiration).isBefore(moment()) ? (
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor: "#a21013",
+                  {getPopclubRedeemsHistoryState.data.redeems.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getNotificationsState.data?.popclub_redeem.unseen_notifications.find(
+                        (notification) =>
+                          notification.deals_redeems_tb_id === row.id
+                      );
+
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.expiration}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.redeem_code}</DataTableCell>
+                        <DataTableCell>
+                          {calculateGrandTotal(row)}
+                        </DataTableCell>
+                        <DataTableCell>
+                          {row.status === 1 &&
+                          moment(row.expiration).isBefore(moment()) ? (
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor: "#a21013",
+                              }}
+                            >
+                              Expired
+                            </span>
+                          ) : (
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
+                              }}
+                            >
+                              {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
+                            </span>
+                          )}
+                        </DataTableCell>
+                        <DataTableCell align="left">
+                          <Link
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(seenNotification(notification.id));
+                              }
                             }}
+                            to={`/popclub/order/${row.hash_key}`}
                           >
-                            Expired
-                          </span>
-                        ) : (
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                ADMIN_POPCLUB_REDEEM_STATUS[row.status].color,
-                            }}
-                          >
-                            {ADMIN_POPCLUB_REDEEM_STATUS[row.status].name}
-                          </span>
-                        )}
-                      </DataTableCell>
-                      <DataTableCell align="left">
-                        <Link to={`/popclub/order/${row.hash_key}`}>
-                          <FaEye className="text-lg" />
-                        </Link>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                            <FaEye className="text-lg" />
+                          </Link>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

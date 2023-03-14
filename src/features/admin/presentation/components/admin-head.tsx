@@ -32,7 +32,7 @@ export function AdminHead(props: AdminHeadProps) {
 
   useEffect(() => {
     dispatch(getAdminNotifications());
-  }, [updateAdminNotificationDateSeenState]);
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -126,6 +126,9 @@ export function AdminHead(props: AdminHeadProps) {
                           break;
                         case 2:
                           notificationLink = `/admin/catering?tracking_no=${notification.catering_tracking_no}`;
+                          break;
+                        case 3:
+                          notificationLink = `/admin/popclub?redeem_code=${notification.redeem_code}`;
                           break;
                       }
                       return (

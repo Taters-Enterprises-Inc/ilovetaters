@@ -1,27 +1,29 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { SearchAddress } from "features/shared/presentation/components/search-address";
-import { useEffect, useState } from "react";
+import { MaterialInputAddress } from "features/shared/presentation/components";
+import { useEffect } from "react";
 import { ShopStoreListDelivery } from "../components/shop-store-list-delivery";
-import {
-  getSession,
-  selectGetSession,
-} from "../../../shared/presentation/slices/get-session.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { getStoresAvailableSnackshop } from "../slices/get-stores-available-snackshop.slice";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   selectShopHomePage,
   setAddressShopHomePage,
 } from "../slices/shop-home-page.slice";
 import { ShopHeroCarousel } from "../carousels";
+import { useLocation } from "react-router-dom";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function ShopHome() {
   const dispatch = useAppDispatch();
   const shopHomePageState = useAppSelector(selectShopHomePage);
 
+  const location = useLocation();
+
   useEffect(() => {
     dispatch(storeReset());
   }, [dispatch]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
 
   return (
     <main className="min-h-screen bg-primary">
@@ -34,51 +36,52 @@ export function ShopHome() {
           Please search your address for delivery
         </h1>
 
-        <div className="flex justify-center">
-          <label className="pure-material-textfield-outlined w-[100%] mb-4">
-            <SearchAddress
-              value={shopHomePageState.address ? shopHomePageState.address : ""}
-              onChange={(value: string) => {
-                dispatch(setAddressShopHomePage({ address: value }));
-              }}
-              onDenied={() => {
-                dispatch(
-                  getStoresAvailableSnackshop({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onPrompt={() => {
-                dispatch(
-                  getStoresAvailableSnackshop({
-                    address: null,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onLocateCurrentAddress={(place: string) => {
-                dispatch(setAddressShopHomePage({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshop({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-              onPlaceSelected={(place: string) => {
-                dispatch(setAddressShopHomePage({ address: place }));
-                dispatch(
-                  getStoresAvailableSnackshop({
-                    address: place,
-                    service: "SNACKSHOP",
-                  })
-                );
-              }}
-            />
-            <span>Search Address</span>
-          </label>
-        </div>
+        <MaterialInputAddress
+          geolocate={true}
+          colorTheme="white"
+          value={shopHomePageState.address ? shopHomePageState.address : ""}
+          onChange={(value: string) => {
+            dispatch(setAddressShopHomePage({ address: value }));
+          }}
+          onDenied={() => {
+            dispatch(
+              getStoresAvailableSnackshop({
+                address: null,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onPrompt={() => {
+            dispatch(
+              getStoresAvailableSnackshop({
+                address: null,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onLocateCurrentAddress={(location) => {
+            dispatch(
+              setAddressShopHomePage({ address: location.formattedAddress })
+            );
+            dispatch(
+              getStoresAvailableSnackshop({
+                address: location.formattedAddress,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+          onPlaceSelected={(location) => {
+            dispatch(
+              setAddressShopHomePage({ address: location.formattedAddress })
+            );
+            dispatch(
+              getStoresAvailableSnackshop({
+                address: location.formattedAddress,
+                service: "SNACKSHOP",
+              })
+            );
+          }}
+        />
         <ShopStoreListDelivery address={shopHomePageState.address} />
       </section>
     </main>

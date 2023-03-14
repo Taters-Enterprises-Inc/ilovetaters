@@ -1,3 +1,4 @@
+import { Moment } from "moment";
 import { AdminStoreModel } from "./domain/admin-store.model";
 
 export interface EditAdminUserParam {
@@ -20,6 +21,11 @@ export interface UpdateStoreDealParam {
 }
 
 export interface UpdateStoreProductParam {
+  id: string;
+  status: "1" | "0";
+}
+
+export interface UpdateStoreCateringProductParam {
   id: string;
   status: "1" | "0";
 }
@@ -66,8 +72,11 @@ export interface LoginAdminParam {
 }
 
 export interface AdminPrivilegeParam {
+  fbUserId: number | null;
+  mobileUserId: number | null;
   password: string;
   transactionId: number;
+  transactionHash: string;
   fromStatusId?: number;
   toStatusId?: string;
   fromStoreId?: number;
@@ -79,7 +88,7 @@ export interface ValidateReferenceNumberParam {
   transactionId: number;
 }
 
-export interface UpdateUserStoresParam {
+export interface UpdateAdminSettingUserStoresParam {
   userId: string;
   stores: Array<AdminStoreModel>;
 }
@@ -95,7 +104,8 @@ export interface AdminUserDiscountChangeStatusParam {
 }
 
 export interface AdminSurveyVerificationChangeStatusParam {
-  surveyverificationId: number;
+  surveyVerificationId: number;
+  invoiceNo: string;
   status: number;
 }
 
@@ -113,6 +123,7 @@ export interface AdminCompleteRedeemParam {
 
 export interface AdminCateringBookingUpdateStatusParam {
   transactionId: number;
+  transactionHash: string;
   mobileUserId: number | null;
   fbUserId: number | null;
   status: number;
@@ -120,7 +131,265 @@ export interface AdminCateringBookingUpdateStatusParam {
 
 export interface AdminShopOrderUpdateStatusParam {
   transactionId: number;
+  transactionHash: string;
   mobileUserId: number | null;
   fbUserId: number | null;
   status: number;
+}
+
+export interface CreateAdminSettingShopProductParam {
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  variants: string;
+  productAvailability: boolean;
+  stores: string;
+  products: string;
+  numFlavor: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface EditAdminSettingShopProductParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  productAvailability: boolean | "";
+  stores: string;
+  products: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface CopyAdminSettingShopProductParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  productAvailability: boolean | "";
+  stores: string;
+  products: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface UpdateAdminSettingShopProductStatusParam {
+  product_id: number;
+  status: number;
+}
+
+export interface UpdateAdminCateringOrderItemRemarksParam {
+  orderItemId: number;
+  remarks: string;
+}
+
+export interface GetAdminSalesParam {
+  service: "overall" | "snackshop" | "catering" | "popclub";
+}
+
+export interface GetAdminTotalSalesParam {
+  service: "overall" | "snackshop" | "catering" | "popclub";
+}
+
+export interface CreateAdminSettingStoreParam {
+  name: string;
+  address: string;
+  storeMenu: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  phoneNumber: string;
+  contactPerson: string;
+  email: string;
+  deliveryHours: string;
+  operatingHours: string;
+  region: string;
+  lat: number;
+  lng: number;
+  deliveryRate: string;
+  minimumRate: string;
+  cateringDeliveryRate: string;
+  cateringMinimumRate: string;
+  storeHash: string;
+  locale: string;
+  image250x250: File | string;
+  services: string;
+  products: string;
+  packages: string;
+}
+
+export interface GetAdminCateringPackageFlavorsParam {
+  packageId: number;
+  type: string;
+}
+
+export interface GetAdminSettingStoreParam {
+  storeId: string;
+}
+
+export interface EditAdminSettingStoreParam {
+  storeId: string;
+  name: string;
+  address: string;
+  storeMenu: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  phoneNumber: string;
+  contactPerson: string;
+  email: string;
+  deliveryHours: string;
+  operatingHours: string;
+  region: string;
+  lat: number;
+  lng: number;
+  deliveryRate: string;
+  minimumRate: string;
+  cateringDeliveryRate: string;
+  cateringMinimumRate: string;
+  storeHash: string;
+  locale: string;
+  image250x250: File | string;
+  services: string;
+  products: string;
+  packages: string;
+}
+
+export interface CreateAdminSettingCateringPackageParam {
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  variants: string;
+  packageAvailability: boolean;
+  stores: string;
+  dynamicPrices: string;
+  numFlavor: string;
+  freeThreshold: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface EditAdminSettingCateringPackageParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  packageAvailability: boolean | "";
+  freeThreshold: string;
+  dynamicPrices: string;
+  stores: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface CopyAdminSettingCateringPackageParam {
+  id: string;
+  name: string;
+  description: string;
+  deliveryDetails: string;
+  addDetails: string;
+  price: string;
+  category: string;
+  uom: string;
+  numFlavor: string;
+  variants: string;
+  packageAvailability: boolean;
+  freeThreshold: string;
+  dynamicPrices: string;
+  stores: string;
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface UpdateAdminSettingCateringPackageStatusParam {
+  package_id: number;
+  status: number;
+}
+
+export interface CreateAdminSettingPopclubDealParam {
+  alias: string;
+  name: string;
+  originalPrice: string;
+  promoPrice: string;
+  promoDiscountPercentage: string;
+  minimumPurchase: string;
+  isFreeDelivery: boolean;
+  description: string;
+  secondsBeforeExpiration: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  availableStartDateTime: string;
+  availableEndDateTime: string;
+  dealAvailability: boolean;
+
+  availableDays: string;
+  categories: string;
+  excludedProducts: string;
+  includedProducts: string;
+  products: string;
+  stores: string;
+
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
+}
+
+export interface EditAdminSettingPopclubDealParam {
+  id: string;
+  alias: string;
+  name: string;
+  originalPrice: string;
+  promoPrice: string;
+  promoDiscountPercentage: string;
+  minimumPurchase: string;
+  isFreeDelivery: boolean;
+  description: string;
+  secondsBeforeExpiration: string;
+  availableStartTime: string;
+  availableEndTime: string;
+  availableStartDateTime: string;
+  availableEndDateTime: string;
+  dealAvailability: boolean | "";
+
+  availableDays: string;
+  categories: string;
+  excludedProducts: string;
+  includedProducts: string;
+  products: string;
+  stores: string;
+
+  image500x500: File | string;
+  image250x250: File | string;
+  image75x75: File | string;
 }

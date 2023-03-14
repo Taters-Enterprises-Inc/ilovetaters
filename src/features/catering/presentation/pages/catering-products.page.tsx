@@ -5,12 +5,12 @@ import {
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
-  getCateringCategoryProducts,
-  selectGetCateringCategoryProducts,
-} from "../slices/get-catering-category-products.slice";
+  getCateringCategoryPackages,
+  selectGetCateringCategoryPackages,
+} from "../slices/get-catering-category-packages.slice";
 
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
@@ -18,9 +18,13 @@ import { CateringFaqs } from "../components";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 
 export function CateringProducts() {
+  const [
+    openCateringPackageCustomizationModal,
+    setOpenCateringPackageCustomizationModal,
+  ] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
-  const getCateringCategoryProductsState = useAppSelector(
-    selectGetCateringCategoryProducts
+  const getCateringCategoryPackagesState = useAppSelector(
+    selectGetCateringCategoryPackages
   );
 
   const dispatch = useAppDispatch();
@@ -37,7 +41,7 @@ export function CateringProducts() {
     ) {
       if (getSessionState.data.cache_data?.region_id) {
         dispatch(
-          getCateringCategoryProducts({
+          getCateringCategoryPackages({
             region_id: getSessionState.data.cache_data.region_id,
           })
         );
@@ -51,7 +55,7 @@ export function CateringProducts() {
         <CateringHeroCarousel />
       </section>
       <section className="container space-y-10 pb-[90px]">
-        {getCateringCategoryProductsState.data?.map((category, i) => (
+        {getCateringCategoryPackagesState.data?.map((category, i) => (
           <section key={i}>
             <h1 className="text-white font-['Bebas_Neue'] text-xl lg:text-3xl tracking-[3px] py-4">
               {category.category_name}
@@ -67,7 +71,11 @@ export function CateringProducts() {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${product.image}`}
                     className="rounded-t-[10px] w-full"
-                    alt=""
+                    alt={product.name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col justify-between flex-1 p-3 space-y-2">
                     <h2 className="text-sm leading-4 text-white">
@@ -88,10 +96,6 @@ export function CateringProducts() {
             </div>
           </section>
         ))}
-
-        {/* <h3 className='text-tertiary text-4xl font-["Bebas_Neue"] text-center py-4 '>
-          FREQUENTLY ASKED QUESTIONS
-        </h3> */}
         <CateringFaqs />
       </section>
 

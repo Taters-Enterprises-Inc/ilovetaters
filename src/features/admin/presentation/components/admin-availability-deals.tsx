@@ -17,8 +17,6 @@ import {
   MaterialInputAutoComplete,
   MaterialInput,
 } from "features/shared/presentation/components";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import {
   getAdminStoreDeals,
   selectGetAdminStoreDeals,
@@ -34,8 +32,10 @@ import {
 } from "../slices/get-deal-categories.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "alias", label: "Alias" },
   { id: "name", label: "Name" },
   { id: "action", label: "Action" },
@@ -106,33 +106,6 @@ export function AdminAvailabilityDeals() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 0,
-                  store_id: storeId,
-                  category_id: categoryId,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminStoreDealsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }}
-              className={`px-4 py-1 text-white bg-green-700 ${
-                status === null || status === "0"
-                  ? "text-base"
-                  : "text-xs opacity-40"
-              } rounded-full font-['Varela_Round']`}
-            >
-              Available
-            </button>
-            <button
-              onClick={() => {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
                   status: 1,
                   store_id: storeId,
                   category_id: categoryId,
@@ -147,8 +120,35 @@ export function AdminAvailabilityDeals() {
                   search: queryParams,
                 });
               }}
+              className={`px-4 py-1 text-white bg-green-700 ${
+                status === null || status === "1"
+                  ? "text-base"
+                  : "text-xs opacity-40"
+              } rounded-full font-['Varela_Round']`}
+            >
+              Available
+            </button>
+            <button
+              onClick={() => {
+                const params = {
+                  page_no: pageNo,
+                  per_page: perPage,
+                  status: 0,
+                  store_id: storeId,
+                  category_id: categoryId,
+                  search: search,
+                };
+
+                const queryParams = createQueryParams(params);
+
+                dispatch(resetGetAdminStoreDealsStatus());
+                navigate({
+                  pathname: "",
+                  search: queryParams,
+                });
+              }}
               className={`px-4 py-1 text-white bg-red-700 ${
-                status && status === "1" ? "text-base" : "text-xs opacity-40"
+                status && status === "0" ? "text-base" : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
             >
               Not Available
@@ -164,6 +164,10 @@ export function AdminAvailabilityDeals() {
               options={getAdminSessionState.data.admin.user_details.stores}
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
               }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
@@ -459,16 +463,27 @@ export function AdminAvailabilityDeals() {
                 <>
                   {getAdminStoreDealsState.data.deals.map((row, i) => (
                     <DataTableRow key={i}>
+                      <DataTableCell>
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                          alt="Deal Product"
+                          className="rounded-[10px] w-[75px] h-[75px]"
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.alias}</DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
-                        {status === null || status === "0" ? (
+                        {status === null || status === "1" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreDeal({
-                                    status: "1",
+                                    status: "0",
                                     id: row.id.toString(),
                                   })
                                 );
@@ -477,13 +492,13 @@ export function AdminAvailabilityDeals() {
                           >
                             Disable
                           </button>
-                        ) : status === "1" ? (
+                        ) : status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreDeal({
-                                    status: "0",
+                                    status: "1",
                                     id: row.id.toString(),
                                   })
                                 );

@@ -38,13 +38,14 @@ import {
   MaterialInput,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { PaymentMethod } from "../components";
+import { ShopPaymentMethod } from "../components";
 import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   getAvailableUserDiscount,
   selectGetAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -87,6 +88,10 @@ export function ShopCheckout() {
       checkoutOrdersState.status === CheckoutOrdersState.success &&
       checkoutOrdersState.data
     ) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Checkout order",
+      });
       dispatch(getNotifications());
       navigate(`/delivery/order/${checkoutOrdersState.data.hash}`);
       dispatch(resetCheckoutOrders());
@@ -140,24 +145,96 @@ export function ShopCheckout() {
   const calculateSubTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        let order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].prod_calc_amount * discountPercentage
+          ? order.prod_calc_amount * discountPercentage
           : 0;
-        calculatedPrice += orders[i].prod_calc_amount - discount;
+
+        const deal_products_promo_includes =
+          getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let i = 0; i < deal_products_promo_includes.length; i++) {
+            const deal_products_promo_include = deal_products_promo_includes[i];
+
+            if (
+              deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                order.prod_calc_amount -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                order.prod_calc_amount -
+                order.prod_calc_amount *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += order.prod_calc_amount - discount;
+          }
+        } else {
+          calculatedPrice += order.prod_calc_amount - discount;
+        }
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -173,7 +250,6 @@ export function ShopCheckout() {
   const calculateDeliveryFee = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -185,12 +261,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
@@ -199,6 +272,7 @@ export function ShopCheckout() {
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
         getLatestUnexpiredRedeemState.data.minimum_purchase <=
           calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1 &&
         getLatestUnexpiredRedeemState.data.store ===
           getSessionState.data.cache_data?.store_id
       ) {
@@ -216,38 +290,162 @@ export function ShopCheckout() {
         />
       );
     } else {
+      return "₱ 0.00";
+    }
+  };
+
+  const calculateDiscount = () => {
+    let calculatedPrice = 0;
+
+    const orders = getSessionState.data?.orders;
+
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        calculatedPrice += orders[i].prod_calc_amount;
+      }
+    }
+
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+    }
+
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
       return (
         <NumberFormat
-          value={0}
+          value={discountedPrice.toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
         />
       );
     }
+
+    return "₱ 0.00";
   };
 
   const calculateTotalPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].prod_calc_amount * discountPercentage
+          ? order.prod_calc_amount * discountPercentage
           : 0;
-        calculatedPrice += orders[i].prod_calc_amount - discount;
+
+        const deal_products_promo_includes =
+          getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let i = 0; i < deal_products_promo_includes.length; i++) {
+            const deal_products_promo_include = deal_products_promo_includes[i];
+
+            if (
+              deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                order.prod_calc_amount -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                order.prod_calc_amount -
+                order.prod_calc_amount *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += order.prod_calc_amount - discount;
+          }
+        } else {
+          calculatedPrice += order.prod_calc_amount - discount;
+        }
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+    }
 
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
+      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
+      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
+      getLatestUnexpiredRedeemState.data &&
+      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
+    ) {
+      const discountedPrice =
+        calculatedPrice *
+        parseFloat(
+          getLatestUnexpiredRedeemState.data.promo_discount_percentage
+        );
+
+      calculatedPrice -= discountedPrice;
     }
 
     if (getAvailableUserDiscountState.data?.percentage) {
@@ -268,7 +466,9 @@ export function ShopCheckout() {
       if (
         getLatestUnexpiredRedeemState.data &&
         getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-        getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice
+        getLatestUnexpiredRedeemState.data.minimum_purchase <=
+          calculatedPrice &&
+        getLatestUnexpiredRedeemState.data.is_free_delivery === 1
       ) {
         calculatedPrice -= getSessionState.data.distance_rate_price;
       }
@@ -287,7 +487,6 @@ export function ShopCheckout() {
   const calculateAvailableUserDiscount = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -295,13 +494,9 @@ export function ShopCheckout() {
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const dealPromoPrice = deals[i].deal_promo_price;
-        if (dealPromoPrice) {
-          calculatedPrice += dealPromoPrice;
-        }
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     if (getAvailableUserDiscountState.data) {
@@ -312,7 +507,7 @@ export function ShopCheckout() {
         <>
           <span>
             {percentage * 100}%{" "}
-            {getAvailableUserDiscountState.data.discount_type_name}:
+            {getAvailableUserDiscountState.data.discount_name}:
           </span>
           <span className="text-end">
             -{" "}
@@ -343,6 +538,185 @@ export function ShopCheckout() {
       setCashOnDelivery(parseInt(getSessionState.data.cash_delivery));
     } else {
       setCashOnDelivery(undefined);
+    }
+  };
+
+  const calculateOrderPrice = (order: {
+    prod_id: number;
+    prod_image_name: string;
+    prod_name: string;
+    prod_qty: number;
+    prod_price: number;
+    prod_calc_amount: number;
+    prod_flavor?: string;
+    prod_flavor_id?: number;
+    prod_with_drinks?: number;
+    prod_size?: string;
+    prod_size_id?: number;
+    prod_multiflavors?: string;
+    prod_sku_id?: number;
+    prod_sku?: number;
+    prod_discount?: number;
+    prod_category: number;
+    is_free_item?: number;
+    free_threshold?: number;
+    promo_discount_percentage: number | null;
+  }) => {
+    const deal_products_promo_includes =
+      getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+    if (order.promo_discount_percentage) {
+      return (
+        <div>
+          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+            <NumberFormat
+              value={order.prod_calc_amount.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+          <h3 className="flex items-end justify-end flex-1 text-base">
+            <NumberFormat
+              value={(
+                order.prod_calc_amount -
+                order.prod_calc_amount * order.promo_discount_percentage
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        </div>
+      );
+    } else if (deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id === order.prod_id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        if (
+          deal_products_promo_include_match.obtainable.length &&
+          deal_products_promo_include_match.quantity &&
+          order.prod_qty >= deal_products_promo_include_match.quantity + 1
+        ) {
+          return (
+            <div>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={order.prod_calc_amount.toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    order.prod_calc_amount -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={order.prod_calc_amount.toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    order.prod_calc_amount -
+                    order.prod_calc_amount *
+                      parseFloat(
+                        deal_products_promo_include_match.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </div>
+          );
+        }
+      } else {
+        return (
+          <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
+            <NumberFormat
+              value={order.prod_calc_amount.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        );
+      }
+    } else {
+      return (
+        <h3 className="flex items-end justify-end flex-1 text-base font-bold ">
+          <NumberFormat
+            value={order.prod_calc_amount.toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        </h3>
+      );
     }
   };
 
@@ -434,6 +808,7 @@ export function ShopCheckout() {
                         required
                         label="E-mail"
                         name="eMail"
+                        type="email"
                         fullWidth
                         value={formState.eMail}
                         onChange={handleInputChange}
@@ -463,6 +838,7 @@ export function ShopCheckout() {
                         <MaterialPhoneInput
                           colorTheme="black"
                           fullWidth
+                          required
                           onChange={handleInputChange}
                           value={formState.phoneNumber}
                           name="phoneNumber"
@@ -487,8 +863,11 @@ export function ShopCheckout() {
                     name="landmarkAddress"
                     fullWidth
                     autoComplete="off"
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     value={formState.landmarkAddress}
-                    onChange={handleInputChange}
+                    onChange={() => {}}
                   />
 
                   <MaterialInput
@@ -536,16 +915,14 @@ export function ShopCheckout() {
                           Note:
                         </h2>
 
-                        {
-                          <ul
-                            className="mt-2 space-y-2 text-sm notes"
-                            dangerouslySetInnerHTML={{
-                              __html: getSessionState.data.cache_data?.moh_notes
-                                ? getSessionState.data.cache_data.moh_notes
-                                : "",
-                            }}
-                          />
-                        }
+                        <ul
+                          className="mt-2 space-y-2 text-sm notes"
+                          dangerouslySetInnerHTML={{
+                            __html: getSessionState.data.cache_data?.moh_notes
+                              ? getSessionState.data.cache_data.moh_notes
+                              : "",
+                          }}
+                        />
                       </div>
                     </>
                   ) : null}
@@ -554,7 +931,7 @@ export function ShopCheckout() {
                     <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                       Choose payment method
                     </h2>
-                    <PaymentMethod onChange={handlePaymentMethodChange} />
+                    <ShopPaymentMethod onChange={handlePaymentMethodChange} />
 
                     {/* <PaymentAccordion /> */}
                   </div>
@@ -565,6 +942,7 @@ export function ShopCheckout() {
                     <Link
                       to="/delivery/terms-and-conditions"
                       className="text-primary"
+                      target="_blank"
                     >
                       Terms & Conditions
                     </Link>
@@ -590,7 +968,8 @@ export function ShopCheckout() {
                   </div>
                 </div>
 
-                {getSessionState.data.orders || getSessionState.data.deals ? (
+                {getSessionState.data.orders ||
+                getSessionState.data.redeem_data ? (
                   <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
                     <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                       Order Summary
@@ -601,12 +980,16 @@ export function ShopCheckout() {
                         {getSessionState.data.orders.map((order, i) => (
                           <div
                             key={i}
-                            className="flex bg-secondary shadow-lg rounded-[10px] relative"
+                            className="flex bg-secondary shadow-lg rounded-[10px] relative "
                           >
                             <img
                               src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                               className="rounded-[10px] w-[92px] h-[92px]"
-                              alt=""
+                              alt={order.prod_name}
+                              onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                              }}
                             />
                             <div className="flex flex-col flex-1 px-3 py-2 text-white">
                               <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -629,7 +1012,7 @@ export function ShopCheckout() {
                               ) : null}
 
                               {order.prod_multiflavors ? (
-                                <h3 className="text-xs">
+                                <h3 className="text-xs ">
                                   Flavor:
                                   <br />
                                   <span
@@ -641,39 +1024,7 @@ export function ShopCheckout() {
                                 </h3>
                               ) : null}
 
-                              {order.promo_discount_percentage ? (
-                                <div>
-                                  <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-                                    <NumberFormat
-                                      value={order.prod_calc_amount.toFixed(2)}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={"₱"}
-                                    />
-                                  </h3>
-                                  <h3 className="flex items-end justify-end flex-1 text-base">
-                                    <NumberFormat
-                                      value={(
-                                        order.prod_calc_amount -
-                                        order.prod_calc_amount *
-                                          order.promo_discount_percentage
-                                      ).toFixed(2)}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={"₱"}
-                                    />
-                                  </h3>
-                                </div>
-                              ) : (
-                                <h3 className="flex items-end justify-end flex-1 text-base">
-                                  <NumberFormat
-                                    value={order.prod_calc_amount.toFixed(2)}
-                                    displayType={"text"}
-                                    thousandSeparator={true}
-                                    prefix={"₱"}
-                                  />
-                                </h3>
-                              )}
+                              {calculateOrderPrice(order)}
                             </div>
                             <button
                               type="button"
@@ -694,7 +1045,11 @@ export function ShopCheckout() {
                           <img
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
                             className="rounded-[10px] w-[92px] h-[92px]"
-                            alt=""
+                            alt={getSessionState.data.redeem_data.deal_name}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
                             <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -711,12 +1066,25 @@ export function ShopCheckout() {
                             ) : null}
 
                             <span
-                              className="text-xs"
+                              className="text-xs text-tertiary"
                               dangerouslySetInnerHTML={{
                                 __html:
                                   getSessionState.data.redeem_data.deal_remarks,
                               }}
                             />
+                            {getSessionState.data.redeem_data
+                              .deal_promo_price ? (
+                              <h3 className="flex items-end justify-end flex-1 text-base">
+                                <NumberFormat
+                                  value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
+                                    2
+                                  )}
+                                  displayType={"text"}
+                                  thousandSeparator={true}
+                                  prefix={"₱"}
+                                />
+                              </h3>
+                            ) : null}
                           </div>
                         </div>
                       </div>
@@ -727,7 +1095,7 @@ export function ShopCheckout() {
                       <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                         Choose payment method
                       </h2>
-                      <PaymentMethod onChange={handlePaymentMethodChange} />
+                      <ShopPaymentMethod onChange={handlePaymentMethodChange} />
 
                       {/* <PaymentAccordion /> */}
                     </div>
@@ -738,12 +1106,20 @@ export function ShopCheckout() {
                       <span className="text-end">
                         {calculateSubTotalPrice()}
                       </span>
+                      <span>Discount:</span>
+                      <span className="text-end">- {calculateDiscount()}</span>
+
+                      {calculateAvailableUserDiscount()}
+
                       <span>Delivery Fee:</span>
-                      <span className="text-end">{calculateDeliveryFee()}</span>
+                      <span className="text-end">
+                        + {calculateDeliveryFee()}
+                      </span>
                       {cashOnDelivery ? (
                         <>
                           <span>COD charge:</span>
                           <span className="text-end">
+                            +{" "}
                             <NumberFormat
                               value={cashOnDelivery.toFixed(2)}
                               displayType={"text"}
@@ -753,8 +1129,6 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-
-                      {calculateAvailableUserDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

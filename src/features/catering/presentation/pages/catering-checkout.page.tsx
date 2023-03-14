@@ -39,7 +39,7 @@ import {
   resetCateringCheckoutOrders,
   selectCateringCheckoutOrders,
 } from "../slices/catering-checkout-orders.slice";
-import { PaymentMethod } from "features/shop/presentation/components";
+import { CateringPaymentMethod } from "features/catering/presentation/components";
 import {
   MaterialInput,
   MaterialPhoneInput,
@@ -49,6 +49,9 @@ import {
   getAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
+import ReactGA from "react-ga";
+import { IoMdClose } from "react-icons/io";
+import { removeItemFromCartCatering } from "../slices/remove-item-from-cart-catering.slice";
 
 export function CateringCheckout() {
   const navigate = useNavigate();
@@ -57,7 +60,6 @@ export function CateringCheckout() {
 
   const [openCateringFaqsModal, setOpenCateringFaqsModal] = useState(false);
   const [enableCompanyName, setEnableCompanyName] = useState(false);
-  const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
   const getSessionState = useAppSelector(selectGetSession);
   const addContactState = useAppSelector(selectAddContact);
@@ -122,6 +124,10 @@ export function CateringCheckout() {
         CateringCheckoutOrdersState.success &&
       cateringCheckoutOrdersState.data
     ) {
+      ReactGA.event({
+        category: "Catering Order",
+        action: "Add to cart item",
+      });
       dispatch(getNotifications());
       navigate(`/shop/contract/${cateringCheckoutOrdersState.data.hash}`);
       dispatch(resetCateringCheckoutOrders());
@@ -254,10 +260,6 @@ export function CateringCheckout() {
       calculatedPrice += getSessionState.data.catering_succeeding_hour_charge;
       calculatedPrice -= discount;
 
-      if (cashOnDelivery) {
-        calculatedPrice += cashOnDelivery;
-      }
-
       return (
         <NumberFormat
           value={calculatedPrice.toFixed(2)}
@@ -272,8 +274,9 @@ export function CateringCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(cateringCheckoutOrders(formState));
     e.preventDefault();
+
+    dispatch(cateringCheckoutOrders(formState));
   };
 
   const handleInputChange = (evt: any) => {
@@ -302,7 +305,7 @@ export function CateringCheckout() {
         <>
           <span>
             {percentage * 100}%{" "}
-            {getAvailableUserDiscountState.data.discount_type_name}:
+            {getAvailableUserDiscountState.data.discount_name}:
           </span>
           <span className="text-end">
             -{" "}
@@ -318,22 +321,6 @@ export function CateringCheckout() {
     }
 
     return null;
-  };
-
-  const handlePaymentMethodChange = (payment: string) => {
-    setFormState({
-      ...formState,
-      payops: payment,
-    });
-    if (
-      getSessionState.data &&
-      getSessionState.data.cash_delivery &&
-      payment === "3"
-    ) {
-      setCashOnDelivery(parseInt(getSessionState.data.cash_delivery));
-    } else {
-      setCashOnDelivery(undefined);
-    }
   };
 
   return (
@@ -468,6 +455,9 @@ export function CateringCheckout() {
                         autoComplete="off"
                         name="eventStartDate"
                         value={formState.eventStartDate}
+                        InputProps={{
+                          readOnly: true,
+                        }}
                         onChange={() => {}}
                         fullWidth
                       />
@@ -483,6 +473,9 @@ export function CateringCheckout() {
                         required
                         autoComplete="off"
                         name="eventEndDate"
+                        InputProps={{
+                          readOnly: true,
+                        }}
                         value={formState.eventEndDate}
                         onChange={() => {}}
                         fullWidth
@@ -502,6 +495,9 @@ export function CateringCheckout() {
                       colorTheme="black"
                       name="servingTime"
                       value={formState.servingTime}
+                      InputProps={{
+                        readOnly: true,
+                      }}
                       onChange={() => {}}
                       fullWidth
                     />
@@ -575,11 +571,13 @@ export function CateringCheckout() {
 
                   <MaterialInput
                     required
-                    aria-readonly
+                    InputProps={{
+                      readOnly: true,
+                    }}
                     colorTheme="black"
                     name="eventAddress"
                     value={formState.eventAddress}
-                    onChange={handleInputChange}
+                    onChange={() => {}}
                     fullWidth
                     autoComplete="off"
                   />
@@ -628,11 +626,19 @@ export function CateringCheckout() {
                     />
                   </RadioGroup>
                 </FormControl>
-                <div className="mt-4 text-secondary lg:mt-0">
+
+                <div className="mt-4  text-secondary lg:mt-0">
                   <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
                     Choose payment method
                   </h2>
-                  <PaymentMethod onChange={handlePaymentMethodChange} />
+                  <CateringPaymentMethod
+                    onChange={(payment) => {
+                      setFormState({
+                        ...formState,
+                        payops: payment,
+                      });
+                    }}
+                  />
                   {/* <CateringPaymentAccordion /> */}
                 </div>
 
@@ -696,12 +702,16 @@ export function CateringCheckout() {
                     {getSessionState.data.orders.map((order, i) => (
                       <div
                         key={i}
-                        className="flex bg-secondary shadow-md  rounded-[10px]"
+                        className="flex bg-secondary shadow-md  rounded-[10px] relative"
                       >
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${order.prod_image_name}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={order.prod_name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm w-[90%]">
@@ -750,6 +760,16 @@ export function CateringCheckout() {
                             )}
                           </h3>
                         </div>
+
+                        <button
+                          type="button"
+                          className="absolute text-white top-2 right-4 "
+                          onClick={() => {
+                            dispatch(removeItemFromCartCatering(i));
+                          }}
+                        >
+                          <IoMdClose />
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -757,21 +777,25 @@ export function CateringCheckout() {
                   <hr className="mt-1 mb-2 border-secondary" />
                   <div className="grid grid-cols-2 text-secondary">
                     <span>Subtotal:</span>
-                    <span className="text-end">{calculateSubTotalPrice()}</span>
+                    <span className="text-end">
+                      + {calculateSubTotalPrice()}
+                    </span>
                     {calculateAvailableUserDiscount()}
                     <span>10% Service Charge:</span>
-                    <span className="text-end">{calculateServiceCharge()}</span>
+                    <span className="text-end">
+                      + {calculateServiceCharge()}
+                    </span>
                     <span>Transportation Fee:</span>
                     <span className="text-end">
-                      {calculateTransportationFee()}
+                      + {calculateTransportationFee()}
                     </span>
                     <span>Additional Hour Fee:</span>
                     <span className="text-end">
-                      {calculateSucceedingHourCharge()}
+                      + {calculateSucceedingHourCharge()}
                     </span>
                     <span>Night Differential Fee:</span>
                     <span className="text-end">
-                      {calculateNightDifferentialFee()}
+                      + {calculateNightDifferentialFee()}
                     </span>
                   </div>
 

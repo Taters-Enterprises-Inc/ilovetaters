@@ -31,7 +31,7 @@ export interface SessionModel {
     platform: string;
   };
 
-  redeem_data?: {
+  redeem_data: {
     id: number;
     deal_id: number;
     deal_image_name: string;
@@ -44,7 +44,21 @@ export interface SessionModel {
     minimum_purchase: number | null;
     deal_original_price: number | null;
     deal_promo_price: number | null;
-  };
+    deal_products_promo_include: Array<{
+      id: number;
+      quantity: number | null;
+      product_id: number;
+      product_hash: string;
+      product_variant_option_tb_id: number | null;
+      promo_discount_percentage: string;
+      obtainable: Array<{
+        product_id: number;
+        price: number;
+        product_variant_option_tb_id: number;
+        promo_discount_percentage: string;
+      }>;
+    }>;
+  } | null;
 
   orders?: Array<{
     prod_id: number;
@@ -66,21 +80,6 @@ export interface SessionModel {
     is_free_item?: number;
     free_threshold?: number;
     promo_discount_percentage: number | null;
-  }>;
-
-  deals?: Array<{
-    id: number;
-    deal_id: number;
-    deal_image_name: string;
-    deal_name: string;
-    description: string;
-    deal_qty: number;
-    redeem_code: string;
-    deal_remarks: string;
-    promo_discount_percentage: string | null;
-    minimum_purchase: number | null;
-    deal_original_price: number | null;
-    deal_promo_price: number | null;
   }>;
 
   km_radius: string;

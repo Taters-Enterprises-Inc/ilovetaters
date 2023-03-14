@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { CategoryProductsModel } from "features/shop/core/domain/category-products.model";
+import { CategoryProductModel } from "features/shared/core/domain/category-product.model";
 import { GetCategoryProductsParam } from "features/shop/core/shop.params";
 import {
   GetCategoryProductsRepository,
@@ -17,7 +17,7 @@ export enum GetCategoryProductsState {
 
 interface InitialState {
   status: GetCategoryProductsState;
-  data: Array<CategoryProductsModel> | undefined;
+  data: Array<CategoryProductModel> | undefined;
   message: string;
 }
 

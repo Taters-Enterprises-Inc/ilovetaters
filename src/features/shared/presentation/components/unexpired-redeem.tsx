@@ -12,16 +12,14 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { selectFacebookLogout } from "../slices/facebook-logout.slice";
 import {
-  forfeitRedeem,
   ForfeitRedeemState,
   resetForfeitRedeemStateStatus,
   selectForfeitRedeem,
 } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { IoMdClose } from "react-icons/io";
-import { MessageModal } from "../modals";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { selectSignInMobileUser } from "../slices/sign-in-mobile-user.slice";
-import { TbArrowsMaximize, TbArrowsMinimize } from "react-icons/tb";
+import { TbArrowsMaximize } from "react-icons/tb";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -33,13 +31,10 @@ export function UnExpiredRedeem() {
   const getSessionState = useAppSelector(selectGetSession);
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
   const signInMobileUserState = useAppSelector(selectSignInMobileUser);
-
-  const [openForfeitModalMessage, setOpenForfeitModalMessage] = useState(false);
-  const [showInfo, setShowInfo] = useState(true);
-
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
+  const [showInfo, setShowInfo] = useState(true);
 
   useEffect(() => {
     if (forfeitRedeemState.status === ForfeitRedeemState.success) {
@@ -97,12 +92,15 @@ export function UnExpiredRedeem() {
                   >
                     <div className="flex-1 h-full px-4 py-2 overflow-auto text-xs sm:overflow-hidden">
                       {getLatestUnexpiredRedeemState.data.remarks ? (
-                        <span
-                          className="font-bold"
-                          dangerouslySetInnerHTML={{
-                            __html: getLatestUnexpiredRedeemState.data.remarks,
-                          }}
-                        />
+                        <>
+                          <span
+                            className="text-xs"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                getLatestUnexpiredRedeemState.data.remarks,
+                            }}
+                          />
+                        </>
                       ) : (
                         <>
                           <span className="font-bold">
@@ -110,7 +108,9 @@ export function UnExpiredRedeem() {
                           </span>
 
                           {getLatestUnexpiredRedeemState.data
-                            .promo_discount_percentage ? (
+                            .promo_discount_percentage ||
+                          getLatestUnexpiredRedeemState.data
+                            .deal_products_promo_include.length > 0 ? (
                             <>
                               <br />
                               <span>
@@ -126,7 +126,7 @@ export function UnExpiredRedeem() {
                     </div>
                   </Link>
                 ) : (
-                  <div className="flex flex-col items-stretch  flex-1 "></div>
+                  <div className="flex flex-col items-stretch flex-1 "></div>
                 )}
                 <div className="relative">
                   <button
@@ -156,7 +156,11 @@ export function UnExpiredRedeem() {
                         showInfo ? "h-[75px] w-[75px]" : "h-[50px] w-[50px]"
                       } `}
                       src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
-                      alt="Deals"
+                      alt={getLatestUnexpiredRedeemState.data.name}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                      }}
                     />
                     {showInfo ? null : <CountdownTimerLatestRedeem />}
                   </button>
@@ -166,18 +170,6 @@ export function UnExpiredRedeem() {
           </div>
         </div>
       ) : null}
-
-      <MessageModal
-        open={openForfeitModalMessage}
-        onClose={() => {
-          setOpenForfeitModalMessage(false);
-        }}
-        onYes={() => {
-          dispatch(forfeitRedeem());
-          setOpenForfeitModalMessage(false);
-        }}
-        message={"Are you sure you want to cancel the redemption?"}
-      />
     </>
   );
 }

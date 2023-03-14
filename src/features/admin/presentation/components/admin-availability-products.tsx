@@ -17,28 +17,30 @@ import {
   MaterialInputAutoComplete,
   MaterialInput,
 } from "features/shared/presentation/components";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import {
   getAdminStoreProducts,
   resetGetAdminStoreProductsStatus,
   selectGetAdminStoreProducts,
 } from "../slices/get-admin-stores-products.slice";
 import {
-  getProductCategories,
-  selectGetProductCategories,
-} from "../slices/get-product-categories.slice";
+  getAdminProductCategories,
+  selectGetAdminProductCategories,
+} from "../slices/get-admin-product-categories.slice";
 import {
   selectUpdateStoreProduct,
   updateStoreProduct,
 } from "../slices/update-store-product.slice";
 import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 import { createQueryParams } from "features/config/helpers";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import NumberFormat from "react-number-format";
 
 const columns: Array<Column> = [
+  { id: "image", label: "Image" },
   { id: "name", label: "Name" },
   { id: "add_details", label: "Details" },
   { id: "category", label: "Category" },
+  { id: "price", label: "Price" },
   { id: "action", label: "Action" },
 ];
 
@@ -59,11 +61,13 @@ export function AdminAvailabilityProducts() {
     selectGetAdminStoreProducts
   );
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getProductCategoriesState = useAppSelector(selectGetProductCategories);
+  const getAdminProductCategoriesState = useAppSelector(
+    selectGetAdminProductCategories
+  );
   const updateStoreProductState = useAppSelector(selectUpdateStoreProduct);
 
   useEffect(() => {
-    dispatch(getProductCategories());
+    dispatch(getAdminProductCategories());
   }, [dispatch]);
 
   useEffect(() => {
@@ -109,7 +113,7 @@ export function AdminAvailabilityProducts() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 0,
+                  status: 1,
                   category_id: categoryId,
                   store_id: storeId,
                   search: search,
@@ -124,7 +128,7 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-green-700 ${
-                status === null || status === "0"
+                status === null || status === "1"
                   ? "text-base"
                   : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
@@ -136,7 +140,7 @@ export function AdminAvailabilityProducts() {
                 const params = {
                   page_no: pageNo,
                   per_page: perPage,
-                  status: 1,
+                  status: 0,
                   store_id: storeId,
                   category_id: categoryId,
                   search: search,
@@ -151,7 +155,7 @@ export function AdminAvailabilityProducts() {
                 });
               }}
               className={`px-4 py-1 text-white bg-red-700 ${
-                status && status === "1" ? "text-base" : "text-xs opacity-40"
+                status && status === "0" ? "text-base" : "text-xs opacity-40"
               } rounded-full font-['Varela_Round']`}
             >
               Not Available
@@ -167,6 +171,10 @@ export function AdminAvailabilityProducts() {
               options={getAdminSessionState.data.admin.user_details.stores}
               defaultValue={
                 getAdminSessionState.data.admin.user_details.stores[0]
+              }
+              isOptionEqualToValue={(option, value) =>
+                option.name + " (" + option.menu_name + ") " ===
+                value.name + " (" + value.menu_name + ") "
               }
               getOptionLabel={(option) =>
                 option.name + " (" + option.menu_name + ") "
@@ -195,7 +203,7 @@ export function AdminAvailabilityProducts() {
         </div>
       </div>
       <div className="px-4 py-2">
-        {getProductCategoriesState.data ? (
+        {getAdminProductCategoriesState.data ? (
           <MaterialInput
             colorTheme="black"
             label="Filter by category"
@@ -228,7 +236,7 @@ export function AdminAvailabilityProducts() {
             <MenuItem value="all">
               <span className="text-xs lg:text-base">All</span>
             </MenuItem>
-            {getProductCategoriesState.data?.map((category, index) => (
+            {getAdminProductCategoriesState.data?.map((category, index) => (
               <MenuItem key={index} value={category.id}>
                 <span className="text-xs lg:text-base">{category.name}</span>
               </MenuItem>
@@ -463,6 +471,17 @@ export function AdminAvailabilityProducts() {
                 <>
                   {getAdminStoreProductsState.data.products.map((row, i) => (
                     <DataTableRow key={i}>
+                      <DataTableCell>
+                        <img
+                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
+                          alt="Deal Product"
+                          className="rounded-[10px] w-[75px] h-[75px]"
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
+                        />
+                      </DataTableCell>
                       <DataTableCell>{row.name}</DataTableCell>
                       <DataTableCell>
                         <div
@@ -473,13 +492,21 @@ export function AdminAvailabilityProducts() {
                       </DataTableCell>
                       <DataTableCell>{row.category_name}</DataTableCell>
                       <DataTableCell>
-                        {status === null || status === "0" ? (
+                        <NumberFormat
+                          value={row.price.toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </DataTableCell>
+                      <DataTableCell>
+                        {status === null || status === "1" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreProduct({
-                                    status: "1",
+                                    status: "0",
                                     id: row.id.toString(),
                                   })
                                 );
@@ -488,13 +515,13 @@ export function AdminAvailabilityProducts() {
                           >
                             Disable
                           </button>
-                        ) : status === "1" ? (
+                        ) : status === "0" ? (
                           <button
                             onClick={() => {
                               if (row.id)
                                 dispatch(
                                   updateStoreProduct({
-                                    status: "0",
+                                    status: "1",
                                     id: row.id.toString(),
                                   })
                                 );

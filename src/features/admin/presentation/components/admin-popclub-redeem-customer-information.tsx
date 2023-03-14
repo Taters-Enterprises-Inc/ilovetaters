@@ -217,12 +217,29 @@ export function AdminPopclubRedeemCustomerInformation(
                       <span className="font-bold">{item.alias}</span>
                       <br />
                       {item.remarks ? (
-                        <span
-                          className="text-secondary"
-                          dangerouslySetInnerHTML={{
-                            __html: item.remarks,
-                          }}
-                        />
+                        <>
+                          <span
+                            className="text-secondary"
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
+                          <br />
+                          <br />
+
+                          <span className=" text-secondary font-bold">
+                            Flavors:
+                          </span>
+
+                          <br />
+
+                          <span
+                            className="text-secondary"
+                            dangerouslySetInnerHTML={{
+                              __html: item.remarks,
+                            }}
+                          />
+                        </>
                       ) : (
                         <span
                           className="text-secondary"

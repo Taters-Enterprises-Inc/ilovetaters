@@ -1,8 +1,6 @@
 import axios from "axios";
 import {
   EditAdminUserParam,
-  UpdateAdminSettingStoreOperatingHoursParam,
-  UpdateAdminSettingStoreParam,
   UpdateStoreDealParam,
   UpdateStoreCatersPackageParam,
   UpdateStoreProductParam,
@@ -12,7 +10,7 @@ import {
   LoginAdminParam,
   AdminPrivilegeParam,
   ValidateReferenceNumberParam,
-  UpdateUserStoresParam,
+  UpdateAdminSettingUserStoresParam,
   CreateAdminGroupParam,
   AdminUserDiscountChangeStatusParam,
   AdminDeclineRedeemParam,
@@ -20,6 +18,24 @@ import {
   AdminCateringBookingUpdateStatusParam,
   AdminShopOrderUpdateStatusParam,
   AdminSurveyVerificationChangeStatusParam,
+  CreateAdminSettingShopProductParam,
+  EditAdminSettingShopProductParam,
+  UpdateAdminSettingShopProductStatusParam,
+  UpdateStoreCateringProductParam,
+  UpdateAdminCateringOrderItemRemarksParam,
+  GetAdminSalesParam,
+  GetAdminTotalSalesParam,
+  CreateAdminSettingStoreParam,
+  GetAdminCateringPackageFlavorsParam,
+  GetAdminSettingStoreParam,
+  EditAdminSettingStoreParam,
+  CopyAdminSettingShopProductParam,
+  CreateAdminSettingCateringPackageParam,
+  EditAdminSettingCateringPackageParam,
+  CopyAdminSettingCateringPackageParam,
+  UpdateAdminSettingCateringPackageStatusParam,
+  CreateAdminSettingPopclubDealParam,
+  EditAdminSettingPopclubDealParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -47,6 +63,29 @@ import { AdminUserDiscountModel } from "features/admin/core/domain/admin-user-di
 import { GetAdminUsersModel } from "features/admin/core/domain/get-admin-users.model";
 import { GetAdminSurveyVerificationsModel } from "features/admin/core/domain/get-admin-survey-verification.model";
 import { AdminSurveyVerificationModel } from "features/admin/core/domain/admin-survey-verification.model";
+import { GetAdminSettingShopProductsModel } from "features/admin/core/domain/get-admin-setting-shop-products.model";
+import { GetAdminSettingShopProductModel } from "features/admin/core/domain/get-admin-setting-shop-product.model";
+import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
+import { GetAdminStoreCateringProductsModel } from "features/admin/core/domain/get-admin-store-catering-products.model";
+import { PackageFlavorModel } from "features/shared/core/domain/package-flavor.model";
+import { SaleModel } from "features/admin/core/domain/sale.model";
+import { TotalSalesModel } from "features/admin/core/domain/total-sales.model";
+import { StoreMenuModel } from "../../core/domain/store-menu.model";
+import { AdminRegionModel } from "features/admin/core/domain/admin-region.model";
+import { AdminStoreLocaleModel } from "features/admin/core/domain/admin-store-locale.model";
+import { AdminPackageModel } from "features/admin/core/domain/admin-package.model";
+import { AdminDealModel } from "features/admin/core/domain/admin-deals.model";
+import { GetAdminSettingStoreModel } from "features/admin/core/domain/get-admin-setting-store.model";
+import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
+import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
+import { CustomerSurveyResponseLogsModel } from "features/admin/core/domain/customer-survey-response-logs.model";
+import { GetAdminSettingCateringPackagesModel } from "features/admin/core/domain/get-admin-setting-catering-packages.model";
+import { GetAdminSettingCateringPackageModel } from "features/admin/core/domain/get-admin-setting-catering-package.model";
+import { GetAdminSettingPopclubDealsModel } from "features/admin/core/domain/get-admin-setting-popclub-deals.model";
+import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-category.model";
+import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
+import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
+import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -168,14 +207,14 @@ export interface EditAdminUserResponse {
   };
 }
 
-export interface GetAdminStoresResponse {
+export interface GetAdminSettingUserStoresResponse {
   data: {
     message: string;
     data: Array<AdminStoreModel>;
   };
 }
 
-export interface GetAdminUserStoresResponse {
+export interface GetAdminSettingUserStoreResponse {
   data: {
     message: string;
     data: Array<AdminStoreModel>;
@@ -263,7 +302,7 @@ export interface GetAdminStoreProductsResponse {
   };
 }
 
-export interface GetProductCategoriesResponse {
+export interface GetAdminProductCategoriesResponse {
   data: {
     message: string;
     data: Array<CategoryModel>;
@@ -283,25 +322,12 @@ export interface GetAdminSettingStoresResponse {
   };
 }
 
-export interface UpdateAdminSettingStoreResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetAdminStoreResponse {
   data: {
     message: string;
     data: AdminStoreModel;
   };
 }
-
-export interface UpdateAdminSettingStoreOperatingHoursResponse {
-  data: {
-    message: string;
-  };
-}
-
 export interface GetCatersPackageCategoriesResponse {
   data: {
     message: string;
@@ -393,6 +419,23 @@ export interface AdminSurveyVerificationChangeStatusResponse {
   };
 }
 
+export interface GetAdminStoreCateringProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminStoreCateringProductsModel;
+  };
+}
+export interface UpdateStoreCateringProductResponse {
+  data: {
+    message: string;
+  };
+}
+export interface UpdateAdminCateringOrderItemRemarksResponse {
+  data: {
+    message: string;
+  };
+}
+
 export interface GetAdminSurveyVerificationResponse {
   data: {
     message: string;
@@ -405,6 +448,655 @@ export interface GetAdminSurveyVerificationsResponse {
     message: string;
     data: GetAdminSurveyVerificationsModel;
   };
+}
+
+export interface GetAdminSettingShopProductsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductsModel;
+  };
+}
+
+export interface CreateAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingShopProductResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingShopProductModel;
+  };
+}
+
+export interface EditAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface DeleteAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingShopProductStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
+  };
+}
+
+export interface GetAdminCateringPackageFlavorsResponse {
+  data: {
+    message: string;
+    data: Array<PackageFlavorModel>;
+  };
+}
+
+export interface GetAdminSalesResponse {
+  data: {
+    message: string;
+    data: Array<SaleModel>;
+  };
+}
+
+export interface GetAdminTotalSalesResponse {
+  data: {
+    message: string;
+    data: TotalSalesModel;
+  };
+}
+
+export interface GetAdminStoreMenusResponse {
+  data: {
+    message: string;
+    data: Array<StoreMenuModel>;
+  };
+}
+
+export interface CreateAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminRegionStoreCombinationsResponse {
+  data: {
+    message: string;
+    data: Array<AdminRegionModel>;
+  };
+}
+
+export interface GetAdminPackagesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPackageModel>;
+  };
+}
+export interface GetAdminDealsResponse {
+  data: {
+    message: string;
+    data: Array<AdminDealModel>;
+  };
+}
+
+export interface GetAdminStoreLocalesResponse {
+  data: {
+    message: string;
+    data: Array<AdminStoreLocaleModel>;
+  };
+}
+
+export interface GetAdminSettingStoreResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingStoreModel;
+  };
+}
+
+export interface EditAdminSettingStoreResponse {
+  data: {
+    message: string;
+  };
+}
+export interface UpdateAdminSettingUserStoresResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSnackshopStoresResponse {
+  data: {
+    message: string;
+    data: Array<SnackshopStoreModel>;
+  };
+}
+
+export interface GetAdminCateringStoresResponse {
+  data: {
+    message: string;
+    data: Array<CateringStoreModel>;
+  };
+}
+
+export interface GetAdminSettingProductAddonsResponse {
+  data: {
+    message: string;
+    data: Array<AdminProductModel>;
+  };
+}
+
+export interface GetCustomerSurveyResponseLogsResponse {
+  data: {
+    message: string;
+    data: Array<CustomerSurveyResponseLogsModel>;
+  };
+}
+
+export interface CopyAdminSettingShopProductResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingCateringPackagesResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingCateringPackagesModel;
+  };
+}
+
+export interface GetAdminPackageCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<CategoryModel>;
+  };
+}
+
+export interface CreateAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingCateringPackageModel;
+  };
+}
+
+export interface EditAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface CopyAdminSettingCateringPackageResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface UpdateAdminSettingCateringPackageStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingPopclubDealsResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealsModel;
+  };
+}
+
+export interface GetAdminPopclubCategoriesResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubCategory>;
+  };
+}
+
+export interface GetAdminSettingDealProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminPopclubProduct>;
+  };
+}
+
+export interface GetAdminPopclubStoresResponse {
+  data: {
+    message: string;
+    data: Array<PopclubStoreModel>;
+  };
+}
+
+export interface CreateAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingPopclubDealModel;
+  };
+}
+
+export interface EditAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingPopclubDealRepository(
+  param: EditAdminSettingPopclubDealParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-popclub-deal`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingPopclubDealRepository(
+  dealId: string
+): Promise<GetAdminSettingPopclubDealResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal?deal-id=${dealId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingPopclubDealRepository(
+  param: CreateAdminSettingPopclubDealParam
+): Promise<CreateAdminSettingPopclubDealResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubStoresRepository(): Promise<GetAdminPopclubStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/popclub`, {
+    withCredentials: true,
+  });
+}
+export function GetAdminSettingDealProductsRepository(): Promise<GetAdminSettingDealProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/deal-shop-products`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPopclubCategoriesRepository(): Promise<GetAdminPopclubCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/popclub/categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingPopclubDealsRepository(
+  query: string
+): Promise<GetAdminSettingPopclubDealsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deals${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateAdminSettingCateringPackageStatusRepository(
+  param: UpdateAdminSettingCateringPackageStatusParam
+): Promise<UpdateAdminSettingCateringPackageStatusResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CopyAdminSettingCateringPackageRepository(
+  param: CopyAdminSettingCateringPackageParam
+): Promise<CopyAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/copy-catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function EditAdminSettingCateringPackageRepository(
+  param: EditAdminSettingCateringPackageParam
+): Promise<EditAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingCateringPackageRepository(
+  packageId: string
+): Promise<GetAdminSettingCateringPackageResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package?package-id=${packageId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingCateringPackageRepository(
+  param: CreateAdminSettingCateringPackageParam
+): Promise<CreateAdminSettingCateringPackageResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-package`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminPackageCategoriesRepository(): Promise<GetAdminPackageCategoriesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/package-categories`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingCateringPackagesRepository(
+  query: string
+): Promise<GetAdminSettingCateringPackagesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/catering-packages${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CopyAdminSettingShopProductRepository(
+  param: CopyAdminSettingShopProductParam
+): Promise<CopyAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/copy-shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingProductAddonsRepository(
+  productId: string
+): Promise<GetAdminSettingProductAddonsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/product-addons?productId=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetCustomerSurveyResponseLogsRepository(
+  customerSurveyVerificationId: number
+): Promise<GetCustomerSurveyResponseLogsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/customer-survey-response-logs/${customerSurveyVerificationId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminCateringStoresRepository(): Promise<GetAdminCateringStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/catering`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSnackshopStoresRepository(): Promise<GetAdminSnackshopStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores/snackshop`, {
+    withCredentials: true,
+  });
+}
+
+export function EditAdminSettingStoreRepository(
+  param: EditAdminSettingStoreParam
+): Promise<EditAdminSettingStoreResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-store`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingStoreRepository(
+  param: GetAdminSettingStoreParam
+): Promise<GetAdminSettingStoreResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/store?store-id=${param.storeId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDealsRepository(): Promise<GetAdminDealsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/deals`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminPackagesRepository(): Promise<GetAdminPackagesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/packages`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreLocalesRepository(): Promise<GetAdminStoreLocalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/locales`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminRegionStoreCombinationsRepository(): Promise<GetAdminRegionStoreCombinationsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/region-store-combination`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingStoreRepository(
+  param: CreateAdminSettingStoreParam
+): Promise<CreateAdminSettingStoreResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/setting/store`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
+}
+
+export function GetAdminStoreMenusRepository(): Promise<GetAdminStoreMenusResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/store-menu`, {
+    withCredentials: true,
+  });
+}
+
+export function UpdateStoreCateringProductRepository(
+  param: UpdateStoreCateringProductParam
+): Promise<UpdateStoreCateringProductResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminTotalSalesRepository(
+  param: GetAdminTotalSalesParam
+): Promise<GetAdminTotalSalesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}/sum`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSalesRepository(
+  param: GetAdminSalesParam
+): Promise<GetAdminSalesResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/products`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminCateringPackageFlavorsRepository(
+  param: GetAdminCateringPackageFlavorsParam
+): Promise<GetAdminCateringPackageFlavorsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-package-flavors/${param.packageId}?type=${param.type}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateAdminSettingShopProductStatusRepository(
+  param: UpdateAdminSettingShopProductStatusParam
+): Promise<UpdateAdminSettingShopProductStatusResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function DeleteAdminSettingShopProductRepository(
+  productId: string
+): Promise<DeleteAdminSettingShopProductResponse> {
+  return axios.delete(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/delete-shop-product?id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function EditAdminSettingShopProductRepository(
+  param: EditAdminSettingShopProductParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingShopProductRepository(
+  productId: string
+): Promise<GetAdminSettingShopProductResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product?product-id=${productId}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminSettingShopProductRepository(
+  param: CreateAdminSettingShopProductParam
+): Promise<CreateAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-product`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingShopProductsRepository(
+  query: string
+): Promise<GetAdminSettingShopProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/shop-products${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSurveyVerificationsRepository(
@@ -440,6 +1132,30 @@ export function AdminUserDiscountChangeStatusRepository(
     }
   );
 }
+
+export function UpdateAdminCateringOrderItemRemarksRepository(
+  param: UpdateAdminCateringOrderItemRemarksParam
+): Promise<UpdateAdminCateringOrderItemRemarksResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/catering-update-order-item-remarks`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminStoreCateringProductsRepository(
+  query: string
+): Promise<GetAdminStoreCateringProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function UpdateAdminNotificationDateSeenRepository(
   notificationId: number
 ) {
@@ -563,18 +1279,6 @@ export function GetCatersPackageCategoriesRepository(): Promise<GetCatersPackage
   );
 }
 
-export function UpdateAdminSettingStoreOperatingHoursRepository(
-  param: UpdateAdminSettingStoreOperatingHoursParam
-): Promise<UpdateAdminSettingStoreOperatingHoursResponse> {
-  return axios.put(
-    `${REACT_APP_DOMAIN_URL}api/admin/store-operating-hours`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
 export function GetAdminStoreRepository(
   storeId: string
 ): Promise<GetAdminStoreResponse> {
@@ -598,14 +1302,6 @@ export function AdminDeclineRedeemRepository(
   );
 }
 
-export function UpdateAdminSettingStoreRepository(
-  param: UpdateAdminSettingStoreParam
-): Promise<UpdateStoreProductResponse> {
-  return axios.put(`${REACT_APP_DOMAIN_URL}api/admin/store`, param, {
-    withCredentials: true,
-  });
-}
-
 export function GetAdminSettingStoresRepository(
   query: string
 ): Promise<GetAdminSettingStoresResponse> {
@@ -626,7 +1322,7 @@ export function UpdateStoreProductRepository(
   );
 }
 
-export function GetProductCategoriesRepository(): Promise<GetProductCategoriesResponse> {
+export function GetAdminProductCategoriesRepository(): Promise<GetAdminProductCategoriesResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/product-categories`, {
     withCredentials: true,
   });
@@ -752,30 +1448,34 @@ export function CreateAdminGroupRepository(
   });
 }
 
-export function UpdateAdminUserStoresRepository(
-  param: UpdateUserStoresParam
-): Promise<GetAdminUserStoresResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/stores`, param, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+export function UpdateAdminSettingUserStoresRepository(
+  param: UpdateAdminSettingUserStoresParam
+): Promise<UpdateAdminSettingUserStoresResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
-export function GetAdminUserStoresRepository(
+export function GetAdminSettingUserStoreRepository(
   userId: string
-): Promise<GetAdminUserStoresResponse> {
+): Promise<GetAdminSettingUserStoreResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/stores?user_id=${userId}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores?user_id=${userId}`,
     {
       withCredentials: true,
     }
   );
 }
 
-export function GetAdminStoresRepository(): Promise<GetAdminStoresResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/stores`, {
+export function GetAdminSettingUserStoresRepository(): Promise<GetAdminSettingUserStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting-user-stores`, {
     withCredentials: true,
   });
 }
@@ -793,7 +1493,7 @@ export function EditAdminUserRepository(
 }
 
 export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/groups`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/groups`, {
     withCredentials: true,
   });
 }
@@ -801,7 +1501,7 @@ export function GetAdminGroupsRepository(): Promise<GetAdminGroupsResponse> {
 export function GetAdminUserRepository(
   userId: string
 ): Promise<GetAdminUserResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/user/${userId}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/user/${userId}`, {
     withCredentials: true,
   });
 }
@@ -817,7 +1517,7 @@ export function CreateAdminUserRepository(
 export function GetAdminUsersRepository(
   query: string
 ): Promise<GetAdminUsersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/users${query}`, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/users${query}`, {
     withCredentials: true,
   });
 }

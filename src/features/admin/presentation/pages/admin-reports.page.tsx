@@ -14,6 +14,18 @@ export function AdminReports() {
     useState<boolean>(false);
   const [openGenerateTransactionModal, setOpenGenerateTransactionModal] =
     useState<boolean>(false);
+  const [
+    openGeneratePopClubStoreVisitModal,
+    setOpenGeneratePopClubStoreVisitModal,
+  ] = useState<boolean>(false);
+  const [
+    openGeneratePopClubSnacksDeliveredModal,
+    setOpenGeneratePopClubSnacksDeliveredModal,
+  ] = useState<boolean>(false);
+  const [
+    openGenerateCustomerFeedbackModal,
+    setOpenGenerateCustomerFeedbackModal,
+  ] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -32,33 +44,99 @@ export function AdminReports() {
         }}
       />
       <div className="relative block h-screen">
-        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-1 text-secondary max-h-screen">
+        <h1 className="font-['Bebas_Neue'] text-3xl ml-4 mt-1 text-secondary">
           Reports
         </h1>
         <main>
-          <div className="flex p-4 space-x-4">
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            Snackshop
+          </h1>
+          <div className="flex px-4 pb-4 flex-wrap justify-start items-start space-x-4">
             <button
               onClick={() => {
                 setOpenGeneratePmixModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
+              <div className="p-4 border shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
               <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">PMIX.xls</span>
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">PMIX</span>
               </div>
             </button>
+
             <button
               onClick={() => {
                 setOpenGenerateTransactionModal(true);
               }}
-              className="flex flex-col items-center justify-center px-4 pt-4 pb-1 border-4 shadow-xl border-secondary"
             >
-              <GrDocumentConfig className="text-6xl" />
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
               <div className="flex items-center justify-center mt-2 space-x-1">
-                <GrAttachment className="text-lg font-semibold" />
-                <span className="text-lg font-semibold">Transaction.xls</span>
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">Transaction</span>
+              </div>
+            </button>
+          </div>
+
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            PopClub
+          </h1>
+
+          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+            <button
+              onClick={() => {
+                setOpenGeneratePopClubStoreVisitModal(true);
+              }}
+            >
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">Store Visit</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpenGeneratePopClubSnacksDeliveredModal(true);
+              }}
+            >
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 ">
+                <GrAttachment className="text-xs font-semibold" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">Snacks</span>
+                  <span className="text-xs font-semibold">Delivered</span>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+            Survey
+          </h1>
+
+          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+            <button
+              onClick={() => {
+                setOpenGenerateCustomerFeedbackModal(true);
+              }}
+            >
+              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-start justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold">Customer</span>
+                  <span className="text-xs font-semibold">Feedback</span>
+                </div>
               </div>
             </button>
           </div>
@@ -107,6 +185,75 @@ export function AdminReports() {
         }}
         onClose={() => {
           setOpenGenerateTransactionModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGeneratePopClubStoreVisitModal}
+        title="Generate PopClub Store Visit Report"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-popclub-store-visit/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGeneratePopClubStoreVisitModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate PopClub Store Visit report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGeneratePopClubStoreVisitModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGeneratePopClubSnacksDeliveredModal}
+        title="Generate PopClub Snacks Delivered Report"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-popclub-snacks-delivered/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGeneratePopClubSnacksDeliveredModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate PopClub Snacks Delivered report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGeneratePopClubSnacksDeliveredModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGenerateCustomerFeedbackModal}
+        title="Generate Customer Feedback"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-customer-feedback/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGenerateCustomerFeedbackModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate customer feedback report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGenerateCustomerFeedbackModal(false);
         }}
       />
     </>

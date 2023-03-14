@@ -1,13 +1,14 @@
+import { styled } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
 
 interface MaterialTimeInputProps {
   value: any;
   label: string;
   colorTheme: "black" | "white";
+  fullWidth?: boolean;
   onChange: (value: any, keyboardInputValue?: string | undefined) => void;
 }
 
@@ -17,7 +18,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -36,7 +37,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",
@@ -57,11 +58,15 @@ export function MaterialTimeInput(props: MaterialTimeInputProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <MobileTimePicker
-        label="Available Start Time"
+        label={props.label}
         value={props.value}
         onChange={props.onChange}
         renderInput={(params) => (
-          <MaterialInput colorTheme={props.colorTheme} {...params} />
+          <MaterialInput
+            colorTheme={props.colorTheme}
+            fullWidth={props.fullWidth}
+            {...params}
+          />
         )}
       />
     </LocalizationProvider>

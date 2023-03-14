@@ -12,8 +12,6 @@ import {
 } from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_USER_DISCOUNT_STATUS } from "features/shared/constants";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminUserDiscounts,
@@ -26,11 +24,21 @@ import { FaEye } from "react-icons/fa";
 import { AdminUserDiscountModal } from "../modals";
 import { getAdminUserDiscount } from "../slices/get-admin-discount-verification.slice";
 import { selectAdminUserDiscountChangeStatus } from "../slices/admin-user-discount-change-status.slice";
+import { AdminChipsButton } from "./chips-button";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
   { id: "appDate", label: "Application Date" },
-  { id: "discount_type", label: "Discount Type" },
+  { id: "discount_name", label: "Discount Type" },
   { id: "full_name", label: "Full Name" },
   { id: "birthday", label: "Birthday" },
   { id: "id_number", label: "ID Number" },
@@ -56,9 +64,20 @@ export function AdminUserDiscounts() {
     selectGetAdminUserDiscounts
   );
 
-  const adminUserDicountChangeStatusState = useAppSelector(
+  const adminUserDiscountChangeStatusState = useAppSelector(
     selectAdminUserDiscountChangeStatus
   );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (id) {
@@ -86,51 +105,32 @@ export function AdminUserDiscounts() {
     orderBy,
     order,
     search,
-    adminUserDicountChangeStatusState,
+    adminUserDiscountChangeStatusState,
   ]);
 
   return (
     <>
-      <div className="flex flex-col px-4 lg:flex-row lg:items-end">
-        <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
+      <div className="flex flex-col  lg:flex-row lg:items-end">
+        <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           User Discount
         </span>
-        <div className="flex">
-          <Select
-            size="small"
-            defaultValue={status ?? -1}
-            onChange={(event) => {
-              if (event.target.value !== status) {
-                const params = {
-                  page_no: pageNo,
-                  per_page: perPage,
-                  status: event.target.value === -1 ? null : event.target.value,
-                  search: search,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                dispatch(resetGetAdminUserDiscountsStatus());
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }
-            }}
-          >
-            <MenuItem value={-1}>All</MenuItem>
-            {ADMIN_USER_DISCOUNT_STATUS.map((value, index) => {
-              if (index === 0) {
-                return null;
-              }
-              return (
-                <MenuItem key={index} value={index}>
-                  {value.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </div>
+        <AdminChipsButton
+          createQueryParams={createQueryParams}
+          data={ADMIN_USER_DISCOUNT_STATUS}
+          dispatchAction={() => {
+            dispatch(resetGetAdminUserDiscountsStatus());
+          }}
+          status={status}
+          params={(value) => {
+            const params = {
+              page_no: pageNo,
+              per_page: perPage,
+              status: value === -1 ? null : value,
+              search: search,
+            };
+            return params;
+          }}
+        />
       </div>
 
       {getAdminUserDiscountsStates.data?.discounts ? (
@@ -345,58 +345,75 @@ export function AdminUserDiscounts() {
             >
               {getAdminUserDiscountsStates.data.discounts !== undefined ? (
                 <>
-                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_USER_DISCOUNT_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="lll">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.discount_type_name}</DataTableCell>
-                      <DataTableCell>
-                        {row.first_name} {row.middle_name} {row.last_name}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
+                  {getAdminUserDiscountsStates.data.discounts.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.user_discount.unseen_notifications.find(
+                        (notification) =>
+                          notification.discount_user_id === row.id
+                      );
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="lll">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.discount_name}</DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="ll">{row.birthday}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.id_number}</DataTableCell>
 
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              id: row.id,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                id: row.id,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
 
-                            const queryParams = createQueryParams(params);
+                              const queryParams = createQueryParams(params);
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

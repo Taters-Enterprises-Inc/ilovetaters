@@ -1,61 +1,69 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  getSession,
-  selectGetSession,
-} from "features/shared/presentation/slices/get-session.slice";
-import { TABS } from "features/shared/constants";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { AiOutlineUser } from "react-icons/ai";
-import { BsCart4 } from "react-icons/bs";
-import { ShopCartModal } from "../../../shop/presentation/modals";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
-import NumberFormat from "react-number-format";
+import Box from "@mui/material/Box";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Popover from "@mui/material/Popover";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
+import { PROFILE_MENU, TABS } from "features/shared/constants";
 import {
   facebookLogout,
   FacebookLogoutState,
   selectFacebookLogout,
 } from "features/shared/presentation/slices/facebook-logout.slice";
-import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
-import { StoreChooserModal } from "features/popclub/presentation/modals/store-chooser.modal";
-import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
-import { CateringCartModal } from "features/catering/presentation/components/catering-cart.modal";
-import { MdLocationPin } from "react-icons/md";
-import { FaShoppingBag, FaUserAlt, FaUserCircle } from "react-icons/fa";
-import { MessageModal } from "../modals";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuList from "@mui/material/MenuList";
-import { Box, ListItemIcon, ListItemText, Popover } from "@mui/material";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
-import { RiShoppingBag3Fill } from "react-icons/ri";
-import { GiPopcorn } from "react-icons/gi";
-import { CartListItem } from "./cart-item-list";
-import { HiDocumentText } from "react-icons/hi";
+import { BsCart4 } from "react-icons/bs";
+import { FaUserAlt, FaUserCircle } from "react-icons/fa";
+import { MdLocationPin } from "react-icons/md";
+import { VscCircleFilled } from "react-icons/vsc";
+import NumberFormat from "react-number-format";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ShopCartModal } from "../../../shop/presentation/modals";
 import {
   getNotifications,
   selectGetNotifications,
 } from "../slices/get-notifications.slice";
-import { VscCircleFilled } from "react-icons/vsc";
 import {
-  selectSeenNotification,
   SeenNotificationState,
+  selectSeenNotification,
 } from "../slices/seen-notification.slice";
+import { CartListItem } from "./cart-item-list";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { openLoginChooserModal } from "../slices/login-chooser-modal.slice";
+
+import {
+  closeMessageModal,
+  openMessageModal,
+} from "features/shared/presentation/slices/message-modal.slice";
+
+export type ActiveUrl =
+  | "PROFILE"
+  | "SNACKSHOP"
+  | "CATERING"
+  | "POPCLUB"
+  | "HOME"
+  | "BRANCHES"
+  | "FRANCHISING"
+  | "SEE_ME";
 
 interface HeaderNavProps {
   className?: string;
-  activeUrl:
-    | "PROFILE"
-    | "SNACKSHOP"
-    | "CATERING"
-    | "POPCLUB"
-    | "HOME"
-    | "BRANCHES"
-    | "FRANCHISING";
+  homePageUrl: string;
+  activeUrl: ActiveUrl;
   logoProps: {
     src: string;
     alt: string;
@@ -64,7 +72,6 @@ interface HeaderNavProps {
 }
 
 export function HeaderNav(props: HeaderNavProps) {
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const [openShopCartModal, setOpenShopCartModal] = useState(false);
   const [openCateringCartModal, setOpenCateringCartModal] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(
@@ -90,90 +97,102 @@ export function HeaderNav(props: HeaderNavProps) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const [
-    openMessageModalWhenSwitchingTabWhenCacheDataExist,
-    setOpenMessageModalWhenSwitchingTabWhenCacheDataExist,
-  ] = useState<{
-    status: boolean;
-    message: string;
-    url?: string;
-    onYes?: () => void;
-  }>({
-    status: false,
-    message: "",
-  });
-
-  const handleSwitchTab = (param: {
-    url?: string;
-    tabName: string;
-    onYes?: () => void;
-  }) => {
-    setOpen(false);
-
+  const handleSwitchTab = (
+    id:
+      | "home"
+      | "popclub"
+      | "snackshop"
+      | "catering"
+      | "branches"
+      | "franchising"
+  ) => {
     if (
       getSessionState.data &&
       getSessionState.data.cache_data &&
+      getSessionState.data.orders &&
       getSessionState.data.customer_address
     ) {
-      setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-        status: true,
-        url: param.url,
-        onYes: param.onYes,
-        message: `This would remove all your cart items, store selection and send you to the ${param.tabName} home page. Are you sure you want to proceed?`,
-      });
+      dispatch(
+        openMessageModal({
+          message: `This would remove all your cart items, store selection and send you to the ${id} home page. Are you sure you want to proceed?`,
+          buttons: [
+            {
+              color: "#22201A",
+              text: "No",
+              onClick: () => {
+                dispatch(closeMessageModal());
+              },
+            },
+            {
+              color: "#CC5801",
+              text: "Yes",
+              onClick: () => {
+                switch (id) {
+                  case "home":
+                    navigate("/");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "popclub":
+                    setOpenPlatformChooserModal(true);
+                    dispatch(closeMessageModal());
+                    break;
+                  case "snackshop":
+                    navigate("/delivery");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "catering":
+                    navigate("/shop");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "branches":
+                    navigate("/branches");
+                    dispatch(closeMessageModal());
+                    break;
+                  case "franchising":
+                    navigate("/franchising");
+                    dispatch(closeMessageModal());
+                    break;
+                }
+              },
+            },
+          ],
+        })
+      );
     } else {
-      if (param.url) navigate(param.url);
-      if (param.onYes) param.onYes();
+      switch (id) {
+        case "home":
+          navigate("/");
+          break;
+        case "popclub":
+          setOpenPlatformChooserModal(true);
+          break;
+        case "snackshop":
+          navigate("/delivery");
+          break;
+        case "catering":
+          navigate("/shop");
+          break;
+        case "branches":
+          navigate("/branches");
+          break;
+        case "franchising":
+          navigate("/franchising");
+          break;
+      }
     }
   };
 
   const handleProfileMenuClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    console.log(event.currentTarget);
     setOpenProfileMenu(event.currentTarget);
-  };
-
-  const handleMyProfile = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile");
-  };
-
-  const handleSnackshopOrders = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/snackshop-orders");
-  };
-
-  const handleCateringBooking = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/catering-bookings");
-  };
-
-  const handlePopClubRedeem = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/popclub-redeems");
-  };
-  const handleUserDiscount = () => {
-    setOpenProfileMenu(null);
-    navigate("/profile/user-discount");
-  };
-
-  const handleLogout = () => {
-    setOpenProfileMenu(null);
-
-    if (currentLocation.pathname === "/profile") {
-      dispatch(facebookLogout());
-      navigate("/");
-    } else {
-      dispatch(facebookLogout());
-    }
   };
 
   useEffect(() => {
     if (facebookLogoutState.status === FacebookLogoutState.success) {
       dispatch(getSession());
     }
-  }, [facebookLogoutState]);
+  }, [facebookLogoutState, dispatch]);
 
   useEffect(() => {
     if (seenNotificationState.status === SeenNotificationState.success) {
@@ -206,8 +225,8 @@ export function HeaderNav(props: HeaderNavProps) {
       calculatedQuantity += getSessionState.data.orders.length;
     }
 
-    if (getSessionState.data?.deals) {
-      calculatedQuantity += getSessionState.data.deals.length;
+    if (getSessionState.data?.redeem_data) {
+      calculatedQuantity += 1;
     }
 
     return calculatedQuantity;
@@ -216,24 +235,95 @@ export function HeaderNav(props: HeaderNavProps) {
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].prod_calc_amount * discountPercentage
+          ? order.prod_calc_amount * discountPercentage
           : 0;
-        calculatedPrice += orders[i].prod_calc_amount - discount;
+        const deal_products_promo_includes =
+          getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let i = 0; i < deal_products_promo_includes.length; i++) {
+            const deal_products_promo_include = deal_products_promo_includes[i];
+
+            if (
+              deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                order.prod_calc_amount -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                order.prod_calc_amount -
+                order.prod_calc_amount *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += order.prod_calc_amount - discount;
+          }
+        } else {
+          calculatedPrice += order.prod_calc_amount - discount;
+        }
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -269,49 +359,6 @@ export function HeaderNav(props: HeaderNavProps) {
     prevOpen.current = open;
   }, [open]);
 
-  const profileMenu = [
-    {
-      id: 1,
-      text: getSessionState.data?.userData
-        ? getSessionState.data?.userData.first_name +
-          " " +
-          getSessionState.data?.userData.last_name
-        : "",
-      icon: <FaUserAlt />,
-      action: handleMyProfile,
-    },
-    {
-      id: 2,
-      text: "Snack Shop Orders",
-      icon: <FaShoppingBag />,
-      action: handleSnackshopOrders,
-    },
-    {
-      id: 3,
-      text: "Catering Bookings",
-      icon: <RiShoppingBag3Fill />,
-      action: handleCateringBooking,
-    },
-    {
-      id: 4,
-      text: "Popclub Redeems",
-      icon: <GiPopcorn />,
-      action: handlePopClubRedeem,
-    },
-    {
-      id: 5,
-      text: "User Discount",
-      icon: <HiDocumentText />,
-      action: handleUserDiscount,
-    },
-    {
-      id: 6,
-      text: " Logout",
-      icon: <BiLogOut />,
-      action: handleLogout,
-    },
-  ];
-
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setOpenCartMenu(event.currentTarget);
   };
@@ -319,30 +366,6 @@ export function HeaderNav(props: HeaderNavProps) {
   const handlePopoverClose = () => {
     setOpenCartMenu(null);
   };
-  const menuList = profileMenu.map((item) => {
-    const { text, icon, action, id } = item;
-
-    return (
-      <div>
-        <MenuItem onClick={action} className="bg-secondary">
-          <ListItemIcon className="text-[20px] sm:text-xl">
-            {icon}
-            {(id === 2 &&
-              getNotificationsState.data?.snackshop_order
-                .unseen_notifications_count) ||
-            (id === 3 &&
-              getNotificationsState.data?.catering_booking
-                .unseen_notifications_count) ? (
-              <VscCircleFilled className="text-xs text-red-600 " />
-            ) : null}
-          </ListItemIcon>
-
-          <ListItemText primary={text} />
-        </MenuItem>
-        {id === 1 || id === 5 ? <hr /> : null}
-      </div>
-    );
-  });
 
   return (
     <>
@@ -351,7 +374,7 @@ export function HeaderNav(props: HeaderNavProps) {
           <nav
             className={`flex justify-between items-center container py-2 h-[64px]`}
           >
-            <Link to={"/"}>
+            <Link to={props.homePageUrl}>
               <img {...props.logoProps} alt="Taters Logo" />
             </Link>
 
@@ -365,10 +388,7 @@ export function HeaderNav(props: HeaderNavProps) {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      handleSwitchTab({
-                        url: "/",
-                        tabName: "HOME",
-                      });
+                      handleSwitchTab("home");
                     }}
                   >
                     Home
@@ -382,18 +402,14 @@ export function HeaderNav(props: HeaderNavProps) {
                       : "text-white"
                   }`}
                 >
-                  <Link
-                    to="/branches"
+                  <div
                     className="cursor-pointer"
                     onClick={() => {
-                      handleSwitchTab({
-                        url: "/",
-                        tabName: "BRANCHES",
-                      });
+                      handleSwitchTab("branches");
                     }}
                   >
                     Branches
-                  </Link>
+                  </div>
                 </li>
 
                 <li className="flex items-center justify-center px-4 pb-1">
@@ -444,33 +460,15 @@ export function HeaderNav(props: HeaderNavProps) {
                             >
                               {TABS.map((tab, i) => {
                                 return (
-                                  <div key={i}>
-                                    {tab.name === "POPCLUB" ? (
-                                      <MenuItem
-                                        onClick={() => {
-                                          handleSwitchTab({
-                                            onYes: () => {
-                                              setOpenPlatformChooserModal(true);
-                                            },
-                                            tabName: "popclub",
-                                          });
-                                        }}
-                                      >
-                                        {tab.name}
-                                      </MenuItem>
-                                    ) : (
-                                      <MenuItem
-                                        onClick={() => {
-                                          handleSwitchTab({
-                                            url: tab.url,
-                                            tabName: tab.name.toLowerCase(),
-                                          });
-                                        }}
-                                      >
-                                        {tab.name}
-                                      </MenuItem>
-                                    )}
-                                  </div>
+                                  <MenuItem
+                                    key={i}
+                                    onClick={() => {
+                                      handleSwitchTab(tab.name);
+                                    }}
+                                    className="uppercase"
+                                  >
+                                    {tab.name}
+                                  </MenuItem>
                                 );
                               })}
                             </MenuList>
@@ -502,16 +500,13 @@ export function HeaderNav(props: HeaderNavProps) {
                             <FaUserCircle className="w-6 h-6 text-2xl text-white fill-current" />
 
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop_order
-                              .unseen_notifications_count +
-                              getNotificationsState.data.catering_booking
-                                .unseen_notifications_count !==
-                              0 ? (
+                            getNotificationsState.data.all
+                              .unseen_notifications_count !== 0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop_order
-                                  .unseen_notifications_count +
-                                  getNotificationsState.data.catering_booking
-                                    .unseen_notifications_count}
+                                {
+                                  getNotificationsState.data.all
+                                    .unseen_notifications_count
+                                }
                               </span>
                             ) : null}
                           </span>
@@ -526,25 +521,18 @@ export function HeaderNav(props: HeaderNavProps) {
                               width={30}
                             />
                             {getNotificationsState.data &&
-                            getNotificationsState.data.snackshop_order
-                              .unseen_notifications_count +
-                              getNotificationsState.data.catering_booking
-                                .unseen_notifications_count !==
-                              0 ? (
+                            getNotificationsState.data.all
+                              .unseen_notifications_count !== 0 ? (
                               <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                {getNotificationsState.data.snackshop_order
-                                  .unseen_notifications_count +
-                                  getNotificationsState.data.catering_booking
-                                    .unseen_notifications_count}
+                                {
+                                  getNotificationsState.data.all
+                                    .unseen_notifications_count
+                                }
                               </span>
                             ) : null}
                           </span>
                         </>
                       )}
-                      {/* <span className="text-xs font-light text-white">
-                        {getSessionState.data?.userData.first_name}{" "}
-                        {getSessionState.data?.userData.last_name}
-                      </span> */}
                     </button>
                     <Menu
                       anchorEl={openProfileMenu}
@@ -583,13 +571,88 @@ export function HeaderNav(props: HeaderNavProps) {
                           },
                         }}
                       />
-                      <div className="bg-white">{menuList}</div>
+                      <div className="bg-white">
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+                            navigate(`/profile`);
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <FaUserAlt />
+                          </ListItemIcon>
+
+                          <ListItemText
+                            primary={
+                              getSessionState.data?.userData
+                                ? getSessionState.data?.userData.first_name +
+                                  " " +
+                                  getSessionState.data?.userData.last_name
+                                : ""
+                            }
+                          />
+                        </MenuItem>
+                        <hr />
+                        {PROFILE_MENU.map((menu) => (
+                          <MenuItem
+                            onClick={() => {
+                              setOpenProfileMenu(null);
+                              navigate(`/profile/${menu.urlId}`);
+                            }}
+                            className="bg-secondary"
+                          >
+                            <ListItemIcon className="text-[20px] sm:text-xl">
+                              {menu.icon}
+                              {(menu.urlId === "snackshop-orders" &&
+                                getNotificationsState.data?.snackshop_order
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "inbox" &&
+                                getNotificationsState.data?.inbox
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "catering-bookings" &&
+                                getNotificationsState.data?.catering_booking
+                                  .unseen_notifications_count) ||
+                              (menu.urlId === "popclub-redeems" &&
+                                getNotificationsState.data?.popclub_redeem
+                                  .unseen_notifications_count) ? (
+                                <VscCircleFilled className="text-xs text-red-600 " />
+                              ) : null}
+                            </ListItemIcon>
+
+                            <ListItemText primary={menu.name} />
+                          </MenuItem>
+                        ))}
+                        <hr />
+
+                        <MenuItem
+                          onClick={() => {
+                            setOpenProfileMenu(null);
+
+                            if (currentLocation.pathname === "/profile") {
+                              dispatch(facebookLogout());
+                              navigate("/");
+                            } else {
+                              dispatch(facebookLogout());
+                            }
+                          }}
+                          className="bg-secondary"
+                        >
+                          <ListItemIcon className="text-[20px] sm:text-xl">
+                            <BiLogOut />
+                          </ListItemIcon>
+
+                          <ListItemText primary="Logout" />
+                        </MenuItem>
+                      </div>
                     </Menu>
                   </div>
                 ) : getSessionState.data?.userData === null ? (
                   <>
                     <button
-                      onClick={() => setOpenLoginChooserModal(true)}
+                      onClick={() =>
+                        dispatch(openLoginChooserModal({ required: false }))
+                      }
                       className="flex flex-col items-center justify-center mt-1 mb-4 space-y-1 text-white rounded-xl"
                     >
                       <AiOutlineUser className="text-2xl" />
@@ -670,6 +733,7 @@ export function HeaderNav(props: HeaderNavProps) {
 
                       <div className="bg-white pointer-events-auto">
                         <CartListItem
+                          activeUrl={props.activeUrl}
                           onProcessOrder={() => {
                             setOpenCartMenu(null);
                             if (props.activeUrl === "CATERING") {
@@ -732,13 +796,6 @@ export function HeaderNav(props: HeaderNavProps) {
         }}
       />
 
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-
       <PlatformChooserModal
         hasCloseButton={true}
         onSelectedPlatform={(platform: string) => {
@@ -757,7 +814,7 @@ export function HeaderNav(props: HeaderNavProps) {
         }}
       />
 
-      <StoreChooserModal
+      <SnacksDeliveredStoreChooserModal
         open={openStoreChooserModal}
         onClose={() => {
           setOpenStoreChooserModal(false);
@@ -769,32 +826,6 @@ export function HeaderNav(props: HeaderNavProps) {
         onClose={() => {
           setOpenStoreVisitStoreChooserModal(false);
         }}
-      />
-
-      <MessageModal
-        open={openMessageModalWhenSwitchingTabWhenCacheDataExist.status}
-        onClose={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-        }}
-        onYes={() => {
-          setOpenMessageModalWhenSwitchingTabWhenCacheDataExist({
-            status: false,
-            message: "",
-            url: undefined,
-            onYes: undefined,
-          });
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.url)
-            navigate(openMessageModalWhenSwitchingTabWhenCacheDataExist.url);
-
-          if (openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes)
-            openMessageModalWhenSwitchingTabWhenCacheDataExist.onYes();
-        }}
-        message={openMessageModalWhenSwitchingTabWhenCacheDataExist.message}
       />
     </>
   );

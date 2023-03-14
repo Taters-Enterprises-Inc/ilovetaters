@@ -1,10 +1,9 @@
 import { useAppDispatch } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
-import { getSession } from "features/shared/presentation/slices/get-session.slice";
 import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect } from "react";
-import ReactPlayer from "react-player";
+import { useLocation } from "react-router-dom";
 import CustomizedAccordions from "../components/faqs";
 
 export function Franchising() {
@@ -14,10 +13,17 @@ export function Franchising() {
     dispatch(storeReset());
   }, [dispatch]);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
+
   return (
     <main className="bg-primary">
       <HeaderNav
         activeUrl="FRANCHISING"
+        homePageUrl="/franchising"
         logoProps={{
           src:
             REACT_APP_DOMAIN_URL +
@@ -82,15 +88,15 @@ export function Franchising() {
 
           <div className="flex flex-col justify-center mt-6 space-y-2 sm:space-x-2 sm:space-y-0 sm:flex-row">
             <a
-              href="FranchiseApplicationForm.pdf"
-              download="FranchiseApplicationForm.pdf"
+              href={require("assets/FranchiseApplicationForm.pdf")}
+              download
               className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center"
             >
               Application Form
             </a>
             <a
-              href="TatersFranchiseKit.pdf"
-              download="TatersFranchiseKit.pdf"
+              href={require("assets/TatersFranchiseKit.pdf")}
+              download
               className="bg-white text-sm text-black w-full sm:w-[150px] rounded-full font-bold h-[35px] flex justify-center items-center"
             >
               Franchise Kit
@@ -99,7 +105,7 @@ export function Franchising() {
         </div>
       </section>
 
-      <FooterNav activeUrl="HOME" />
+      <FooterNav activeUrl="FRANCHISING" />
     </main>
   );
 }

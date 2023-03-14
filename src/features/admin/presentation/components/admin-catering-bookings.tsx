@@ -167,7 +167,7 @@ export function AdminCateringBookings() {
       <AdminChipsButton
         createQueryParams={createQueryParams}
         data={ADMIN_CATERING_BOOKING_STATUS}
-        dispactAction={() => {
+        dispatchAction={() => {
           dispatch(resetGetAdminCateringBookingsStatus());
         }}
         status={status}
@@ -258,7 +258,7 @@ export function AdminCateringBookings() {
                 const notification: NotificationModel | undefined =
                   getAdminNotificationsState.data?.catering_booking.unseen_notifications.find(
                     (notification) =>
-                      notification.catering_tracking_no === row.tracking_no
+                      notification.catering_transaction_tb_id === row.id
                   );
                 return (
                   <div
@@ -424,7 +424,7 @@ export function AdminCateringBookings() {
                     const notification: NotificationModel | undefined =
                       getAdminNotificationsState.data?.catering_booking.unseen_notifications.find(
                         (notification) =>
-                          notification.catering_tracking_no === row.tracking_no
+                          notification.catering_transaction_tb_id === row.id
                       );
                     return (
                       <DataTableRow

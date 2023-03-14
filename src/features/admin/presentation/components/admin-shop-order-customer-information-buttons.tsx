@@ -12,6 +12,7 @@ import {
   selectGetAdminShopOrder,
 } from "../slices/get-admin-shop-order.slice";
 import { useEffect } from "react";
+import ReactGA from "react-ga";
 
 export function AdminShopOrderCustomerInformationButtons() {
   const getAdminShopOrderState = useAppSelector(selectGetAdminShopOrder);
@@ -33,6 +34,7 @@ export function AdminShopOrderCustomerInformationButtons() {
       dispatch(
         adminShopOrderUpdateStatus({
           transactionId: getAdminShopOrderState.data.id,
+          transactionHash: getAdminShopOrderState.data.hash_key,
           fbUserId: getAdminShopOrderState.data.fb_user_id,
           mobileUserId: getAdminShopOrderState.data.mobile_user_id,
           status,
@@ -70,6 +72,10 @@ export function AdminShopOrderCustomerInformationButtons() {
           </button>
           <button
             onClick={() => {
+              ReactGA.event({
+                category: "Admin Snackshop Order",
+                action: "Confirm order",
+              });
               handleUpdateStatus(3);
             }}
             className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"
@@ -159,6 +165,10 @@ export function AdminShopOrderCustomerInformationButtons() {
       return (
         <button
           onClick={() => {
+            ReactGA.event({
+              category: "Admin Snackshop Order",
+              action: "Complete order",
+            });
             handleUpdateStatus(6);
           }}
           className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:mb-0"

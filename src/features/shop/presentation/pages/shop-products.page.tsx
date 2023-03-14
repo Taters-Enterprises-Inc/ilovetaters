@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
-  getSession,
   GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
@@ -14,11 +13,9 @@ import {
   selectGetCategoryProducts,
 } from "../slices/get-category-products.slice";
 
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-import Dispatcher from "pusher-js/types/src/core/events/dispatcher";
 
 export function ShopProducts() {
   const getSessionState = useAppSelector(selectGetSession);

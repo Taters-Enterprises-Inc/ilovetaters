@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
 import { AdminSurveyVerificationIDInformation } from "../components/admin-survey-verification-id-information";
+import { AdminSurveyVerificationAudit } from "../components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,7 +56,10 @@ export function AdminSurveyVerificationModal(
   }
 
   return (
-    <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
+    <div
+      id="survey-verification-modal"
+      className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+    >
       <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
         <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
           <span className="text-2xl text-white">Survey Verification Form</span>
@@ -78,10 +82,14 @@ export function AdminSurveyVerificationModal(
             aria-label="basic tabs example"
           >
             <Tab label="ID Information" {...a11yProps(0)} />
+            <Tab label="Audit Logs" {...a11yProps(1)} />
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
             <AdminSurveyVerificationIDInformation onClose={props.onClose} />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <AdminSurveyVerificationAudit />
           </TabPanel>
         </div>
       </div>

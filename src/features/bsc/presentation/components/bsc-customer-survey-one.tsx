@@ -1,6 +1,6 @@
-import { FormControl } from "@mui/material";
-import { LinearProgress } from '@mui/material';
-import { BSCSentenceRadioButton } from './bsc-sentence-radio-button';
+import FormControl from "@mui/material/FormControl";
+import LinearProgress from "@mui/material/LinearProgress";
+import { BSCSentenceRadioButton } from "./bsc-sentence-radio-button";
 import { BSCRadioCustomerSurvey } from "./bsc-radio-customer-survey";
 
 export function BSCCustomerSurveyOne() {
@@ -16,8 +16,7 @@ export function BSCCustomerSurveyOne() {
         </h1>
         <p className="text-xs lg:text-sm w-[90%] sm:w-[90%]">
           Thank you for choosing Taters! It would be great if you would
-          participate in our short survey so that we can improve our
-          service.
+          participate in our short survey so that we can improve our service.
         </p>
       </div>
 
@@ -28,81 +27,55 @@ export function BSCCustomerSurveyOne() {
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            1. Please rate your overall satisfaction with your Taters Experience.
+            1. Please rate your overall satisfaction with your Taters
+            Experience.
           </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            2. Which type of delivery did you do recently?
-          </p>
-          <BSCRadioCustomerSurvey type="order"/>
+          <p> 2. Which type of delivery did you do recently?</p>
+          <BSCRadioCustomerSurvey type="order" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            3. Rate the friendliness of the delivery driver.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 3. Rate the friendliness of the delivery driver.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            4. Rate the taste of the food you received.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 4. Rate the taste of the food you received.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            5. Rate the availability of the menu items.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 5. Rate the availability of the menu items.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            6. Rate the speed of service.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 6. Rate the speed of service.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            7. Rate the temperature of food.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 7. Rate the temperature of food.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            8. Rate the accuracy of the order.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 8. Rate the accuracy of the order.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            9. Rate the portion you received.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 9. Rate the portion you received.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            10. Rate the overall value of the price you paid.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <p> 10. Rate the overall value of the price you paid.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] flex justify-between items-center my-4">
@@ -123,18 +96,22 @@ export function BSCCustomerSurveyOne() {
         </div>
 
         <div className="w-[40%] ml-[50%] mt-[3%]">
-          <LinearProgress variant="determinate" value={33} className="w-[100%] mx-auto mb-4 h-4" sx={{
-              '& .MuiLinearProgress-bar1Determinate': {
-                color: '#004d00',
-                backgroundColor: '#004d00',
+          <LinearProgress
+            variant="determinate"
+            value={33}
+            className="w-[100%] mx-auto mb-4 h-4"
+            sx={{
+              "& .MuiLinearProgress-bar1Determinate": {
+                color: "#004d00",
+                backgroundColor: "#004d00",
               },
-              '&.MuiLinearProgress-root': {
-                backgroundColor: 'gray',
+              "&.MuiLinearProgress-root": {
+                backgroundColor: "gray",
                 height: 8,
               },
             }}
           />
-          <p className="text-xs text-center text-black"> Page 1 of 3 </p> 
+          <p className="text-xs text-center text-black"> Page 1 of 3 </p>
         </div>
       </FormControl>
     </main>

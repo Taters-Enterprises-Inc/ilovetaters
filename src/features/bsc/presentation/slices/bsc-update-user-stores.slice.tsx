@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { AdminStoreModel } from "features/admin/core/domain/admin-store.model";
 import {
   UpdateBscUserStoresRepository,
   UpdateBscUserStoresResponse,

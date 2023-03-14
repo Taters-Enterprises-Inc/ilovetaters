@@ -75,7 +75,7 @@ export function DataTable(props: DataTableProps) {
             label="Search"
             size="small"
             name="search"
-            value={props.search}
+            defaultValue={props.search}
             onChange={(e) => {
               props.onSearch(e.target.value);
             }}

@@ -11,11 +11,11 @@ import {
 } from "features/shared/constants";
 import NumberFormat from "react-number-format";
 import MenuItem from "@mui/material/MenuItem";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  selectGetAdminStores,
-  getAdminStores,
-} from "../slices/get-admin-stores.slice";
+  selectGetAdminCateringStores,
+  getAdminCateringStores,
+} from "../slices/get-admin-catering-stores.slice";
 import { AdminPasswordModal } from "../modals";
 import {
   adminCateringPrivilege,
@@ -32,6 +32,8 @@ import {
 import Moment from "react-moment";
 import moment from "moment";
 import { MaterialInput } from "features/shared/presentation/components";
+import { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
+import { selectUpdateAdminCateringOrderItemRemarks } from "../slices/update-admin-catering-order-item-remarks.slice";
 
 export function AdminCateringBookingCustomerInformation() {
   const query = useQuery();
@@ -54,10 +56,16 @@ export function AdminCateringBookingCustomerInformation() {
   const getAdminCateringBookingState = useAppSelector(
     selectGetAdminCateringBooking
   );
-  const getAdminStoresState = useAppSelector(selectGetAdminStores);
+  const getAdminCateringStoresState = useAppSelector(
+    selectGetAdminCateringStores
+  );
 
   const adminCateringPrivilegeState = useAppSelector(
     selectAdminCateringPrivilege
+  );
+
+  const updateAdminCateringOrderItemRemarksState = useAppSelector(
+    selectUpdateAdminCateringOrderItemRemarks
   );
 
   useEffect(() => {
@@ -85,17 +93,22 @@ export function AdminCateringBookingCustomerInformation() {
     if (trackingNo) {
       dispatch(getAdminCateringBooking(trackingNo));
     }
-  }, [dispatch, trackingNo, adminCateringPrivilegeState]);
+  }, [
+    dispatch,
+    trackingNo,
+    adminCateringPrivilegeState,
+    updateAdminCateringOrderItemRemarksState,
+  ]);
 
   useEffect(() => {
-    dispatch(getAdminStores());
+    dispatch(getAdminCateringStores());
   }, [dispatch]);
 
-  const calculateWithZeroIfNoValue = (value: number) => {
+  const calculateWithZeroIfNoValue = (value: string) => {
     if (value)
       return (
         <NumberFormat
-          value={value.toFixed(2)}
+          value={parseInt(value).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -141,6 +154,9 @@ export function AdminCateringBookingCustomerInformation() {
       calculatedPrice -= parseInt(getAdminCateringBookingState?.data.discount);
     }
 
+    if (getAdminCateringBookingState.data?.cod_fee) {
+      calculatedPrice += parseInt(getAdminCateringBookingState.data?.cod_fee);
+    }
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -290,7 +306,7 @@ export function AdminCateringBookingCustomerInformation() {
               }}
               name="toStoreId"
             >
-              {getAdminStoresState.data?.map((store, index) => (
+              {getAdminCateringStoresState.data?.map((store, index) => (
                 <MenuItem key={index} value={store.store_id}>
                   {store.name}
                 </MenuItem>
@@ -503,7 +519,7 @@ export function AdminCateringBookingCustomerInformation() {
                     <tr key={i}>
                       <th
                         scope="row"
-                        className="px-6 py-4 font-medium text-secondary"
+                        className="px-6 py-4 font-medium text-secondary "
                       >
                         <span
                           dangerouslySetInnerHTML={{
@@ -517,12 +533,8 @@ export function AdminCateringBookingCustomerInformation() {
                           }}
                         />
                       </th>
-                      <td className="px-6 py-4">
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: item.remarks,
-                          }}
-                        />
+                      <td className="px-6 align-top w-[250px] ">
+                        <AdminCateringEditFlavor orderItem={item} />
                       </td>
                       <td className="px-6 py-4">{item.quantity}</td>
                       <td className="px-6 py-4 text-end">
@@ -545,11 +557,12 @@ export function AdminCateringBookingCustomerInformation() {
                       </td>
                     </tr>
                   ))}
-                  <tr className="text-end">
+                  <tr className="text-end ">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Total:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -560,23 +573,12 @@ export function AdminCateringBookingCustomerInformation() {
                       />
                     </td>
                   </tr>
-                  {getAdminCateringBookingState?.data?.discount && (
-                    <tr className="text-end">
-                      <td colSpan={4} className="px-6 py-2 font-bold">
-                        {getAdminCateringBookingState?.data.discount_name}
-                      </td>
-                      <td className="px-6 py-2">
-                        {calculateWithZeroIfNoValue(
-                          parseInt(getAdminCateringBookingState?.data.discount)
-                        )}
-                      </td>
-                    </tr>
-                  )}
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Subtotal:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       <NumberFormat
                         value={parseInt(
                           getAdminCateringBookingState.data.purchase_amount
@@ -588,13 +590,33 @@ export function AdminCateringBookingCustomerInformation() {
                     </td>
                   </tr>
 
+                  {getAdminCateringBookingState.data.discount &&
+                  getAdminCateringBookingState.data.discount_percentage &&
+                  getAdminCateringBookingState.data.discount_name ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold ">
+                        {parseFloat(
+                          getAdminCateringBookingState.data.discount_percentage
+                        ) * 100}
+                        % {getAdminCateringBookingState.data.discount_name}
+                      </td>
+                      <td className="px-6 py-2 w-[150px]">
+                        -{" "}
+                        {calculateWithZeroIfNoValue(
+                          getAdminCateringBookingState.data.discount
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Service Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.service_fee
+                        getAdminCateringBookingState.data.service_fee.toString()
                       )}
                     </td>
                   </tr>
@@ -602,11 +624,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Transportation Fee:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        parseInt(
-                          getAdminCateringBookingState.data.distance_price
-                        )
+                        getAdminCateringBookingState.data.distance_price
                       )}
                     </td>
                   </tr>
@@ -614,9 +635,10 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Additional Hour Charges:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.additional_hour_charge
+                        getAdminCateringBookingState.data.additional_hour_charge.toString()
                       )}
                     </td>
                   </tr>
@@ -624,17 +646,36 @@ export function AdminCateringBookingCustomerInformation() {
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Night differential Charge:
                     </td>
-                    <td className="px-6 py-2">
+                    <td className="px-6 py-2 w-[150px]">
+                      +
                       {calculateWithZeroIfNoValue(
-                        getAdminCateringBookingState.data.night_diff_fee
+                        getAdminCateringBookingState.data.night_diff_fee.toString()
                       )}
                     </td>
                   </tr>
+
+                  {getAdminCateringBookingState.data.cod_fee &&
+                  getAdminCateringBookingState.data.cod_fee !== "0" ? (
+                    <tr className="text-end">
+                      <td colSpan={4} className="px-6 py-2 font-bold">
+                        COD Additional Charges:
+                      </td>
+                      <td className="px-6 py-2">
+                        +{" "}
+                        {calculateWithZeroIfNoValue(
+                          getAdminCateringBookingState.data.cod_fee
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+
                   <tr className="text-end">
                     <td colSpan={4} className="px-6 py-2 font-bold">
                       Grand Total:
                     </td>
-                    <td className="px-6 py-2">{calculateGrandTotal()}</td>
+                    <td className="px-6 py-2 w-[150px]">
+                      {calculateGrandTotal()}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -658,7 +699,7 @@ export function AdminCateringBookingCustomerInformation() {
                       <span className="text-xs">
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: item.remarks,
+                            __html: item.remarks ?? "",
                           }}
                         />
                       </span>
@@ -696,6 +737,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between mt-2">
                   <span className="text-sm font-bold">Total: </span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -709,6 +751,7 @@ export function AdminCateringBookingCustomerInformation() {
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Subtotal:</span>
                   <span className="text-sm text-end">
+                    +
                     <NumberFormat
                       value={parseInt(
                         getAdminCateringBookingState.data.purchase_amount
@@ -719,19 +762,40 @@ export function AdminCateringBookingCustomerInformation() {
                     />
                   </span>
                 </div>
+
+                {getAdminCateringBookingState.data.discount &&
+                getAdminCateringBookingState.data.discount_percentage &&
+                getAdminCateringBookingState.data.discount_name ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      {parseFloat(
+                        getAdminCateringBookingState.data.discount_percentage
+                      ) * 100}
+                      % {getAdminCateringBookingState.data.discount_name}:
+                    </span>
+                    <span className="text-sm text-end">
+                      -{" "}
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.discount
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Service Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.service_fee
+                      getAdminCateringBookingState.data.service_fee.toString()
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Transportation Fee:</span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      parseInt(getAdminCateringBookingState.data.distance_price)
+                      getAdminCateringBookingState.data.distance_price
                     )}
                   </span>
                 </div>
@@ -740,8 +804,9 @@ export function AdminCateringBookingCustomerInformation() {
                     Additional Hour Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.additional_hour_charge
+                      getAdminCateringBookingState.data.additional_hour_charge.toString()
                     )}
                   </span>
                 </div>
@@ -750,11 +815,25 @@ export function AdminCateringBookingCustomerInformation() {
                     Night differential Charge:
                   </span>
                   <span className="text-sm text-end">
+                    +
                     {calculateWithZeroIfNoValue(
-                      getAdminCateringBookingState.data.night_diff_fee
+                      getAdminCateringBookingState.data.night_diff_fee.toString()
                     )}
                   </span>
                 </div>
+                {getAdminCateringBookingState.data.cod_fee &&
+                getAdminCateringBookingState.data.cod_fee !== "0" ? (
+                  <div className="flex justify-between">
+                    <span className="text-sm font-bold">
+                      COD Additional Charges:
+                    </span>
+                    <span className="text-sm text-end">
+                      {calculateWithZeroIfNoValue(
+                        getAdminCateringBookingState.data.cod_fee
+                      )}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <span className="text-sm font-bold">Grand Total:</span>
                   <span className="text-sm text-end">
@@ -788,7 +867,10 @@ export function AdminCateringBookingCustomerInformation() {
             dispatch(
               adminCateringPrivilege({
                 password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
                 transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
                 fromStatusId: getAdminCateringBookingState.data.status,
                 toStatusId: status,
               })
@@ -806,7 +888,10 @@ export function AdminCateringBookingCustomerInformation() {
             dispatch(
               adminCateringPrivilege({
                 password,
+                fbUserId: getAdminCateringBookingState.data.fb_user_id,
+                mobileUserId: getAdminCateringBookingState.data.mobile_user_id,
                 transactionId: getAdminCateringBookingState.data.id,
+                transactionHash: getAdminCateringBookingState.data.hash_key,
                 fromStoreId: getAdminCateringBookingState.data.store,
                 toStoreId: store,
               })

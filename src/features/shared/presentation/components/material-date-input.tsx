@@ -1,12 +1,12 @@
-import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import TextField from "@mui/material/TextField";
 import {
   CalendarPickerView,
   DesktopDatePicker,
   LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useState } from "react";
 
 const MaterialInput = styled((props: any) => <TextField {...props} />, {
   shouldForwardProp: (prop) => prop !== "colorTheme",
@@ -14,7 +14,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -33,7 +33,7 @@ const MaterialInput = styled((props: any) => <TextField {...props} />, {
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",
@@ -54,13 +54,12 @@ export interface MaterialDateInputProps {
   value: string | null;
   label: string;
   colorTheme: "white" | "black";
-  openTo?: CalendarPickerView | undefined;
-  views?: readonly CalendarPickerView[] | undefined;
-  shouldDisableYear: ((year: Date) => boolean) | undefined;
-  onChange: (
-    value: Date | null,
-    keyboardInputValue?: string | undefined
-  ) => void;
+  openTo?: CalendarPickerView;
+  required?: boolean;
+  views?: readonly CalendarPickerView[];
+  shouldDisableYear?: (year: Date) => boolean;
+  onChange: (value: Date | null, keyboardInputValue?: string) => void;
+  size?: string;
 }
 
 export function MaterialDateInput(props: MaterialDateInputProps) {
@@ -81,10 +80,11 @@ export function MaterialDateInput(props: MaterialDateInputProps) {
         renderInput={(params) => (
           <MaterialInput
             colorTheme={props.colorTheme}
+            size={props.size}
             onClick={() => {
               setOpenBirthDateCalendar(true);
             }}
-            required
+            required={props.required}
             fullWidth
             {...params}
           />

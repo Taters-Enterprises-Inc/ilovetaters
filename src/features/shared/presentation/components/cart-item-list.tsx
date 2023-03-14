@@ -1,4 +1,11 @@
+import {
+  removeItemFromCartCatering,
+  RemoveItemFromCartCateringState,
+  resetRemoveItemFromCartCatering,
+  selectRemoveItemFromCartCatering,
+} from "features/catering/presentation/slices/remove-item-from-cart-catering.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { forfeitRedeem } from "features/popclub/presentation/slices/forfeit-redeem.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   removeItemFromCartShop,
@@ -10,10 +17,11 @@ import { useEffect } from "react";
 import { BsCartX } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
-import { useNavigate } from "react-router-dom";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
+import { ActiveUrl } from "./header-nav";
 
 export interface CartListItemProps {
+  activeUrl: ActiveUrl;
   onProcessOrder: () => void;
 }
 
@@ -23,6 +31,9 @@ export function CartListItem(props: CartListItemProps) {
   const removeItemFromCartShopState = useAppSelector(
     selectRemoveItemFromCartShop
   );
+  const removeItemFromCartCateringState = useAppSelector(
+    selectRemoveItemFromCartCatering
+  );
 
   useEffect(() => {
     if (
@@ -31,29 +42,110 @@ export function CartListItem(props: CartListItemProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartShop());
     }
-  }, [removeItemFromCartShopState]);
+  }, [removeItemFromCartShopState, dispatch]);
+
+  useEffect(() => {
+    if (
+      removeItemFromCartCateringState.status ===
+      RemoveItemFromCartCateringState.success
+    ) {
+      dispatch(getSession());
+      dispatch(resetRemoveItemFromCartCatering());
+    }
+  }, [removeItemFromCartCateringState, dispatch]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        const discountPercentage = orders[i].promo_discount_percentage;
+        const order = orders[i];
+        const discountPercentage = order.promo_discount_percentage;
         const discount = discountPercentage
-          ? orders[i].prod_calc_amount * discountPercentage
+          ? order.prod_calc_amount * discountPercentage
           : 0;
-        calculatedPrice += orders[i].prod_calc_amount - discount;
+        const deal_products_promo_includes =
+          getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+        if (deal_products_promo_includes) {
+          let deal_products_promo_include_match = null;
+
+          for (let i = 0; i < deal_products_promo_includes.length; i++) {
+            const deal_products_promo_include = deal_products_promo_includes[i];
+
+            if (
+              deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            }
+          }
+
+          if (deal_products_promo_include_match) {
+            let addedObtainable: Array<{
+              product_id: number;
+              price: number;
+              product_variant_option_tb_id: number;
+              promo_discount_percentage: string;
+            }> = [];
+            let obtainableDiscountedPrice = 0;
+            let obtainablePrice = 0;
+
+            for (
+              let y = 0;
+              y < deal_products_promo_include_match.obtainable.length;
+              y++
+            ) {
+              const val = deal_products_promo_include_match.obtainable[y];
+
+              if (
+                val.price &&
+                val.promo_discount_percentage &&
+                !addedObtainable.some(
+                  (value) => value.product_id === val.product_id
+                )
+              ) {
+                obtainableDiscountedPrice +=
+                  val.price -
+                  val.price * parseFloat(val.promo_discount_percentage);
+                obtainablePrice += val.price;
+
+                addedObtainable.push(val);
+              }
+            }
+
+            if (
+              deal_products_promo_include_match.obtainable.length > 0 &&
+              deal_products_promo_include_match.quantity &&
+              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+            ) {
+              calculatedPrice +=
+                obtainableDiscountedPrice +
+                order.prod_calc_amount -
+                obtainablePrice;
+            } else {
+              calculatedPrice +=
+                order.prod_calc_amount -
+                order.prod_calc_amount *
+                  parseFloat(
+                    deal_products_promo_include_match.promo_discount_percentage
+                  );
+            }
+          } else {
+            calculatedPrice += order.prod_calc_amount - discount;
+          }
+        } else {
+          calculatedPrice += order.prod_calc_amount - discount;
+        }
       }
     }
 
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
+    if (getSessionState.data?.redeem_data) {
+      if (getSessionState.data.redeem_data.deal_promo_price)
+        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
     }
 
     return (
@@ -66,6 +158,185 @@ export function CartListItem(props: CartListItemProps) {
     );
   };
 
+  const calculateOrderPrice = (order: {
+    prod_id: number;
+    prod_image_name: string;
+    prod_name: string;
+    prod_qty: number;
+    prod_price: number;
+    prod_calc_amount: number;
+    prod_flavor?: string;
+    prod_flavor_id?: number;
+    prod_with_drinks?: number;
+    prod_size?: string;
+    prod_size_id?: number;
+    prod_multiflavors?: string;
+    prod_sku_id?: number;
+    prod_sku?: number;
+    prod_discount?: number;
+    prod_category: number;
+    is_free_item?: number;
+    free_threshold?: number;
+    promo_discount_percentage: number | null;
+  }) => {
+    const deal_products_promo_includes =
+      getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+    if (order.promo_discount_percentage) {
+      return (
+        <div>
+          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+            <NumberFormat
+              value={order.prod_calc_amount.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+          <h3 className="flex items-end justify-end flex-1 text-base">
+            <NumberFormat
+              value={(
+                order.prod_calc_amount -
+                order.prod_calc_amount * order.promo_discount_percentage
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        </div>
+      );
+    } else if (deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id === order.prod_id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          order.prod_qty >= deal_products_promo_include_match.quantity + 1
+        ) {
+          return (
+            <div>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={order.prod_calc_amount.toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    obtainableDiscountedPrice +
+                    order.prod_calc_amount -
+                    obtainablePrice
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
+                <NumberFormat
+                  value={order.prod_calc_amount.toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+              <h3 className="flex items-end justify-end flex-1 text-base">
+                <NumberFormat
+                  value={(
+                    order.prod_calc_amount -
+                    order.prod_calc_amount *
+                      parseFloat(
+                        deal_products_promo_include_match.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h3>
+            </div>
+          );
+        }
+      } else {
+        return (
+          <h3 className="flex items-end justify-end flex-1 text-base">
+            <NumberFormat
+              value={order.prod_calc_amount.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h3>
+        );
+      }
+    } else {
+      return (
+        <h3 className="flex items-end justify-end flex-1 text-base">
+          <NumberFormat
+            value={order.prod_calc_amount.toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
+        </h3>
+      );
+    }
+  };
+
   return (
     <>
       <div className="pb-2">
@@ -73,9 +344,7 @@ export function CartListItem(props: CartListItemProps) {
           {(getSessionState.data?.orders === undefined ||
             getSessionState.data?.orders == null ||
             getSessionState.data?.orders.length <= 0) &&
-          (getSessionState.data?.deals === undefined ||
-            getSessionState.data?.deals == null ||
-            getSessionState.data?.deals.length <= 0) ? (
+          getSessionState.data?.redeem_data === null ? (
             <div className="flex flex-row items-center justify-center px-10 pt-2 space-x-5 space-y-2">
               <BsCartX className="text-2xl text-secondary" />
               <span className="text-secondary text-md font-['Bebas_Neue'] tracking-[2px]">
@@ -104,7 +373,11 @@ export function CartListItem(props: CartListItemProps) {
                         <img
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
+                          alt={order.prod_name}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="w-full text-sm font-bold leading-4">
@@ -137,44 +410,21 @@ export function CartListItem(props: CartListItemProps) {
                               />
                             </h3>
                           ) : null}
-                          {order.promo_discount_percentage ? (
-                            <div>
-                              <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-                                <NumberFormat
-                                  value={order.prod_calc_amount.toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
-                              <h3 className="flex items-end justify-end flex-1 text-base">
-                                <NumberFormat
-                                  value={(
-                                    order.prod_calc_amount -
-                                    order.prod_calc_amount *
-                                      order.promo_discount_percentage
-                                  ).toFixed(2)}
-                                  displayType={"text"}
-                                  thousandSeparator={true}
-                                  prefix={"₱"}
-                                />
-                              </h3>
-                            </div>
-                          ) : (
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={order.prod_calc_amount.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          )}
+                          {calculateOrderPrice(order)}
                         </div>
                         <button
                           className="absolute text-white top-2 right-4 "
                           onClick={() => {
-                            dispatch(removeItemFromCartShop(i));
+                            switch (props.activeUrl) {
+                              case "SNACKSHOP":
+                                dispatch(removeItemFromCartShop(i));
+
+                                break;
+                              case "CATERING":
+                                dispatch(removeItemFromCartCatering(i));
+
+                                break;
+                            }
                           }}
                         >
                           <IoMdClose />
@@ -184,66 +434,64 @@ export function CartListItem(props: CartListItemProps) {
                   </>
                 ) : null}
 
-                {getSessionState.data?.deals !== undefined &&
-                getSessionState.data?.deals !== null &&
-                getSessionState.data?.deals.length > 0 ? (
-                  <>
-                    {getSessionState.data?.deals.map((deal, i) => (
-                      <div
-                        key={i}
-                        className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative"
-                      >
-                        <img
-                          src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.deal_image_name}`}
-                          className="rounded-[10px] w-[92px] h-[92px]"
-                          alt=""
-                        />
-                        <div className="flex flex-col flex-1 px-3 py-2 text-white">
-                          <h3 className="w-full text-sm font-bold leading-4">
-                            {deal.deal_name}
-                          </h3>
-                          <h3 className="text-xs">
-                            Quantity:{" "}
-                            <span className="text-tertiary">
-                              {deal.deal_qty}
-                            </span>
-                          </h3>
+                {getSessionState.data?.redeem_data ? (
+                  <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
+                      className="rounded-[10px] w-[92px] h-[92px]"
+                      alt={getSessionState.data.redeem_data.deal_name}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                      }}
+                    />
+                    <div className="flex flex-col flex-1 px-3 py-2 text-white">
+                      <h3 className="w-full text-sm font-bold leading-4">
+                        {getSessionState.data.redeem_data.deal_name}
+                      </h3>
+                      <h3 className="text-xs">
+                        Quantity:{" "}
+                        <span className="text-tertiary">
+                          {getSessionState.data.redeem_data.deal_qty}
+                        </span>
+                      </h3>
 
-                          {deal.deal_remarks ? (
-                            <h3 className="text-xs">
-                              Flavor:
-                              <br />
-                              <span
-                                className="text-tertiary"
-                                dangerouslySetInnerHTML={{
-                                  __html: deal.deal_remarks,
-                                }}
-                              />
-                            </h3>
-                          ) : null}
+                      {getSessionState.data.redeem_data.deal_remarks ? (
+                        <h3 className="text-xs">
+                          Flavor:
+                          <br />
+                          <span
+                            className="text-tertiary"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                getSessionState.data.redeem_data.deal_remarks,
+                            }}
+                          />
+                        </h3>
+                      ) : null}
 
-                          {deal.deal_promo_price ? (
-                            <h3 className="flex items-end justify-end flex-1 text-base">
-                              <NumberFormat
-                                value={deal.deal_promo_price.toFixed(2)}
-                                displayType={"text"}
-                                thousandSeparator={true}
-                                prefix={"₱"}
-                              />
-                            </h3>
-                          ) : null}
-                        </div>
-                        <button
-                          className="absolute text-white top-2 right-4 "
-                          onClick={() => {
-                            dispatch(removeItemFromCartShop(i));
-                          }}
-                        >
-                          <IoMdClose />
-                        </button>
-                      </div>
-                    ))}
-                  </>
+                      {getSessionState.data.redeem_data.deal_promo_price ? (
+                        <h3 className="flex items-end justify-end flex-1 text-base">
+                          <NumberFormat
+                            value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </h3>
+                      ) : null}
+                    </div>
+                    <button
+                      className="absolute text-white top-2 right-4 "
+                      onClick={() => {
+                        dispatch(forfeitRedeem());
+                      }}
+                    >
+                      <IoMdClose />
+                    </button>
+                  </div>
                 ) : null}
               </div>
 

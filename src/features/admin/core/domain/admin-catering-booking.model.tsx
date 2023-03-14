@@ -11,9 +11,10 @@ export interface AdminCateringBookingModel {
   message: string;
   event_class: string;
   company_name: string;
-  discount: string;
-  discount_id: string;
-  discount_name: string;
+  discount_user_id: string;
+  discount: string | null;
+  discount_name: string | null;
+  discount_percentage: string | null;
   hash_key: string;
 
   service_fee: number;
@@ -49,12 +50,15 @@ export interface AdminCateringBookingModel {
   payops: number;
   store_name: string;
   items: Array<{
+    id: number;
+    product_id: number;
     product_price: string;
     quantity: number;
-    remarks: string;
+    remarks: string | null;
     name: string;
     description: string;
     add_details: string;
     product_label: string;
+    type: string;
   }>;
 }

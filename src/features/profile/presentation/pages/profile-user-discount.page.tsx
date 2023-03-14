@@ -42,7 +42,7 @@ export function ProfileUserDiscount() {
     idNumber: string;
     idFront: string;
     idBack: string;
-    discountTypeId: number | null;
+    discountId: number | null;
   }>({
     firstName: "",
     middleName: "",
@@ -51,13 +51,12 @@ export function ProfileUserDiscount() {
     idNumber: "",
     idFront: "",
     idBack: "",
-    discountTypeId: null,
+    discountId: null,
   });
 
   useEffect(() => {
     dispatch(getUserDiscount());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyUserDiscountState]);
+  }, [applyUserDiscountState, dispatch]);
 
   useEffect(() => {
     if (
@@ -72,7 +71,7 @@ export function ProfileUserDiscount() {
         idNumber: getUserDiscountState.data.id_number,
         idFront: getUserDiscountState.data.id_front,
         idBack: getUserDiscountState.data.id_back,
-        discountTypeId: getUserDiscountState.data.discount_type_id,
+        discountId: getUserDiscountState.data.discount_id,
       });
       setImagesFront({
         src: `${REACT_APP_DOMAIN_URL}api/load-image-user-discount/${getUserDiscountState.data.id_front}`,
@@ -145,7 +144,6 @@ export function ProfileUserDiscount() {
   });
 
   const handleSubmitApplication = (e: FormEvent<HTMLFormElement>) => {
-    console.log(formState);
     if (
       formState &&
       formState.firstName &&
@@ -155,7 +153,7 @@ export function ProfileUserDiscount() {
       formState.idFront &&
       formState.idBack &&
       formState.birthday &&
-      formState.discountTypeId
+      formState.discountId
     ) {
       if (
         getUserDiscountState.data &&
@@ -171,7 +169,7 @@ export function ProfileUserDiscount() {
             idFront: formState.idFront,
             idBack: formState.idBack,
             birthday: formState.birthday,
-            discountTypeId: formState.discountTypeId,
+            discountId: formState.discountId,
           })
         );
       } else {
@@ -184,7 +182,7 @@ export function ProfileUserDiscount() {
             idFront: formState.idFront,
             idBack: formState.idBack,
             birthday: formState.birthday,
-            discountTypeId: formState.discountTypeId,
+            discountId: formState.discountId,
           })
         );
       }
@@ -237,11 +235,11 @@ export function ProfileUserDiscount() {
             onChange={(e) => {
               setFormState({
                 ...formState,
-                discountTypeId: parseInt(e.target.value),
+                discountId: parseInt(e.target.value),
               });
             }}
-            name="discountTypeId"
-            value={formState.discountTypeId}
+            name="discountId"
+            value={formState.discountId}
           >
             <FormControlLabel
               value={1}
@@ -305,7 +303,7 @@ export function ProfileUserDiscount() {
               shouldDisableYear={(year: Date) => {
                 let currentYear = new Date().getFullYear();
 
-                return formState.discountTypeId === 1
+                return formState.discountId === 1
                   ? year.getFullYear() > currentYear - 60
                   : year.getFullYear() > currentYear;
               }}

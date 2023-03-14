@@ -5,22 +5,22 @@ interface AdminSnackshopOrderStatusBbuttonParams {
   createQueryParams: (params: object) => string;
   params: (value: any) => any;
   status: string | null;
-  dispactAction: () => void;
+  dispatchAction: () => void;
   data: Array<any>;
 }
 
 export const AdminChipsButton: React.FC<
   AdminSnackshopOrderStatusBbuttonParams
-> = ({ params, createQueryParams, status, dispactAction, data }) => {
+> = ({ params, createQueryParams, status, dispatchAction, data }) => {
   const navigate = useNavigate();
 
   const Data = useCallback(() => {
-    return data
+    return data;
   }, [data]);
 
   const Dispatch = useCallback((): void => {
-    return dispactAction();
-  }, [dispactAction]);
+    return dispatchAction();
+  }, [dispatchAction]);
 
   return (
     <div className="flex  flex-wrap gap-2 px-4 md:justify-end justify-start items-center ">

@@ -1,8 +1,6 @@
 export { Tab } from "./tab";
-export { LoadingAndSnackbarWrapper } from "./loading-and-snackbar.wrapper";
 export { DataTable } from "./data-table";
-export { BackdropLoading } from "./backdrop-loading-wrapper";
-export { SearchAddress } from "./search-address";
+export { BackdropLoading } from "../wrappers/backdrop-loading.wrapper";
 export { HeaderNav } from "./header-nav";
 export { FooterNav } from "./footer-nav.component";
 export { SocialMediaLink } from "./social-media-link.button";
@@ -12,13 +10,10 @@ export { Addon } from "./addon";
 export { MobileLoginSignIn } from "./mobile-login-sign-in";
 export { MobileLoginSignUp } from "./mobile-login-sign-up";
 export { UnExpiredRedeem } from "./unexpired-redeem";
-export { UserNotificationWrapper } from "./user-notification.wrapper";
 export { MobileForgotPasswordOtp } from "./mobile-forgot-password-otp";
 export { MobileForgotPasswordOtpAuthentication } from "./mobile-forgot-password-otp-authentication";
 export { MobileForgotPasswordNewPassword } from "./mobile-forgot-password-new-password";
 export { DataList } from "./data-list";
-export { ConsentWrapper } from "./consent-wrapper";
-export { AdminNotificationWrapper } from "./admin-notification.wrapper";
 
 export { MaterialInput } from "./material-input";
 export { MaterialDateInput } from "./material-date-input";
@@ -27,3 +22,7 @@ export { MaterialInputPassword } from "./material-input-password";
 export { MaterialInputAutoComplete } from "./material-input-autocomplete";
 export { MaterialTimeInput } from "./material-time-input";
 export { MaterialPhoneInput } from "./material-phone-input";
+
+export { UploadFile } from "./upload-file";
+export { MaterialInputAddress } from "./material-input-address";
+export { MaterialSwitch } from "./material-switch";

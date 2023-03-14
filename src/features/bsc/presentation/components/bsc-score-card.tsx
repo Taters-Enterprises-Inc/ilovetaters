@@ -1,6 +1,6 @@
-import { FormControl } from "@mui/material";
-import { LinearProgress } from '@mui/material';
-import { BSCSentenceRadioButton } from './bsc-sentence-radio-button';
+import FormControl from "@mui/material/FormControl";
+import LinearProgress from "@mui/material/LinearProgress";
+import { BSCSentenceRadioButton } from "./bsc-sentence-radio-button";
 import { BSCRatingRadioButton } from "./bsc-rating-radio-button";
 
 export function BSCScoreCardPage() {
@@ -92,18 +92,22 @@ export function BSCScoreCardPage() {
         </div>
 
         <div className="w-[40%] ml-[50%] mt-[3%]">
-          <LinearProgress variant="determinate" value={25} className="w-[100%] mx-auto mb-4 h-4" sx={{
-              '& .MuiLinearProgress-bar1Determinate': {
-                color: '#004d00',
-                backgroundColor: '#004d00',
+          <LinearProgress
+            variant="determinate"
+            value={25}
+            className="w-[100%] mx-auto mb-4 h-4"
+            sx={{
+              "& .MuiLinearProgress-bar1Determinate": {
+                color: "#004d00",
+                backgroundColor: "#004d00",
               },
-              '&.MuiLinearProgress-root': {
-                backgroundColor: 'gray',
+              "&.MuiLinearProgress-root": {
+                backgroundColor: "gray",
                 height: 8,
               },
             }}
           />
-          <p className="text-xs text-center text-black"> Page 1 of 4 </p> 
+          <p className="text-xs text-center text-black"> Page 1 of 4 </p>
         </div>
       </FormControl>
     </main>

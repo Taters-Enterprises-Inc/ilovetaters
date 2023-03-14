@@ -1,6 +1,6 @@
-import { FormControl } from "@mui/material";
-import { LinearProgress } from '@mui/material';
-import { BSCSentenceRadioButton } from './bsc-sentence-radio-button';
+import FormControl from "@mui/material/FormControl";
+import LinearProgress from "@mui/material/LinearProgress";
+import { BSCSentenceRadioButton } from "./bsc-sentence-radio-button";
 import { BSCRadioCustomerSurvey } from "./bsc-radio-customer-survey";
 
 export function BSCCustomerSurveyTwo() {
@@ -16,8 +16,7 @@ export function BSCCustomerSurveyTwo() {
         </h1>
         <p className="text-xs lg:text-sm w-[90%] sm:w-[90%]">
           Thank you for choosing Taters! It would be great if you would
-          participate in our short survey so that we can improve our
-          service.
+          participate in our short survey so that we can improve our service.
         </p>
       </div>
 
@@ -26,75 +25,68 @@ export function BSCCustomerSurveyTwo() {
         sx={{ py: 5 }}
       >
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            11. Did you have a problem during your experience?
-          </p>
-          <BSCRadioCustomerSurvey type="close"/>
+          <p> 11. Did you have a problem during your experience?</p>
+          <BSCRadioCustomerSurvey type="close" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            12. Based on this visit, what is the likelihood that you will recommend Taters to others in the next 30 days?
+            12. Based on this visit, what is the likelihood that you will
+            recommend Taters to others in the next 30 days?
           </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            13. Please tell us in three or more sentences about your experience with Taters.
+            13. Please tell us in three or more sentences about your experience
+            with Taters.
           </p>
-          <BSCRadioCustomerSurvey type="comment"/>
+          <BSCRadioCustomerSurvey type="comment" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            14. If you were to choose the next store destination of Taters, where would you want it located?
+            14. If you were to choose the next store destination of Taters,
+            where would you want it located?
           </p>
-          <BSCRadioCustomerSurvey type="comment"/>
+          <BSCRadioCustomerSurvey type="comment" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            15. If you were to add a new permanent entree on the menu, what would you want to see?
+            15. If you were to add a new permanent entree on the menu, what
+            would you want to see?
           </p>
-          <BSCRadioCustomerSurvey type="comment"/>
+          <BSCRadioCustomerSurvey type="comment" />
+        </div>
+
+        <div className="mx-[10%] py-5 leading-relaxed text-justify">
+          <p> 16. Was your order delivered as promised?</p>
+          <BSCRadioCustomerSurvey type="close" />
+        </div>
+
+        <div className="mx-[10%] py-5 leading-relaxed text-justify">
+          <p> 17. Select your gender.</p>
+          <BSCRadioCustomerSurvey type="gender" />
+        </div>
+
+        <div className="mx-[10%] py-5 leading-relaxed text-justify">
+          <p> 18. Select your gender.</p>
+          <BSCRadioCustomerSurvey type="satisfaction" />
         </div>
 
         <div className="mx-[10%] py-5 leading-relaxed text-justify">
           <p>
             {" "}
-            16. Was your order delivered as promised?
+            19. Please select which of the following best describes your
+            background.
           </p>
-          <BSCRadioCustomerSurvey type="close"/>
-        </div>
-
-        <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            17. Select your gender.
-          </p>
-          <BSCRadioCustomerSurvey type="gender"/>
-        </div>
-
-        <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            18. Select your gender.
-          </p>
-          <BSCRadioCustomerSurvey type="satisfaction"/>
-        </div>
-
-        <div className="mx-[10%] py-5 leading-relaxed text-justify">
-          <p>
-            {" "}
-            19. Please select which of the following best describes your background.
-          </p>
-          <BSCRadioCustomerSurvey type="background"/>
+          <BSCRadioCustomerSurvey type="background" />
         </div>
 
         <div className="mx-[10%] flex justify-between items-center my-4">
@@ -115,18 +107,22 @@ export function BSCCustomerSurveyTwo() {
         </div>
 
         <div className="w-[40%] ml-[50%] mt-[3%]">
-          <LinearProgress variant="determinate" value={33} className="w-[100%] mx-auto mb-4 h-4" sx={{
-              '& .MuiLinearProgress-bar1Determinate': {
-                color: '#004d00',
-                backgroundColor: '#004d00',
+          <LinearProgress
+            variant="determinate"
+            value={33}
+            className="w-[100%] mx-auto mb-4 h-4"
+            sx={{
+              "& .MuiLinearProgress-bar1Determinate": {
+                color: "#004d00",
+                backgroundColor: "#004d00",
               },
-              '&.MuiLinearProgress-root': {
-                backgroundColor: 'gray',
+              "&.MuiLinearProgress-root": {
+                backgroundColor: "gray",
                 height: 8,
               },
             }}
           />
-          <p className="text-xs text-center text-black"> Page 1 of 3 </p> 
+          <p className="text-xs text-center text-black"> Page 1 of 3 </p>
         </div>
       </FormControl>
     </main>

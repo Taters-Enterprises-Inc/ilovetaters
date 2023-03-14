@@ -5,8 +5,12 @@ import {
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  BsCartX,
+  BsFillCalendar2WeekFill,
+  BsFillCartPlusFill,
+} from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -20,12 +24,12 @@ import NumberFormat from "react-number-format";
 
 import {
   getSession,
+  GetSessionState,
   selectGetSession,
 } from "features/shared/presentation/slices/get-session.slice";
 import Radio from "@mui/material/Radio";
 import { ShopPeopleAlsoBoughtCarousel } from "../carousels";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { LoginChooserModal } from "features/popclub/presentation/modals/login-chooser.modal";
 import {
   getProductSku,
   GetProductSkuState,
@@ -35,10 +39,8 @@ import { ProductDetailsAccordion } from "features/shared/presentation/components
 import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components/page-title-and-breadcrumbs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper";
-
 import "swiper/css";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { QuantityInput } from "features/shared/presentation/components";
 import {
   addToCartShop,
   AddToCartShopState,
@@ -62,58 +64,69 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ShopStoreChooserModal } from "features/shop/presentation/modals/shop-store-chooser.modal";
+import { ShopProductFlavor } from "../components";
+import ReactGA from "react-ga";
+import { PlatformChooserModal } from "features/popclub/presentation/modals/platform-chooser.modal";
+import { SnacksDeliveredStoreChooserModal } from "features/popclub/presentation/modals/snacks-delivered-store-chooser.modal";
+import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modals/store-visit-store-chooser.modal";
+import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
+import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
+import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 
 let quantityId: any;
 
+export type ShopFlavorType = {
+  [key: string]: {
+    name: string;
+    quantity: number;
+  };
+};
+
+export type ShopMultiFlavorType = {
+  [key: string]: ShopFlavorType;
+};
+
 export function ShopProduct() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { hash } = useParams();
+  const location = useLocation();
+
+  const [setDisabled] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [currentSize, setCurrentSize] = useState<string>("");
+  const [currentMultiFlavors, setCurrentMultiFlavors] =
+    useState<ShopMultiFlavorType>({});
+  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
+    useState(false);
+
+  const [openPlatformChooserModal, setOpenPlatformChooserModal] =
+    useState(false);
+  const [openStoreChooserModal, setOpenStoreChooserModal] = useState(false);
+  const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
+    useState(false);
+
+  const timerRef = useRef(0);
+  const isLongPress = useRef(false);
+  const isQuantityNull = useRef(false);
+
   const getProductDetailsState = useAppSelector(selectGetProductDetails);
   const getProductSkuState = useAppSelector(selectGetProductSku);
-  const [openLoginChooserModal, setOpenLoginChooserModal] = useState(false);
   const getSessionState = useAppSelector(selectGetSession);
   const addToCartShopState = useAppSelector(selectAddToCartShop);
   const addToCartCheckoutShopState = useAppSelector(
     selectAddToCartCheckoutShop
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
-
-  const [resetMultiFlavors, setResetMultiFlavors] = useState(false);
-  const [setDisabled] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-
-  const timerRef = useRef(0);
-  const isLongPress = useRef(false);
-  const isQuantityNull = useRef(false);
-
-  const [currentSize, setCurrentSize] = useState<number | undefined>();
-  const [currentFlavor, setCurrentFlavor] = useState<number | undefined>();
-  const [currentMultiFlavors, setCurrentMultiFlavors] = useState<any>();
-  const [totalMultiFlavorsQuantity, setTotalMultiFlavorsQuantity] =
-    useState<number>(0);
-
-  const [shopOpenStoreChooserModal, setShopOpenStoreChooserModal] =
-    useState(false);
-
-  const navigate = useNavigate();
-
-  let { hash } = useParams();
-
-  const location = useLocation();
+  const redeemDealState = useAppSelector(selectRedeemDeal);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
   useEffect(() => {
-    if (resetMultiFlavors === true) {
-      setResetMultiFlavors(false);
-    }
-  }, [resetMultiFlavors]);
-
-  useEffect(() => {
     if (forfeitRedeemState.status === ForfeitRedeemState.success) {
-      setCurrentSize(undefined);
-      setCurrentFlavor(undefined);
+      setCurrentSize("");
       dispatch(resetForfeitRedeemStateStatus());
     }
   }, [dispatch, forfeitRedeemState]);
@@ -121,8 +134,9 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
+      dispatch(redeemValidators());
     }
-  }, [location, dispatch, hash, forfeitRedeemState]);
+  }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
 
   useEffect(() => {
     if (
@@ -139,7 +153,14 @@ export function ShopProduct() {
 
   useEffect(() => {
     if (addToCartShopState.status === AddToCartShopState.success) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Add to cart item",
+      });
       dispatch(getSession());
+      setQuantity(1);
+      setCurrentSize("");
+      setCurrentMultiFlavors({});
     }
   }, [addToCartShopState, dispatch]);
 
@@ -147,6 +168,10 @@ export function ShopProduct() {
     if (
       addToCartCheckoutShopState.status === AddToCartCheckoutShopState.success
     ) {
+      ReactGA.event({
+        category: "Snackshop Order",
+        action: "Add to cart item",
+      });
       dispatch(getSession());
       navigate("/delivery/checkout");
       dispatch(resetAddToCartCheckout());
@@ -160,45 +185,63 @@ export function ShopProduct() {
       getProductDetailsState.data.product_size &&
       getProductDetailsState.data.product_size.length > 0 &&
       getProductDetailsState.data.product.product_hash === hash &&
-      currentSize === undefined
+      currentSize === ""
     ) {
-      setCurrentSize(getProductDetailsState.data.product_size[0].id);
+      setCurrentSize(getProductDetailsState.data.product_size[0].id.toString());
     }
   }, [getProductDetailsState, currentSize, hash]);
 
   useEffect(() => {
-    if (
-      getProductDetailsState.status &&
-      getProductDetailsState.data &&
-      getProductDetailsState.data.product_flavor &&
-      getProductDetailsState.data.product_flavor.length > 0 &&
-      getProductDetailsState.data.product.product_hash === hash &&
-      currentFlavor === undefined &&
-      getProductDetailsState.data.product.num_flavor === 1
-    ) {
-      setCurrentFlavor(getProductDetailsState.data.product_flavor[0].id);
+    if (currentSize !== "") {
+      dispatch(
+        getProductSku({
+          prod_flavor: "",
+          prod_size: currentSize,
+        })
+      );
     }
-  }, [getProductDetailsState, currentFlavor, hash]);
+  }, [currentSize, dispatch]);
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getSessionState.data &&
+      getSessionState.data.redeem_data &&
+      getProductDetailsState.data
+    ) {
+      const deal_products_promo_includes =
+        getSessionState.data.redeem_data.deal_products_promo_include;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id ===
+            getProductDetailsState.data.product.id &&
+          deal_products_promo_include.product_variant_option_tb_id
+        ) {
+          if (deal_products_promo_include.quantity)
+            setQuantity(deal_products_promo_include.quantity + 1);
+
+          setCurrentSize(
+            deal_products_promo_include.product_variant_option_tb_id.toString()
+          );
+
+          break;
+        }
+      }
+    }
+  }, [getSessionState]);
 
   const calculateOrdersPrice = () => {
     let calculatedPrice = 0;
     const orders = getSessionState.data?.orders;
-    const deals = getSessionState.data?.deals;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         calculatedPrice += orders[i].prod_calc_amount;
       }
     }
-
-    if (deals) {
-      for (let i = 0; i < deals.length; i++) {
-        const deal_promo_price = deals[i].deal_promo_price;
-
-        if (deal_promo_price) calculatedPrice += deal_promo_price;
-      }
-    }
-
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -209,36 +252,34 @@ export function ShopProduct() {
     );
   };
 
-  function handleonClick() {
+  function handleOnClick() {
     if (isLongPress.current === true) {
       return;
     }
   }
 
-  function handleonMouseUp() {
+  function handleOnMouseUp() {
     clearTimeout(timerRef.current);
     clearInterval(quantityId);
 
     if (quantity > 1) {
       if (
         getProductDetailsState.data &&
-        getProductDetailsState.data?.product.num_flavor > 1
+        getProductDetailsState.data?.product.num_flavor > 0
       ) {
-        setCurrentMultiFlavors(undefined);
-        setTotalMultiFlavorsQuantity(0);
-        setResetMultiFlavors(true);
+        setCurrentMultiFlavors({});
       }
     }
   }
 
-  function handleonMouseDown(action: string) {
+  function handleOnMouseDown(action: string) {
     isQuantityNull.current = false;
     if (
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
       clearInterval(quantityId);
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
     } else {
       pressTimer(action);
     }
@@ -247,7 +288,11 @@ export function ShopProduct() {
   function pressTimer(action: string) {
     isLongPress.current = false;
 
-    action === "add" ? setQuantity(quantity + 1) : setQuantity(quantity - 1);
+    action === "add"
+      ? setQuantity(() => {
+          return isNaN(quantity) ? 1 : quantity + 1;
+        })
+      : setQuantity(quantity - 1);
 
     timerRef.current = window.setTimeout(() => {
       handleOnLongPress(action);
@@ -256,7 +301,7 @@ export function ShopProduct() {
   }
 
   function handleOnLongPress(action: string) {
-    let counter = quantity;
+    let counter = isNaN(quantity) ? 1 : quantity;
 
     quantityId = setInterval(() => {
       if (action === "add") counter += 1;
@@ -278,20 +323,24 @@ export function ShopProduct() {
 
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;
-    const multiFlavorsArray: Array<{
-      name: string;
-      quantity: number;
-    }> = Object.values(currentMultiFlavors);
     let result: string | undefined;
 
-    for (let i = 0; i < multiFlavorsArray.length; i++) {
-      if (multiFlavorsArray[i].quantity > 0)
-        result =
-          (result === undefined ? "" : result) +
-          `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
-            multiFlavorsArray[i].name
-          }<br/>`;
-    }
+    Object.keys(currentMultiFlavors).forEach((key) => {
+      const multiFlavorsArray: Array<{
+        name: string;
+        quantity: number;
+      }> = Object.values(currentMultiFlavors[key]);
+
+      for (let i = 0; i < multiFlavorsArray.length; i++) {
+        if (multiFlavorsArray[i].quantity > 0)
+          result =
+            (result === undefined ? "" : result) +
+            `<strong>${multiFlavorsArray[i].quantity.toString()}</strong> - ${
+              multiFlavorsArray[i].name
+            }<br/>`;
+      }
+    });
+
     return result ? result : undefined;
   };
 
@@ -300,7 +349,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -309,17 +358,47 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       if (
-        getProductDetailsState.data.product.num_flavor > 1 &&
-        totalMultiFlavorsQuantity !==
-          getProductDetailsState.data.product.num_flavor * quantity
+        getProductDetailsState.data?.product_flavor &&
+        getProductDetailsState.data.product.num_flavor > 0 &&
+        getProductDetailsState.data.product_flavor.length > 0
       ) {
-        dispatch(
-          popUpSnackBar({
-            message: "Please meet the required number of flavors.",
-            severity: "error",
-          })
-        );
-        return;
+        for (
+          let i = 0;
+          i < getProductDetailsState.data.product_flavor.length;
+          i++
+        ) {
+          let totalMultiFlavorsQuantity = 0;
+
+          if (currentMultiFlavors[i] === undefined) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+
+          Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+            const currentFlavor = currentMultiFlavors[i];
+            totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+          });
+
+          if (
+            totalMultiFlavorsQuantity !==
+            quantity * getProductDetailsState.data.product.num_flavor
+          ) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+        }
       }
 
       let flavors_details = createFlavorDetails();
@@ -330,7 +409,6 @@ export function ShopProduct() {
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor: currentFlavor,
           prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
@@ -353,7 +431,7 @@ export function ShopProduct() {
       getSessionState.data?.userData == null ||
       getSessionState.data?.userData === undefined
     ) {
-      setOpenLoginChooserModal(true);
+      dispatch(openLoginChooserModal({ required: false }));
       return;
     }
 
@@ -362,17 +440,47 @@ export function ShopProduct() {
       getProductDetailsState.data
     ) {
       if (
-        getProductDetailsState.data.product.num_flavor > 1 &&
-        totalMultiFlavorsQuantity !==
-          getProductDetailsState.data.product.num_flavor * quantity
+        getProductDetailsState.data?.product_flavor &&
+        getProductDetailsState.data.product.num_flavor > 0 &&
+        getProductDetailsState.data.product_flavor.length > 0
       ) {
-        dispatch(
-          popUpSnackBar({
-            message: "Please meet the required number of flavors.",
-            severity: "error",
-          })
-        );
-        return;
+        for (
+          let i = 0;
+          i < getProductDetailsState.data.product_flavor.length;
+          i++
+        ) {
+          let totalMultiFlavorsQuantity = 0;
+
+          if (currentMultiFlavors[i] === undefined) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+
+          Object.keys(currentMultiFlavors[i]).forEach(function (key) {
+            const currentFlavor = currentMultiFlavors[i];
+            totalMultiFlavorsQuantity += currentFlavor[key].quantity;
+          });
+
+          if (
+            totalMultiFlavorsQuantity !==
+            quantity * getProductDetailsState.data.product.num_flavor
+          ) {
+            dispatch(
+              popUpSnackBar({
+                message: "Please meet the required number of flavors.",
+                severity: "error",
+              })
+            );
+
+            return;
+          }
+        }
       }
 
       let flavors_details = createFlavorDetails();
@@ -383,7 +491,6 @@ export function ShopProduct() {
           prod_image_name: getProductDetailsState.data.product.product_image,
           prod_name: getProductDetailsState.data.product.name,
           prod_qty: quantity,
-          prod_flavor: currentFlavor,
           prod_size: currentSize,
           prod_price: getProductDetailsState.data.product.price,
           prod_calc_amount:
@@ -401,16 +508,190 @@ export function ShopProduct() {
     }
   };
 
-  const handleSizeAndFlavorChange = (
-    size: number | undefined,
-    flavor: number | undefined
-  ) => {
-    if (getProductDetailsState.data) {
-      dispatch(
-        getProductSku({
-          prod_flavor: flavor,
-          prod_size: size,
-        })
+  const calculateTotalPrice = () => {
+    const deal_products_promo_includes =
+      getSessionState.data?.redeem_data?.deal_products_promo_include;
+
+    if (getProductDetailsState.data?.product.promo_discount_percentage) {
+      const price = getProductDetailsState.data.product.price * quantity;
+
+      return (
+        <div>
+          <h2 className="mt-4 text-2xl text-white line-through">
+            <NumberFormat
+              value={(
+                getProductDetailsState.data?.product.price * quantity
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h2>
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="text-4xl text-white">
+              <NumberFormat
+                value={(
+                  price -
+                  price *
+                    parseFloat(
+                      getProductDetailsState.data.product
+                        .promo_discount_percentage
+                    )
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+        </div>
+      );
+    } else if (getProductDetailsState.data && deal_products_promo_includes) {
+      let deal_products_promo_include_match = null;
+
+      for (let i = 0; i < deal_products_promo_includes.length; i++) {
+        const deal_products_promo_include = deal_products_promo_includes[i];
+
+        if (
+          deal_products_promo_include.product_id ===
+            getProductDetailsState.data.product.id &&
+          deal_products_promo_include.product_variant_option_tb_id &&
+          deal_products_promo_include.product_variant_option_tb_id.toString() ===
+            currentSize
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+          break;
+        }
+      }
+
+      if (deal_products_promo_include_match) {
+        let addedObtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }> = [];
+        let obtainableDiscountedPrice = 0;
+        let obtainablePrice = 0;
+
+        for (
+          let y = 0;
+          y < deal_products_promo_include_match.obtainable.length;
+          y++
+        ) {
+          const val = deal_products_promo_include_match.obtainable[y];
+
+          if (
+            val.price &&
+            val.promo_discount_percentage &&
+            !addedObtainable.some(
+              (value) => value.product_id === val.product_id
+            )
+          ) {
+            obtainableDiscountedPrice +=
+              val.price - val.price * parseFloat(val.promo_discount_percentage);
+            obtainablePrice += val.price;
+
+            addedObtainable.push(val);
+          }
+        }
+
+        if (
+          deal_products_promo_include_match.obtainable.length > 0 &&
+          deal_products_promo_include_match.quantity &&
+          quantity >= deal_products_promo_include_match.quantity
+        ) {
+          return (
+            <div>
+              <h2 className="mt-4 text-2xl text-white line-through">
+                <NumberFormat
+                  value={(
+                    getProductDetailsState.data?.product.price * quantity
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+              {getProductDetailsState.data?.product.price ? (
+                <h2 className="text-4xl text-white">
+                  <NumberFormat
+                    value={(
+                      obtainableDiscountedPrice +
+                      getProductDetailsState.data?.product.price * quantity -
+                      obtainablePrice
+                    ).toFixed(2)}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"₱"}
+                  />
+                </h2>
+              ) : null}
+            </div>
+          );
+        } else {
+          const price = getProductDetailsState.data.product.price * quantity;
+          return (
+            <div>
+              <h2 className="mt-4 text-2xl text-white line-through">
+                <NumberFormat
+                  value={price.toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+              <h2 className="text-4xl text-white">
+                <NumberFormat
+                  value={(
+                    price -
+                    price *
+                      parseFloat(
+                        deal_products_promo_include_match.promo_discount_percentage
+                      )
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+            </div>
+          );
+        }
+      } else {
+        return (
+          <>
+            {getProductDetailsState.data?.product.price ? (
+              <h2 className="mt-4 text-4xl text-white">
+                <NumberFormat
+                  value={(
+                    getProductDetailsState.data.product.price * quantity
+                  ).toFixed(2)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"₱"}
+                />
+              </h2>
+            ) : null}
+          </>
+        );
+      }
+    } else {
+      return (
+        <>
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="mt-4 text-4xl text-white">
+              <NumberFormat
+                value={(
+                  getProductDetailsState.data.product.price * quantity
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+        </>
       );
     }
   };
@@ -454,9 +735,13 @@ export function ShopProduct() {
                   {getProductDetailsState.data?.product_images.map((name) => (
                     <SwiperSlide>
                       <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}.jpg`}
+                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${name}`}
                         className="lg:rounded-[20px] w-full h-full object-cover"
-                        alt=""
+                        alt={name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                        }}
                       />
                     </SwiperSlide>
                   ))}
@@ -514,7 +799,11 @@ export function ShopProduct() {
                           <img
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                             className="rounded-[10px] w-[75px] h-[75px]"
-                            alt=""
+                            alt={order.prod_name}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                            }}
                           />
                           <div className="flex flex-col flex-1 px-3 py-2 text-white">
                             <h3 className="text-sm w-[90%] font-bold leading-4">
@@ -605,6 +894,109 @@ export function ShopProduct() {
                   </ProductDetailsAccordion>
                 ) : null}
 
+                <div>
+                  <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
+                    Quantity
+                  </h2>
+
+                  <div className="h-[60px] w-full mt-2">
+                    <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
+                      <button
+                        onClick={() =>
+                          quantity <= 1 || isQuantityNull.current
+                            ? setDisabled
+                            : handleOnClick()
+                        }
+                        onMouseDown={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleOnMouseDown("minus")
+                        }
+                        onMouseUp={handleOnMouseUp}
+                        onTouchStart={() =>
+                          quantity <= 1
+                            ? setDisabled
+                            : handleOnMouseDown("minus")
+                        }
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          handleOnMouseUp();
+                        }}
+                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
+                          quantity <= 1 || isQuantityNull.current
+                            ? "opacity-30 cursor-not-allowed"
+                            : ""
+                        }`}
+                      >
+                        <AiOutlineMinus className="mx-8 text-3xl " />
+                      </button>
+
+                      <input
+                        value={quantity}
+                        type="number"
+                        onChange={(e) => {
+                          let value = e.target.value;
+                          isQuantityNull.current = false;
+
+                          if (
+                            getSessionState.data?.userData == null ||
+                            getSessionState.data?.userData === undefined
+                          ) {
+                            clearInterval(quantityId);
+                            dispatch(
+                              openLoginChooserModal({ required: false })
+                            );
+                          } else {
+                            if (isNaN(parseInt(value)) || value === "0") {
+                              isQuantityNull.current = true;
+                            }
+                            if (parseInt(value) >= 10) {
+                              setQuantity(10);
+                            } else if (parseInt(value) < 0) {
+                              setQuantity(1);
+                            } else {
+                              setQuantity(parseInt(value));
+                            }
+                          }
+                        }}
+                        min="1"
+                        max="10"
+                        className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
+                        name="custom-input-number"
+                      />
+
+                      <button
+                        onClick={() =>
+                          quantity >= 10 ? setDisabled : handleOnClick()
+                        }
+                        onMouseDown={() =>
+                          quantity >= 10
+                            ? setDisabled
+                            : handleOnMouseDown("add")
+                        }
+                        onMouseUp={handleOnMouseUp}
+                        onTouchStart={() =>
+                          quantity >= 10
+                            ? setDisabled
+                            : handleOnMouseDown("add")
+                        }
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+
+                          handleOnMouseUp();
+                        }}
+                        className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
+                          quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
+                        }`}
+                      >
+                        <AiOutlinePlus className="mx-8 text-3xl" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {calculateTotalPrice()}
+
                 {getProductDetailsState.data?.product_size &&
                 getProductDetailsState.data?.product_size.length > 0 ? (
                   <div>
@@ -613,14 +1005,12 @@ export function ShopProduct() {
                     </h2>
                     <FormControl>
                       <RadioGroup
-                        value={currentSize ?? ""}
+                        value={currentSize}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                          const sizeId = parseInt(
-                            (event.target as HTMLInputElement).value
-                          );
+                          const sizeId = (event.target as HTMLInputElement)
+                            .value;
 
                           setCurrentSize(sizeId);
-                          handleSizeAndFlavorChange(sizeId, currentFlavor);
                         }}
                       >
                         {getProductDetailsState.data?.product_size.map(
@@ -649,262 +1039,31 @@ export function ShopProduct() {
                   </div>
                 ) : null}
 
-                {getProductDetailsState.data &&
-                getProductDetailsState.data.product_flavor &&
-                getProductDetailsState.data.product &&
-                getProductDetailsState.data.product_flavor.length > 0 ? (
-                  <div>
-                    <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                      Choose Flavor
-                    </h2>
-                    {getProductDetailsState.data.product.num_flavor > 1 ? (
-                      <ul>
-                        {getProductDetailsState.data.product_flavor.map(
-                          (flavor, i) => {
-                            if (getProductDetailsState.data) {
-                              return (
-                                <li key={i}>
-                                  <span className="text-sm text-white">
-                                    {flavor.name}
-                                  </span>
-                                  <QuantityInput
-                                    reset={resetMultiFlavors}
-                                    min={0}
-                                    disableAdd={
-                                      getProductDetailsState.data.product
-                                        .num_flavor *
-                                        quantity -
-                                        totalMultiFlavorsQuantity ===
-                                      0
-                                    }
-                                    onChange={(val, action) => {
-                                      if (currentMultiFlavors) {
-                                        currentMultiFlavors[flavor.id] = {
-                                          name: flavor.name,
-                                          quantity: val,
-                                        };
-
-                                        setCurrentMultiFlavors(
-                                          currentMultiFlavors
-                                        );
-                                      } else {
-                                        const temp: any = {};
-                                        temp[flavor.id] = {
-                                          name: flavor.name,
-                                          quantity: val,
-                                        };
-                                        setCurrentMultiFlavors(temp);
-                                      }
-                                      setTotalMultiFlavorsQuantity(
-                                        totalMultiFlavorsQuantity +
-                                          (action === "plus" ? +1 : -1)
-                                      );
-                                    }}
-                                  />
-                                </li>
-                              );
-                            }
-
-                            return null;
+                {getProductDetailsState.data?.product_flavor.map(
+                  (flavor, i) => (
+                    <>
+                      {getProductDetailsState.data ? (
+                        <ShopProductFlavor
+                          key={i}
+                          numberOfFlavors={
+                            getProductDetailsState.data.product.num_flavor
                           }
-                        )}
-                      </ul>
-                    ) : (
-                      <FormControl>
-                        <RadioGroup
-                          value={currentFlavor ?? ""}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            const flavorId = parseInt(
-                              (event.target as HTMLInputElement).value
-                            );
+                          productQuantity={quantity}
+                          currentMultiFlavor={currentMultiFlavors[i]}
+                          flavor={flavor}
+                          onChangeMultiFlavor={(updatedMultiFlavors) => {
+                            const updateCurrentMultiFlavor = {
+                              ...currentMultiFlavors,
+                            };
 
-                            setCurrentFlavor(flavorId);
-                            handleSizeAndFlavorChange(currentSize, flavorId);
+                            updateCurrentMultiFlavor[i] = updatedMultiFlavors;
+
+                            setCurrentMultiFlavors(updateCurrentMultiFlavor);
                           }}
-                        >
-                          {getProductDetailsState.data.product_flavor.map(
-                            (flavor, i) => {
-                              if (getProductDetailsState.data) {
-                                return (
-                                  <FormControlLabel
-                                    key={i}
-                                    value={flavor.id}
-                                    control={
-                                      <Radio
-                                        color="tertiary"
-                                        sx={{ color: "white" }}
-                                      />
-                                    }
-                                    label={
-                                      <span className="!text-white">
-                                        {flavor.name}
-                                      </span>
-                                    }
-                                  />
-                                );
-                              }
-
-                              return null;
-                            }
-                          )}
-                        </RadioGroup>
-                      </FormControl>
-                    )}
-                  </div>
-                ) : null}
-
-                <div>
-                  <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">
-                    Quantity
-                  </h2>
-
-                  <div className="h-[60px] w-full mt-2">
-                    <div className="relative flex flex-row w-full h-full mt-1 text-white bg-transparent border-2 border-white rounded-lg">
-                      <button
-                        onClick={() =>
-                          quantity <= 1 || isQuantityNull.current
-                            ? setDisabled
-                            : handleonClick()
-                        }
-                        onMouseDown={() =>
-                          quantity <= 1
-                            ? setDisabled
-                            : handleonMouseDown("minus")
-                        }
-                        onMouseUp={handleonMouseUp}
-                        onTouchStart={() =>
-                          quantity <= 1
-                            ? setDisabled
-                            : handleonMouseDown("minus")
-                        }
-                        onTouchEnd={(e) => {
-                          e.preventDefault();
-                          handleonMouseUp();
-                        }}
-                        className={`h-full w-[150px] rounded-l cursor-pointer outline-none bg-primary ${
-                          quantity <= 1 || isQuantityNull.current
-                            ? "opacity-30 cursor-not-allowed"
-                            : ""
-                        }`}
-                      >
-                        <AiOutlineMinus className="mx-8 text-3xl " />
-                      </button>
-
-                      <input
-                        value={quantity}
-                        type="number"
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          isQuantityNull.current = false;
-
-                          if (
-                            getSessionState.data?.userData == null ||
-                            getSessionState.data?.userData === undefined
-                          ) {
-                            clearInterval(quantityId);
-                            setOpenLoginChooserModal(true);
-                          } else {
-                            if (isNaN(parseInt(value))) {
-                              isQuantityNull.current = true;
-                            }
-
-                            setTimeout(() => {
-                              if (isQuantityNull.current) {
-                                setQuantity(0);
-                              }
-                            }, 1000);
-
-                            if (parseInt(value) >= 10) {
-                              setQuantity(10);
-                            } else if (parseInt(value) < 0) {
-                              setQuantity(1);
-                            } else {
-                              setQuantity(parseInt(value));
-                            }
-                          }
-                        }}
-                        min="1"
-                        max="10"
-                        className="flex items-center w-full text-3xl font-semibold text-center outline-none cursor-default leading-2 bg-secondary text-md md:text-base"
-                        name="custom-input-number"
-                      />
-
-                      <button
-                        onClick={() =>
-                          quantity >= 10 ? setDisabled : handleonClick()
-                        }
-                        onMouseDown={() =>
-                          quantity >= 10
-                            ? setDisabled
-                            : handleonMouseDown("add")
-                        }
-                        onMouseUp={handleonMouseUp}
-                        onTouchStart={() =>
-                          quantity >= 10
-                            ? setDisabled
-                            : handleonMouseDown("add")
-                        }
-                        onTouchEnd={(e) => {
-                          e.preventDefault();
-
-                          handleonMouseUp();
-                        }}
-                        className={`h-full w-[150px] rounded-r cursor-pointer bg-primary ${
-                          quantity >= 10 ? "opacity-30 cursor-not-allowed" : ""
-                        }`}
-                      >
-                        <AiOutlinePlus className="mx-8 text-3xl" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {getProductDetailsState.data?.product
-                  .promo_discount_percentage ? (
-                  <div>
-                    <h2 className="mt-4 text-2xl text-white line-through">
-                      <NumberFormat
-                        value={(
-                          getProductDetailsState.data?.product.price * quantity
-                        ).toFixed(2)}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                      />
-                    </h2>
-                    {getProductDetailsState.data?.product.price ? (
-                      <h2 className="text-4xl text-white">
-                        <NumberFormat
-                          value={(
-                            (getProductDetailsState.data.product.price -
-                              getProductDetailsState.data.product.price *
-                                parseFloat(
-                                  getProductDetailsState.data.product
-                                    .promo_discount_percentage
-                                )) *
-                            quantity
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
                         />
-                      </h2>
-                    ) : null}
-                  </div>
-                ) : (
-                  <>
-                    {getProductDetailsState.data?.product.price ? (
-                      <h2 className="mt-4 text-4xl text-white">
-                        <NumberFormat
-                          value={(
-                            getProductDetailsState.data.product.price * quantity
-                          ).toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </h2>
-                    ) : null}
-                  </>
+                      ) : null}
+                    </>
+                  )
                 )}
 
                 {getSessionState.data?.cache_data ||
@@ -958,7 +1117,11 @@ export function ShopProduct() {
                         <div className="max-h-[300px] overflow-y-auto flex flex-col py-4 px-4">
                           {getProductDetailsState.data?.addons.map(
                             (product, i) => (
-                              <Addon key={i} product={product} />
+                              <Addon
+                                key={i}
+                                product={product}
+                                maxQuantity={10}
+                              />
                             )
                           )}
                         </div>
@@ -998,13 +1161,6 @@ export function ShopProduct() {
         </div>
       </section>
 
-      <LoginChooserModal
-        open={openLoginChooserModal}
-        onClose={() => {
-          setOpenLoginChooserModal(false);
-        }}
-      />
-
       <ShopStoreChooserModal
         open={shopOpenStoreChooserModal}
         onClose={() => {
@@ -1014,6 +1170,38 @@ export function ShopProduct() {
           if (hash) {
             dispatch(getProductDetails({ hash }));
           }
+        }}
+      />
+
+      <PlatformChooserModal
+        hasCloseButton={true}
+        onSelectedPlatform={(platform: string) => {
+          switch (platform) {
+            case "store-visit":
+              setOpenStoreVisitStoreChooserModal(true);
+              break;
+            case "online-delivery":
+              setOpenStoreChooserModal(true);
+              break;
+          }
+        }}
+        open={openPlatformChooserModal}
+        onClose={() => {
+          setOpenPlatformChooserModal(false);
+        }}
+      />
+
+      <SnacksDeliveredStoreChooserModal
+        open={openStoreChooserModal}
+        onClose={() => {
+          setOpenStoreChooserModal(false);
+        }}
+      />
+
+      <StoreVisitStoreChooserModal
+        open={openStoreVisitStoreChooserModal}
+        onClose={() => {
+          setOpenStoreVisitStoreChooserModal(false);
         }}
       />
     </main>

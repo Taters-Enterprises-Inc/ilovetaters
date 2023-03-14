@@ -1,4 +1,5 @@
 import { ProductModel } from "features/shared/core/domain/product.model";
+import { ProductFlavorsModel } from "./product_flavors.model";
 
 export interface ProductDetailsModel {
   product: ProductModel;
@@ -7,10 +8,7 @@ export interface ProductDetailsModel {
     id: number;
     name: string;
   }>;
-  product_flavor?: Array<{
-    id: number;
-    name: string;
-  }>;
+  product_flavor: Array<ProductFlavorsModel>;
   suggested_products?: Array<ProductModel>;
   product_images: Array<string>;
 }

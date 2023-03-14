@@ -37,7 +37,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
       dispatch(getSession());
       dispatch(resetRemoveItemFromCartCatering());
     }
-  }, [removeItemFromCartCateringState]);
+  }, [removeItemFromCartCateringState, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -88,7 +88,7 @@ export function CateringCartModal(props: CateringCartModalProps) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-paper px-4 pt-[30px] pb-3 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
+      <div className="bg-paper px-4 pt-[30px] pb-3 mb-[200px] lg:mb-0 round w-[90%] lg:w-[400px] mt-10 relative rounded-[10px]">
         <button
           className="absolute text-2xl text-secondary top-2 right-4 "
           onClick={() => {
@@ -123,7 +123,11 @@ export function CateringCartModal(props: CateringCartModalProps) {
                   <img
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                     className="rounded-[10px] w-[92px] h-[92px]"
-                    alt=""
+                    alt={order.prod_name}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                    }}
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
                     <h3 className="text-sm w-[90%]  font-bold leading-4">

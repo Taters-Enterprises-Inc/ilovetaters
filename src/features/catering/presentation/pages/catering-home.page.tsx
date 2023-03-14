@@ -1,14 +1,14 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { SearchAddress } from "features/shared/presentation/components/search-address";
+import { MaterialInputAddress } from "features/shared/presentation/components";
 import { getSession } from "features/shared/presentation/slices/get-session.slice";
-import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 import { useEffect, useState } from "react";
 import { FaSearchLocation } from "react-icons/fa";
 import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  resetCateringStoreAndAddress,
+  selectSetCateringStoreAndAddress,
+  setCateringStoreAndAddress,
+  SetCateringStoreAndAddressState,
+} from "features/catering/presentation/slices/set-catering-store-and-address.slice";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CateringStoreList } from "../components";
 import { getStoresAvailableCatering } from "../slices/get-stores-available-catering.slice";
@@ -22,33 +22,40 @@ import {
 import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import { CateringHeroCarousel } from "../components/catering-hero.carousel";
 import { MaterialDateTimeInput } from "features/shared/presentation/components";
+import { storeReset } from "features/shared/presentation/slices/store-reset.slice";
 
 export function CateringHome() {
   const dispatch = useAppDispatch();
-  const cateringHomePageState = useAppSelector(selectCateringHomePage);
   const [openStartEventCalendar, setOpenStartEventCalendar] = useState(false);
   const [openEndEventCalendar, setOpenEndEventCalendar] = useState(false);
 
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setCateringStoreAndAddressState = useAppSelector(
+    selectSetCateringStoreAndAddress
+  );
+  const cateringHomePageState = useAppSelector(selectCateringHomePage);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    dispatch(storeReset());
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setCateringStoreAndAddressState.status ===
+      SetCateringStoreAndAddressState.success
+    ) {
       dispatch(getSession());
       navigate("products");
+      dispatch(resetCateringStoreAndAddress());
       document.body.classList.remove("overflow-hidden");
     }
-  }, [setStoreAndAddressState, navigate, dispatch]);
-
-  useEffect(() => {
-    dispatch(storeReset());
-  }, [dispatch]);
+  }, [setCateringStoreAndAddressState, navigate, dispatch]);
 
   const disableDates = (date: Date) => {
     return moment(date) <= moment().add(13, "days");
@@ -143,7 +150,7 @@ export function CateringHome() {
         <CateringHeroCarousel />
       </section>
       <section className="container pb-96">
-        <h1 className='text-white text-lg pt-4 pb-2 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
+        <h1 className='text-white text-lg pt-4 pb-6 font-["Bebas_Neue"] tracking-[2px] text-center leading-tight'>
           Thank you for considering Taters for your celebration.{" "}
           <span className="block lg:inline">
             {" "}
@@ -152,57 +159,60 @@ export function CateringHome() {
         </h1>
 
         <div className="space-y-4">
-          <div className="flex justify-center">
-            <label className="pure-material-textfield-outlined w-[100%]">
-              <SearchAddress
-                value={
-                  cateringHomePageState.address
-                    ? cateringHomePageState.address
-                    : ""
-                }
-                onDenied={() => {
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onPrompt={() => {
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: null,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onLocateCurrentAddress={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-                onChange={(value: string) => {
-                  dispatch(setAddressCateringHomePage({ address: value }));
-                }}
-                onPlaceSelected={(place: string) => {
-                  dispatch(setAddressCateringHomePage({ address: place }));
+          <MaterialInputAddress
+            geolocate={true}
+            colorTheme="white"
+            value={
+              cateringHomePageState.address ? cateringHomePageState.address : ""
+            }
+            onDenied={() => {
+              dispatch(
+                getStoresAvailableCatering({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onPrompt={() => {
+              dispatch(
+                getStoresAvailableCatering({
+                  address: null,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onLocateCurrentAddress={(location) => {
+              dispatch(
+                setAddressCateringHomePage({
+                  address: location.formattedAddress,
+                })
+              );
+              dispatch(
+                getStoresAvailableCatering({
+                  address: location.formattedAddress,
+                  service: "CATERING",
+                })
+              );
+            }}
+            onChange={(value: string) => {
+              dispatch(setAddressCateringHomePage({ address: value }));
+            }}
+            onPlaceSelected={(location) => {
+              dispatch(
+                setAddressCateringHomePage({
+                  address: location.formattedAddress,
+                })
+              );
 
-                  dispatch(
-                    getStoresAvailableCatering({
-                      address: place,
-                      service: "CATERING",
-                    })
-                  );
-                }}
-              />
-              <span>Search Address</span>
-            </label>
-          </div>
-          <div className="space-y-4 lg:space-y-0 lg:space-x-4 flex flex-col sm:flex-row">
+              dispatch(
+                getStoresAvailableCatering({
+                  address: location.formattedAddress,
+                  service: "CATERING",
+                })
+              );
+            }}
+          />
+          <div className="flex flex-col space-y-4 lg:space-y-0 lg:space-x-4 sm:flex-row">
             <MaterialDateTimeInput
               label="Select Event Start Date"
               colorTheme="white"
@@ -288,7 +298,7 @@ export function CateringHome() {
                 cateringHomePageState.eventEndDate
               ) {
                 dispatch(
-                  setStoreAndAddress({
+                  setCateringStoreAndAddress({
                     address: cateringHomePageState.address,
                     storeId,
                     regionId,

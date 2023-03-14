@@ -20,4 +20,13 @@ export { AdminAvailabilityCatersProductAddons } from "./admin-availability-cater
 export { AdminCateringBookingAudit } from "./admin-catering-booking-audit";
 export { AdminUserDiscounts } from "./admin-user-discounts";
 export { AdminIdUserDiscountInformation } from "./admin-user-discount-id-information";
-export { AdminSurveyVerifications } from "./admin-survey-verification";
+export { AdminSurveyVerifications } from "./admin-survey-verifications";
+export { AdminSettingShopProducts } from "./admin-setting-shop-products";
+export { AdminAvailabilityCatersProducts } from "./admin-availability-caters-products";
+export { AdminCateringEditFlavor } from "./admin-catering-edit-flavor";
+export { AdminDashboardSalesLineChart } from "./admin-dashboard-sales-line-chart";
+export { AdminTotalSalesCard } from "./admin-total-sales-card";
+export { AdminSearchStoreCoordinates } from "./admin-search-store-coordinates";
+export { AdminSurveyVerificationAudit } from "./admin-survey-verification-audit";
+export { AdminSettingCateringPackages } from "./admin-setting-catering-packages";
+export { AdminSettingPopclubDeals } from "./admin-setting-popclub-deals";

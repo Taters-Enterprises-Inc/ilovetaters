@@ -1,8 +1,8 @@
-import { Fragment } from "react";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
+import { CSSObject, styled, Theme } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { Fragment } from "react";
 import {
   selectAdminSideBar,
   toggleAdminSideBar,
@@ -68,7 +68,7 @@ export function AdminDrawerDesktop() {
         dispatch(toggleAdminSideBar());
       }}
     >
-      <Box className="relative h-screen bg-secondary font-['Varela_Round'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
+      <Box className="relative h-screen Sidebar bg-secondary font-['Varela_Round'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
         <DrawerHeader className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
           <FaBars
             className={`cursor-pointer ${
@@ -77,7 +77,6 @@ export function AdminDrawerDesktop() {
             onClick={() => dispatch(toggleAdminSideBar())}
           />
         </DrawerHeader>
-
         <div className="flex items-center px-4 gap-x-4">
           <img
             src={require("assets/favicon.png")}
@@ -95,7 +94,6 @@ export function AdminDrawerDesktop() {
             TEI Shop Admin
           </h1>
         </div>
-
         <div
           className={`whitespace-pre duration-300 mt-3 px-4 text-white 
                 ${
@@ -113,7 +111,7 @@ export function AdminDrawerDesktop() {
               <div className="text-xs">
                 {getAdminSessionState.data.admin.user_details.groups.map(
                   (group, i) => (
-                    <>
+                    <span key={i}>
                       {getAdminSessionState.data &&
                       i !==
                         getAdminSessionState.data.admin.user_details.groups
@@ -121,7 +119,7 @@ export function AdminDrawerDesktop() {
                           1
                         ? group.name + ", "
                         : group.name}
-                    </>
+                    </span>
                   )
                 )}
               </div>

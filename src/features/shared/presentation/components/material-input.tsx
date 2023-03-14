@@ -1,11 +1,11 @@
-import TextField, { StandardTextFieldProps } from "@mui/material/TextField";
 import { alpha, styled } from "@mui/material/styles";
+import TextField, { StandardTextFieldProps } from "@mui/material/TextField";
 import { ChangeEventHandler } from "react";
 
 export interface MaterialInputProps extends StandardTextFieldProps {
-  colorTheme: "white" | "black";
+  colorTheme: "white" | "black" | "green" | "blue";
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
-  value: string | null;
+  value?: string | null;
   name: string;
 }
 
@@ -18,7 +18,7 @@ export const MaterialInput = styled(
   ...(colorTheme === "white" && {
     "& input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
     "& label": {
       color: "white !important",
@@ -37,14 +37,14 @@ export const MaterialInput = styled(
     },
     "& .MuiInputBase-input": {
       color: "white !important",
-      "-webkit-text-fill-color": "white !important",
+      WebkitTextFillColor: "white !important",
     },
   }),
 
   ...(colorTheme === "black" && {
     "& input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
     },
     "& label": {
       color: "#22201A !important",
@@ -63,7 +63,59 @@ export const MaterialInput = styled(
     },
     "& .MuiInputBase-input": {
       color: "#22201A !important",
-      "-webkit-text-fill-color": "#22201A !important",
+      WebkitTextFillColor: "#22201A !important",
+    },
+  }),
+
+  ...(colorTheme === "green" && {
+    "& input": {
+      color: "#006600 !important",
+      WebkitTextFillColor: "#006600 !important",
+    },
+    "& label": {
+      color: "#006600 !important",
+    },
+    "& fieldset": {
+      borderColor: "#006600 !important",
+    },
+    "&:hover fieldset": {
+      borderColor: "#006600 !important",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#006600 !important",
+    },
+    ".MuiSvgIcon-root ": {
+      fill: "#006600 !important",
+    },
+    "& .MuiInputBase-input": {
+      color: "#006600 !important",
+      WebkitTextFillColor: "#006600 !important",
+    },
+  }),
+
+  ...(colorTheme === "blue" && {
+    "& input": {
+      color: "#003399 !important",
+      WebkitTextFillColor: "#003399 !important",
+    },
+    "& label": {
+      color: "#003399 !important",
+    },
+    "& fieldset": {
+      borderColor: "#003399 !important",
+    },
+    "&:hover fieldset": {
+      borderColor: "#003399 !important",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#003399 !important",
+    },
+    ".MuiSvgIcon-root ": {
+      fill: "#003399 !important",
+    },
+    "& .MuiInputBase-input": {
+      color: "#003399 !important",
+      WebkitTextFillColor: "#003399 !important",
     },
   }),
 }));

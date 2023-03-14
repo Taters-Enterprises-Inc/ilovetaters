@@ -19,14 +19,13 @@ export interface OrderModel {
       dateadded: string;
       hash_key: string;
       store: number;
-      invoice_num: string;
+      invoice_num: string | null;
       reseller_id: number;
       reseller_discount: string;
       discount: string;
       discount_name?: string;
       discount_percentage?: string;
       voucher_id: number;
-      table_number: null;
       store_name: string;
       store_address: string;
       store_contact: string;
@@ -51,8 +50,8 @@ export interface OrderModel {
       promo_price: string;
       sku: null;
       sku_id: null;
-      calc_price: number;
-      product_price: number;
+      calc_price: string;
+      product_price: string;
       product_image: string;
       name: string;
       description: string;
@@ -78,7 +77,21 @@ export interface OrderModel {
       product_image: string;
       quantity: number;
       remarks: string | null;
-      price: number;
+      price: number | null;
+      deal_products_promo_include: Array<{
+        id: number;
+        quantity: number;
+        product_id: number;
+        product_hash: string;
+        product_variant_option_tb_id: number | null;
+        promo_discount_percentage: string;
+        obtainable: Array<{
+          product_id: number;
+          price: number;
+          product_variant_option_tb_id: number;
+          promo_discount_percentage: string;
+        }>;
+      }>;
     }>;
     personnel: {
       name: string;

@@ -5,10 +5,10 @@ import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.
 import moment from "moment";
 import { useEffect } from "react";
 import {
-  selectSetStoreAndAddress,
-  setStoreAndAddress,
-  SetStoreAndAddressState,
-} from "features/shared/presentation/slices/set-store-and-address.slice";
+  selectSetSnackshopStoreAndAddress,
+  setSnackshopStoreAndAddress,
+  SetSnackshopStoreAndAddressState,
+} from "features/shop/presentation/slices/set-snackshop-store-and-address.slice";
 import { selectGetStoresAvailableSnackshopModal } from "../slices/get-stores-available-snackshop-modal.slice";
 
 interface ShopStoreClusterProps {
@@ -25,26 +25,34 @@ export function ShopStoreCluster(props: ShopStoreClusterProps) {
   const getStoresAvailableSnackshopModalState = useAppSelector(
     selectGetStoresAvailableSnackshopModal
   );
-  const setStoreAndAddressState = useAppSelector(selectSetStoreAndAddress);
+  const setSnackshopStoreAndAddressState = useAppSelector(
+    selectSetSnackshopStoreAndAddress
+  );
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setSnackshopStoreAndAddressState.status ===
+      SetSnackshopStoreAndAddressState.success
+    ) {
       dispatch(getSession());
     }
-  }, [setStoreAndAddressState, dispatch]);
+  }, [setSnackshopStoreAndAddressState, dispatch]);
 
   useEffect(() => {
-    if (setStoreAndAddressState.status === SetStoreAndAddressState.success) {
+    if (
+      setSnackshopStoreAndAddressState.status ===
+      SetSnackshopStoreAndAddressState.success
+    ) {
       props.onClose();
 
       document.body.classList.remove("overflow-hidden");
     }
-  }, [dispatch, props, setStoreAndAddressState]);
+  }, [dispatch, props, setSnackshopStoreAndAddressState]);
 
   const storeClicked = (storeId: number, regionId: number) => {
     if (props.address) {
       dispatch(
-        setStoreAndAddress({
+        setSnackshopStoreAndAddress({
           address: props.address,
           storeId,
           regionId,
@@ -142,19 +150,15 @@ export function ShopStoreCluster(props: ShopStoreClusterProps) {
                       </div>
                     ) : null}
 
-                    {store.store_image ? (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
-                        alt=""
-                        className="w-full"
-                      />
-                    ) : (
-                      <img
-                        src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/blank.jpg`}
-                        alt=""
-                        className="w-full"
-                      />
-                    )}
+                    <img
+                      src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/store_images/250/${store.store_image}`}
+                      className="w-full"
+                      alt={store.store_name}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null;
+                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
+                      }}
+                    />
 
                     <div className="p-4 space-y-2">
                       <h1 className="mb-1 text-sm font-bold leading-5">
