@@ -4,6 +4,7 @@ export interface NotificationModel {
   transaction_tb_id: number;
   catering_transaction_tb_id: number;
   deals_redeems_tb_id: number;
+  discount_user_id: number;
 
   tracking_no: string;
   catering_tracking_no: string;

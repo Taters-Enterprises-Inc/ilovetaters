@@ -11,7 +11,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { DataList } from "features/shared/presentation/components";
+import { DataList, MaterialSwitch } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSettingCateringPackages,
@@ -307,8 +307,8 @@ export function AdminSettingCateringPackages() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          <Checkbox
-                            onChange={(e) => {
+                          <MaterialSwitch label=""
+                            checked={row.status === 1 ? true : false}onChange={(e) => {
                               const checked = e.target.checked;
                               dispatch(
                                 openMessageModal({
@@ -341,10 +341,7 @@ export function AdminSettingCateringPackages() {
                                   ],
                                 })
                               );
-                            }}
-                            color="primary"
-                            checked={row.status === 1 ? true : false}
-                          />
+                            }}/>
                         </DataTableCell>
 
                         <DataTableCell>

@@ -11,7 +11,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { DataList } from "features/shared/presentation/components";
+import { DataList, MaterialSwitch } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSettingShopProducts,
@@ -307,42 +307,42 @@ export function AdminSettingShopProducts() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          <Checkbox
-                            onChange={(e) => {
-                              const checked = e.target.checked;
-                              dispatch(
-                                openMessageModal({
-                                  message: `Are you sure you want to ${
-                                    checked ? "enable" : "disable"
-                                  } the product ?`,
-                                  buttons: [
-                                    {
-                                      color: "#CC5801",
-                                      text: "Yes",
-                                      onClick: () => {
-                                        dispatch(
-                                          updateAdminSettingShopProductStatus({
-                                            product_id: row.id,
-                                            status: checked ? 1 : 0,
-                                          })
-                                        );
-                                        dispatch(closeMessageModal());
-                                      },
+                          
+                        <MaterialSwitch 
+                          label=""
+                          checked={row.status === 1 ? true : false}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            dispatch(
+                              openMessageModal({
+                                message: `Are you sure you want to ${
+                                  checked ? "enable" : "disable"
+                                } the product ?`,
+                                buttons: [
+                                  {
+                                    color: "#CC5801",
+                                    text: "Yes",
+                                    onClick: () => {
+                                      dispatch(
+                                        updateAdminSettingShopProductStatus({
+                                          product_id: row.id,
+                                          status: checked ? 1 : 0,
+                                        })
+                                      );
+                                      dispatch(closeMessageModal());
                                     },
-                                    {
-                                      color: "#22201A",
-                                      text: "No",
-                                      onClick: () => {
-                                        dispatch(closeMessageModal());
-                                      },
+                                  },
+                                  {
+                                    color: "#22201A",
+                                    text: "No",
+                                    onClick: () => {
+                                      dispatch(closeMessageModal());
                                     },
-                                  ],
-                                })
-                              );
-                            }}
-                            color="primary"
-                            checked={row.status === 1 ? true : false}
-                          />
+                                  },
+                                ],
+                              })
+                            );
+                          }}/>
                         </DataTableCell>
 
                         <DataTableCell>

@@ -257,7 +257,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               >
                 <span className="flex items-center px-4 ">
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                    <AiOutlineIdcard size={20} />
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.user_discount
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
+                      <AiOutlineIdcard size={20} />
+                    </Badge>
 
                     <span
                       className={`whitespace-pre duration-300 ${
@@ -754,7 +762,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                         <NavLink
                           to="/admin/setting/store"
                           onClick={() => {
-                            // toggle2();
                             if (props.mobile) dispatch(closeAdminSideBar());
                           }}
                           className={(navData) =>

@@ -355,6 +355,11 @@ import {
   selectAdminInfluencerChangeStatus,
 } from "features/admin/presentation/slices/admin-influencer-change-status.slice";
 
+import {
+  EditAdminSettingPopclubDealState,
+  selectEditAdminSettingPopclubDeal,
+} from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
+
 const SweetAlert = withReactContent(Swal);
 
 export function LoadingAndSnackbarWrapper() {
@@ -553,6 +558,9 @@ export function LoadingAndSnackbarWrapper() {
   const adminInfluencerChangeStatusState = useAppSelector(
     selectAdminInfluencerChangeStatus
   );
+  const editAdminSettingPopclubDealState = useAppSelector(
+    selectEditAdminSettingPopclubDeal
+  );
 
   useEffect(() => {
     switch (adminInfluencerChangeStatusState.status) {
@@ -610,6 +618,25 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [applyInfluencerState]);
+
+  useEffect(() => {
+    switch (editAdminSettingPopclubDealState.status) {
+      case EditAdminSettingPopclubDealState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingPopclubDealState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingPopclubDealState.success:
+        showAlert(setSuccessAlert, editAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingPopclubDealState.fail:
+        showAlert(setFailsAlert, editAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingPopclubDealState]);
 
   useEffect(() => {
     switch (createAdminSettingPopclubDealState.status) {

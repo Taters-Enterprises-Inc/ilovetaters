@@ -10,7 +10,7 @@ export interface GetAdminSettingPopclubDealModel {
   original_price: string;
   promo_price: string;
   product_image: string;
-  promo_discount_price: string;
+  promo_discount_percentage: string;
   minimum_purchase: string;
   is_free_delivery: boolean;
   description: string;
@@ -19,7 +19,7 @@ export interface GetAdminSettingPopclubDealModel {
   available_end_time: string;
   available_start_datetime: string;
   available_end_datetime: string;
-  avialable_days: Array<string>;
+  available_days: string;
   categories: Array<AdminPopclubCategory>;
   excluded_products: Array<AdminProductModel>;
   included_products: Array<AdminDealIncludedProductModel>;

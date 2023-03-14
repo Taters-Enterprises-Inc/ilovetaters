@@ -36,6 +36,7 @@ import {
   UpdateAdminSettingCateringPackageStatusParam,
   CreateAdminSettingPopclubDealParam,
   AdminInfluencerChangeStatusParam,
+  EditAdminSettingPopclubDealParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -715,13 +716,32 @@ export interface AdminInfluencerChangeStatusResponse {
   };
 }
 
+export interface EditAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
 export function AdminInfluencerChangeStatusRepository(
   param: AdminInfluencerChangeStatusParam
 ): Promise<AdminInfluencerChangeStatusResponse> {
   return axios.post(
     `${REACT_APP_DOMAIN_URL}api/admin/discount/influencer-change-status`,
     param,
+    { withCredentials: true }
+  );
+}
+
+export function EditAdminSettingPopclubDealRepository(
+  param: EditAdminSettingPopclubDealParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-popclub-deal`,
+    param,
     {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       withCredentials: true,
     }
   );

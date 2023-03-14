@@ -16,6 +16,7 @@ import { getAdminNotifications } from "features/admin/presentation/slices/get-ad
 import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-shop-order.slice";
 import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
+import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -151,9 +152,11 @@ export function AdminNotificationWrapper() {
 
   useEffect(() => {
     pusher.unsubscribe("admin-survey-verification");
-    const snackshopChannel = pusher.subscribe("admin-survey-verification");
+    const surveyVerificationChannel = pusher.subscribe(
+      "admin-survey-verification"
+    );
 
-    snackshopChannel.bind("new-survey", (data: TransactionParam) => {
+    surveyVerificationChannel.bind("new-survey", (data: TransactionParam) => {
       if (
         getAdminSessionState.data?.admin.is_admin ||
         getAdminSessionState.data?.admin.is_csr_admin ||
@@ -166,6 +169,25 @@ export function AdminNotificationWrapper() {
         dispatch(getAdminNotifications());
       }
     });
+  }, [getAdminSessionState, dispatch, query]);
+
+  useEffect(() => {
+    pusher.unsubscribe("admin-discount-user");
+    const discountUserChannel = pusher.subscribe("admin-discount-user");
+
+    discountUserChannel.bind(
+      "discount-application",
+      (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin
+        ) {
+          toast("🦄 " + data.message);
+          dispatch(getAdminUserDiscounts(""));
+          dispatch(getAdminNotifications());
+        }
+      }
+    );
   }, [getAdminSessionState, dispatch, query]);
 
   return (

@@ -56,8 +56,7 @@ export function ProfileUserDiscount() {
 
   useEffect(() => {
     dispatch(getUserDiscount());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyUserDiscountState]);
+  }, [applyUserDiscountState, dispatch]);
 
   useEffect(() => {
     if (
