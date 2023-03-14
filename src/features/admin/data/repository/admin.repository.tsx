@@ -35,6 +35,7 @@ import {
   CopyAdminSettingCateringPackageParam,
   UpdateAdminSettingCateringPackageStatusParam,
   CreateAdminSettingPopclubDealParam,
+  EditAdminSettingPopclubDealParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -691,6 +692,27 @@ export interface GetAdminSettingPopclubDealResponse {
     message: string;
     data: GetAdminSettingPopclubDealModel;
   };
+}
+
+export interface EditAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function EditAdminSettingPopclubDealRepository(
+  param: EditAdminSettingPopclubDealParam
+): Promise<EditAdminSettingShopProductResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/edit-popclub-deal`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSettingPopclubDealRepository(

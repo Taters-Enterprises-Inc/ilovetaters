@@ -342,6 +342,10 @@ import {
   CreateAdminSettingPopclubDealState,
   selectCreateAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
+import {
+  EditAdminSettingPopclubDealState,
+  selectEditAdminSettingPopclubDeal,
+} from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -536,6 +540,28 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminSettingPopclubDealState = useAppSelector(
     selectCreateAdminSettingPopclubDeal
   );
+  const editAdminSettingPopclubDealState = useAppSelector(
+    selectEditAdminSettingPopclubDeal
+  );
+
+  useEffect(() => {
+    switch (editAdminSettingPopclubDealState.status) {
+      case EditAdminSettingPopclubDealState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case EditAdminSettingPopclubDealState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingPopclubDealState.success:
+        showAlert(setSuccessAlert, editAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case EditAdminSettingPopclubDealState.fail:
+        showAlert(setFailsAlert, editAdminSettingPopclubDealState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [editAdminSettingPopclubDealState]);
 
   useEffect(() => {
     switch (createAdminSettingPopclubDealState.status) {

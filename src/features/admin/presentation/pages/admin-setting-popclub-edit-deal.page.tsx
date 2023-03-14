@@ -37,12 +37,6 @@ import {
   GetAdminPopclubStoresState,
 } from "../slices/get-admin-popclub-stores.slice";
 import {
-  createAdminSettingPopclubDeal,
-  CreateAdminSettingPopclubDealState,
-  resetCreateAdminSettingPopclubDealState,
-  selectCreateAdminSettingPopclubDeal,
-} from "../slices/create-admin-setting-popclub-deal.slice";
-import {
   getAdminProducts,
   selectGetAdminProducts,
 } from "../slices/get-admin-products.slice";
@@ -56,6 +50,12 @@ import {
   selectGetAdminSettingPopclubDeal,
 } from "../slices/get-admin-setting-popclub-deal.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  editAdminSettingPopclubDeal,
+  EditAdminSettingPopclubDealState,
+  resetEditAdminSettingPopclubDealState,
+  selectEditAdminSettingPopclubDeal,
+} from "../slices/edit-admin-setting-popclub-deal.slice";
 
 export function AdminSettingPopclubEditDeal() {
   const dispatch = useAppDispatch();
@@ -79,7 +79,7 @@ export function AdminSettingPopclubEditDeal() {
     availableEndTime: Moment | null;
     availableStartDateTime: Moment | null;
     availableEndDateTime: Moment | null;
-    dealAvailability: boolean;
+    dealAvailability: boolean | "";
     availableDays: Array<string>;
     categories: Array<AdminPopclubCategory>;
     excludedProducts: Array<AdminProductModel>;
@@ -103,7 +103,7 @@ export function AdminSettingPopclubEditDeal() {
     availableEndTime: null,
     availableStartDateTime: null,
     availableEndDateTime: null,
-    dealAvailability: false,
+    dealAvailability: "",
     availableDays: [],
     products: [],
     stores: [],
@@ -128,8 +128,8 @@ export function AdminSettingPopclubEditDeal() {
     selectGetAdminPopclubStores
   );
 
-  const createAdminSettingPopclubDealState = useAppSelector(
-    selectCreateAdminSettingPopclubDeal
+  const editAdminSettingPopclubDealState = useAppSelector(
+    selectEditAdminSettingPopclubDeal
   );
   const getAdminSettingPopclubDealState = useAppSelector(
     selectGetAdminSettingPopclubDeal
@@ -148,13 +148,13 @@ export function AdminSettingPopclubEditDeal() {
 
   useEffect(() => {
     if (
-      createAdminSettingPopclubDealState.status ===
-      CreateAdminSettingPopclubDealState.success
+      editAdminSettingPopclubDealState.status ===
+      EditAdminSettingPopclubDealState.success
     ) {
       navigate("/admin/setting/deal");
-      dispatch(resetCreateAdminSettingPopclubDealState());
+      dispatch(resetEditAdminSettingPopclubDealState());
     }
-  }, [createAdminSettingPopclubDealState, dispatch, navigate]);
+  }, [editAdminSettingPopclubDealState, dispatch, navigate]);
 
   useEffect(() => {
     const stores = getAdminPopclubStoresState.data;
@@ -179,7 +179,7 @@ export function AdminSettingPopclubEditDeal() {
         originalPrice: getAdminSettingPopclubDealState.data.original_price,
         promoPrice: getAdminSettingPopclubDealState.data.promo_price,
         promoDiscountPercentage:
-          getAdminSettingPopclubDealState.data.promo_discount_price,
+          getAdminSettingPopclubDealState.data.promo_discount_percentage,
         minimumPurchase: getAdminSettingPopclubDealState.data.minimum_purchase,
         isFreeDelivery: getAdminSettingPopclubDealState.data.is_free_delivery,
         description: getAdminSettingPopclubDealState.data.description,
@@ -201,9 +201,10 @@ export function AdminSettingPopclubEditDeal() {
           getAdminSettingPopclubDealState.data.available_end_datetime,
           "YYYY-MM-DD HH:mm:ss"
         ),
-        dealAvailability: false,
-        availableDays:
-          getAdminSettingPopclubDealState.data.avialable_days ?? [],
+        dealAvailability: "",
+        availableDays: getAdminSettingPopclubDealState.data.available_days
+          ? getAdminSettingPopclubDealState.data.available_days.split(",")
+          : [],
         products: getAdminSettingPopclubDealState.data.products
           ? JSON.parse(
               JSON.stringify(getAdminSettingPopclubDealState.data.products)
@@ -255,20 +256,22 @@ export function AdminSettingPopclubEditDeal() {
 
     dispatch(
       openMessageModal({
-        message: "Are you sure you want to create the deal ?",
+        message: "Are you sure you want to edit the deal ?",
         buttons: [
           {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
               if (
+                id &&
                 formState.availableStartTime &&
                 formState.availableEndTime &&
                 formState.availableStartDateTime &&
                 formState.availableEndDateTime
               ) {
                 dispatch(
-                  createAdminSettingPopclubDeal({
+                  editAdminSettingPopclubDeal({
+                    id,
                     ...formState,
                     availableStartTime:
                       formState.availableStartTime.format("HH:mm:ss"),
@@ -364,15 +367,15 @@ export function AdminSettingPopclubEditDeal() {
           pageTitles: [
             { name: "Deals", url: "/admin/setting/deal" },
             {
-              name: "Create Deal",
-              url: "/admin/setting/deal/create-deal",
+              name: "Edit Deal",
+              url: "/admin/setting/deal/" + id,
             },
           ],
         }}
       />
       <section className="flex flex-col px-4 lg:flex-row lg:items-end">
         <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Create Deal
+          Edit Deal
         </span>
       </section>
       <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
@@ -959,22 +962,82 @@ export function AdminSettingPopclubEditDeal() {
         </div>
 
         {getAdminPopclubStoresState.data ? (
-          <>
+          <div>
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Store Selection
             </h1>
-            <MaterialSwitch
-              label={
-                "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
-              }
-              checked={formState.dealAvailability}
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  dealAvailability: e.target.checked,
-                });
-              }}
-            />
+
+            <h4 className="mt-1 text-sm leading-5 text-secondary">
+              <strong className="text-yellow-600">Warning:</strong> If you click
+              the button below it open the switch that will force the product to
+              be available or not be available to all the listed stores below.
+              Please always check this.
+            </h4>
+
+            {formState.dealAvailability === "" ? (
+              <button
+                type="button"
+                onClick={() => {
+                  dispatch(
+                    openMessageModal({
+                      message:
+                        "Are you sure you want to open the availability switch, it will force the product to be available or not be available to all the listed stores below. Please always check this.",
+                      buttons: [
+                        {
+                          color: "#CC5801",
+                          text: "Yes",
+                          onClick: () => {
+                            setFormState({
+                              ...formState,
+                              dealAvailability: false,
+                            });
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                        {
+                          color: "#22201A",
+                          text: "No",
+                          onClick: () => {
+                            dispatch(closeMessageModal());
+                          },
+                        },
+                      ],
+                    })
+                  );
+                }}
+                className="px-4 py-2 my-4 text-white rounded-lg bg-secondary w-fit"
+              >
+                Open Availability Switch
+              </button>
+            ) : (
+              <div className="flex flex-col py-2 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormState({
+                      ...formState,
+                      dealAvailability: "",
+                    });
+                  }}
+                  className="px-4 py-2 text-white rounded-lg bg-secondary w-fit"
+                >
+                  Close Availability Switch
+                </button>
+
+                <MaterialSwitch
+                  label={
+                    "Make the product available to store selected. ( If the switch is off the store will be the one who enable it )"
+                  }
+                  checked={formState.dealAvailability}
+                  onChange={(e) => {
+                    setFormState({
+                      ...formState,
+                      dealAvailability: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+            )}
 
             <MaterialInputAutoComplete
               label="Select Stores"
@@ -994,14 +1057,14 @@ export function AdminSettingPopclubEditDeal() {
               }}
               filterSelectedOptions
             />
-          </>
+          </div>
         ) : null}
 
         <button
           type="submit"
           className="px-4 py-2 text-white rounded-lg bg-button w-fit"
         >
-          Create Deal
+          Edit Deal
         </button>
       </form>
     </>
