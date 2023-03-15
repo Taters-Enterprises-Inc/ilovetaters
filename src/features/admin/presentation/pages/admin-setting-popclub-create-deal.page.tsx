@@ -60,6 +60,7 @@ export function AdminSettingPopclubCreateDeal() {
   const [formState, setFormState] = useState<{
     alias: string;
     name: string;
+    urlId: string;
     originalPrice: string;
     promoPrice: string;
     promoDiscountPercentage: string;
@@ -84,6 +85,7 @@ export function AdminSettingPopclubCreateDeal() {
   }>({
     alias: "",
     name: "",
+    urlId: "",
     originalPrice: "",
     promoPrice: "",
     promoDiscountPercentage: "",
@@ -186,33 +188,34 @@ export function AdminSettingPopclubCreateDeal() {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
-                dispatch(
-                  createAdminSettingPopclubDeal({
-                    ...formState,
-                    availableStartTime: formState.availableStartTime ? 
-                      formState.availableStartTime.format("HH:mm:ss") : '',
-                    availableEndTime: formState.availableEndTime ? 
-                      formState.availableEndTime.format("HH:mm:ss") : '',
-                    availableStartDateTime: formState.availableStartDateTime ?
-                      formState.availableStartDateTime.format(
+              dispatch(
+                createAdminSettingPopclubDeal({
+                  ...formState,
+                  availableStartTime: formState.availableStartTime
+                    ? formState.availableStartTime.format("HH:mm:ss")
+                    : "",
+                  availableEndTime: formState.availableEndTime
+                    ? formState.availableEndTime.format("HH:mm:ss")
+                    : "",
+                  availableStartDateTime: formState.availableStartDateTime
+                    ? formState.availableStartDateTime.format(
                         "YYYY-MM-DD HH:mm:ss"
-                      ) : '',
-                    availableEndDateTime: formState.availableEndDateTime ? formState.availableEndDateTime.format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    ) : '',
-                    stores: JSON.stringify(formState.stores),
-                    categories: JSON.stringify(formState.categories),
-                    excludedProducts: JSON.stringify(
-                      formState.excludedProducts
-                    ),
-                    includedProducts: JSON.stringify(
-                      formState.includedProducts
-                    ),
-                    products: JSON.stringify(formState.products),
-                    availableDays: formState.availableDays.toString(),
-                  })
-                );
-              
+                      )
+                    : "",
+                  availableEndDateTime: formState.availableEndDateTime
+                    ? formState.availableEndDateTime.format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : "",
+                  stores: JSON.stringify(formState.stores),
+                  categories: JSON.stringify(formState.categories),
+                  excludedProducts: JSON.stringify(formState.excludedProducts),
+                  includedProducts: JSON.stringify(formState.includedProducts),
+                  products: JSON.stringify(formState.products),
+                  availableDays: formState.availableDays.toString(),
+                })
+              );
+
               dispatch(closeMessageModal());
             },
           },
@@ -314,6 +317,16 @@ export function AdminSettingPopclubCreateDeal() {
               value={formState.name}
               name="name"
               label="Name"
+              fullWidth
+            />
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.urlId}
+              name="urlId"
+              label="Url Id"
               fullWidth
             />
 
