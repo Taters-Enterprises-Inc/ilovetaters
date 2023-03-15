@@ -11,25 +11,19 @@ export function Catering() {
       <Helmet>
         <title>Taters | Catering</title>
       </Helmet>
+      <HeaderNav
+        activeUrl="CATERING"
+        homePageUrl="/shop"
+        logoProps={{
+          src:
+            REACT_APP_DOMAIN_URL +
+            "api/assets/images/shared/logo/taters-catering-logo.png",
+          alt: "Taters Logo",
+          className: "w-[80px] lg:w-[90px]",
+        }}
+      />
 
-      {maintenance ? (
-        <CateringMaintenance />
-      ) : (
-        <>
-          <HeaderNav
-            activeUrl="CATERING"
-            homePageUrl="/shop"
-            logoProps={{
-              src:
-                REACT_APP_DOMAIN_URL +
-                "api/assets/images/shared/logo/taters-catering-logo.png",
-              alt: "Taters Logo",
-              className: "w-[80px] lg:w-[90px]",
-            }}
-          />
-          {/* <Outlet /> */}
-        </>
-      )}
+      {maintenance ? <CateringMaintenance /> : <Outlet />}
 
       <FooterNav activeUrl="CATERING" />
     </>
