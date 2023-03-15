@@ -13,3 +13,4 @@ export { CateringSignedContractVerified } from "./catering-signed-contract-verif
 export { CateringStoreChooser } from "./catering-store-chooser";
 export { CateringStoreCluster } from "./catering-store-cluster";
 export { CateringPaymentMethod } from "./catering-payment-method";
+export { CateringMaintenance } from "./catering-maintenance";

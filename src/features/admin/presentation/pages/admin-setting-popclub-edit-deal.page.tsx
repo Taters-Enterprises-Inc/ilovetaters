@@ -159,17 +159,6 @@ export function AdminSettingPopclubEditDeal() {
   }, [editAdminSettingPopclubDealState, dispatch, navigate]);
 
   useEffect(() => {
-    const stores = getAdminPopclubStoresState.data;
-    if (
-      getAdminPopclubStoresState.status ===
-        GetAdminPopclubStoresState.success &&
-      stores
-    ) {
-      setFormState((f) => ({ ...f, stores }));
-    }
-  }, [getAdminPopclubStoresState]);
-
-  useEffect(() => {
     if (
       getAdminSettingPopclubDealState.status ===
         GetAdminSettingPopclubDealState.success &&
