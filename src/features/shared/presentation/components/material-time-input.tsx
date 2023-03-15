@@ -9,6 +9,7 @@ interface MaterialTimeInputProps {
   label: string;
   colorTheme: "black" | "white";
   fullWidth?: boolean;
+  required?: boolean;
   onChange: (value: any, keyboardInputValue?: string | undefined) => void;
 }
 
@@ -65,6 +66,7 @@ export function MaterialTimeInput(props: MaterialTimeInputProps) {
           <MaterialInput
             colorTheme={props.colorTheme}
             fullWidth={props.fullWidth}
+            required={props.required}
             {...params}
           />
         )}

@@ -7,6 +7,7 @@ import { PopclubStoreModel } from "./popclub-store.model";
 export interface GetAdminSettingPopclubDealModel {
   alias: string;
   name: string;
+  hash: string;
   original_price: string;
   promo_price: string;
   product_image: string;
