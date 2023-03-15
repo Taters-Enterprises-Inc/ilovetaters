@@ -60,6 +60,7 @@ export function AdminSettingPopclubCreateDeal() {
   const [formState, setFormState] = useState<{
     alias: string;
     name: string;
+    urlId: string;
     originalPrice: string;
     promoPrice: string;
     promoDiscountPercentage: string;
@@ -84,6 +85,7 @@ export function AdminSettingPopclubCreateDeal() {
   }>({
     alias: "",
     name: "",
+    urlId: "",
     originalPrice: "",
     promoPrice: "",
     promoDiscountPercentage: "",
@@ -320,6 +322,16 @@ export function AdminSettingPopclubCreateDeal() {
               value={formState.name}
               name="name"
               label="Name"
+              fullWidth
+            />
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.urlId}
+              name="urlId"
+              label="Url Id"
               fullWidth
             />
 

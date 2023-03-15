@@ -345,6 +345,7 @@ export interface UpdateAdminSettingCateringPackageStatusParam {
 export interface CreateAdminSettingPopclubDealParam {
   alias: string;
   name: string;
+  urlId: string;
   originalPrice: string;
   promoPrice: string;
   promoDiscountPercentage: string;
