@@ -31,11 +31,6 @@ import {
   selectGetAdminProducts,
 } from "../slices/get-admin-products.slice";
 import { AdminProductModel } from "features/admin/core/domain/admin-product.model";
-import {
-  selectGetAdminSettingProductAddons,
-  getAdminSettingProductAddons,
-  GetAdminSettingProductAddonsState,
-} from "../slices/get-admin-setting-product-addons.slice";
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 import {
   copyAdminSettingShopProduct,
@@ -77,10 +72,6 @@ export function AdminSettingShopCopyProduct() {
 
   const copyAdminSettingShopProductState = useAppSelector(
     selectCopyAdminSettingShopProduct
-  );
-
-  const getAdminSettingProductAddonsState = useAppSelector(
-    selectGetAdminSettingProductAddons
   );
 
   useEffect(() => {
@@ -134,7 +125,6 @@ export function AdminSettingShopCopyProduct() {
     if (id) {
       dispatch(resetGetAdminSettingShopProductState());
       dispatch(getAdminSettingShopProduct(id));
-      dispatch(getAdminSettingProductAddons(id));
     }
   }, [dispatch, id]);
 

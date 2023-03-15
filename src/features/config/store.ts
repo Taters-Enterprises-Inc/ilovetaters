@@ -186,7 +186,6 @@ import loginChooserModal from "features/shared/presentation/slices/login-chooser
 import messageModal from "features/shared/presentation/slices/message-modal.slice";
 import getAdminSnackshopStores from "features/admin/presentation/slices/get-admin-snackshop-stores.slice";
 import getAdminCateringStores from "features/admin/presentation/slices/get-admin-catering-stores.slice";
-import getAdminSettingProductAddons from "features/admin/presentation/slices/get-admin-setting-product-addons.slice";
 import getCustomerSurveyResponseLogs from "features/admin/presentation/slices/get-customer-survey-response-logs.slice";
 import copyAdminSettingShopProduct from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
 import getAdminSettingCateringPackages from "features/admin/presentation/slices/get-admin-setting-catering-packages.slice";
@@ -392,7 +391,6 @@ export const store = configureStore({
     messageModal,
     getAdminSnackshopStores,
     getAdminCateringStores,
-    getAdminSettingProductAddons,
     getCustomerSurveyResponseLogs,
     copyAdminSettingShopProduct,
     getAdminSettingCateringPackages,
