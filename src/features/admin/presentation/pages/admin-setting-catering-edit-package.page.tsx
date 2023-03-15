@@ -171,17 +171,6 @@ export function AdminSettingCateringEditPackage() {
     }
   }, [getAdminSettingCateringPackageState]);
 
-  useEffect(() => {
-    const products = getAdminSettingProductAddonsState.data;
-    if (
-      getAdminSettingProductAddonsState.status ===
-        GetAdminSettingProductAddonsState.success &&
-      products
-    ) {
-      setFormState((f) => ({ ...f, products }));
-    }
-  }, [getAdminSettingProductAddonsState]);
-
   const handleAddProductVariant = () => {
     setFormState({
       ...formState,
