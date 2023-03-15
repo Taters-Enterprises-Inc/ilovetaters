@@ -234,7 +234,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     return (
@@ -263,7 +265,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
@@ -307,7 +311,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (
@@ -428,7 +434,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (
@@ -496,7 +504,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (getAvailableUserDiscountState.data) {
@@ -1076,9 +1086,10 @@ export function ShopCheckout() {
                               .deal_promo_price ? (
                               <h3 className="flex items-end justify-end flex-1 text-base">
                                 <NumberFormat
-                                  value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
-                                    2
-                                  )}
+                                  value={parseFloat(
+                                    getSessionState.data.redeem_data
+                                      .deal_promo_price
+                                  ).toFixed(2)}
                                   displayType={"text"}
                                   thousandSeparator={true}
                                   prefix={"₱"}

@@ -123,6 +123,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -205,6 +206,16 @@ export function AdminShopOrderCustomerInformation() {
           }
         } else {
           calculatedPrice += parseFloat(order.price) - discount;
+        }
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
         }
       }
     }
@@ -229,6 +240,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -313,6 +325,16 @@ export function AdminShopOrderCustomerInformation() {
       }
     }
 
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
+        }
+      }
+    }
+
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}
@@ -327,6 +349,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -407,6 +430,16 @@ export function AdminShopOrderCustomerInformation() {
           }
         } else {
           calculatedPrice += parseFloat(order.price) - discount;
+        }
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
         }
       }
     }

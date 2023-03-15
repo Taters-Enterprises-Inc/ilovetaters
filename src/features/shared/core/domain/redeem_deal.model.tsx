@@ -13,8 +13,8 @@ export interface RedeemDealModel {
 
   redeem_hash: string;
 
-  original_price: number | null;
-  promo_price: number | null;
+  original_price: string | null;
+  promo_price: string | null;
   promo_discount_percentage: string | null;
   minimum_purchase: number | null;
   is_free_delivery: number;

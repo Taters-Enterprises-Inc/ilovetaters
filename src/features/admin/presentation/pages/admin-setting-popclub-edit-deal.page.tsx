@@ -402,6 +402,9 @@ export function AdminSettingPopclubEditDeal() {
               name="name"
               label="Name"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
             />
 
             <MaterialInput
@@ -422,6 +425,9 @@ export function AdminSettingPopclubEditDeal() {
               name="description"
               label="Description"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
             />
 
             <div className="flex space-x-2">

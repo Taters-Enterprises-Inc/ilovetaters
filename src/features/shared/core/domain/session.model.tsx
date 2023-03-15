@@ -42,8 +42,8 @@ export interface SessionModel {
     deal_remarks: string;
     promo_discount_percentage: string | null;
     minimum_purchase: number | null;
-    deal_original_price: number | null;
-    deal_promo_price: number | null;
+    deal_original_price: string | null;
+    deal_promo_price: string | null;
     deal_products_promo_include: Array<{
       id: number;
       quantity: number | null;

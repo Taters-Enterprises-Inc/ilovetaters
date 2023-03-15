@@ -285,7 +285,7 @@ export function AdminSettingPopclubDeals() {
                         <DataTableCell>
                           {row.original_price ? (
                             <NumberFormat
-                              value={row.original_price.toFixed(2)}
+                              value={parseFloat(row.original_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -297,7 +297,7 @@ export function AdminSettingPopclubDeals() {
                         <DataTableCell>
                           {row.promo_price ? (
                             <NumberFormat
-                              value={row.promo_price.toFixed(2)}
+                              value={parseFloat(row.promo_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}

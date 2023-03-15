@@ -242,8 +242,9 @@ export function Deal(props: DealProps) {
               className={`text-[11px] lg:text-[12px] mb-[2px] bg-yellow-500 text-white rounded-r-[2px] font-bold px-1`}
             >
               {Math.round(
-                ((props.deal.original_price - props.deal.promo_price) /
-                  props.deal.original_price) *
+                ((parseFloat(props.deal.original_price) -
+                  parseFloat(props.deal.promo_price)) /
+                  parseFloat(props.deal.original_price)) *
                   100
               )}
               % OFF

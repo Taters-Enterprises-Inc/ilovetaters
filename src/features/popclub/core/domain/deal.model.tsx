@@ -5,10 +5,10 @@ export interface DealModel {
   description: string;
   delivery_details: string;
 
-  promo_price: number | null;
   promo_discount_percentage: string | null;
   minimum_purchase: number | null;
-  original_price: number | null;
+  original_price: string | null;
+  promo_price: string | null;
 
   discounted_price: number;
   uom: string;

@@ -30,7 +30,10 @@ import {
 import { resetGetRedeem } from "../slices/get-redeem.slice";
 import Countdown from "react-countdown";
 import { AiOutlineFieldTime } from "react-icons/ai";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
+import {
+  getSession,
+  selectGetSession,
+} from "features/shared/presentation/slices/get-session.slice";
 import {
   FacebookLogoutState,
   resetFacebookLogout,
@@ -171,33 +174,45 @@ export function PopClubDeal() {
             deal_products_promo_include.length === 1 &&
             deal_products_promo_include[0].obtainable.length === 0
           ) {
-            navigate(
-              "/delivery/products/" +
-                deal_products_promo_include[0].product_hash
-            );
+            dispatch(getSession()).then(() => {
+              navigate(
+                "/delivery/products/" +
+                  deal_products_promo_include[0].product_hash
+              );
+            });
           } else if (deal_products_promo_include[0].obtainable.length >= 1) {
-            navigate(
-              "/delivery/products/" +
-                deal_products_promo_include[0].product_hash
-            );
+            dispatch(getSession()).then(() => {
+              navigate(
+                "/delivery/products/" +
+                  deal_products_promo_include[0].product_hash
+              );
+            });
           } else if (
             deal_products_promo_include[0].obtainable.length > 1 &&
             deal_products_promo_include.length > 1
           ) {
-            navigate("/delivery/products");
+            dispatch(getSession()).then(() => {
+              navigate("/delivery/products");
+            });
           } else {
-            navigate("/delivery/products");
+            dispatch(getSession()).then(() => {
+              navigate("/delivery/products");
+            });
           }
         } else if (
           getDealState.data.promo_discount_percentage ||
           getDealState.data.is_free_delivery
         ) {
-          navigate("/delivery/products");
+          dispatch(getSession()).then(() => {
+            navigate("/delivery/products");
+          });
         } else if (
           getDealState.data.promo_price &&
           getDealState.data.original_price
         ) {
-          navigate("/delivery/checkout");
+          dispatch(getSession()).then(() => {
+            navigate("/delivery/checkout");
+          });
         }
       }
 
@@ -735,9 +750,9 @@ export function PopClubDeal() {
                   <div className="absolute top-0 left-0 flex flex-col items-start">
                     <div className=" text-[14px] bg-yellow-500 pl-2 pr-4 text-white rounded-r-[4px] mt-3 mb-[2px] font-bold">
                       {Math.floor(
-                        ((getDealState.data.original_price -
-                          getDealState.data.promo_price) /
-                          getDealState.data.original_price) *
+                        ((parseFloat(getDealState.data.original_price) -
+                          parseFloat(getDealState.data.promo_price)) /
+                          parseFloat(getDealState.data.original_price)) *
                           100
                       )}
                       % OFF

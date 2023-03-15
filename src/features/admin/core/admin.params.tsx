@@ -370,6 +370,7 @@ export interface EditAdminSettingPopclubDealParam {
   id: string;
   alias: string;
   name: string;
+  urlId: string;
   originalPrice: string;
   promoPrice: string;
   promoDiscountPercentage: string;

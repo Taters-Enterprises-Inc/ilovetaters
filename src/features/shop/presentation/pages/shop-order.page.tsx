@@ -575,7 +575,7 @@ export function ShopOrder() {
                           {deal.price ? (
                             <h3 className="flex items-end justify-end flex-1 text-base">
                               <NumberFormat
-                                value={deal.price.toFixed(2)}
+                                value={parseFloat(deal.price).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}
                                 prefix={"₱"}

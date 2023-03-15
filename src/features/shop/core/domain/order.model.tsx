@@ -77,7 +77,7 @@ export interface OrderModel {
       product_image: string;
       quantity: number;
       remarks: string | null;
-      price: number | null;
+      price: string | null;
       deal_products_promo_include: Array<{
         id: number;
         quantity: number;
