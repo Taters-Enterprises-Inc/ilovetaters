@@ -186,26 +186,20 @@ export function AdminSettingPopclubCreateDeal() {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
-              if (
-                formState.availableStartTime &&
-                formState.availableEndTime &&
-                formState.availableStartDateTime &&
-                formState.availableEndDateTime
-              ) {
                 dispatch(
                   createAdminSettingPopclubDeal({
                     ...formState,
-                    availableStartTime:
-                      formState.availableStartTime.format("HH:mm:ss"),
-                    availableEndTime:
-                      formState.availableEndTime.format("HH:mm:ss"),
-                    availableStartDateTime:
+                    availableStartTime: formState.availableStartTime ? 
+                      formState.availableStartTime.format("HH:mm:ss") : '',
+                    availableEndTime: formState.availableEndTime ? 
+                      formState.availableEndTime.format("HH:mm:ss") : '',
+                    availableStartDateTime: formState.availableStartDateTime ?
                       formState.availableStartDateTime.format(
                         "YYYY-MM-DD HH:mm:ss"
-                      ),
-                    availableEndDateTime: formState.availableEndDateTime.format(
+                      ) : '',
+                    availableEndDateTime: formState.availableEndDateTime ? formState.availableEndDateTime.format(
                       "YYYY-MM-DD HH:mm:ss"
-                    ),
+                    ) : '',
                     stores: JSON.stringify(formState.stores),
                     categories: JSON.stringify(formState.categories),
                     excludedProducts: JSON.stringify(
@@ -218,7 +212,7 @@ export function AdminSettingPopclubCreateDeal() {
                     availableDays: formState.availableDays.toString(),
                   })
                 );
-              }
+              
               dispatch(closeMessageModal());
             },
           },

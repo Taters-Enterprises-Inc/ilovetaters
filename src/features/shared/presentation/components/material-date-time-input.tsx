@@ -54,6 +54,7 @@ interface MaterialDateTimeInputProps {
   defaultCalendarMonth?: Date | undefined;
   value: any;
   fullWidth?: boolean;
+  required?: boolean;
   openCalendar: boolean;
   setOpenCalendar: (newValue: boolean) => void;
   onChange: (
@@ -85,6 +86,7 @@ export function MaterialDateTimeInput(props: MaterialDateTimeInputProps) {
               label: { color: "white" },
               borderColor: "white !important",
             }}
+            required={props.required}
             autoComplete="off"
             onClick={() => {
               props.setOpenCalendar(true);
