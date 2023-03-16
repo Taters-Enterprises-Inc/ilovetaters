@@ -36,11 +36,6 @@ import {
   closeMessageModal,
   openMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
-import {
-  selectGetAdminSettingProductAddons,
-  getAdminSettingProductAddons,
-  GetAdminSettingProductAddonsState,
-} from "../slices/get-admin-setting-product-addons.slice";
 import { CateringStoreModel } from "features/admin/core/domain/catering-store.model";
 import { AdminCateringDynamicPrice } from "features/admin/core/domain/admin-catering-dynamic-price.model";
 
@@ -70,10 +65,6 @@ export function AdminSettingCateringCopyPackage() {
 
   const copyAdminSettingCateringPackageState = useAppSelector(
     selectCopyAdminSettingCateringPackage
-  );
-
-  const getAdminSettingProductAddonsState = useAppSelector(
-    selectGetAdminSettingProductAddons
   );
 
   useEffect(() => {
@@ -128,7 +119,6 @@ export function AdminSettingCateringCopyPackage() {
     if (id) {
       dispatch(resetGetAdminSettingCateringPackageState());
       dispatch(getAdminSettingCateringPackage(id));
-      dispatch(getAdminSettingProductAddons(id));
     }
   }, [dispatch, id]);
 
@@ -170,17 +160,6 @@ export function AdminSettingCateringCopyPackage() {
       });
     }
   }, [getAdminSettingCateringPackageState]);
-
-  useEffect(() => {
-    const products = getAdminSettingProductAddonsState.data;
-    if (
-      getAdminSettingProductAddonsState.status ===
-        GetAdminSettingProductAddonsState.success &&
-      products
-    ) {
-      setFormState((f) => ({ ...f, products }));
-    }
-  }, [getAdminSettingProductAddonsState]);
 
   const handleAddProductVariant = () => {
     setFormState({

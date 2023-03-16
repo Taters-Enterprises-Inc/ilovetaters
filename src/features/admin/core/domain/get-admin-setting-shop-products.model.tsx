@@ -11,5 +11,6 @@ export interface GetAdminSettingShopProductsModel {
     price: number;
     add_details: string;
     status: number;
+    popclub_status: number;
   }>;
 }

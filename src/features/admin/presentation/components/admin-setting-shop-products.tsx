@@ -11,7 +11,10 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { DataList, MaterialSwitch } from "features/shared/presentation/components";
+import {
+  DataList,
+  MaterialSwitch,
+} from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSettingShopProducts,
@@ -41,6 +44,7 @@ export function AdminSettingShopProducts() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const status = query.get("status");
 
   let columns: Array<Column> = [
     { id: "image", label: "Image" },
@@ -48,8 +52,12 @@ export function AdminSettingShopProducts() {
     { id: "description", label: "Description" },
     { id: "price", label: "Price" },
     {
-      id: "status",
-      label: "Status",
+      id: "snackshop-status",
+      label: "Snackshop Status",
+    },
+    {
+      id: "popclub-status",
+      label: "Popclub Status",
     },
     { id: "action", label: "" },
   ];
@@ -69,6 +77,7 @@ export function AdminSettingShopProducts() {
       order_by: orderBy,
       order: order,
       search: search,
+      status: status,
     });
 
     dispatch(getAdminSettingShopProducts(query));
@@ -80,6 +89,7 @@ export function AdminSettingShopProducts() {
     orderBy,
     order,
     search,
+    status,
   ]);
 
   return (
@@ -307,42 +317,83 @@ export function AdminSettingShopProducts() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          
-                        <MaterialSwitch 
-                          label=""
-                          checked={row.status === 1 ? true : false}
-                          onChange={(e) => {
-                            const checked = e.target.checked;
-                            dispatch(
-                              openMessageModal({
-                                message: `Are you sure you want to ${
-                                  checked ? "enable" : "disable"
-                                } the product ?`,
-                                buttons: [
-                                  {
-                                    color: "#CC5801",
-                                    text: "Yes",
-                                    onClick: () => {
-                                      dispatch(
-                                        updateAdminSettingShopProductStatus({
-                                          product_id: row.id,
-                                          status: checked ? 1 : 0,
-                                        })
-                                      );
-                                      dispatch(closeMessageModal());
+                          <MaterialSwitch
+                            label=""
+                            checked={row.status === 1 ? true : false}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              dispatch(
+                                openMessageModal({
+                                  message: `Are you sure you want to ${
+                                    checked ? "enable" : "disable"
+                                  } the product ?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(
+                                          updateAdminSettingShopProductStatus({
+                                            product_id: row.id,
+                                            status: checked ? 1 : 0,
+                                            type: "snackshop",
+                                          })
+                                        );
+                                        dispatch(closeMessageModal());
+                                      },
                                     },
-                                  },
-                                  {
-                                    color: "#22201A",
-                                    text: "No",
-                                    onClick: () => {
-                                      dispatch(closeMessageModal());
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
                                     },
-                                  },
-                                ],
-                              })
-                            );
-                          }}/>
+                                  ],
+                                })
+                              );
+                            }}
+                          />
+                        </DataTableCell>
+
+                        <DataTableCell>
+                          <MaterialSwitch
+                            label=""
+                            checked={row.popclub_status === 1 ? true : false}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              dispatch(
+                                openMessageModal({
+                                  message: `Are you sure you want to ${
+                                    checked ? "enable" : "disable"
+                                  } the product on popclub ?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(
+                                          updateAdminSettingShopProductStatus({
+                                            product_id: row.id,
+                                            status: checked ? 1 : 0,
+                                            type: "popclub",
+                                          })
+                                        );
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                  ],
+                                })
+                              );
+                            }}
+                          />
                         </DataTableCell>
 
                         <DataTableCell>

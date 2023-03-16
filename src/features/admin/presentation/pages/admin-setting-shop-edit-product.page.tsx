@@ -47,11 +47,6 @@ import {
   closeMessageModal,
   openMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
-import {
-  selectGetAdminSettingProductAddons,
-  getAdminSettingProductAddons,
-  GetAdminSettingProductAddonsState,
-} from "../slices/get-admin-setting-product-addons.slice";
 import { SnackshopStoreModel } from "features/admin/core/domain/snackshop-store.model";
 
 export interface Variant {
@@ -87,10 +82,6 @@ export function AdminSettingShopEditProduct() {
 
   const deleteAdminSettingShopProductState = useAppSelector(
     selectDeleteAdminSettingShopProduct
-  );
-
-  const getAdminSettingProductAddonsState = useAppSelector(
-    selectGetAdminSettingProductAddons
   );
 
   useEffect(() => {
@@ -154,7 +145,6 @@ export function AdminSettingShopEditProduct() {
     if (id) {
       dispatch(resetGetAdminSettingShopProductState());
       dispatch(getAdminSettingShopProduct(id));
-      dispatch(getAdminSettingProductAddons(id));
     }
   }, [dispatch, id]);
 
@@ -187,17 +177,6 @@ export function AdminSettingShopEditProduct() {
       });
     }
   }, [getAdminSettingShopProductState]);
-
-  useEffect(() => {
-    const products = getAdminSettingProductAddonsState.data;
-    if (
-      getAdminSettingProductAddonsState.status ===
-        GetAdminSettingProductAddonsState.success &&
-      products
-    ) {
-      setFormState((f) => ({ ...f, products }));
-    }
-  }, [getAdminSettingProductAddonsState]);
 
   const handleAddProductVariant = () => {
     setFormState({

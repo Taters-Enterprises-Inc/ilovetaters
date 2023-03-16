@@ -11,7 +11,10 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { DataList } from "features/shared/presentation/components";
+import {
+  DataList,
+  MaterialSwitch,
+} from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSettingPopclubDeals,
@@ -26,6 +29,10 @@ import {
   closeMessageModal,
   openMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
+import {
+  updateAdminSettingPopclubDealStatus,
+  selectUpdateAdminSettingPopclubDealStatus,
+} from "../slices/update-admin-setting-popclub-deal-status.slice";
 
 export function AdminSettingPopclubDeals() {
   const dispatch = useAppDispatch();
@@ -37,6 +44,7 @@ export function AdminSettingPopclubDeals() {
   const orderBy = query.get("order_by");
   const order = query.get("order");
   const search = query.get("search");
+  const status = query.get("status");
 
   let columns: Array<Column> = [
     { id: "image", label: "Image" },
@@ -54,6 +62,9 @@ export function AdminSettingPopclubDeals() {
   const getAdminSettingPopclubDealsState = useAppSelector(
     selectGetAdminSettingPopclubDeals
   );
+  const updateAdminSettingPopclubDealStatusState = useAppSelector(
+    selectUpdateAdminSettingPopclubDealStatus
+  );
 
   useEffect(() => {
     const query = createQueryParams({
@@ -62,10 +73,20 @@ export function AdminSettingPopclubDeals() {
       order_by: orderBy,
       order: order,
       search: search,
+      status: status,
     });
 
     dispatch(getAdminSettingPopclubDeals(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search]);
+  }, [
+    updateAdminSettingPopclubDealStatusState,
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+    status,
+  ]);
 
   return (
     <>
@@ -285,7 +306,7 @@ export function AdminSettingPopclubDeals() {
                         <DataTableCell>
                           {row.original_price ? (
                             <NumberFormat
-                              value={row.original_price.toFixed(2)}
+                              value={parseFloat(row.original_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -297,7 +318,7 @@ export function AdminSettingPopclubDeals() {
                         <DataTableCell>
                           {row.promo_price ? (
                             <NumberFormat
-                              value={row.promo_price.toFixed(2)}
+                              value={parseFloat(row.promo_price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
@@ -308,27 +329,27 @@ export function AdminSettingPopclubDeals() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          <Checkbox
+                          <MaterialSwitch
+                            label=""
+                            checked={row.status === 1 ? true : false}
                             onChange={(e) => {
                               const checked = e.target.checked;
                               dispatch(
                                 openMessageModal({
                                   message: `Are you sure you want to ${
                                     checked ? "enable" : "disable"
-                                  } the package ?`,
+                                  } the deal ?`,
                                   buttons: [
                                     {
                                       color: "#CC5801",
                                       text: "Yes",
                                       onClick: () => {
-                                        // dispatch(
-                                        //   updateAdminSettingCateringPackageStatus(
-                                        //     {
-                                        //       package_id: row.id,
-                                        //       status: checked ? 1 : 0,
-                                        //     }
-                                        //   )
-                                        // );
+                                        dispatch(
+                                          updateAdminSettingPopclubDealStatus({
+                                            deal_id: row.id,
+                                            status: checked ? 1 : 0,
+                                          })
+                                        );
                                         dispatch(closeMessageModal());
                                       },
                                     },
@@ -343,8 +364,6 @@ export function AdminSettingPopclubDeals() {
                                 })
                               );
                             }}
-                            color="primary"
-                            checked={row.status === 1 ? true : false}
                           />
                         </DataTableCell>
 

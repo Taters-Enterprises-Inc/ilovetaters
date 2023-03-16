@@ -323,7 +323,9 @@ export function HeaderNav(props: HeaderNavProps) {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     return (

@@ -36,6 +36,7 @@ import {
   UpdateAdminSettingCateringPackageStatusParam,
   CreateAdminSettingPopclubDealParam,
   EditAdminSettingPopclubDealParam,
+  UpdateAdminSettingPopclubDealStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -588,13 +589,6 @@ export interface GetAdminCateringStoresResponse {
   };
 }
 
-export interface GetAdminSettingProductAddonsResponse {
-  data: {
-    message: string;
-    data: Array<AdminProductModel>;
-  };
-}
-
 export interface GetCustomerSurveyResponseLogsResponse {
   data: {
     message: string;
@@ -698,6 +692,24 @@ export interface EditAdminSettingPopclubDealResponse {
   data: {
     message: string;
   };
+}
+
+export interface UpdateAdminSettingPopclubDealStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UpdateAdminSettingPopclubDealStatusRepository(
+  param: UpdateAdminSettingPopclubDealStatusParam
+): Promise<UpdateAdminSettingCateringPackageStatusResponse> {
+  return axios.put(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/popclub-deal`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function EditAdminSettingPopclubDealRepository(
@@ -867,17 +879,6 @@ export function CopyAdminSettingShopProductRepository(
       headers: {
         "Content-Type": "multipart/form-data",
       },
-      withCredentials: true,
-    }
-  );
-}
-
-export function GetAdminSettingProductAddonsRepository(
-  productId: string
-): Promise<GetAdminSettingProductAddonsResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/setting/product-addons?productId=${productId}`,
-    {
       withCredentials: true,
     }
   );
