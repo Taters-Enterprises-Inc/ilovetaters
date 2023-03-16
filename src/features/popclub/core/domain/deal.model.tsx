@@ -6,6 +6,7 @@ export interface DealModel {
   delivery_details: string;
 
   promo_discount_percentage: string | null;
+  subtotal_promo_discount: string | null;
   minimum_purchase: number | null;
   original_price: string | null;
   promo_price: string | null;

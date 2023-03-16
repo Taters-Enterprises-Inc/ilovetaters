@@ -213,6 +213,8 @@ export function PopClubDeal() {
           dispatch(getSession()).then(() => {
             navigate("/delivery/checkout");
           });
+        } else if (getDealState.data.subtotal_promo_discount) {
+          navigate("/delivery/products");
         }
       }
 
@@ -317,6 +319,20 @@ export function PopClubDeal() {
       getRedeemState.data &&
       (getRedeemState.data.promo_discount_percentage ||
         getRedeemState.data.is_free_delivery)
+    ) {
+      return (
+        <button
+          onClick={() => {
+            navigate("/delivery/products");
+          }}
+          className="w-full py-3 text-white uppercase border border-white bg-secondary rounded-xl"
+        >
+          Go Back to Products
+        </button>
+      );
+    } else if (
+      getRedeemState.data &&
+      getRedeemState.data.subtotal_promo_discount
     ) {
       return (
         <button

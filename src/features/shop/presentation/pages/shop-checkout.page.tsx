@@ -316,19 +316,21 @@ export function ShopCheckout() {
         );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
-      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
-    ) {
-      const discountedPrice =
-        calculatedPrice *
-        parseFloat(
-          getLatestUnexpiredRedeemState.data.promo_discount_percentage
-        );
+    if (getLatestUnexpiredRedeemState.data) {
+      let discountedPrice = 0;
+      if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.promo_discount_percentage
+          );
+
+      if (getLatestUnexpiredRedeemState.data?.subtotal_promo_discount)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.subtotal_promo_discount
+          );
       return (
         <NumberFormat
           value={discountedPrice.toFixed(2)}
@@ -439,20 +441,21 @@ export function ShopCheckout() {
         );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
-      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
-    ) {
-      const discountedPrice =
-        calculatedPrice *
-        parseFloat(
-          getLatestUnexpiredRedeemState.data.promo_discount_percentage
-        );
+    if (getLatestUnexpiredRedeemState.data) {
+      let discountedPrice = 0;
+      if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.promo_discount_percentage
+          );
 
+      if (getLatestUnexpiredRedeemState.data?.subtotal_promo_discount)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.subtotal_promo_discount
+          );
       calculatedPrice -= discountedPrice;
     }
 
