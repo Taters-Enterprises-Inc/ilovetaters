@@ -196,6 +196,7 @@ export interface CopyAdminSettingShopProductParam {
 export interface UpdateAdminSettingShopProductStatusParam {
   product_id: number;
   status: number;
+  type: "snackshop" | "popclub";
 }
 
 export interface UpdateAdminCateringOrderItemRemarksParam {

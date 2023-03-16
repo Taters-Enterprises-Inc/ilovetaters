@@ -52,8 +52,12 @@ export function AdminSettingShopProducts() {
     { id: "description", label: "Description" },
     { id: "price", label: "Price" },
     {
-      id: "status",
-      label: "Status",
+      id: "snackshop-status",
+      label: "Snackshop Status",
+    },
+    {
+      id: "popclub-status",
+      label: "Popclub Status",
     },
     { id: "action", label: "" },
   ];
@@ -332,6 +336,47 @@ export function AdminSettingShopProducts() {
                                           updateAdminSettingShopProductStatus({
                                             product_id: row.id,
                                             status: checked ? 1 : 0,
+                                            type: "snackshop",
+                                          })
+                                        );
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                    {
+                                      color: "#22201A",
+                                      text: "No",
+                                      onClick: () => {
+                                        dispatch(closeMessageModal());
+                                      },
+                                    },
+                                  ],
+                                })
+                              );
+                            }}
+                          />
+                        </DataTableCell>
+
+                        <DataTableCell>
+                          <MaterialSwitch
+                            label=""
+                            checked={row.popclub_status === 1 ? true : false}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              dispatch(
+                                openMessageModal({
+                                  message: `Are you sure you want to ${
+                                    checked ? "enable" : "disable"
+                                  } the product on popclub ?`,
+                                  buttons: [
+                                    {
+                                      color: "#CC5801",
+                                      text: "Yes",
+                                      onClick: () => {
+                                        dispatch(
+                                          updateAdminSettingShopProductStatus({
+                                            product_id: row.id,
+                                            status: checked ? 1 : 0,
+                                            type: "popclub",
                                           })
                                         );
                                         dispatch(closeMessageModal());
