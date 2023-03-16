@@ -395,3 +395,8 @@ export interface EditAdminSettingPopclubDealParam {
   image250x250: File | string;
   image75x75: File | string;
 }
+
+export interface UpdateAdminSettingPopclubDealStatusParam {
+  deal_id: number;
+  status: number;
+}
