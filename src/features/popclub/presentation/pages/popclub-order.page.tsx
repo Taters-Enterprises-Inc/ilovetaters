@@ -294,7 +294,7 @@ export function PopclubOrder() {
                           ) : null}
                           <h3 className="flex items-end justify-end flex-1 text-base">
                             <NumberFormat
-                              value={deal.price.toFixed(2)}
+                              value={Number(deal.price).toFixed(2)}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={"₱"}
