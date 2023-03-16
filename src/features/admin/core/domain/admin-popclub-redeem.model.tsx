@@ -17,7 +17,7 @@ export interface AdminPopclubRedeemModel {
   fb_user_id: number;
 
   items: Array<{
-    price: number | null;
+    price: string | null;
     quantity: number;
     remarks: string;
     alias: string;
