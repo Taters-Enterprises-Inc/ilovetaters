@@ -109,7 +109,7 @@ export function AdminShopOrderCustomerInformation() {
     if (value)
       return (
         <NumberFormat
-          value={parseInt(value).toFixed(2)}
+          value={parseFloat(value).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -444,16 +444,16 @@ export function AdminShopOrderCustomerInformation() {
       }
     }
 
+    if (getAdminShopOrderState.data?.discount) {
+      calculatedPrice -= parseFloat(getAdminShopOrderState.data?.discount);
+    }
+
     if (getAdminShopOrderState.data?.distance_price) {
       calculatedPrice += parseInt(getAdminShopOrderState.data?.distance_price);
     }
 
     if (getAdminShopOrderState.data?.cod_fee) {
       calculatedPrice += parseInt(getAdminShopOrderState.data?.cod_fee);
-    }
-
-    if (getAdminShopOrderState.data?.discount) {
-      calculatedPrice -= parseInt(getAdminShopOrderState.data?.discount);
     }
 
     if (getAdminShopOrderState.data?.giftcard_discount) {

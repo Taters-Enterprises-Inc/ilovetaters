@@ -671,7 +671,7 @@ export function ShopOrder() {
                         <NumberFormat
                           value={
                             getOrdersState.data?.order.clients_info.discount
-                              ? parseInt(
+                              ? parseFloat(
                                   getOrdersState.data.order.clients_info
                                     .discount
                                 ).toFixed(2)
