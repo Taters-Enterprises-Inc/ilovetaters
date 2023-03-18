@@ -188,39 +188,34 @@ export function AdminSettingPopclubCreateDeal() {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
-              if (
-                formState.availableStartTime &&
-                formState.availableEndTime &&
-                formState.availableStartDateTime &&
-                formState.availableEndDateTime
-              ) {
-                dispatch(
-                  createAdminSettingPopclubDeal({
-                    ...formState,
-                    availableStartTime:
-                      formState.availableStartTime.format("HH:mm:ss"),
-                    availableEndTime:
-                      formState.availableEndTime.format("HH:mm:ss"),
-                    availableStartDateTime:
-                      formState.availableStartDateTime.format(
+              dispatch(
+                createAdminSettingPopclubDeal({
+                  ...formState,
+                  availableStartTime: formState.availableStartTime
+                    ? formState.availableStartTime.format("HH:mm:ss")
+                    : "",
+                  availableEndTime: formState.availableEndTime
+                    ? formState.availableEndTime.format("HH:mm:ss")
+                    : "",
+                  availableStartDateTime: formState.availableStartDateTime
+                    ? formState.availableStartDateTime.format(
                         "YYYY-MM-DD HH:mm:ss"
-                      ),
-                    availableEndDateTime: formState.availableEndDateTime.format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    ),
-                    stores: JSON.stringify(formState.stores),
-                    categories: JSON.stringify(formState.categories),
-                    excludedProducts: JSON.stringify(
-                      formState.excludedProducts
-                    ),
-                    includedProducts: JSON.stringify(
-                      formState.includedProducts
-                    ),
-                    products: JSON.stringify(formState.products),
-                    availableDays: formState.availableDays.toString(),
-                  })
-                );
-              }
+                      )
+                    : "",
+                  availableEndDateTime: formState.availableEndDateTime
+                    ? formState.availableEndDateTime.format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : "",
+                  stores: JSON.stringify(formState.stores),
+                  categories: JSON.stringify(formState.categories),
+                  excludedProducts: JSON.stringify(formState.excludedProducts),
+                  includedProducts: JSON.stringify(formState.includedProducts),
+                  products: JSON.stringify(formState.products),
+                  availableDays: formState.availableDays.toString(),
+                })
+              );
+
               dispatch(closeMessageModal());
             },
           },
@@ -323,6 +318,19 @@ export function AdminSettingPopclubCreateDeal() {
               name="name"
               label="Name"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
+            />
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.urlId}
+              name="urlId"
+              label="Url Id"
+              fullWidth
             />
 
             <MaterialInput
@@ -343,6 +351,9 @@ export function AdminSettingPopclubCreateDeal() {
               name="description"
               label="Description"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
             />
 
             <div className="flex space-x-2">

@@ -234,7 +234,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     return (
@@ -263,7 +265,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (getSessionState.data && getSessionState.data.distance_rate_price) {
@@ -307,22 +311,26 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
-      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
-    ) {
-      const discountedPrice =
-        calculatedPrice *
-        parseFloat(
-          getLatestUnexpiredRedeemState.data.promo_discount_percentage
-        );
+    if (getLatestUnexpiredRedeemState.data) {
+      let discountedPrice = 0;
+      if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.promo_discount_percentage
+          );
+
+      if (getLatestUnexpiredRedeemState.data?.subtotal_promo_discount)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.subtotal_promo_discount
+          );
       return (
         <NumberFormat
           value={discountedPrice.toFixed(2)}
@@ -428,23 +436,26 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.minimum_purchase &&
-      getLatestUnexpiredRedeemState.data.minimum_purchase <= calculatedPrice &&
-      getLatestUnexpiredRedeemState.data.is_free_delivery === 0 &&
-      getLatestUnexpiredRedeemState.data &&
-      getLatestUnexpiredRedeemState.data?.promo_discount_percentage
-    ) {
-      const discountedPrice =
-        calculatedPrice *
-        parseFloat(
-          getLatestUnexpiredRedeemState.data.promo_discount_percentage
-        );
+    if (getLatestUnexpiredRedeemState.data) {
+      let discountedPrice = 0;
+      if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.promo_discount_percentage
+          );
 
+      if (getLatestUnexpiredRedeemState.data?.subtotal_promo_discount)
+        discountedPrice =
+          calculatedPrice *
+          parseFloat(
+            getLatestUnexpiredRedeemState.data.subtotal_promo_discount
+          );
       calculatedPrice -= discountedPrice;
     }
 
@@ -496,7 +507,9 @@ export function ShopCheckout() {
 
     if (getSessionState.data?.redeem_data) {
       if (getSessionState.data.redeem_data.deal_promo_price)
-        calculatedPrice += getSessionState.data?.redeem_data.deal_promo_price;
+        calculatedPrice += parseFloat(
+          getSessionState.data?.redeem_data.deal_promo_price
+        );
     }
 
     if (getAvailableUserDiscountState.data) {
@@ -1076,9 +1089,10 @@ export function ShopCheckout() {
                               .deal_promo_price ? (
                               <h3 className="flex items-end justify-end flex-1 text-base">
                                 <NumberFormat
-                                  value={getSessionState.data.redeem_data.deal_promo_price.toFixed(
-                                    2
-                                  )}
+                                  value={parseFloat(
+                                    getSessionState.data.redeem_data
+                                      .deal_promo_price
+                                  ).toFixed(2)}
                                   displayType={"text"}
                                   thousandSeparator={true}
                                   prefix={"₱"}

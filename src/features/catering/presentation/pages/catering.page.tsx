@@ -2,14 +2,15 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
+import { CateringMaintenance } from "../components";
 
 export function Catering() {
+  const maintenance = false;
   return (
     <>
       <Helmet>
         <title>Taters | Catering</title>
       </Helmet>
-
       <HeaderNav
         activeUrl="CATERING"
         homePageUrl="/shop"
@@ -22,7 +23,7 @@ export function Catering() {
         }}
       />
 
-      <Outlet />
+      {maintenance ? <CateringMaintenance /> : <Outlet />}
 
       <FooterNav activeUrl="CATERING" />
     </>

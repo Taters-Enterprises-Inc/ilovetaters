@@ -109,7 +109,7 @@ export function AdminShopOrderCustomerInformation() {
     if (value)
       return (
         <NumberFormat
-          value={parseInt(value).toFixed(2)}
+          value={parseFloat(value).toFixed(2)}
           displayType={"text"}
           thousandSeparator={true}
           prefix={"₱"}
@@ -123,6 +123,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -205,6 +206,16 @@ export function AdminShopOrderCustomerInformation() {
           }
         } else {
           calculatedPrice += parseFloat(order.price) - discount;
+        }
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
         }
       }
     }
@@ -229,6 +240,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -309,6 +321,16 @@ export function AdminShopOrderCustomerInformation() {
           }
         } else {
           calculatedPrice += parseFloat(order.price) - discount;
+        }
+      }
+    }
+
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
         }
       }
     }
@@ -327,6 +349,7 @@ export function AdminShopOrderCustomerInformation() {
     let calculatedPrice = 0;
 
     const orders = getAdminShopOrderState.data?.items;
+    const deals = getAdminShopOrderState.data?.deal_items;
 
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
@@ -411,16 +434,26 @@ export function AdminShopOrderCustomerInformation() {
       }
     }
 
+    if (deals) {
+      for (let i = 0; i < deals.length; i++) {
+        const deal = deals[i];
+
+        if (deal.price) {
+          calculatedPrice += parseFloat(deal.price);
+        }
+      }
+    }
+
+    if (getAdminShopOrderState.data?.discount) {
+      calculatedPrice -= parseFloat(getAdminShopOrderState.data?.discount);
+    }
+
     if (getAdminShopOrderState.data?.distance_price) {
       calculatedPrice += parseInt(getAdminShopOrderState.data?.distance_price);
     }
 
     if (getAdminShopOrderState.data?.cod_fee) {
       calculatedPrice += parseInt(getAdminShopOrderState.data?.cod_fee);
-    }
-
-    if (getAdminShopOrderState.data?.discount) {
-      calculatedPrice -= parseInt(getAdminShopOrderState.data?.discount);
     }
 
     if (getAdminShopOrderState.data?.giftcard_discount) {

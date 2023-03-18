@@ -7,8 +7,8 @@ export interface GetAdminSettingPopclubDealsModel {
     id: number;
     product_image: string;
     name: string;
-    original_price: number | null;
-    promo_price: number | null;
+    original_price: string | null;
+    promo_price: string | null;
     description: string;
     status: number;
   }>;

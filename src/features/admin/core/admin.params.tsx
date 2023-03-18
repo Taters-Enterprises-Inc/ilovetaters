@@ -201,6 +201,7 @@ export interface CopyAdminSettingShopProductParam {
 export interface UpdateAdminSettingShopProductStatusParam {
   product_id: number;
   status: number;
+  type: "snackshop" | "popclub";
 }
 
 export interface UpdateAdminCateringOrderItemRemarksParam {
@@ -375,6 +376,7 @@ export interface EditAdminSettingPopclubDealParam {
   id: string;
   alias: string;
   name: string;
+  urlId: string;
   originalPrice: string;
   promoPrice: string;
   promoDiscountPercentage: string;
@@ -398,4 +400,9 @@ export interface EditAdminSettingPopclubDealParam {
   image500x500: File | string;
   image250x250: File | string;
   image75x75: File | string;
+}
+
+export interface UpdateAdminSettingPopclubDealStatusParam {
+  deal_id: number;
+  status: number;
 }

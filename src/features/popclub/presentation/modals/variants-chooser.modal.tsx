@@ -61,31 +61,31 @@ export function VariantsChooserModal(props: VariantChooserModalProps) {
     document.body.classList.remove("overflow-hidden");
   }
 
-  useEffect(() => {
-    if (
-      redeemDealState.status === RedeemDealState.success &&
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "online-delivery"
-    ) {
-      navigate("/delivery/checkout");
-      dispatch(getSession());
-      dispatch(resetRedeemDeal());
-    } else if (
-      redeemDealState.status === RedeemDealState.success &&
-      getSessionState.status === GetSessionState.success &&
-      getSessionState.data?.popclub_data.platform === "store-visit"
-    ) {
-      dispatch(resetRedeemDeal());
-      props.onClose();
-    }
-  }, [
-    getSessionState,
-    navigate,
-    redeemDealState,
-    getRedeemsState,
-    props,
-    dispatch,
-  ]);
+  // useEffect(() => {
+  //   if (
+  //     redeemDealState.status === RedeemDealState.success &&
+  //     getSessionState.status === GetSessionState.success &&
+  //     getSessionState.data?.popclub_data.platform === "online-delivery"
+  //   ) {
+  //     navigate("/delivery/checkout");
+  //     dispatch(getSession());
+  //     dispatch(resetRedeemDeal());
+  //   } else if (
+  //     redeemDealState.status === RedeemDealState.success &&
+  //     getSessionState.status === GetSessionState.success &&
+  //     getSessionState.data?.popclub_data.platform === "store-visit"
+  //   ) {
+  //     dispatch(resetRedeemDeal());
+  //     props.onClose();
+  //   }
+  // }, [
+  //   getSessionState,
+  //   navigate,
+  //   redeemDealState,
+  //   getRedeemsState,
+  //   props,
+  //   dispatch,
+  // ]);
 
   const createFlavorDetails = (): string | undefined => {
     if (currentMultiFlavors === undefined) return undefined;

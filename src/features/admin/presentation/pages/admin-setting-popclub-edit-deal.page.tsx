@@ -159,17 +159,6 @@ export function AdminSettingPopclubEditDeal() {
   }, [editAdminSettingPopclubDealState, dispatch, navigate]);
 
   useEffect(() => {
-    const stores = getAdminPopclubStoresState.data;
-    if (
-      getAdminPopclubStoresState.status ===
-        GetAdminPopclubStoresState.success &&
-      stores
-    ) {
-      setFormState((f) => ({ ...f, stores }));
-    }
-  }, [getAdminPopclubStoresState]);
-
-  useEffect(() => {
     if (
       getAdminSettingPopclubDealState.status ===
         GetAdminSettingPopclubDealState.success &&
@@ -179,31 +168,45 @@ export function AdminSettingPopclubEditDeal() {
         alias: getAdminSettingPopclubDealState.data.alias,
         name: getAdminSettingPopclubDealState.data.name,
         urlId: getAdminSettingPopclubDealState.data.hash,
-        originalPrice: getAdminSettingPopclubDealState.data.original_price,
-        promoPrice: getAdminSettingPopclubDealState.data.promo_price,
+        originalPrice:
+          getAdminSettingPopclubDealState.data.original_price ?? "",
+        promoPrice: getAdminSettingPopclubDealState.data.promo_price ?? "",
         promoDiscountPercentage:
-          getAdminSettingPopclubDealState.data.promo_discount_percentage,
-        minimumPurchase: getAdminSettingPopclubDealState.data.minimum_purchase,
+          getAdminSettingPopclubDealState.data.promo_discount_percentage ?? "",
+        minimumPurchase:
+          getAdminSettingPopclubDealState.data.minimum_purchase ?? "",
         isFreeDelivery: getAdminSettingPopclubDealState.data.is_free_delivery,
         description: getAdminSettingPopclubDealState.data.description,
         secondsBeforeExpiration:
           getAdminSettingPopclubDealState.data.seconds_before_expiration,
-        availableStartTime: moment(
-          getAdminSettingPopclubDealState.data.available_start_time,
-          "HH:mm:ss"
-        ),
-        availableEndTime: moment(
-          getAdminSettingPopclubDealState.data.available_end_time,
-          "HH:mm:ss"
-        ),
-        availableStartDateTime: moment(
-          getAdminSettingPopclubDealState.data.available_start_datetime,
-          "YYYY-MM-DD HH:mm:ss"
-        ),
-        availableEndDateTime: moment(
-          getAdminSettingPopclubDealState.data.available_end_datetime,
-          "YYYY-MM-DD HH:mm:ss"
-        ),
+        availableStartTime: getAdminSettingPopclubDealState.data
+          .available_start_time
+          ? moment(
+              getAdminSettingPopclubDealState.data.available_start_time,
+              "HH:mm:ss"
+            )
+          : null,
+        availableEndTime: getAdminSettingPopclubDealState.data
+          .available_end_time
+          ? moment(
+              getAdminSettingPopclubDealState.data.available_end_time,
+              "HH:mm:ss"
+            )
+          : null,
+        availableStartDateTime: getAdminSettingPopclubDealState.data
+          .available_start_datetime
+          ? moment(
+              getAdminSettingPopclubDealState.data.available_start_datetime,
+              "YYYY-MM-DD HH:mm:ss"
+            )
+          : null,
+        availableEndDateTime: getAdminSettingPopclubDealState.data
+          .available_end_datetime
+          ? moment(
+              getAdminSettingPopclubDealState.data.available_end_datetime,
+              "YYYY-MM-DD HH:mm:ss"
+            )
+          : null,
         dealAvailability: "",
         availableDays: getAdminSettingPopclubDealState.data.available_days
           ? getAdminSettingPopclubDealState.data.available_days.split(",")
@@ -265,28 +268,27 @@ export function AdminSettingPopclubEditDeal() {
             color: "#CC5801",
             text: "Yes",
             onClick: () => {
-              if (
-                id &&
-                formState.availableStartTime &&
-                formState.availableEndTime &&
-                formState.availableStartDateTime &&
-                formState.availableEndDateTime
-              ) {
+              if (id) {
                 dispatch(
                   editAdminSettingPopclubDeal({
                     id,
                     ...formState,
-                    availableStartTime:
-                      formState.availableStartTime.format("HH:mm:ss"),
-                    availableEndTime:
-                      formState.availableEndTime.format("HH:mm:ss"),
-                    availableStartDateTime:
-                      formState.availableStartDateTime.format(
-                        "YYYY-MM-DD HH:mm:ss"
-                      ),
-                    availableEndDateTime: formState.availableEndDateTime.format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    ),
+                    availableStartTime: formState.availableStartTime
+                      ? formState.availableStartTime.format("HH:mm:ss")
+                      : "",
+                    availableEndTime: formState.availableEndTime
+                      ? formState.availableEndTime.format("HH:mm:ss")
+                      : "",
+                    availableStartDateTime: formState.availableStartDateTime
+                      ? formState.availableStartDateTime.format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )
+                      : "",
+                    availableEndDateTime: formState.availableEndDateTime
+                      ? formState.availableEndDateTime.format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )
+                      : "",
                     stores: JSON.stringify(formState.stores),
                     categories: JSON.stringify(formState.categories),
                     excludedProducts: JSON.stringify(
@@ -402,6 +404,19 @@ export function AdminSettingPopclubEditDeal() {
               name="name"
               label="Name"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
+            />
+
+            <MaterialInput
+              required
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.urlId}
+              name="urlId"
+              label="Url Id"
+              fullWidth
             />
             <MaterialInput
               required
@@ -421,6 +436,9 @@ export function AdminSettingPopclubEditDeal() {
               name="description"
               label="Description"
               fullWidth
+              multiline
+              rows={4}
+              maxRows={5}
             />
 
             <div className="flex space-x-2">

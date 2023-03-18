@@ -134,7 +134,7 @@ export function AdminShopOrders() {
     }
 
     if (row.discount) {
-      calculatedPrice -= parseInt(row.discount);
+      calculatedPrice -= parseFloat(row.discount);
     }
 
     if (row.giftcard_discount) {

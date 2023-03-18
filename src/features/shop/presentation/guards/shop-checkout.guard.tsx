@@ -19,7 +19,10 @@ export function ShopCheckoutGuard() {
     const redeemData = getSessionState.data.redeem_data;
 
     if (redeemData) {
-      if (redeemData.deal_promo_price && redeemData.deal_promo_price <= 0) {
+      if (
+        redeemData.deal_promo_price &&
+        parseFloat(redeemData.deal_promo_price) <= 0
+      ) {
         return <Navigate to={"/delivery/products"} />;
       } else if (redeemData.deal_promo_price === null) {
         if (orders.length <= 0) {
