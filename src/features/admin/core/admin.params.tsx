@@ -136,9 +136,6 @@ export interface AdminCateringBookingUpdateStatusParam {
 
 export interface AdminShopOrderUpdateStatusParam {
   transactionId: number;
-  transactionHash: string;
-  mobileUserId: number | null;
-  fbUserId: number | null;
   status: number;
 }
 
@@ -350,6 +347,8 @@ export interface CreateAdminSettingPopclubDealParam {
   originalPrice: string;
   promoPrice: string;
   promoDiscountPercentage: string;
+  subTotalPromoDiscount: string;
+  influencerDiscount: string;
   minimumPurchase: string;
   isFreeDelivery: boolean;
   description: string;

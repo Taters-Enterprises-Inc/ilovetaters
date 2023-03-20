@@ -34,9 +34,6 @@ export function AdminShopOrderCustomerInformationButtons() {
       dispatch(
         adminShopOrderUpdateStatus({
           transactionId: getAdminShopOrderState.data.id,
-          transactionHash: getAdminShopOrderState.data.hash_key,
-          fbUserId: getAdminShopOrderState.data.fb_user_id,
-          mobileUserId: getAdminShopOrderState.data.mobile_user_id,
           status,
         })
       );

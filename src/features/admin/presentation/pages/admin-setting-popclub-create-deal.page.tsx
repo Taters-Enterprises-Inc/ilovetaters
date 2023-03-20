@@ -64,6 +64,8 @@ export function AdminSettingPopclubCreateDeal() {
     originalPrice: string;
     promoPrice: string;
     promoDiscountPercentage: string;
+    subTotalPromoDiscount: string;
+    influencerDiscount: string;
     minimumPurchase: string;
     isFreeDelivery: boolean;
     description: string;
@@ -89,6 +91,8 @@ export function AdminSettingPopclubCreateDeal() {
     originalPrice: "",
     promoPrice: "",
     promoDiscountPercentage: "",
+    subTotalPromoDiscount: "",
+    influencerDiscount: "",
     minimumPurchase: "",
     isFreeDelivery: false,
     description: "",
@@ -138,7 +142,7 @@ export function AdminSettingPopclubCreateDeal() {
       createAdminSettingPopclubDealState.status ===
       CreateAdminSettingPopclubDealState.success
     ) {
-      navigate("/admin/setting/deal");
+      // navigate("/admin/setting/deal");
       dispatch(resetCreateAdminSettingPopclubDealState());
     }
   }, [createAdminSettingPopclubDealState, dispatch, navigate]);
@@ -337,16 +341,6 @@ export function AdminSettingPopclubCreateDeal() {
               required
               colorTheme="black"
               onChange={handleInputChange}
-              value={formState.urlId}
-              name="urlId"
-              label="Url Id"
-              fullWidth
-            />
-
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
               value={formState.description}
               name="description"
               label="Description"
@@ -398,6 +392,26 @@ export function AdminSettingPopclubCreateDeal() {
                 type="number"
               />
             </div>
+
+            <MaterialInput
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.subTotalPromoDiscount}
+              name="subTotalPromoDiscount"
+              label="Sub Total Promo Discount"
+              type="number"
+              fullWidth
+            />
+
+            <MaterialInput
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.influencerDiscount}
+              name="influencerDiscount"
+              label="Influencer Discount"
+              type="number"
+              fullWidth
+            />
 
             <MaterialInputAutoComplete
               label="Select Available Days"
@@ -526,16 +540,18 @@ export function AdminSettingPopclubCreateDeal() {
               />
             </div>
 
-            <MaterialSwitch
-              label="Is Free Delivery"
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  isFreeDelivery: e.target.checked,
-                });
-              }}
-              checked={formState.isFreeDelivery}
-            />
+            <div className="flex flex-col">
+              <MaterialSwitch
+                label="Is Free Delivery"
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    isFreeDelivery: e.target.checked,
+                  });
+                }}
+                checked={formState.isFreeDelivery}
+              />
+            </div>
 
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Products

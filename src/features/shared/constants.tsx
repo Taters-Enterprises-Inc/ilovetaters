@@ -244,7 +244,7 @@ export const SEE_ME_TAB_FAQ: Array<TabModel> = [
 
 export const PROFILE_TABS: Array<TabModel> = [
   {
-    name: "My Profile",
+    name: "Profile",
     active: "profile",
     icon: <FaUserAlt />,
     url: "/profile",
@@ -256,25 +256,25 @@ export const PROFILE_TABS: Array<TabModel> = [
     url: "/profile/inbox",
   },
   {
-    name: "Snack Shop Orders",
+    name: "Orders",
     active: "snackshop",
     icon: <FaShoppingBag />,
     url: "/profile/snackshop-orders",
   },
   {
-    name: "Catering Bookings",
+    name: "Bookings",
     active: "catering",
     icon: <RiShoppingBag3Fill />,
     url: "/profile/catering-bookings",
   },
   {
-    name: "Popclub Redeems",
+    name: "Redeems",
     active: "popclub",
     icon: <GiPopcorn />,
     url: "/profile/popclub-redeems",
   },
   {
-    name: "User Discount",
+    name: "Discount",
     active: "user-discount",
     icon: <HiDocumentText />,
     url: "/profile/user-discount",

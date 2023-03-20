@@ -24,6 +24,7 @@ import {
   selectGetCateringOrders,
 } from "features/catering/presentation/slices/get-catering-orders.slice";
 import { getNotifications } from "../slices/get-notifications.slice";
+import { getInbox } from "features/profile/presentation/slices/get-inbox.slice";
 
 export function UserNotificationWrapper() {
   const dispatch = useAppDispatch();
@@ -64,6 +65,26 @@ export function UserNotificationWrapper() {
           showAlert(setSuccessAlert, data.message);
 
           dispatch(getNotifications());
+          dispatch(getInbox(""));
+        }
+      }
+    );
+
+    inboxChannel.bind(
+      "inbox-influencer-discount",
+      (data: {
+        fb_user_id?: number;
+        mobile_user_id?: number;
+        message: string;
+      }) => {
+        if (
+          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
+        ) {
+          showAlert(setSuccessAlert, data.message);
+
+          dispatch(getNotifications());
+          dispatch(getInbox(""));
         }
       }
     );

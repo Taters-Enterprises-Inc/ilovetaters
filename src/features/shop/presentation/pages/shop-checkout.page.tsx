@@ -46,6 +46,10 @@ import {
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+import {
+  getInfluencer,
+  selectGetInfluencer,
+} from "features/profile/presentation/slices/get-influencer.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -79,9 +83,15 @@ export function ShopCheckout() {
     selectGetAvailableUserDiscount
   );
 
+  const getInfluencerState = useAppSelector(selectGetInfluencer);
+
+  useEffect(() => {
+    dispatch(getInfluencer());
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(getAvailableUserDiscount());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (
@@ -316,7 +326,10 @@ export function ShopCheckout() {
         );
     }
 
-    if (getLatestUnexpiredRedeemState.data) {
+    if (
+      getLatestUnexpiredRedeemState.data ||
+      getInfluencerState.data?.discount_points
+    ) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
         discountedPrice =
@@ -331,6 +344,10 @@ export function ShopCheckout() {
           parseFloat(
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
+      if (getInfluencerState.data?.discount_points)
+        discountedPrice =
+          calculatedPrice * parseFloat(getInfluencerState.data.discount_points);
+
       return (
         <NumberFormat
           value={discountedPrice.toFixed(2)}
@@ -441,7 +458,10 @@ export function ShopCheckout() {
         );
     }
 
-    if (getLatestUnexpiredRedeemState.data) {
+    if (
+      getLatestUnexpiredRedeemState.data ||
+      getInfluencerState.data?.discount_points
+    ) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
         discountedPrice =
@@ -456,6 +476,10 @@ export function ShopCheckout() {
           parseFloat(
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
+
+      if (getInfluencerState.data?.discount_points)
+        discountedPrice =
+          calculatedPrice * parseFloat(getInfluencerState.data.discount_points);
       calculatedPrice -= discountedPrice;
     }
 

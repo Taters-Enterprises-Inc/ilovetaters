@@ -1,4 +1,8 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
@@ -66,6 +70,7 @@ import {
 } from "features/shared/presentation/slices/message-modal.slice";
 
 export function PopClubDeal() {
+  const query = useQuery();
   const getDealState = useAppSelector(selectGetDeal);
   const getDealProductVariantsState = useAppSelector(
     selectGetDealProductVariants
@@ -82,6 +87,7 @@ export function PopClubDeal() {
 
   const dispatch = useAppDispatch();
   let { hash } = useParams();
+  const referralCode = query.get("referral-code");
 
   const getSessionState = useAppSelector(selectGetSession);
 
@@ -118,6 +124,7 @@ export function PopClubDeal() {
             redeemDeal({
               hash: getDealState.data?.hash,
               remarks: "",
+              referralCode: referralCode ?? "",
             })
           );
         }

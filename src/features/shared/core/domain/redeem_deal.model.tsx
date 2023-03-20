@@ -19,6 +19,7 @@ export interface RedeemDealModel {
   subtotal_promo_discount: string | null;
   minimum_purchase: number | null;
   is_free_delivery: number;
+  referral_code: string | null;
   deal_products_promo_exclude: Array<{
     product_id: number;
   }>;
