@@ -5,12 +5,8 @@ import {
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  BsCartX,
-  BsFillCalendar2WeekFill,
-  BsFillCartPlusFill,
-} from "react-icons/bs";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -72,6 +68,15 @@ import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modal
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
+import { BsBookmarkStarFill } from "react-icons/bs";
+
+import { MaterialInput } from "features/shared/presentation/components";
+import {
+  getSnackshopInfluencerProduct,
+  selectGetSnackshopInfluencerProduct,
+  GetSnackshopInfluencerProductState,
+  resetGetSnackshopInfluencerProductState,
+} from "../slices/get-snackshop-influencer-product.slice";
 
 let quantityId: any;
 
@@ -106,6 +111,8 @@ export function ShopProduct() {
   const [openStoreVisitStoreChooserModal, setOpenStoreVisitStoreChooserModal] =
     useState(false);
 
+  const [referralCode, setReferralCode] = useState("");
+
   const timerRef = useRef(0);
   const isLongPress = useRef(false);
   const isQuantityNull = useRef(false);
@@ -119,6 +126,9 @@ export function ShopProduct() {
   );
   const forfeitRedeemState = useAppSelector(selectForfeitRedeem);
   const redeemDealState = useAppSelector(selectRedeemDeal);
+  const getSnackshopInfluencerProductState = useAppSelector(
+    selectGetSnackshopInfluencerProduct
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -134,6 +144,7 @@ export function ShopProduct() {
   useEffect(() => {
     if (hash !== undefined) {
       dispatch(getProductDetails({ hash }));
+      dispatch(resetGetSnackshopInfluencerProductState());
       dispatch(redeemValidators());
     }
   }, [location, dispatch, hash, forfeitRedeemState, redeemDealState]);
@@ -484,6 +495,12 @@ export function ShopProduct() {
       }
 
       let flavors_details = createFlavorDetails();
+      let productDiscount =
+        getProductDetailsState.data.product.promo_discount_percentage;
+
+      if (getSnackshopInfluencerProductState.data) {
+        productDiscount = getSnackshopInfluencerProductState.data.discount;
+      }
 
       dispatch(
         addToCartShop({
@@ -496,8 +513,7 @@ export function ShopProduct() {
           prod_calc_amount:
             getProductDetailsState.data.product.price * quantity,
           prod_category: getProductDetailsState.data.product.category,
-          promo_discount_percentage:
-            getProductDetailsState.data.product.promo_discount_percentage,
+          promo_discount_percentage: productDiscount,
           prod_with_drinks: -1,
           flavors_details: flavors_details,
           prod_sku_id: -1,
@@ -512,7 +528,41 @@ export function ShopProduct() {
     const deal_products_promo_includes =
       getSessionState.data?.redeem_data?.deal_products_promo_include;
 
-    if (getProductDetailsState.data?.product.promo_discount_percentage) {
+    if (
+      getSnackshopInfluencerProductState.data &&
+      getProductDetailsState.data?.product
+    ) {
+      const price = getProductDetailsState.data.product.price * quantity;
+
+      return (
+        <div>
+          <h2 className="mt-4 text-2xl text-white line-through">
+            <NumberFormat
+              value={(
+                getProductDetailsState.data?.product.price * quantity
+              ).toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </h2>
+          {getProductDetailsState.data?.product.price ? (
+            <h2 className="text-4xl text-white">
+              <NumberFormat
+                value={(
+                  price -
+                  price *
+                    parseFloat(getSnackshopInfluencerProductState.data.discount)
+                ).toFixed(2)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={"₱"}
+              />
+            </h2>
+          ) : null}
+        </div>
+      );
+    } else if (getProductDetailsState.data?.product.promo_discount_percentage) {
       const price = getProductDetailsState.data.product.price * quantity;
 
       return (
@@ -893,6 +943,62 @@ export function ShopProduct() {
                     </div>
                   </ProductDetailsAccordion>
                 ) : null}
+
+                <ProductDetailsAccordion
+                  title={{
+                    name: "Influencer Referral",
+                    prefixIcon: <BsBookmarkStarFill className="text-3xl" />,
+                  }}
+                >
+                  <div className="flex p-4">
+                    <MaterialInput
+                      colorTheme="white"
+                      required
+                      label="Referral Code"
+                      name="referralCode"
+                      fullWidth
+                      value={referralCode}
+                      onChange={(e) => {
+                        if (
+                          getSnackshopInfluencerProductState.status !==
+                          GetSnackshopInfluencerProductState.success
+                        ) {
+                          const value = e.target.value;
+                          setReferralCode(value);
+                        }
+                      }}
+                      className="rounded-none"
+                    />
+                    {getSnackshopInfluencerProductState.data ? (
+                      <button
+                        className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-green-900 py-2 rounded-r-lg shadow-lg`}
+                      >
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Applied
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (getProductDetailsState.data) {
+                            dispatch(
+                              getSnackshopInfluencerProduct({
+                                referralCode,
+                                productId:
+                                  getProductDetailsState.data.product.id,
+                              })
+                            );
+                          }
+                        }}
+                        className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 rounded-r-lg shadow-lg`}
+                      >
+                        <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                          Apply
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </ProductDetailsAccordion>
 
                 <div>
                   <h2 className="font-['Bebas_Neue'] text-4xl text-white tracking-[2px]">

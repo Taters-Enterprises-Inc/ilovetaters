@@ -31,8 +31,6 @@ export const createAdminSettingPopclubDeal = createAsyncThunk(
       const response: CreateAdminSettingPopclubDealResponse =
         await CreateAdminSettingPopclubDealRepository(param);
 
-      console.log(response.data);
-
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

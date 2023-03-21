@@ -210,6 +210,7 @@ import adminInfluencerChangeStatus from "features/admin/presentation/slices/admi
 import editAdminSettingPopclubDeal from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 import updateAdminSettingPopclubDealStatus from "features/admin/presentation/slices/update-admin-setting-popclub-deal-status.slice";
 import getInfluencerDealRedeems from "features/profile/presentation/slices/get-influencer-deal-redeems.slice";
+import getSnackshopInfluencerProduct from "features/shop/presentation/slices/get-snackshop-influencer-product.slice";
 
 export const store = configureStore({
   reducer: {
@@ -423,6 +424,7 @@ export const store = configureStore({
     editAdminSettingPopclubDeal,
     updateAdminSettingPopclubDealStatus,
     getInfluencerDealRedeems,
+    getSnackshopInfluencerProduct,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

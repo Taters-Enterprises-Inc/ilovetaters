@@ -360,6 +360,11 @@ import {
   selectEditAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 
+import {
+  selectGetSnackshopInfluencerProduct,
+  GetSnackshopInfluencerProductState,
+} from "features/shop/presentation/slices/get-snackshop-influencer-product.slice";
+
 const SweetAlert = withReactContent(Swal);
 
 export function LoadingAndSnackbarWrapper() {
@@ -561,6 +566,28 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingPopclubDealState = useAppSelector(
     selectEditAdminSettingPopclubDeal
   );
+  const getSnackshopInfluencerProductState = useAppSelector(
+    selectGetSnackshopInfluencerProduct
+  );
+
+  useEffect(() => {
+    switch (getSnackshopInfluencerProductState.status) {
+      case GetSnackshopInfluencerProductState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case GetSnackshopInfluencerProductState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case GetSnackshopInfluencerProductState.success:
+        showAlert(setSuccessAlert, getSnackshopInfluencerProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case GetSnackshopInfluencerProductState.fail:
+        showAlert(setFailsAlert, getSnackshopInfluencerProductState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [getSnackshopInfluencerProductState]);
 
   useEffect(() => {
     switch (adminInfluencerChangeStatusState.status) {

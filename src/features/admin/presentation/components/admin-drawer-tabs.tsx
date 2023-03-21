@@ -294,7 +294,15 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               >
                 <span className="flex items-center px-4 ">
                   <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                    <BsFillPersonBadgeFill size={20} />
+                    <Badge
+                      badgeContent={
+                        getAdminNotificationsState.data?.influencer
+                          .unseen_notifications_count
+                      }
+                      color="primary"
+                    >
+                      <BsFillPersonBadgeFill size={20} />
+                    </Badge>
 
                     <span
                       className={`whitespace-pre duration-300 ${

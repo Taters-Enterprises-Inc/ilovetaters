@@ -45,3 +45,8 @@ export interface CheckoutOrdersParam {
   landmarkAddress: string;
   completeDeliveryAddress: string;
 }
+
+export interface GetSnackshopInfluencerProductParam {
+  referralCode: string;
+  productId: number;
+}

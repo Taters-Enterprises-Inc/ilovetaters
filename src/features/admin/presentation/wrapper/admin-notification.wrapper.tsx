@@ -17,6 +17,7 @@ import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-
 import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
+import { getAdminInfluencers } from "../slices/get-admin-influencers.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -184,6 +185,25 @@ export function AdminNotificationWrapper() {
         ) {
           toast("🦄 " + data.message);
           dispatch(getAdminUserDiscounts(""));
+          dispatch(getAdminNotifications());
+        }
+      }
+    );
+  }, [getAdminSessionState, dispatch, query]);
+  
+  useEffect(() => {
+    pusher.unsubscribe("admin-influencer");
+    const discountUserChannel = pusher.subscribe("admin-influencer");
+
+    discountUserChannel.bind(
+      "influencer-application",
+      (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin
+        ) {
+          toast("🦄 " + data.message);
+          dispatch(getAdminInfluencers(""));
           dispatch(getAdminNotifications());
         }
       }

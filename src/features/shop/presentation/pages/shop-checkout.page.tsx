@@ -33,7 +33,6 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
-import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   MaterialInput,
   MaterialPhoneInput,

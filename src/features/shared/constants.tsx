@@ -420,6 +420,32 @@ export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   },
 ];
 
+export const USER_DISCOUNT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Your application for discount is pending",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for discount is under review",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for discount is approved",
+    color: "#004d00",
+  },
+  {
+    name: "Your application for discount is rejected",
+    color: "#a21013",
+  },
+];
+
 export const ADMIN_INFLUENCER_STATUS: Array<{
   name: string;
   color: string;
@@ -442,6 +468,32 @@ export const ADMIN_INFLUENCER_STATUS: Array<{
   },
   {
     name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+export const INFLUENCER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Your application for influencer is pending",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for influencer is under review",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for influencer is approved",
+    color: "#004d00",
+  },
+  {
+    name: "Your application for influencer is rejected",
     color: "#a21013",
   },
 ];

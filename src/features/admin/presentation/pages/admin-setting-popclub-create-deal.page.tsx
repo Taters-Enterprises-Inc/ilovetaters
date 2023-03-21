@@ -142,7 +142,7 @@ export function AdminSettingPopclubCreateDeal() {
       createAdminSettingPopclubDealState.status ===
       CreateAdminSettingPopclubDealState.success
     ) {
-      // navigate("/admin/setting/deal");
+      navigate("/admin/setting/deal");
       dispatch(resetCreateAdminSettingPopclubDealState());
     }
   }, [createAdminSettingPopclubDealState, dispatch, navigate]);

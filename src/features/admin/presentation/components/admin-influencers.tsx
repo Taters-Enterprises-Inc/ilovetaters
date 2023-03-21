@@ -25,6 +25,15 @@ import {
   getAdminInfluencers,
   resetGetAdminInfluencersStatus,
 } from "../slices/get-admin-influencers.slice";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import {
+  selectUpdateAdminNotificationDateSeen,
+  updateAdminNotificationDateSeen,
+} from "../slices/update-admin-notification-dateseen.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
 
 const columns: Array<Column> = [
   { id: "status", label: "Status" },
@@ -55,6 +64,17 @@ export function AdminInfluencers() {
   const adminInfluencerChangeStatusState = useAppSelector(
     selectAdminInfluencerChangeStatus
   );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+  const updateAdminNotificationDateSeenState = useAppSelector(
+    selectUpdateAdminNotificationDateSeen
+  );
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [updateAdminNotificationDateSeenState, dispatch]);
 
   useEffect(() => {
     if (id) {
@@ -176,57 +196,71 @@ export function AdminInfluencers() {
             >
               <hr className="mt-4" />
 
-              {getAdminInfluencersState.data.influencers.map((row, i) => (
-                <div
-                  onClick={() => {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      id: row.id,
-                      search: search,
-                    };
+              {getAdminInfluencersState.data.influencers.map((row, i) => {
+                const notification: NotificationModel | undefined =
+                  getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                    (notification) => notification.influencer_id === row.id
+                  );
 
-                    const queryParams = createQueryParams(params);
+                return (
+                  <div
+                    onClick={() => {
+                      if (notification) {
+                        dispatch(
+                          updateAdminNotificationDateSeen(notification.id)
+                        );
+                      }
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        id: row.id,
+                        search: search,
+                      };
 
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                  className="flex flex-col px-4 py-2 border-b"
-                  key={i}
-                >
-                  <span className="flex flex-wrap items-center space-x-1 text-xl">
-                    <span>
-                      {row.first_name +
-                        " " +
-                        row.middle_name +
-                        " " +
-                        row.last_name}
+                      const queryParams = createQueryParams(params);
+
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }}
+                    className={`flex flex-col px-4 py-2 border-b ${
+                      notification ? "bg-gray-200" : ""
+                    }`}
+                    key={i}
+                  >
+                    <span className="flex flex-wrap items-center space-x-1 text-xl">
+                      <span>
+                        {row.first_name +
+                          " " +
+                          row.middle_name +
+                          " " +
+                          row.last_name}
+                      </span>
+
+                      <span
+                        className="px-2 py-1 text-xs rounded-full "
+                        style={{
+                          color: "white",
+                          backgroundColor:
+                            ADMIN_INFLUENCER_STATUS[row.status].color,
+                        }}
+                      >
+                        {ADMIN_INFLUENCER_STATUS[row.status].name}
+                      </span>
                     </span>
 
-                    <span
-                      className="px-2 py-1 text-xs rounded-full "
-                      style={{
-                        color: "white",
-                        backgroundColor:
-                          ADMIN_INFLUENCER_STATUS[row.status].color,
-                      }}
-                    >
-                      {ADMIN_INFLUENCER_STATUS[row.status].name}
+                    <span className="text-xs text-gray-600">
+                      <strong> ID Number:</strong> {row.id_number}
                     </span>
-                  </span>
-
-                  <span className="text-xs text-gray-600">
-                    <strong> ID Number:</strong> {row.id_number}
-                  </span>
-                  <span className="text-xs text-gray-600">
-                    <strong>Application Date: </strong>
-                    <Moment format="lll">{row.dateadded}</Moment>
-                  </span>
-                </div>
-              ))}
+                    <span className="text-xs text-gray-600">
+                      <strong>Application Date: </strong>
+                      <Moment format="lll">{row.dateadded}</Moment>
+                    </span>
+                  </div>
+                );
+              })}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -322,57 +356,75 @@ export function AdminInfluencers() {
             >
               {getAdminInfluencersState.data.influencers !== undefined ? (
                 <>
-                  {getAdminInfluencersState.data.influencers.map((row, i) => (
-                    <DataTableRow key={i}>
-                      <DataTableCell>
-                        <span
-                          className="px-2 py-1 text-xs rounded-full "
-                          style={{
-                            color: "white",
-                            backgroundColor:
-                              ADMIN_INFLUENCER_STATUS[row.status].color,
-                          }}
-                        >
-                          {ADMIN_INFLUENCER_STATUS[row.status].name}
-                        </span>
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="lll">{row.dateadded}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>
-                        {row.first_name} {row.middle_name} {row.last_name}
-                      </DataTableCell>
-                      <DataTableCell>
-                        <Moment format="ll">{row.birthday}</Moment>
-                      </DataTableCell>
-                      <DataTableCell>{row.id_number}</DataTableCell>
+                  {getAdminInfluencersState.data.influencers.map((row, i) => {
+                    const notification: NotificationModel | undefined =
+                      getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                        (notification) => notification.influencer_id === row.id
+                      );
 
-                      <DataTableCell align="left">
-                        <button
-                          onClick={() => {
-                            const params = {
-                              page_no: pageNo,
-                              per_page: perPage,
-                              status: status,
-                              id: row.id,
-                              order_by: orderBy,
-                              order: order,
-                              search: search,
-                            };
+                    return (
+                      <DataTableRow
+                        key={i}
+                        className={`${notification ? "bg-gray-200" : ""}`}
+                      >
+                        <DataTableCell>
+                          <span
+                            className="px-2 py-1 text-xs rounded-full "
+                            style={{
+                              color: "white",
+                              backgroundColor:
+                                ADMIN_INFLUENCER_STATUS[row.status].color,
+                            }}
+                          >
+                            {ADMIN_INFLUENCER_STATUS[row.status].name}
+                          </span>
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="lll">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>
+                          {row.first_name} {row.middle_name} {row.last_name}
+                        </DataTableCell>
+                        <DataTableCell>
+                          <Moment format="ll">{row.birthday}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.id_number}</DataTableCell>
 
-                            const queryParams = createQueryParams(params);
+                        <DataTableCell align="left">
+                          <button
+                            onClick={() => {
+                              if (notification) {
+                                dispatch(
+                                  updateAdminNotificationDateSeen(
+                                    notification.id
+                                  )
+                                );
+                              }
 
-                            navigate({
-                              pathname: "",
-                              search: queryParams,
-                            });
-                          }}
-                        >
-                          <FaEye className="text-lg" />
-                        </button>
-                      </DataTableCell>
-                    </DataTableRow>
-                  ))}
+                              const params = {
+                                page_no: pageNo,
+                                per_page: perPage,
+                                status: status,
+                                id: row.id,
+                                order_by: orderBy,
+                                order: order,
+                                search: search,
+                              };
+
+                              const queryParams = createQueryParams(params);
+
+                              navigate({
+                                pathname: "",
+                                search: queryParams,
+                              });
+                            }}
+                          >
+                            <FaEye className="text-lg" />
+                          </button>
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

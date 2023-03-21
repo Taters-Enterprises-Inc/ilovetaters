@@ -31,4 +31,9 @@ export interface GetAdminNotificationModel {
     unseen_notifications: Array<NotificationModel>;
     unseen_notifications_count: number;
   };
+  influencer: {
+    notifications: Array<NotificationModel>;
+    unseen_notifications: Array<NotificationModel>;
+    unseen_notifications_count: number;
+  };
 }
