@@ -44,9 +44,9 @@ export interface CheckoutOrdersParam {
   phoneNumber: string;
   landmarkAddress: string;
   completeDeliveryAddress: string;
+  referralCode: string;
 }
 
-export interface GetSnackshopInfluencerProductParam {
+export interface GetSnackshopInfluencerPromoParam {
   referralCode: string;
-  productId: number;
 }

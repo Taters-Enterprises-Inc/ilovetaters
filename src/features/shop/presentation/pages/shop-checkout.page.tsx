@@ -45,10 +45,14 @@ import {
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
+
 import {
-  getInfluencer,
-  selectGetInfluencer,
-} from "features/profile/presentation/slices/get-influencer.slice";
+  getSnackshopInfluencerPromo,
+  selectGetSnackshopInfluencerPromo,
+  GetSnackshopInfluencerPromoState,
+  resetGetSnackshopInfluencerPromoState,
+} from "../slices/get-snackshop-influencer-promo.slice";
+
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -67,6 +71,9 @@ export function ShopCheckout() {
 
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
+  
+  const [referralCode, setReferralCode] = useState("");
+
 
   const isDeliveryApplied = useRef(false);
   const getContactsState = useAppSelector(selectGetContacts);
@@ -82,15 +89,17 @@ export function ShopCheckout() {
     selectGetAvailableUserDiscount
   );
 
-  const getInfluencerState = useAppSelector(selectGetInfluencer);
-
-  useEffect(() => {
-    dispatch(getInfluencer());
-  }, [dispatch]);
+  const getSnackshopInfluencerPromoState = useAppSelector(
+    selectGetSnackshopInfluencerPromo
+  );
 
   useEffect(() => {
     dispatch(getAvailableUserDiscount());
   }, [dispatch]);
+
+  useEffect(()=>{
+    dispatch(resetGetSnackshopInfluencerPromoState());
+  },[dispatch]);
 
   useEffect(() => {
     if (
@@ -147,7 +156,7 @@ export function ShopCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(checkoutOrders(formState));
+    dispatch(checkoutOrders({...formState, referralCode: getSnackshopInfluencerPromoState.data?.referral_code ?? ''}));
     e.preventDefault();
   };
 
@@ -327,7 +336,7 @@ export function ShopCheckout() {
 
     if (
       getLatestUnexpiredRedeemState.data ||
-      getInfluencerState.data?.discount_points
+      getSnackshopInfluencerPromoState.data?.customer_discount
     ) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
@@ -343,9 +352,9 @@ export function ShopCheckout() {
           parseFloat(
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
-      if (getInfluencerState.data?.discount_points)
+      if (getSnackshopInfluencerPromoState.data?.customer_discount)
         discountedPrice =
-          calculatedPrice * parseFloat(getInfluencerState.data.discount_points);
+          calculatedPrice * parseFloat(getSnackshopInfluencerPromoState.data.customer_discount);
 
       return (
         <NumberFormat
@@ -458,8 +467,7 @@ export function ShopCheckout() {
     }
 
     if (
-      getLatestUnexpiredRedeemState.data ||
-      getInfluencerState.data?.discount_points
+      getLatestUnexpiredRedeemState.data
     ) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
@@ -476,9 +484,6 @@ export function ShopCheckout() {
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
 
-      if (getInfluencerState.data?.discount_points)
-        discountedPrice =
-          calculatedPrice * parseFloat(getInfluencerState.data.discount_points);
       calculatedPrice -= discountedPrice;
     }
 
@@ -1007,6 +1012,7 @@ export function ShopCheckout() {
                 {getSessionState.data.orders ||
                 getSessionState.data.redeem_data ? (
                   <div className="space-y-4 lg:flex-[0_0_40%] lg:max-w-[40%] order-1 lg:order-2">
+                    
                     <h2 className="font-['Bebas_Neue'] text-3xl  text-secondary tracking-[3px] text-center">
                       Order Summary
                     </h2>
@@ -1166,6 +1172,53 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
+                    </div>
+
+                    
+                    <div className="flex">
+                        <MaterialInput
+                          colorTheme="black"
+                          required
+                          label="Referral Code"
+                          name="referralCode"
+                          fullWidth
+                          value={referralCode}
+                          onChange={(e) => {
+                            if (
+                              getSnackshopInfluencerPromoState.status !==
+                              GetSnackshopInfluencerPromoState.success
+                            ) {
+                              const value = e.target.value;
+                              setReferralCode(value);
+                            }
+                          }}
+                          className="rounded-none"
+                        />
+                        {getSnackshopInfluencerPromoState.data ? (
+                          <button
+                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-green-900 py-2 rounded-r-lg shadow-lg`}
+                          >
+                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                              Applied
+                            </span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              dispatch(
+                                getSnackshopInfluencerPromo({
+                                  referralCode,
+                                })
+                              );
+                            }}
+                            type="button"
+                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 rounded-r-lg shadow-lg`}
+                          >
+                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                              Apply
+                            </span>
+                          </button>
+                        )}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

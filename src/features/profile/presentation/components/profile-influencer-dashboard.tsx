@@ -73,14 +73,14 @@ export function ProfileInfluencerDashboard() {
         </h1>
       </div>
       <div>
-        <span>Influencer Discount: </span>
-        {getInfluencerState.data?.discount_points ? (
+        <span>Influencer Payable: </span>
+        {/* {getInfluencerState.data?.discount_points ? (
           <span className="text-lg font-bold">
             {parseFloat(getInfluencerState.data.discount_points) * 100}%
           </span>
         ) : (
           "0%"
-        )}
+        )} */}
       </div>
 
       {getInfluencerDealRedeemsState.data?.deal_redeems ? (

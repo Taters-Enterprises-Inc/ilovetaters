@@ -14,11 +14,11 @@ import {
   GetProductDetailsParam,
   GetProductSkuParam,
   AddToCartShopParam,
-  GetSnackshopInfluencerProductParam,
+  GetSnackshopInfluencerPromoParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
-import { GetSnackshopInfluencerProductModel } from "features/shop/core/domain/get-snackshop-influencer-product.model";
+import { GetSnackshopInfluencerPromoModel } from "features/shop/core/domain/get-snackshop-influencer-promo.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -92,17 +92,17 @@ export interface GetSnackshopDealsResponse {
   };
 }
 
-export interface GetSnackshopInfluencerProductResponse {
+export interface GetSnackshopInfluencerPromoResponse {
   data: {
     message: string;
-    data: GetSnackshopInfluencerProductModel;
+    data: GetSnackshopInfluencerPromoModel;
   };
 }
-export function GetSnackshopInfluencerProductRepository(
-  param: GetSnackshopInfluencerProductParam
-): Promise<GetSnackshopInfluencerProductResponse> {
+export function GetSnackshopInfluencerPromoRepository(
+  param: GetSnackshopInfluencerPromoParam
+): Promise<GetSnackshopInfluencerPromoResponse> {
   return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/shop/influencer-product`,
+    `${REACT_APP_DOMAIN_URL}api/shop/influencer-promo`,
     param,
     {
       withCredentials: true,

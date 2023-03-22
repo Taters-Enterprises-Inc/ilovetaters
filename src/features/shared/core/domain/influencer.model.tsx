@@ -9,5 +9,4 @@ export interface InfluencerModel {
   id_back: string;
   dateadded: string;
   status: number;
-  discount_points: string | null;
 }

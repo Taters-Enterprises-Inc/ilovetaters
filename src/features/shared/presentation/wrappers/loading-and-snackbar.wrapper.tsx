@@ -361,9 +361,9 @@ import {
 } from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 
 import {
-  selectGetSnackshopInfluencerProduct,
-  GetSnackshopInfluencerProductState,
-} from "features/shop/presentation/slices/get-snackshop-influencer-product.slice";
+  selectGetSnackshopInfluencerPromo,
+  GetSnackshopInfluencerPromoState,
+} from "features/shop/presentation/slices/get-snackshop-influencer-promo.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -566,28 +566,28 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingPopclubDealState = useAppSelector(
     selectEditAdminSettingPopclubDeal
   );
-  const getSnackshopInfluencerProductState = useAppSelector(
-    selectGetSnackshopInfluencerProduct
+  const getSnackshopInfluencerPromoState = useAppSelector(
+    selectGetSnackshopInfluencerPromo
   );
 
   useEffect(() => {
-    switch (getSnackshopInfluencerProductState.status) {
-      case GetSnackshopInfluencerProductState.inProgress:
+    switch (getSnackshopInfluencerPromoState.status) {
+      case GetSnackshopInfluencerPromoState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case GetSnackshopInfluencerProductState.initial:
+      case GetSnackshopInfluencerPromoState.initial:
         setOpenBackdropLoading(false);
         break;
-      case GetSnackshopInfluencerProductState.success:
-        showAlert(setSuccessAlert, getSnackshopInfluencerProductState.message);
+      case GetSnackshopInfluencerPromoState.success:
+        showAlert(setSuccessAlert, getSnackshopInfluencerPromoState.message);
         setOpenBackdropLoading(false);
         break;
-      case GetSnackshopInfluencerProductState.fail:
-        showAlert(setFailsAlert, getSnackshopInfluencerProductState.message);
+      case GetSnackshopInfluencerPromoState.fail:
+        showAlert(setFailsAlert, getSnackshopInfluencerPromoState.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [getSnackshopInfluencerProductState]);
+  }, [getSnackshopInfluencerPromoState]);
 
   useEffect(() => {
     switch (adminInfluencerChangeStatusState.status) {
