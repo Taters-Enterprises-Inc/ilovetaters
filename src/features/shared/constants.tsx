@@ -459,6 +459,10 @@ export const ADMIN_INFLUENCER_STATUS: Array<{
     color: "#cca300",
   },
   {
+    name: "Rejected",
+    color: "#a21013",
+  },
+  {
     name: "Under Review",
     color: "#cca300",
   },
@@ -467,11 +471,23 @@ export const ADMIN_INFLUENCER_STATUS: Array<{
     color: "#004d00",
   },
   {
+    name: "Registration Rejected",
+    color: "#a21013",
+  },
+  {
     name: "Contract Verified",
     color: "#004d00",
   },
   {
-    name: "Rejected",
+    name: "Contract Rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Registration Completed",
+    color: "#004d00",
+  },
+  {
+    name: "Registration Declined",
     color: "#a21013",
   },
 ];

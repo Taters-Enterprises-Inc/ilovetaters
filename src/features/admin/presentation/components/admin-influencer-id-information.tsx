@@ -37,39 +37,6 @@ export function AdminIdInfluencerInformation(
     }
   }, [adminInfluencerChangeStatusState, dispatch, props]);
 
-  const handleUnderReview = () => {
-    if (getAdminInfluencerState.data) {
-      dispatch(
-        adminInfluencerChangeStatus({
-          influencerUserId: getAdminInfluencerState.data.id,
-          status: 2,
-        })
-      );
-    }
-  };
-
-  const handleConfirmRegistration = () => {
-    if (getAdminInfluencerState.data) {
-      dispatch(
-        adminInfluencerChangeStatus({
-          influencerUserId: getAdminInfluencerState.data.id,
-          status: 3,
-        })
-      );
-    }
-  };
-
-  const handleReject = () => {
-    if (getAdminInfluencerState.data) {
-      dispatch(
-        adminInfluencerChangeStatus({
-          influencerUserId: getAdminInfluencerState.data.id,
-          status: 4,
-        })
-      );
-    }
-  };
-
   return (
     <>
       <div className="pt-1 text-secondary">
@@ -172,31 +139,133 @@ export function AdminIdInfluencerInformation(
         {getAdminInfluencerState.data?.status === 1 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
-              onClick={handleReject}
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 2,
+                    })
+                  );
+                }
+              }}
               className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
             >
               Reject
             </button>
             <button
-              onClick={handleUnderReview}
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 3,
+                    })
+                  );
+                }
+              }}
               className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
             >
               Under Review
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 2 ? (
+        ) : getAdminInfluencerState.data?.status === 3 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
-              onClick={handleReject}
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 5,
+                    })
+                  );
+                }
+              }}
               className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
             >
-              Reject
+              Reject Registration
             </button>
             <button
-              onClick={handleConfirmRegistration}
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 4,
+                    })
+                  );
+                }
+              }}
               className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
             >
               Confirm Registration
+            </button>
+          </div>
+        ) : getAdminInfluencerState.data?.status === 4 ? (
+          <div className="flex items-start justify-end py-3 space-x-2">
+            <button
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 7,
+                    })
+                  );
+                }
+              }}
+              className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+            >
+              Reject Contract
+            </button>
+            <button
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 6,
+                    })
+                  );
+                }
+              }}
+              className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
+            >
+              Contract Verified
+            </button>
+          </div>
+        ) : getAdminInfluencerState.data?.status === 6 ? (
+          <div className="flex items-start justify-end py-3 space-x-2">
+            <button
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 9,
+                    })
+                  );
+                }
+              }}
+              className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+            >
+              Decline Registration
+            </button>
+            <button
+              onClick={() => {
+                if (getAdminInfluencerState.data) {
+                  dispatch(
+                    adminInfluencerChangeStatus({
+                      influencerUserId: getAdminInfluencerState.data.id,
+                      status: 8,
+                    })
+                  );
+                }
+              }}
+              className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
+            >
+              Complete Registration
             </button>
           </div>
         ) : null}
