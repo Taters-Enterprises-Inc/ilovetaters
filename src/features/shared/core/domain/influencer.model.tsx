@@ -9,4 +9,5 @@ export interface InfluencerModel {
   id_back: string;
   dateadded: string;
   status: number;
+  payable: string;
 }

@@ -21,11 +21,9 @@ import {
 } from "../slices/get-influencer-deal-redeems.slice";
 import { createQueryParams } from "features/config/helpers";
 import { DataList } from "features/shared/presentation/components";
-import { NotificationModel } from "features/shared/core/domain/notification.model";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
-import { seenNotification } from "features/shared/presentation/slices/seen-notification.slice";
 import Moment from "react-moment";
-import { VscCircleFilled } from "react-icons/vsc";
+import NumberFormat from "react-number-format";
 
 const columns: Array<Column> = [
   { id: "redeem_code", label: "Date" },
@@ -74,13 +72,16 @@ export function ProfileInfluencerDashboard() {
       </div>
       <div>
         <span>Influencer Payable: </span>
-        {/* {getInfluencerState.data?.discount_points ? (
-          <span className="text-lg font-bold">
-            {parseFloat(getInfluencerState.data.discount_points) * 100}%
-          </span>
+        {getInfluencerState.data?.payable ? (
+          <NumberFormat
+            value={parseFloat(getInfluencerState.data.payable).toFixed(2)}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={"₱"}
+          />
         ) : (
-          "0%"
-        )} */}
+          "₱0.00"
+        )}
       </div>
 
       {getInfluencerDealRedeemsState.data?.deal_redeems ? (
