@@ -463,7 +463,11 @@ export const ADMIN_INFLUENCER_STATUS: Array<{
     color: "#cca300",
   },
   {
-    name: "Approved",
+    name: "Registration Confirmed",
+    color: "#004d00",
+  },
+  {
+    name: "Contract Verified",
     color: "#004d00",
   },
   {

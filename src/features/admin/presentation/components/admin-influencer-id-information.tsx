@@ -48,7 +48,7 @@ export function AdminIdInfluencerInformation(
     }
   };
 
-  const handleApprove = () => {
+  const handleConfirmRegistration = () => {
     if (getAdminInfluencerState.data) {
       dispatch(
         adminInfluencerChangeStatus({
@@ -193,10 +193,10 @@ export function AdminIdInfluencerInformation(
               Reject
             </button>
             <button
-              onClick={handleApprove}
+              onClick={handleConfirmRegistration}
               className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
             >
-              Approve
+              Confirm Registration
             </button>
           </div>
         ) : null}

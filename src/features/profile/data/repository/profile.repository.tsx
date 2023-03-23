@@ -12,7 +12,7 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
 import { InfluencerModel } from "features/shared/core/domain/influencer.model";
-import { GetInfluencerDealRedeemsModel } from "features/profile/core/domain/get-influencer-deal-redeems.model";
+import { GetInfluencerRefereesModel } from "features/profile/core/domain/get-influencer-referees.model";
 
 export interface GetCateringBookingHistoryResponse {
   data: {
@@ -80,18 +80,18 @@ export interface UpdateInfluencerResponse {
   };
 }
 
-export interface GetInfluencerDealRedeemsResponse {
+export interface GetInfluencerRefereesResponse {
   data: {
     message: string;
-    data: GetInfluencerDealRedeemsModel;
+    data: GetInfluencerRefereesModel;
   };
 }
 
-export function GetInfluencerDealRedeemsRepository(
+export function GetInfluencerRefereesRepository(
   query: string
-): Promise<GetInfluencerDealRedeemsResponse> {
+): Promise<GetInfluencerRefereesResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/profile/influencer-deal-redeems${query}`,
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-referee${query}`,
     {
       withCredentials: true,
     }

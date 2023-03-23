@@ -15,10 +15,10 @@ import {
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
 import {
-  getInfluencerDealRedeems,
-  selectGetInfluencerDealRedeems,
-  resetGetInfluencerDealRedeemsStatus,
-} from "../slices/get-influencer-deal-redeems.slice";
+  getInfluencerReferees,
+  selectGetInfluencerReferees,
+  resetGetInfluencerRefereesStatus,
+} from "../slices/get-influencer-referees.slice";
 import { createQueryParams } from "features/config/helpers";
 import { DataList } from "features/shared/presentation/components";
 import { selectGetNotifications } from "features/shared/presentation/slices/get-notifications.slice";
@@ -26,10 +26,10 @@ import Moment from "react-moment";
 import NumberFormat from "react-number-format";
 
 const columns: Array<Column> = [
-  { id: "redeem_code", label: "Date" },
+  { id: "dateadded", label: "Date" },
+  { id: "tracking_no", label: "Tracking No." },
   { id: "referee_name", label: "Referee Name" },
-  { id: "discount", label: "Discount Received" },
-  { id: "dateadded", label: "Date Redeemed" },
+  { id: "customer_discount", label: "Payable Received" },
 ];
 
 export function ProfileInfluencerDashboard() {
@@ -43,8 +43,8 @@ export function ProfileInfluencerDashboard() {
   const search = query.get("search");
 
   const getInfluencerState = useAppSelector(selectGetInfluencer);
-  const getInfluencerDealRedeemsState = useAppSelector(
-    selectGetInfluencerDealRedeems
+  const getInfluencerRefereesState = useAppSelector(
+    selectGetInfluencerReferees
   );
   const getNotificationsState = useAppSelector(selectGetNotifications);
 
@@ -56,7 +56,7 @@ export function ProfileInfluencerDashboard() {
       order: order,
       search: search,
     });
-    dispatch(getInfluencerDealRedeems(query));
+    dispatch(getInfluencerReferees(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search]);
 
   useEffect(() => {
@@ -84,12 +84,12 @@ export function ProfileInfluencerDashboard() {
         )}
       </div>
 
-      {getInfluencerDealRedeemsState.data?.deal_redeems ? (
+      {getInfluencerRefereesState.data?.referees ? (
         <>
           <div className="py-4 lg:hidden">
             <DataList
               search={search ?? ""}
-              emptyMessage="No snackshop orders yet."
+              emptyMessage="No referees yet."
               onSearch={(val) => {
                 const params = {
                   page_no: null,
@@ -111,7 +111,7 @@ export function ProfileInfluencerDashboard() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetInfluencerDealRedeemsStatus());
+                  dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
               onPageChange={(event, newPage) => {
@@ -125,17 +125,17 @@ export function ProfileInfluencerDashboard() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetInfluencerDealRedeemsStatus());
+                  dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
               totalRows={
-                getInfluencerDealRedeemsState.data.pagination.total_rows
+                getInfluencerRefereesState.data.pagination.total_rows
               }
-              perPage={getInfluencerDealRedeemsState.data.pagination.per_page}
+              perPage={getInfluencerRefereesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getInfluencerDealRedeemsState.data.deal_redeems.map((row, i) => {
+              {getInfluencerRefereesState.data.referees.map((row, i) => {
                 return (
                   <div
                     className={`flex flex-col cursor-pointer px-4 py-2 border-b`}
@@ -143,12 +143,12 @@ export function ProfileInfluencerDashboard() {
                   >
                     <span className="flex items-center justify-between space-x-1 text-xl">
                       <span className="overflow-hidden text-secondary text-ellipsis whitespace-nowrap max-w-[360px]">
-                        {row.redeem_code}
+                        {row.tracking_no}
                       </span>
                     </span>
                     <div className="flex justify-between">
                       <span className="text-xs text-gray-600 ">
-                        <Moment format="LLL">{row.redeem_dateadded}</Moment>
+                        <Moment format="LLL">{row.dateadded}</Moment>
                       </span>
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export function ProfileInfluencerDashboard() {
             <DataTable
               order={order === "asc" ? "asc" : "desc"}
               orderBy={orderBy ?? "redeem_dateadded"}
-              emptyMessage="No snackshop orders yet."
+              emptyMessage="No referees yet."
               search={search ?? ""}
               onSearch={(val) => {
                 const params = {
@@ -183,7 +183,7 @@ export function ProfileInfluencerDashboard() {
                     search: search,
                   };
 
-                  dispatch(resetGetInfluencerDealRedeemsStatus());
+                  dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
               columns={columns}
@@ -197,34 +197,38 @@ export function ProfileInfluencerDashboard() {
                     search: search,
                   };
 
-                  dispatch(resetGetInfluencerDealRedeemsStatus());
+                  dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
               onPageChange={(event, newPage) => {
                 const pageNoInt = pageNo ? parseInt(pageNo) : null;
                 if (newPage !== pageNoInt) {
-                  dispatch(resetGetInfluencerDealRedeemsStatus());
+                  dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
               totalRows={
-                getInfluencerDealRedeemsState.data.pagination.total_rows
+                getInfluencerRefereesState.data.pagination.total_rows
               }
-              perPage={getInfluencerDealRedeemsState.data.pagination.per_page}
+              perPage={getInfluencerRefereesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getInfluencerDealRedeemsState.data.deal_redeems !== undefined ? (
+              {getInfluencerRefereesState.data.referees !== undefined ? (
                 <>
-                  {getInfluencerDealRedeemsState.data.deal_redeems.map(
+                  {getInfluencerRefereesState.data.referees.map(
                     (row, i) => {
                       return (
                         <DataTableRow key={i}>
-                          <DataTableCell>{row.redeem_code}</DataTableCell>
-                          <DataTableCell>{row.referee_name}</DataTableCell>
                           <DataTableCell>
-                            {parseFloat(row.influencer_discount) * 100}%
-                          </DataTableCell>
-                          <DataTableCell>
-                            <Moment format="LLL">{row.redeem_dateadded}</Moment>
+                            <Moment format="LLL">{row.dateadded}</Moment></DataTableCell>
+                          <DataTableCell>{row.tracking_no}</DataTableCell>
+                          <DataTableCell>{row.client_name}</DataTableCell>
+                          <DataTableCell>                
+                            <NumberFormat
+                              value={parseFloat(row.influencer_discount).toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
                           </DataTableCell>
                         </DataTableRow>
                       );
