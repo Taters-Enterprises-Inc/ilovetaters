@@ -196,8 +196,7 @@ export function ProfileUserDiscount() {
           <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl ">
             User Discount Form
           </h1>
-
-          {getUserDiscountState.data?.status ? (
+          {getUserDiscountState.data ? (
             <span
               className="px-4 py-1 text-base rounded-lg"
               style={{
@@ -212,7 +211,9 @@ export function ProfileUserDiscount() {
                   .name
               }
             </span>
-          ) : (
+          ) : null}
+
+          {getUserDiscountState.data === null ? (
             <span
               className="px-4 py-1 text-base rounded-lg"
               style={{
@@ -222,7 +223,7 @@ export function ProfileUserDiscount() {
             >
               No Application
             </span>
-          )}
+          ) : null}
         </div>
 
         <FormControl>
