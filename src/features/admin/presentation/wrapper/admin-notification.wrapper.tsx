@@ -18,6 +18,7 @@ import { getAdminCateringBooking } from "features/admin/presentation/slices/get-
 import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
 import { getAdminInfluencers } from "../slices/get-admin-influencers.slice";
+import { getAdminInfluencer } from "../slices/get-admin-influencer.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -190,7 +191,7 @@ export function AdminNotificationWrapper() {
       }
     );
   }, [getAdminSessionState, dispatch, query]);
-  
+
   useEffect(() => {
     pusher.unsubscribe("admin-influencer");
     const discountUserChannel = pusher.subscribe("admin-influencer");
@@ -203,6 +204,27 @@ export function AdminNotificationWrapper() {
           getAdminSessionState.data?.admin.is_csr_admin
         ) {
           toast("🦄 " + data.message);
+          dispatch(getAdminInfluencers(""));
+          dispatch(getAdminNotifications());
+        }
+      }
+    );
+
+    discountUserChannel.bind(
+      "influencer-application-with-id",
+      (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin
+        ) {
+          toast("🦄 " + data.message);
+
+          const influencerId = query.get("id");
+
+          if (influencerId) {
+            dispatch(getAdminInfluencer(influencerId));
+          }
+
           dispatch(getAdminInfluencers(""));
           dispatch(getAdminNotifications());
         }

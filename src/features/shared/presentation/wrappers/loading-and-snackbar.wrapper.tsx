@@ -364,6 +364,10 @@ import {
   selectGetSnackshopInfluencerPromo,
   GetSnackshopInfluencerPromoState,
 } from "features/shop/presentation/slices/get-snackshop-influencer-promo.slice";
+import {
+  selectUploadContractInfluencer,
+  UploadContractInfluencerState,
+} from "features/profile/presentation/slices/upload-contract-influencer.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -569,6 +573,29 @@ export function LoadingAndSnackbarWrapper() {
   const getSnackshopInfluencerPromoState = useAppSelector(
     selectGetSnackshopInfluencerPromo
   );
+
+  const uploadContractInfluencerState = useAppSelector(
+    selectUploadContractInfluencer
+  );
+
+  useEffect(() => {
+    switch (uploadContractInfluencerState.status) {
+      case UploadContractInfluencerState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case UploadContractInfluencerState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractInfluencerState.success:
+        showAlert(setSuccessAlert, uploadContractInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case UploadContractInfluencerState.fail:
+        showAlert(setFailsAlert, uploadContractInfluencerState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [uploadContractInfluencerState]);
 
   useEffect(() => {
     switch (getSnackshopInfluencerPromoState.status) {

@@ -8,6 +8,7 @@ import {
   ApplyUserDiscountParam,
   UpdateInfluencerParam,
   UpdateUserDiscountParam,
+  UploadContractInfluencerParam,
 } from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
@@ -85,6 +86,26 @@ export interface GetInfluencerRefereesResponse {
     message: string;
     data: GetInfluencerRefereesModel;
   };
+}
+export interface UploadContractInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function UploadContractInfluencerRepository(
+  param: UploadContractInfluencerParam
+): Promise<UploadContractInfluencerResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-upload-contract/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetInfluencerRefereesRepository(

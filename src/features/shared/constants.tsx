@@ -464,19 +464,23 @@ export const ADMIN_INFLUENCER_STATUS: Array<{
   },
   {
     name: "Under Review",
-    color: "#cca300",
+    color: "#153B44",
   },
   {
     name: "Registration Confirmed",
-    color: "#004d00",
+    color: "#42032C",
   },
   {
     name: "Registration Rejected",
     color: "#a21013",
   },
   {
+    name: "Contract Under Verification",
+    color: "#541212",
+  },
+  {
     name: "Contract Verified",
-    color: "#004d00",
+    color: "#C84B31",
   },
   {
     name: "Contract Rejected",
@@ -500,20 +504,45 @@ export const INFLUENCER_STATUS: Array<{
     name: "",
     color: "",
   },
+
   {
     name: "Your application for influencer is pending",
     color: "#cca300",
   },
   {
-    name: "Your application for influencer is under review",
-    color: "#cca300",
+    name: "Your application for influencer is rejected",
+    color: "#a21013",
   },
   {
-    name: "Your application for influencer is approved",
-    color: "#004d00",
+    name: "Your application for influencer is under review",
+    color: "#153B44",
+  },
+  {
+    name: "Your application for influencer is confirmed",
+    color: "#42032C",
   },
   {
     name: "Your application for influencer is rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Your application for influencer is contract under verification",
+    color: "#541212",
+  },
+  {
+    name: "Your application for influencer is contract verified",
+    color: "#C84B31",
+  },
+  {
+    name: "Your application for influencer is contract rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Your application for influencer is completed",
+    color: "#004d00",
+  },
+  {
+    name: "Your application for influencer is declined",
     color: "#a21013",
   },
 ];
@@ -553,7 +582,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#cca300",
   },
   {
-    name: "Upload Signed Contract",
+    name: "Upload signed contract",
     color: "#42032C",
   },
   {
@@ -561,7 +590,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#541212",
   },
   {
-    name: "Upload Initial proof of payment",
+    name: "Upload initial proof of payment",
     color: "#C84B31",
   },
   {
@@ -569,7 +598,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#153B44",
   },
   {
-    name: "Upload Final proof of payment",
+    name: "Upload final proof of payment",
     color: "#152A38",
   },
   {
@@ -651,7 +680,7 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
     color: "",
   },
   {
-    name: "Waiting for booking confirmation",
+    name: "Waiting For Booking Confirmation",
     color: "#cca300",
   },
   {
@@ -679,11 +708,11 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
     color: "#1E5128",
   },
   {
-    name: "Final payment verified",
+    name: "Final Payment Verified",
     color: "#4E9F3D",
   },
   {
-    name: "Catering booking completed",
+    name: "Catering Booking Completed",
     color: "#004d00",
   },
   {

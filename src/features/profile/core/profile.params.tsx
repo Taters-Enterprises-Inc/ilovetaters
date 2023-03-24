@@ -41,3 +41,7 @@ export interface UpdateInfluencerParam {
   idFront: string;
   idBack: string;
 }
+
+export interface UploadContractInfluencerParam {
+  formData: FormData;
+}

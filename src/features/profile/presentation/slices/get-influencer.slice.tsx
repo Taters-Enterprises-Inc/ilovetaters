@@ -17,7 +17,7 @@ export enum GetInfluencerState {
 interface InitialState {
   status: GetInfluencerState;
   message: string;
-  data: InfluencerModel | undefined;
+  data: InfluencerModel | undefined | null;
 }
 
 const initialState: InitialState = {

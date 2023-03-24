@@ -205,12 +205,22 @@ export function AdminIdInfluencerInformation(
         ) : getAdminInfluencerState.data?.status === 4 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
+              disabled
+              style={{ opacity: 0.65 }}
+              className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
+            >
+              Registration Confirmed
+            </button>
+          </div>
+        ) : getAdminInfluencerState.data?.status === 6 ? (
+          <div className="flex items-start justify-end py-3 space-x-2">
+            <button
               onClick={() => {
                 if (getAdminInfluencerState.data) {
                   dispatch(
                     adminInfluencerChangeStatus({
                       influencerUserId: getAdminInfluencerState.data.id,
-                      status: 7,
+                      status: 8,
                     })
                   );
                 }
@@ -225,7 +235,7 @@ export function AdminIdInfluencerInformation(
                   dispatch(
                     adminInfluencerChangeStatus({
                       influencerUserId: getAdminInfluencerState.data.id,
-                      status: 6,
+                      status: 7,
                     })
                   );
                 }
@@ -235,7 +245,7 @@ export function AdminIdInfluencerInformation(
               Contract Verified
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 6 ? (
+        ) : getAdminInfluencerState.data?.status === 7 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               onClick={() => {
@@ -243,7 +253,7 @@ export function AdminIdInfluencerInformation(
                   dispatch(
                     adminInfluencerChangeStatus({
                       influencerUserId: getAdminInfluencerState.data.id,
-                      status: 9,
+                      status: 10,
                     })
                   );
                 }
@@ -258,7 +268,7 @@ export function AdminIdInfluencerInformation(
                   dispatch(
                     adminInfluencerChangeStatus({
                       influencerUserId: getAdminInfluencerState.data.id,
-                      status: 8,
+                      status: 9,
                     })
                   );
                 }
