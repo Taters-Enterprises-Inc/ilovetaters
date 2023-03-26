@@ -351,9 +351,9 @@ import {
   UpdateInfluencerState,
 } from "features/profile/presentation/slices/update-influencer.slice";
 import {
-  AdminInfluencerChangeStatusState,
-  selectAdminInfluencerChangeStatus,
-} from "features/admin/presentation/slices/admin-influencer-change-status.slice";
+  AdminInfluencerApplicationChangeStatusState,
+  selectAdminInfluencerApplicationChangeStatus,
+} from "features/admin/presentation/slices/admin-influencer-application-change-status.slice";
 
 import {
   EditAdminSettingPopclubDealState,
@@ -568,8 +568,8 @@ export function LoadingAndSnackbarWrapper() {
   );
   const applyInfluencerState = useAppSelector(selectApplyInfluencer);
   const updateInfluencerState = useAppSelector(selectUpdateInfluencer);
-  const adminInfluencerChangeStatusState = useAppSelector(
-    selectAdminInfluencerChangeStatus
+  const adminInfluencerApplicationChangeStatusState = useAppSelector(
+    selectAdminInfluencerApplicationChangeStatus
   );
   const editAdminSettingPopclubDealState = useAppSelector(
     selectEditAdminSettingPopclubDeal
@@ -648,23 +648,29 @@ export function LoadingAndSnackbarWrapper() {
   }, [getSnackshopInfluencerPromoState]);
 
   useEffect(() => {
-    switch (adminInfluencerChangeStatusState.status) {
-      case AdminInfluencerChangeStatusState.inProgress:
+    switch (adminInfluencerApplicationChangeStatusState.status) {
+      case AdminInfluencerApplicationChangeStatusState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case AdminInfluencerChangeStatusState.initial:
+      case AdminInfluencerApplicationChangeStatusState.initial:
         setOpenBackdropLoading(false);
         break;
-      case AdminInfluencerChangeStatusState.success:
-        showAlert(setSuccessAlert, adminInfluencerChangeStatusState.message);
+      case AdminInfluencerApplicationChangeStatusState.success:
+        showAlert(
+          setSuccessAlert,
+          adminInfluencerApplicationChangeStatusState.message
+        );
         setOpenBackdropLoading(false);
         break;
-      case AdminInfluencerChangeStatusState.fail:
-        showAlert(setFailsAlert, adminInfluencerChangeStatusState.message);
+      case AdminInfluencerApplicationChangeStatusState.fail:
+        showAlert(
+          setFailsAlert,
+          adminInfluencerApplicationChangeStatusState.message
+        );
         setOpenBackdropLoading(false);
         break;
     }
-  }, [adminInfluencerChangeStatusState]);
+  }, [adminInfluencerApplicationChangeStatusState]);
 
   useEffect(() => {
     switch (updateInfluencerState.status) {

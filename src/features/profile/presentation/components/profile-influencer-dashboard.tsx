@@ -128,9 +128,7 @@ export function ProfileInfluencerDashboard() {
                   dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
-              totalRows={
-                getInfluencerRefereesState.data.pagination.total_rows
-              }
+              totalRows={getInfluencerRefereesState.data.pagination.total_rows}
               perPage={getInfluencerRefereesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
@@ -206,34 +204,33 @@ export function ProfileInfluencerDashboard() {
                   dispatch(resetGetInfluencerRefereesStatus());
                 }
               }}
-              totalRows={
-                getInfluencerRefereesState.data.pagination.total_rows
-              }
+              totalRows={getInfluencerRefereesState.data.pagination.total_rows}
               perPage={getInfluencerRefereesState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               {getInfluencerRefereesState.data.referees !== undefined ? (
                 <>
-                  {getInfluencerRefereesState.data.referees.map(
-                    (row, i) => {
-                      return (
-                        <DataTableRow key={i}>
-                          <DataTableCell>
-                            <Moment format="LLL">{row.dateadded}</Moment></DataTableCell>
-                          <DataTableCell>{row.tracking_no}</DataTableCell>
-                          <DataTableCell>{row.client_name}</DataTableCell>
-                          <DataTableCell>                
-                            <NumberFormat
-                              value={parseFloat(row.influencer_discount).toFixed(2)}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"₱"}
-                            />
-                          </DataTableCell>
-                        </DataTableRow>
-                      );
-                    }
-                  )}
+                  {getInfluencerRefereesState.data.referees.map((row, i) => {
+                    return (
+                      <DataTableRow key={i}>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
+                        <DataTableCell>{row.tracking_no}</DataTableCell>
+                        <DataTableCell>{row.client_name}</DataTableCell>
+                        <DataTableCell>
+                          <NumberFormat
+                            value={parseFloat(row.influencer_discount).toFixed(
+                              2
+                            )}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"₱"}
+                          />
+                        </DataTableCell>
+                      </DataTableRow>
+                    );
+                  })}
                 </>
               ) : null}
             </DataTable>

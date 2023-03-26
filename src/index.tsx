@@ -60,7 +60,6 @@ import {
   AdminAvailabilityCatersPackageAddon,
   AdminAvailabilityCatersProductAddon,
   AdminUserDiscount,
-  AdminInfluencer,
   AdminSurveyVerification,
   AdminSettingShopProduct,
   AdminSettingShopCreateProduct,
@@ -76,6 +75,7 @@ import {
   AdminSettingPopClubDeal,
   AdminSettingPopclubCreateDeal,
   AdminSettingPopclubEditDeal,
+  AdminInfluencerApplication,
   AdminSettingInfluencerPromo,
   AdminSettingInfluencerCreatePromo,
 } from "features/admin/presentation/pages";
@@ -383,10 +383,12 @@ root.render(
                                 path="user-discount"
                                 element={<AdminUserDiscount />}
                               />
-                              <Route
-                                path="influencer"
-                                element={<AdminInfluencer />}
-                              />
+                              <Route path="influencer">
+                                <Route
+                                  path="application"
+                                  element={<AdminInfluencerApplication />}
+                                />
+                              </Route>
 
                               <Route
                                 path="survey-verification"

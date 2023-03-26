@@ -35,7 +35,7 @@ import {
   CopyAdminSettingCateringPackageParam,
   UpdateAdminSettingCateringPackageStatusParam,
   CreateAdminSettingPopclubDealParam,
-  AdminInfluencerChangeStatusParam,
+  AdminInfluencerApplicationChangeStatusParam,
   EditAdminSettingPopclubDealParam,
   UpdateAdminSettingPopclubDealStatusParam,
   CreateAdminSettingInfluencerPromoParam,
@@ -89,8 +89,8 @@ import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-c
 import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
 import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
 import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
-import { GetAdminInfluencersModel } from "features/admin/core/domain/get-admin-influencers.model";
-import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
+import { GetAdminInfluencerApplicationsModel } from "features/admin/core/domain/get-admin-influencer-applications.model";
+import { AdminInfluencerApplicationModel } from "features/admin/core/domain/admin-influencer-application.model";
 import { GetAdminSettingInfluencerPromosModel } from "features/admin/core/domain/get-admin-setting-influencer-promos.model";
 import { SettingInfluencerModel } from "features/admin/core/domain/setting-influencer.model";
 
@@ -694,20 +694,20 @@ export interface GetAdminSettingPopclubDealResponse {
   };
 }
 
-export interface GetAdminInfluencersResponse {
+export interface GetAdminInfluencerApplicationsResponse {
   data: {
     message: string;
-    data: GetAdminInfluencersModel;
+    data: GetAdminInfluencerApplicationsModel;
   };
 }
 
-export interface GetAdminInfluencerResponse {
+export interface GetAdminInfluencerApplicationResponse {
   data: {
     message: string;
-    data: AdminInfluencerModel;
+    data: AdminInfluencerApplicationModel;
   };
 }
-export interface AdminInfluencerChangeStatusResponse {
+export interface AdminInfluencerApplicationChangeStatusResponse {
   data: {
     message: string;
   };
@@ -778,11 +778,11 @@ export function GetAdminSettingInfluencerPromosRepository(
   );
 }
 
-export function AdminInfluencerChangeStatusRepository(
-  param: AdminInfluencerChangeStatusParam
-): Promise<AdminInfluencerChangeStatusResponse> {
+export function AdminInfluencerApplicationChangeStatusRepository(
+  param: AdminInfluencerApplicationChangeStatusParam
+): Promise<AdminInfluencerApplicationChangeStatusResponse> {
   return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/discount/influencer-change-status`,
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/application/change-status`,
     param,
     { withCredentials: true }
   );
@@ -815,20 +815,26 @@ export function EditAdminSettingPopclubDealRepository(
   );
 }
 
-export function GetAdminInfluencerRepository(
+export function GetAdminInfluencerApplicationRepository(
   id: string
-): Promise<GetAdminInfluencerResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/influencer/${id}`, {
-    withCredentials: true,
-  });
+): Promise<GetAdminInfluencerApplicationResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/application/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
-export function GetAdminInfluencersRepository(
+export function GetAdminInfluencerApplicationsRepository(
   query: string
-): Promise<GetAdminInfluencersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/influencers${query}`, {
-    withCredentials: true,
-  });
+): Promise<GetAdminInfluencerApplicationsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/applications${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminSettingPopclubDealRepository(

@@ -30,6 +30,6 @@ export { AdminSearchStoreCoordinates } from "./admin-search-store-coordinates";
 export { AdminSurveyVerificationAudit } from "./admin-survey-verification-audit";
 export { AdminSettingCateringPackages } from "./admin-setting-catering-packages";
 export { AdminSettingPopclubDeals } from "./admin-setting-popclub-deals";
-export { AdminInfluencers } from "./admin-influencers";
-export { AdminIdInfluencerInformation } from "./admin-influencer-id-information";
+export { AdminInfluencerApplications } from "./admin-influencers-applications";
+export { AdminIdInfluencerApplicationInformation } from "./admin-influencer-application-id-information";
 export { AdminSettingInfluencerPromos } from "./admin-setting-influencer-promos";

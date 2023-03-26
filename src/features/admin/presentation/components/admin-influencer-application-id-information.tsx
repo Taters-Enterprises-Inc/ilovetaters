@@ -5,37 +5,39 @@ import {
 } from "features/shared/constants";
 import Moment from "react-moment";
 import { useEffect } from "react";
-import { selectGetAdminInfluencer } from "../slices/get-admin-influencer.slice";
+import { selectGetAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
 import {
-  selectAdminInfluencerChangeStatus,
-  AdminInfluencerChangeStatusState,
-  adminInfluencerChangeStatus,
-  resetAdminInfluencerChangeStatusSliceStatus,
-} from "../slices/admin-influencer-change-status.slice";
+  selectAdminInfluencerApplicationChangeStatus,
+  AdminInfluencerApplicationChangeStatusState,
+  adminInfluencerApplicationChangeStatus,
+  resetAdminInfluencerApplicationChangeStatusSliceStatus,
+} from "../slices/admin-influencer-application-change-status.slice";
 
-interface AdminIdInfluencerInformationProps {
+interface AdminIdInfluencerApplicationInformationProps {
   onClose: () => void;
 }
 
-export function AdminIdInfluencerInformation(
-  props: AdminIdInfluencerInformationProps
+export function AdminIdInfluencerApplicationInformation(
+  props: AdminIdInfluencerApplicationInformationProps
 ) {
   const dispatch = useAppDispatch();
 
-  const getAdminInfluencerState = useAppSelector(selectGetAdminInfluencer);
-  const adminInfluencerChangeStatusState = useAppSelector(
-    selectAdminInfluencerChangeStatus
+  const getAdminInfluencerApplicationState = useAppSelector(
+    selectGetAdminInfluencerApplication
+  );
+  const adminInfluencerApplicationChangeStatusState = useAppSelector(
+    selectAdminInfluencerApplicationChangeStatus
   );
 
   useEffect(() => {
     if (
-      adminInfluencerChangeStatusState.status ===
-      AdminInfluencerChangeStatusState.success
+      adminInfluencerApplicationChangeStatusState.status ===
+      AdminInfluencerApplicationChangeStatusState.success
     ) {
-      dispatch(resetAdminInfluencerChangeStatusSliceStatus());
+      dispatch(resetAdminInfluencerApplicationChangeStatusSliceStatus());
       props.onClose();
     }
-  }, [adminInfluencerChangeStatusState, dispatch, props]);
+  }, [adminInfluencerApplicationChangeStatusState, dispatch, props]);
 
   return (
     <>
@@ -45,26 +47,27 @@ export function AdminIdInfluencerInformation(
             <div>
               <strong>ID Number :</strong>{" "}
               <span className="font-semibold">
-                {getAdminInfluencerState.data?.id_number ?? "N/A"}
+                {getAdminInfluencerApplicationState.data?.id_number ?? "N/A"}
               </span>
             </div>
             <div>
               <strong>Application Status:</strong>{" "}
-              {getAdminInfluencerState.data?.status ? (
+              {getAdminInfluencerApplicationState.data?.status ? (
                 <span
                   className="px-2 py-1 text-xs rounded-full "
                   style={{
                     color: "white",
                     backgroundColor:
                       ADMIN_INFLUENCER_STATUS[
-                        getAdminInfluencerState.data.status
+                        getAdminInfluencerApplicationState.data.status
                       ].color,
                   }}
                 >
                   {" "}
                   {
-                    ADMIN_INFLUENCER_STATUS[getAdminInfluencerState.data.status]
-                      .name
+                    ADMIN_INFLUENCER_STATUS[
+                      getAdminInfluencerApplicationState.data.status
+                    ].name
                   }
                 </span>
               ) : (
@@ -79,11 +82,11 @@ export function AdminIdInfluencerInformation(
             <div>
               <strong>Full Name:</strong>{" "}
               <span className="font-semibold">
-                {getAdminInfluencerState.data?.first_name +
+                {getAdminInfluencerApplicationState.data?.first_name +
                   " " +
-                  getAdminInfluencerState.data?.middle_name +
+                  getAdminInfluencerApplicationState.data?.middle_name +
                   " " +
-                  getAdminInfluencerState.data?.last_name ?? "N/A"}
+                  getAdminInfluencerApplicationState.data?.last_name ?? "N/A"}
               </span>
             </div>
           </div>
@@ -95,7 +98,7 @@ export function AdminIdInfluencerInformation(
               <strong>Birthday:</strong>{" "}
               <span className="font-semibold">
                 <Moment format="LLL">
-                  {getAdminInfluencerState.data?.birthday}
+                  {getAdminInfluencerApplicationState.data?.birthday}
                 </Moment>
               </span>
             </div>
@@ -107,10 +110,11 @@ export function AdminIdInfluencerInformation(
             <div>
               <strong>Profile Account Name:</strong>{" "}
               <span className="font-semibold">
-                {getAdminInfluencerState.data?.fb_first_name ||
-                  getAdminInfluencerState.data?.mobile_first_name}{" "}
-                {getAdminInfluencerState.data?.fb_last_name ||
-                  getAdminInfluencerState.data?.mobile_last_name}
+                {getAdminInfluencerApplicationState.data?.fb_first_name ||
+                  getAdminInfluencerApplicationState.data
+                    ?.mobile_first_name}{" "}
+                {getAdminInfluencerApplicationState.data?.fb_last_name ||
+                  getAdminInfluencerApplicationState.data?.mobile_last_name}
               </span>
             </div>
           </div>
@@ -122,7 +126,7 @@ export function AdminIdInfluencerInformation(
           <div className="flex flex-col items-center flex-1">
             <span className="font-semibold">Front</span>
             <img
-              src={`${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getAdminInfluencerState.data?.id_front}`}
+              src={`${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getAdminInfluencerApplicationState.data?.id_front}`}
               alt="id front"
             />
           </div>
@@ -131,19 +135,20 @@ export function AdminIdInfluencerInformation(
             <span className="font-semibold">Back</span>
 
             <img
-              src={`${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getAdminInfluencerState.data?.id_back}`}
+              src={`${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getAdminInfluencerApplicationState.data?.id_back}`}
               alt="id back"
             />
           </div>
         </div>
-        {getAdminInfluencerState.data?.status === 1 ? (
+        {getAdminInfluencerApplicationState.data?.status === 1 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 2,
                     })
                   );
@@ -155,10 +160,11 @@ export function AdminIdInfluencerInformation(
             </button>
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 3,
                     })
                   );
@@ -169,14 +175,15 @@ export function AdminIdInfluencerInformation(
               Under Review
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 3 ? (
+        ) : getAdminInfluencerApplicationState.data?.status === 3 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 5,
                     })
                   );
@@ -188,10 +195,11 @@ export function AdminIdInfluencerInformation(
             </button>
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 4,
                     })
                   );
@@ -202,7 +210,7 @@ export function AdminIdInfluencerInformation(
               Confirm Registration
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 4 ? (
+        ) : getAdminInfluencerApplicationState.data?.status === 4 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               disabled
@@ -212,14 +220,15 @@ export function AdminIdInfluencerInformation(
               Registration Confirmed
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 6 ? (
+        ) : getAdminInfluencerApplicationState.data?.status === 6 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 8,
                     })
                   );
@@ -231,10 +240,11 @@ export function AdminIdInfluencerInformation(
             </button>
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 7,
                     })
                   );
@@ -245,14 +255,15 @@ export function AdminIdInfluencerInformation(
               Contract Verified
             </button>
           </div>
-        ) : getAdminInfluencerState.data?.status === 7 ? (
+        ) : getAdminInfluencerApplicationState.data?.status === 7 ? (
           <div className="flex items-start justify-end py-3 space-x-2">
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 10,
                     })
                   );
@@ -264,10 +275,11 @@ export function AdminIdInfluencerInformation(
             </button>
             <button
               onClick={() => {
-                if (getAdminInfluencerState.data) {
+                if (getAdminInfluencerApplicationState.data) {
                   dispatch(
-                    adminInfluencerChangeStatus({
-                      influencerUserId: getAdminInfluencerState.data.id,
+                    adminInfluencerApplicationChangeStatus({
+                      influencerUserId:
+                        getAdminInfluencerApplicationState.data.id,
                       status: 9,
                     })
                   );

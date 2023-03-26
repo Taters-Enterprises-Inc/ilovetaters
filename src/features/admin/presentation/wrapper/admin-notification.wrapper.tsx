@@ -17,8 +17,8 @@ import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-
 import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
-import { getAdminInfluencers } from "../slices/get-admin-influencers.slice";
-import { getAdminInfluencer } from "../slices/get-admin-influencer.slice";
+import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
+import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -204,7 +204,7 @@ export function AdminNotificationWrapper() {
           getAdminSessionState.data?.admin.is_csr_admin
         ) {
           toast("🦄 " + data.message);
-          dispatch(getAdminInfluencers(""));
+          dispatch(getAdminInfluencerApplications(""));
           dispatch(getAdminNotifications());
         }
       }
@@ -222,10 +222,10 @@ export function AdminNotificationWrapper() {
           const influencerId = query.get("id");
 
           if (influencerId) {
-            dispatch(getAdminInfluencer(influencerId));
+            dispatch(getAdminInfluencerApplication(influencerId));
           }
 
-          dispatch(getAdminInfluencers(""));
+          dispatch(getAdminInfluencerApplications(""));
           dispatch(getAdminNotifications());
         }
       }

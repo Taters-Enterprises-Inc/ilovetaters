@@ -280,43 +280,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
             </li>
           ) : null}
 
-          {getAdminSessionState.data?.admin.is_admin ||
-          getAdminSessionState.data?.admin.is_csr_admin ? (
-            <li>
-              <NavLink
-                to="/admin/influencer"
-                onClick={() => {
-                  if (props.mobile) dispatch(closeAdminSideBar());
-                }}
-                className={(navData) =>
-                  navData.isActive ? "flex bg-white text-secondary" : "flex"
-                }
-              >
-                <span className="flex items-center px-4 ">
-                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                    <Badge
-                      badgeContent={
-                        getAdminNotificationsState.data?.influencer
-                          .unseen_notifications_count
-                      }
-                      color="primary"
-                    >
-                      <BsFillPersonBadgeFill size={20} />
-                    </Badge>
-
-                    <span
-                      className={`whitespace-pre duration-300 ${
-                        !adminSideBarState.status && "opacity-0 overflow-hidden"
-                      }`}
-                    >
-                      Influencer
-                    </span>
-                  </span>
-                </span>
-              </NavLink>
-            </li>
-          ) : null}
-
           <li>
             <NavLink
               to="/admin/survey-verification"
@@ -350,6 +313,132 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
+            <li>
+              <div className="flex px-4">
+                <div className="flex-1">
+                  <Accordion>
+                    <AccordionSummary>
+                      <span className="flex items-center">
+                        <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                          <Badge
+                            badgeContent={
+                              getAdminNotificationsState.data?.influencer
+                                .unseen_notifications_count
+                            }
+                            color="primary"
+                          >
+                            <BsFillPersonBadgeFill size={20} />
+                          </Badge>
+
+                          <span
+                            className={`whitespace-pre duration-300 ${
+                              !adminSideBarState.status &&
+                              "opacity-0 overflow-hidden"
+                            }`}
+                          >
+                            Influencer
+                          </span>
+                        </span>
+                      </span>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul>
+                        <li>
+                          <NavLink
+                            to="/admin/influencer/application"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <IoIosArrowForward size={20} />
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Application
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+
+                        <li>
+                          <NavLink
+                            to="/admin/setting/store"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <IoIosArrowForward size={20} />
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Cash-out
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+
+                        <li>
+                          <NavLink
+                            to="/admin/setting/store"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <IoIosArrowForward size={20} />
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Promos
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </div>
+              </div>
+            </li>
+          ) : null}
 
           <li>
             <div className="flex px-4">
@@ -759,35 +848,6 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                                     }`}
                                   >
                                     Deals
-                                  </span>
-                                </span>
-                              </span>
-                            </NavLink>
-                          </li>
-
-                          <li>
-                            <NavLink
-                              to="/admin/setting/influencer-promo"
-                              onClick={() => {
-                                if (props.mobile) dispatch(closeAdminSideBar());
-                              }}
-                              className={(navData) =>
-                                navData.isActive
-                                  ? "flex bg-white text-secondary"
-                                  : "flex"
-                              }
-                            >
-                              <span className="flex items-center ">
-                                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                                  <IoIosArrowForward size={20} />
-
-                                  <span
-                                    className={`whitespace-pre duration-300 ${
-                                      !adminSideBarState.status &&
-                                      "opacity-0 overflow-hidden"
-                                    }`}
-                                  >
-                                    Influencer Promos
                                   </span>
                                 </span>
                               </span>

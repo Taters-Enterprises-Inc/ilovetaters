@@ -103,7 +103,7 @@ export interface AdminUserDiscountChangeStatusParam {
   status: number;
 }
 
-export interface AdminInfluencerChangeStatusParam {
+export interface AdminInfluencerApplicationChangeStatusParam {
   influencerUserId: number;
   status: number;
 }

@@ -2,7 +2,7 @@ import { IoMdClose } from "react-icons/io";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState, SyntheticEvent } from "react";
-import { AdminIdInfluencerInformation } from "../components";
+import { AdminIdInfluencerApplicationInformation } from "../components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,7 +38,9 @@ interface AdminInfluencerModalProps {
   onClose: () => void;
 }
 
-export function AdminInfluencerModal(props: AdminInfluencerModalProps) {
+export function AdminInfluencerApplicationModal(
+  props: AdminInfluencerModalProps
+) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -79,7 +81,7 @@ export function AdminInfluencerModal(props: AdminInfluencerModalProps) {
           </Tabs>
           <hr />
           <TabPanel value={value} index={0}>
-            <AdminIdInfluencerInformation onClose={props.onClose} />
+            <AdminIdInfluencerApplicationInformation onClose={props.onClose} />
           </TabPanel>
         </div>
       </div>

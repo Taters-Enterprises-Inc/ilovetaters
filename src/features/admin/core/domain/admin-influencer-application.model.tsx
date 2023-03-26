@@ -1,4 +1,4 @@
-export interface AdminInfluencerModel {
+export interface AdminInfluencerApplicationModel {
   id: number;
   first_name: string;
   middle_name: string;

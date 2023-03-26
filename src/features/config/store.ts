@@ -204,9 +204,9 @@ import getAdminSettingPopclubDeal from "features/admin/presentation/slices/get-a
 import applyInfluencer from "features/profile/presentation/slices/apply-influencer.slice";
 import getInfluencer from "features/profile/presentation/slices/get-influencer.slice";
 import updateInfluencer from "features/profile/presentation/slices/update-influencer.slice";
-import getAdminInfluencers from "features/admin/presentation/slices/get-admin-influencers.slice";
-import getAdminInfluencer from "features/admin/presentation/slices/get-admin-influencer.slice";
-import adminInfluencerChangeStatus from "features/admin/presentation/slices/admin-influencer-change-status.slice";
+import getAdminInfluencerApplications from "features/admin/presentation/slices/get-admin-influencer-applications.slice";
+import getAdminInfluencerApplication from "features/admin/presentation/slices/get-admin-influencer-application.slice";
+import adminInfluencerApplicationChangeStatus from "features/admin/presentation/slices/admin-influencer-application-change-status.slice";
 import editAdminSettingPopclubDeal from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 import updateAdminSettingPopclubDealStatus from "features/admin/presentation/slices/update-admin-setting-popclub-deal-status.slice";
 import getInfluencerDealRedeems from "features/profile/presentation/slices/get-influencer-referees.slice";
@@ -423,9 +423,9 @@ export const store = configureStore({
     applyInfluencer,
     getInfluencer,
     updateInfluencer,
-    getAdminInfluencers,
-    getAdminInfluencer,
-    adminInfluencerChangeStatus,
+    getAdminInfluencerApplications,
+    getAdminInfluencerApplication,
+    adminInfluencerApplicationChangeStatus,
     editAdminSettingPopclubDeal,
     updateAdminSettingPopclubDealStatus,
     getInfluencerDealRedeems,

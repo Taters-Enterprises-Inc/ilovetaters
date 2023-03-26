@@ -16,15 +16,15 @@ import { createQueryParams } from "features/config/helpers";
 import { DataList } from "features/shared/presentation/components";
 import Moment from "react-moment";
 import { FaEye } from "react-icons/fa";
-import { AdminInfluencerModal } from "../modals";
-import { getAdminInfluencer } from "../slices/get-admin-influencer.slice";
-import { selectAdminInfluencerChangeStatus } from "../slices/admin-influencer-change-status.slice";
+import { AdminInfluencerApplicationModal } from "../modals";
+import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
+import { selectAdminInfluencerApplicationChangeStatus } from "../slices/admin-influencer-application-change-status.slice";
 import { AdminChipsButton } from "./chips-button";
 import {
-  selectGetAdminInfluencers,
-  getAdminInfluencers,
-  resetGetAdminInfluencersStatus,
-} from "../slices/get-admin-influencers.slice";
+  selectGetAdminInfluencerApplications,
+  getAdminInfluencerApplications,
+  resetGetAdminInfluencerApplicationsStatus,
+} from "../slices/get-admin-influencer-applications.slice";
 import {
   getAdminNotifications,
   selectGetAdminNotifications,
@@ -44,7 +44,7 @@ const columns: Array<Column> = [
   { id: "action", label: "Action" },
 ];
 
-export function AdminInfluencers() {
+export function AdminInfluencerApplications() {
   const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
@@ -59,10 +59,12 @@ export function AdminInfluencers() {
   const [openAdminUserDiscountModal, setOpenAdminUserDiscountModal] =
     useState(false);
 
-  const getAdminInfluencersState = useAppSelector(selectGetAdminInfluencers);
+  const getAdminInfluencerApplicationsState = useAppSelector(
+    selectGetAdminInfluencerApplications
+  );
 
-  const adminInfluencerChangeStatusState = useAppSelector(
-    selectAdminInfluencerChangeStatus
+  const adminInfluencerApplicationChangeStatusState = useAppSelector(
+    selectAdminInfluencerApplicationChangeStatus
   );
 
   const getAdminNotificationsState = useAppSelector(
@@ -78,7 +80,7 @@ export function AdminInfluencers() {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAdminInfluencer(id)).then(() => {
+      dispatch(getAdminInfluencerApplication(id)).then(() => {
         setOpenAdminUserDiscountModal(true);
       });
     }
@@ -93,7 +95,7 @@ export function AdminInfluencers() {
       order: order,
       search: search,
     });
-    dispatch(getAdminInfluencers(query));
+    dispatch(getAdminInfluencerApplications(query));
   }, [
     dispatch,
     pageNo,
@@ -102,20 +104,20 @@ export function AdminInfluencers() {
     orderBy,
     order,
     search,
-    adminInfluencerChangeStatusState,
+    adminInfluencerApplicationChangeStatusState,
   ]);
 
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:items-end">
         <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-          Influencers
+          Influencers Application
         </span>
         <AdminChipsButton
           createQueryParams={createQueryParams}
           data={ADMIN_INFLUENCER_STATUS}
           dispatchAction={() => {
-            dispatch(resetGetAdminInfluencersStatus());
+            dispatch(resetGetAdminInfluencerApplicationsStatus());
           }}
           status={status}
           params={(value) => {
@@ -130,7 +132,7 @@ export function AdminInfluencers() {
         />
       </div>
 
-      {getAdminInfluencersState.data?.influencers ? (
+      {getAdminInfluencerApplicationsState.data?.influencer_applications ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -164,7 +166,7 @@ export function AdminInfluencers() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminInfluencersStatus());
+                  dispatch(resetGetAdminInfluencerApplicationsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -183,84 +185,90 @@ export function AdminInfluencers() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminInfluencersStatus());
+                  dispatch(resetGetAdminInfluencerApplicationsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminInfluencersState.data.pagination.total_rows}
-              perPage={getAdminInfluencersState.data.pagination.per_page}
+              totalRows={
+                getAdminInfluencerApplicationsState.data.pagination.total_rows
+              }
+              perPage={
+                getAdminInfluencerApplicationsState.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
 
-              {getAdminInfluencersState.data.influencers.map((row, i) => {
-                const notification: NotificationModel | undefined =
-                  getAdminNotificationsState.data?.influencer.unseen_notifications.find(
-                    (notification) => notification.influencer_id === row.id
+              {getAdminInfluencerApplicationsState.data.influencer_applications.map(
+                (row, i) => {
+                  const notification: NotificationModel | undefined =
+                    getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                      (notification) => notification.influencer_id === row.id
+                    );
+
+                  return (
+                    <div
+                      onClick={() => {
+                        if (notification) {
+                          dispatch(
+                            updateAdminNotificationDateSeen(notification.id)
+                          );
+                        }
+                        const params = {
+                          page_no: pageNo,
+                          per_page: perPage,
+                          status: status,
+                          id: row.id,
+                          search: search,
+                        };
+
+                        const queryParams = createQueryParams(params);
+
+                        navigate({
+                          pathname: "",
+                          search: queryParams,
+                        });
+                      }}
+                      className={`flex flex-col px-4 py-2 border-b ${
+                        notification ? "bg-gray-200" : ""
+                      }`}
+                      key={i}
+                    >
+                      <span className="flex flex-wrap items-center space-x-1 text-xl">
+                        <span>
+                          {row.first_name +
+                            " " +
+                            row.middle_name +
+                            " " +
+                            row.last_name}
+                        </span>
+
+                        <span
+                          className="px-2 py-1 text-xs rounded-full "
+                          style={{
+                            color: "white",
+                            backgroundColor:
+                              ADMIN_INFLUENCER_STATUS[row.status].color,
+                          }}
+                        >
+                          {ADMIN_INFLUENCER_STATUS[row.status].name}
+                        </span>
+                      </span>
+
+                      <span className="text-xs text-gray-600">
+                        <strong> ID Number:</strong> {row.id_number}
+                      </span>
+                      <span className="text-xs text-gray-600">
+                        <strong>Application Date: </strong>
+                        <Moment format="lll">{row.dateadded}</Moment>
+                      </span>
+                    </div>
                   );
-
-                return (
-                  <div
-                    onClick={() => {
-                      if (notification) {
-                        dispatch(
-                          updateAdminNotificationDateSeen(notification.id)
-                        );
-                      }
-                      const params = {
-                        page_no: pageNo,
-                        per_page: perPage,
-                        status: status,
-                        id: row.id,
-                        search: search,
-                      };
-
-                      const queryParams = createQueryParams(params);
-
-                      navigate({
-                        pathname: "",
-                        search: queryParams,
-                      });
-                    }}
-                    className={`flex flex-col px-4 py-2 border-b ${
-                      notification ? "bg-gray-200" : ""
-                    }`}
-                    key={i}
-                  >
-                    <span className="flex flex-wrap items-center space-x-1 text-xl">
-                      <span>
-                        {row.first_name +
-                          " " +
-                          row.middle_name +
-                          " " +
-                          row.last_name}
-                      </span>
-
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            ADMIN_INFLUENCER_STATUS[row.status].color,
-                        }}
-                      >
-                        {ADMIN_INFLUENCER_STATUS[row.status].name}
-                      </span>
-                    </span>
-
-                    <span className="text-xs text-gray-600">
-                      <strong> ID Number:</strong> {row.id_number}
-                    </span>
-                    <span className="text-xs text-gray-600">
-                      <strong>Application Date: </strong>
-                      <Moment format="lll">{row.dateadded}</Moment>
-                    </span>
-                  </div>
-                );
-              })}
+                }
+              )}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">
@@ -301,7 +309,7 @@ export function AdminInfluencers() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminInfluencersStatus());
+                  dispatch(resetGetAdminInfluencerApplicationsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -322,7 +330,7 @@ export function AdminInfluencers() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminInfluencersStatus());
+                  dispatch(resetGetAdminInfluencerApplicationsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -343,88 +351,96 @@ export function AdminInfluencers() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminInfluencersStatus());
+                  dispatch(resetGetAdminInfluencerApplicationsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
                 }
               }}
-              totalRows={getAdminInfluencersState.data.pagination.total_rows}
-              perPage={getAdminInfluencersState.data.pagination.per_page}
+              totalRows={
+                getAdminInfluencerApplicationsState.data.pagination.total_rows
+              }
+              perPage={
+                getAdminInfluencerApplicationsState.data.pagination.per_page
+              }
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminInfluencersState.data.influencers !== undefined ? (
+              {getAdminInfluencerApplicationsState.data
+                .influencer_applications !== undefined ? (
                 <>
-                  {getAdminInfluencersState.data.influencers.map((row, i) => {
-                    const notification: NotificationModel | undefined =
-                      getAdminNotificationsState.data?.influencer.unseen_notifications.find(
-                        (notification) => notification.influencer_id === row.id
+                  {getAdminInfluencerApplicationsState.data.influencer_applications.map(
+                    (row, i) => {
+                      const notification: NotificationModel | undefined =
+                        getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                          (notification) =>
+                            notification.influencer_id === row.id
+                        );
+
+                      return (
+                        <DataTableRow
+                          key={i}
+                          className={`${notification ? "bg-gray-200" : ""}`}
+                        >
+                          <DataTableCell>
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  ADMIN_INFLUENCER_STATUS[row.status].color,
+                              }}
+                            >
+                              {ADMIN_INFLUENCER_STATUS[row.status].name}
+                            </span>
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Moment format="lll">{row.dateadded}</Moment>
+                          </DataTableCell>
+                          <DataTableCell>
+                            {row.first_name} {row.middle_name} {row.last_name}
+                          </DataTableCell>
+                          <DataTableCell>
+                            <Moment format="ll">{row.birthday}</Moment>
+                          </DataTableCell>
+                          <DataTableCell>{row.id_number}</DataTableCell>
+
+                          <DataTableCell align="left">
+                            <button
+                              onClick={() => {
+                                if (notification) {
+                                  dispatch(
+                                    updateAdminNotificationDateSeen(
+                                      notification.id
+                                    )
+                                  );
+                                }
+
+                                const params = {
+                                  page_no: pageNo,
+                                  per_page: perPage,
+                                  status: status,
+                                  id: row.id,
+                                  order_by: orderBy,
+                                  order: order,
+                                  search: search,
+                                };
+
+                                const queryParams = createQueryParams(params);
+
+                                navigate({
+                                  pathname: "",
+                                  search: queryParams,
+                                });
+                              }}
+                            >
+                              <FaEye className="text-lg" />
+                            </button>
+                          </DataTableCell>
+                        </DataTableRow>
                       );
-
-                    return (
-                      <DataTableRow
-                        key={i}
-                        className={`${notification ? "bg-gray-200" : ""}`}
-                      >
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
-                                ADMIN_INFLUENCER_STATUS[row.status].color,
-                            }}
-                          >
-                            {ADMIN_INFLUENCER_STATUS[row.status].name}
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell>
-                          <Moment format="lll">{row.dateadded}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>
-                          {row.first_name} {row.middle_name} {row.last_name}
-                        </DataTableCell>
-                        <DataTableCell>
-                          <Moment format="ll">{row.birthday}</Moment>
-                        </DataTableCell>
-                        <DataTableCell>{row.id_number}</DataTableCell>
-
-                        <DataTableCell align="left">
-                          <button
-                            onClick={() => {
-                              if (notification) {
-                                dispatch(
-                                  updateAdminNotificationDateSeen(
-                                    notification.id
-                                  )
-                                );
-                              }
-
-                              const params = {
-                                page_no: pageNo,
-                                per_page: perPage,
-                                status: status,
-                                id: row.id,
-                                order_by: orderBy,
-                                order: order,
-                                search: search,
-                              };
-
-                              const queryParams = createQueryParams(params);
-
-                              navigate({
-                                pathname: "",
-                                search: queryParams,
-                              });
-                            }}
-                          >
-                            <FaEye className="text-lg" />
-                          </button>
-                        </DataTableCell>
-                      </DataTableRow>
-                    );
-                  })}
+                    }
+                  )}
                 </>
               ) : null}
             </DataTable>
@@ -432,7 +448,7 @@ export function AdminInfluencers() {
         </>
       ) : null}
 
-      <AdminInfluencerModal
+      <AdminInfluencerApplicationModal
         open={openAdminUserDiscountModal}
         onClose={() => {
           const params = {
