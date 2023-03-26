@@ -76,6 +76,8 @@ import {
   AdminSettingPopClubDeal,
   AdminSettingPopclubCreateDeal,
   AdminSettingPopclubEditDeal,
+  AdminSettingInfluencerPromo,
+  AdminSettingInfluencerCreatePromo,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -534,6 +536,20 @@ root.render(
                                   <Route
                                     path=":id"
                                     element={<AdminSettingPopclubEditDeal />}
+                                  />
+                                </Route>
+
+                                <Route path="influencer-promo">
+                                  <Route
+                                    index
+                                    element={<AdminSettingInfluencerPromo />}
+                                  />
+
+                                  <Route
+                                    path="create-promo"
+                                    element={
+                                      <AdminSettingInfluencerCreatePromo />
+                                    }
                                   />
                                 </Route>
                               </Route>

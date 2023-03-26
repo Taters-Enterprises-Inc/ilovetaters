@@ -213,6 +213,9 @@ import getInfluencerDealRedeems from "features/profile/presentation/slices/get-i
 import getSnackshopInfluencerPromo from "features/shop/presentation/slices/get-snackshop-influencer-promo.slice";
 import getInfluencerReferees from "features/profile/presentation/slices/get-influencer-referees.slice";
 import uploadContractInfluencer from "features/profile/presentation/slices/upload-contract-influencer.slice";
+import getAdminSettingInfluencerPromos from "features/admin/presentation/slices/get-admin-setting-influencer-promos.slice";
+import getAdminSettingInfluencers from "features/admin/presentation/slices/get-admin-setting-influencers.slice";
+import createAdminSettingInfluencerPromo from "features/admin/presentation/slices/create-admin-setting-influencer-promo.slice";
 
 export const store = configureStore({
   reducer: {
@@ -429,6 +432,9 @@ export const store = configureStore({
     getSnackshopInfluencerPromo,
     getInfluencerReferees,
     uploadContractInfluencer,
+    getAdminSettingInfluencerPromos,
+    getAdminSettingInfluencers,
+    createAdminSettingInfluencerPromo,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

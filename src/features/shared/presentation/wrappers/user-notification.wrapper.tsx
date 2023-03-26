@@ -126,7 +126,7 @@ export function UserNotificationWrapper() {
     );
 
     inboxChannel.bind(
-      "inbox-influencer-discount",
+      "inbox-influencer-promo",
       (data: {
         fb_user_id?: number;
         mobile_user_id?: number;

@@ -368,6 +368,10 @@ import {
   selectUploadContractInfluencer,
   UploadContractInfluencerState,
 } from "features/profile/presentation/slices/upload-contract-influencer.slice";
+import {
+  CreateAdminSettingInfluencerPromoState,
+  selectCreateAdminSettingInfluencerPromo,
+} from "features/admin/presentation/slices/create-admin-setting-influencer-promo.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -577,6 +581,33 @@ export function LoadingAndSnackbarWrapper() {
   const uploadContractInfluencerState = useAppSelector(
     selectUploadContractInfluencer
   );
+  const createAdminSettingInfluencerPromoState = useAppSelector(
+    selectCreateAdminSettingInfluencerPromo
+  );
+  useEffect(() => {
+    switch (createAdminSettingInfluencerPromoState.status) {
+      case CreateAdminSettingInfluencerPromoState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case CreateAdminSettingInfluencerPromoState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingInfluencerPromoState.success:
+        showAlert(
+          setSuccessAlert,
+          createAdminSettingInfluencerPromoState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case CreateAdminSettingInfluencerPromoState.fail:
+        showAlert(
+          setFailsAlert,
+          createAdminSettingInfluencerPromoState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [createAdminSettingInfluencerPromoState]);
 
   useEffect(() => {
     switch (uploadContractInfluencerState.status) {

@@ -38,6 +38,7 @@ import {
   AdminInfluencerChangeStatusParam,
   EditAdminSettingPopclubDealParam,
   UpdateAdminSettingPopclubDealStatusParam,
+  CreateAdminSettingInfluencerPromoParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -90,6 +91,8 @@ import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.mode
 import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
 import { GetAdminInfluencersModel } from "features/admin/core/domain/get-admin-influencers.model";
 import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
+import { GetAdminSettingInfluencerPromosModel } from "features/admin/core/domain/get-admin-setting-influencer-promos.model";
+import { SettingInfluencerModel } from "features/admin/core/domain/setting-influencer.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -720,6 +723,59 @@ export interface EditAdminSettingPopclubDealResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminSettingInfluencerPromosResponse {
+  data: {
+    message: string;
+    data: GetAdminSettingInfluencerPromosModel;
+  };
+}
+
+export interface GetAdminSettingInfluencersResponse {
+  data: {
+    message: string;
+    data: Array<SettingInfluencerModel>;
+  };
+}
+
+export interface CreateAdminSettingInfluencerPromoResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function CreateAdminSettingInfluencerPromoRepository(
+  param: CreateAdminSettingInfluencerPromoParam
+): Promise<CreateAdminSettingInfluencerPromoResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/influencer`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminSettingInfluencersRepository(): Promise<GetAdminSettingInfluencersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/influencers`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminSettingInfluencerPromosRepository(
+  query: string
+): Promise<GetAdminSettingInfluencerPromosResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/setting/influencer-promos
+    ${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminInfluencerChangeStatusRepository(
