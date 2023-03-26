@@ -33,5 +33,5 @@ export { AdminSettingPopClubDeal } from "./admin-setting-popclub-deal.page";
 export { AdminSettingPopclubCreateDeal } from "./admin-setting-popclub-create-deal.page";
 export { AdminSettingPopclubEditDeal } from "./admin-setting-popclub-edit-deal.page";
 export { AdminInfluencerApplication } from "./admin-influencer-application.page";
-export { AdminSettingInfluencerPromo } from "./admin-setting-influencer-promo.page";
-export { AdminSettingInfluencerCreatePromo } from "./admin-setting-influencer-create-promo.page";
+export { AdminInfluencerPromo } from "./admin-influencer-promo.page";
+export { AdminInfluencerCreatePromo } from "./admin-influencer-create-promo.page";

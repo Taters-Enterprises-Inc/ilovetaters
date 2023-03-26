@@ -1,6 +1,6 @@
-import { AdminHead, AdminSettingInfluencerPromos } from "../components";
+import { AdminHead, AdminInfluencerPromos } from "../components";
 
-export function AdminSettingInfluencerPromo() {
+export function AdminInfluencerPromo() {
   return (
     <>
       <AdminHead
@@ -13,12 +13,12 @@ export function AdminSettingInfluencerPromo() {
           pageTitles: [
             {
               name: "Influencer Promos",
-              url: "/admin/setting/influencer-promo",
+              url: "/admin/influencer/promo",
             },
           ],
         }}
       />
-      <AdminSettingInfluencerPromos />
+      <AdminInfluencerPromos />
     </>
   );
 }

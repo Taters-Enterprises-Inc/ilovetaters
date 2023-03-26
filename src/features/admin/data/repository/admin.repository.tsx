@@ -38,7 +38,7 @@ import {
   AdminInfluencerApplicationChangeStatusParam,
   EditAdminSettingPopclubDealParam,
   UpdateAdminSettingPopclubDealStatusParam,
-  CreateAdminSettingInfluencerPromoParam,
+  CreateAdminInfluencerPromoParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -91,8 +91,8 @@ import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.mode
 import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
 import { GetAdminInfluencerApplicationsModel } from "features/admin/core/domain/get-admin-influencer-applications.model";
 import { AdminInfluencerApplicationModel } from "features/admin/core/domain/admin-influencer-application.model";
-import { GetAdminSettingInfluencerPromosModel } from "features/admin/core/domain/get-admin-setting-influencer-promos.model";
-import { SettingInfluencerModel } from "features/admin/core/domain/setting-influencer.model";
+import { GetAdminInfluencerPromosModel } from "features/admin/core/domain/get-admin-influencer-promos.model";
+import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -725,52 +725,48 @@ export interface EditAdminSettingPopclubDealResponse {
   };
 }
 
-export interface GetAdminSettingInfluencerPromosResponse {
+export interface GetAdminInfluencerPromosResponse {
   data: {
     message: string;
-    data: GetAdminSettingInfluencerPromosModel;
+    data: GetAdminInfluencerPromosModel;
   };
 }
 
-export interface GetAdminSettingInfluencersResponse {
+export interface GetAdminInfluencersResponse {
   data: {
     message: string;
-    data: Array<SettingInfluencerModel>;
+    data: Array<AdminInfluencerModel>;
   };
 }
 
-export interface CreateAdminSettingInfluencerPromoResponse {
+export interface CreateAdminInfluencerPromoResponse {
   data: {
     message: string;
   };
 }
 
-export function CreateAdminSettingInfluencerPromoRepository(
-  param: CreateAdminSettingInfluencerPromoParam
-): Promise<CreateAdminSettingInfluencerPromoResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/admin/setting/influencer`,
-    param,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    }
-  );
-}
-
-export function GetAdminSettingInfluencersRepository(): Promise<GetAdminSettingInfluencersResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/setting/influencers`, {
+export function CreateAdminInfluencerPromoRepository(
+  param: CreateAdminInfluencerPromoParam
+): Promise<CreateAdminInfluencerPromoResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/influencer`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 }
 
-export function GetAdminSettingInfluencerPromosRepository(
+export function GetAdminInfluencersRepository(): Promise<GetAdminInfluencersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/influencers`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminInfluencerPromosRepository(
   query: string
-): Promise<GetAdminSettingInfluencerPromosResponse> {
+): Promise<GetAdminInfluencerPromosResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/setting/influencer-promos
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/promos
     ${query}`,
     {
       withCredentials: true,

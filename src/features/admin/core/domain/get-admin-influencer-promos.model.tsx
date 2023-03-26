@@ -1,6 +1,6 @@
 import { InfluencerPromoModel } from "./influencer-promo.model";
 
-export interface GetAdminSettingInfluencerPromosModel {
+export interface GetAdminInfluencerPromosModel {
   pagination: {
     total_rows: number;
     per_page: number;

@@ -369,9 +369,9 @@ import {
   UploadContractInfluencerState,
 } from "features/profile/presentation/slices/upload-contract-influencer.slice";
 import {
-  CreateAdminSettingInfluencerPromoState,
-  selectCreateAdminSettingInfluencerPromo,
-} from "features/admin/presentation/slices/create-admin-setting-influencer-promo.slice";
+  CreateAdminInfluencerPromoState,
+  selectCreateAdminInfluencerPromo,
+} from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -581,33 +581,27 @@ export function LoadingAndSnackbarWrapper() {
   const uploadContractInfluencerState = useAppSelector(
     selectUploadContractInfluencer
   );
-  const createAdminSettingInfluencerPromoState = useAppSelector(
-    selectCreateAdminSettingInfluencerPromo
+  const createAdminInfluencerPromoState = useAppSelector(
+    selectCreateAdminInfluencerPromo
   );
   useEffect(() => {
-    switch (createAdminSettingInfluencerPromoState.status) {
-      case CreateAdminSettingInfluencerPromoState.inProgress:
+    switch (createAdminInfluencerPromoState.status) {
+      case CreateAdminInfluencerPromoState.inProgress:
         setOpenBackdropLoading(true);
         break;
-      case CreateAdminSettingInfluencerPromoState.initial:
+      case CreateAdminInfluencerPromoState.initial:
         setOpenBackdropLoading(false);
         break;
-      case CreateAdminSettingInfluencerPromoState.success:
-        showAlert(
-          setSuccessAlert,
-          createAdminSettingInfluencerPromoState.message
-        );
+      case CreateAdminInfluencerPromoState.success:
+        showAlert(setSuccessAlert, createAdminInfluencerPromoState.message);
         setOpenBackdropLoading(false);
         break;
-      case CreateAdminSettingInfluencerPromoState.fail:
-        showAlert(
-          setFailsAlert,
-          createAdminSettingInfluencerPromoState.message
-        );
+      case CreateAdminInfluencerPromoState.fail:
+        showAlert(setFailsAlert, createAdminInfluencerPromoState.message);
         setOpenBackdropLoading(false);
         break;
     }
-  }, [createAdminSettingInfluencerPromoState]);
+  }, [createAdminInfluencerPromoState]);
 
   useEffect(() => {
     switch (uploadContractInfluencerState.status) {

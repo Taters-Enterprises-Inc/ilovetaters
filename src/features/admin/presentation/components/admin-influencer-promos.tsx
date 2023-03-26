@@ -13,16 +13,14 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
-import NumberFormat from "react-number-format";
 import {
-  selectGetAdminSettingInfluencerPromos,
-  getAdminSettingInfluencerPromos,
-  resetGetAdminSettingInfluencerPromosState,
-} from "../slices/get-admin-setting-influencer-promos.slice";
+  selectGetAdminInfluencerPromos,
+  getAdminInfluencerPromos,
+  resetGetAdminInfluencerPromosState,
+} from "../slices/get-admin-influencer-promos.slice";
 
-export function AdminSettingInfluencerPromos() {
+export function AdminInfluencerPromos() {
   const dispatch = useAppDispatch();
 
   const query = useQuery();
@@ -42,8 +40,8 @@ export function AdminSettingInfluencerPromos() {
     { id: "dateadded", label: "Date Created" },
   ];
 
-  const getAdminSettingInfluencerPromosState = useAppSelector(
-    selectGetAdminSettingInfluencerPromos
+  const getAdminInfluencerPromosState = useAppSelector(
+    selectGetAdminInfluencerPromos
   );
 
   useEffect(() => {
@@ -56,7 +54,7 @@ export function AdminSettingInfluencerPromos() {
       status: status,
     });
 
-    dispatch(getAdminSettingInfluencerPromos(query));
+    dispatch(getAdminInfluencerPromos(query));
   }, [dispatch, pageNo, perPage, orderBy, order, search, status]);
 
   return (
@@ -68,7 +66,7 @@ export function AdminSettingInfluencerPromos() {
         <div className="flex flex-col space-y-1 lg:flex-row lg:space-x-4 lg:space-y-0">
           <div>
             <Link
-              to="create-promo"
+              to="create"
               className="inline-flex items-center px-4 tracking-wide py-1  bg-button font-['Varela_Round'] text-white text-xs rounded-md font-700"
             >
               <AiFillFolderAdd size={20} />
@@ -77,7 +75,7 @@ export function AdminSettingInfluencerPromos() {
           </div>
         </div>
       </div>
-      {getAdminSettingInfluencerPromosState.data?.influencer_promos ? (
+      {getAdminInfluencerPromosState.data?.influencer_promos ? (
         <>
           <div className="p-4 lg:hidden">
             <DataList
@@ -109,7 +107,7 @@ export function AdminSettingInfluencerPromos() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingInfluencerPromosState());
+                  dispatch(resetGetAdminInfluencerPromosState());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -127,7 +125,7 @@ export function AdminSettingInfluencerPromos() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingInfluencerPromosState());
+                  dispatch(resetGetAdminInfluencerPromosState());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -135,15 +133,13 @@ export function AdminSettingInfluencerPromos() {
                 }
               }}
               totalRows={
-                getAdminSettingInfluencerPromosState.data.pagination.total_rows
+                getAdminInfluencerPromosState.data.pagination.total_rows
               }
-              perPage={
-                getAdminSettingInfluencerPromosState.data.pagination.per_page
-              }
+              perPage={getAdminInfluencerPromosState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
               <hr className="mt-4" />
-              {getAdminSettingInfluencerPromosState.data.influencer_promos.map(
+              {getAdminInfluencerPromosState.data.influencer_promos.map(
                 (row, i) => (
                   <div
                     className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
@@ -196,7 +192,7 @@ export function AdminSettingInfluencerPromos() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingInfluencerPromosState());
+                  dispatch(resetGetAdminInfluencerPromosState());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -216,7 +212,7 @@ export function AdminSettingInfluencerPromos() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingInfluencerPromosState());
+                  dispatch(resetGetAdminInfluencerPromosState());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -236,7 +232,7 @@ export function AdminSettingInfluencerPromos() {
 
                   const queryParams = createQueryParams(params);
 
-                  dispatch(resetGetAdminSettingInfluencerPromosState());
+                  dispatch(resetGetAdminInfluencerPromosState());
                   navigate({
                     pathname: "",
                     search: queryParams,
@@ -244,17 +240,15 @@ export function AdminSettingInfluencerPromos() {
                 }
               }}
               totalRows={
-                getAdminSettingInfluencerPromosState.data.pagination.total_rows
+                getAdminInfluencerPromosState.data.pagination.total_rows
               }
-              perPage={
-                getAdminSettingInfluencerPromosState.data.pagination.per_page
-              }
+              perPage={getAdminInfluencerPromosState.data.pagination.per_page}
               page={pageNo ? parseInt(pageNo) : 1}
             >
-              {getAdminSettingInfluencerPromosState.data.influencer_promos !==
+              {getAdminInfluencerPromosState.data.influencer_promos !==
               undefined ? (
                 <>
-                  {getAdminSettingInfluencerPromosState.data.influencer_promos.map(
+                  {getAdminInfluencerPromosState.data.influencer_promos.map(
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>

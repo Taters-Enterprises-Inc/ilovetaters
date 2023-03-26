@@ -1,4 +1,4 @@
-import { SettingInfluencerModel } from "features/admin/core/domain/setting-influencer.model";
+import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   MaterialInput,
@@ -12,28 +12,26 @@ import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AdminHead } from "../components";
 import {
-  createAdminSettingInfluencerPromo,
-  CreateAdminSettingInfluencerPromoState,
-  resetCreateAdminSettingInfluencerPromoState,
-  selectCreateAdminSettingInfluencerPromo,
-} from "../slices/create-admin-setting-influencer-promo.slice";
+  createAdminInfluencerPromo,
+  CreateAdminInfluencerPromoState,
+  resetCreateAdminInfluencerPromoState,
+  selectCreateAdminInfluencerPromo,
+} from "../slices/create-admin-influencer-promo.slice";
 import {
-  selectGetAdminSettingInfluencers,
-  getAdminSettingInfluencers,
-} from "../slices/get-admin-setting-influencers.slice";
+  selectGetAdminInfluencers,
+  getAdminInfluencers,
+} from "../slices/get-admin-influencers.slice";
 
-export function AdminSettingInfluencerCreatePromo() {
+export function AdminInfluencerCreatePromo() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const getAdminSettingInfluencersState = useAppSelector(
-    selectGetAdminSettingInfluencers
-  );
+  const getAdminInfluencersState = useAppSelector(selectGetAdminInfluencers);
 
   const [formState, setFormState] = useState<{
     customerDiscountPercentage: string;
     influencerDiscountPercentage: string;
-    influencer: SettingInfluencerModel | "";
+    influencer: AdminInfluencerModel | "";
   }>({
     customerDiscountPercentage: "",
     influencerDiscountPercentage: "",
@@ -41,22 +39,22 @@ export function AdminSettingInfluencerCreatePromo() {
   });
 
   useEffect(() => {
-    dispatch(getAdminSettingInfluencers());
+    dispatch(getAdminInfluencers());
   }, [dispatch]);
 
-  const createAdminSettingInfluencerPromoState = useAppSelector(
-    selectCreateAdminSettingInfluencerPromo
+  const createAdminInfluencerPromoState = useAppSelector(
+    selectCreateAdminInfluencerPromo
   );
 
   useEffect(() => {
     if (
-      createAdminSettingInfluencerPromoState.status ===
-      CreateAdminSettingInfluencerPromoState.success
+      createAdminInfluencerPromoState.status ===
+      CreateAdminInfluencerPromoState.success
     ) {
-      navigate("/admin/setting/influencer-promo");
-      dispatch(resetCreateAdminSettingInfluencerPromoState());
+      navigate("/admin/influencer/promo");
+      dispatch(resetCreateAdminInfluencerPromoState());
     }
-  }, [createAdminSettingInfluencerPromoState, dispatch, navigate]);
+  }, [createAdminInfluencerPromoState, dispatch, navigate]);
 
   const handleInputChange = (evt: any) => {
     const value = evt.target.value;
@@ -78,7 +76,7 @@ export function AdminSettingInfluencerCreatePromo() {
             text: "Yes",
             onClick: () => {
               dispatch(
-                createAdminSettingInfluencerPromo({
+                createAdminInfluencerPromo({
                   ...formState,
                   influencer: JSON.stringify(formState.influencer),
                 })
@@ -128,12 +126,12 @@ export function AdminSettingInfluencerCreatePromo() {
       <form onSubmit={handleOnSubmit} className="p-4 space-y-3">
         <div className="flex space-x-4">
           <div className="flex-1 space-y-3">
-            {getAdminSettingInfluencersState.data ? (
+            {getAdminInfluencersState.data ? (
               <MaterialInputAutoComplete
                 label="Select Influencer"
                 fullWidth
                 colorTheme="black"
-                options={getAdminSettingInfluencersState.data}
+                options={getAdminInfluencersState.data}
                 getOptionLabel={(option) =>
                   (option.fb_user_name ?? "") + (option.mobile_user_name ?? "")
                 }

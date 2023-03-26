@@ -406,7 +406,7 @@ export interface UpdateAdminSettingPopclubDealStatusParam {
   status: number;
 }
 
-export interface CreateAdminSettingInfluencerPromoParam {
+export interface CreateAdminInfluencerPromoParam {
   customerDiscountPercentage: string;
   influencerDiscountPercentage: string;
   influencer: string;

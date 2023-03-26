@@ -32,4 +32,4 @@ export { AdminSettingCateringPackages } from "./admin-setting-catering-packages"
 export { AdminSettingPopclubDeals } from "./admin-setting-popclub-deals";
 export { AdminInfluencerApplications } from "./admin-influencers-applications";
 export { AdminIdInfluencerApplicationInformation } from "./admin-influencer-application-id-information";
-export { AdminSettingInfluencerPromos } from "./admin-setting-influencer-promos";
+export { AdminInfluencerPromos } from "./admin-influencer-promos";
