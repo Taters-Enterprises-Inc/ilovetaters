@@ -93,6 +93,7 @@ import { GetAdminInfluencerApplicationsModel } from "features/admin/core/domain/
 import { AdminInfluencerApplicationModel } from "features/admin/core/domain/admin-influencer-application.model";
 import { GetAdminInfluencerPromosModel } from "features/admin/core/domain/get-admin-influencer-promos.model";
 import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
+import { GetAdminInfluencerCashoutsModel } from "features/admin/core/domain/get-admin-influencer-cashouts.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -745,13 +746,28 @@ export interface CreateAdminInfluencerPromoResponse {
   };
 }
 
+export interface GetAdminInfluencerCashoutsResponse {
+  data: {
+    message: string;
+    data: GetAdminInfluencerCashoutsModel;
+  };
+}
+
+export function GetAdminInfluencerCashoutsRepository(
+  query: string
+): Promise<GetAdminInfluencerCashoutsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashouts${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
 export function CreateAdminInfluencerPromoRepository(
   param: CreateAdminInfluencerPromoParam
 ): Promise<CreateAdminInfluencerPromoResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/influencer`, param, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
     withCredentials: true,
   });
 }
@@ -766,8 +782,7 @@ export function GetAdminInfluencerPromosRepository(
   query: string
 ): Promise<GetAdminInfluencerPromosResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/influencer/promos
-    ${query}`,
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/promos${query}`,
     {
       withCredentials: true,
     }

@@ -377,7 +377,7 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
 
                         <li>
                           <NavLink
-                            to="/admin/setting/store"
+                            to="/admin/influencer/cashout"
                             onClick={() => {
                               if (props.mobile) dispatch(closeAdminSideBar());
                             }}

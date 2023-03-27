@@ -45,3 +45,8 @@ export interface UpdateInfluencerParam {
 export interface UploadContractInfluencerParam {
   formData: FormData;
 }
+
+export interface InfluencerCashoutParam {
+  influencerId: number;
+  cashout: string;
+}

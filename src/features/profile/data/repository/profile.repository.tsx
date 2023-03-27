@@ -6,6 +6,7 @@ import { UserDiscountModel } from "features/shared/core/domain/user-discount.mod
 import {
   ApplyInfluencerParam,
   ApplyUserDiscountParam,
+  InfluencerCashoutParam,
   UpdateInfluencerParam,
   UpdateUserDiscountParam,
   UploadContractInfluencerParam,
@@ -91,6 +92,26 @@ export interface UploadContractInfluencerResponse {
   data: {
     message: string;
   };
+}
+export interface InfluencerCashoutResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function InfluencerCashoutRepository(
+  param: InfluencerCashoutParam
+): Promise<InfluencerCashoutResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer/cashout`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }
 
 export function UploadContractInfluencerRepository(

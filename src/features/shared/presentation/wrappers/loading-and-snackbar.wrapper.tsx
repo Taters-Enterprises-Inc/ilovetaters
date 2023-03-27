@@ -372,6 +372,10 @@ import {
   CreateAdminInfluencerPromoState,
   selectCreateAdminInfluencerPromo,
 } from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
+import {
+  selectInfluencerCashout,
+  InfluencerCashoutState,
+} from "features/profile/presentation/slices/influencer-cashout.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -584,6 +588,27 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminInfluencerPromoState = useAppSelector(
     selectCreateAdminInfluencerPromo
   );
+  const influencerCashoutState = useAppSelector(selectInfluencerCashout);
+
+  useEffect(() => {
+    switch (influencerCashoutState.status) {
+      case InfluencerCashoutState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case InfluencerCashoutState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case InfluencerCashoutState.success:
+        showAlert(setSuccessAlert, influencerCashoutState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case InfluencerCashoutState.fail:
+        showAlert(setFailsAlert, influencerCashoutState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [influencerCashoutState]);
+
   useEffect(() => {
     switch (createAdminInfluencerPromoState.status) {
       case CreateAdminInfluencerPromoState.inProgress:

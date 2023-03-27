@@ -33,3 +33,4 @@ export { AdminSettingPopclubDeals } from "./admin-setting-popclub-deals";
 export { AdminInfluencerApplications } from "./admin-influencers-applications";
 export { AdminIdInfluencerApplicationInformation } from "./admin-influencer-application-id-information";
 export { AdminInfluencerPromos } from "./admin-influencer-promos";
+export { AdminInfluencerCashouts } from "./admin-influencer-cash-outs";

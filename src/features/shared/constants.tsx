@@ -1168,3 +1168,25 @@ export const SHOP_ORDER_STATUS: Array<{
     color: "#004d00",
   },
 ];
+
+export const ADMIN_INFLUENCER_CASHOUT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Approve",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];

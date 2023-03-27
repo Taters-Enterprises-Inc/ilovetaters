@@ -216,6 +216,8 @@ import uploadContractInfluencer from "features/profile/presentation/slices/uploa
 import getAdminInfluencerPromos from "features/admin/presentation/slices/get-admin-influencer-promos.slice";
 import getAdminInfluencers from "features/admin/presentation/slices/get-admin-influencers.slice";
 import createAdminInfluencerPromo from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
+import influencerCashout from "features/profile/presentation/slices/influencer-cashout.slice";
+import getAdminInfluencerCashouts from "features/admin/presentation/slices/get-admin-influencer-cashouts.slice";
 
 export const store = configureStore({
   reducer: {
@@ -435,6 +437,8 @@ export const store = configureStore({
     getAdminInfluencerPromos,
     getAdminInfluencers,
     createAdminInfluencerPromo,
+    influencerCashout,
+    getAdminInfluencerCashouts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

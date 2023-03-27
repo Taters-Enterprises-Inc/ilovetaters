@@ -78,6 +78,7 @@ import {
   AdminInfluencerApplication,
   AdminInfluencerPromo,
   AdminInfluencerCreatePromo,
+  AdminInfluencerCashout,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -389,10 +390,9 @@ root.render(
                                   element={<AdminInfluencerApplication />}
                                 />
                                 <Route
-                                  path="promo"
-                                  element={<AdminInfluencerPromo />}
+                                  path="cashout"
+                                  element={<AdminInfluencerCashout />}
                                 />
-
                                 <Route path="promo">
                                   <Route
                                     index
