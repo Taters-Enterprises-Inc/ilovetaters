@@ -6,6 +6,7 @@ export interface NotificationModel {
   deals_redeems_tb_id: number;
   discount_user_id: number;
   influencer_id: number;
+  influencer_cashout_id: number;
 
   tracking_no: string;
   catering_tracking_no: string;

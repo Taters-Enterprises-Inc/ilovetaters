@@ -325,8 +325,12 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                         <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                           <Badge
                             badgeContent={
-                              getAdminNotificationsState.data?.influencer
-                                .unseen_notifications_count
+                              (getAdminNotificationsState.data
+                                ?.influencer_application
+                                .unseen_notifications_count ?? 0) +
+                              (getAdminNotificationsState.data
+                                ?.influencer_cashout
+                                .unseen_notifications_count ?? 0)
                             }
                             color="primary"
                           >
@@ -360,7 +364,16 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           >
                             <span className="flex items-center ">
                               <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                                <IoIosArrowForward size={20} />
+                                <Badge
+                                  badgeContent={
+                                    getAdminNotificationsState.data
+                                      ?.influencer_application
+                                      .unseen_notifications_count
+                                  }
+                                  color="primary"
+                                >
+                                  <IoIosArrowForward size={20} />
+                                </Badge>
 
                                 <span
                                   className={`whitespace-pre duration-300 ${
@@ -389,7 +402,16 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
                           >
                             <span className="flex items-center ">
                               <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                                <IoIosArrowForward size={20} />
+                                <Badge
+                                  badgeContent={
+                                    getAdminNotificationsState.data
+                                      ?.influencer_cashout
+                                      .unseen_notifications_count
+                                  }
+                                  color="primary"
+                                >
+                                  <IoIosArrowForward size={20} />
+                                </Badge>
 
                                 <span
                                   className={`whitespace-pre duration-300 ${

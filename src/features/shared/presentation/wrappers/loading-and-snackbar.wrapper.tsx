@@ -376,6 +376,10 @@ import {
   selectInfluencerCashout,
   InfluencerCashoutState,
 } from "features/profile/presentation/slices/influencer-cashout.slice";
+import {
+  selectAdminInfluencerCashoutChangeStatus,
+  AdminInfluencerCashoutChangeStatusState,
+} from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -589,6 +593,35 @@ export function LoadingAndSnackbarWrapper() {
     selectCreateAdminInfluencerPromo
   );
   const influencerCashoutState = useAppSelector(selectInfluencerCashout);
+
+  const adminInfluencerCashoutChangeStatusState = useAppSelector(
+    selectAdminInfluencerCashoutChangeStatus
+  );
+
+  useEffect(() => {
+    switch (adminInfluencerCashoutChangeStatusState.status) {
+      case AdminInfluencerCashoutChangeStatusState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case AdminInfluencerCashoutChangeStatusState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case AdminInfluencerCashoutChangeStatusState.success:
+        showAlert(
+          setSuccessAlert,
+          adminInfluencerCashoutChangeStatusState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case AdminInfluencerCashoutChangeStatusState.fail:
+        showAlert(
+          setFailsAlert,
+          adminInfluencerCashoutChangeStatusState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [adminInfluencerCashoutChangeStatusState]);
 
   useEffect(() => {
     switch (influencerCashoutState.status) {

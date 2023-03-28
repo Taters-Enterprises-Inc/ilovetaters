@@ -19,6 +19,8 @@ import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifica
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
 import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
 import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
+import { getAdminInfluencerCashout } from "../slices/get-admin-influencer-cashout.slice";
+import { getAdminInfluencerCashouts } from "../slices/get-admin-influencer-cashouts.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -209,6 +211,17 @@ export function AdminNotificationWrapper() {
         }
       }
     );
+
+    discountUserChannel.bind("influencer-cashout", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminInfluencerCashouts(""));
+        dispatch(getAdminNotifications());
+      }
+    });
 
     discountUserChannel.bind(
       "influencer-application-with-id",

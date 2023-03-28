@@ -39,6 +39,7 @@ import {
   EditAdminSettingPopclubDealParam,
   UpdateAdminSettingPopclubDealStatusParam,
   CreateAdminInfluencerPromoParam,
+  AdminInfluencerCashoutChangeStatusParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -94,6 +95,7 @@ import { AdminInfluencerApplicationModel } from "features/admin/core/domain/admi
 import { GetAdminInfluencerPromosModel } from "features/admin/core/domain/get-admin-influencer-promos.model";
 import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
 import { GetAdminInfluencerCashoutsModel } from "features/admin/core/domain/get-admin-influencer-cashouts.model";
+import { AdminInfluencerCashoutModel } from "features/admin/core/domain/admin-influencer-cashout.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -751,6 +753,40 @@ export interface GetAdminInfluencerCashoutsResponse {
     message: string;
     data: GetAdminInfluencerCashoutsModel;
   };
+}
+
+export interface GetAdminInfluencerCashoutResponse {
+  data: {
+    message: string;
+    data: AdminInfluencerCashoutModel;
+  };
+}
+
+export interface AdminInfluencerCashoutChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function AdminInfluencerCashoutChangeStatusRepository(
+  param: AdminInfluencerCashoutChangeStatusParam
+): Promise<AdminInfluencerCashoutChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashout/change-status`,
+    param,
+    { withCredentials: true }
+  );
+}
+
+export function GetAdminInfluencerCashoutRepository(
+  id: string
+): Promise<GetAdminInfluencerCashoutResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashout/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminInfluencerCashoutsRepository(

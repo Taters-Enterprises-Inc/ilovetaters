@@ -205,7 +205,7 @@ export function AdminInfluencerApplications() {
               {getAdminInfluencerApplicationsState.data.influencer_applications.map(
                 (row, i) => {
                   const notification: NotificationModel | undefined =
-                    getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                    getAdminNotificationsState.data?.influencer_application.unseen_notifications.find(
                       (notification) => notification.influencer_id === row.id
                     );
 
@@ -372,7 +372,7 @@ export function AdminInfluencerApplications() {
                   {getAdminInfluencerApplicationsState.data.influencer_applications.map(
                     (row, i) => {
                       const notification: NotificationModel | undefined =
-                        getAdminNotificationsState.data?.influencer.unseen_notifications.find(
+                        getAdminNotificationsState.data?.influencer_application.unseen_notifications.find(
                           (notification) =>
                             notification.influencer_id === row.id
                         );

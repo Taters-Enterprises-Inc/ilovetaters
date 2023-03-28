@@ -4,25 +4,33 @@ import {
   DataTableCell,
   DataTableRow,
 } from "../../../shared/presentation/components/data-table";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DataList } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
-import { AiFillFolderAdd } from "react-icons/ai";
 import {
   selectGetAdminInfluencerCashouts,
   getAdminInfluencerCashouts,
   resetGetAdminInfluencerCashoutsState,
 } from "../slices/get-admin-influencer-cashouts.slice";
+import { getAdminInfluencerCashout } from "../slices/get-admin-influencer-cashout.slice";
 import { AdminChipsButton } from "./chips-button";
 import { ADMIN_INFLUENCER_CASHOUT_STATUS } from "features/shared/constants";
 import { FaEye } from "react-icons/fa";
 import NumberFormat from "react-number-format";
+import { AdminInfluencerCashoutModal } from "../modals";
+import { selectAdminInfluencerCashoutChangeStatus } from "../slices/admin-influencer-cashout-change-status.slice";
+import {
+  getAdminNotifications,
+  selectGetAdminNotifications,
+} from "../slices/get-admin-notifications.slice";
+import { NotificationModel } from "features/shared/core/domain/notification.model";
+import { updateAdminNotificationDateSeen } from "../slices/update-admin-notification-dateseen.slice";
 
 export function AdminInfluencerCashouts() {
   const dispatch = useAppDispatch();
@@ -35,6 +43,7 @@ export function AdminInfluencerCashouts() {
   const order = query.get("order");
   const search = query.get("search");
   const status = query.get("status");
+  const id = query.get("id");
 
   let columns: Array<Column> = [
     { id: "cashout_status", label: "Status" },
@@ -44,9 +53,36 @@ export function AdminInfluencerCashouts() {
     { id: "action", label: "Action" },
   ];
 
+  const [openInfluencerCashoutModal, setOpenInfluencerCashoutModal] =
+    useState(false);
+
   const getAdminInfluencerCashoutsState = useAppSelector(
     selectGetAdminInfluencerCashouts
   );
+
+  const adminInfluencerCashoutChangeStatusState = useAppSelector(
+    selectAdminInfluencerCashoutChangeStatus
+  );
+
+  const getAdminNotificationsState = useAppSelector(
+    selectGetAdminNotifications
+  );
+
+  // useEffect(() => {
+  //   dispatch(getAdminNotifications());
+  // }, [updateAdminNotificationDateSeenState, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAdminNotifications());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getAdminInfluencerCashout(id)).then(() => {
+        setOpenInfluencerCashoutModal(true);
+      });
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     const query = createQueryParams({
@@ -59,7 +95,16 @@ export function AdminInfluencerCashouts() {
     });
 
     dispatch(getAdminInfluencerCashouts(query));
-  }, [dispatch, pageNo, perPage, orderBy, order, search, status]);
+  }, [
+    adminInfluencerCashoutChangeStatusState,
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+    status,
+  ]);
 
   return (
     <>
@@ -150,18 +195,49 @@ export function AdminInfluencerCashouts() {
             >
               <hr className="mt-4" />
               {getAdminInfluencerCashoutsState.data.influencer_cashouts.map(
-                (row, i) => (
-                  <div
-                    className="flex flex-col px-4 py-2 space-y-4 border-b lg:space-y-0"
-                    key={i}
-                  >
-                    <span className="flex flex-wrap items-center space-x-1 text-xl">
-                      <span className="text-xs lg:text-bas">
-                        {row.fb_user_name} {row.mobile_user_name}
+                (row, i) => {
+                  const notification: NotificationModel | undefined =
+                    getAdminNotificationsState.data?.influencer_cashout.unseen_notifications.find(
+                      (notification) =>
+                        notification.influencer_cashout_id === row.id
+                    );
+
+                  return (
+                    <div
+                      onClick={() => {
+                        if (notification) {
+                          dispatch(
+                            updateAdminNotificationDateSeen(notification.id)
+                          );
+                        }
+                        const params = {
+                          page_no: pageNo,
+                          per_page: perPage,
+                          status: status,
+                          id: row.id,
+                          search: search,
+                        };
+
+                        const queryParams = createQueryParams(params);
+
+                        navigate({
+                          pathname: "",
+                          search: queryParams,
+                        });
+                      }}
+                      className={`flex flex-col px-4 py-2 border-b ${
+                        notification ? "bg-gray-200" : ""
+                      }`}
+                      key={i}
+                    >
+                      <span className="flex flex-wrap items-center space-x-1 text-xl">
+                        <span className="text-xs lg:text-bas">
+                          {row.fb_user_name} {row.mobile_user_name}
+                        </span>
                       </span>
-                    </span>
-                  </div>
-                )
+                    </div>
+                  );
+                }
               )}
             </DataList>
           </div>
@@ -259,69 +335,81 @@ export function AdminInfluencerCashouts() {
               undefined ? (
                 <>
                   {getAdminInfluencerCashoutsState.data.influencer_cashouts.map(
-                    (row, i) => (
-                      <DataTableRow key={i}>
-                        <DataTableCell>
-                          <span
-                            className="px-2 py-1 text-xs rounded-full "
-                            style={{
-                              color: "white",
-                              backgroundColor:
+                    (row, i) => {
+                      const notification: NotificationModel | undefined =
+                        getAdminNotificationsState.data?.influencer_cashout.unseen_notifications.find(
+                          (notification) =>
+                            notification.influencer_cashout_id === row.id
+                        );
+
+                      return (
+                        <DataTableRow
+                          key={i}
+                          className={`${notification ? "bg-gray-200" : ""}`}
+                        >
+                          <DataTableCell>
+                            <span
+                              className="px-2 py-1 text-xs rounded-full "
+                              style={{
+                                color: "white",
+                                backgroundColor:
+                                  ADMIN_INFLUENCER_CASHOUT_STATUS[
+                                    row.influencer_cashout_status_id
+                                  ].color,
+                              }}
+                            >
+                              {
                                 ADMIN_INFLUENCER_CASHOUT_STATUS[
                                   row.influencer_cashout_status_id
-                                ].color,
-                            }}
-                          >
-                            {
-                              ADMIN_INFLUENCER_CASHOUT_STATUS[
-                                row.influencer_cashout_status_id
-                              ].name
-                            }
-                          </span>
-                        </DataTableCell>
-                        <DataTableCell>
-                          {row.fb_user_name} {row.mobile_user_name}
-                        </DataTableCell>
-                        <DataTableCell>
-                          <NumberFormat
-                            value={parseFloat(row.cashout).toFixed(2)}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"₱"}
-                          />
-                        </DataTableCell>
-                        <DataTableCell>{row.dateadded}</DataTableCell>
-                        <DataTableCell align="left">
-                          <button
-                            onClick={() => {
-                              // if (notification) {
-                              //   dispatch(
-                              //     updateAdminNotificationDateSeen(
-                              //       notification.id
-                              //     )
-                              //   );
-                              // }
-                              // const params = {
-                              //   page_no: pageNo,
-                              //   per_page: perPage,
-                              //   status: status,
-                              //   id: row.id,
-                              //   order_by: orderBy,
-                              //   order: order,
-                              //   search: search,
-                              // };
-                              // const queryParams = createQueryParams(params);
-                              // navigate({
-                              //   pathname: "",
-                              //   search: queryParams,
-                              // });
-                            }}
-                          >
-                            <FaEye className="text-lg" />
-                          </button>
-                        </DataTableCell>
-                      </DataTableRow>
-                    )
+                                ].name
+                              }
+                            </span>
+                          </DataTableCell>
+                          <DataTableCell>
+                            {row.fb_user_name} {row.mobile_user_name}
+                          </DataTableCell>
+                          <DataTableCell>
+                            <NumberFormat
+                              value={parseFloat(row.cashout).toFixed(2)}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"₱"}
+                            />
+                          </DataTableCell>
+                          <DataTableCell>{row.dateadded}</DataTableCell>
+                          <DataTableCell align="left">
+                            <button
+                              onClick={() => {
+                                if (notification) {
+                                  dispatch(
+                                    updateAdminNotificationDateSeen(
+                                      notification.id
+                                    )
+                                  );
+                                }
+
+                                const params = {
+                                  page_no: pageNo,
+                                  per_page: perPage,
+                                  status: status,
+                                  id: row.id,
+                                  order_by: orderBy,
+                                  order: order,
+                                  search: search,
+                                };
+                                const queryParams = createQueryParams(params);
+                                navigate({
+                                  pathname: "",
+                                  search: queryParams,
+                                });
+                              }}
+                            >
+                              <FaEye className="text-lg" />
+                            </button>
+                          </DataTableCell>
+                        </DataTableRow>
+                      );
+                    }
                   )}
                 </>
               ) : null}
@@ -329,6 +417,29 @@ export function AdminInfluencerCashouts() {
           </div>
         </>
       ) : null}
+
+      <AdminInfluencerCashoutModal
+        open={openInfluencerCashoutModal}
+        onClose={() => {
+          const params = {
+            page_no: pageNo,
+            per_page: perPage,
+            status: status,
+            redeem_code: null,
+            order_by: orderBy,
+            order: order,
+            search: search,
+          };
+
+          const queryParams = createQueryParams(params);
+
+          navigate({
+            pathname: "",
+            search: queryParams,
+          });
+          setOpenInfluencerCashoutModal(false);
+        }}
+      />
     </>
   );
 }

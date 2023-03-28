@@ -411,3 +411,8 @@ export interface CreateAdminInfluencerPromoParam {
   influencerDiscountPercentage: string;
   influencer: string;
 }
+
+export interface AdminInfluencerCashoutChangeStatusParam {
+  influencerCashoutId: number;
+  status: number;
+}

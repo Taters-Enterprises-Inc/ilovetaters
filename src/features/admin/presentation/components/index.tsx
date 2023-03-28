@@ -34,3 +34,4 @@ export { AdminInfluencerApplications } from "./admin-influencers-applications";
 export { AdminIdInfluencerApplicationInformation } from "./admin-influencer-application-id-information";
 export { AdminInfluencerPromos } from "./admin-influencer-promos";
 export { AdminInfluencerCashouts } from "./admin-influencer-cash-outs";
+export { AdminInfluencerCashoutInformation } from "./admin-influencer-cashout-information";

@@ -218,6 +218,8 @@ import getAdminInfluencers from "features/admin/presentation/slices/get-admin-in
 import createAdminInfluencerPromo from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
 import influencerCashout from "features/profile/presentation/slices/influencer-cashout.slice";
 import getAdminInfluencerCashouts from "features/admin/presentation/slices/get-admin-influencer-cashouts.slice";
+import getAdminInfluencerCashout from "features/admin/presentation/slices/get-admin-influencer-cashout.slice";
+import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 
 export const store = configureStore({
   reducer: {
@@ -439,6 +441,8 @@ export const store = configureStore({
     createAdminInfluencerPromo,
     influencerCashout,
     getAdminInfluencerCashouts,
+    getAdminInfluencerCashout,
+    adminInfluencerCashoutChangeStatus,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

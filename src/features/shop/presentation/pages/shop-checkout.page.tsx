@@ -772,6 +772,51 @@ export function ShopCheckout() {
     }
   };
 
+  const influencerAndCustomerDiscount = () => {
+    if (getSnackshopInfluencerPromoState.data) {
+      let calculatedPrice = 0;
+
+      const orders = getSessionState.data?.orders;
+
+      if (orders) {
+        for (let i = 0; i < orders.length; i++) {
+          calculatedPrice += orders[i].prod_calc_amount;
+        }
+      }
+
+      let influencerDiscount = parseFloat(
+        getSnackshopInfluencerPromoState.data.influencer_discount
+      );
+      influencerDiscount = calculatedPrice * influencerDiscount;
+
+      return (
+        <div className="text-sm">
+          <span>
+            For transparency
+            <b>
+              {getSnackshopInfluencerPromoState.data.fb_user_name ??
+                "" +
+                  " " +
+                  getSnackshopInfluencerPromoState.data.mobile_user_name ??
+                ""}
+            </b>{" "}
+            will get{" "}
+          </span>
+          <b>
+            <NumberFormat
+              value={influencerDiscount.toFixed(2)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"₱"}
+            />
+          </b>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <main className="bg-paper">
       <PageTitleAndBreadCrumbs
@@ -1183,51 +1228,54 @@ export function ShopCheckout() {
                         </>
                       ) : null}
                     </div>
-
-                    <div className="flex">
-                      <MaterialInput
-                        colorTheme="black"
-                        required
-                        label="Referral Code"
-                        name="referralCode"
-                        fullWidth
-                        value={referralCode}
-                        onChange={(e) => {
-                          if (
-                            getSnackshopInfluencerPromoState.status !==
-                            GetSnackshopInfluencerPromoState.success
-                          ) {
-                            const value = e.target.value;
-                            setReferralCode(value);
-                          }
-                        }}
-                        className="rounded-none"
-                      />
-                      {getSnackshopInfluencerPromoState.data ? (
-                        <button
-                          className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-green-900 py-2 rounded-r-lg shadow-lg`}
-                        >
-                          <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                            Applied
-                          </span>
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            dispatch(
-                              getSnackshopInfluencerPromo({
-                                referralCode,
-                              })
-                            );
+                    <div>
+                      <div className="flex">
+                        <MaterialInput
+                          colorTheme="black"
+                          required
+                          label="Referral Code"
+                          name="referralCode"
+                          fullWidth
+                          value={referralCode}
+                          onChange={(e) => {
+                            if (
+                              getSnackshopInfluencerPromoState.status !==
+                              GetSnackshopInfluencerPromoState.success
+                            ) {
+                              const value = e.target.value;
+                              setReferralCode(value);
+                            }
                           }}
-                          type="button"
-                          className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 rounded-r-lg shadow-lg`}
-                        >
-                          <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                            Apply
-                          </span>
-                        </button>
-                      )}
+                          className="rounded-none"
+                        />
+                        {getSnackshopInfluencerPromoState.data ? (
+                          <button
+                            type="button"
+                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-green-900 py-2 rounded-r-lg shadow-lg`}
+                          >
+                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                              Applied
+                            </span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              dispatch(
+                                getSnackshopInfluencerPromo({
+                                  referralCode,
+                                })
+                              );
+                            }}
+                            type="button"
+                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 rounded-r-lg shadow-lg`}
+                          >
+                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
+                              Apply
+                            </span>
+                          </button>
+                        )}
+                      </div>
+                      {influencerAndCustomerDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

@@ -31,12 +31,15 @@ export const createAdminInfluencerPromo = createAsyncThunk(
       const response: CreateAdminInfluencerPromoResponse =
         await CreateAdminInfluencerPromoRepository(param);
 
+      console.log(response.data);
+
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         if (!error.response) {
           throw error;
         }
+        console.log(error.response.data.message);
 
         throw rejectWithValue(error.response.data.message);
       }
