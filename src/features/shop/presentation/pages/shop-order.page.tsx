@@ -26,6 +26,7 @@ import {
   selectGetCustomerSurveyResponseInOrderService,
   getCustomerSurveyResponseInOrderService,
 } from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
+import { Media } from "features/shared/presentation/components";
 
 export function ShopOrder() {
   const dispatch = useAppDispatch();
@@ -502,14 +503,10 @@ export function ShopOrder() {
                         key={index}
                         className="flex bg-secondary shadow-md rounded-[10px]"
                       >
-                        <img
+                        <Media
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt={order.name}
-                          onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
@@ -544,14 +541,10 @@ export function ShopOrder() {
                         key={index}
                         className="flex bg-secondary shadow-md rounded-[10px]"
                       >
-                        <img
+                        <Media
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt={deal.name}
-                          onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">{deal.name}</h3>
