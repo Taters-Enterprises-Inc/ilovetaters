@@ -38,6 +38,7 @@ export interface AdminShopOrderModel {
     add_details: string;
     product_label: string | null;
     promo_discount_percentage: string | null;
+    deal_discount_percentage: string | null;
     deal_products_promo_include: Array<{
       id: number;
       quantity: number | null;

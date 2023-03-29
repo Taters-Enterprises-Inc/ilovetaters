@@ -77,6 +77,13 @@ export function CartListItem(props: CartListItemProps) {
 
             if (
               deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            } else if (
+              deal_products_promo_include.product_id === order.prod_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
@@ -105,6 +112,7 @@ export function CartListItem(props: CartListItemProps) {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.prod_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -121,7 +129,10 @@ export function CartListItem(props: CartListItemProps) {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+              order.prod_qty >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
@@ -185,37 +196,20 @@ export function CartListItem(props: CartListItemProps) {
     const deal_products_promo_includes =
       getSessionState.data?.redeem_data?.deal_products_promo_include;
 
-    if (order.promo_discount_percentage) {
-      return (
-        <div>
-          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-            <NumberFormat
-              value={order.prod_calc_amount.toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-          <h3 className="flex items-end justify-end flex-1 text-base">
-            <NumberFormat
-              value={(
-                order.prod_calc_amount -
-                order.prod_calc_amount * order.promo_discount_percentage
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-        </div>
-      );
-    } else if (deal_products_promo_includes) {
+    if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
         const deal_products_promo_include = deal_products_promo_includes[i];
 
         if (
+          deal_products_promo_include.product_id === order.prod_id &&
+          deal_products_promo_include.product_variant_option_tb_id === null
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        } else if (
           deal_products_promo_include.product_id === order.prod_id &&
           deal_products_promo_include.product_variant_option_tb_id
         ) {
@@ -245,6 +239,7 @@ export function CartListItem(props: CartListItemProps) {
           if (
             val.price &&
             val.promo_discount_percentage &&
+            val.product_id === order.prod_id &&
             !addedObtainable.some(
               (value) => value.product_id === val.product_id
             )
@@ -260,7 +255,9 @@ export function CartListItem(props: CartListItemProps) {
         if (
           deal_products_promo_include_match.obtainable.length > 0 &&
           deal_products_promo_include_match.quantity &&
-          order.prod_qty >= deal_products_promo_include_match.quantity + 1
+          order.prod_qty >= deal_products_promo_include_match.quantity + 1 &&
+          obtainableDiscountedPrice &&
+          obtainablePrice
         ) {
           return (
             <div>
