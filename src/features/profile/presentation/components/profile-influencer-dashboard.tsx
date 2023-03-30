@@ -26,6 +26,7 @@ import NumberFormat from "react-number-format";
 import { GiCash } from "react-icons/gi";
 import { ProfileCashoutModal } from "../modals";
 import { influencerCashout } from "../slices/influencer-cashout.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 
 const columns: Array<Column> = [
   { id: "dateadded", label: "Date" },
@@ -69,31 +70,54 @@ export function ProfileInfluencerDashboard() {
   return (
     <>
       <div className="space-y-6">
-        <div className="flex flex-col items-start sm:flex-row sm:justify-between sm:items-center">
-          <h1 className="text-secondary font-['Bebas_Neue'] tracking-[3px] text-3xl ">
-            Influencer Profile
-          </h1>
-        </div>
-
-        <div className="flex justify-between">
-          <div>
-            <span>Influencer Payable: </span>
-            {getInfluencerState.data?.payable ? (
-              <NumberFormat
-                value={parseFloat(getInfluencerState.data.payable).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            ) : (
-              "₱0.00"
-            )}
-          </div>
-          <div>
-            <button
+        <div className="flex">
+          {getInfluencerState.data ? (
+            <div
               onClick={() => {
                 setOpenCashoutModal(true);
               }}
+              className="flex cursor-pointer lg:shadow-[0_3px_10px_rgb(0,0,0,0.3)] w-[350px]"
+            >
+              <div className="bg-primary w-[4px]"></div>
+              <div className="px-4 py-1 flex flex-col flex-1">
+                <span className="text-lg text-secondary font-semibold">
+                  INFLUENCER BALANCE
+                </span>
+                <span className="text-xs text-secondary mt-1">
+                  {getInfluencerState.data.first_name +
+                    " " +
+                    getInfluencerState.data.middle_name +
+                    " " +
+                    getInfluencerState.data.last_name}
+                </span>
+                <div className="h-[40px] flex justify-end items-end">
+                  <span className="text-[12px] font-semibold text-secondary mr-2 mb-[3px]">
+                    PHP
+                  </span>
+                  <span className="text-2xl font-bold text-secondary">
+                    <NumberFormat
+                      value={parseFloat(getInfluencerState.data.payable)}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                    />
+                  </span>
+                  <span className="text-[12px] font-semibold text-secondary mr-2 mb-[3px]">
+                    .
+                    {
+                      parseFloat(getInfluencerState.data.payable)
+                        .toFixed(2)
+                        .split(".")[1]
+                    }
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="flex justify-end">
+          {/* <div>
+            <button
               className="text-white border px-2 border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
             >
               <GiCash className="text-3xl" />
@@ -101,7 +125,7 @@ export function ProfileInfluencerDashboard() {
                 Cash out
               </span>
             </button>
-          </div>
+          </div> */}
         </div>
 
         {getInfluencerRefereesState.data?.referees ? (
@@ -270,14 +294,24 @@ export function ProfileInfluencerDashboard() {
         }}
         onCashout={(cashout) => {
           if (getInfluencerState.data) {
-            console.log(cashout, getInfluencerState.data.id);
-            dispatch(
-              influencerCashout({
-                influencerId: getInfluencerState.data.id,
-                cashout,
-              })
-            );
-            setOpenCashoutModal(false);
+            if (
+              parseFloat(cashout) <= parseFloat(getInfluencerState.data.payable)
+            ) {
+              dispatch(
+                influencerCashout({
+                  influencerId: getInfluencerState.data.id,
+                  cashout,
+                })
+              );
+              setOpenCashoutModal(false);
+            } else {
+              dispatch(
+                popUpSnackBar({
+                  message: "You can't cashout above your balance.",
+                  severity: "error",
+                })
+              );
+            }
           }
         }}
       />

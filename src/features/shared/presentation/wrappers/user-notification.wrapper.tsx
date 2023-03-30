@@ -76,6 +76,25 @@ export function UserNotificationWrapper() {
         }
       }
     );
+
+    influencerChannel.bind(
+      "influencer-cashout-update",
+      (data: {
+        fb_user_id?: number;
+        mobile_user_id?: number;
+        message: string;
+      }) => {
+        if (
+          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
+          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
+        ) {
+          showAlert(setSuccessAlert, data.message);
+
+          dispatch(getNotifications());
+          dispatch(getInfluencer());
+        }
+      }
+    );
   }, [getSessionState, dispatch]);
 
   useEffect(() => {
