@@ -434,14 +434,12 @@ export function AdminPopclubRedeemCustomerInformation(
         ) : null}
         {getAdminPopclubRedeemState.data?.items.some(
           (value) => value.is_partner_company
-        ) ? (
+        ) &&
+        getAdminPopclubRedeemState.data &&
+        getAdminPopclubRedeemState.data.status === 1 &&
+        moment(getAdminPopclubRedeemState.data.expiration).isAfter(moment()) ? (
           <>
-            {getAdminPopclubRedeemState.data &&
-            getAdminPopclubRedeemState.data.status === 1 &&
-            moment(getAdminPopclubRedeemState.data.expiration).isAfter(
-              moment()
-            ) &&
-            getAdminPopclubRedeemState.data.partner_company_id_number ? (
+            {getAdminPopclubRedeemState.data.partner_company_id_number ? (
               <div className="flex items-start justify-end py-3 space-x-2">
                 <button
                   onClick={handleDecline}
