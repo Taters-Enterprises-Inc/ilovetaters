@@ -66,6 +66,7 @@ export function AdminSettingPopclubCreateDeal() {
     promoDiscountPercentage: string;
     minimumPurchase: string;
     isFreeDelivery: boolean;
+    isPartnerCompany: boolean;
     description: string;
     secondsBeforeExpiration: string;
     availableStartTime: Moment | null;
@@ -91,6 +92,7 @@ export function AdminSettingPopclubCreateDeal() {
     promoDiscountPercentage: "",
     minimumPurchase: "",
     isFreeDelivery: false,
+    isPartnerCompany: false,
     description: "",
     secondsBeforeExpiration: "",
     availableStartTime: null,
@@ -526,6 +528,17 @@ export function AdminSettingPopclubCreateDeal() {
                 });
               }}
               checked={formState.isFreeDelivery}
+            />
+
+            <MaterialSwitch
+              label="Is Partner Company"
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  isPartnerCompany: e.target.checked,
+                });
+              }}
+              checked={formState.isPartnerCompany}
             />
 
             <h1 className="text-2xl font-bold text-secondary !my-2">

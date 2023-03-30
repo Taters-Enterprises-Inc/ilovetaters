@@ -1,5 +1,12 @@
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetAdminPopclubRedeem } from "../slices/get-admin-popclub-redeem.slice";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
+import {
+  getAdminPopclubRedeem,
+  selectGetAdminPopclubRedeem,
+} from "../slices/get-admin-popclub-redeem.slice";
 import { ADMIN_POPCLUB_REDEEM_STATUS } from "features/shared/constants";
 import moment from "moment";
 import NumberFormat from "react-number-format";
@@ -10,13 +17,18 @@ import {
   resetAdminCompleteRedeemSliceStatus,
   selectAdminCompleteRedeem,
 } from "../slices/admin-complete-redeem.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   adminDeclineRedeem,
   AdminDeclineRedeemState,
   resetAdminDeclineRedeemSliceStatus,
   selectAdminDeclineRedeem,
 } from "../slices/admin-decline-redeem.slice";
+import { MaterialInput } from "features/shared/presentation/components";
+import {
+  selectValidatePartnerCompanyEmployeeIdNumberAdmin,
+  validatePartnerCompanyEmployeeIdNumberAdmin,
+} from "../slices/validate-partner-company-employee-id-number.slice";
 
 interface AdminPopclubRedeemCustomerInformationProps {
   onClose: () => void;
@@ -24,12 +36,21 @@ interface AdminPopclubRedeemCustomerInformationProps {
 export function AdminPopclubRedeemCustomerInformation(
   props: AdminPopclubRedeemCustomerInformationProps
 ) {
+  const query = useQuery();
+
+  const redeemCode = query.get("redeem_code");
+
   const dispatch = useAppDispatch();
   const adminCompleteRedeemState = useAppSelector(selectAdminCompleteRedeem);
   const adminDeclineRedeemState = useAppSelector(selectAdminDeclineRedeem);
   const getAdminPopclubRedeemState = useAppSelector(
     selectGetAdminPopclubRedeem
   );
+  const validatePartnerCompanyEmployeeIdNumberAdminState = useAppSelector(
+    selectValidatePartnerCompanyEmployeeIdNumberAdmin
+  );
+
+  const [idNumber, setIdNumber] = useState<string>("");
 
   useEffect(() => {
     if (adminDeclineRedeemState.status === AdminDeclineRedeemState.success) {
@@ -44,6 +65,12 @@ export function AdminPopclubRedeemCustomerInformation(
       props.onClose();
     }
   }, [adminCompleteRedeemState, dispatch]);
+
+  useEffect(() => {
+    if (redeemCode) {
+      dispatch(getAdminPopclubRedeem(redeemCode));
+    }
+  }, [redeemCode, validatePartnerCompanyEmployeeIdNumberAdminState, dispatch]);
 
   const handleComplete = () => {
     if (getAdminPopclubRedeemState.data) {
@@ -185,6 +212,61 @@ export function AdminPopclubRedeemCustomerInformation(
             </span>
           </div>
         </div>
+
+        {getAdminPopclubRedeemState.data?.items.some(
+          (value) => value.is_partner_company
+        ) ? (
+          <>
+            <hr />
+            <div className="flex flex-col py-2 space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
+              {getAdminPopclubRedeemState.data.partner_company_id_number ===
+              null ? (
+                <div className="flex flex-col flex-1 lg:flex-row lg:space-x-2">
+                  <MaterialInput
+                    colorTheme="black"
+                    size="small"
+                    label="Employee ID Number"
+                    name="idNumber"
+                    value={idNumber}
+                    onChange={(e) => {
+                      setIdNumber(e.target.value);
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      if (getAdminPopclubRedeemState.data)
+                        dispatch(
+                          validatePartnerCompanyEmployeeIdNumberAdmin({
+                            redeemId: getAdminPopclubRedeemState.data.id,
+                            idNumber,
+                          })
+                        );
+                    }}
+                    className="px-3 py-1 text-base text-white bg-green-700 shadow-md lg:mb-0"
+                  >
+                    Validate
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-start justify-start flex-1 space-x-2">
+                  <strong>Employee ID Number: </strong>
+                  <span>
+                    {getAdminPopclubRedeemState.data.partner_company_id_number}
+                  </span>
+                  <span
+                    className="px-2 py-1 text-xs rounded-full"
+                    style={{
+                      color: "white",
+                      backgroundColor: "#004d00",
+                    }}
+                  >
+                    Validated
+                  </span>
+                </div>
+              )}
+            </div>
+          </>
+        ) : null}
       </div>
 
       <hr className="mt-1" />
@@ -350,25 +432,72 @@ export function AdminPopclubRedeemCustomerInformation(
             </div>
           </>
         ) : null}
-
-        {getAdminPopclubRedeemState.data &&
-        getAdminPopclubRedeemState.data.status === 1 &&
-        moment(getAdminPopclubRedeemState.data.expiration).isAfter(moment()) ? (
-          <div className="flex items-start justify-end py-3 space-x-2">
-            <button
-              onClick={handleDecline}
-              className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
-            >
-              Decline
-            </button>
-            <button
-              onClick={handleComplete}
-              className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
-            >
-              Complete
-            </button>
-          </div>
-        ) : null}
+        {getAdminPopclubRedeemState.data?.items.some(
+          (value) => value.is_partner_company
+        ) ? (
+          <>
+            {getAdminPopclubRedeemState.data &&
+            getAdminPopclubRedeemState.data.status === 1 &&
+            moment(getAdminPopclubRedeemState.data.expiration).isAfter(
+              moment()
+            ) &&
+            getAdminPopclubRedeemState.data.partner_company_id_number ? (
+              <div className="flex items-start justify-end py-3 space-x-2">
+                <button
+                  onClick={handleDecline}
+                  className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+                >
+                  Decline
+                </button>
+                <button
+                  onClick={handleComplete}
+                  className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
+                >
+                  Complete
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-start justify-end py-3 space-x-2">
+                <button
+                  onClick={handleDecline}
+                  className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+                >
+                  Decline
+                </button>
+                <button
+                  disabled
+                  style={{ opacity: 0.65 }}
+                  className="px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md cursor-not-allowed lg:mb-0"
+                >
+                  Complete
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {getAdminPopclubRedeemState.data &&
+            getAdminPopclubRedeemState.data.status === 1 &&
+            moment(getAdminPopclubRedeemState.data.expiration).isAfter(
+              moment()
+            ) ? (
+              <div className="flex items-start justify-end py-3 space-x-2">
+                <button
+                  onClick={handleDecline}
+                  className="px-3 py-1 text-base text-white bg-orange-700 rounded-md shadow-md"
+                >
+                  Decline
+                </button>
+                <button
+                  onClick={handleComplete}
+                  className="order-1 px-3 py-1 mb-2 text-base text-white bg-green-700 rounded-md shadow-md lg:order-2 lg:mb-0"
+                >
+                  Complete
+                </button>
+              </div>
+            ) : null}
+          </>
+        )}
       </div>
     </div>
   );
