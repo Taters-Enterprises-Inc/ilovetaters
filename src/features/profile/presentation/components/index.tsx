@@ -6,3 +6,4 @@ export { InfluencerContractTermsAndConditions } from "./influencer-contract-term
 export { ProfileInfluencerContractIsRequired } from "./profile-influencer-contract-is-required";
 export { ProfileInfluencerContractIsOnVerification } from "./profile-influencer-contract-is-on-verification";
 export { ProfileInfluencerContractVerified } from "./profile-influencer-contract-verified";
+export { InfluencerPaymentMethod } from "./influencer-payment-method";

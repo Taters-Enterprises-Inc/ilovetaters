@@ -26,6 +26,7 @@ import {
   GetInfluencerState,
 } from "../slices/get-influencer.slice";
 import { updateInfluencer } from "../slices/update-influencer.slice";
+import { InfluencerPaymentMethod } from "./influencer-payment-method";
 
 export function ProfileInfluencerForm() {
   const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ export function ProfileInfluencerForm() {
     idNumber: string;
     idFront: string;
     idBack: string;
+    paymentSelected: string;
   }>({
     firstName: "",
     middleName: "",
@@ -50,6 +52,7 @@ export function ProfileInfluencerForm() {
     idNumber: "",
     idFront: "",
     idBack: "",
+    paymentSelected: "",
   });
 
   useEffect(() => {
@@ -69,6 +72,7 @@ export function ProfileInfluencerForm() {
         idNumber: getInfluencerState.data.id_number,
         idFront: getInfluencerState.data.id_front,
         idBack: getInfluencerState.data.id_back,
+        paymentSelected: "",
       });
       setImagesFront({
         src: `${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getInfluencerState.data.id_front}`,
@@ -272,6 +276,27 @@ export function ProfileInfluencerForm() {
           onChange={handleInputChange}
           name="idNumber"
           type="text"
+        />
+      </div>
+
+      <div className="mt-4  text-secondary lg:mt-0">
+        <h2 className="text-2xl font-['Bebas_Neue'] tracking-[2px]">
+          Bank Details
+        </h2>
+        <InfluencerPaymentMethod
+          paymentSelected={formState.paymentSelected}
+          setPaymentSelected={(payment) => {
+            setFormState({
+              ...formState,
+              paymentSelected: payment,
+            });
+          }}
+          onChange={(payment) => {
+            // setFormState({
+            //   ...formState,
+            //   payops: payment,
+            // });
+          }}
         />
       </div>
 
