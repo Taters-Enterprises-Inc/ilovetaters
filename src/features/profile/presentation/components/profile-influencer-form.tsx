@@ -2,11 +2,6 @@ import { useEffect } from "react";
 import { FormEvent, useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { ProfileContainer } from "./profile-container";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   ADMIN_INFLUENCER_STATUS,
@@ -44,6 +39,8 @@ export function ProfileInfluencerForm() {
     idFront: string;
     idBack: string;
     paymentSelected: string;
+    accountNumber: string;
+    accountName: string;
   }>({
     firstName: "",
     middleName: "",
@@ -53,6 +50,8 @@ export function ProfileInfluencerForm() {
     idFront: "",
     idBack: "",
     paymentSelected: "",
+    accountNumber: "",
+    accountName: "",
   });
 
   useEffect(() => {
@@ -72,7 +71,9 @@ export function ProfileInfluencerForm() {
         idNumber: getInfluencerState.data.id_number,
         idFront: getInfluencerState.data.id_front,
         idBack: getInfluencerState.data.id_back,
-        paymentSelected: "",
+        paymentSelected: getInfluencerState.data.payment_selected.toString(),
+        accountNumber: getInfluencerState.data.account_number,
+        accountName: getInfluencerState.data.account_name,
       });
       setImagesFront({
         src: `${REACT_APP_DOMAIN_URL}api/load-image-influencer/${getInfluencerState.data.id_front}`,
@@ -174,13 +175,7 @@ export function ProfileInfluencerForm() {
       } else {
         dispatch(
           applyInfluencer({
-            firstName: formState.firstName,
-            middleName: formState.middleName,
-            lastName: formState.lastName,
-            idNumber: formState.idNumber,
-            idFront: formState.idFront,
-            idBack: formState.idBack,
-            birthday: formState.birthday,
+            ...formState,
           })
         );
       }
@@ -285,17 +280,25 @@ export function ProfileInfluencerForm() {
         </h2>
         <InfluencerPaymentMethod
           paymentSelected={formState.paymentSelected}
+          accountNumber={formState.accountNumber}
+          accountName={formState.accountName}
           setPaymentSelected={(payment) => {
             setFormState({
               ...formState,
               paymentSelected: payment,
             });
           }}
-          onChange={(payment) => {
-            // setFormState({
-            //   ...formState,
-            //   payops: payment,
-            // });
+          setAccountNumber={(accountNumber) => {
+            setFormState({
+              ...formState,
+              accountNumber,
+            });
+          }}
+          setAccountName={(accountName) => {
+            setFormState({
+              ...formState,
+              accountName,
+            });
           }}
         />
       </div>

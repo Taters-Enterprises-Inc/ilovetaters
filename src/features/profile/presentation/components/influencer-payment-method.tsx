@@ -2,11 +2,8 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import { useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { selectGetSession } from "features/shared/presentation/slices/get-session.slice";
-import { ChangeEvent, useState, useEffect } from "react";
-import { PaymentCardModal } from "features/shared/presentation/modals";
+import { ChangeEvent, useState } from "react";
 import { MaterialInput } from "features/shared/presentation/components";
 
 interface InfluencerPaymentMethodOption {
@@ -25,9 +22,12 @@ const PAYMENT_OPTIONS: Array<InfluencerPaymentMethodOption> = [
 ];
 
 interface InfluencerPaymentMethodProps {
-  onChange: (payment: string) => void;
   paymentSelected: string;
+  accountNumber: string;
+  accountName: string;
   setPaymentSelected: (payment: string) => void;
+  setAccountNumber: (value: string) => void;
+  setAccountName: (value: string) => void;
 }
 
 const PAYOPS_LIST = [
@@ -66,10 +66,13 @@ const PAYOPS_LIST = [
 ];
 
 export function InfluencerPaymentMethod(props: InfluencerPaymentMethodProps) {
+  const [paymentSectionSelected, setPaymentSectionSelected] =
+    useState("E-WALLET");
+
   const handleInfluencerPaymentMethodChange = (
     option: InfluencerPaymentMethodOption
   ) => {
-    props.setPaymentSelected(option.value);
+    setPaymentSectionSelected(option.value);
   };
 
   return (
@@ -81,7 +84,7 @@ export function InfluencerPaymentMethod(props: InfluencerPaymentMethodProps) {
               type="button"
               onClick={() => handleInfluencerPaymentMethodChange(option)}
               className={`relative px-4 py-3 font-semibold border w-full text-sm lg:text-base lg:w-fit ${
-                option.value === props.paymentSelected
+                option.value === paymentSectionSelected
                   ? "text-green-900 border-green-900"
                   : " text-secondary border-secondary"
               } `}
@@ -89,7 +92,7 @@ export function InfluencerPaymentMethod(props: InfluencerPaymentMethodProps) {
               {option.name}
               <div
                 className={`payment-method-active ${
-                  option.value === props.paymentSelected ? "" : "hidden"
+                  option.value === paymentSectionSelected ? "" : "hidden"
                 }`}
               >
                 <svg
@@ -113,27 +116,32 @@ export function InfluencerPaymentMethod(props: InfluencerPaymentMethodProps) {
         <RadioGroup
           aria-labelledby="payops aria label"
           name="payops"
+          value={props.paymentSelected}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            props.onChange((event.target as HTMLInputElement).value);
+            props.setPaymentSelected((event.target as HTMLInputElement).value);
           }}
         >
-          {props.paymentSelected === "BANK-ACCOUNT" ? (
+          {paymentSectionSelected === "BANK-ACCOUNT" ? (
             <div className="mt-2 flex flex-col space-y-2">
               <MaterialInput
                 colorTheme="black"
                 name="bankAccountNumber"
-                label="Bank Account Number"
-                value=""
+                label="Account Number"
+                value={props.accountNumber}
                 size="small"
-                onChange={() => {}}
+                onChange={(e) => {
+                  props.setAccountNumber(e.target.value);
+                }}
               />
               <MaterialInput
                 colorTheme="black"
-                name="bankAccountName"
+                name="accountName"
                 label="Bank Account Name"
-                value=""
+                value={props.accountName}
                 size="small"
-                onChange={() => {}}
+                onChange={(e) => {
+                  props.setAccountName(e.target.value);
+                }}
               />
               {PAYOPS_LIST.map((payops, i) => (
                 <>
@@ -156,23 +164,27 @@ export function InfluencerPaymentMethod(props: InfluencerPaymentMethodProps) {
             </div>
           ) : null}
 
-          {props.paymentSelected === "E-WALLET" ? (
+          {paymentSectionSelected === "E-WALLET" ? (
             <div className="mt-2 flex flex-col space-y-2">
               <MaterialInput
                 colorTheme="black"
                 name="phoneNumber"
                 label="Phone Number"
-                value=""
+                value={props.accountNumber}
                 size="small"
-                onChange={() => {}}
+                onChange={(e) => {
+                  props.setAccountNumber(e.target.value);
+                }}
               />
               <MaterialInput
                 colorTheme="black"
                 name="accountName"
                 label="Account Name"
-                value=""
+                value={props.accountName}
                 size="small"
-                onChange={() => {}}
+                onChange={(e) => {
+                  props.setAccountName(e.target.value);
+                }}
               />
               {PAYOPS_LIST.map((payops, i) => (
                 <>

@@ -59,19 +59,23 @@ export function ProfileCashoutModal(props: ProfileCashoutModalProps) {
                     PHP
                   </span>
                   <span className="text-2xl font-bold text-secondary">
-                    <NumberFormat
-                      value={parseFloat(getInfluencerState.data.payable)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                    />
+                    {getInfluencerState.data.payable ? (
+                      <NumberFormat
+                        value={parseFloat(getInfluencerState.data.payable)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                      />
+                    ) : (
+                      "0"
+                    )}
                   </span>
                   <span className="text-[12px] font-semibold text-secondary mr-2 mb-[3px]">
                     .
-                    {
-                      parseFloat(getInfluencerState.data.payable)
-                        .toFixed(2)
-                        .split(".")[1]
-                    }
+                    {getInfluencerState.data.payable
+                      ? parseFloat(getInfluencerState.data.payable)
+                          .toFixed(2)
+                          .split(".")[1]
+                      : 0}
                   </span>
                 </div>
               </div>

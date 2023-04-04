@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   ADMIN_INFLUENCER_STATUS,
+  ADMIN_SNACKSHOP_MOP_STATUS,
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import Moment from "react-moment";
@@ -118,6 +119,65 @@ export function AdminIdInfluencerApplicationInformation(
               </span>
             </div>
           </div>
+
+          <hr />
+
+          {getAdminInfluencerApplicationState.data ? (
+            <div className="grid-cols-2 gap-4 lg:grid">
+              <div>
+                <strong>Bank Account Type:</strong>{" "}
+                <span className="font-semibold">
+                  {
+                    ADMIN_SNACKSHOP_MOP_STATUS[
+                      getAdminInfluencerApplicationState.data.payment_selected
+                    ]
+                  }
+                </span>
+              </div>
+            </div>
+          ) : null}
+
+          <hr />
+
+          <div className="grid-cols-2 gap-4 lg:grid">
+            <div>
+              <strong>Bank Account Name:</strong>{" "}
+              <span className="font-semibold">
+                {getAdminInfluencerApplicationState.data?.account_name}
+              </span>
+            </div>
+            <div>
+              <strong>Bank Account Number:</strong>{" "}
+              <span className="font-semibold">
+                {getAdminInfluencerApplicationState.data?.account_number}
+              </span>
+            </div>
+          </div>
+
+          {getAdminInfluencerApplicationState.data ? (
+            <>
+              <hr />
+              <div className="pt-2 pb-3">
+                <span className="text-xl font-bold">Attached Documents</span>
+
+                {getAdminInfluencerApplicationState.data.contract ? (
+                  <div className="mt-1">
+                    <strong>Uploaded Signed Contract:</strong>{" "}
+                    <span className="font-semibold">
+                      <a
+                        className="text-blue-600 underline"
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`${REACT_APP_DOMAIN_URL}api/load-image-influencer-contract/${getAdminInfluencerApplicationState.data.contract}`}
+                      >
+                        Click to view
+                      </a>
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            </>
+          ) : null}
         </div>
 
         <hr className="mt-1" />

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   ADMIN_INFLUENCER_CASHOUT_STATUS,
+  ADMIN_SNACKSHOP_MOP_STATUS,
   REACT_APP_DOMAIN_URL,
 } from "features/shared/constants";
 import Moment from "react-moment";
@@ -104,6 +105,40 @@ export function AdminInfluencerCashoutInformation(
               <span className="font-semibold">
                 {getAdminInfluencerCashoutState.data?.fb_user_name ?? ""}
                 {getAdminInfluencerCashoutState.data?.mobile_user_name ?? ""}
+              </span>
+            </div>
+          </div>
+
+          <hr />
+
+          {getAdminInfluencerCashoutState.data ? (
+            <div className="grid-cols-2 gap-4 lg:grid">
+              <div>
+                <strong>Bank Account Type:</strong>{" "}
+                <span className="font-semibold">
+                  {
+                    ADMIN_SNACKSHOP_MOP_STATUS[
+                      getAdminInfluencerCashoutState.data.payment_selected
+                    ]
+                  }
+                </span>
+              </div>
+            </div>
+          ) : null}
+
+          <hr />
+
+          <div className="grid-cols-2 gap-4 lg:grid">
+            <div>
+              <strong>Bank Account Name:</strong>{" "}
+              <span className="font-semibold">
+                {getAdminInfluencerCashoutState.data?.account_name}
+              </span>
+            </div>
+            <div>
+              <strong>Bank Account Number:</strong>{" "}
+              <span className="font-semibold">
+                {getAdminInfluencerCashoutState.data?.account_number}
               </span>
             </div>
           </div>

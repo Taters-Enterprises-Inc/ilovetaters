@@ -8,7 +8,11 @@ export interface AdminInfluencerApplicationModel {
   id_front: string;
   id_back: string;
   dateadded: string;
+  payment_selected: number;
+  account_number: string;
+  account_name: string;
   status: number;
+  contract: string | null;
 
   fb_first_name: string;
   fb_last_name: string;

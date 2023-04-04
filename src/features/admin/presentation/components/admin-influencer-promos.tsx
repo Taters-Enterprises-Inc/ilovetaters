@@ -19,6 +19,7 @@ import {
   getAdminInfluencerPromos,
   resetGetAdminInfluencerPromosState,
 } from "../slices/get-admin-influencer-promos.slice";
+import Moment from "react-moment";
 
 export function AdminInfluencerPromos() {
   const dispatch = useAppDispatch();
@@ -257,7 +258,9 @@ export function AdminInfluencerPromos() {
                         <DataTableCell>{row.referral_code}</DataTableCell>
                         <DataTableCell>{row.customer_discount}</DataTableCell>
                         <DataTableCell>{row.influencer_discount}</DataTableCell>
-                        <DataTableCell>{row.dateadded}</DataTableCell>
+                        <DataTableCell>
+                          <Moment format="LLL">{row.dateadded}</Moment>
+                        </DataTableCell>
                       </DataTableRow>
                     )
                   )}

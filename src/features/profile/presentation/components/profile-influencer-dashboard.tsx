@@ -95,37 +95,28 @@ export function ProfileInfluencerDashboard() {
                     PHP
                   </span>
                   <span className="text-2xl font-bold text-secondary">
-                    <NumberFormat
-                      value={parseFloat(getInfluencerState.data.payable)}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                    />
+                    {getInfluencerState.data.payable ? (
+                      <NumberFormat
+                        value={parseFloat(getInfluencerState.data.payable)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                      />
+                    ) : (
+                      "0"
+                    )}
                   </span>
                   <span className="text-[12px] font-semibold text-secondary mr-2 mb-[3px]">
                     .
-                    {
-                      parseFloat(getInfluencerState.data.payable)
-                        .toFixed(2)
-                        .split(".")[1]
-                    }
+                    {getInfluencerState.data.payable
+                      ? parseFloat(getInfluencerState.data.payable)
+                          .toFixed(2)
+                          .split(".")[1]
+                      : 0}
                   </span>
                 </div>
               </div>
             </div>
           ) : null}
-        </div>
-
-        <div className="flex justify-end">
-          {/* <div>
-            <button
-              className="text-white border px-2 border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 w-full rounded-lg shadow-lg"
-            >
-              <GiCash className="text-3xl" />
-              <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                Cash out
-              </span>
-            </button>
-          </div> */}
         </div>
 
         {getInfluencerRefereesState.data?.referees ? (
@@ -295,6 +286,7 @@ export function ProfileInfluencerDashboard() {
         onCashout={(cashout) => {
           if (getInfluencerState.data) {
             if (
+              getInfluencerState.data.payable &&
               parseFloat(cashout) <= parseFloat(getInfluencerState.data.payable)
             ) {
               dispatch(

@@ -31,6 +31,7 @@ import {
 } from "../slices/get-admin-notifications.slice";
 import { NotificationModel } from "features/shared/core/domain/notification.model";
 import { updateAdminNotificationDateSeen } from "../slices/update-admin-notification-dateseen.slice";
+import Moment from "react-moment";
 
 export function AdminInfluencerCashouts() {
   const dispatch = useAppDispatch();
@@ -376,7 +377,9 @@ export function AdminInfluencerCashouts() {
                               prefix={"₱"}
                             />
                           </DataTableCell>
-                          <DataTableCell>{row.dateadded}</DataTableCell>
+                          <DataTableCell>
+                            <Moment format="LLL">{row.dateadded}</Moment>
+                          </DataTableCell>
                           <DataTableCell align="left">
                             <button
                               onClick={() => {

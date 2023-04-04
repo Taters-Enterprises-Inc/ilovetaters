@@ -13,4 +13,7 @@ export interface AdminInfluencerCashoutModel {
   last_name: string;
   fb_user_name: string | null;
   mobile_user_name: string | null;
+  payment_selected: number;
+  account_number: string;
+  account_name: string;
 }
