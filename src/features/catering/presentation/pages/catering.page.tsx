@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import { CateringMaintenance } from "../components";
 
 export function Catering() {
-  const maintenance = false;
+  const maintenance = true;
   return (
     <>
       <Helmet>

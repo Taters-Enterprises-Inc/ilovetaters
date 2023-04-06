@@ -6,8 +6,11 @@ import { useAppDispatch } from "features/config/hooks";
 import { getLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 
 import { useEffect } from "react";
+import { ShopMaintenance } from "../components";
 
 export function Shop() {
+  const maintenance = true;
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export function Shop() {
         }}
       />
 
-      <Outlet />
+      {maintenance ? <ShopMaintenance /> : <Outlet />}
 
       <FooterNav activeUrl="SNACKSHOP" />
     </>
