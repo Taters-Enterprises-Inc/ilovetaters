@@ -3,7 +3,7 @@ import {
   AdminHead,
   AdminTotalSalesCard,
 } from "../components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAdminSales } from "../slices/get-admin-sales.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
@@ -25,8 +25,17 @@ import {
   selectGetAdminOverallTotalSales,
 } from "../slices/get-admin-overall-total-sales.slice";
 
+enum SalesTab {
+  Snackshop,
+  Catering,
+  Popclub,
+  Performance,
+}
+
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
+
+  const [salesTab, setSalesTab] = useState<SalesTab>(SalesTab.Snackshop);
 
   const getAdminSnackshopTotalSalesState = useAppSelector(
     selectGetAdminSnackshopTotalSales
@@ -69,16 +78,24 @@ export function AdminDashboard() {
         <div className="grid grid-cols-1 gap-4 mt-2 mb-8 sm:grid-cols-2 lg:grid-cols-4">
           <AdminTotalSalesCard
             title="Snackshop Sales"
+            onClick={() => {
+              setSalesTab(SalesTab.Snackshop);
+            }}
             totalCompletedTransaction={
               getAdminSnackshopTotalSalesState.data?.total_completed_transaction
             }
             totalPurchaseAmount={
               getAdminSnackshopTotalSalesState.data?.total_purchase_amount
             }
+            active={salesTab === SalesTab.Snackshop}
             icon={
               <img
                 src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/snackshop-active.png`}
-                className="w-[65px]"
+                className={
+                  salesTab === SalesTab.Snackshop
+                    ? `w-[65px]`
+                    : `w-[15%] lg:w-[20%]`
+                }
                 alt="Entertainment Snacks est. 1994."
               />
             }
@@ -86,16 +103,24 @@ export function AdminDashboard() {
 
           <AdminTotalSalesCard
             title="Catering Sales"
+            onClick={() => {
+              setSalesTab(SalesTab.Catering);
+            }}
             totalCompletedTransaction={
               getAdminCateringTotalSalesState.data?.total_completed_transaction
             }
             totalPurchaseAmount={
               getAdminCateringTotalSalesState.data?.total_purchase_amount
             }
+            active={salesTab === SalesTab.Catering}
             icon={
               <img
                 src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/catering-active.png`}
-                className="w-[65px]"
+                className={
+                  salesTab === SalesTab.Catering
+                    ? `w-[65px]`
+                    : `w-[15%] lg:w-[20%]`
+                }
                 alt="Entertainment Snacks est. 1994."
               />
             }
@@ -103,16 +128,24 @@ export function AdminDashboard() {
 
           <AdminTotalSalesCard
             title="PopClub Sales"
+            onClick={() => {
+              setSalesTab(SalesTab.Popclub);
+            }}
             totalCompletedTransaction={
               getAdminPopClubTotalSalesState.data?.total_completed_transaction
             }
             totalPurchaseAmount={
               getAdminPopClubTotalSalesState.data?.total_purchase_amount
             }
+            active={salesTab === SalesTab.Popclub}
             icon={
               <img
                 src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/popclub-active.png`}
-                className="w-[60px]"
+                className={
+                  salesTab === SalesTab.Popclub
+                    ? `w-[60px]`
+                    : `w-[12%] lg:w-[18%]`
+                }
                 alt="Entertainment Snacks est. 1994."
               />
             }
@@ -120,16 +153,24 @@ export function AdminDashboard() {
 
           <AdminTotalSalesCard
             title="Overall Sales"
+            onClick={() => {
+              setSalesTab(SalesTab.Performance);
+            }}
             totalCompletedTransaction={
               getAdminOverallTotalSalesState.data?.total_completed_transaction
             }
             totalPurchaseAmount={
               getAdminOverallTotalSalesState.data?.total_purchase_amount
             }
+            active={salesTab === SalesTab.Performance}
             icon={
               <img
                 src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/icons/home-active.png`}
-                className="w-[65px]"
+                className={
+                  salesTab === SalesTab.Performance
+                    ? `w-[65px]`
+                    : `w-[15%] lg:w-[20%]`
+                }
                 alt="Entertainment Snacks est. 1994."
               />
             }

@@ -15,6 +15,7 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
 import { InfluencerModel } from "features/shared/core/domain/influencer.model";
 import { GetInfluencerRefereesModel } from "features/profile/core/domain/get-influencer-referees.model";
+import { GetInfluencerCashoutsModel } from "features/profile/core/domain/get-influencer-cashouts.model";
 
 export interface GetCateringBookingHistoryResponse {
   data: {
@@ -97,6 +98,24 @@ export interface InfluencerCashoutResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetInfluencerCashoutsResponse {
+  data: {
+    message: string;
+    data: GetInfluencerCashoutsModel;
+  };
+}
+
+export function GetInfluencerCashoutsRepository(
+  query: string
+): Promise<GetInfluencerCashoutsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-cashouts${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function InfluencerCashoutRepository(

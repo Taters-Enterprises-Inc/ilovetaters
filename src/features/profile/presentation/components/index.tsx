@@ -7,3 +7,5 @@ export { ProfileInfluencerContractIsRequired } from "./profile-influencer-contra
 export { ProfileInfluencerContractIsOnVerification } from "./profile-influencer-contract-is-on-verification";
 export { ProfileInfluencerContractVerified } from "./profile-influencer-contract-verified";
 export { InfluencerPaymentMethod } from "./influencer-payment-method";
+export { ProfileInfluencerReferees } from "./profile-influencer-referees";
+export { ProfileInfluencerCashouts } from "./profile-influencer-cashouts";

@@ -792,7 +792,6 @@ export function ShopCheckout() {
       return (
         <div className="text-sm">
           <span>
-            For transparency
             <b>
               {getSnackshopInfluencerPromoState.data.fb_user_name ??
                 "" +
