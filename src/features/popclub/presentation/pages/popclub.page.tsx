@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import { PopclubMaintenance } from "../components";
 
 export function PopClub() {
-  const maintenance = true;
+  const maintenance = false;
 
   return (
     <main className="min-h-screen bg-primary">

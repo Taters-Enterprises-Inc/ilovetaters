@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { ShopMaintenance } from "../components";
 
 export function Shop() {
-  const maintenance = true;
+  const maintenance = false;
 
   const dispatch = useAppDispatch();
 
