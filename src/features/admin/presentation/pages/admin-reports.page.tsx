@@ -15,6 +15,10 @@ export function AdminReports() {
   const [openGenerateTransactionModal, setOpenGenerateTransactionModal] =
     useState<boolean>(false);
   const [
+    openGenerateTransactionCateringModal,
+    setOpenGenerateTransactionCateringModal,
+  ] = useState<boolean>(false);
+  const [
     openGeneratePopClubStoreVisitModal,
     setOpenGeneratePopClubStoreVisitModal,
   ] = useState<boolean>(false);
@@ -48,10 +52,10 @@ export function AdminReports() {
           Reports
         </h1>
         <main>
-          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+          <h1 className="mt-1 mb-1 ml-4 text-lg font-bold text-secondary">
             Snackshop
           </h1>
-          <div className="flex px-4 pb-4 flex-wrap justify-start items-start space-x-4">
+          <div className="flex flex-wrap items-start justify-start px-4 pb-4 space-x-4">
             <button
               onClick={() => {
                 setOpenGeneratePmixModal(true);
@@ -71,7 +75,7 @@ export function AdminReports() {
                 setOpenGenerateTransactionModal(true);
               }}
             >
-              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+              <div className="flex items-center justify-center p-4 border shadow-xl border-secondary">
                 <GrDocumentConfig className="text-5xl" />
               </div>
               <div className="flex items-center justify-center mt-2 space-x-1">
@@ -81,17 +85,37 @@ export function AdminReports() {
             </button>
           </div>
 
-          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+          <h1 className="mt-1 mb-1 ml-4 text-lg font-bold text-secondary">
+            Catering
+          </h1>
+
+          <div className="flex flex-wrap items-start justify-start px-4 pb-4 space-x-4">
+            <button
+              onClick={() => {
+                setOpenGenerateTransactionCateringModal(true);
+              }}
+            >
+              <div className="flex items-center justify-center p-4 border shadow-xl border-secondary">
+                <GrDocumentConfig className="text-5xl" />
+              </div>
+              <div className="flex items-center justify-center mt-2 space-x-1">
+                <GrAttachment className="text-xs font-semibold" />
+                <span className="text-xs font-semibold">Transaction</span>
+              </div>
+            </button>
+          </div>
+
+          <h1 className="mt-1 mb-1 ml-4 text-lg font-bold text-secondary">
             PopClub
           </h1>
 
-          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+          <div className="flex flex-wrap items-start justify-start px-4 pb-4 space-x-4">
             <button
               onClick={() => {
                 setOpenGeneratePopClubStoreVisitModal(true);
               }}
             >
-              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+              <div className="flex items-center justify-center p-4 border shadow-xl border-secondary">
                 <GrDocumentConfig className="text-5xl" />
               </div>
               <div className="flex items-start justify-center mt-2 space-x-1">
@@ -105,7 +129,7 @@ export function AdminReports() {
                 setOpenGeneratePopClubSnacksDeliveredModal(true);
               }}
             >
-              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+              <div className="flex items-center justify-center p-4 border shadow-xl border-secondary">
                 <GrDocumentConfig className="text-5xl" />
               </div>
               <div className="flex items-start justify-center mt-2 ">
@@ -118,17 +142,17 @@ export function AdminReports() {
             </button>
           </div>
 
-          <h1 className="text-lg font-bold ml-4 mt-1 mb-1 text-secondary">
+          <h1 className="mt-1 mb-1 ml-4 text-lg font-bold text-secondary">
             Survey
           </h1>
 
-          <div className="flex px-4 pb-4  flex-wrap justify-start items-start space-x-4">
+          <div className="flex flex-wrap items-start justify-start px-4 pb-4 space-x-4">
             <button
               onClick={() => {
                 setOpenGenerateCustomerFeedbackModal(true);
               }}
             >
-              <div className="p-4 border flex justify-center items-center shadow-xl border-secondary">
+              <div className="flex items-center justify-center p-4 border shadow-xl border-secondary">
                 <GrDocumentConfig className="text-5xl" />
               </div>
               <div className="flex items-start justify-center mt-2 space-x-1">
@@ -179,6 +203,29 @@ export function AdminReports() {
           dispatch(
             popUpSnackBar({
               message: "Successfully generate Transaction report!",
+              severity: "success",
+            })
+          );
+        }}
+        onClose={() => {
+          setOpenGenerateTransactionModal(false);
+        }}
+      />
+
+      <AdminGenerateReportModal
+        open={openGenerateTransactionCateringModal}
+        title="Generate Transaction Report"
+        onClickGenerate={(startDate, endDate) => {
+          window.location.href =
+            REACT_APP_DOMAIN_URL +
+            "api/admin/report-transaction-catering/" +
+            startDate +
+            "/" +
+            endDate;
+          setOpenGenerateTransactionCateringModal(false);
+          dispatch(
+            popUpSnackBar({
+              message: "Successfully generate Transaction Catering report!",
               severity: "success",
             })
           );

@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { Media } from "features/shared/presentation/components";
 import {
   getSession,
   selectGetSession,
@@ -120,14 +121,10 @@ export function CateringCartModal(props: CateringCartModalProps) {
                   key={i}
                   className="flex bg-secondary shadow-md rounded-[10px] relative"
                 >
-                  <img
+                  <Media
                     src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                     className="rounded-[10px] w-[92px] h-[92px]"
                     alt={order.prod_name}
-                    onError={({ currentTarget }) => {
-                      currentTarget.onerror = null;
-                      currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                    }}
                   />
                   <div className="flex flex-col flex-1 px-3 py-2 text-white">
                     <h3 className="text-sm w-[90%]  font-bold leading-4">

@@ -26,6 +26,7 @@ import {
   selectGetCustomerSurveyResponseInOrderService,
   getCustomerSurveyResponseInOrderService,
 } from "features/shared/presentation/slices/get-customer-survey-response-in-order-service.slice";
+import { Media } from "features/shared/presentation/components";
 
 export function ShopOrder() {
   const dispatch = useAppDispatch();
@@ -131,39 +132,20 @@ export function ShopOrder() {
       deal_products_promo_includes =
         getOrdersState.data?.order.deals_details[0].deal_products_promo_include;
     }
-
-    if (order.promo_discount_percentage) {
-      return (
-        <>
-          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-            <NumberFormat
-              value={parseFloat(order.calc_price).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-          <h3 className="flex items-end justify-end flex-1 text-base">
-            <NumberFormat
-              value={(
-                parseFloat(order.calc_price) -
-                parseFloat(order.calc_price) *
-                  parseFloat(order.promo_discount_percentage)
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-        </>
-      );
-    } else if (deal_products_promo_includes) {
+    if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
         const deal_products_promo_include = deal_products_promo_includes[i];
 
         if (
+          deal_products_promo_include.product_id === order.product_id &&
+          deal_products_promo_include.product_variant_option_tb_id === null
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        } else if (
           deal_products_promo_include.product_id === order.product_id &&
           deal_products_promo_include.product_variant_option_tb_id
         ) {
@@ -193,6 +175,7 @@ export function ShopOrder() {
           if (
             val.price &&
             val.promo_discount_percentage &&
+            val.product_id === order.product_id &&
             !addedObtainable.some(
               (value) => value.product_id === val.product_id
             )
@@ -208,7 +191,9 @@ export function ShopOrder() {
         if (
           deal_products_promo_include_match.obtainable.length > 0 &&
           deal_products_promo_include_match.quantity &&
-          order.quantity >= deal_products_promo_include_match.quantity + 1
+          order.quantity >= deal_products_promo_include_match.quantity + 1 &&
+          obtainableDiscountedPrice &&
+          obtainablePrice
         ) {
           return (
             <>
@@ -502,14 +487,10 @@ export function ShopOrder() {
                         key={index}
                         className="flex bg-secondary shadow-md rounded-[10px]"
                       >
-                        <img
+                        <Media
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt={order.name}
-                          onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">
@@ -544,14 +525,10 @@ export function ShopOrder() {
                         key={index}
                         className="flex bg-secondary shadow-md rounded-[10px]"
                       >
-                        <img
+                        <Media
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${deal.product_image}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt={deal.name}
-                          onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="text-sm">{deal.name}</h3>

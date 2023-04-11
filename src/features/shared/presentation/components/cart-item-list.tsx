@@ -19,6 +19,7 @@ import { IoMdClose } from "react-icons/io";
 import NumberFormat from "react-number-format";
 import { getSession, selectGetSession } from "../slices/get-session.slice";
 import { ActiveUrl } from "./header-nav";
+import { Media } from "./media";
 
 export interface CartListItemProps {
   activeUrl: ActiveUrl;
@@ -76,6 +77,13 @@ export function CartListItem(props: CartListItemProps) {
 
             if (
               deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            } else if (
+              deal_products_promo_include.product_id === order.prod_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
@@ -104,6 +112,7 @@ export function CartListItem(props: CartListItemProps) {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.prod_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -120,7 +129,10 @@ export function CartListItem(props: CartListItemProps) {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+              order.prod_qty >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
@@ -184,37 +196,20 @@ export function CartListItem(props: CartListItemProps) {
     const deal_products_promo_includes =
       getSessionState.data?.redeem_data?.deal_products_promo_include;
 
-    if (order.promo_discount_percentage) {
-      return (
-        <div>
-          <h3 className="flex items-end justify-end flex-1 text-sm line-through">
-            <NumberFormat
-              value={order.prod_calc_amount.toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-          <h3 className="flex items-end justify-end flex-1 text-base">
-            <NumberFormat
-              value={(
-                order.prod_calc_amount -
-                order.prod_calc_amount * order.promo_discount_percentage
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h3>
-        </div>
-      );
-    } else if (deal_products_promo_includes) {
+    if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
         const deal_products_promo_include = deal_products_promo_includes[i];
 
         if (
+          deal_products_promo_include.product_id === order.prod_id &&
+          deal_products_promo_include.product_variant_option_tb_id === null
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        } else if (
           deal_products_promo_include.product_id === order.prod_id &&
           deal_products_promo_include.product_variant_option_tb_id
         ) {
@@ -244,6 +239,7 @@ export function CartListItem(props: CartListItemProps) {
           if (
             val.price &&
             val.promo_discount_percentage &&
+            val.product_id === order.prod_id &&
             !addedObtainable.some(
               (value) => value.product_id === val.product_id
             )
@@ -259,7 +255,9 @@ export function CartListItem(props: CartListItemProps) {
         if (
           deal_products_promo_include_match.obtainable.length > 0 &&
           deal_products_promo_include_match.quantity &&
-          order.prod_qty >= deal_products_promo_include_match.quantity + 1
+          order.prod_qty >= deal_products_promo_include_match.quantity + 1 &&
+          obtainableDiscountedPrice &&
+          obtainablePrice
         ) {
           return (
             <div>
@@ -372,14 +370,10 @@ export function CartListItem(props: CartListItemProps) {
                         key={i}
                         className="flex bg-secondary rounded-[10px] relative pr-10"
                       >
-                        <img
+                        <Media
                           src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${order.prod_image_name}`}
                           className="rounded-[10px] w-[92px] h-[92px]"
                           alt={order.prod_name}
-                          onError={({ currentTarget }) => {
-                            currentTarget.onerror = null;
-                            currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                          }}
                         />
                         <div className="flex flex-col flex-1 px-3 py-2 text-white">
                           <h3 className="w-full text-sm font-bold leading-4">
@@ -438,14 +432,10 @@ export function CartListItem(props: CartListItemProps) {
 
                 {getSessionState.data?.redeem_data ? (
                   <div className="flex bg-secondary shadow-md shadow-tertiary rounded-[10px] relative">
-                    <img
+                    <Media
                       src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/75/${getSessionState.data.redeem_data.deal_image_name}`}
                       className="rounded-[10px] w-[92px] h-[92px]"
                       alt={getSessionState.data.redeem_data.deal_name}
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null;
-                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                      }}
                     />
                     <div className="flex flex-col flex-1 px-3 py-2 text-white">
                       <h3 className="w-full text-sm font-bold leading-4">

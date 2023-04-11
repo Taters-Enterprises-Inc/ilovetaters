@@ -68,6 +68,7 @@ export function AdminSettingPopclubCreateDeal() {
     influencerDiscount: string;
     minimumPurchase: string;
     isFreeDelivery: boolean;
+    isPartnerCompany: boolean;
     description: string;
     secondsBeforeExpiration: string;
     availableStartTime: Moment | null;
@@ -95,6 +96,7 @@ export function AdminSettingPopclubCreateDeal() {
     influencerDiscount: "",
     minimumPurchase: "",
     isFreeDelivery: false,
+    isPartnerCompany: false,
     description: "",
     secondsBeforeExpiration: "",
     availableStartTime: null,
@@ -448,7 +450,8 @@ export function AdminSettingPopclubCreateDeal() {
                   option.name + " (" + option.platform_name + ")"
                 }
                 isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
+                  option.name + " (" + option.platform_name + ")" ===
+                  value.name + " (" + value.platform_name + ")"
                 }
                 value={formState.categories ? [...formState.categories] : []}
                 onChange={(e, categories) => {
@@ -552,6 +555,17 @@ export function AdminSettingPopclubCreateDeal() {
                 checked={formState.isFreeDelivery}
               />
             </div>
+
+            <MaterialSwitch
+              label="Is Partner Company"
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  isPartnerCompany: e.target.checked,
+                });
+              }}
+              checked={formState.isPartnerCompany}
+            />
 
             <h1 className="text-2xl font-bold text-secondary !my-2">
               Products

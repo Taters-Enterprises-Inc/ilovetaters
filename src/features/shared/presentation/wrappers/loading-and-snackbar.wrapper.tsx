@@ -359,6 +359,10 @@ import {
   EditAdminSettingPopclubDealState,
   selectEditAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
+import {
+  selectValidatePartnerCompanyEmployeeIdNumberAdmin,
+  ValidatePartnerCompanyEmployeeIdNumberAdminState,
+} from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
 
 import {
   selectGetSnackshopInfluencerPromo,
@@ -598,6 +602,10 @@ export function LoadingAndSnackbarWrapper() {
     selectAdminInfluencerCashoutChangeStatus
   );
 
+  const validatePartnerCompanyEmployeeIdNumberAdminState = useAppSelector(
+    selectValidatePartnerCompanyEmployeeIdNumberAdmin
+  );
+
   useEffect(() => {
     switch (adminInfluencerCashoutChangeStatusState.status) {
       case AdminInfluencerCashoutChangeStatusState.inProgress:
@@ -622,6 +630,31 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [adminInfluencerCashoutChangeStatusState]);
+
+  useEffect(() => {
+    switch (validatePartnerCompanyEmployeeIdNumberAdminState.status) {
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.success:
+        showAlert(
+          setSuccessAlert,
+          validatePartnerCompanyEmployeeIdNumberAdminState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.fail:
+        showAlert(
+          setFailsAlert,
+          validatePartnerCompanyEmployeeIdNumberAdminState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [validatePartnerCompanyEmployeeIdNumberAdminState]);
 
   useEffect(() => {
     switch (influencerCashoutState.status) {

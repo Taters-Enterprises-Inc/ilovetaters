@@ -143,6 +143,13 @@ export function AdminShopOrderCustomerInformation() {
 
             if (
               deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            } else if (
+              deal_products_promo_include.product_id === order.product_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
@@ -171,6 +178,7 @@ export function AdminShopOrderCustomerInformation() {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.product_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -187,7 +195,10 @@ export function AdminShopOrderCustomerInformation() {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.quantity >= deal_products_promo_include_match.quantity + 1
+              order.quantity >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
@@ -259,6 +270,13 @@ export function AdminShopOrderCustomerInformation() {
 
             if (
               deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            } else if (
+              deal_products_promo_include.product_id === order.product_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
@@ -287,6 +305,7 @@ export function AdminShopOrderCustomerInformation() {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.product_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -302,7 +321,10 @@ export function AdminShopOrderCustomerInformation() {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.quantity >= deal_products_promo_include_match.quantity + 1
+              order.quantity >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
@@ -368,6 +390,13 @@ export function AdminShopOrderCustomerInformation() {
 
             if (
               deal_products_promo_include.product_id === order.product_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+
+              break;
+            } else if (
+              deal_products_promo_include.product_id === order.product_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
               deal_products_promo_include_match = deal_products_promo_include;
@@ -396,6 +425,7 @@ export function AdminShopOrderCustomerInformation() {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.product_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -411,7 +441,10 @@ export function AdminShopOrderCustomerInformation() {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.quantity >= deal_products_promo_include_match.quantity + 1
+              order.quantity >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +
@@ -509,39 +542,20 @@ export function AdminShopOrderCustomerInformation() {
   }) => {
     const deal_products_promo_includes = item.deal_products_promo_include;
 
-    if (item.promo_discount_percentage) {
-      return (
-        <>
-          <span className="text-sm line-through">
-            <NumberFormat
-              value={parseFloat(item.price).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </span>
-          <br />
-          <span>
-            <NumberFormat
-              value={(
-                parseFloat(item.price) -
-                parseFloat(item.price) *
-                  parseFloat(item.promo_discount_percentage)
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </span>
-        </>
-      );
-    } else if (deal_products_promo_includes) {
+    if (deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
         const deal_products_promo_include = deal_products_promo_includes[i];
 
         if (
+          deal_products_promo_include.product_id === item.product_id &&
+          deal_products_promo_include.product_variant_option_tb_id === null
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+
+          break;
+        } else if (
           deal_products_promo_include.product_id === item.product_id &&
           deal_products_promo_include.product_variant_option_tb_id
         ) {
@@ -571,6 +585,7 @@ export function AdminShopOrderCustomerInformation() {
           if (
             val.price &&
             val.promo_discount_percentage &&
+            val.product_id === item.product_id &&
             !addedObtainable.some(
               (value) => value.product_id === val.product_id
             )
@@ -586,7 +601,9 @@ export function AdminShopOrderCustomerInformation() {
         if (
           deal_products_promo_include_match.obtainable.length > 0 &&
           deal_products_promo_include_match.quantity &&
-          item.quantity >= deal_products_promo_include_match.quantity + 1
+          item.quantity >= deal_products_promo_include_match.quantity + 1 &&
+          obtainableDiscountedPrice &&
+          obtainablePrice
         ) {
           return (
             <>
@@ -1048,6 +1065,32 @@ export function AdminShopOrderCustomerInformation() {
                                   parseFloat(item.product_price) -
                                   parseFloat(item.product_price) *
                                     parseFloat(item.promo_discount_percentage)
+                                ).toFixed(2)}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                          </>
+                        ) : item.deal_discount_percentage ? (
+                          <>
+                            <span className="text-sm line-through">
+                              <NumberFormat
+                                value={parseFloat(item.product_price).toFixed(
+                                  2
+                                )}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={"₱"}
+                              />
+                            </span>
+                            <br />
+                            <span>
+                              <NumberFormat
+                                value={(
+                                  parseFloat(item.product_price) -
+                                  parseFloat(item.product_price) *
+                                    parseFloat(item.deal_discount_percentage)
                                 ).toFixed(2)}
                                 displayType={"text"}
                                 thousandSeparator={true}

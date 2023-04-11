@@ -221,6 +221,7 @@ import getAdminInfluencerCashouts from "features/admin/presentation/slices/get-a
 import getAdminInfluencerCashout from "features/admin/presentation/slices/get-admin-influencer-cashout.slice";
 import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 import getInfluencerCashouts from "features/profile/presentation/slices/get-influencer-cashouts.slice";
+import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
 
 export const store = configureStore({
   reducer: {
@@ -445,6 +446,7 @@ export const store = configureStore({
     getAdminInfluencerCashout,
     adminInfluencerCashoutChangeStatus,
     getInfluencerCashouts,
+    validatePartnerCompanyEmployeeIdNumberAdmin,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

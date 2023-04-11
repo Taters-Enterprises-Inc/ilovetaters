@@ -40,6 +40,7 @@ import {
   UpdateAdminSettingPopclubDealStatusParam,
   CreateAdminInfluencerPromoParam,
   AdminInfluencerCashoutChangeStatusParam,
+  ValidatePartnerCompanyEmployeeIdNumberParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -727,6 +728,11 @@ export interface EditAdminSettingPopclubDealResponse {
     message: string;
   };
 }
+export interface ValidatePartnerCompanyEmployeeIdNumberAdminResponse {
+  data: {
+    message: string;
+  };
+}
 
 export interface GetAdminInfluencerPromosResponse {
   data: {
@@ -783,6 +789,18 @@ export function GetAdminInfluencerCashoutRepository(
 ): Promise<GetAdminInfluencerCashoutResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashout/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function ValidatePartnerCompanyEmployeeIdNumberAdminRepository(
+  param: ValidatePartnerCompanyEmployeeIdNumberParam
+): Promise<ValidatePartnerCompanyEmployeeIdNumberAdminResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/partner-company-employee-id-number/`,
+    param,
     {
       withCredentials: true,
     }

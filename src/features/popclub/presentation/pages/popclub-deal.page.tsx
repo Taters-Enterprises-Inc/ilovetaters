@@ -68,6 +68,7 @@ import {
   closeMessageModal,
   openMessageModal,
 } from "features/shared/presentation/slices/message-modal.slice";
+import { Media } from "features/shared/presentation/components";
 
 export function PopClubDeal() {
   const query = useQuery();
@@ -791,13 +792,9 @@ export function PopClubDeal() {
                     </div>
                   </div>
                 ) : null}
-                <img
+                <Media
                   src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getDealState.data.product_image}`}
                   alt={getDealState.data.name}
-                  onError={({ currentTarget }) => {
-                    currentTarget.onerror = null;
-                    currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                  }}
                 />
                 <CountdownTimer />
                 <div className="container flex-col pt-4 space-y-4 pb-36 lg:px-4">

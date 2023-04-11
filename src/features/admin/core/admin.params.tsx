@@ -88,6 +88,11 @@ export interface ValidateReferenceNumberParam {
   transactionId: number;
 }
 
+export interface ValidatePartnerCompanyEmployeeIdNumberParam {
+  idNumber: string;
+  redeemId: number;
+}
+
 export interface UpdateAdminSettingUserStoresParam {
   userId: string;
   stores: Array<AdminStoreModel>;
@@ -351,6 +356,7 @@ export interface CreateAdminSettingPopclubDealParam {
   influencerDiscount: string;
   minimumPurchase: string;
   isFreeDelivery: boolean;
+  isPartnerCompany: boolean;
   description: string;
   secondsBeforeExpiration: string;
   availableStartTime: string;

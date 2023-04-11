@@ -17,7 +17,7 @@ export enum GetUserDiscountState {
 interface InitialState {
   status: GetUserDiscountState;
   message: string;
-  data: UserDiscountModel | undefined;
+  data: UserDiscountModel | undefined | null;
 }
 
 const initialState: InitialState = {

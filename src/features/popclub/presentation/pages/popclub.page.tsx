@@ -2,8 +2,11 @@ import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { FooterNav, HeaderNav } from "features/shared/presentation/components";
 import { Helmet } from "react-helmet";
 import { Outlet } from "react-router-dom";
+import { PopclubMaintenance } from "../components";
 
 export function PopClub() {
+  const maintenance = false;
+
   return (
     <main className="min-h-screen bg-primary">
       <Helmet>
@@ -22,7 +25,7 @@ export function PopClub() {
         }}
       />
 
-      <Outlet />
+      {maintenance ? <PopclubMaintenance /> : <Outlet />}
 
       <FooterNav activeUrl="POPCLUB" />
     </main>

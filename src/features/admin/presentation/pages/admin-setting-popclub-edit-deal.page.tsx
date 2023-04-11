@@ -519,7 +519,8 @@ export function AdminSettingPopclubEditDeal() {
                   option.name + " (" + option.platform_name + ")"
                 }
                 isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
+                  option.name + " (" + option.platform_name + ")" ===
+                  value.name + " (" + value.platform_name + ")"
                 }
                 value={formState.categories ? [...formState.categories] : []}
                 onChange={(e, categories) => {
