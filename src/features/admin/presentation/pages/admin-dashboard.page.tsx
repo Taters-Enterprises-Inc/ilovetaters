@@ -1,4 +1,5 @@
 import {
+  AdminDashboardPieChart,
   AdminDashboardSalesLineChart,
   AdminHead,
   AdminTotalSalesCard,
@@ -176,7 +177,12 @@ export function AdminDashboard() {
             }
           />
         </div>
+
         <AdminDashboardSalesLineChart />
+
+        {/* <div className="w-[700px] h-[700px]">
+          <AdminDashboardPieChart />
+        </div> */}
       </div>
     </>
   );
