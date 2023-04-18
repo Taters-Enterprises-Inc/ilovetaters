@@ -157,7 +157,7 @@ import getAdminStoreCateringProducts from "features/admin/presentation/slices/ge
 import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
-import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
+import getAdminDashboardShopSalesHistory from "features/admin/presentation/slices/get-admin-dashboard-shop-sales-history.slice";
 import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-admin-snackshop-total-sales.slice";
 import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
 import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
@@ -382,7 +382,7 @@ export const store = configureStore({
     updateStoreCateringProduct,
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
-    getAdminSales,
+    getAdminDashboardShopSalesHistory,
     getAdminSnackshopTotalSales,
     getAdminCateringTotalSales,
     getAdminPopClubTotalSales,

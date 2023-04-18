@@ -23,7 +23,6 @@ import {
   UpdateAdminSettingShopProductStatusParam,
   UpdateStoreCateringProductParam,
   UpdateAdminCateringOrderItemRemarksParam,
-  GetAdminSalesParam,
   GetAdminTotalSalesParam,
   CreateAdminSettingStoreParam,
   GetAdminCateringPackageFlavorsParam,
@@ -513,7 +512,7 @@ export interface GetAdminCateringPackageFlavorsResponse {
   };
 }
 
-export interface GetAdminSalesResponse {
+export interface GetAdminDashboardShopSalesHistoryResponse {
   data: {
     message: string;
     data: Array<SaleModel>;
@@ -1175,12 +1174,13 @@ export function GetAdminTotalSalesRepository(
   );
 }
 
-export function GetAdminSalesRepository(
-  param: GetAdminSalesParam
-): Promise<GetAdminSalesResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}`, {
-    withCredentials: true,
-  });
+export function GetAdminDashboardShopSalesHistoryRepository(): Promise<GetAdminDashboardShopSalesHistoryResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/sales-history`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {

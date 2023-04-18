@@ -211,10 +211,6 @@ export interface UpdateAdminCateringOrderItemRemarksParam {
   remarks: string;
 }
 
-export interface GetAdminSalesParam {
-  service: "overall" | "snackshop" | "catering" | "popclub";
-}
-
 export interface GetAdminTotalSalesParam {
   service: "overall" | "snackshop" | "catering" | "popclub";
 }

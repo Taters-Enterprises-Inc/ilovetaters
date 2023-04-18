@@ -8,7 +8,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { useAppSelector } from "features/config/hooks";
-import { selectGetAdminSales } from "../slices/get-admin-sales.slice";
+import { selectGetAdminDashboardShopSalesHistory } from "../slices/get-admin-dashboard-shop-sales-history.slice";
 import moment from "moment";
 import NumberFormat from "react-number-format";
 
@@ -38,11 +38,13 @@ const intToString = (num: any): any => {
 };
 
 export function AdminDashboardSalesLineChart() {
-  const getAdminSalesState = useAppSelector(selectGetAdminSales);
+  const getAdminDashboardShopSalesHistoryState = useAppSelector(
+    selectGetAdminDashboardShopSalesHistory
+  );
 
   return (
     <ResponsiveContainer width="100%">
-      <AreaChart data={getAdminSalesState.data}>
+      <AreaChart data={getAdminDashboardShopSalesHistoryState.data}>
         <defs>
           <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#a21013" stopOpacity={0.8} />

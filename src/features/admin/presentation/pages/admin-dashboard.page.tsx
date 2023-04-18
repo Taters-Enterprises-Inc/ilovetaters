@@ -5,7 +5,7 @@ import {
 } from "../components";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { getAdminSales } from "../slices/get-admin-sales.slice";
+import { getAdminDashboardShopSalesHistory } from "../slices/get-admin-dashboard-shop-sales-history.slice";
 import NumberFormat from "react-number-format";
 import {
   getAdminSnackshopTotalSales,
@@ -51,7 +51,7 @@ export function AdminDashboard() {
   );
 
   useEffect(() => {
-    dispatch(getAdminSales({ service: "overall" }));
+    dispatch(getAdminDashboardShopSalesHistory());
     dispatch(getAdminSnackshopTotalSales());
     dispatch(getAdminCateringTotalSales());
     dispatch(getAdminPopClubTotalSales());
