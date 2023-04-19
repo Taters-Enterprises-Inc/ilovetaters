@@ -1,7 +1,7 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useNavigate } from "react-router-dom";
 
-export function CateringMaintenance() {
+export function ShopMaintenance() {
   const navigate = useNavigate();
 
   return (
@@ -15,7 +15,7 @@ export function CateringMaintenance() {
         <div className="flex items-end">
           <span className="text-6xl font-bold text-primary">
             {" "}
-            Taters Catering will be back soon!
+            Taters Snackshop will be back soon!
           </span>
         </div>
         <p className="font-bold text-primary space-y-20 ">

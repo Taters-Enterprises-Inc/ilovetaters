@@ -10,4 +10,5 @@ export interface SnackShopOrderModel {
   application_status: boolean;
   hash_key: string;
   survey_hash: string | null;
+  discount: string | null;
 }

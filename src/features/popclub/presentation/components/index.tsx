@@ -8,3 +8,4 @@ export { SnacksDeliveredDealStoreCluster } from "./snacks-delivered-deal-store-c
 export { StoreVisitDealStoreCluster } from "./store-visit-deal-store-cluster";
 export { StoreVisitDealStoreSearch } from "./store-visit-deal-store-search";
 export { PopClubQuantityInput } from "./popclub-quantity-input";
+export { PopclubMaintenance } from "./popclub-maintenance";

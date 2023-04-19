@@ -20,6 +20,7 @@ import { IoMdClose } from "react-icons/io";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { selectSignInMobileUser } from "../slices/sign-in-mobile-user.slice";
 import { TbArrowsMaximize } from "react-icons/tb";
+import { Media } from "./media";
 
 export function UnExpiredRedeem() {
   const dispatch = useAppDispatch();
@@ -151,16 +152,12 @@ export function UnExpiredRedeem() {
                       }
                     }}
                   >
-                    <img
+                    <Media
                       className={`object-contain rounded-r-xl ${
                         showInfo ? "h-[75px] w-[75px]" : "h-[50px] w-[50px]"
                       } `}
                       src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/500/${getLatestUnexpiredRedeemState.data.product_image}`}
                       alt={getLatestUnexpiredRedeemState.data.name}
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null;
-                        currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                      }}
                     />
                     {showInfo ? null : <CountdownTimerLatestRedeem />}
                   </button>

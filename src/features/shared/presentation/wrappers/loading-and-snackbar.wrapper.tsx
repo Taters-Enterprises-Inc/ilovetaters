@@ -346,6 +346,10 @@ import {
   EditAdminSettingPopclubDealState,
   selectEditAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
+import {
+  selectValidatePartnerCompanyEmployeeIdNumberAdmin,
+  ValidatePartnerCompanyEmployeeIdNumberAdminState,
+} from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -543,6 +547,34 @@ export function LoadingAndSnackbarWrapper() {
   const editAdminSettingPopclubDealState = useAppSelector(
     selectEditAdminSettingPopclubDeal
   );
+  const validatePartnerCompanyEmployeeIdNumberAdminState = useAppSelector(
+    selectValidatePartnerCompanyEmployeeIdNumberAdmin
+  );
+
+  useEffect(() => {
+    switch (validatePartnerCompanyEmployeeIdNumberAdminState.status) {
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.inProgress:
+        setOpenBackdropLoading(true);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.initial:
+        setOpenBackdropLoading(false);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.success:
+        showAlert(
+          setSuccessAlert,
+          validatePartnerCompanyEmployeeIdNumberAdminState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+      case ValidatePartnerCompanyEmployeeIdNumberAdminState.fail:
+        showAlert(
+          setFailsAlert,
+          validatePartnerCompanyEmployeeIdNumberAdminState.message
+        );
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [validatePartnerCompanyEmployeeIdNumberAdminState]);
 
   useEffect(() => {
     switch (editAdminSettingPopclubDealState.status) {

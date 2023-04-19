@@ -251,8 +251,13 @@ export function HeaderNav(props: HeaderNavProps) {
 
           for (let i = 0; i < deal_products_promo_includes.length; i++) {
             const deal_products_promo_include = deal_products_promo_includes[i];
-
             if (
+              deal_products_promo_include.product_id === order.prod_id &&
+              deal_products_promo_include.product_variant_option_tb_id === null
+            ) {
+              deal_products_promo_include_match = deal_products_promo_include;
+              break;
+            } else if (
               deal_products_promo_include.product_id === order.prod_id &&
               deal_products_promo_include.product_variant_option_tb_id
             ) {
@@ -282,6 +287,7 @@ export function HeaderNav(props: HeaderNavProps) {
               if (
                 val.price &&
                 val.promo_discount_percentage &&
+                val.product_id === order.prod_id &&
                 !addedObtainable.some(
                   (value) => value.product_id === val.product_id
                 )
@@ -298,7 +304,10 @@ export function HeaderNav(props: HeaderNavProps) {
             if (
               deal_products_promo_include_match.obtainable.length > 0 &&
               deal_products_promo_include_match.quantity &&
-              order.prod_qty >= deal_products_promo_include_match.quantity + 1
+              order.prod_qty >=
+                deal_products_promo_include_match.quantity + 1 &&
+              obtainableDiscountedPrice &&
+              obtainablePrice
             ) {
               calculatedPrice +=
                 obtainableDiscountedPrice +

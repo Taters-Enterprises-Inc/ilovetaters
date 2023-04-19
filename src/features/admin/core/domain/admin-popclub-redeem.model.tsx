@@ -15,12 +15,14 @@ export interface AdminPopclubRedeemModel {
   store_name: string;
   mobile_user_id: number;
   fb_user_id: number;
+  partner_company_id_number: string | null;
 
   items: Array<{
-    price: number | null;
+    price: string | null;
     quantity: number;
     remarks: string;
     alias: string;
     description: string;
+    is_partner_company: boolean;
   }>;
 }

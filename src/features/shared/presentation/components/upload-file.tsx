@@ -1,6 +1,7 @@
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
+import { Media } from "./media";
 
 interface UploadFileProps {
   description: string;
@@ -43,12 +44,8 @@ export function UploadFile(props: UploadFileProps) {
         <>
           {props.image ? (
             <>
-              <img
-                src={
-                  props.image instanceof File
-                    ? URL.createObjectURL(props.image as File)
-                    : props.image
-                }
+              <Media
+                src={props.image}
                 className="object-contain h-[150px] w-[150px]"
                 alt="upload file"
               />

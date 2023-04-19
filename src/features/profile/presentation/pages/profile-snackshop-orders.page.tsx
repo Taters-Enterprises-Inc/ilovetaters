@@ -73,13 +73,16 @@ export function ProfileSnackshopOrders() {
       calculatedPrice += parseFloat(row.purchase_amount);
     }
 
+    if (row.discount) {
+      calculatedPrice -= parseFloat(row.discount);
+    }
+
     if (row.cod_fee) {
       calculatedPrice += parseInt(row.cod_fee);
     }
     if (row.distance_price) {
       calculatedPrice += parseInt(row.distance_price);
     }
-
     return (
       <NumberFormat
         value={calculatedPrice.toFixed(2)}

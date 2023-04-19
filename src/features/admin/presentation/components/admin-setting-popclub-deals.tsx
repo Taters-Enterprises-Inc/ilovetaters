@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   DataList,
   MaterialSwitch,
+  Media,
 } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
@@ -285,14 +286,10 @@ export function AdminSettingPopclubDeals() {
                     (row, i) => (
                       <DataTableRow key={i}>
                         <DataTableCell>
-                          <img
+                          <Media
                             src={`${REACT_APP_DOMAIN_URL}api/assets/images/shared/products/250/${row.product_image}`}
-                            alt="Shop Product"
                             className="rounded-[10px] w-[75px] h-[75px]"
-                            onError={({ currentTarget }) => {
-                              currentTarget.onerror = null;
-                              currentTarget.src = `${REACT_APP_DOMAIN_URL}api/assets/images/shared/image_not_found/blank.jpg`;
-                            }}
+                            alt="Shop Product"
                           />
                         </DataTableCell>
                         <DataTableCell>{row.name}</DataTableCell>

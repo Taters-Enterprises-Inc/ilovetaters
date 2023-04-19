@@ -1,7 +1,7 @@
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { useNavigate } from "react-router-dom";
 
-export function CateringMaintenance() {
+export function PopclubMaintenance() {
   const navigate = useNavigate();
 
   return (
@@ -13,12 +13,12 @@ export function CateringMaintenance() {
       />
       <div className="space-y-2">
         <div className="flex items-end">
-          <span className="text-6xl font-bold text-primary">
+          <span className="text-6xl font-bold text-white">
             {" "}
-            Taters Catering will be back soon!
+            Taters Popclub will be back soon!
           </span>
         </div>
-        <p className="font-bold text-primary space-y-20 ">
+        <p className="font-bold text-white space-y-20 ">
           Taters is closed from April 6, 2023 to April 7, 2023 in observance of
           the holy week. We will be back on April 8, 2023. Thank you
         </p>
@@ -27,7 +27,7 @@ export function CateringMaintenance() {
         onClick={() => {
           navigate("/");
         }}
-        className="inline-block mt-4 px-10 py-2.5 mr-5 bg-primary text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md transition duration-150 ease-in-out"
+        className="inline-block mt-4 px-10 py-2.5 mr-5 bg-white text-primary font-medium text-xs leading-tight uppercase rounded-full shadow-md transition duration-150 ease-in-out"
       >
         <span className="text-lg">Go to home</span>
       </button>

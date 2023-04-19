@@ -512,47 +512,20 @@ export function ShopProduct() {
     const deal_products_promo_includes =
       getSessionState.data?.redeem_data?.deal_products_promo_include;
 
-    if (getProductDetailsState.data?.product.promo_discount_percentage) {
-      const price = getProductDetailsState.data.product.price * quantity;
-
-      return (
-        <div>
-          <h2 className="mt-4 text-2xl text-white line-through">
-            <NumberFormat
-              value={(
-                getProductDetailsState.data?.product.price * quantity
-              ).toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </h2>
-          {getProductDetailsState.data?.product.price ? (
-            <h2 className="text-4xl text-white">
-              <NumberFormat
-                value={(
-                  price -
-                  price *
-                    parseFloat(
-                      getProductDetailsState.data.product
-                        .promo_discount_percentage
-                    )
-                ).toFixed(2)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={"₱"}
-              />
-            </h2>
-          ) : null}
-        </div>
-      );
-    } else if (getProductDetailsState.data && deal_products_promo_includes) {
+    if (getProductDetailsState.data && deal_products_promo_includes) {
       let deal_products_promo_include_match = null;
 
       for (let i = 0; i < deal_products_promo_includes.length; i++) {
         const deal_products_promo_include = deal_products_promo_includes[i];
 
         if (
+          deal_products_promo_include.product_id ===
+            getProductDetailsState.data.product.id &&
+          deal_products_promo_include.product_variant_option_tb_id === null
+        ) {
+          deal_products_promo_include_match = deal_products_promo_include;
+          break;
+        } else if (
           deal_products_promo_include.product_id ===
             getProductDetailsState.data.product.id &&
           deal_products_promo_include.product_variant_option_tb_id &&
@@ -584,6 +557,9 @@ export function ShopProduct() {
           if (
             val.price &&
             val.promo_discount_percentage &&
+            val.product_id &&
+            val.product_id === getProductDetailsState.data.product.id &&
+            val.product_variant_option_tb_id.toString() === currentSize &&
             !addedObtainable.some(
               (value) => value.product_id === val.product_id
             )
@@ -599,7 +575,9 @@ export function ShopProduct() {
         if (
           deal_products_promo_include_match.obtainable.length > 0 &&
           deal_products_promo_include_match.quantity &&
-          quantity >= deal_products_promo_include_match.quantity
+          quantity >= deal_products_promo_include_match.quantity &&
+          obtainableDiscountedPrice &&
+          obtainablePrice
         ) {
           return (
             <div>
