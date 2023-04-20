@@ -147,6 +147,12 @@ import {
   AdminNotificationWrapper,
   AdminSidebarWrapper,
 } from "features/admin/presentation/wrapper";
+import {
+  Audit,
+  AuditDashboard,
+  AuditLogin,
+} from "features/audit/presentation/pages";
+import { AuditSidebarWrapper } from "features/audit/presentation/components";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -527,6 +533,16 @@ root.render(
                               </Route>
                             </Route>
                           </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="digital/audit" element={<Audit />}>
+                        <Route index element={<AuditLogin />} />
+                        <Route element={<AuditSidebarWrapper />}>
+                          <Route
+                            path="dashboard"
+                            element={<AuditDashboard />}
+                          />
                         </Route>
                       </Route>
 
