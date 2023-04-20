@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { BSCDrawerTabs } from "features/bsc/presentation/components/bsc-drawer-tabs";
 import { toggleBSCSideBar } from "features/bsc/presentation/slices/bsc-sidebar.slice";
 import { FaBars } from "react-icons/fa";
@@ -62,7 +62,6 @@ export function AuditDrawer() {
     <Drawer
       anchor="left"
       variant="permanent"
-      className="hidden lg:block"
       sx={{ zIndex: 10 }}
       open={open}
       onClose={open ? handleDrawerClose : handleDrawerOpen}
@@ -97,7 +96,6 @@ export function AuditDrawer() {
           <h2 className="text-xs">MIS Department</h2>
         </div>
 
-        {/* <BSCDrawerTabs /> */}
         <AuditDrawerMenu isOpen={open} />
       </Box>
     </Drawer>
