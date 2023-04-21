@@ -53,13 +53,15 @@ const SettingsItems = [
 
 const settings = (open: boolean) => {
   return (
-    <div>
+    <>
       <Accordion sx={{ backgroundColor: "inherit", boxShadow: "none" }}>
         <AccordionSummary
           sx={{
-            "& .MuiAccordionSummary-content": { margin: 0 },
+            backgroundColor: "inherit",
+            "& .MuiAccordionSummary-content ": { margin: 0 },
           }}
-          expandIcon={<MdExpandMore className="text-white" size={20} />}
+          expandIcon={<MdExpandMore className={`text-white`} size={20} />}
+          className="flex"
         >
           <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center text-white">
             <IoSettings size={20} />
@@ -95,7 +97,7 @@ const settings = (open: boolean) => {
           );
         })}
       </Accordion>
-    </div>
+    </>
   );
 };
 
@@ -104,11 +106,11 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
     <div className="relative flex flex-col pb-4 m-0 mt-5 text-sm text-white">
       <nav>
         <ul>
-          <li>
-            {NavItems.map((items, index) => {
-              const { text, path, icon } = items;
-              return (
-                <>
+          {NavItems.map((items, index) => {
+            const { text, path, icon } = items;
+            return (
+              <>
+                <li>
                   <NavLink
                     key={index}
                     to={path}
@@ -129,12 +131,11 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
                       </span>
                     </span>
                   </NavLink>
-
-                  {index == 1 ? settings(props.isOpen) : null}
-                </>
-              );
-            })}
-          </li>
+                </li>
+              </>
+            );
+          })}
+          <li className="flex">{settings(props.isOpen)}</li>
           <li>
             <button
               onClick={() => {

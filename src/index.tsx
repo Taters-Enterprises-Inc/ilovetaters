@@ -152,6 +152,8 @@ import {
   AuditDashboard,
   AuditLogin,
   AuditResponse,
+  AuditSettingsQuestions,
+  AuditSettingsUsers,
 } from "features/audit/presentation/pages";
 import { AuditSidebarWrapper } from "features/audit/presentation/components";
 const root = ReactDOM.createRoot(
@@ -545,6 +547,14 @@ root.render(
                             element={<AuditDashboard />}
                           />
                           <Route path="response" element={<AuditResponse />} />
+                          <Route
+                            path="questions"
+                            element={<AuditSettingsQuestions />}
+                          />
+                          <Route
+                            path="users"
+                            element={<AuditSettingsUsers />}
+                          />
                         </Route>
                       </Route>
 

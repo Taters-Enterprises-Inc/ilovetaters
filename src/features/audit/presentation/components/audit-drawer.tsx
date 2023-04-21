@@ -7,7 +7,7 @@ import MuiDrawer from "@mui/material/Drawer";
 import { useState } from "react";
 import { AuditDrawerMenu } from "./audit-drawer-menu";
 
-const drawerWidth = "16rem";
+const drawerWidth = "17rem";
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -84,7 +84,7 @@ export function AuditDrawer() {
             className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
           ${!open && "opacity-0 translate-x-28 overflow-hidden"}`}
           >
-            Taters Portal
+            Internal Audit Portal
           </h1>
         </div>
         <div
