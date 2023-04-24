@@ -17,6 +17,7 @@ import {
   AccordionSummary,
   Box,
   Divider,
+  Hidden,
 } from "@mui/material";
 import { FaQuestionCircle } from "react-icons/fa";
 import { GrUserSettings } from "react-icons/gr";
@@ -51,7 +52,17 @@ const SettingsItems = [
   },
 ];
 
-const settings = (open: boolean) => {
+const Settings = (open: boolean) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleOnClick = () => {
+    if (expanded) {
+      setExpanded(false);
+    } else {
+      setExpanded(true);
+    }
+  };
+
   return (
     <>
       <Accordion sx={{ backgroundColor: "inherit", boxShadow: "none" }}>
@@ -59,9 +70,10 @@ const settings = (open: boolean) => {
           sx={{
             backgroundColor: "inherit",
             "& .MuiAccordionSummary-content ": { margin: 0 },
+            "& .Mui-expanded ": { margin: expanded ? 0 : undefined },
           }}
+          onClick={handleOnClick}
           expandIcon={<MdExpandMore className={`text-white`} size={20} />}
-          className="flex"
         >
           <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center text-white">
             <IoSettings size={20} />
@@ -135,7 +147,7 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
               </>
             );
           })}
-          <li className="flex">{settings(props.isOpen)}</li>
+          <li className="flex">{Settings(props.isOpen)}</li>
           <li>
             <button
               onClick={() => {
