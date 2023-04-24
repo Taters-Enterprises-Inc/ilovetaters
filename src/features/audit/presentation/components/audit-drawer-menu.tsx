@@ -43,11 +43,6 @@ const SettingsItems = [
     path: "settings/questions",
     icon: <RiQuestionnaireLine size={20} />,
   },
-  {
-    text: "Manage Users",
-    path: "settings/users",
-    icon: <RiUserSettingsLine size={20} />,
-  },
 ];
 
 const Settings = (status: boolean) => {
