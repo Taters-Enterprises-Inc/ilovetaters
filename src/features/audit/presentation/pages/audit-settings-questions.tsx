@@ -7,13 +7,13 @@ export function AuditSettingsQuestions() {
         AuditBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/digital/audit/dashboard",
+            url: "/internal/audit/dashboard",
           },
           className: "lg:h-[200px]",
           pageTitles: [
             {
               name: "Edit Questions",
-              url: "/digital/audit/settings/questions",
+              url: "/internal/audit/settings/questions",
             },
           ],
         }}

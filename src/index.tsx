@@ -153,7 +153,6 @@ import {
   AuditLogin,
   AuditResponse,
   AuditSettingsQuestions,
-  AuditSettingsUsers,
 } from "features/audit/presentation/pages";
 import { AuditSidebarWrapper } from "features/audit/presentation/components";
 const root = ReactDOM.createRoot(
@@ -539,7 +538,7 @@ root.render(
                         </Route>
                       </Route>
 
-                      <Route path="digital/audit" element={<Audit />}>
+                      <Route path="internal/audit" element={<Audit />}>
                         <Route index element={<AuditLogin />} />
                         <Route element={<AuditSidebarWrapper />}>
                           <Route
@@ -552,10 +551,6 @@ root.render(
                             <Route
                               path="questions"
                               element={<AuditSettingsQuestions />}
-                            />
-                            <Route
-                              path="users"
-                              element={<AuditSettingsUsers />}
                             />
                           </Route>
                         </Route>

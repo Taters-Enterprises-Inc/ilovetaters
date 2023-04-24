@@ -7,10 +7,10 @@ export function AuditResponse() {
         AuditBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/digital/audit/response",
+            url: "/internal/audit/dashboard",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Responses", url: "/digital/audit/response" }],
+          pageTitles: [{ name: "Responses", url: "/internal/audit/response" }],
         }}
       />
     </>

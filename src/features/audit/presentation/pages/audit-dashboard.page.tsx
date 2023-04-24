@@ -8,10 +8,10 @@ export function AuditDashboard() {
         AuditBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/digital/audit/dashboard",
+            url: "/internal/audit/dashboard",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/digital/audit/dashboard" }],
+          pageTitles: [{ name: "Dashboard", url: "/internal/audit/dashboard" }],
         }}
       />
     </>
