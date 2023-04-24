@@ -9,29 +9,53 @@ import { getAdminDashboardShopSalesHistory } from "../slices/get-admin-dashboard
 import NumberFormat from "react-number-format";
 import { GoPerson } from "react-icons/go";
 import {
-  getAdminDashboardTransactionTotal,
-  selectGetAdminDashboardTransactionTotal,
-} from "../slices/get-admin-dashboard-transaction-total.slice";
+  getAdminDashboardShopTransactionTotal,
+  selectGetAdminDashboardShopTransactionTotal,
+} from "../slices/get-admin-dashboard-shop-transaction-total.slice";
 import {
-  getAdminDashboardCompletedTransactionTotal,
-  selectGetAdminDashboardCompletedTransactionTotal,
-} from "../slices/get-admin-dashboard-completed-transaction-total.slice";
+  getAdminDashboardShopCompletedTransactionTotal,
+  selectGetAdminDashboardShopCompletedTransactionTotal,
+} from "../slices/get-admin-dashboard-shop-completed-transaction-total.slice";
 import { intToShortString } from "features/config/helpers";
+import {
+  getAdminDashboardShopAddToCartTotal,
+  selectGetAdminDashboardShopAddToCartTotal,
+} from "../slices/get-admin-dashboard-shop-add-to-cart-total.slice";
+import {
+  getAdminDashboardShopProductViewTotal,
+  selectGetAdminDashboardShopProductViewTotal,
+} from "../slices/get-admin-dashboard-shop-product-view-total.slice";
+import {
+  getAdminDashboardShopInitialCheckoutTotal,
+  selectGetAdminDashboardShopInitialCheckoutTotal,
+} from "../slices/get-admin-dashboard-shop-initial-checkout-total.slice";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
 
-  const getAdminDashboardTransactionTotalState = useAppSelector(
-    selectGetAdminDashboardTransactionTotal
+  const getAdminDashboardShopTransactionTotalState = useAppSelector(
+    selectGetAdminDashboardShopTransactionTotal
   );
-  const getAdminDashboardCompletedTransactionTotalState = useAppSelector(
-    selectGetAdminDashboardCompletedTransactionTotal
+  const getAdminDashboardShopCompletedTransactionTotalState = useAppSelector(
+    selectGetAdminDashboardShopCompletedTransactionTotal
+  );
+  const getAdminDashboardShopAddToCartTotalState = useAppSelector(
+    selectGetAdminDashboardShopAddToCartTotal
+  );
+  const getAdminDashboardShopProductViewTotalState = useAppSelector(
+    selectGetAdminDashboardShopProductViewTotal
+  );
+  const getAdminDashboardShopInitialCheckoutTotalState = useAppSelector(
+    selectGetAdminDashboardShopInitialCheckoutTotal
   );
 
   useEffect(() => {
     dispatch(getAdminDashboardShopSalesHistory());
-    dispatch(getAdminDashboardTransactionTotal());
-    dispatch(getAdminDashboardCompletedTransactionTotal());
+    dispatch(getAdminDashboardShopTransactionTotal());
+    dispatch(getAdminDashboardShopCompletedTransactionTotal());
+    dispatch(getAdminDashboardShopAddToCartTotal());
+    dispatch(getAdminDashboardShopProductViewTotal());
+    dispatch(getAdminDashboardShopInitialCheckoutTotal());
   }, [dispatch]);
 
   return (
@@ -52,9 +76,9 @@ export function AdminDashboard() {
           <div className="grid grid-cols-5 gap-4 h-[100px]">
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
               <span className="text-secondary text-4xl font-bold">
-                {getAdminDashboardTransactionTotalState.data
+                {getAdminDashboardShopTransactionTotalState.data
                   ? intToShortString(
-                      getAdminDashboardTransactionTotalState.data
+                      getAdminDashboardShopTransactionTotalState.data
                     )
                   : 0}
               </span>
@@ -62,24 +86,42 @@ export function AdminDashboard() {
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
               <span className="text-secondary text-4xl font-bold">
-                {getAdminDashboardCompletedTransactionTotalState.data
+                {getAdminDashboardShopCompletedTransactionTotalState.data
                   ? intToShortString(
-                      getAdminDashboardCompletedTransactionTotalState.data
+                      getAdminDashboardShopCompletedTransactionTotalState.data
                     )
                   : 0}
               </span>
               <span className="text-secondary text-sm ">Completed Orders</span>
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
-              <span className="text-secondary text-4xl font-bold">0</span>
+              <span className="text-secondary text-4xl font-bold">
+                {getAdminDashboardShopAddToCartTotalState.data
+                  ? intToShortString(
+                      getAdminDashboardShopAddToCartTotalState.data
+                    )
+                  : 0}
+              </span>
               <span className="text-secondary text-sm ">Add to Cart</span>
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
-              <span className="text-secondary text-4xl font-bold">0</span>
+              <span className="text-secondary text-4xl font-bold">
+                {getAdminDashboardShopProductViewTotalState.data
+                  ? intToShortString(
+                      getAdminDashboardShopProductViewTotalState.data
+                    )
+                  : 0}
+              </span>
               <span className="text-secondary text-sm ">Product View</span>
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
-              <span className="text-secondary text-4xl font-bold">0</span>
+              <span className="text-secondary text-4xl font-bold">
+                {getAdminDashboardShopInitialCheckoutTotalState.data
+                  ? intToShortString(
+                      getAdminDashboardShopInitialCheckoutTotalState.data
+                    )
+                  : 0}
+              </span>
               <span className="text-secondary text-sm ">Initial Checkouts</span>
             </div>
           </div>

@@ -765,21 +765,69 @@ export interface AdminInfluencerCashoutChangeStatusResponse {
   };
 }
 
-export interface GetAdminDashboardTransactionTotalResponse {
+export interface GetAdminDashboardShopTransactionTotalResponse {
   data: {
     message: string;
     data: number;
   };
 }
 
-export interface GetAdminDashboardCompletedTransactionTotalResponse {
+export interface GetAdminDashboardShopCompletedTransactionTotalResponse {
   data: {
     message: string;
     data: number;
   };
 }
 
-export function GetAdminDashboardCompletedTransactionTotalRepository(): Promise<GetAdminDashboardCompletedTransactionTotalResponse> {
+export interface GetAdminDashboardShopInitialCheckoutTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopProductViewTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopAddToCartTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export function GetAdminDashboardShopAddToCartTotalRepository(): Promise<GetAdminDashboardShopAddToCartTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/add-to-cart-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopProductViewTotalRepository(): Promise<GetAdminDashboardShopProductViewTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/product-view-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopInitialCheckoutTotalRepository(): Promise<GetAdminDashboardShopInitialCheckoutTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/initial-checkout-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopCompletedTransactionTotalRepository(): Promise<GetAdminDashboardShopCompletedTransactionTotalResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-completed-transaction`,
     {
@@ -788,7 +836,7 @@ export function GetAdminDashboardCompletedTransactionTotalRepository(): Promise<
   );
 }
 
-export function GetAdminDashboardTransactionTotalRepository(): Promise<GetAdminDashboardTransactionTotalResponse> {
+export function GetAdminDashboardShopTransactionTotalRepository(): Promise<GetAdminDashboardShopTransactionTotalResponse> {
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-transaction`,
     {

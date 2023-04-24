@@ -218,10 +218,13 @@ import getAdminInfluencerCashout from "features/admin/presentation/slices/get-ad
 import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 import getInfluencerCashouts from "features/profile/presentation/slices/get-influencer-cashouts.slice";
 import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
-import getAdminDashboardTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-transaction-total.slice";
-import getAdminDashboardCompletedTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-completed-transaction-total.slice";
+import getAdminDashboardShopTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-transaction-total.slice";
+import getAdminDashboardShopCompletedTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-completed-transaction-total.slice";
 import insertShopProductViewLog from "features/shop/presentation/slices/insert-shop-product-view-log.slice";
 import insertShopInitialCheckoutLog from "features/shop/presentation/slices/insert-shop-initial-checkout-log.slice";
+import getAdminDashboardShopAddToCartTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-add-to-cart-total.slice";
+import getAdminDashboardShopProductViewTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-product-view-total.slice";
+import getAdminDashboardShopInitialCheckoutTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-initial-checkout-total.slice";
 
 export const store = configureStore({
   reducer: {
@@ -443,10 +446,13 @@ export const store = configureStore({
     adminInfluencerCashoutChangeStatus,
     getInfluencerCashouts,
     validatePartnerCompanyEmployeeIdNumberAdmin,
-    getAdminDashboardTransactionTotal,
-    getAdminDashboardCompletedTransactionTotal,
+    getAdminDashboardShopTransactionTotal,
+    getAdminDashboardShopCompletedTransactionTotal,
     insertShopProductViewLog,
     insertShopInitialCheckoutLog,
+    getAdminDashboardShopAddToCartTotal,
+    getAdminDashboardShopProductViewTotal,
+    getAdminDashboardShopInitialCheckoutTotal,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
