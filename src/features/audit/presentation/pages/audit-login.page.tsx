@@ -1,19 +1,58 @@
+import {
+  selectGetAdminSession,
+  getAdminSession,
+  GetAdminSessionState,
+} from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  selectLoginAdmin,
+  LoginAdminState,
+  resetLoginAdminState,
+  loginAdmin,
+} from "features/admin/presentation/slices/login-admin.slice";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   MaterialInput,
   MaterialInputPassword,
 } from "features/shared/presentation/components";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { FormEvent, useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export function AuditLogin() {
+  const dispatch = useAppDispatch();
+  const loginAdminState = useAppSelector(selectLoginAdmin);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   const [identity, setIdentity] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const navigate = useNavigate();
 
-  const handleOnSubmit = () => {
-    return navigate("dashboard");
+  useEffect(() => {
+    if (loginAdminState.status === LoginAdminState.success) {
+      dispatch(getAdminSession());
+    }
+  }, [loginAdminState, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAdminSession());
+    dispatch(resetLoginAdminState());
+  }, [dispatch]);
+
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    dispatch(
+      loginAdmin({
+        identity,
+        password,
+      })
+    );
+    e.preventDefault();
   };
+
+  if (
+    getAdminSessionState.data &&
+    getAdminSessionState.status === GetAdminSessionState.success
+  ) {
+    return <Navigate to={"dashboard"} />;
+  }
 
   return (
     <main className="flex items-center justify-center h-screen bg-paper">
@@ -70,12 +109,6 @@ export function AuditLogin() {
             >
               LOG IN
             </button>
-            {/* <Link
-              to={"sign-up"}
-              className="block w-full py-2 my-2 text-white border-2 border-solid shadow-md border-button rounded-3xl"
-            >
-              CREATE ACCOUNT
-            </Link> */}
           </form>
         </div>
       </div>
