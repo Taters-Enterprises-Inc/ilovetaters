@@ -69,6 +69,7 @@ import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-de
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
 import { BsBookmarkStarFill } from "react-icons/bs";
+import { insertShopProductViewLog } from "../slices/insert-shop-product-view-log.slice";
 
 let quantityId: any;
 
@@ -86,7 +87,7 @@ export type ShopMultiFlavorType = {
 export function ShopProduct() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  let { hash } = useParams();
+  const { hash } = useParams();
   const location = useLocation();
 
   const [setDisabled] = useState(true);
@@ -190,6 +191,15 @@ export function ShopProduct() {
 
   useEffect(() => {
     if (currentSize !== "") {
+      if (getProductDetailsState.data) {
+        dispatch(
+          insertShopProductViewLog({
+            product_id: getProductDetailsState.data.product.id,
+            product_variant_option_id: parseInt(currentSize),
+          })
+        );
+      }
+
       dispatch(
         getProductSku({
           prod_flavor: "",

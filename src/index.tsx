@@ -152,6 +152,7 @@ import {
   AdminNotificationWrapper,
   AdminSidebarWrapper,
 } from "features/admin/presentation/wrapper";
+import { ShopProductViewLog } from "features/shop/presentation/logs";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -257,7 +258,9 @@ root.render(
                                 path="cart/:cart_id"
                                 element={<ShopEditCartItem />}
                               />
-                              <Route path=":hash" element={<ShopProduct />} />
+                              <Route element={<ShopProductViewLog />}>
+                                <Route path=":hash" element={<ShopProduct />} />
+                              </Route>
                             </Route>
 
                             <Route path="order/:hash" element={<ShopOrder />} />

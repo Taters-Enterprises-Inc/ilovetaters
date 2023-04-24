@@ -158,10 +158,6 @@ import updateStoreCateringProduct from "features/admin/presentation/slices/updat
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
 import getAdminDashboardShopSalesHistory from "features/admin/presentation/slices/get-admin-dashboard-shop-sales-history.slice";
-import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-admin-snackshop-total-sales.slice";
-import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
-import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
-import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
 import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
 import getAdminRegionStoreCombinations from "features/admin/presentation/slices/get-admin-region-store-combinations.slice";
@@ -222,6 +218,10 @@ import getAdminInfluencerCashout from "features/admin/presentation/slices/get-ad
 import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 import getInfluencerCashouts from "features/profile/presentation/slices/get-influencer-cashouts.slice";
 import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
+import getAdminDashboardTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-transaction-total.slice";
+import getAdminDashboardCompletedTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-completed-transaction-total.slice";
+import insertShopProductViewLog from "features/shop/presentation/slices/insert-shop-product-view-log.slice";
+import insertShopInitialCheckoutLog from "features/shop/presentation/slices/insert-shop-initial-checkout-log.slice";
 
 export const store = configureStore({
   reducer: {
@@ -383,10 +383,6 @@ export const store = configureStore({
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
     getAdminDashboardShopSalesHistory,
-    getAdminSnackshopTotalSales,
-    getAdminCateringTotalSales,
-    getAdminPopClubTotalSales,
-    getAdminOverallTotalSales,
     getAdminStoreMenus,
     createAdminSettingStore,
     getAdminRegionStoreCombinations,
@@ -447,6 +443,10 @@ export const store = configureStore({
     adminInfluencerCashoutChangeStatus,
     getInfluencerCashouts,
     validatePartnerCompanyEmployeeIdNumberAdmin,
+    getAdminDashboardTransactionTotal,
+    getAdminDashboardCompletedTransactionTotal,
+    insertShopProductViewLog,
+    insertShopInitialCheckoutLog,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

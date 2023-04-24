@@ -23,7 +23,6 @@ import {
   UpdateAdminSettingShopProductStatusParam,
   UpdateStoreCateringProductParam,
   UpdateAdminCateringOrderItemRemarksParam,
-  GetAdminTotalSalesParam,
   CreateAdminSettingStoreParam,
   GetAdminCateringPackageFlavorsParam,
   GetAdminSettingStoreParam,
@@ -519,13 +518,6 @@ export interface GetAdminDashboardShopSalesHistoryResponse {
   };
 }
 
-export interface GetAdminTotalSalesResponse {
-  data: {
-    message: string;
-    data: TotalSalesModel;
-  };
-}
-
 export interface GetAdminStoreMenusResponse {
   data: {
     message: string;
@@ -771,6 +763,38 @@ export interface AdminInfluencerCashoutChangeStatusResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminDashboardTransactionTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardCompletedTransactionTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export function GetAdminDashboardCompletedTransactionTotalRepository(): Promise<GetAdminDashboardCompletedTransactionTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-completed-transaction`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardTransactionTotalRepository(): Promise<GetAdminDashboardTransactionTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-transaction`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function AdminInfluencerCashoutChangeStatusRepository(
@@ -1157,17 +1181,6 @@ export function UpdateStoreCateringProductRepository(
   return axios.put(
     `${REACT_APP_DOMAIN_URL}api/admin/availability/caters-product`,
     param,
-    {
-      withCredentials: true,
-    }
-  );
-}
-
-export function GetAdminTotalSalesRepository(
-  param: GetAdminTotalSalesParam
-): Promise<GetAdminTotalSalesResponse> {
-  return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}/sum`,
     {
       withCredentials: true,
     }

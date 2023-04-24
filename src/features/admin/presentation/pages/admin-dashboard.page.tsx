@@ -3,59 +3,35 @@ import {
   AdminDashboardSalesLineChart,
   AdminHead,
 } from "../components";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAdminDashboardShopSalesHistory } from "../slices/get-admin-dashboard-shop-sales-history.slice";
 import NumberFormat from "react-number-format";
-import {
-  getAdminSnackshopTotalSales,
-  selectGetAdminSnackshopTotalSales,
-} from "../slices/get-admin-snackshop-total-sales.slice";
-import {
-  getAdminCateringTotalSales,
-  selectGetAdminCateringTotalSales,
-} from "../slices/get-admin-catering-total-sales.slice";
-import {
-  getAdminPopClubTotalSales,
-  selectGetAdminPopClubTotalSales,
-} from "../slices/get-admin-popclub-total-sales.slice";
-import {
-  getAdminOverallTotalSales,
-  selectGetAdminOverallTotalSales,
-} from "../slices/get-admin-overall-total-sales.slice";
 import { GoPerson } from "react-icons/go";
-
-enum SalesTab {
-  Snackshop,
-  Catering,
-  Popclub,
-  Performance,
-}
+import {
+  getAdminDashboardTransactionTotal,
+  selectGetAdminDashboardTransactionTotal,
+} from "../slices/get-admin-dashboard-transaction-total.slice";
+import {
+  getAdminDashboardCompletedTransactionTotal,
+  selectGetAdminDashboardCompletedTransactionTotal,
+} from "../slices/get-admin-dashboard-completed-transaction-total.slice";
+import { intToShortString } from "features/config/helpers";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
 
-  const [salesTab, setSalesTab] = useState<SalesTab>(SalesTab.Snackshop);
-
-  const getAdminSnackshopTotalSalesState = useAppSelector(
-    selectGetAdminSnackshopTotalSales
+  const getAdminDashboardTransactionTotalState = useAppSelector(
+    selectGetAdminDashboardTransactionTotal
   );
-  const getAdminCateringTotalSalesState = useAppSelector(
-    selectGetAdminCateringTotalSales
-  );
-  const getAdminPopClubTotalSalesState = useAppSelector(
-    selectGetAdminPopClubTotalSales
-  );
-  const getAdminOverallTotalSalesState = useAppSelector(
-    selectGetAdminOverallTotalSales
+  const getAdminDashboardCompletedTransactionTotalState = useAppSelector(
+    selectGetAdminDashboardCompletedTransactionTotal
   );
 
   useEffect(() => {
     dispatch(getAdminDashboardShopSalesHistory());
-    dispatch(getAdminSnackshopTotalSales());
-    dispatch(getAdminCateringTotalSales());
-    dispatch(getAdminPopClubTotalSales());
-    dispatch(getAdminOverallTotalSales());
+    dispatch(getAdminDashboardTransactionTotal());
+    dispatch(getAdminDashboardCompletedTransactionTotal());
   }, [dispatch]);
 
   return (
@@ -75,11 +51,23 @@ export function AdminDashboard() {
         <div className="space-y-4">
           <div className="grid grid-cols-5 gap-4 h-[100px]">
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
-              <span className="text-secondary text-4xl font-bold">0</span>
+              <span className="text-secondary text-4xl font-bold">
+                {getAdminDashboardTransactionTotalState.data
+                  ? intToShortString(
+                      getAdminDashboardTransactionTotalState.data
+                    )
+                  : 0}
+              </span>
               <span className="text-secondary text-sm ">Transactions</span>
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">
-              <span className="text-secondary text-4xl font-bold">0</span>
+              <span className="text-secondary text-4xl font-bold">
+                {getAdminDashboardCompletedTransactionTotalState.data
+                  ? intToShortString(
+                      getAdminDashboardCompletedTransactionTotalState.data
+                    )
+                  : 0}
+              </span>
               <span className="text-secondary text-sm ">Completed Orders</span>
             </div>
             <div className="lg:shadow-[0_3px_10px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center">

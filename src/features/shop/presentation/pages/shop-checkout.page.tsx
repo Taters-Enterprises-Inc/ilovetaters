@@ -39,7 +39,10 @@ import {
   Media,
 } from "features/shared/presentation/components";
 import { ShopPaymentMethod } from "../components";
-import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import {
+  GetLatestUnexpiredRedeemState,
+  selectGetLatestUnexpiredRedeem,
+} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   getAvailableUserDiscount,
   selectGetAvailableUserDiscount,
@@ -53,6 +56,7 @@ import {
   GetSnackshopInfluencerPromoState,
   resetGetSnackshopInfluencerPromoState,
 } from "../slices/get-snackshop-influencer-promo.slice";
+import { insertShopInitialCheckoutLog } from "../slices/insert-shop-initial-checkout-log.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -80,6 +84,8 @@ export function ShopCheckout() {
   const getSessionState = useAppSelector(selectGetSession);
   const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
 
+  const shopInitialCheckoutLogInserted = useRef(false);
+
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
   );
@@ -91,6 +97,25 @@ export function ShopCheckout() {
   const getSnackshopInfluencerPromoState = useAppSelector(
     selectGetSnackshopInfluencerPromo
   );
+
+  useEffect(() => {
+    if (
+      getSessionState.status === GetSessionState.success &&
+      getLatestUnexpiredRedeemState.status ===
+        GetLatestUnexpiredRedeemState.success &&
+      shopInitialCheckoutLogInserted.current === false
+    ) {
+      dispatch(
+        insertShopInitialCheckoutLog({
+          subtotal: calculateSubTotalPrice(),
+          discount: calculateDiscount(),
+          deliveryFee: calculateDeliveryFee(),
+        })
+      );
+
+      shopInitialCheckoutLogInserted.current = true;
+    }
+  }, [dispatch, getSessionState, getLatestUnexpiredRedeemState]);
 
   useEffect(() => {
     dispatch(getAvailableUserDiscount());
@@ -272,14 +297,7 @@ export function ShopCheckout() {
         );
     }
 
-    return (
-      <NumberFormat
-        value={calculatedPrice.toFixed(2)}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={"₱"}
-      />
-    );
+    return calculatedPrice;
   };
 
   const calculateDeliveryFee = () => {
@@ -315,19 +333,12 @@ export function ShopCheckout() {
       ) {
         isDeliveryApplied.current = true;
 
-        return <>₱ 0.00</>;
+        return 0;
       }
 
-      return (
-        <NumberFormat
-          value={getSessionState.data.distance_rate_price.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return getSessionState.data.distance_rate_price;
     } else {
-      return "₱ 0.00";
+      return 0;
     }
   };
 
@@ -372,17 +383,10 @@ export function ShopCheckout() {
           calculatedPrice *
           parseFloat(getSnackshopInfluencerPromoState.data.customer_discount);
 
-      return (
-        <NumberFormat
-          value={discountedPrice.toFixed(2)}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={"₱"}
-        />
-      );
+      return discountedPrice;
     }
 
-    return "₱ 0.00";
+    return 0;
   };
 
   const calculateTotalPrice = () => {
@@ -1200,16 +1204,35 @@ export function ShopCheckout() {
                     <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
-                        {calculateSubTotalPrice()}
+                        <NumberFormat
+                          value={calculateSubTotalPrice().toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
                       </span>
                       <span>Discount:</span>
-                      <span className="text-end">- {calculateDiscount()}</span>
+                      <span className="text-end">
+                        -
+                        <NumberFormat
+                          value={calculateDiscount().toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
+                      </span>
 
                       {calculateAvailableUserDiscount()}
 
                       <span>Delivery Fee:</span>
                       <span className="text-end">
-                        + {calculateDeliveryFee()}
+                        +
+                        <NumberFormat
+                          value={calculateDeliveryFee().toFixed(2)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"₱"}
+                        />
                       </span>
                       {cashOnDelivery ? (
                         <>
