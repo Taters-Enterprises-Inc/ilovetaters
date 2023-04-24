@@ -21,12 +21,10 @@ import {
 } from "@mui/material";
 import { FaQuestionCircle } from "react-icons/fa";
 import { GrUserSettings } from "react-icons/gr";
+import { useAppSelector } from "features/config/hooks";
+import { selectAuditSideBar } from "../slices/audit-sidebar-slice";
 
-interface auditDrawerMenuProps {
-  isOpen: boolean;
-}
-
-const NavItems = [
+const NavigationItems = [
   {
     text: "Dashboard",
     path: "dashboard",
@@ -41,18 +39,18 @@ const NavItems = [
 
 const SettingsItems = [
   {
-    text: "Questions",
+    text: "Edit Questions",
     path: "settings/questions",
     icon: <RiQuestionnaireLine size={20} />,
   },
   {
-    text: "Users",
+    text: "Manage Users",
     path: "settings/users",
     icon: <RiUserSettingsLine size={20} />,
   },
 ];
 
-const Settings = (open: boolean) => {
+const Settings = (status: boolean) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleOnClick = () => {
@@ -82,7 +80,7 @@ const Settings = (open: boolean) => {
             <IoSettings size={20} />
             <span
               className={`whitespace-pre text-white duration-300 ${
-                !open && "opacity-0 overflow-hidden"
+                !status && "opacity-0 overflow-hidden"
               }`}
             >
               Settings
@@ -92,10 +90,10 @@ const Settings = (open: boolean) => {
 
         {SettingsItems.map((item, index) => {
           const { text, path, icon } = item;
+          const key = index;
           return (
-            <AccordionDetails sx={{ padding: 0 }}>
+            <AccordionDetails key={key} sx={{ padding: 0 }}>
               <NavLink
-                key={index}
                 to={path}
                 className={(navData) =>
                   navData.isActive
@@ -108,7 +106,7 @@ const Settings = (open: boolean) => {
                     {icon}
                     <span
                       className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 overflow-hidden"
+                        !status && "opacity-0 overflow-hidden"
                       }`}
                     >
                       {text}
@@ -124,41 +122,47 @@ const Settings = (open: boolean) => {
   );
 };
 
-export function AuditDrawerMenu(props: auditDrawerMenuProps) {
+const Navigation = (status: boolean) => {
+  return (
+    <>
+      {NavigationItems.map((items, index) => {
+        const { text, path, icon } = items;
+        return (
+          <NavLink
+            key={index}
+            to={path}
+            className={(navData) =>
+              navData.isActive ? "flex bg-white text-secondary" : "flex"
+            }
+          >
+            <span className="flex items-center px-4 ">
+              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                {icon}
+                <span
+                  className={`whitespace-pre duration-300 ${
+                    !status && "opacity-0 overflow-hidden"
+                  }`}
+                >
+                  {text}
+                </span>
+              </span>
+            </span>
+          </NavLink>
+        );
+      })}
+    </>
+  );
+};
+
+export function AuditDrawerMenu() {
+  const adminSideBarState = useAppSelector(selectAuditSideBar);
+
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-5 text-sm text-white">
       <nav>
         <ul>
-          <li>
-            {NavItems.map((items, index) => {
-              const { text, path, icon } = items;
-              return (
-                <>
-                  <NavLink
-                    key={index}
-                    to={path}
-                    className={(navData) =>
-                      navData.isActive ? "flex bg-white text-secondary" : "flex"
-                    }
-                  >
-                    <span className="flex items-center px-4 ">
-                      <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                        {icon}
-                        <span
-                          className={`whitespace-pre duration-300 ${
-                            !props.isOpen && "opacity-0 overflow-hidden"
-                          }`}
-                        >
-                          {text}
-                        </span>
-                      </span>
-                    </span>
-                  </NavLink>
-                </>
-              );
-            })}
-          </li>
-          <li className="flex">{Settings(props.isOpen)}</li>
+          <li>{Navigation(adminSideBarState.status)}</li>
+          <li className="flex">{Settings(adminSideBarState.status)}</li>
           <li>
             <button
               onClick={() => {
@@ -172,7 +176,7 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
 
                   <span
                     className={`whitespace-pre duration-300 ${
-                      !props.isOpen && "opacity-0 overflow-hidden"
+                      !adminSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
                     Logout

@@ -204,6 +204,7 @@ import getAdminSettingPopclubDeal from "features/admin/presentation/slices/get-a
 import editAdminSettingPopclubDeal from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 import updateAdminSettingPopclubDealStatus from "features/admin/presentation/slices/update-admin-setting-popclub-deal-status.slice";
 import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
+import auditSideBar from "features/audit/presentation/slices/audit-sidebar-slice";
 
 export const store = configureStore({
   reducer: {
@@ -411,6 +412,7 @@ export const store = configureStore({
     editAdminSettingPopclubDeal,
     updateAdminSettingPopclubDealStatus,
     validatePartnerCompanyEmployeeIdNumberAdmin,
+    auditSideBar,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
