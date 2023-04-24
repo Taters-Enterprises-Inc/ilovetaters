@@ -42,12 +42,12 @@ const NavItems = [
 const SettingsItems = [
   {
     text: "Questions",
-    path: "questions",
+    path: "settings/questions",
     icon: <RiQuestionnaireLine size={20} />,
   },
   {
     text: "Users",
-    path: "users",
+    path: "settings/users",
     icon: <RiUserSettingsLine size={20} />,
   },
 ];
@@ -69,8 +69,11 @@ const Settings = (open: boolean) => {
         <AccordionSummary
           sx={{
             backgroundColor: "inherit",
-            "& .MuiAccordionSummary-content ": { margin: 0 },
-            "& .Mui-expanded ": { margin: expanded ? 0 : undefined },
+            "& .MuiAccordionSummary-content ": {
+              marginY: 0,
+              marginRight: "112px",
+            },
+            "& .Mui-expanded ": { marginY: expanded ? 0 : undefined },
           }}
           onClick={handleOnClick}
           expandIcon={<MdExpandMore className={`text-white`} size={20} />}
@@ -91,12 +94,20 @@ const Settings = (open: boolean) => {
           const { text, path, icon } = item;
           return (
             <AccordionDetails sx={{ padding: 0 }}>
-              <NavLink key={index} to={path}>
-                <span className="flex text-white items-center px-4 ">
-                  <span className="flex px-[0.5rem] py-[0.85rem] text-white space-x-4 items-center">
+              <NavLink
+                key={index}
+                to={path}
+                className={(navData) =>
+                  navData.isActive
+                    ? "flex bg-white text-secondary"
+                    : "flex text-white"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
                     {icon}
                     <span
-                      className={`whitespace-pre text-white duration-300 ${
+                      className={`whitespace-pre duration-300 ${
                         !open && "opacity-0 overflow-hidden"
                       }`}
                     >
@@ -118,11 +129,11 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
     <div className="relative flex flex-col pb-4 m-0 mt-5 text-sm text-white">
       <nav>
         <ul>
-          {NavItems.map((items, index) => {
-            const { text, path, icon } = items;
-            return (
-              <>
-                <li>
+          <li>
+            {NavItems.map((items, index) => {
+              const { text, path, icon } = items;
+              return (
+                <>
                   <NavLink
                     key={index}
                     to={path}
@@ -143,10 +154,10 @@ export function AuditDrawerMenu(props: auditDrawerMenuProps) {
                       </span>
                     </span>
                   </NavLink>
-                </li>
-              </>
-            );
-          })}
+                </>
+              );
+            })}
+          </li>
           <li className="flex">{Settings(props.isOpen)}</li>
           <li>
             <button

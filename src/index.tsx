@@ -547,14 +547,17 @@ root.render(
                             element={<AuditDashboard />}
                           />
                           <Route path="response" element={<AuditResponse />} />
-                          <Route
-                            path="questions"
-                            element={<AuditSettingsQuestions />}
-                          />
-                          <Route
-                            path="users"
-                            element={<AuditSettingsUsers />}
-                          />
+
+                          <Route path="settings">
+                            <Route
+                              path="questions"
+                              element={<AuditSettingsQuestions />}
+                            />
+                            <Route
+                              path="users"
+                              element={<AuditSettingsUsers />}
+                            />
+                          </Route>
                         </Route>
                       </Route>
 
