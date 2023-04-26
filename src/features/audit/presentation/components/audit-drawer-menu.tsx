@@ -1,28 +1,19 @@
-import { closeBSCSideBar } from "features/bsc/presentation/slices/bsc-sidebar.slice";
-import { logoutBsc } from "features/bsc/presentation/slices/logout-bsc.slice";
-import { useState } from "react";
-import { HiUsers } from "react-icons/hi";
+import { useEffect, useState } from "react";
 import { MdDashboardCustomize, MdExpandMore } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
-import {
-  RiQuestionAnswerFill,
-  RiQuestionnaireLine,
-  RiUserSettingsLine,
-} from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { RiQuestionAnswerFill, RiQuestionnaireLine } from "react-icons/ri";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoSettings } from "react-icons/io5";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Divider,
-  Hidden,
-} from "@mui/material";
-import { FaQuestionCircle } from "react-icons/fa";
-import { GrUserSettings } from "react-icons/gr";
-import { useAppSelector } from "features/config/hooks";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectAuditSideBar } from "../slices/audit-sidebar-slice";
+import {
+  LogoutAuditState,
+  logoutAudit,
+  resetLogoutAudit,
+  selectLogoutAudit,
+} from "../slices/logout-audit.slice";
+import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 const NavigationItems = [
   {
@@ -150,18 +141,30 @@ const Navigation = (status: boolean) => {
 };
 
 export function AuditDrawerMenu() {
-  const adminSideBarState = useAppSelector(selectAuditSideBar);
+  const AuditSideBarState = useAppSelector(selectAuditSideBar);
+  const logoutAuditState = useAppSelector(selectLogoutAudit);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (logoutAuditState.status === LogoutAuditState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAudit());
+      navigate("/internal/audit");
+    }
+  }, [logoutAuditState, dispatch, navigate]);
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-5 text-sm text-white">
       <nav>
         <ul>
-          <li>{Navigation(adminSideBarState.status)}</li>
-          <li className="flex">{Settings(adminSideBarState.status)}</li>
+          <li>{Navigation(AuditSideBarState.status)}</li>
+          <li className="flex">{Settings(AuditSideBarState.status)}</li>
           <li>
             <button
               onClick={() => {
-                // dispatch(logoutBsc());
+                dispatch(logoutAudit());
               }}
               className="flex w-full"
             >
@@ -171,7 +174,7 @@ export function AuditDrawerMenu() {
 
                   <span
                     className={`whitespace-pre duration-300 ${
-                      !adminSideBarState.status && "opacity-0 overflow-hidden"
+                      !AuditSideBarState.status && "opacity-0 overflow-hidden"
                     }`}
                   >
                     Logout

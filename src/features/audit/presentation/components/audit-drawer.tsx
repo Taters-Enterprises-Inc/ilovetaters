@@ -11,6 +11,7 @@ import {
   toggleAuditSideBar,
 } from "../slices/audit-sidebar-slice";
 import { useAppSelector, useAppDispatch } from "features/config/hooks";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 const drawerWidth = "17rem";
 
@@ -54,6 +55,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const SideBarContent = () => {
   const auditSideBarState = useAppSelector(selectAuditSideBar);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   const dispatch = useAppDispatch();
 
   return (
@@ -92,9 +95,30 @@ const SideBarContent = () => {
                   "opacity-0 translate-x-28 overflow-hidden "
                 }`}
       >
-        <div className="text-base">Administrator Need to change</div>
+        {getAdminSessionState.data ? (
+          <div>
+            <div className="text-base">
+              {getAdminSessionState.data.admin.user_details.first_name}{" "}
+              {getAdminSessionState.data.admin.user_details.last_name}
+            </div>
 
-        <h2 className="text-xs">MIS Department</h2>
+            <div className="text-xs">
+              {getAdminSessionState.data.admin.user_details.groups.map(
+                (group, i) => (
+                  <span key={i}>
+                    {getAdminSessionState.data &&
+                    i !==
+                      getAdminSessionState.data.admin.user_details.groups
+                        .length -
+                        1
+                      ? group.name + ", "
+                      : group.name}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <AuditDrawerMenu />

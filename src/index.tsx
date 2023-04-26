@@ -155,6 +155,7 @@ import {
   AuditSettingsQuestions,
 } from "features/audit/presentation/pages";
 import { AuditSidebarWrapper } from "features/audit/presentation/components";
+import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -540,18 +541,24 @@ root.render(
 
                       <Route path="internal/audit" element={<Audit />}>
                         <Route index element={<AuditLogin />} />
-                        <Route element={<AuditSidebarWrapper />}>
-                          <Route
-                            path="dashboard"
-                            element={<AuditDashboard />}
-                          />
-                          <Route path="response" element={<AuditResponse />} />
 
-                          <Route path="settings">
+                        <Route element={<AuditGuard />}>
+                          <Route element={<AuditSidebarWrapper />}>
                             <Route
-                              path="questions"
-                              element={<AuditSettingsQuestions />}
+                              path="dashboard"
+                              element={<AuditDashboard />}
                             />
+                            <Route
+                              path="response"
+                              element={<AuditResponse />}
+                            />
+
+                            <Route path="settings">
+                              <Route
+                                path="questions"
+                                element={<AuditSettingsQuestions />}
+                              />
+                            </Route>
                           </Route>
                         </Route>
                       </Route>

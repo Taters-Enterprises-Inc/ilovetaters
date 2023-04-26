@@ -3,12 +3,6 @@ import {
   getAdminSession,
   GetAdminSessionState,
 } from "features/admin/presentation/slices/get-admin-session.slice";
-import {
-  selectLoginAdmin,
-  LoginAdminState,
-  resetLoginAdminState,
-  loginAdmin,
-} from "features/admin/presentation/slices/login-admin.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
@@ -17,29 +11,35 @@ import {
 } from "features/shared/presentation/components";
 import React, { FormEvent, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  selectLoginAudit,
+  LoginAuditState,
+  resetLoginAuditState,
+  loginAudit,
+} from "../slices/login-audit.slice";
 
 export function AuditLogin() {
   const dispatch = useAppDispatch();
-  const loginAdminState = useAppSelector(selectLoginAdmin);
+  const loginAuditState = useAppSelector(selectLoginAudit);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const [identity, setIdentity] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
-    if (loginAdminState.status === LoginAdminState.success) {
+    if (loginAuditState.status === LoginAuditState.success) {
       dispatch(getAdminSession());
     }
-  }, [loginAdminState, dispatch]);
+  }, [loginAuditState, dispatch]);
 
   useEffect(() => {
     dispatch(getAdminSession());
-    dispatch(resetLoginAdminState());
+    dispatch(resetLoginAuditState());
   }, [dispatch]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     dispatch(
-      loginAdmin({
+      loginAudit({
         identity,
         password,
       })
@@ -49,7 +49,8 @@ export function AuditLogin() {
 
   if (
     getAdminSessionState.data &&
-    getAdminSessionState.status === GetAdminSessionState.success
+    getAdminSessionState.status === GetAdminSessionState.success &&
+    getAdminSessionState.data.admin.is_audit_admin === true
   ) {
     return <Navigate to={"dashboard"} />;
   }
