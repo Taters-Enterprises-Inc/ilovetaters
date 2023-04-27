@@ -207,6 +207,8 @@ import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presenta
 import auditSideBar from "features/audit/presentation/slices/audit-sidebar-slice";
 import loginAudit from "features/audit/presentation/slices/login-audit.slice";
 import logoutAudit from "features/audit/presentation/slices/logout-audit.slice";
+import getAuditSettingQuestions from "features/audit/presentation/slices/get-audit-setting-questions.slice";
+import updateAuditSettingsQuestion from "features/audit/presentation/slices/update-admin-settings-questions.slice";
 
 export const store = configureStore({
   reducer: {
@@ -417,6 +419,8 @@ export const store = configureStore({
     auditSideBar,
     loginAudit,
     logoutAudit,
+    getAuditSettingQuestions,
+    updateAuditSettingsQuestion,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -1,3 +1,5 @@
+export { AuditSettingsQuestionsContent } from "./audit-settings-questions-content";
+
 export { AuditBreadCrumbs } from "./audit-breadcrumbs";
 
 export { AuditHead } from "./audit-head";
