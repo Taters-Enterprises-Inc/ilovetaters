@@ -225,6 +225,8 @@ import insertShopInitialCheckoutLog from "features/shop/presentation/slices/inse
 import getAdminDashboardShopAddToCartTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-add-to-cart-total.slice";
 import getAdminDashboardShopProductViewTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-product-view-total.slice";
 import getAdminDashboardShopInitialCheckoutTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-initial-checkout-total.slice";
+import getAdminDashboardShopUsersTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-users-total.slice";
+import getAdminDashboardShopFeaturedProducts from "features/admin/presentation/slices/get-admin-dashboard-shop-featured-products.slice";
 
 export const store = configureStore({
   reducer: {
@@ -453,6 +455,8 @@ export const store = configureStore({
     getAdminDashboardShopAddToCartTotal,
     getAdminDashboardShopProductViewTotal,
     getAdminDashboardShopInitialCheckoutTotal,
+    getAdminDashboardShopUsersTotal,
+    getAdminDashboardShopFeaturedProducts,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

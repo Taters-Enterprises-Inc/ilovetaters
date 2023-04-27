@@ -95,6 +95,8 @@ import { GetAdminInfluencerPromosModel } from "features/admin/core/domain/get-ad
 import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
 import { GetAdminInfluencerCashoutsModel } from "features/admin/core/domain/get-admin-influencer-cashouts.model";
 import { AdminInfluencerCashoutModel } from "features/admin/core/domain/admin-influencer-cashout.model";
+import { AdminUsersTotalModel } from "features/admin/core/domain/admin-users-total.model";
+import { AdminFeaturedProductModel } from "features/admin/core/domain/admin-featured-product.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -798,6 +800,38 @@ export interface GetAdminDashboardShopAddToCartTotalResponse {
     message: string;
     data: number;
   };
+}
+
+export interface GetAdminDashboardShopUsersTotalResponse {
+  data: {
+    message: string;
+    data: Array<AdminUsersTotalModel>;
+  };
+}
+
+export interface GetAdminDashboardShopFeaturedProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminFeaturedProductModel>;
+  };
+}
+
+export function GetAdminDashboardShopFeaturedProductsRepository(): Promise<GetAdminDashboardShopFeaturedProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/featured-products`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopUsersTotalRepository(): Promise<GetAdminDashboardShopUsersTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/users-total`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminDashboardShopAddToCartTotalRepository(): Promise<GetAdminDashboardShopAddToCartTotalResponse> {

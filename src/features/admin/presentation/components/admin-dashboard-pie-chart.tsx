@@ -1,10 +1,6 @@
+import { AdminUsersTotalModel } from "features/admin/core/domain/admin-users-total.model";
 import { useState } from "react";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
-
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-];
 
 const COLORS = ["#22201A", "#a21013"];
 
@@ -36,12 +32,16 @@ const renderCustomizedLabel = ({
   );
 };
 
-export function AdminDashboardPieChart() {
+interface AdminDashboardPieChartProps {
+  data: Array<AdminUsersTotalModel>;
+}
+
+export function AdminDashboardPieChart(props: AdminDashboardPieChartProps) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
         <Pie
-          data={data}
+          data={props.data}
           cx="50%"
           cy="50%"
           labelLine={false}
@@ -50,7 +50,7 @@ export function AdminDashboardPieChart() {
           fill="#8884d8"
           dataKey="value"
         >
-          {data.map((entry, index) => (
+          {props.data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
