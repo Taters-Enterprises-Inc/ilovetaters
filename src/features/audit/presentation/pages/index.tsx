@@ -1,3 +1,4 @@
+export { AuditForm } from "./audit-form.page";
 export { AuditSettingsQuestions } from "./audit-settings-questions";
 export { AuditResponse } from "./audit-response.page";
 export { AuditDashboard } from "./audit-dashboard.page";

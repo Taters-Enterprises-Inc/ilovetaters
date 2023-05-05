@@ -46,7 +46,8 @@ export function AuditSettingsQuestionsContent() {
 
   let columns: Array<Column> = [
     { id: "question", label: "Questions" },
-    { id: "total", label: "Total Point", minWidth: 220 },
+    { id: "urgency", label: "Urgency", minWidth: 220 },
+    { id: "eqv", label: "Equivalent", minWidth: 220 },
     { id: "status", label: "Active" },
   ];
 
@@ -260,64 +261,15 @@ export function AuditSettingsQuestionsContent() {
                         <DataTableCell>{row.questions}</DataTableCell>
                         <DataTableCell>
                           <div className="flex flex-row text-xl">
-                            <Button
-                              className="p-0"
-                              onClick={() => {
-                                dispatch(
-                                  openMessageModal({
-                                    message: `Enter desired total point for each question: `,
-                                    buttons: [
-                                      {
-                                        color: "#CC5801",
-                                        text: "3",
+                            <span className="basis-1">{row.urgency_level}</span>
+                          </div>
+                        </DataTableCell>
 
-                                        onClick: () => {
-                                          dispatch(
-                                            updateAuditSettingsQuestion({
-                                              id: row.id,
-                                              status: 3,
-                                              type: "point",
-                                            })
-                                          );
-                                          dispatch(closeMessageModal());
-                                        },
-                                      },
-                                      {
-                                        color: "#CC5801",
-                                        text: "2",
-                                        onClick: () => {
-                                          dispatch(
-                                            updateAuditSettingsQuestion({
-                                              id: row.id,
-                                              status: 2,
-                                              type: "point",
-                                            })
-                                          );
-                                          dispatch(closeMessageModal());
-                                        },
-                                      },
-                                      {
-                                        color: "#CC5801",
-                                        text: "1",
-                                        onClick: () => {
-                                          dispatch(
-                                            updateAuditSettingsQuestion({
-                                              id: row.id,
-                                              status: 1,
-                                              type: "point",
-                                            })
-                                          );
-                                          dispatch(closeMessageModal());
-                                        },
-                                      },
-                                    ],
-                                  })
-                                );
-                              }}
-                            >
-                              <BiEdit />
-                            </Button>
-                            <span className="basis-1">{row.total_point}</span>
+                        <DataTableCell>
+                          <div className="flex flex-row text-xl">
+                            <span className="basis-1">
+                              {row.equivalent_point}
+                            </span>
                           </div>
                         </DataTableCell>
 

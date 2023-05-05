@@ -150,6 +150,7 @@ import {
 import {
   Audit,
   AuditDashboard,
+  AuditForm,
   AuditLogin,
   AuditResponse,
   AuditSettingsQuestions,
@@ -560,6 +561,7 @@ root.render(
                               />
                             </Route>
                           </Route>
+                          <Route path="form" element={<AuditForm />} />
                         </Route>
                       </Route>
 

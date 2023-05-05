@@ -8,7 +8,8 @@ export interface GetAuditSettingsQuestionsModel {
     questions: string;
     section_name: string;
     sub_section_name: string | null;
-    total_point: number;
+    urgency_level: number;
+    equivalent_point: number;
     status: number;
   }>;
 }
