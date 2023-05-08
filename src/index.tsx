@@ -155,7 +155,10 @@ import {
   AuditResponse,
   AuditSettingsQuestions,
 } from "features/audit/presentation/pages";
-import { AuditSidebarWrapper } from "features/audit/presentation/components";
+import {
+  AuditFormSideStepper,
+  AuditSidebarWrapper,
+} from "features/audit/presentation/components";
 import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -561,7 +564,9 @@ root.render(
                               />
                             </Route>
                           </Route>
-                          <Route path="form" element={<AuditForm />} />
+                          <Route element={<AuditFormSideStepper />}>
+                            <Route path="form" element={<AuditForm />} />
+                          </Route>
                         </Route>
                       </Route>
 
