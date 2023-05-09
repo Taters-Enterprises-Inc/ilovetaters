@@ -40,7 +40,7 @@ export function AuditFormContent() {
               <TextField id="Store" size="small" variant="outlined" />
             </div>
             <div className="flex flex-col space-y-2">
-              <span>Store Type: </span>
+              <span>Store: </span>
 
               <Autocomplete
                 disablePortal
@@ -56,6 +56,25 @@ export function AuditFormContent() {
                 )}
               />
             </div>
+
+            <div className="flex flex-col space-y-2">
+              <span>Store Type: </span>
+
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                size="small"
+                options={
+                  getStoreState.data
+                    ? getStoreState.data.map((row) => row.name)
+                    : []
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Taters Store Type" />
+                )}
+              />
+            </div>
+
             <Button
               variant="contained"
               startIcon={<MdNavigateNext className="text-white text-4xl" />}
