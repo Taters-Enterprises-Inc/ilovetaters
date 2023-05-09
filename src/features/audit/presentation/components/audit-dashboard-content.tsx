@@ -10,7 +10,7 @@ export function AuditDashboardContent() {
       <div
         className="absolute right-10 bottom-10"
         onClick={() => navigate("../form")}
-      >
+      >  
         <Fab color="primary">
           <TiDocumentAdd className="text-3xl" />
         </Fab>
