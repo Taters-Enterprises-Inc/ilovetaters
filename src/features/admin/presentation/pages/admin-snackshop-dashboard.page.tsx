@@ -40,7 +40,7 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { Media } from "features/shared/presentation/components";
 
-export function AdminDashboard() {
+export function AdminSnackshopDashboard() {
   const dispatch = useAppDispatch();
 
   const getAdminDashboardShopTransactionTotalState = useAppSelector(
@@ -85,7 +85,13 @@ export function AdminDashboard() {
             url: "/admin",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/admin/dashboard" }],
+          pageTitles: [
+            { name: "Dashboard", url: "/admin/dashboard/snackshop" },
+            {
+              name: "Snackshop",
+              url: "/admin/dashboard/snackshop",
+            },
+          ],
         }}
       />
 

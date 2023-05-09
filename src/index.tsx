@@ -79,6 +79,8 @@ import {
   AdminInfluencerPromo,
   AdminInfluencerCreatePromo,
   AdminInfluencerCashout,
+  AdminSnackshopDashboard,
+  AdminCustomerFeedbackDashboard,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -136,7 +138,6 @@ import {
 
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
-import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 import {
   SeeMeCatering,
   SeeMeSnackshop,
@@ -366,10 +367,16 @@ root.render(
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
                             <Route element={<AdminSidebarWrapper />}>
-                              <Route
-                                path="dashboard"
-                                element={<AdminDashboard />}
-                              />
+                              <Route path="dashboard">
+                                <Route
+                                  path="snackshop"
+                                  element={<AdminSnackshopDashboard />}
+                                />
+                                <Route
+                                  path="customer-feedback"
+                                  element={<AdminCustomerFeedbackDashboard />}
+                                />
+                              </Route>
                               <Route
                                 path="order"
                                 element={<AdminShopOrder />}

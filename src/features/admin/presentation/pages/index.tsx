@@ -36,3 +36,6 @@ export { AdminInfluencerApplication } from "./admin-influencer-application.page"
 export { AdminInfluencerPromo } from "./admin-influencer-promo.page";
 export { AdminInfluencerCreatePromo } from "./admin-influencer-create-promo.page";
 export { AdminInfluencerCashout } from "./admin-influencer-cash-out.page";
+
+export { AdminSnackshopDashboard } from "./admin-snackshop-dashboard.page";
+export { AdminCustomerFeedbackDashboard } from "./admin-customer-feedback-dashboard.page";

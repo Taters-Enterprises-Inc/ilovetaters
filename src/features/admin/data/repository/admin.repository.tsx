@@ -97,6 +97,7 @@ import { GetAdminInfluencerCashoutsModel } from "features/admin/core/domain/get-
 import { AdminInfluencerCashoutModel } from "features/admin/core/domain/admin-influencer-cashout.model";
 import { AdminUsersTotalModel } from "features/admin/core/domain/admin-users-total.model";
 import { AdminFeaturedProductModel } from "features/admin/core/domain/admin-featured-product.model";
+import { AdminCustomerFeedbackRatingsSectionAvarageModel } from "features/admin/core/domain/admin-customer-feedback-ratings-section-avarage.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -814,6 +815,24 @@ export interface GetAdminDashboardShopFeaturedProductsResponse {
     message: string;
     data: Array<AdminFeaturedProductModel>;
   };
+}
+
+export interface GetAdminDashboardCustomerFeedbackRatingsResponse {
+  data: {
+    message: string;
+    data: Array<AdminCustomerFeedbackRatingsSectionAvarageModel>;
+  };
+}
+
+export function GetAdminDashboardCustomerFeedbackRatingsRepository(
+  query: string
+): Promise<GetAdminDashboardCustomerFeedbackRatingsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/customer-feedback/ratings${query}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function GetAdminDashboardShopFeaturedProductsRepository(): Promise<GetAdminDashboardShopFeaturedProductsResponse> {
