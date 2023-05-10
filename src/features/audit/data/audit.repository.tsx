@@ -5,7 +5,9 @@ import {
   UpdateAuditSettingsQuestionParam,
 } from "../core/audit.params";
 import { GetAuditSettingsQuestionsModel } from "../core/domain/get-audit-settings-questions.model";
-import { GetStoresModel } from "../core/domain/get-store-model.model";
+import { GetAuditStoreModel } from "../core/domain/get-store-model.model";
+import { AuditEvaluationFormModel } from "../core/domain/audit-evaluation-form.model";
+import { AuditQuestionModel } from "../core/domain/audit-question.model";
 
 export interface LoginAuditResponse {
   data: {
@@ -35,7 +37,14 @@ export interface UpdateAuditSettingsQuestionResponse {
 export interface GetStoresResponse {
   data: {
     message: string;
-    data: Array<GetStoresModel>;
+    data: GetAuditStoreModel;
+  };
+}
+
+export interface GetAuditEvaluationFormQuestionResponse {
+  data: {
+    message: string;
+    data: AuditQuestionModel;
   };
 }
 
@@ -80,6 +89,14 @@ export function UpdateAuditSettingsQuestionRepository(
 
 export function GetStoresRepository(): Promise<GetStoresResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/audit/stores`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAuditEvaluationFormQuestionRepository(
+  query: string
+): Promise<GetAuditEvaluationFormQuestionResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/audit/evaluation${query}`, {
     withCredentials: true,
   });
 }

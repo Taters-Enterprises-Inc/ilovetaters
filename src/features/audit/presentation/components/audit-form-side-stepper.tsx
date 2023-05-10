@@ -88,7 +88,7 @@ export function AuditFormSideStepper() {
               </div>
             </div>
 
-            <div className="mt-20 lg:w-3/5 lg:pr-28">
+            <div className="mt-14 lg:w-3/5 lg:pr-28">
               <Outlet />
             </div>
           </div>

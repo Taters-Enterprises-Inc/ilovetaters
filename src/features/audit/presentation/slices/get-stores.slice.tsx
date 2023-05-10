@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { GetStoresModel } from "features/audit/core/domain/get-store-model.model";
+import { GetAuditStoreModel } from "features/audit/core/domain/get-store-model.model";
 import {
-  GetStoresRepository,
   GetStoresResponse,
+  GetStoresRepository,
 } from "features/audit/data/audit.repository";
-
 import { RootState } from "features/config/store";
 
 export enum GetStoresState {
@@ -14,10 +13,11 @@ export enum GetStoresState {
   success,
   fail,
 }
+
 interface InitialState {
   status: GetStoresState;
   message: string;
-  data: Array<GetStoresModel> | undefined;
+  data: GetAuditStoreModel | undefined;
 }
 
 const initialState: InitialState = {
@@ -47,7 +47,11 @@ export const getStores = createAsyncThunk(
 export const getStoresSlice = createSlice({
   name: "getStores",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGetStoresStatus: (state) => {
+      state.status = GetStoresState.inProgress;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getStores.pending, (state) => {
@@ -71,4 +75,5 @@ export const getStoresSlice = createSlice({
 
 export const selectGetStores = (state: RootState) => state.getStores;
 
+export const { resetGetStoresStatus } = getStoresSlice.actions;
 export default getStoresSlice.reducer;
