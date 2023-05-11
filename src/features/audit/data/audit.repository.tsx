@@ -44,7 +44,7 @@ export interface GetStoresResponse {
 export interface GetAuditEvaluationFormQuestionResponse {
   data: {
     message: string;
-    data: AuditQuestionModel;
+    data: Array<AuditQuestionModel>;
   };
 }
 

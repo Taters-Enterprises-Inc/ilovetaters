@@ -19,7 +19,7 @@ export enum GetAuditEvaluationFormQuestionState {
 interface InitialState {
   status: GetAuditEvaluationFormQuestionState;
   message: string;
-  data: AuditQuestionModel | undefined;
+  data: Array<AuditQuestionModel> | undefined;
 }
 
 const initialState: InitialState = {
