@@ -5,6 +5,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Divider,
   FormControl,
   IconContainerProps,
   Rating,
@@ -34,6 +35,8 @@ import { createQueryParams } from "features/config/helpers";
 import { AuditEvaluationAnswer } from "features/audit/core/domain/audit-evaluation-answer.model";
 import { IoIosArrowBack } from "react-icons/io";
 import { GrStatusCriticalSmall } from "react-icons/gr";
+import { RiNurseFill } from "react-icons/ri";
+import { auditCurrentSection } from "../slices/audit-section.slice";
 
 export function AuditFormContent() {
   const dispatch = useAppDispatch();
@@ -43,7 +46,6 @@ export function AuditFormContent() {
   const getCriteria = useAppSelector(selectGetAuditEvaluationFormQuestion);
 
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
-  const [value, setValue] = useState<number | null>(2);
 
   const [attention, setAttention] = useState("");
 
@@ -69,7 +71,9 @@ export function AuditFormContent() {
     dispatch(getAuditEvaluationFormQuestion(""));
   }, [dispatch]);
 
-  console.log(criteriaSection);
+  useEffect(() => {
+    dispatch(auditCurrentSection(criteriaSection));
+  }, [dispatch, criteriaSection]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,7 +88,8 @@ export function AuditFormContent() {
       if (increasedSurveySection < getCriteria.data.length) {
         setCriteriaSection(increasedSurveySection);
       } else {
-        console.log(selectedStore);
+        console.log(formState);
+        console.log(selectedStore?.store_id);
         console.log(selectedType);
         console.log(attention);
       }
@@ -94,192 +99,277 @@ export function AuditFormContent() {
       }
     }
   };
+  // console.log(formState);
 
   return (
     <>
       <div className="flex flex-col space-y-10 lg:px-10">
         <div>
-          <h1 className="flex justify-center text-4xl font-['Bebas_Neue'] text-center py-6">
+          <span className="flex justify-center text-4xl font-['Bebas_Neue'] text-center">
             INTERNAL QUALITY AUDIT FORM
-          </h1>
+          </span>
         </div>
         {getCriteria.data ? (
           <form onSubmit={handleFormSubmit}>
-            <div className="flex flex-col space-y-10 px-10 mb-20">
-              <div>
-                <h1 id="section_1" className="capitalize font-semibold text-xl">
-                  {getCriteria.data[criteriaSection].section}
-                </h1>
+            <div className="flex flex-col space-y-2 mb-20">
+              <div className="px-5">
                 {criteriaSection === 0 ? (
-                  <span className="text-md">
-                    Setup store and attention Information
-                  </span>
+                  <>
+                    <h1
+                      id="section_1"
+                      className="capitalize font-semibold text-xl"
+                    >
+                      {getCriteria.data[criteriaSection].section}
+                    </h1>
+                    <span className="text-md">
+                      Setup store and attention Information
+                    </span>
+                  </>
                 ) : null}
               </div>
 
               <div className="flex flex-col space-y-5">
                 {getCriteria.data[criteriaSection].criteria.length === 0 ? (
                   <>
-                    <div className="flex flex-col space-y-2">
-                      <span>Attention: </span>
-                      <TextField
-                        required
-                        id="Store"
-                        size="small"
-                        variant="outlined"
-                        onChange={(event) => {
-                          setAttention(event.target.value);
-                        }}
-                        value={attention}
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <span>Store: </span>
+                    <div className="px-5">
+                      <div className="flex flex-col space-y-2">
+                        <span>Attention: </span>
+                        <TextField
+                          required
+                          id="Store"
+                          size="small"
+                          variant="outlined"
+                          onChange={(event) => {
+                            setAttention(event.target.value);
+                          }}
+                          value={attention}
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span>Store: </span>
 
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        size="small"
-                        options={
-                          getStoreState.data
-                            ? getStoreState.data.stores.map((row) => row.name)
-                            : []
-                        }
-                        onChange={(event, value: any) => {
-                          if (value && getStoreState.data) {
-                            const selectedStoreObj =
-                              getStoreState.data.stores.find(
-                                (store) => store.name === value
-                              );
-                            setSelectedStore(selectedStoreObj);
-                          } else {
-                            setSelectedStore(undefined);
+                        <Autocomplete
+                          disablePortal
+                          id="combo-box-demo"
+                          size="small"
+                          options={
+                            getStoreState.data
+                              ? getStoreState.data.stores.map((row) => row.name)
+                              : []
                           }
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            value={selectedStore ?? ""}
-                            {...params}
-                            label="Select store to evaluate"
-                          />
-                        )}
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <span>Store Type: </span>
+                          onChange={(event, value: any) => {
+                            if (value && getStoreState.data) {
+                              const selectedStoreObj =
+                                getStoreState.data.stores.find(
+                                  (store) => store.name === value
+                                );
+                              setSelectedStore(selectedStoreObj);
+                            } else {
+                              setSelectedStore(undefined);
+                            }
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              required
+                              value={selectedStore ?? ""}
+                              {...params}
+                              label="Select store to evaluate"
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span>Store Type: </span>
 
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        size="small"
-                        options={
-                          getStoreState.data
-                            ? getStoreState.data.store_type.map(
-                                (row) => row.type_name
-                              )
-                            : []
-                        }
-                        onChange={(event, value: any) => {
-                          if (value && getStoreState.data) {
-                            const selectedStoreObj =
-                              getStoreState.data.store_type.find(
-                                (store) => store.type_name === value
-                              );
-                            setselectedType(selectedStoreObj);
-                          } else {
-                            setselectedType(undefined);
+                        <Autocomplete
+                          disablePortal
+                          id="combo-box-demo"
+                          size="small"
+                          options={
+                            getStoreState.data
+                              ? getStoreState.data.store_type.map(
+                                  (row) => row.type_name
+                                )
+                              : []
                           }
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            value={selectedType ?? ""}
-                            required
-                            {...params}
-                            label="Taters Store Type"
-                          />
-                        )}
-                      />
+                          onChange={(event, value: any) => {
+                            if (value && getStoreState.data) {
+                              const selectedStoreObj =
+                                getStoreState.data.store_type.find(
+                                  (store) => store.type_name === value
+                                );
+                              setselectedType(selectedStoreObj);
+                            } else {
+                              setselectedType(undefined);
+                            }
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              value={selectedType ?? ""}
+                              required
+                              {...params}
+                              label="Taters Store Type"
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
                   </>
                 ) : null}
-
                 {getCriteria.data[criteriaSection].criteria.length !== 0 ? (
                   <>
                     <div className="flex flex-col space-y-2">
-                      {getCriteria.data[criteriaSection].criteria.map((row) => {
-                        const StyledRating = styled(Rating)(({ theme }) => ({
-                          "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
-                            color: theme.palette.action.disabled,
-                          },
-                        }));
+                      {getCriteria.data[criteriaSection].criteria.map(
+                        (row, index) => {
+                          const StyledRating = styled(Rating)(({ theme }) => ({
+                            "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
+                              color: theme.palette.action.disabled,
+                            },
+                          }));
 
-                        const customIcons: {
-                          [index: string]: {
-                            icon: React.ReactElement;
-                            label: string;
+                          const customIcons: {
+                            [index: string]: {
+                              icon: React.ReactElement;
+                              label: string;
+                            };
+                          } = {
+                            1: {
+                              icon: (
+                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
+                              ),
+                              label: "Less Critical",
+                            },
+                            2: {
+                              icon: (
+                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
+                              ),
+                              label: "Critical",
+                            },
+                            3: {
+                              icon: (
+                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
+                              ),
+                              label: "Most Critital",
+                            },
                           };
-                        } = {
-                          1: {
-                            icon: (
-                              <GrStatusCriticalSmall className="text-5xl pt-2.5" />
-                            ),
-                            label: "Less Critical",
-                          },
-                          2: {
-                            icon: (
-                              <GrStatusCriticalSmall className="text-5xl pt-2.5" />
-                            ),
-                            label: "Critical",
-                          },
-                          3: {
-                            icon: (
-                              <GrStatusCriticalSmall className="text-5xl pt-2.5" />
-                            ),
-                            label: "Most Critital",
-                          },
-                        };
 
-                        const IconContainer = (props: IconContainerProps) => {
-                          const { value, ...other } = props;
+                          const IconContainer = (props: IconContainerProps) => {
+                            const { value, ...other } = props;
+                            return (
+                              <span {...other}>{customIcons[value].icon}</span>
+                            );
+                          };
+
+                          const handleRatingChange =
+                            (id: number) =>
+                            (
+                              event: React.ChangeEvent<{}>,
+                              value: number | null
+                            ) => {
+                              const ratingValue = value || 0;
+
+                              setFormState((prevFormState) => ({
+                                ...prevFormState,
+                                [id]: { id, ratingValue },
+                              }));
+                            };
+
                           return (
-                            <span {...other}>{customIcons[value].icon}</span>
-                          );
-                        };
+                            <div className="flex justify-center" key={index}>
+                              <Card className="w-11/12" variant="outlined">
+                                <CardContent className="space-y-2">
+                                  <Typography
+                                    sx={{ fontSize: 14 }}
+                                    color="black"
+                                    gutterBottom
+                                  >
+                                    {row.questions}
+                                  </Typography>
+                                  <div className="flex space-x-10 text-xs">
+                                    <span>Urgency Level: {row.level}</span>
+                                    <span>
+                                      Equivalent Point: {row.equivalent_point}
+                                    </span>
+                                  </div>
 
-                        return (
-                          <div>
-                            <Card className="w-full" variant="outlined">
-                              <CardContent>
-                                <Typography
-                                  gutterBottom
-                                  variant="h6"
-                                  component="div"
-                                >
-                                  <span className="">{row.questions}</span>
-                                </Typography>
-                                <div className="flex justify-center">
-                                  <StyledRating
-                                    name="highlight-selected-only"
-                                    defaultValue={0}
-                                    max={3}
-                                    IconContainerComponent={IconContainer}
-                                    getLabelText={(value: number) =>
-                                      customIcons[value].label
-                                    }
-                                    highlightSelectedOnly
-                                  />
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </div>
-                        );
-                      })}
+                                  <Divider flexItem />
+
+                                  <div className="flex space-x-5 justify-start">
+                                    <div className="flex space-x-5">
+                                      <div className="flex flex-col space-y-1">
+                                        <span>Rating: </span>
+                                        <StyledRating
+                                          name={row.id.toString()}
+                                          defaultValue={0}
+                                          max={3}
+                                          value={Number(
+                                            formState?.[row.id]
+                                              ?.form_rating_id ?? 0
+                                          )}
+                                          onChange={(
+                                            e,
+                                            value: number | null
+                                          ) => {
+                                            const rating = value || 0;
+                                            const form_rating_id = rating;
+                                            const question_id = row.id;
+
+                                            setFormState({
+                                              ...formState,
+                                              [row.id]: {
+                                                form_rating_id,
+                                                question_id,
+                                              },
+                                            });
+                                          }}
+                                          IconContainerComponent={IconContainer}
+                                          getLabelText={(value: number) =>
+                                            customIcons[value].label
+                                          }
+                                          highlightSelectedOnly
+                                        />
+                                      </div>
+                                      <span>
+                                        {formState?.[row.id]?.form_rating_id ??
+                                          null}
+                                      </span>
+                                      <Divider
+                                        orientation="vertical"
+                                        flexItem
+                                      />
+                                      <div className="flex flex-col space-y-2">
+                                        <span>Remarks: </span>
+
+                                        <TextField
+                                          name={row.id.toString()}
+                                          size="small"
+                                          variant="outlined"
+                                          onChange={(e) => {
+                                            const remarks = e.target.value;
+                                            setFormState((prevState) => ({
+                                              ...prevState,
+                                              [row.id]: {
+                                                ...prevState[row.id],
+                                                ...prevState[row.id],
+                                                remarks,
+                                              },
+                                            }));
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            </div>
+                          );
+                        }
+                      )}
                     </div>
                   </>
                 ) : null}
 
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 px-5">
                   {criteriaSection !== 0 ? (
                     <Button
                       className="basis-1/2"
