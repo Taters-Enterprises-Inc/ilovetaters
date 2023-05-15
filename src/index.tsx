@@ -153,6 +153,7 @@ import {
   AuditForm,
   AuditLogin,
   AuditResponse,
+  AuditReview,
   AuditSettingsQuestions,
 } from "features/audit/presentation/pages";
 import {
@@ -563,6 +564,11 @@ root.render(
                                 element={<AuditSettingsQuestions />}
                               />
                             </Route>
+
+                            <Route
+                              path="form/review/:hash"
+                              element={<AuditReview />}
+                            />
                           </Route>
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="form" element={<AuditForm />} />

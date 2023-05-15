@@ -16,48 +16,10 @@ import { MdOutlineArrowBackIos } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "features/config/hooks";
 import { selectAuditSection } from "../slices/audit-section.slice";
-
-// interface StepsProps {
-//   ActiveSteps: number;
-// }
+import { AUDIT_STEPPER } from "features/shared/constants";
 
 export function AuditFormSideStepper() {
   const currentSection = useAppSelector(selectAuditSection);
-
-  const steps = [
-    {
-      section: "INTERNAL QUALITY AUDIT GENERAL INFORMATION",
-    },
-    {
-      section: "ENVIRONMENT",
-    },
-    {
-      section: "CUSTOMER EXPERIENCE (SERVICE)",
-    },
-    {
-      section: "SAFETY 3.1 SAFE FOOD HANDLING/ FACILITY SAFETY/FOOD SANITATION",
-    },
-    {
-      section: "SAFETY 3.2 FOOD SAFETY PROCESS FLOW",
-    },
-    {
-      section: "PRODUCT QUALITY/FOOD PREPARATION",
-    },
-    {
-      section: "MATERIALS MANAGEMENT",
-    },
-    {
-      section: "CASH HANDLING",
-    },
-    {
-      section: "EQUIPMENT OPERATIONS MAINTENANCE",
-    },
-    {
-      section: "RESOURCE MANAGEMENT",
-    },
-  ];
-
-  console.log(currentSection.section);
 
   return (
     <>
@@ -82,7 +44,7 @@ export function AuditFormSideStepper() {
                       activeStep={currentSection.section}
                       orientation="vertical"
                     >
-                      {steps.map((step, index) => (
+                      {AUDIT_STEPPER.map((step, index) => (
                         <Step key={step.section}>
                           <StepLabel>{step.section}</StepLabel>
                         </Step>

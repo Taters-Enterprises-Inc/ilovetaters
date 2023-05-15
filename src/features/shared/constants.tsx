@@ -13,6 +13,7 @@ import { GiPopcorn } from "react-icons/gi";
 import { HiDocumentText } from "react-icons/hi";
 import Pusher from "pusher-js";
 import { ReactElement, ReactNode } from "react";
+import { GrStatusCriticalSmall } from "react-icons/gr";
 export const REACT_APP_DOMAIN_URL = process.env.REACT_APP_DOMAIN_URL;
 export const REACT_APP_BASE_NAME = process.env.REACT_APP_BASE_NAME;
 
@@ -1029,3 +1030,56 @@ export const SHOP_ORDER_STATUS: Array<{
     color: "#004d00",
   },
 ];
+
+export const AUDIT_STEPPER: Array<{ section: string }> = [
+  {
+    section: "INTERNAL QUALITY AUDIT GENERAL INFORMATION",
+  },
+  {
+    section: "ENVIRONMENT",
+  },
+  {
+    section: "CUSTOMER EXPERIENCE (SERVICE)",
+  },
+  {
+    section: "SAFETY 3.1 SAFE FOOD HANDLING/ FACILITY SAFETY/FOOD SANITATION",
+  },
+  {
+    section: "SAFETY 3.2 FOOD SAFETY PROCESS FLOW",
+  },
+  {
+    section: "PRODUCT QUALITY/FOOD PREPARATION",
+  },
+  {
+    section: "MATERIALS MANAGEMENT",
+  },
+  {
+    section: "CASH HANDLING",
+  },
+  {
+    section: "EQUIPMENT OPERATIONS MAINTENANCE",
+  },
+  {
+    section: "RESOURCE MANAGEMENT",
+  },
+];
+
+export const AUDIT_CUSTOM_ICON: {
+  [index: string]: {
+    icon: React.ReactElement;
+    label: string;
+  };
+} = {
+  1: {
+    icon: <GrStatusCriticalSmall className="text-4xl pt-2.5" />,
+    label: "Less Critical",
+  },
+  2: {
+    icon: <GrStatusCriticalSmall className="text-4xl pt-2.5" />,
+    label: "Critical",
+  },
+  3: {
+    icon: <GrStatusCriticalSmall className="text-4xl pt-2.5" />,
+    label: "Most Critital",
+  },
+};

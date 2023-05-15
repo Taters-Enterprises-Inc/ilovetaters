@@ -1,6 +1,7 @@
 import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
+  InsertAuditResponseParam,
   LoginAuditParam,
   UpdateAuditSettingsQuestionParam,
 } from "../core/audit.params";
@@ -8,6 +9,7 @@ import { GetAuditSettingsQuestionsModel } from "../core/domain/get-audit-setting
 import { GetAuditStoreModel } from "../core/domain/get-store-model.model";
 import { AuditEvaluationFormModel } from "../core/domain/audit-evaluation-form.model";
 import { AuditQuestionModel } from "../core/domain/audit-question.model";
+import { InsertAuditResponseModel } from "../core/domain/insert-audit-response.model";
 
 export interface LoginAuditResponse {
   data: {
@@ -45,6 +47,13 @@ export interface GetAuditEvaluationFormQuestionResponse {
   data: {
     message: string;
     data: Array<AuditQuestionModel>;
+  };
+}
+
+export interface InsertAuditResponseResponse {
+  data: {
+    message: string;
+    data: InsertAuditResponseModel;
   };
 }
 
@@ -97,6 +106,17 @@ export function GetAuditEvaluationFormQuestionRepository(
   query: string
 ): Promise<GetAuditEvaluationFormQuestionResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/audit/evaluation${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function InsertAuditResponseRepository(
+  param: InsertAuditResponseParam
+): Promise<InsertAuditResponseResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/audit/response`, param, {
+    headers: {
+      "Content-type": "application/json",
+    },
     withCredentials: true,
   });
 }

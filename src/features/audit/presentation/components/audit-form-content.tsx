@@ -37,19 +37,32 @@ import { IoIosArrowBack } from "react-icons/io";
 import { GrStatusCriticalSmall } from "react-icons/gr";
 import { RiNurseFill } from "react-icons/ri";
 import { auditCurrentSection } from "../slices/audit-section.slice";
+import { AUDIT_CUSTOM_ICON } from "features/shared/constants";
+import { Navigate, useNavigate } from "react-router-dom";
+import copyAdminSettingShopProductSlice from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
+import {
+  InsertAuditResponseState,
+  insertAuditResponse,
+  resetInsertAuditResponse,
+  selectInsertAuditResponse,
+} from "../slices/insert-audit-response.slice";
 
 export function AuditFormContent() {
   const dispatch = useAppDispatch();
   const query = useQuery();
+  const navigate = useNavigate();
 
   const getStoreState = useAppSelector(selectGetStores);
   const getCriteria = useAppSelector(selectGetAuditEvaluationFormQuestion);
 
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
-
   const [attention, setAttention] = useState("");
 
+  const [maxLength, setmaxLength] = useState(10);
+
   const [criteriaSection, setCriteriaSection] = useState(0);
+
+  const insertAuditResponseState = useAppSelector(selectInsertAuditResponse);
 
   const [selectedType, setselectedType] = useState<
     | {
@@ -73,33 +86,53 @@ export function AuditFormContent() {
 
   useEffect(() => {
     dispatch(auditCurrentSection(criteriaSection));
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [dispatch, criteriaSection]);
+
+  useEffect(() => {
+    if (insertAuditResponseState.status === InsertAuditResponseState.success) {
+      dispatch(resetInsertAuditResponse());
+      navigate(`form/review/${insertAuditResponseState.data?.hash}`);
+    }
+  }, [dispatch, insertAuditResponseState, navigate]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const query = createQueryParams({ type: selectedType?.type_name });
     const increasedSurveySection = criteriaSection + 1;
 
+    if (getCriteria.data && getCriteria.data[9].criteria.length === 0) {
+      setmaxLength(9);
+    }
+
     if (
       getCriteria.status === GetAuditEvaluationFormQuestionState.success &&
       getCriteria.data &&
       getCriteria.data.length > 0
     ) {
-      if (increasedSurveySection < getCriteria.data.length) {
-        setCriteriaSection(increasedSurveySection);
-      } else {
-        console.log(formState);
-        console.log(selectedStore?.store_id);
-        console.log(selectedType);
-        console.log(attention);
-      }
-
       if (getCriteria.data[criteriaSection].criteria.length === 0) {
         dispatch(getAuditEvaluationFormQuestion(query));
       }
+
+      if (increasedSurveySection < maxLength) {
+        setCriteriaSection(increasedSurveySection);
+      } else {
+        dispatch(
+          insertAuditResponse({
+            selectedStoreId: selectedStore?.store_id,
+            selectedTypeId: selectedType?.id,
+            attention,
+            answers: formState,
+          })
+        );
+
+        console.log(formState);
+        console.log(selectedStore?.store_id);
+        console.log(selectedType?.id);
+        console.log(attention);
+      }
     }
   };
-  // console.log(formState);
 
   return (
     <>
@@ -227,36 +260,12 @@ export function AuditFormContent() {
                             },
                           }));
 
-                          const customIcons: {
-                            [index: string]: {
-                              icon: React.ReactElement;
-                              label: string;
-                            };
-                          } = {
-                            1: {
-                              icon: (
-                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
-                              ),
-                              label: "Less Critical",
-                            },
-                            2: {
-                              icon: (
-                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
-                              ),
-                              label: "Critical",
-                            },
-                            3: {
-                              icon: (
-                                <GrStatusCriticalSmall className="text-4xl pt-2.5" />
-                              ),
-                              label: "Most Critital",
-                            },
-                          };
-
                           const IconContainer = (props: IconContainerProps) => {
                             const { value, ...other } = props;
                             return (
-                              <span {...other}>{customIcons[value].icon}</span>
+                              <span {...other}>
+                                {AUDIT_CUSTOM_ICON[value].icon}
+                              </span>
                             );
                           };
 
@@ -324,7 +333,7 @@ export function AuditFormContent() {
                                           }}
                                           IconContainerComponent={IconContainer}
                                           getLabelText={(value: number) =>
-                                            customIcons[value].label
+                                            AUDIT_CUSTOM_ICON[value].label
                                           }
                                           highlightSelectedOnly
                                         />
@@ -343,6 +352,9 @@ export function AuditFormContent() {
                                         <TextField
                                           name={row.id.toString()}
                                           size="small"
+                                          value={
+                                            formState?.[row.id]?.remarks ?? ""
+                                          }
                                           variant="outlined"
                                           onChange={(e) => {
                                             const remarks = e.target.value;
@@ -350,7 +362,7 @@ export function AuditFormContent() {
                                               ...prevState,
                                               [row.id]: {
                                                 ...prevState[row.id],
-                                                ...prevState[row.id],
+                                                ...(prevState[row.id] || {}),
                                                 remarks,
                                               },
                                             }));
@@ -394,7 +406,8 @@ export function AuditFormContent() {
                       <MdNavigateNext className="text-white text-4xl" />
                     }
                   >
-                    {getCriteria.data.length - 1 === criteriaSection
+                    {getCriteria.data.length - 1 === criteriaSection ||
+                    maxLength - 1 === criteriaSection
                       ? "Submit"
                       : "Continue"}
                   </Button>
