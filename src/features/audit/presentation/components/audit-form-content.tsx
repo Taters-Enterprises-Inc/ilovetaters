@@ -2,14 +2,12 @@ import {
   Autocomplete,
   Button,
   Card,
-  CardActionArea,
   CardContent,
-  CardMedia,
   Divider,
-  FormControl,
   IconContainerProps,
   Rating,
   TextField,
+  TextFieldProps,
   Typography,
   styled,
 } from "@mui/material";
@@ -19,13 +17,14 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { getStores, selectGetStores } from "../slices/get-stores.slice";
-import { FormEvent, useEffect, useState } from "react";
 import {
-  MdNavigateNext,
-  MdOutlineNavigateBefore,
-  MdOutlineNavigateNext,
-} from "react-icons/md";
-import { GetAuditStoreModel } from "features/audit/core/domain/get-store-model.model";
+  FormEvent,
+  JSXElementConstructor,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
+import { MdNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
 import {
   GetAuditEvaluationFormQuestionState,
   getAuditEvaluationFormQuestion,
@@ -33,19 +32,18 @@ import {
 } from "../slices/get-audit-evaluation-form_questions.slice";
 import { createQueryParams } from "features/config/helpers";
 import { AuditEvaluationAnswer } from "features/audit/core/domain/audit-evaluation-answer.model";
-import { IoIosArrowBack } from "react-icons/io";
-import { GrStatusCriticalSmall } from "react-icons/gr";
-import { RiNurseFill } from "react-icons/ri";
 import { auditCurrentSection } from "../slices/audit-section.slice";
 import { AUDIT_CUSTOM_ICON } from "features/shared/constants";
-import { Navigate, useNavigate } from "react-router-dom";
-import copyAdminSettingShopProductSlice from "features/admin/presentation/slices/copy-admin-setting-shop-product.slice";
+import { useNavigate } from "react-router-dom";
 import {
   InsertAuditResponseState,
   insertAuditResponse,
   resetInsertAuditResponse,
   selectInsertAuditResponse,
 } from "../slices/insert-audit-response.slice";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 export function AuditFormContent() {
   const dispatch = useAppDispatch();
@@ -57,6 +55,8 @@ export function AuditFormContent() {
 
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
   const [attention, setAttention] = useState("");
+
+  const [selectedDate, setSelectedDate] = useState<string>("YYYY-MM");
 
   const [maxLength, setmaxLength] = useState(10);
 
@@ -92,12 +92,13 @@ export function AuditFormContent() {
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
       dispatch(resetInsertAuditResponse());
-      navigate(`form/review/${insertAuditResponseState.data?.hash}`);
+      navigate(`review/${insertAuditResponseState.data?.hash}`);
     }
   }, [dispatch, insertAuditResponseState, navigate]);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const query = createQueryParams({ type: selectedType?.type_name });
     const increasedSurveySection = criteriaSection + 1;
 
@@ -122,6 +123,7 @@ export function AuditFormContent() {
             selectedStoreId: selectedStore?.store_id,
             selectedTypeId: selectedType?.id,
             attention,
+            period: selectedDate,
             answers: formState,
           })
         );
@@ -164,7 +166,7 @@ export function AuditFormContent() {
               <div className="flex flex-col space-y-5">
                 {getCriteria.data[criteriaSection].criteria.length === 0 ? (
                   <>
-                    <div className="px-5">
+                    <div className="space-y-3 px-5">
                       <div className="flex flex-col space-y-2">
                         <span>Attention: </span>
                         <TextField
@@ -245,6 +247,27 @@ export function AuditFormContent() {
                             />
                           )}
                         />
+                      </div>
+
+                      <div className="flex flex-col space-y-2">
+                        <span>For the month of: </span>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label={'"month" and "year"'}
+                            views={["month", "year"]}
+                            onChange={(date) => {
+                              const formattedDate = date
+                                ? dayjs(date).format("YYYY-MM")
+                                : "";
+                              setSelectedDate(formattedDate);
+                            }}
+                            value={selectedDate}
+                            renderInput={(params) => (
+                              <TextField required {...params} label="Period" />
+                            )}
+                          />
+                        </LocalizationProvider>
                       </div>
                     </div>
                   </>
