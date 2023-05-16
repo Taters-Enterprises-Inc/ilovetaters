@@ -13,3 +13,4 @@ export { AuditHead } from "./audit-head";
 export { AuditDrawerMenu } from "./audit-drawer-menu";
 export { AuditDrawer } from "./audit-drawer";
 export { AuditSidebarWrapper } from "./audit-sidebar-wrapper";
+export { AuditReviewContent } from "./audit-review-content";
