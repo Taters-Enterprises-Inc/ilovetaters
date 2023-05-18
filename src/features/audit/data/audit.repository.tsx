@@ -134,7 +134,7 @@ export function GetAuditResponseRepository(
   param: GetAuditResponseParam
 ): Promise<GetAuditResponseResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/audit/response/answer${param.hash}`,
+    `${REACT_APP_DOMAIN_URL}api/audit/response/answer/${param.hash}`,
     {
       headers: {
         "Content-type": "application/json",

@@ -127,14 +127,11 @@ export function AuditFormContent() {
             answers: formState,
           })
         );
-
-        console.log(formState);
-        console.log(selectedStore?.store_id);
-        console.log(selectedType?.id);
-        console.log(attention);
       }
     }
   };
+
+  console.log(formState);
 
   return (
     <>
@@ -345,12 +342,19 @@ export function AuditFormContent() {
                                             const rating = value || 0;
                                             const form_rating_id = rating;
                                             const question_id = row.id;
-
+                                            const eq_point =
+                                              row.equivalent_point;
+                                            const level = row.level;
                                             setFormState({
                                               ...formState,
                                               [row.id]: {
-                                                form_rating_id,
-                                                question_id,
+                                                form_rating_id: form_rating_id,
+                                                question_id: question_id,
+                                                remarks:
+                                                  formState[row.id]?.remarks ??
+                                                  null,
+                                                equivalent_point: eq_point,
+                                                level: level,
                                               },
                                             });
                                           }}

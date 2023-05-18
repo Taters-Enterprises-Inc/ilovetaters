@@ -9,6 +9,7 @@ export interface GetAuditResponseModel {
   };
 
   answers: Array<{
+    id: number;
     questions: string;
     rating: number;
     remarks: string;

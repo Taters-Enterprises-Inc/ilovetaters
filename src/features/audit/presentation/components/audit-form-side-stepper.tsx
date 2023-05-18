@@ -26,7 +26,7 @@ export function AuditFormSideStepper() {
       <main className="flex min-h-screen">
         <section
           id="audit-form-main-section"
-          className="flex-1 h-screen overflow-y-auto bg-paper"
+          className="flex-1 h-screen bg-paper"
         >
           <div className="flex bg-paper">
             <div className="hidden lg:relative lg:block">
@@ -38,7 +38,7 @@ export function AuditFormSideStepper() {
                   </span>
                 </Link>
 
-                <div className="flex  ml-40">
+                <div className="flex  ml-40 pb-10">
                   <Box sx={{ maxWidth: 300 }}>
                     <Stepper
                       activeStep={currentSection.section}
@@ -50,11 +50,6 @@ export function AuditFormSideStepper() {
                         </Step>
                       ))}
                     </Stepper>
-                    {/* {1 === 8 && (
-                    <Paper square elevation={0} sx={{ p: 3 }}>
-                      <Typography>All sections completed - you&apos;re finished</Typography>
-                    </Paper>
-                  )} */}
                   </Box>
 
                   <Divider orientation="vertical" flexItem />
