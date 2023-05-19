@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { AuditEvaluationFormModel } from "features/audit/core/domain/audit-evaluation-form.model";
 import { AuditQuestionModel } from "features/audit/core/domain/audit-question.model";
 import {
   GetAuditEvaluationFormQuestionResponse,

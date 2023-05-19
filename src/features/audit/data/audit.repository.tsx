@@ -8,7 +8,6 @@ import {
 } from "../core/audit.params";
 import { GetAuditSettingsQuestionsModel } from "../core/domain/get-audit-settings-questions.model";
 import { GetAuditStoreModel } from "../core/domain/get-store-model.model";
-import { AuditEvaluationFormModel } from "../core/domain/audit-evaluation-form.model";
 import { AuditQuestionModel } from "../core/domain/audit-question.model";
 import { InsertAuditResponseModel } from "../core/domain/insert-audit-response.model";
 import { GetAuditResponseModel } from "../core/domain/audit-response.model";

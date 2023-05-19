@@ -4,9 +4,15 @@ export interface GetAuditResponseModel {
     attention: string;
     audit_period: string;
     dateadded: string;
+    type_id: string;
     type_name: string;
     store_name: string;
   };
+
+  default_weight_info: Array<{
+    category_id: string;
+    weight: number;
+  }>;
 
   answers: Array<{
     id: number;
