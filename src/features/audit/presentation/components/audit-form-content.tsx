@@ -44,6 +44,7 @@ import {
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
 
 export function AuditFormContent() {
   const dispatch = useAppDispatch();
@@ -54,6 +55,7 @@ export function AuditFormContent() {
   const getCriteria = useAppSelector(selectGetAuditEvaluationFormQuestion);
 
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
+  const [result, setResult] = useState<AuditResultModel>({});
   const [attention, setAttention] = useState("");
 
   const [selectedDate, setSelectedDate] = useState<string>("YYYY-MM");
@@ -130,8 +132,6 @@ export function AuditFormContent() {
       }
     }
   };
-
-  console.log(formState);
 
   return (
     <>

@@ -17,5 +17,6 @@ export interface GetAuditResponseModel {
     level: number;
     section_name: string;
     sub_section_name: string | null;
+    category_id: number;
   }>;
 }
