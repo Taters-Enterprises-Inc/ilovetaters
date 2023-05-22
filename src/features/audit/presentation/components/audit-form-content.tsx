@@ -289,118 +289,109 @@ export function AuditFormContent() {
                             );
                           };
 
-                          const handleRatingChange =
-                            (id: number) =>
-                            (
-                              event: React.ChangeEvent<{}>,
-                              value: number | null
-                            ) => {
-                              const ratingValue = value || 0;
-
-                              setFormState((prevFormState) => ({
-                                ...prevFormState,
-                                [id]: { id, ratingValue },
-                              }));
-                            };
-
                           return (
-                            <div className="flex justify-center" key={index}>
-                              <Card className="w-11/12" variant="outlined">
-                                <CardContent className="space-y-2">
-                                  <Typography
-                                    sx={{ fontSize: 14 }}
-                                    color="black"
-                                    gutterBottom
-                                  >
-                                    {row.questions}
-                                  </Typography>
-                                  <div className="flex space-x-10 text-xs">
-                                    <span>Urgency Level: {row.level}</span>
-                                    <span>
-                                      Equivalent Point: {row.equivalent_point}
-                                    </span>
-                                  </div>
-
-                                  <Divider flexItem />
-
-                                  <div className="flex space-x-5 justify-start">
-                                    <div className="flex space-x-5">
-                                      <div className="flex flex-col space-y-1">
-                                        <span>Rating: </span>
-                                        <StyledRating
-                                          name={row.id.toString()}
-                                          defaultValue={0}
-                                          max={3}
-                                          value={Number(
-                                            formState?.[row.id]
-                                              ?.form_rating_id ?? 0
-                                          )}
-                                          onChange={(
-                                            e,
-                                            value: number | null
-                                          ) => {
-                                            const rating = value || 0;
-                                            const form_rating_id = rating;
-                                            const question_id = row.id;
-                                            const eq_point =
-                                              row.equivalent_point;
-                                            const level = row.level;
-                                            setFormState({
-                                              ...formState,
-                                              [row.id]: {
-                                                form_rating_id: form_rating_id,
-                                                question_id: question_id,
-                                                remarks:
-                                                  formState[row.id]?.remarks ??
-                                                  null,
-                                                equivalent_point: eq_point,
-                                                level: level,
-                                              },
-                                            });
-                                          }}
-                                          IconContainerComponent={IconContainer}
-                                          getLabelText={(value: number) =>
-                                            AUDIT_CUSTOM_ICON[value].label
-                                          }
-                                          highlightSelectedOnly
-                                        />
-                                      </div>
+                            <>
+                              <div className="flex justify-center" key={index}>
+                                <Card className="w-11/12" variant="outlined">
+                                  <CardContent className="space-y-2">
+                                    <Typography
+                                      sx={{ fontSize: 14 }}
+                                      color="black"
+                                      gutterBottom
+                                    >
+                                      {row.questions}
+                                    </Typography>
+                                    <div className="flex space-x-10 text-xs">
+                                      <span>Urgency Level: {row.level}</span>
                                       <span>
-                                        {formState?.[row.id]?.form_rating_id ??
-                                          null}
+                                        Equivalent Point: {row.equivalent_point}
                                       </span>
-                                      <Divider
-                                        orientation="vertical"
-                                        flexItem
-                                      />
-                                      <div className="flex flex-col space-y-2">
-                                        <span>Remarks: </span>
+                                    </div>
 
-                                        <TextField
-                                          name={row.id.toString()}
-                                          size="small"
-                                          value={
-                                            formState?.[row.id]?.remarks ?? ""
-                                          }
-                                          variant="outlined"
-                                          onChange={(e) => {
-                                            const remarks = e.target.value;
-                                            setFormState((prevState) => ({
-                                              ...prevState,
-                                              [row.id]: {
-                                                ...prevState[row.id],
-                                                ...(prevState[row.id] || {}),
-                                                remarks,
-                                              },
-                                            }));
-                                          }}
+                                    <Divider flexItem />
+
+                                    <div className="flex space-x-5 justify-start">
+                                      <div className="flex space-x-5">
+                                        <div className="flex flex-col space-y-1">
+                                          <span>Rating: </span>
+                                          <StyledRating
+                                            name={row.id.toString()}
+                                            defaultValue={0}
+                                            max={3}
+                                            value={Number(
+                                              formState?.[row.id]
+                                                ?.form_rating_id ?? 0
+                                            )}
+                                            onChange={(
+                                              e,
+                                              value: number | null
+                                            ) => {
+                                              const rating = value || 0;
+                                              const form_rating_id = rating;
+                                              const question_id = row.id;
+                                              const eq_point =
+                                                row.equivalent_point;
+                                              const level = row.level;
+                                              setFormState({
+                                                ...formState,
+                                                [row.id]: {
+                                                  form_rating_id:
+                                                    form_rating_id,
+                                                  question_id: question_id,
+                                                  remarks:
+                                                    formState[row.id]
+                                                      ?.remarks ?? null,
+                                                  equivalent_point: eq_point,
+                                                  level: level,
+                                                },
+                                              });
+                                            }}
+                                            IconContainerComponent={
+                                              IconContainer
+                                            }
+                                            getLabelText={(value: number) =>
+                                              AUDIT_CUSTOM_ICON[value].label
+                                            }
+                                            highlightSelectedOnly
+                                          />
+                                        </div>
+                                        <span>
+                                          {formState?.[row.id]
+                                            ?.form_rating_id ?? 0}
+                                        </span>
+                                        <Divider
+                                          orientation="vertical"
+                                          flexItem
                                         />
+                                        <div className="flex flex-col space-y-2">
+                                          <span>Remarks: </span>
+
+                                          <TextField
+                                            name={row.id.toString()}
+                                            size="small"
+                                            value={
+                                              formState?.[row.id]?.remarks ?? ""
+                                            }
+                                            variant="outlined"
+                                            onChange={(e) => {
+                                              const remarks = e.target.value;
+                                              setFormState((prevState) => ({
+                                                ...prevState,
+                                                [row.id]: {
+                                                  ...prevState[row.id],
+                                                  ...(prevState[row.id] || {}),
+                                                  remarks,
+                                                },
+                                              }));
+                                            }}
+                                          />
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            </div>
+                                  </CardContent>
+                                </Card>
+                              </div>
+                            </>
                           );
                         }
                       )}

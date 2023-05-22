@@ -15,14 +15,18 @@ export interface GetAuditResponseModel {
   }>;
 
   answers: Array<{
-    id: number;
-    questions: string;
-    rating: number;
-    remarks: string;
-    equivalent_point: number;
-    level: number;
-    section_name: string;
-    sub_section_name: string | null;
-    category_id: number;
+    criteria: Array<{
+      id: number;
+      questions: string;
+      rating: number;
+      remarks: string;
+      equivalent_point: number;
+      section_id: number;
+      level: number;
+      section_name: string;
+      sub_section_name: string | null;
+      category_id: number;
+    }>;
+    section: string | undefined;
   }>;
 }

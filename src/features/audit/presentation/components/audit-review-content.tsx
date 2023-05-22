@@ -1,4 +1,12 @@
-import { Divider, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Tab,
+  Tabs,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -12,6 +20,13 @@ import { AppDispatch } from "features/config/store";
 import { useAppSelector } from "features/config/hooks";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
 import { closestIndexTo } from "date-fns/esm";
+import { get } from "http";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
 export function AuditReviewContent() {
   const { hash } = useParams();
@@ -73,11 +88,22 @@ export function AuditReviewContent() {
       getResponseState.status === GetAuditResponseState.success &&
       getResponseState.data
     ) {
-      getResponseState.data.answers.map((row) => {
-        if (category === row.category_id) {
-          sum_rating += row.rating;
-          eq_point += row.equivalent_point;
-        }
+      // getResponseState.data.answers.map((row) => {
+      // if (category === row.category_id) {
+      //   sum_rating += row.rating;
+      //   eq_point += row.equivalent_point;
+      // }
+      // });
+
+      getResponseState.data.answers.map((index) => {
+        index.criteria.map((row) => {
+          if (category === row.category_id) {
+            if (category === row.category_id) {
+              sum_rating += row.rating;
+              eq_point += row.equivalent_point;
+            }
+          }
+        });
       });
     }
 
@@ -131,9 +157,29 @@ export function AuditReviewContent() {
     setTabStep(newValue);
   };
 
+  const TabPanel = (props: TabPanelProps) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <div>{children}</div>
+          </Box>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="container max-w-screen-lg	">
+      <div className="container max-w-screen-lg mb-12">
         <div className="flex flex-col space-y-5">
           <div className="flex justify-center">
             <h5 className="mb-2 text-2xl font-bold text-center tracking-tight text-gray-900">
@@ -252,20 +298,67 @@ export function AuditReviewContent() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col space-y-2 text-lg border-b-8 border-primary shadow-2xl drop-shadow rounded-lg p-5">
+              <div className="flex flex-col space-y-2 text-lg border-t-8 border-primary shadow-2xl drop-shadow rounded-lg">
                 <Tabs
+                  className="bg-primary text-white"
                   value={tabStep}
                   onChange={handleTabChange}
                   variant="scrollable"
                   scrollButtons="auto"
-                  aria-label="scrollable auto tabs example"
+                  TabIndicatorProps={{
+                    style: {
+                      backgroundColor: "white",
+                    },
+                  }}
                 >
-                  {getResponseState.data.answers.map((row, index) => (
-                    <>
-                      <Tab key={index} label={row.section_name} />
-                    </>
-                  ))}
+                  {getResponseState.data.answers
+                    .filter((row) => row.criteria.length !== 0)
+                    .map((row, index) => (
+                      <Tab
+                        key={index}
+                        label={row.section}
+                        style={{
+                          color: "white",
+                        }}
+                      />
+                    ))}
                 </Tabs>
+
+                <TabPanel index={tabStep} value={tabStep}>
+                  <>
+                    <div className="flex flex-col space-y-2">
+                      {getResponseState.data.answers[tabStep].criteria.map(
+                        (row, index) => (
+                          <div key={index} className=" p-4">
+                            <div>
+                              <span className="text-base md:text-lg">
+                                {row.questions}
+                              </span>
+                              <div className="flex flex-col md:flex-row  md:space-x-2">
+                                <span className="md:text-sm md:self-center text-xs">
+                                  Equivalent point: {row.equivalent_point}
+                                </span>
+                                <span className="hidden md:block">
+                                  &#x2022;
+                                </span>
+                                <span className="md:text-sm md:self-center text-xs">
+                                  Urgency Level: {row.level}
+                                </span>
+
+                                <Divider orientation="vertical" flexItem />
+
+                                <span className="md:text-sm md:self-center text-xs">
+                                  Rating: {row.level}
+                                </span>
+                              </div>
+                            </div>
+                            <Divider />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </>
+                </TabPanel>
               </div>
             </>
           ) : null}
