@@ -7,7 +7,6 @@ import {
   IconContainerProps,
   Rating,
   TextField,
-  TextFieldProps,
   Typography,
   styled,
 } from "@mui/material";
@@ -60,6 +59,7 @@ export function AuditFormContent() {
 
   const [selectedDate, setSelectedDate] = useState<string>("YYYY-MM");
 
+
   const [maxLength, setmaxLength] = useState(10);
 
   const [criteriaSection, setCriteriaSection] = useState(0);
@@ -91,6 +91,19 @@ export function AuditFormContent() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [dispatch, criteriaSection]);
 
+
+
+  // const AuditResponseCategory = [
+  //   { category: "Environment", id: 1 },
+  //   { category: "Customer Service", id: 2 },
+  //   { category: "Safety", id: 3 },
+  //   { category: "Product Standard", id: 4 },
+  //   { category: "Material Management", id: 5 },
+  //   { category: "Cash Handling", id: 6 },
+  //   { category: "Equipment Maintenance", id: 7 },
+  //   { category: "Resource Management", id: 8 },
+  // ];
+
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
       dispatch(resetInsertAuditResponse());
@@ -101,24 +114,66 @@ export function AuditFormContent() {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    let rating = 0;
+    let eq_rating = 0
+    let grade = 0;
+
     const query = createQueryParams({ type: selectedType?.type_name });
     const increasedSurveySection = criteriaSection + 1;
 
-    if (getCriteria.data && getCriteria.data[9].criteria.length === 0) {
+    if (getCriteria.data && getCriteria.data.question_data[9].criteria.length === 0) {
       setmaxLength(9);
     }
 
     if (
       getCriteria.status === GetAuditEvaluationFormQuestionState.success &&
       getCriteria.data &&
-      getCriteria.data.length > 0
+      getCriteria.data.question_data.length > 0
     ) {
-      if (getCriteria.data[criteriaSection].criteria.length === 0) {
+      if (getCriteria.data.question_data[criteriaSection].criteria.length === 0) {
         dispatch(getAuditEvaluationFormQuestion(query));
       }
 
       if (increasedSurveySection < maxLength) {
+
+        if(getCriteria.data.question_data[criteriaSection].criteria.length !== 0){
+          getCriteria.data.question_data[criteriaSection].criteria.map((row) => {
+              if(criteriaSection === 4 && getCriteria.data){
+                getCriteria.data.question_data[3].criteria.map((item) => {
+                  rating += formState[item.id].form_rating_id;
+                  eq_rating += item.equivalent_point; 
+                })
+              }
+              rating += formState[row.id].form_rating_id;
+              eq_rating += row.equivalent_point;       
+  
+          })
+            grade = eq_rating / rating;
+  
+  
+            const updatedResult: AuditResultModel = {};
+
+  
+            if(criteriaSection === 3) {        
+              return setCriteriaSection(increasedSurveySection);
+            }
+
+            let category_id = criteriaSection;
+
+            if(category_id > 3){ category_id = category_id - 1}
+  
+            updatedResult[category_id] = {
+              category: getCriteria.data.default_weight[category_id].category_id,
+              grade: grade,
+              weight: getCriteria.data.default_weight[category_id].weight,
+              final: grade * getCriteria.data.default_weight[category_id].weight,
+            }
+  
+        }
+
+
         setCriteriaSection(increasedSurveySection);
+
       } else {
         dispatch(
           insertAuditResponse({
@@ -132,6 +187,8 @@ export function AuditFormContent() {
       }
     }
   };
+
+
 
   return (
     <>
@@ -151,7 +208,7 @@ export function AuditFormContent() {
                       id="section_1"
                       className="capitalize font-semibold text-xl"
                     >
-                      {getCriteria.data[criteriaSection].section}
+                      {getCriteria.data.question_data[criteriaSection].section}
                     </h1>
                     <span className="text-md">
                       Setup store and attention Information
@@ -161,7 +218,7 @@ export function AuditFormContent() {
               </div>
 
               <div className="flex flex-col space-y-5">
-                {getCriteria.data[criteriaSection].criteria.length === 0 ? (
+                {getCriteria.data.question_data[criteriaSection].criteria.length === 0 ? (
                   <>
                     <div className="space-y-3 px-5">
                       <div className="flex flex-col space-y-2">
@@ -269,10 +326,10 @@ export function AuditFormContent() {
                     </div>
                   </>
                 ) : null}
-                {getCriteria.data[criteriaSection].criteria.length !== 0 ? (
+                {getCriteria.data.question_data[criteriaSection].criteria.length !== 0 ? (
                   <>
                     <div className="flex flex-col space-y-2">
-                      {getCriteria.data[criteriaSection].criteria.map(
+                      {getCriteria.data.question_data[criteriaSection].criteria.map(
                         (row, index) => {
                           const StyledRating = styled(Rating)(({ theme }) => ({
                             "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
@@ -290,8 +347,8 @@ export function AuditFormContent() {
                           };
 
                           return (
-                            <>
-                              <div className="flex justify-center" key={index}>
+                            <div key={index}>
+                              <div className="flex justify-center" >
                                 <Card className="w-11/12" variant="outlined">
                                   <CardContent className="space-y-2">
                                     <Typography
@@ -391,7 +448,7 @@ export function AuditFormContent() {
                                   </CardContent>
                                 </Card>
                               </div>
-                            </>
+                            </div>
                           );
                         }
                       )}
@@ -424,7 +481,7 @@ export function AuditFormContent() {
                       <MdNavigateNext className="text-white text-4xl" />
                     }
                   >
-                    {getCriteria.data.length - 1 === criteriaSection ||
+                    {getCriteria.data.question_data.length - 1 === criteriaSection ||
                     maxLength - 1 === criteriaSection
                       ? "Submit"
                       : "Continue"}

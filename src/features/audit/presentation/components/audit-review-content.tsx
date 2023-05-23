@@ -88,13 +88,6 @@ export function AuditReviewContent() {
       getResponseState.status === GetAuditResponseState.success &&
       getResponseState.data
     ) {
-      // getResponseState.data.answers.map((row) => {
-      // if (category === row.category_id) {
-      //   sum_rating += row.rating;
-      //   eq_point += row.equivalent_point;
-      // }
-      // });
-
       getResponseState.data.answers.map((index) => {
         index.criteria.map((row) => {
           if (category === row.category_id) {
