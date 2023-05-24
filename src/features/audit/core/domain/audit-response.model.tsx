@@ -10,8 +10,10 @@ export interface GetAuditResponseModel {
   };
 
   default_weight_info: Array<{
-    category_id: string;
+    category_id: number;
+    grade: number;
     weight: number;
+    final_score: number;
   }>;
 
   answers: Array<{

@@ -23,7 +23,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { MdNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
+import {
+  MdNavigateNext,
+  MdOutlineBrowserNotSupported,
+  MdOutlineNavigateBefore,
+} from "react-icons/md";
 import {
   GetAuditEvaluationFormQuestionState,
   getAuditEvaluationFormQuestion,
@@ -44,6 +48,11 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
+import { AiFillEyeInvisible } from "react-icons/ai";
+
+interface ClickedRowsState {
+  [key: number]: boolean;
+}
 
 export function AuditFormContent() {
   const dispatch = useAppDispatch();
@@ -59,12 +68,13 @@ export function AuditFormContent() {
 
   const [selectedDate, setSelectedDate] = useState<string>("YYYY-MM");
 
-
   const [maxLength, setmaxLength] = useState(10);
 
   const [criteriaSection, setCriteriaSection] = useState(0);
 
   const insertAuditResponseState = useAppSelector(selectInsertAuditResponse);
+
+  const [clickedRows, setClickedRows] = useState<ClickedRowsState>({});
 
   const [selectedType, setselectedType] = useState<
     | {
@@ -91,19 +101,6 @@ export function AuditFormContent() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [dispatch, criteriaSection]);
 
-
-
-  // const AuditResponseCategory = [
-  //   { category: "Environment", id: 1 },
-  //   { category: "Customer Service", id: 2 },
-  //   { category: "Safety", id: 3 },
-  //   { category: "Product Standard", id: 4 },
-  //   { category: "Material Management", id: 5 },
-  //   { category: "Cash Handling", id: 6 },
-  //   { category: "Equipment Maintenance", id: 7 },
-  //   { category: "Resource Management", id: 8 },
-  // ];
-
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
       dispatch(resetInsertAuditResponse());
@@ -114,14 +111,13 @@ export function AuditFormContent() {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let rating = 0;
-    let eq_rating = 0
-    let grade = 0;
-
     const query = createQueryParams({ type: selectedType?.type_name });
     const increasedSurveySection = criteriaSection + 1;
 
-    if (getCriteria.data && getCriteria.data.question_data[9].criteria.length === 0) {
+    if (
+      getCriteria.data &&
+      getCriteria.data.question_data[9].criteria.length === 0
+    ) {
       setmaxLength(9);
     }
 
@@ -130,50 +126,14 @@ export function AuditFormContent() {
       getCriteria.data &&
       getCriteria.data.question_data.length > 0
     ) {
-      if (getCriteria.data.question_data[criteriaSection].criteria.length === 0) {
+      if (
+        getCriteria.data.question_data[criteriaSection].criteria.length === 0
+      ) {
         dispatch(getAuditEvaluationFormQuestion(query));
       }
 
       if (increasedSurveySection < maxLength) {
-
-        if(getCriteria.data.question_data[criteriaSection].criteria.length !== 0){
-          getCriteria.data.question_data[criteriaSection].criteria.map((row) => {
-              if(criteriaSection === 4 && getCriteria.data){
-                getCriteria.data.question_data[3].criteria.map((item) => {
-                  rating += formState[item.id].form_rating_id;
-                  eq_rating += item.equivalent_point; 
-                })
-              }
-              rating += formState[row.id].form_rating_id;
-              eq_rating += row.equivalent_point;       
-  
-          })
-            grade = eq_rating / rating;
-  
-  
-            const updatedResult: AuditResultModel = {};
-
-  
-            if(criteriaSection === 3) {        
-              return setCriteriaSection(increasedSurveySection);
-            }
-
-            let category_id = criteriaSection;
-
-            if(category_id > 3){ category_id = category_id - 1}
-  
-            updatedResult[category_id] = {
-              category: getCriteria.data.default_weight[category_id].category_id,
-              grade: grade,
-              weight: getCriteria.data.default_weight[category_id].weight,
-              final: grade * getCriteria.data.default_weight[category_id].weight,
-            }
-  
-        }
-
-
         setCriteriaSection(increasedSurveySection);
-
       } else {
         dispatch(
           insertAuditResponse({
@@ -182,13 +142,60 @@ export function AuditFormContent() {
             attention,
             period: selectedDate,
             answers: formState,
+            result: result,
           })
         );
       }
     }
   };
 
+  useEffect(() => {
+    let rating = 0;
+    let eq_rating = 0;
+    let grade = 0;
+    let final = 0;
 
+    if (getCriteria.data) {
+      if (
+        getCriteria.data.question_data[criteriaSection].criteria.length !== 0
+      ) {
+        if (criteriaSection === 4 && getCriteria.data) {
+          getCriteria.data.question_data[3].criteria.map((row) => {
+            rating += formState[row.id]?.form_rating_id ?? 0;
+            eq_rating += clickedRows[row.id] ? 0 : row.equivalent_point;
+          });
+        }
+
+        getCriteria.data.question_data[criteriaSection].criteria.map((row) => {
+          rating += formState[row.id]?.form_rating_id ?? 0;
+          eq_rating += clickedRows[row.id] ? 0 : row.equivalent_point;
+        });
+
+        if (criteriaSection === 3) {
+          return;
+        }
+        let category_id = criteriaSection;
+
+        if (category_id > 3) {
+          category_id = category_id - 1;
+        }
+
+        grade = rating / eq_rating;
+        final = grade * getCriteria.data.default_weight[category_id - 1].weight;
+
+        setResult({
+          ...result,
+          [category_id]: {
+            category:
+              getCriteria.data.default_weight[category_id - 1].category_id,
+            grade: Number(grade.toFixed(2)),
+            weight: getCriteria.data.default_weight[category_id - 1].weight,
+            final: Number(final.toFixed(2)),
+          },
+        });
+      }
+    }
+  }, [criteriaSection]);
 
   return (
     <>
@@ -218,7 +225,8 @@ export function AuditFormContent() {
               </div>
 
               <div className="flex flex-col space-y-5">
-                {getCriteria.data.question_data[criteriaSection].criteria.length === 0 ? (
+                {getCriteria.data.question_data[criteriaSection].criteria
+                  .length === 0 ? (
                   <>
                     <div className="space-y-3 px-5">
                       <div className="flex flex-col space-y-2">
@@ -326,31 +334,34 @@ export function AuditFormContent() {
                     </div>
                   </>
                 ) : null}
-                {getCriteria.data.question_data[criteriaSection].criteria.length !== 0 ? (
+                {getCriteria.data.question_data[criteriaSection].criteria
+                  .length !== 0 ? (
                   <>
                     <div className="flex flex-col space-y-2">
-                      {getCriteria.data.question_data[criteriaSection].criteria.map(
-                        (row, index) => {
-                          const StyledRating = styled(Rating)(({ theme }) => ({
-                            "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
-                              color: theme.palette.action.disabled,
-                            },
-                          }));
+                      {getCriteria.data.question_data[
+                        criteriaSection
+                      ].criteria.map((row, index) => {
+                        const StyledRating = styled(Rating)(({ theme }) => ({
+                          "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
+                            color: theme.palette.action.disabled,
+                          },
+                        }));
 
-                          const IconContainer = (props: IconContainerProps) => {
-                            const { value, ...other } = props;
-                            return (
-                              <span {...other}>
-                                {AUDIT_CUSTOM_ICON[value].icon}
-                              </span>
-                            );
-                          };
-
+                        const IconContainer = (props: IconContainerProps) => {
+                          const { value, ...other } = props;
                           return (
-                            <div key={index}>
-                              <div className="flex justify-center" >
-                                <Card className="w-11/12" variant="outlined">
-                                  <CardContent className="space-y-2">
+                            <span {...other}>
+                              {AUDIT_CUSTOM_ICON[value].icon}
+                            </span>
+                          );
+                        };
+
+                        return (
+                          <div key={index}>
+                            <div className="flex justify-center">
+                              <Card className="w-11/12" variant="outlined">
+                                <CardContent className="space-y-2">
+                                  <div className="flex justify-between">
                                     <Typography
                                       sx={{ fontSize: 14 }}
                                       color="black"
@@ -358,100 +369,125 @@ export function AuditFormContent() {
                                     >
                                       {row.questions}
                                     </Typography>
-                                    <div className="flex space-x-10 text-xs">
-                                      <span>Urgency Level: {row.level}</span>
-                                      <span>
-                                        Equivalent Point: {row.equivalent_point}
-                                      </span>
-                                    </div>
+                                    <Button>
+                                      <AiFillEyeInvisible
+                                        className={`text-xl self-center ${
+                                          clickedRows[row.id]
+                                            ? "text-red-500"
+                                            : "text-black"
+                                        }`}
+                                        onClick={() => {
+                                          setFormState((prevFormState) => ({
+                                            ...prevFormState,
+                                            [row.id]: {
+                                              ...prevFormState[row.id],
+                                              equivalent_point: clickedRows[
+                                                row.id
+                                              ]
+                                                ? row.equivalent_point
+                                                : 0,
+                                            },
+                                          }));
+                                          setClickedRows((prevClickedRows) => ({
+                                            ...prevClickedRows,
+                                            [row.id]: !prevClickedRows[row.id],
+                                          }));
+                                        }}
+                                      />
+                                    </Button>
+                                  </div>
+                                  <div className="flex space-x-10 text-xs">
+                                    <span>Urgency Level: {row.level}</span>
+                                    <span>
+                                      Equivalent Point: {row.equivalent_point}
+                                    </span>
+                                  </div>
 
-                                    <Divider flexItem />
+                                  <Divider flexItem />
 
-                                    <div className="flex space-x-5 justify-start">
-                                      <div className="flex space-x-5">
-                                        <div className="flex flex-col space-y-1">
-                                          <span>Rating: </span>
-                                          <StyledRating
-                                            name={row.id.toString()}
-                                            defaultValue={0}
-                                            max={3}
-                                            value={Number(
-                                              formState?.[row.id]
-                                                ?.form_rating_id ?? 0
-                                            )}
-                                            onChange={(
-                                              e,
-                                              value: number | null
-                                            ) => {
-                                              const rating = value || 0;
-                                              const form_rating_id = rating;
-                                              const question_id = row.id;
-                                              const eq_point =
-                                                row.equivalent_point;
-                                              const level = row.level;
-                                              setFormState({
-                                                ...formState,
-                                                [row.id]: {
-                                                  form_rating_id:
-                                                    form_rating_id,
-                                                  question_id: question_id,
-                                                  remarks:
-                                                    formState[row.id]
-                                                      ?.remarks ?? null,
-                                                  equivalent_point: eq_point,
-                                                  level: level,
-                                                },
-                                              });
-                                            }}
-                                            IconContainerComponent={
-                                              IconContainer
-                                            }
-                                            getLabelText={(value: number) =>
-                                              AUDIT_CUSTOM_ICON[value].label
-                                            }
-                                            highlightSelectedOnly
-                                          />
-                                        </div>
-                                        <span>
-                                          {formState?.[row.id]
-                                            ?.form_rating_id ?? 0}
-                                        </span>
-                                        <Divider
-                                          orientation="vertical"
-                                          flexItem
+                                  <div className="flex space-x-5 justify-start">
+                                    <div className="flex space-x-5">
+                                      <div className="flex flex-col space-y-1">
+                                        <span>Rating: </span>
+                                        <StyledRating
+                                          name={row.id.toString()}
+                                          defaultValue={0}
+                                          max={3}
+                                          value={Number(
+                                            formState?.[row.id]
+                                              ?.form_rating_id ?? 0
+                                          )}
+                                          onChange={(
+                                            e,
+                                            value: number | null
+                                          ) => {
+                                            const rating = value || 0;
+                                            const form_rating_id = rating;
+                                            const question_id = row.id;
+                                            const eq_point =
+                                              row.equivalent_point;
+                                            const level = row.level;
+                                            setFormState({
+                                              ...formState,
+                                              [row.id]: {
+                                                form_rating_id: form_rating_id,
+                                                question_id: question_id,
+                                                remarks:
+                                                  formState[row.id]?.remarks ??
+                                                  null,
+                                                equivalent_point:
+                                                  formState[row.id]?.remarks ??
+                                                  eq_point,
+                                                level: level,
+                                              },
+                                            });
+                                          }}
+                                          IconContainerComponent={IconContainer}
+                                          getLabelText={(value: number) =>
+                                            AUDIT_CUSTOM_ICON[value].label
+                                          }
+                                          highlightSelectedOnly
                                         />
-                                        <div className="flex flex-col space-y-2">
-                                          <span>Remarks: </span>
+                                      </div>
+                                      <span>
+                                        {formState?.[row.id]?.form_rating_id ??
+                                          0}
+                                      </span>
+                                      <Divider
+                                        orientation="vertical"
+                                        flexItem
+                                      />
+                                      <div className="flex flex-col space-y-2">
+                                        <span>Remarks: </span>
 
-                                          <TextField
-                                            name={row.id.toString()}
-                                            size="small"
-                                            value={
-                                              formState?.[row.id]?.remarks ?? ""
-                                            }
-                                            variant="outlined"
-                                            onChange={(e) => {
-                                              const remarks = e.target.value;
-                                              setFormState((prevState) => ({
-                                                ...prevState,
-                                                [row.id]: {
-                                                  ...prevState[row.id],
-                                                  ...(prevState[row.id] || {}),
-                                                  remarks,
-                                                },
-                                              }));
-                                            }}
-                                          />
-                                        </div>
+                                        <TextField
+                                          name={row.id.toString()}
+                                          size="small"
+                                          value={
+                                            formState?.[row.id]?.remarks ?? ""
+                                          }
+                                          variant="outlined"
+                                          onChange={(e) => {
+                                            const remarks = e.target.value;
+                                            setFormState((prevState) => ({
+                                              ...prevState,
+                                              [row.id]: {
+                                                ...prevState[row.id],
+                                                ...(prevState[row.id] || {}),
+                                                remarks,
+                                              },
+                                            }));
+                                          }}
+                                        />
                                       </div>
                                     </div>
-                                  </CardContent>
-                                </Card>
-                              </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
                             </div>
-                          );
-                        }
-                      )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </>
                 ) : null}
@@ -481,8 +517,8 @@ export function AuditFormContent() {
                       <MdNavigateNext className="text-white text-4xl" />
                     }
                   >
-                    {getCriteria.data.question_data.length - 1 === criteriaSection ||
-                    maxLength - 1 === criteriaSection
+                    {getCriteria.data.question_data.length - 1 ===
+                      criteriaSection || maxLength - 1 === criteriaSection
                       ? "Submit"
                       : "Continue"}
                   </Button>

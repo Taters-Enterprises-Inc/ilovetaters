@@ -1,4 +1,5 @@
 import { AuditEvaluationAnswer } from "./domain/audit-evaluation-answer.model";
+import { AuditResultModel } from "./domain/audit-result.model";
 
 export interface LoginAuditParam {
   identity: string;
@@ -17,6 +18,7 @@ export interface InsertAuditResponseParam {
   attention: string;
   period: string;
   answers: AuditEvaluationAnswer;
+  result: AuditResultModel;
 }
 
 export interface GetAuditResponseParam {

@@ -80,72 +80,6 @@ export function AuditReviewContent() {
     { short: "Resource Mgmt.", category: "Resource Management", id: 8 },
   ];
 
-  const getWeightedAverage = (category: number) => {
-    let sum_rating = 0;
-    let eq_point = 0;
-
-    if (
-      getResponseState.status === GetAuditResponseState.success &&
-      getResponseState.data
-    ) {
-      getResponseState.data.answers.map((index) => {
-        index.criteria.map((row) => {
-          if (category === row.category_id) {
-            if (category === row.category_id) {
-              sum_rating += row.rating;
-              eq_point += row.equivalent_point;
-            }
-          }
-        });
-      });
-    }
-
-    let grade = eq_point / sum_rating;
-
-    return (grade = grade * 100);
-  };
-
-  useEffect(() => {
-    if (
-      getResponseState.status === GetAuditResponseState.success &&
-      getResponseState.data
-    ) {
-      const updatedResult: AuditResultModel = {};
-
-      AuditResponseCategory.forEach((row) => {
-        const weight =
-          getResponseState.data?.default_weight_info?.[row.id - 1]?.weight || 0;
-
-        updatedResult[row.id - 1] = {
-          category: row.id,
-          grade: getWeightedAverage(row.id),
-          weight: weight,
-          final: getWeightedAverage(row.id) * weight,
-        };
-      });
-
-      setResult(updatedResult);
-    }
-  }, [getResponseState]);
-
-  const totalWeight = Object.values(result).reduce(
-    (accumulator, currentValue) => {
-      return accumulator + Math.round(parseFloat(currentValue.weight) * 100);
-    },
-    0
-  );
-
-  const totalFinal = Object.values(result).reduce(
-    (accumulator, currentValue) => {
-      const parsedFinal = parseFloat(currentValue.final);
-      if (isNaN(parsedFinal)) {
-        return accumulator;
-      }
-      return accumulator + parsedFinal;
-    },
-    0
-  );
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabStep(newValue);
   };
@@ -243,29 +177,27 @@ export function AuditReviewContent() {
                                     ? row.short
                                     : row.category}
                                 </td>
-                                {result && result[row.id - 1] ? (
-                                  result[row.id - 1].grade ? (
-                                    <>
-                                      <td className="px-2 py-1">
-                                        {`${result[row.id - 1].grade.toFixed(
-                                          2
-                                        )}%`}
-                                      </td>
-                                      <td className="px-2 py-1">
-                                        {`${result[row.id - 1].weight * 100}%`}
-                                      </td>
-                                      <td className="px-2 py-1">{`${result[
-                                        row.id - 1
-                                      ].final.toFixed(2)}%`}</td>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <td className="px-2 py-1">-</td>
-                                      <td className="px-2 py-1"></td>
-                                      <td className="px-2 py-1">-</td>
-                                    </>
-                                  )
-                                ) : null}
+                                {getResponseState.data?.default_weight_info[
+                                  index
+                                ] ? (
+                                  <>
+                                    <td className="px-2 py-1">
+                                      {`${getResponseState.data.default_weight_info[index].grade}%`}
+                                    </td>
+                                    <td className="px-2 py-1">
+                                      {`${getResponseState.data.default_weight_info[index].weight}%`}
+                                    </td>
+                                    <td className="px-2 py-1">
+                                      {`${getResponseState.data.default_weight_info[index].final_score}%`}
+                                    </td>
+                                  </>
+                                ) : (
+                                  <>
+                                    <td className="px-2 py-1">-</td>
+                                    <td className="px-2 py-1">-</td>
+                                    <td className="px-2 py-1">-</td>
+                                  </>
+                                )}
                               </tr>
                             ))}
                           </tbody>
@@ -279,11 +211,45 @@ export function AuditReviewContent() {
                                 ? "Gen Ave %"
                                 : "General Average %"}
                             </th>
-                            <td className="px-2 py-3"></td>
-                            <td className="px-2 py-3">{`${totalWeight}%`}</td>
-                            <td className="px-2 py-3">{`${totalFinal.toFixed(
-                              2
-                            )}%`}</td>
+                            <td className="px-2 py-3">-</td>
+                            {getResponseState.data.default_weight_info ? (
+                              <>
+                                <td className="px-2 py-3">
+                                  {`${
+                                    Math.round(
+                                      getResponseState.data.default_weight_info.reduce(
+                                        (accumulator, currentIteration) => {
+                                          return (
+                                            accumulator +
+                                            parseFloat(
+                                              currentIteration.weight.toString()
+                                            )
+                                          );
+                                        },
+                                        0
+                                      )
+                                    ) * 100
+                                  }%`}
+                                </td>
+                                <td className="px-2 py-3">
+                                  {`${
+                                    Math.round(
+                                      getResponseState.data.default_weight_info.reduce(
+                                        (accumulator, currentIteration) => {
+                                          return (
+                                            accumulator +
+                                            parseFloat(
+                                              currentIteration.final_score.toString()
+                                            )
+                                          );
+                                        },
+                                        0
+                                      )
+                                    ) * 100
+                                  }%`}
+                                </td>
+                              </>
+                            ) : null}
                           </tr>
                         </tfoot>
                       </table>
@@ -341,7 +307,13 @@ export function AuditReviewContent() {
                                 <Divider orientation="vertical" flexItem />
 
                                 <span className="md:text-sm md:self-center text-xs">
-                                  Rating: {row.level}
+                                  Rating: {row.rating}
+                                </span>
+                                <span className="hidden md:block">
+                                  &#x2022;
+                                </span>
+                                <span className="md:text-sm md:self-center text-xs">
+                                  Remarks: {row.remarks}
                                 </span>
                               </div>
                             </div>
