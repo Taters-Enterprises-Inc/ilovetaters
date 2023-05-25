@@ -214,6 +214,7 @@ import getAuditEvaluationFormQuestion from "features/audit/presentation/slices/g
 import AuditSection from "features/audit/presentation/slices/audit-section.slice";
 import insertAuditResponse from "features/audit/presentation/slices/insert-audit-response.slice";
 import getAuditResponse from "features/audit/presentation/slices/get-audit-response.slice";
+import getAuditResponseInformationQualityAuditInformation from "features/audit/presentation/slices/get-audit-response-quality-audit-information.slice";
 
 export const store = configureStore({
   reducer: {
@@ -431,6 +432,7 @@ export const store = configureStore({
     AuditSection,
     insertAuditResponse,
     getAuditResponse,
+    getAuditResponseInformationQualityAuditInformation,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

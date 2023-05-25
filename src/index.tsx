@@ -152,7 +152,7 @@ import {
   AuditDashboard,
   AuditForm,
   AuditLogin,
-  AuditResponse,
+  AuditResponseQualityAuditPage,
   AuditReview,
   AuditSettingsQuestions,
 } from "features/audit/presentation/pages";
@@ -553,10 +553,13 @@ root.render(
                               path="dashboard"
                               element={<AuditDashboard />}
                             />
-                            <Route
-                              path="response"
-                              element={<AuditResponse />}
-                            />
+
+                            <Route path="responses">
+                              <Route
+                                path="quality/audit"
+                                element={<AuditResponseQualityAuditPage />}
+                              />
+                            </Route>
 
                             <Route path="settings">
                               <Route

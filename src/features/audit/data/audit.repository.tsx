@@ -11,6 +11,7 @@ import { GetAuditStoreModel } from "../core/domain/get-store-model.model";
 import { AuditQuestionModel } from "../core/domain/audit-question.model";
 import { InsertAuditResponseModel } from "../core/domain/insert-audit-response.model";
 import { GetAuditResponseModel } from "../core/domain/audit-response.model";
+import { GetAuditResponseInformationQualityAuditInformationModel } from "../core/domain/get-audit-response-quality-audit-information.model";
 
 export interface LoginAuditResponse {
   data: {
@@ -62,6 +63,13 @@ export interface GetAuditResponseResponse {
   data: {
     message: string;
     data: GetAuditResponseModel;
+  };
+}
+
+export interface GetAuditResponseInformationQualityAuditInformationResponse {
+  data: {
+    message: string;
+    data: GetAuditResponseInformationQualityAuditInformationModel;
   };
 }
 
@@ -138,6 +146,17 @@ export function GetAuditResponseRepository(
       headers: {
         "Content-type": "application/json",
       },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAuditResponseInformationQualityAuditInformationRepository(
+  query: string
+): Promise<GetAuditResponseInformationQualityAuditInformationResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/audit/response/quality/audit/information${query}`,
+    {
       withCredentials: true,
     }
   );

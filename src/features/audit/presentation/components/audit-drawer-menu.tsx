@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { MdDashboardCustomize, MdExpandMore } from "react-icons/md";
+import {
+  MdDashboardCustomize,
+  MdExpandMore,
+  MdOutlineNavigateNext,
+} from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { RiQuestionAnswerFill, RiQuestionnaireLine } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -14,17 +18,21 @@ import {
   selectLogoutAudit,
 } from "../slices/logout-audit.slice";
 import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { GrNext } from "react-icons/gr";
 
-const NavigationItems = [
+const DashbordItems = [
   {
     text: "Dashboard",
     path: "dashboard",
     icon: <MdDashboardCustomize size={20} />,
   },
+];
+
+const ResponsesItems = [
   {
-    text: "Response",
-    path: "response",
-    icon: <RiQuestionAnswerFill size={20} />,
+    text: "Quality Audit",
+    path: "responses/quality/audit",
+    icon: <MdOutlineNavigateNext size={20} />,
   },
 ];
 
@@ -32,9 +40,81 @@ const SettingsItems = [
   {
     text: "Edit Questions",
     path: "settings/questions",
-    icon: <RiQuestionnaireLine size={20} />,
+    icon: <MdOutlineNavigateNext size={20} />,
   },
 ];
+
+const Responses = (status: boolean) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleOnClick = () => {
+    if (expanded) {
+      setExpanded(false);
+    } else {
+      setExpanded(true);
+    }
+  };
+
+  return (
+    <>
+      <Accordion sx={{ backgroundColor: "inherit", boxShadow: "none" }}>
+        <AccordionSummary
+          sx={{
+            backgroundColor: "inherit",
+            "& .MuiAccordionSummary-content ": {
+              marginY: 0,
+              marginRight: "95px",
+            },
+            "& .Mui-expanded ": { marginY: expanded ? 0 : undefined },
+          }}
+          onClick={handleOnClick}
+          expandIcon={<MdExpandMore className={`text-white`} size={20} />}
+        >
+          <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center text-white">
+            <RiQuestionAnswerFill size={20} />
+            <span
+              className={`whitespace-pre text-white duration-300 ${
+                !status && "opacity-0 overflow-hidden"
+              }`}
+            >
+              Responses
+            </span>
+          </span>
+        </AccordionSummary>
+
+        {ResponsesItems.map((item, index) => {
+          const { text, path, icon } = item;
+          const key = index;
+          return (
+            <AccordionDetails key={key} sx={{ padding: 0 }}>
+              <NavLink
+                to={path}
+                className={(navData) =>
+                  navData.isActive
+                    ? "flex bg-white text-secondary"
+                    : "flex text-white"
+                }
+              >
+                <span className="flex items-center px-4 ">
+                  <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                    {icon}
+                    <span
+                      className={`whitespace-pre duration-300 ${
+                        !status && "opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      {text}
+                    </span>
+                  </span>
+                </span>
+              </NavLink>
+            </AccordionDetails>
+          );
+        })}
+      </Accordion>
+    </>
+  );
+};
 
 const Settings = (status: boolean) => {
   const [expanded, setExpanded] = useState(false);
@@ -111,7 +191,7 @@ const Settings = (status: boolean) => {
 const Navigation = (status: boolean) => {
   return (
     <>
-      {NavigationItems.map((items, index) => {
+      {DashbordItems.map((items, index) => {
         const { text, path, icon } = items;
         return (
           <NavLink
@@ -160,6 +240,7 @@ export function AuditDrawerMenu() {
       <nav>
         <ul>
           <li>{Navigation(AuditSideBarState.status)}</li>
+          <li className="flex">{Responses(AuditSideBarState.status)}</li>
           <li className="flex">{Settings(AuditSideBarState.status)}</li>
           <li>
             <button

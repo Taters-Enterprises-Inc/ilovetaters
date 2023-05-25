@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -17,9 +17,20 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "features/config/hooks";
 import { selectAuditSection } from "../slices/audit-section.slice";
 import { AUDIT_STEPPER } from "features/shared/constants";
+import { Audit } from "../pages";
 
 export function AuditFormSideStepper() {
   const currentSection = useAppSelector(selectAuditSection);
+
+  useEffect(() => {
+    if (
+      AUDIT_STEPPER.length > currentSection.maxLength &&
+      currentSection.section === 1
+    ) {
+      console.log("test");
+      AUDIT_STEPPER.pop();
+    }
+  }, [currentSection.maxLength, AUDIT_STEPPER]);
 
   return (
     <>
@@ -28,37 +39,49 @@ export function AuditFormSideStepper() {
           id="audit-form-main-section"
           className="flex-1 h-screen bg-paper"
         >
-          <div className="flex bg-paper">
-            <div className="hidden lg:relative lg:block">
-              <div className="sticky top-5">
-                <Link className="flex ml-10 mt-5 mb-10" to={"dashboard"}>
+          <div className="flex flex-col md:flex-row bg-paper">
+            <div className="lg:relative">
+              <div className={"sticky top-5"}>
+                <Link
+                  className="flex ml-2 md:ml-10 mt-5 md:mb-10"
+                  to={"dashboard"}
+                >
                   <span className="flex font-normal">
                     <MdOutlineArrowBackIos className="mt-[6px] mr-3 text-sm" />
                     Back to Dashboard
                   </span>
                 </Link>
 
-                <div className="flex  ml-40 pb-10">
-                  <Box sx={{ maxWidth: 300 }}>
-                    <Stepper
-                      activeStep={currentSection.section}
-                      orientation="vertical"
-                    >
-                      {AUDIT_STEPPER.map((step, index) => (
-                        <Step key={step.section}>
-                          <StepLabel>{step.section}</StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper>
-                  </Box>
+                {currentSection.section ? (
+                  <div className="hidden md:block">
+                    <div className="flex ml-40 pb-10">
+                      <Box sx={{ maxWidth: 300 }}>
+                        <Stepper
+                          activeStep={currentSection.section}
+                          orientation="vertical"
+                        >
+                          {AUDIT_STEPPER.map((step, index) => (
+                            <Step key={step.section}>
+                              <StepLabel>{step.section}</StepLabel>
+                            </Step>
+                          ))}
+                        </Stepper>
+                      </Box>
 
-                  <Divider orientation="vertical" flexItem />
-                </div>
+                      <Divider orientation="vertical" flexItem />
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 
-            <div className="mt-14 lg:w-3/5 lg:pr-28">
-              <Outlet />
+            <div
+              className={`${currentSection.section ? `` : `w-full mr-12`}
+            mt-14 flex justify-center`}
+            >
+              <div>
+                <Outlet />
+              </div>
             </div>
           </div>
         </section>

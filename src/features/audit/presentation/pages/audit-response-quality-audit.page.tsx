@@ -1,13 +1,9 @@
-import { Helmet } from "react-helmet";
-import { AuditHead, AuditReviewContent } from "../components";
+import { AuditResponseQualityAudit } from "../components";
+import { AuditHead } from "../components/audit-head";
 
-export function AuditReview() {
+export function AuditResponseQualityAuditPage() {
   return (
     <>
-      <Helmet>
-        <title>Taters | Internal Quality Audit</title>
-      </Helmet>
-
       <AuditHead
         AuditBreadCrumbsProps={{
           home: {
@@ -17,16 +13,18 @@ export function AuditReview() {
           className: "lg:h-[200px]",
           pageTitles: [
             {
-              name: "Audit Responses",
+              name: "Responses",
+              url: "/internal/audit/responses",
+            },
+            {
+              name: "Quality Audit",
               url: "/internal/audit/responses/quality/audit",
             },
           ],
         }}
       />
 
-      <main className="min-h-screen bg-paper">
-        <AuditReviewContent />
-      </main>
+      <AuditResponseQualityAudit />
     </>
   );
 }

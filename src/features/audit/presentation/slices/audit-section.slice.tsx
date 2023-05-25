@@ -3,10 +3,12 @@ import { RootState } from "features/config/store";
 
 interface InitialState {
   section: number;
+  maxLength: number;
 }
 
 const initialState: InitialState = {
   section: 0,
+  maxLength: 0,
 };
 
 export const AuditSectionSlice = createSlice({
@@ -14,7 +16,8 @@ export const AuditSectionSlice = createSlice({
   initialState,
   reducers: {
     auditCurrentSection: (state, action) => {
-      state.section = action.payload;
+      state.section = action.payload.section;
+      state.maxLength = action.payload.maxLength;
     },
   },
 });

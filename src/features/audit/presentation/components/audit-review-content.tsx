@@ -182,13 +182,25 @@ export function AuditReviewContent() {
                                 ] ? (
                                   <>
                                     <td className="px-2 py-1">
-                                      {`${getResponseState.data.default_weight_info[index].grade}%`}
+                                      {`${Math.round(
+                                        getResponseState.data
+                                          .default_weight_info[index].grade *
+                                          100
+                                      )}%`}
                                     </td>
                                     <td className="px-2 py-1">
-                                      {`${getResponseState.data.default_weight_info[index].weight}%`}
+                                      {`${Math.round(
+                                        getResponseState.data
+                                          .default_weight_info[index].weight *
+                                          100
+                                      )}%`}
                                     </td>
                                     <td className="px-2 py-1">
-                                      {`${getResponseState.data.default_weight_info[index].final_score}%`}
+                                      {`${Math.round(
+                                        getResponseState.data
+                                          .default_weight_info[index]
+                                          .final_score * 100
+                                      )}%`}
                                     </td>
                                   </>
                                 ) : (
@@ -215,38 +227,30 @@ export function AuditReviewContent() {
                             {getResponseState.data.default_weight_info ? (
                               <>
                                 <td className="px-2 py-3">
-                                  {`${
-                                    Math.round(
-                                      getResponseState.data.default_weight_info.reduce(
-                                        (accumulator, currentIteration) => {
-                                          return (
-                                            accumulator +
-                                            parseFloat(
-                                              currentIteration.weight.toString()
-                                            )
-                                          );
-                                        },
-                                        0
-                                      )
+                                  {`${Math.round(
+                                    getResponseState.data.default_weight_info.reduce(
+                                      (accumulator, currentIteration) => {
+                                        return (
+                                          accumulator +
+                                          Number(currentIteration.weight)
+                                        );
+                                      },
+                                      0
                                     ) * 100
-                                  }%`}
+                                  )}%`}
                                 </td>
                                 <td className="px-2 py-3">
-                                  {`${
-                                    Math.round(
-                                      getResponseState.data.default_weight_info.reduce(
-                                        (accumulator, currentIteration) => {
-                                          return (
-                                            accumulator +
-                                            parseFloat(
-                                              currentIteration.final_score.toString()
-                                            )
-                                          );
-                                        },
-                                        0
-                                      )
+                                  {`${Math.round(
+                                    getResponseState.data.default_weight_info.reduce(
+                                      (accumulator, currentIteration) => {
+                                        return (
+                                          accumulator +
+                                          Number(currentIteration.final_score)
+                                        );
+                                      },
+                                      0
                                     ) * 100
-                                  }%`}
+                                  )}%`}
                                 </td>
                               </>
                             ) : null}

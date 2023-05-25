@@ -97,9 +97,11 @@ export function AuditFormContent() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(auditCurrentSection(criteriaSection));
+    dispatch(
+      auditCurrentSection({ section: criteriaSection, maxLength: maxLength })
+    );
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [dispatch, criteriaSection]);
+  }, [dispatch, criteriaSection, maxLength]);
 
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
@@ -108,18 +110,20 @@ export function AuditFormContent() {
     }
   }, [dispatch, insertAuditResponseState, navigate]);
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const query = createQueryParams({ type: selectedType?.type_name });
-    const increasedSurveySection = criteriaSection + 1;
-
+  useEffect(() => {
     if (
       getCriteria.data &&
       getCriteria.data.question_data[9].criteria.length === 0
     ) {
       setmaxLength(9);
     }
+  }, [getCriteria.data]);
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const query = createQueryParams({ type: selectedType?.type_name });
+    const increasedSurveySection = criteriaSection + 1;
 
     if (
       getCriteria.status === GetAuditEvaluationFormQuestionState.success &&
@@ -496,9 +500,12 @@ export function AuditFormContent() {
                   {criteriaSection !== 0 ? (
                     <Button
                       className="basis-1/2"
-                      type="submit"
                       variant="contained"
-                      onClick={() => setCriteriaSection(criteriaSection - 1)}
+                      onClick={() => {
+                        if (criteriaSection > 0) {
+                          setCriteriaSection(criteriaSection - 1);
+                        }
+                      }}
                       startIcon={
                         <MdOutlineNavigateBefore className="text-white text-4xl" />
                       }
@@ -512,6 +519,7 @@ export function AuditFormContent() {
                       criteriaSection === 0 ? `basis-full` : `basis-1/2`
                     }`}
                     type="submit"
+                    onClick={() => handleFormSubmit}
                     variant="contained"
                     startIcon={
                       <MdNavigateNext className="text-white text-4xl" />
