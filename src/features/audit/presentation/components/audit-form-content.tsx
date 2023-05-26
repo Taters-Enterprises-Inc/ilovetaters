@@ -5,6 +5,7 @@ import {
   CardContent,
   Divider,
   IconContainerProps,
+  InputAdornment,
   Rating,
   TextField,
   Typography,
@@ -16,18 +17,8 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { getStores, selectGetStores } from "../slices/get-stores.slice";
-import {
-  FormEvent,
-  JSXElementConstructor,
-  ReactElement,
-  useEffect,
-  useState,
-} from "react";
-import {
-  MdNavigateNext,
-  MdOutlineBrowserNotSupported,
-  MdOutlineNavigateBefore,
-} from "react-icons/md";
+import { FormEvent, useEffect, useState } from "react";
+import { MdNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
 import {
   GetAuditEvaluationFormQuestionState,
   getAuditEvaluationFormQuestion,
@@ -48,7 +39,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
-import { AiFillEyeInvisible } from "react-icons/ai";
+import { AiFillEyeInvisible, AiOutlineCalendar } from "react-icons/ai";
 
 interface ClickedRowsState {
   [key: number]: boolean;
@@ -66,9 +57,12 @@ export function AuditFormContent() {
   const [result, setResult] = useState<AuditResultModel>({});
   const [attention, setAttention] = useState("");
 
-  const [selectedDate, setSelectedDate] = useState<string>("YYYY-MM");
+  const [selectedDate, setSelectedDate] = useState("");
 
   const [maxLength, setmaxLength] = useState(10);
+
+  const [isDisabled, setDisabled] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const [criteriaSection, setCriteriaSection] = useState(0);
 
@@ -197,6 +191,11 @@ export function AuditFormContent() {
     }
   }, [criteriaSection]);
 
+  useEffect(() => {
+    console.log(result);
+    console.log(formState);
+  }, [formState, result]);
+
   return (
     <>
       <div className="flex flex-col space-y-10 lg:px-10">
@@ -282,46 +281,12 @@ export function AuditFormContent() {
 
                         <TextField
                           disabled
-                          id="Store"
+                          id="StoreType"
                           size="small"
                           variant="outlined"
-                          defaultValue={
-                            "This will change after selecting store"
-                          }
-                          value={selectedStore?.type_name}
+                          placeholder="This will change after selecting store"
+                          value={selectedStore?.type_name || ""}
                         />
-
-                        {/* <Autocomplete
-                          disablePortal
-                          id="combo-box-demo"
-                          size="small"
-                          options={
-                            getStoreState.data
-                              ? getStoreState.data.store_type.map(
-                                  (row) => row.type_name
-                                )
-                              : []
-                          }
-                          onChange={(event, value: any) => {
-                            if (value && getStoreState.data) {
-                              const selectedStoreObj =
-                                getStoreState.data.store_type.find(
-                                  (store) => store.type_name === value
-                                );
-                              setselectedType(selectedStoreObj);
-                            } else {
-                              setselectedType(undefined);
-                            }
-                          }}
-                          renderInput={(params) => (
-                            <TextField
-                              value={selectedType ?? ""}
-                              required
-                              {...params}
-                              label="Taters Store Type"
-                            />
-                          )}
-                        /> */}
                       </div>
 
                       <div className="flex flex-col space-y-2">
@@ -329,17 +294,39 @@ export function AuditFormContent() {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DatePicker
-                            label={'"month" and "year"'}
+                            label="Month and Year"
                             views={["month", "year"]}
+                            onError={() => setDisabled(true)}
+                            onAccept={(value) => {
+                              if (dayjs(value)) {
+                                setDisabled(false);
+                              }
+                            }}
+                            open={isPickerOpen}
+                            onClose={() => setIsPickerOpen(false)}
                             onChange={(date) => {
-                              const formattedDate = date
-                                ? dayjs(date).format("YYYY-MM")
-                                : "";
-                              setSelectedDate(formattedDate);
+                              if (date) {
+                                const formattedDate =
+                                  dayjs(date).format("YYYY-MM");
+                                setSelectedDate(formattedDate);
+                              }
                             }}
                             value={selectedDate}
                             renderInput={(params) => (
-                              <TextField required {...params} label="Period" />
+                              <TextField
+                                required
+                                {...params}
+                                size="small"
+                                InputProps={{
+                                  disabled: true,
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <AiOutlineCalendar />
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                onClick={() => setIsPickerOpen(true)}
+                              />
                             )}
                           />
                         </LocalizationProvider>
@@ -382,30 +369,33 @@ export function AuditFormContent() {
                                     >
                                       {row.questions}
                                     </Typography>
-                                    <Button>
+                                    <Button
+                                      onClick={() => {
+                                        setFormState((prevFormState) => ({
+                                          ...prevFormState,
+                                          [row.id]: {
+                                            ...prevFormState[row.id],
+                                            question_id: row.id,
+                                            level: row.level,
+                                            equivalent_point: clickedRows[
+                                              row.id
+                                            ]
+                                              ? row.equivalent_point
+                                              : 0,
+                                          },
+                                        }));
+                                        setClickedRows((prevClickedRows) => ({
+                                          ...prevClickedRows,
+                                          [row.id]: !prevClickedRows[row.id],
+                                        }));
+                                      }}
+                                    >
                                       <AiFillEyeInvisible
                                         className={`text-xl self-center ${
                                           clickedRows[row.id]
                                             ? "text-red-500"
                                             : "text-black"
                                         }`}
-                                        onClick={() => {
-                                          setFormState((prevFormState) => ({
-                                            ...prevFormState,
-                                            [row.id]: {
-                                              ...prevFormState[row.id],
-                                              equivalent_point: clickedRows[
-                                                row.id
-                                              ]
-                                                ? row.equivalent_point
-                                                : 0,
-                                            },
-                                          }));
-                                          setClickedRows((prevClickedRows) => ({
-                                            ...prevClickedRows,
-                                            [row.id]: !prevClickedRows[row.id],
-                                          }));
-                                        }}
                                       />
                                     </Button>
                                   </div>
@@ -528,6 +518,7 @@ export function AuditFormContent() {
                       criteriaSection === 0 ? `basis-full` : `basis-1/2`
                     }`}
                     type="submit"
+                    disabled={isDisabled}
                     onClick={() => handleFormSubmit}
                     variant="contained"
                     startIcon={
