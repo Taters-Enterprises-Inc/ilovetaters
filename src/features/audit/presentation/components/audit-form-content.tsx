@@ -76,17 +76,13 @@ export function AuditFormContent() {
 
   const [clickedRows, setClickedRows] = useState<ClickedRowsState>({});
 
-  const [selectedType, setselectedType] = useState<
-    | {
-        id: number;
-        type_name: string;
-      }
-    | undefined
-  >();
   const [selectedStore, setSelectedStore] = useState<
     | {
-        store_id: number;
-        name: string;
+        id: string;
+        store_type_id: string;
+        store_code: string;
+        store_name: string;
+        type_name: string;
       }
     | undefined
   >();
@@ -122,7 +118,7 @@ export function AuditFormContent() {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const query = createQueryParams({ type: selectedType?.type_name });
+    const query = createQueryParams({ type: selectedStore?.type_name });
     const increasedSurveySection = criteriaSection + 1;
 
     if (
@@ -141,8 +137,8 @@ export function AuditFormContent() {
       } else {
         dispatch(
           insertAuditResponse({
-            selectedStoreId: selectedStore?.store_id,
-            selectedTypeId: selectedType?.id,
+            selectedStoreId: selectedStore?.id,
+            selectedTypeId: selectedStore?.store_type_id,
             attention,
             period: selectedDate,
             answers: formState,
@@ -255,14 +251,16 @@ export function AuditFormContent() {
                           size="small"
                           options={
                             getStoreState.data
-                              ? getStoreState.data.stores.map((row) => row.name)
+                              ? getStoreState.data.stores.map(
+                                  (row) => row.store_name
+                                )
                               : []
                           }
                           onChange={(event, value: any) => {
                             if (value && getStoreState.data) {
                               const selectedStoreObj =
                                 getStoreState.data.stores.find(
-                                  (store) => store.name === value
+                                  (store) => store.store_name === value
                                 );
                               setSelectedStore(selectedStoreObj);
                             } else {
@@ -282,7 +280,18 @@ export function AuditFormContent() {
                       <div className="flex flex-col space-y-2">
                         <span>Store Type: </span>
 
-                        <Autocomplete
+                        <TextField
+                          disabled
+                          id="Store"
+                          size="small"
+                          variant="outlined"
+                          defaultValue={
+                            "This will change after selecting store"
+                          }
+                          value={selectedStore?.type_name}
+                        />
+
+                        {/* <Autocomplete
                           disablePortal
                           id="combo-box-demo"
                           size="small"
@@ -312,7 +321,7 @@ export function AuditFormContent() {
                               label="Taters Store Type"
                             />
                           )}
-                        />
+                        /> */}
                       </div>
 
                       <div className="flex flex-col space-y-2">

@@ -13,8 +13,8 @@ export interface UpdateAuditSettingsQuestionParam {
 }
 
 export interface InsertAuditResponseParam {
-  selectedStoreId?: number;
-  selectedTypeId?: number;
+  selectedStoreId?: string;
+  selectedTypeId?: string;
   attention: string;
   period: string;
   answers: AuditEvaluationAnswer;

@@ -1,11 +1,9 @@
 export interface GetAuditStoreModel {
-  store_type: Array<{
-    id: number;
-    type_name: string;
-  }>;
-
   stores: Array<{
-    store_id: number;
-    name: string;
+    id: string;
+    store_type_id: string;
+    store_code: string;
+    store_name: string;
+    type_name: string;
   }>;
 }
