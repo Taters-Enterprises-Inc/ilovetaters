@@ -41,7 +41,7 @@ export function AuditFormSideStepper() {
         >
           <div className="flex flex-col md:flex-row bg-paper">
             <div className="lg:relative">
-              <div className={"sticky top-5"}>
+              <div className="sticky top-5">
                 <Link
                   className="flex ml-2 md:ml-10 mt-5 md:mb-10"
                   to={"dashboard"}
@@ -75,13 +75,8 @@ export function AuditFormSideStepper() {
               </div>
             </div>
 
-            <div
-              className={`${currentSection.section ? `` : `w-full mr-12`}
-            mt-14 flex justify-center`}
-            >
-              <div>
-                <Outlet />
-              </div>
+            <div className="flex-1 mt-14 flex justify-center">
+              <Outlet />
             </div>
           </div>
         </section>

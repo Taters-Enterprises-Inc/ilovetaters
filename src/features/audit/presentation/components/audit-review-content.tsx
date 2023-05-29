@@ -196,11 +196,11 @@ export function AuditReviewContent() {
                                       )}%`}
                                     </td>
                                     <td className="px-2 py-1">
-                                      {`${Math.round(
+                                      {`${(
                                         getResponseState.data
                                           .default_weight_info[index]
                                           .final_score * 100
-                                      )}%`}
+                                      ).toFixed(1)}%`}
                                     </td>
                                   </>
                                 ) : (

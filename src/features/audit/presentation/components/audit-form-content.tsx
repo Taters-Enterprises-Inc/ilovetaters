@@ -40,6 +40,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
 import { AiFillEyeInvisible, AiOutlineCalendar } from "react-icons/ai";
+import { max } from "date-fns";
 
 interface ClickedRowsState {
   [key: number]: boolean;
@@ -63,6 +64,7 @@ export function AuditFormContent() {
 
   const [isDisabled, setDisabled] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [actionDispatched, setActionDispatched] = useState(false);
 
   const [criteriaSection, setCriteriaSection] = useState(0);
 
@@ -125,25 +127,32 @@ export function AuditFormContent() {
       ) {
         dispatch(getAuditEvaluationFormQuestion(query));
       }
+      computeResult(criteriaSection);
 
       if (increasedSurveySection < maxLength) {
         setCriteriaSection(increasedSurveySection);
       } else {
-        dispatch(
-          insertAuditResponse({
-            selectedStoreId: selectedStore?.id,
-            selectedTypeId: selectedStore?.store_type_id,
-            attention,
-            period: selectedDate,
-            answers: formState,
-            result: result,
-          })
-        );
+        setActionDispatched(true);
       }
     }
   };
 
   useEffect(() => {
+    if (actionDispatched) {
+      dispatch(
+        insertAuditResponse({
+          selectedStoreId: selectedStore?.id,
+          selectedTypeId: selectedStore?.store_type_id,
+          attention,
+          period: selectedDate,
+          answers: formState,
+          result: result,
+        })
+      );
+    }
+  }, [result, dispatch, actionDispatched]);
+
+  const computeResult = (currentSection: number) => {
     let rating = 0;
     let eq_rating = 0;
     let grade = 0;
@@ -151,24 +160,24 @@ export function AuditFormContent() {
 
     if (getCriteria.data) {
       if (
-        getCriteria.data.question_data[criteriaSection].criteria.length !== 0
+        getCriteria.data.question_data[currentSection].criteria.length !== 0
       ) {
-        if (criteriaSection === 4 && getCriteria.data) {
+        if (currentSection === 4 && getCriteria.data) {
           getCriteria.data.question_data[3].criteria.map((row) => {
             rating += formState[row.id]?.form_rating_id ?? 0;
             eq_rating += clickedRows[row.id] ? 0 : row.equivalent_point;
           });
         }
 
-        getCriteria.data.question_data[criteriaSection].criteria.map((row) => {
+        getCriteria.data.question_data[currentSection].criteria.map((row) => {
           rating += formState[row.id]?.form_rating_id ?? 0;
           eq_rating += clickedRows[row.id] ? 0 : row.equivalent_point;
         });
 
-        if (criteriaSection === 3) {
+        if (currentSection === 3) {
           return;
         }
-        let category_id = criteriaSection;
+        let category_id = currentSection;
 
         if (category_id > 3) {
           category_id = category_id - 1;
@@ -179,17 +188,17 @@ export function AuditFormContent() {
 
         setResult({
           ...result,
-          [category_id]: {
+          [category_id - 1]: {
             category:
               getCriteria.data.default_weight[category_id - 1].category_id,
             grade: Number(grade.toFixed(2)),
             weight: getCriteria.data.default_weight[category_id - 1].weight,
-            final: Number(final.toFixed(2)),
+            final: Number(final.toFixed(3)),
           },
         });
       }
     }
-  }, [criteriaSection]);
+  };
 
   useEffect(() => {
     console.log(result);
@@ -198,7 +207,7 @@ export function AuditFormContent() {
 
   return (
     <>
-      <div className="flex flex-col space-y-10 lg:px-10">
+      <div className="flex flex-col space-y-10">
         <div>
           <span className="flex justify-center text-4xl font-['Bebas_Neue'] text-center">
             INTERNAL QUALITY AUDIT FORM
@@ -357,180 +366,186 @@ export function AuditFormContent() {
                         };
 
                         return (
-                          <div key={index}>
-                            <div className="flex justify-center">
-                              <Card className="w-11/12" variant="outlined">
-                                <CardContent className="space-y-2">
-                                  <div className="flex justify-between">
-                                    <Typography
-                                      sx={{ fontSize: 14 }}
-                                      color="black"
-                                      gutterBottom
-                                    >
+                          <div key={index} className="flex justify-center">
+                            <Card
+                              className="w-11/12"
+                              variant="outlined"
+                              style={{ width: "80%" }}
+                            >
+                              <CardContent className="space-y-2">
+                                <div className="flex justify-between">
+                                  <Typography
+                                    sx={{ fontSize: 14 }}
+                                    color="black"
+                                    gutterBottom
+                                  >
+                                    <span className="whitespace-pre-wrap break-words">
                                       {row.questions}
-                                    </Typography>
-                                    <Button
-                                      onClick={() => {
-                                        setFormState((prevFormState) => ({
-                                          ...prevFormState,
-                                          [row.id]: {
-                                            ...prevFormState[row.id],
-                                            question_id: row.id,
-                                            level: row.level,
-                                            equivalent_point: clickedRows[
-                                              row.id
-                                            ]
-                                              ? row.equivalent_point
-                                              : 0,
-                                          },
-                                        }));
-                                        setClickedRows((prevClickedRows) => ({
-                                          ...prevClickedRows,
-                                          [row.id]: !prevClickedRows[row.id],
-                                        }));
-                                      }}
-                                    >
-                                      <AiFillEyeInvisible
-                                        className={`text-xl self-center ${
-                                          clickedRows[row.id]
-                                            ? "text-red-500"
-                                            : "text-black"
-                                        }`}
-                                      />
-                                    </Button>
-                                  </div>
-                                  <div className="flex space-x-10 text-xs">
-                                    <span>Urgency Level: {row.level}</span>
-                                    <span>
-                                      Equivalent Point: {row.equivalent_point}
                                     </span>
-                                  </div>
+                                  </Typography>
+                                  <Button
+                                    onClick={() => {
+                                      setFormState((prevFormState) => ({
+                                        ...prevFormState,
+                                        [row.id]: {
+                                          form_rating_id: 0,
+                                          question_id: row.id,
+                                          level: row.level,
+                                          equivalent_point: 0,
+                                          remarks:
+                                            formState[row.id]?.remarks ?? "",
+                                        },
+                                      }));
+                                      setClickedRows((prevClickedRows) => ({
+                                        ...prevClickedRows,
+                                        [row.id]: !prevClickedRows[row.id],
+                                      }));
+                                    }}
+                                  >
+                                    <AiFillEyeInvisible
+                                      className={`text-xl self-center ${
+                                        clickedRows[row.id]
+                                          ? "text-red-500"
+                                          : "text-black"
+                                      }`}
+                                    />
+                                  </Button>
+                                </div>
+                                <div className="flex space-x-10 text-xs">
+                                  <span>Urgency Level: {row.level}</span>
+                                  <span>
+                                    Equivalent Point: {row.equivalent_point}
+                                  </span>
+                                </div>
 
-                                  <Divider flexItem />
+                                <Divider flexItem />
 
-                                  <div className="flex space-x-5 justify-start">
-                                    <div className="flex space-x-5">
-                                      <div className="flex flex-col space-y-1">
-                                        <span>Rating: </span>
-                                        <StyledRating
-                                          name={row.id.toString()}
-                                          defaultValue={0}
-                                          max={3}
-                                          value={Number(
-                                            formState?.[row.id]
-                                              ?.form_rating_id ?? 0
-                                          )}
-                                          onChange={(
-                                            e,
-                                            value: number | null
-                                          ) => {
-                                            const rating = value || 0;
-                                            const form_rating_id = rating;
-                                            const question_id = row.id;
-                                            const eq_point =
-                                              row.equivalent_point;
-                                            const level = row.level;
-                                            setFormState({
-                                              ...formState,
-                                              [row.id]: {
-                                                form_rating_id: form_rating_id,
-                                                question_id: question_id,
-                                                remarks:
-                                                  formState[row.id]?.remarks ??
-                                                  null,
-                                                equivalent_point:
-                                                  formState[row.id]?.remarks ??
-                                                  eq_point,
-                                                level: level,
-                                              },
-                                            });
-                                          }}
-                                          IconContainerComponent={IconContainer}
-                                          getLabelText={(value: number) =>
-                                            AUDIT_CUSTOM_ICON[value].label
-                                          }
-                                          highlightSelectedOnly
-                                        />
-                                      </div>
-                                      <span>
-                                        {formState?.[row.id]?.form_rating_id ??
-                                          0}
-                                      </span>
-                                      <Divider
-                                        orientation="vertical"
-                                        flexItem
+                                <div className="flex space-x-5 justify-start">
+                                  <div className="flex space-x-5">
+                                    <div className="flex flex-col space-y-1">
+                                      <span>Rating: </span>
+                                      <StyledRating
+                                        name={row.id.toString()}
+                                        defaultValue={0}
+                                        max={3}
+                                        value={Number(
+                                          formState?.[row.id]?.form_rating_id ??
+                                            0
+                                        )}
+                                        onChange={(e, value: number | null) => {
+                                          const rating = value || 0;
+                                          const form_rating_id = rating;
+                                          const question_id = row.id;
+                                          const eq_point = row.equivalent_point;
+                                          const level = row.level;
+                                          setFormState({
+                                            ...formState,
+                                            [row.id]: {
+                                              form_rating_id: form_rating_id,
+                                              question_id: question_id,
+                                              remarks:
+                                                formState[row.id]?.remarks ??
+                                                null,
+                                              equivalent_point:
+                                                formState[row.id]
+                                                  ?.equivalent_point ??
+                                                eq_point,
+                                              level: level,
+                                            },
+                                          });
+                                        }}
+                                        IconContainerComponent={IconContainer}
+                                        getLabelText={(value: number) =>
+                                          AUDIT_CUSTOM_ICON[value].label
+                                        }
+                                        highlightSelectedOnly
                                       />
-                                      <div className="flex flex-col space-y-2">
-                                        <span>Remarks: </span>
+                                    </div>
+                                    <span>
+                                      {formState?.[row.id]?.form_rating_id ?? 0}
+                                    </span>
+                                    <Divider orientation="vertical" flexItem />
+                                    <div className="flex flex-col w-full space-y-2">
+                                      <span>Remarks: </span>
 
-                                        <TextField
-                                          name={row.id.toString()}
-                                          size="small"
-                                          value={
-                                            formState?.[row.id]?.remarks ?? ""
-                                          }
-                                          variant="outlined"
-                                          onChange={(e) => {
-                                            const remarks = e.target.value;
-                                            setFormState((prevState) => ({
-                                              ...prevState,
-                                              [row.id]: {
-                                                ...prevState[row.id],
-                                                ...(prevState[row.id] || {}),
-                                                remarks,
-                                              },
-                                            }));
-                                          }}
-                                        />
-                                      </div>
+                                      <TextField
+                                        name={row.id.toString()}
+                                        size="small"
+                                        value={
+                                          formState?.[row.id]?.remarks ?? ""
+                                        }
+                                        multiline={true}
+                                        variant="outlined"
+                                        onChange={(e) => {
+                                          const form_rating_id = 0;
+                                          const question_id = row.id;
+                                          const eq_point = row.equivalent_point;
+                                          const level = row.level;
+                                          const remarks = e.target.value;
+                                          setFormState({
+                                            ...formState,
+                                            [row.id]: {
+                                              form_rating_id:
+                                                formState[row.id]
+                                                  ?.form_rating_id ??
+                                                form_rating_id,
+                                              question_id: question_id,
+                                              remarks: remarks,
+                                              equivalent_point:
+                                                formState[row.id]
+                                                  ?.equivalent_point ??
+                                                eq_point,
+                                              level: level,
+                                            },
+                                          });
+                                        }}
+                                      />
                                     </div>
                                   </div>
-                                </CardContent>
-                              </Card>
-                            </div>
+                                </div>
+                              </CardContent>
+                            </Card>
                           </div>
                         );
                       })}
                     </div>
                   </>
                 ) : null}
+              </div>
 
-                <div className="flex space-x-3 px-5">
-                  {criteriaSection !== 0 ? (
-                    <Button
-                      className="basis-1/2"
-                      variant="contained"
-                      onClick={() => {
-                        if (criteriaSection > 0) {
-                          setCriteriaSection(criteriaSection - 1);
-                        }
-                      }}
-                      startIcon={
-                        <MdOutlineNavigateBefore className="text-white text-4xl" />
-                      }
-                    >
-                      Back
-                    </Button>
-                  ) : null}
-
+              <div className="flex space-x-3 px-5">
+                {criteriaSection !== 0 ? (
                   <Button
-                    className={`${
-                      criteriaSection === 0 ? `basis-full` : `basis-1/2`
-                    }`}
-                    type="submit"
-                    disabled={isDisabled}
-                    onClick={() => handleFormSubmit}
+                    className="basis-1/2"
                     variant="contained"
+                    onClick={() => {
+                      if (criteriaSection > 0) {
+                        setCriteriaSection(criteriaSection - 1);
+                      }
+                    }}
                     startIcon={
-                      <MdNavigateNext className="text-white text-4xl" />
+                      <MdOutlineNavigateBefore className="text-white text-4xl" />
                     }
                   >
-                    {getCriteria.data.question_data.length - 1 ===
-                      criteriaSection || maxLength - 1 === criteriaSection
-                      ? "Submit"
-                      : "Continue"}
+                    Back
                   </Button>
-                </div>
+                ) : null}
+
+                <Button
+                  className={`${
+                    criteriaSection === 0 ? `basis-full` : `basis-1/2`
+                  }`}
+                  type="submit"
+                  disabled={isDisabled}
+                  onClick={() => handleFormSubmit}
+                  variant="contained"
+                  startIcon={<MdNavigateNext className="text-white text-4xl" />}
+                >
+                  {getCriteria.data.question_data.length - 1 ===
+                    criteriaSection || maxLength - 1 === criteriaSection
+                    ? "Submit"
+                    : "Continue"}
+                </Button>
               </div>
             </div>
           </form>
