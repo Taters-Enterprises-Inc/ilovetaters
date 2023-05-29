@@ -153,6 +153,20 @@ import {
   AdminNotificationWrapper,
   AdminSidebarWrapper,
 } from "features/admin/presentation/wrapper";
+import {
+  Audit,
+  AuditDashboard,
+  AuditForm,
+  AuditLogin,
+  AuditResponseQualityAuditPage,
+  AuditReview,
+  AuditSettingsQuestions,
+} from "features/audit/presentation/pages";
+import {
+  AuditFormSideStepper,
+  AuditSidebarWrapper,
+} from "features/audit/presentation/components";
+import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 import { ShopProductViewLog } from "features/shop/presentation/logs";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -567,6 +581,41 @@ root.render(
                                 </Route>
                               </Route>
                             </Route>
+                          </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="internal/audit" element={<Audit />}>
+                        <Route index element={<AuditLogin />} />
+
+                        <Route element={<AuditGuard />}>
+                          <Route element={<AuditSidebarWrapper />}>
+                            <Route
+                              path="dashboard"
+                              element={<AuditDashboard />}
+                            />
+
+                            <Route path="responses">
+                              <Route
+                                path="quality/audit"
+                                element={<AuditResponseQualityAuditPage />}
+                              />
+                            </Route>
+
+                            <Route path="settings">
+                              <Route
+                                path="questions"
+                                element={<AuditSettingsQuestions />}
+                              />
+                            </Route>
+
+                            <Route
+                              path="form/review/:hash"
+                              element={<AuditReview />}
+                            />
+                          </Route>
+                          <Route element={<AuditFormSideStepper />}>
+                            <Route path="form" element={<AuditForm />} />
                           </Route>
                         </Route>
                       </Route>

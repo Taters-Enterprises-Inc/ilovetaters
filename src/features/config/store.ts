@@ -218,6 +218,17 @@ import getAdminInfluencerCashout from "features/admin/presentation/slices/get-ad
 import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 import getInfluencerCashouts from "features/profile/presentation/slices/get-influencer-cashouts.slice";
 import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
+import auditSideBar from "features/audit/presentation/slices/audit-sidebar-slice";
+import loginAudit from "features/audit/presentation/slices/login-audit.slice";
+import logoutAudit from "features/audit/presentation/slices/logout-audit.slice";
+import getAuditSettingQuestions from "features/audit/presentation/slices/get-audit-setting-questions.slice";
+import updateAuditSettingsQuestion from "features/audit/presentation/slices/update-admin-settings-questions.slice";
+import getStores from "features/audit/presentation/slices/get-stores.slice";
+import getAuditEvaluationFormQuestion from "features/audit/presentation/slices/get-audit-evaluation-form_questions.slice";
+import AuditSection from "features/audit/presentation/slices/audit-section.slice";
+import insertAuditResponse from "features/audit/presentation/slices/insert-audit-response.slice";
+import getAuditResponse from "features/audit/presentation/slices/get-audit-response.slice";
+import getAuditResponseInformationQualityAuditInformation from "features/audit/presentation/slices/get-audit-response-quality-audit-information.slice";
 import getAdminDashboardShopTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-transaction-total.slice";
 import getAdminDashboardShopCompletedTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-completed-transaction-total.slice";
 import insertShopProductViewLog from "features/shop/presentation/slices/insert-shop-product-view-log.slice";
@@ -449,6 +460,17 @@ export const store = configureStore({
     adminInfluencerCashoutChangeStatus,
     getInfluencerCashouts,
     validatePartnerCompanyEmployeeIdNumberAdmin,
+    auditSideBar,
+    loginAudit,
+    logoutAudit,
+    getAuditSettingQuestions,
+    updateAuditSettingsQuestion,
+    getStores,
+    getAuditEvaluationFormQuestion,
+    AuditSection,
+    insertAuditResponse,
+    getAuditResponse,
+    getAuditResponseInformationQualityAuditInformation,
     getAdminDashboardShopTransactionTotal,
     getAdminDashboardShopCompletedTransactionTotal,
     insertShopProductViewLog,
