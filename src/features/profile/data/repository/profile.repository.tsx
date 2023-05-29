@@ -4,11 +4,18 @@ import { GetPopclubRedeemsHistoryModel } from "features/profile/core/domain/get-
 import { GetSnackShopOrderHistoryModel } from "features/profile/core/domain/get-snackshop-order-history.model";
 import { UserDiscountModel } from "features/shared/core/domain/user-discount.model";
 import {
+  ApplyInfluencerParam,
   ApplyUserDiscountParam,
+  InfluencerCashoutParam,
+  UpdateInfluencerParam,
   UpdateUserDiscountParam,
+  UploadContractInfluencerParam,
 } from "features/profile/core/profile.params";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetInboxModel } from "features/profile/core/domain/get-inbox.model";
+import { InfluencerModel } from "features/shared/core/domain/influencer.model";
+import { GetInfluencerRefereesModel } from "features/profile/core/domain/get-influencer-referees.model";
+import { GetInfluencerCashoutsModel } from "features/profile/core/domain/get-influencer-cashouts.model";
 
 export interface GetCateringBookingHistoryResponse {
   data: {
@@ -55,6 +62,133 @@ export interface GetInboxResponse {
     message: string;
     data: GetInboxModel;
   };
+}
+
+export interface ApplyInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetInfluencerResponse {
+  data: {
+    message: string;
+    data: InfluencerModel;
+  };
+}
+
+export interface UpdateInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetInfluencerRefereesResponse {
+  data: {
+    message: string;
+    data: GetInfluencerRefereesModel;
+  };
+}
+export interface UploadContractInfluencerResponse {
+  data: {
+    message: string;
+  };
+}
+export interface InfluencerCashoutResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetInfluencerCashoutsResponse {
+  data: {
+    message: string;
+    data: GetInfluencerCashoutsModel;
+  };
+}
+
+export function GetInfluencerCashoutsRepository(
+  query: string
+): Promise<GetInfluencerCashoutsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-cashouts${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function InfluencerCashoutRepository(
+  param: InfluencerCashoutParam
+): Promise<InfluencerCashoutResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer/cashout`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function UploadContractInfluencerRepository(
+  param: UploadContractInfluencerParam
+): Promise<UploadContractInfluencerResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-upload-contract/`,
+    param.formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetInfluencerRefereesRepository(
+  query: string
+): Promise<GetInfluencerRefereesResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/profile/influencer-referee${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function UpdateInfluencerRepository(
+  param: UpdateInfluencerParam
+): Promise<UpdateInfluencerResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/profile/update-influencer`,
+    param,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetInfluencerRepository(): Promise<GetInfluencerResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/profile/influencer`, {
+    withCredentials: true,
+  });
+}
+
+export function ApplyInfluencerRepository(
+  param: ApplyInfluencerParam
+): Promise<ApplyInfluencerResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/profile/influencer`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 }
 
 export function GetInboxRepository(query: string): Promise<GetInboxResponse> {

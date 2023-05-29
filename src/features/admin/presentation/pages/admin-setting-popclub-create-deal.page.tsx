@@ -64,6 +64,8 @@ export function AdminSettingPopclubCreateDeal() {
     originalPrice: string;
     promoPrice: string;
     promoDiscountPercentage: string;
+    subTotalPromoDiscount: string;
+    influencerDiscount: string;
     minimumPurchase: string;
     isFreeDelivery: boolean;
     isPartnerCompany: boolean;
@@ -90,6 +92,8 @@ export function AdminSettingPopclubCreateDeal() {
     originalPrice: "",
     promoPrice: "",
     promoDiscountPercentage: "",
+    subTotalPromoDiscount: "",
+    influencerDiscount: "",
     minimumPurchase: "",
     isFreeDelivery: false,
     isPartnerCompany: false,
@@ -391,6 +395,26 @@ export function AdminSettingPopclubCreateDeal() {
               />
             </div>
 
+            <MaterialInput
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.subTotalPromoDiscount}
+              name="subTotalPromoDiscount"
+              label="Sub Total Promo Discount"
+              type="number"
+              fullWidth
+            />
+
+            <MaterialInput
+              colorTheme="black"
+              onChange={handleInputChange}
+              value={formState.influencerDiscount}
+              name="influencerDiscount"
+              label="Influencer Discount"
+              type="number"
+              fullWidth
+            />
+
             <MaterialInputAutoComplete
               label="Select Available Days"
               colorTheme="black"
@@ -519,16 +543,18 @@ export function AdminSettingPopclubCreateDeal() {
               />
             </div>
 
-            <MaterialSwitch
-              label="Is Free Delivery"
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  isFreeDelivery: e.target.checked,
-                });
-              }}
-              checked={formState.isFreeDelivery}
-            />
+            <div className="flex flex-col">
+              <MaterialSwitch
+                label="Is Free Delivery"
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    isFreeDelivery: e.target.checked,
+                  });
+                }}
+                checked={formState.isFreeDelivery}
+              />
+            </div>
 
             <MaterialSwitch
               label="Is Partner Company"

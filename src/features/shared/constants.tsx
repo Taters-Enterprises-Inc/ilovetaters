@@ -11,6 +11,7 @@ import { GoLaw } from "react-icons/go";
 import { TabModel } from "./presentation/components/tab";
 import { GiPopcorn } from "react-icons/gi";
 import { HiDocumentText } from "react-icons/hi";
+import { BsFillPersonBadgeFill } from "react-icons/bs";
 import Pusher from "pusher-js";
 import { ReactElement, ReactNode } from "react";
 import { GrStatusCriticalSmall } from "react-icons/gr";
@@ -244,7 +245,7 @@ export const SEE_ME_TAB_FAQ: Array<TabModel> = [
 
 export const PROFILE_TABS: Array<TabModel> = [
   {
-    name: "My Profile",
+    name: "Profile",
     active: "profile",
     icon: <FaUserAlt />,
     url: "/profile",
@@ -256,28 +257,34 @@ export const PROFILE_TABS: Array<TabModel> = [
     url: "/profile/inbox",
   },
   {
-    name: "Snack Shop Orders",
+    name: "Orders",
     active: "snackshop",
     icon: <FaShoppingBag />,
     url: "/profile/snackshop-orders",
   },
   {
-    name: "Catering Bookings",
+    name: "Bookings",
     active: "catering",
     icon: <RiShoppingBag3Fill />,
     url: "/profile/catering-bookings",
   },
   {
-    name: "Popclub Redeems",
+    name: "Redeems",
     active: "popclub",
     icon: <GiPopcorn />,
     url: "/profile/popclub-redeems",
   },
   {
-    name: "User Discount",
+    name: "Discount",
     active: "user-discount",
     icon: <HiDocumentText />,
     url: "/profile/user-discount",
+  },
+  {
+    name: "Influencer",
+    active: "influencer",
+    icon: <BsFillPersonBadgeFill />,
+    url: "/profile/influencer",
   },
 ];
 
@@ -414,6 +421,133 @@ export const ADMIN_USER_DISCOUNT_STATUS: Array<{
   },
 ];
 
+export const USER_DISCOUNT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Your application for discount is pending",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for discount is under review",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for discount is approved",
+    color: "#004d00",
+  },
+  {
+    name: "Your application for discount is rejected",
+    color: "#a21013",
+  },
+];
+
+export const ADMIN_INFLUENCER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Under Review",
+    color: "#153B44",
+  },
+  {
+    name: "Registration Confirmed",
+    color: "#42032C",
+  },
+  {
+    name: "Registration Rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Contract Under Verification",
+    color: "#541212",
+  },
+  {
+    name: "Contract Verified",
+    color: "#C84B31",
+  },
+  {
+    name: "Contract Rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Registration Completed",
+    color: "#004d00",
+  },
+  {
+    name: "Registration Declined",
+    color: "#a21013",
+  },
+];
+
+export const INFLUENCER_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+
+  {
+    name: "Your application for influencer is pending",
+    color: "#cca300",
+  },
+  {
+    name: "Your application for influencer is rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Your application for influencer is under review",
+    color: "#153B44",
+  },
+  {
+    name: "Your application for influencer is confirmed",
+    color: "#42032C",
+  },
+  {
+    name: "Your application for influencer is rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Your application for influencer is contract under verification",
+    color: "#541212",
+  },
+  {
+    name: "Your application for influencer is contract verified",
+    color: "#C84B31",
+  },
+  {
+    name: "Your application for influencer is contract rejected",
+    color: "#a21013",
+  },
+  {
+    name: "Your application for influencer is completed",
+    color: "#004d00",
+  },
+  {
+    name: "Your application for influencer is declined",
+    color: "#a21013",
+  },
+];
+
 export const ADMIN_SURVEY_VERIFICATION_STATUS: Array<{
   name: string;
   color: string;
@@ -449,7 +583,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#cca300",
   },
   {
-    name: "Upload Signed Contract",
+    name: "Upload signed contract",
     color: "#42032C",
   },
   {
@@ -457,7 +591,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#541212",
   },
   {
-    name: "Upload Initial proof of payment",
+    name: "Upload initial proof of payment",
     color: "#C84B31",
   },
   {
@@ -465,7 +599,7 @@ export const CATERING_BOOKING_STATUS: Array<{
     color: "#153B44",
   },
   {
-    name: "Upload Final proof of payment",
+    name: "Upload final proof of payment",
     color: "#152A38",
   },
   {
@@ -547,7 +681,7 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
     color: "",
   },
   {
-    name: "Waiting for booking confirmation",
+    name: "Waiting For Booking Confirmation",
     color: "#cca300",
   },
   {
@@ -575,11 +709,11 @@ export const ADMIN_CATERING_BOOKING_STATUS: Array<{
     color: "#1E5128",
   },
   {
-    name: "Final payment verified",
+    name: "Final Payment Verified",
     color: "#4E9F3D",
   },
   {
-    name: "Catering booking completed",
+    name: "Catering Booking Completed",
     color: "#004d00",
   },
   {
@@ -983,6 +1117,11 @@ export const PROFILE_MENU: Array<{
     icon: <HiDocumentText />,
     urlId: "user-discount",
   },
+  {
+    name: "Influencer",
+    icon: <BsFillPersonBadgeFill />,
+    urlId: "influencer",
+  },
 ];
 
 export const SHOP_ORDER_STATUS: Array<{
@@ -1083,3 +1222,46 @@ export const AUDIT_CUSTOM_ICON: {
     label: "Most Critital",
   },
 };
+export const ADMIN_INFLUENCER_CASHOUT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Approve",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];
+
+export const INFLUENCER_CASHOUT_STATUS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "",
+    color: "",
+  },
+  {
+    name: "Pending",
+    color: "#cca300",
+  },
+  {
+    name: "Approve",
+    color: "#004d00",
+  },
+  {
+    name: "Rejected",
+    color: "#a21013",
+  },
+];

@@ -75,6 +75,12 @@ import {
   AdminSettingPopClubDeal,
   AdminSettingPopclubCreateDeal,
   AdminSettingPopclubEditDeal,
+  AdminInfluencerApplication,
+  AdminInfluencerPromo,
+  AdminInfluencerCreatePromo,
+  AdminInfluencerCashout,
+  AdminSnackshopDashboard,
+  AdminCustomerFeedbackDashboard,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -102,6 +108,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
   ProfileInbox,
+  ProfileInfluencer,
 } from "features/profile/presentation/pages";
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
@@ -131,7 +138,6 @@ import {
 
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
-import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 import {
   SeeMeCatering,
   SeeMeSnackshop,
@@ -161,6 +167,7 @@ import {
   AuditSidebarWrapper,
 } from "features/audit/presentation/components";
 import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
+import { ShopProductViewLog } from "features/shop/presentation/logs";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -234,6 +241,11 @@ root.render(
                                 path="user-discount"
                                 element={<ProfileUserDiscount />}
                               />
+
+                              <Route
+                                path="influencer"
+                                element={<ProfileInfluencer />}
+                              />
                             </Route>
                           </Route>
 
@@ -261,7 +273,9 @@ root.render(
                                 path="cart/:cart_id"
                                 element={<ShopEditCartItem />}
                               />
-                              <Route path=":hash" element={<ShopProduct />} />
+                              <Route element={<ShopProductViewLog />}>
+                                <Route path=":hash" element={<ShopProduct />} />
+                              </Route>
                             </Route>
 
                             <Route path="order/:hash" element={<ShopOrder />} />
@@ -367,10 +381,16 @@ root.render(
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
                             <Route element={<AdminSidebarWrapper />}>
-                              <Route
-                                path="dashboard"
-                                element={<AdminDashboard />}
-                              />
+                              <Route path="dashboard">
+                                <Route
+                                  path="snackshop"
+                                  element={<AdminSnackshopDashboard />}
+                                />
+                                <Route
+                                  path="customer-feedback"
+                                  element={<AdminCustomerFeedbackDashboard />}
+                                />
+                              </Route>
                               <Route
                                 path="order"
                                 element={<AdminShopOrder />}
@@ -388,6 +408,27 @@ root.render(
                                 path="user-discount"
                                 element={<AdminUserDiscount />}
                               />
+                              <Route path="influencer">
+                                <Route
+                                  path="application"
+                                  element={<AdminInfluencerApplication />}
+                                />
+                                <Route
+                                  path="cashout"
+                                  element={<AdminInfluencerCashout />}
+                                />
+                                <Route path="promo">
+                                  <Route
+                                    index
+                                    element={<AdminInfluencerPromo />}
+                                  />
+                                  <Route
+                                    path="create"
+                                    element={<AdminInfluencerCreatePromo />}
+                                  />
+                                </Route>
+                              </Route>
+
                               <Route
                                 path="survey-verification"
                                 element={<AdminSurveyVerification />}
