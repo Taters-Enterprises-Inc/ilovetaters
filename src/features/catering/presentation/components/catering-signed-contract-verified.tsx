@@ -41,7 +41,7 @@ export function CateringSignedContractVerified() {
               <p className="m-0 font-bold">Signed contract verified</p>
               <p className="text-xs">
                 We successfully verify your contract, you can proceed to payment
-                now.{" "}
+                now.
               </p>
             </div>
           </div>

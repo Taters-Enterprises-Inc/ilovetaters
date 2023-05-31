@@ -44,4 +44,20 @@ export interface CheckoutOrdersParam {
   phoneNumber: string;
   landmarkAddress: string;
   completeDeliveryAddress: string;
+  referralCode: string;
+}
+
+export interface GetSnackshopInfluencerPromoParam {
+  referralCode: string;
+}
+
+export interface InsertShopProductViewLogParam {
+  product_id: number;
+  product_variant_option_id?: number | null;
+}
+
+export interface InsertShopInitialCheckoutLogParam {
+  subtotal: number;
+  discount: number;
+  deliveryFee: number;
 }

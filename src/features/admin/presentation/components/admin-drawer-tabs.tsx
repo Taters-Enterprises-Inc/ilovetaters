@@ -44,6 +44,7 @@ import {
 } from "../slices/get-admin-notifications.slice";
 import { TbReportSearch } from "react-icons/tb";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { BsFillPersonBadgeFill } from "react-icons/bs";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -109,30 +110,143 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
       <nav>
         <ul>
           <li>
-            <NavLink
-              to="/admin/dashboard"
-              onClick={() => {
-                if (props.mobile) dispatch(closeAdminSideBar());
-              }}
-              className={(navData) =>
-                navData.isActive ? "flex bg-white text-secondary" : "flex"
-              }
-            >
-              <span className="flex items-center px-4 ">
-                <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                  <MdOutlineDashboardCustomize size={20} />
+            <div className="flex px-4">
+              <div className="flex-1">
+                <Accordion defaultExpanded={true}>
+                  <AccordionSummary>
+                    <span className="flex items-center">
+                      <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                        <MdOutlineDashboardCustomize size={20} />
 
-                  <span
-                    className={`whitespace-pre duration-300 ${
-                      !adminSideBarState.status && "opacity-0 overflow-hidden"
-                    }`}
-                  >
-                    Dashboard
-                  </span>
-                </span>
-              </span>
-            </NavLink>
+                        <span
+                          className={`whitespace-pre duration-300 ${
+                            !adminSideBarState.status &&
+                            "opacity-0 overflow-hidden"
+                          }`}
+                        >
+                          Dashboard
+                        </span>
+                      </span>
+                    </span>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ul>
+                      <li>
+                        <NavLink
+                          to="/admin/dashboard/customer-feedback"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Customer Feedback
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+
+                      <li>
+                        <NavLink
+                          to="/admin/dashboard/snackshop"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Snackshop
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/admin/dashboard/catering"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                Catering
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/admin/dashboard/popclub"
+                          onClick={() => {
+                            if (props.mobile) dispatch(closeAdminSideBar());
+                          }}
+                          className={(navData) =>
+                            navData.isActive
+                              ? "flex bg-white text-secondary"
+                              : "flex"
+                          }
+                        >
+                          <span className="flex items-center ">
+                            <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                              <IoIosArrowForward size={20} />
+                              <span
+                                className={`whitespace-pre duration-300 ${
+                                  !adminSideBarState.status &&
+                                  "opacity-0 overflow-hidden"
+                                }`}
+                              >
+                                PopClub
+                              </span>
+                            </span>
+                          </span>
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            </div>
           </li>
+
           {getAdminSessionState.data?.admin.is_snackshop_available ||
           getAdminSessionState.data?.admin
             .is_popclub_snacks_delivered_available ? (
@@ -312,6 +426,154 @@ export function AdminDrawerTabs(props: AdminDrawerTabsProps) {
               </span>
             </NavLink>
           </li>
+
+          {getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin ? (
+            <li>
+              <div className="flex px-4">
+                <div className="flex-1">
+                  <Accordion>
+                    <AccordionSummary>
+                      <span className="flex items-center">
+                        <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                          <Badge
+                            badgeContent={
+                              (getAdminNotificationsState.data
+                                ?.influencer_application
+                                .unseen_notifications_count ?? 0) +
+                              (getAdminNotificationsState.data
+                                ?.influencer_cashout
+                                .unseen_notifications_count ?? 0)
+                            }
+                            color="primary"
+                          >
+                            <BsFillPersonBadgeFill size={20} />
+                          </Badge>
+
+                          <span
+                            className={`whitespace-pre duration-300 ${
+                              !adminSideBarState.status &&
+                              "opacity-0 overflow-hidden"
+                            }`}
+                          >
+                            Influencer
+                          </span>
+                        </span>
+                      </span>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <ul>
+                        <li>
+                          <NavLink
+                            to="/admin/influencer/application"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <Badge
+                                  badgeContent={
+                                    getAdminNotificationsState.data
+                                      ?.influencer_application
+                                      .unseen_notifications_count
+                                  }
+                                  color="primary"
+                                >
+                                  <IoIosArrowForward size={20} />
+                                </Badge>
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Application
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+
+                        <li>
+                          <NavLink
+                            to="/admin/influencer/cashout"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <Badge
+                                  badgeContent={
+                                    getAdminNotificationsState.data
+                                      ?.influencer_cashout
+                                      .unseen_notifications_count
+                                  }
+                                  color="primary"
+                                >
+                                  <IoIosArrowForward size={20} />
+                                </Badge>
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Cash-out
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+
+                        <li>
+                          <NavLink
+                            to="/admin/influencer/promo"
+                            onClick={() => {
+                              if (props.mobile) dispatch(closeAdminSideBar());
+                            }}
+                            className={(navData) =>
+                              navData.isActive
+                                ? "flex bg-white text-secondary"
+                                : "flex"
+                            }
+                          >
+                            <span className="flex items-center ">
+                              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+                                <IoIosArrowForward size={20} />
+
+                                <span
+                                  className={`whitespace-pre duration-300 ${
+                                    !adminSideBarState.status &&
+                                    "opacity-0 overflow-hidden"
+                                  }`}
+                                >
+                                  Promos
+                                </span>
+                              </span>
+                            </span>
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </AccordionDetails>
+                  </Accordion>
+                </div>
+              </div>
+            </li>
+          ) : null}
 
           <li>
             <div className="flex px-4">

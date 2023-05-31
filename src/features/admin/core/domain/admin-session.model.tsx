@@ -7,6 +7,7 @@ export interface AdminSessionModel {
     last_check: string;
 
     is_admin: boolean;
+    is_audit_admin: boolean;
     is_catering_admin: boolean;
     is_csr_admin: boolean;
 
