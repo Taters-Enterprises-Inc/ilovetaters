@@ -46,22 +46,6 @@ export function AuditReviewContent() {
     }
   }, [hash, dispatch]);
 
-  const auditPeriod = (dateParam: string, isPeriod: boolean) => {
-    const date = new Date(`${dateParam}-01`);
-    const formattedAuditPeriod = date.toLocaleDateString("en", {
-      month: "long",
-      year: "numeric",
-    });
-
-    const formattedDateAdded = date.toLocaleDateString("en", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    });
-
-    return isPeriod ? formattedAuditPeriod : formattedDateAdded;
-  };
-
   const AuditResponseResultTable = [
     { name: "Category" },
     { name: "Grade" },
@@ -127,10 +111,12 @@ export function AuditReviewContent() {
                       </span>
                       <span>&#x2022;</span>
                       <span className="text-center">
-                        {auditPeriod(
-                          getResponseState.data.information.audit_period,
-                          true
-                        )}
+                        {new Date(
+                          getResponseState.data.information.audit_period
+                        ).toLocaleDateString("en", {
+                          month: "long",
+                          year: "numeric",
+                        })}
                       </span>
                     </div>
                     <Divider
@@ -144,10 +130,13 @@ export function AuditReviewContent() {
                       </span>
                       <span>&#x2022;</span>
                       <span className="text-center">
-                        {auditPeriod(
-                          getResponseState.data.information.dateadded,
-                          false
-                        )}
+                        {new Date(
+                          getResponseState.data.information.dateadded
+                        ).toLocaleDateString("en", {
+                          month: "long",
+                          day: "2-digit",
+                          year: "numeric",
+                        })}
                       </span>
                     </div>
                   </div>
@@ -299,25 +288,34 @@ export function AuditReviewContent() {
                               </span>
                               <div className="flex flex-col md:flex-row  md:space-x-2">
                                 <span className="md:text-sm md:self-center text-xs">
-                                  Equivalent point: {row.equivalent_point}
+                                  Equivalent point:{" "}
+                                  {row.equivalent_point === 0
+                                    ? "N/A"
+                                    : row.equivalent_point}
                                 </span>
                                 <span className="hidden md:block">
                                   &#x2022;
                                 </span>
                                 <span className="md:text-sm md:self-center text-xs">
-                                  Urgency Level: {row.level}
+                                  Urgency Level: {row.urgency_rating}
                                 </span>
 
                                 <Divider orientation="vertical" flexItem />
 
                                 <span className="md:text-sm md:self-center text-xs">
-                                  Rating: {row.rating}
+                                  Rating:{" "}
+                                  {row.equivalent_point === 0
+                                    ? "N/A"
+                                    : row.rating === null
+                                    ? 0
+                                    : row.rating}
                                 </span>
                                 <span className="hidden md:block">
                                   &#x2022;
                                 </span>
                                 <span className="md:text-sm md:self-center text-xs">
-                                  Remarks: {row.remarks}
+                                  Remarks:{" "}
+                                  {row.remarks === "" ? "N/A" : row.remarks}
                                 </span>
                               </div>
                             </div>
