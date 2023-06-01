@@ -62,7 +62,11 @@ export function AuditFormSideStepper() {
                         >
                           {AUDIT_STEPPER.map((step, index) => (
                             <Step key={step.section}>
-                              <StepLabel>{step.section}</StepLabel>
+                              {step.section === "4" ? (
+                                <StepContent>{step.section}</StepContent>
+                              ) : (
+                                <StepLabel>{step.section}</StepLabel>
+                              )}
                             </Step>
                           ))}
                         </Stepper>

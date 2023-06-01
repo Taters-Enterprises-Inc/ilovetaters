@@ -1,5 +1,4 @@
-import React from "react";
-import { AuditDashboardContent, AuditHead } from "../components";
+import { AuditHead } from "../components";
 
 export function AuditDashboard() {
   return (
@@ -14,7 +13,6 @@ export function AuditDashboard() {
           pageTitles: [{ name: "Dashboard", url: "/internal/audit/dashboard" }],
         }}
       />
-      <AuditDashboardContent />
     </>
   );
 }

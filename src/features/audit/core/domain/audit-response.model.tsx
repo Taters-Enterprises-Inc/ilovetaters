@@ -24,7 +24,7 @@ export interface GetAuditResponseModel {
       remarks: string;
       equivalent_point: number;
       section_id: number;
-      level: number;
+      urgency_rating: number;
       section_name: string;
       sub_section_name: string | null;
       category_id: number;
