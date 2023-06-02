@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   Divider,
+  IconButton,
   IconContainerProps,
   InputAdornment,
   Rating,
@@ -223,146 +224,155 @@ export function AuditFormContent() {
         </div>
         {getCriteria.data ? (
           <form onSubmit={handleFormSubmit}>
-            <div className="flex flex-col space-y-2 mb-20">
-              <div className="px-5">
-                {criteriaSection === 0 ? (
-                  <>
-                    <h1
-                      id="section_1"
-                      className="capitalize font-semibold text-xl"
-                    >
-                      {getCriteria.data.question_data[criteriaSection].section}
-                    </h1>
-                    <span className="text-md">
-                      Setup store and attention Information
-                    </span>
-                  </>
-                ) : null}
-              </div>
-
+            <div className="flex flex-col space-y-2 mb-20 px-16 ">
               <div className="flex flex-col space-y-5">
                 {getCriteria.data.question_data[criteriaSection].criteria
                   .length === 0 ? (
                   <>
-                    <div className="space-y-3 px-5">
-                      <div className="flex flex-col space-y-2">
-                        <span>Attention: </span>
-                        <TextField
-                          required
-                          id="Store"
-                          size="small"
-                          variant="outlined"
-                          onChange={(event) => {
-                            setAttention(event.target.value);
-                          }}
-                          value={attention}
-                        />
-                      </div>
-                      <div className="flex flex-col space-y-2">
-                        <span>Store: </span>
-
-                        <Autocomplete
-                          disablePortal
-                          id="combo-box-demo"
-                          size="small"
-                          options={
-                            getStoreState.data
-                              ? getStoreState.data.stores.map(
-                                  (row) => row.store_name
-                                )
-                              : []
-                          }
-                          onChange={(event, value: any) => {
-                            if (value && getStoreState.data) {
-                              const selectedStoreObj =
-                                getStoreState.data.stores.find(
-                                  (store) => store.store_name === value
-                                );
-                              setSelectedStore(selectedStoreObj);
-                            } else {
-                              setSelectedStore(undefined);
+                    <div className="flex justify-center">
+                      <div className="w-3/6">
+                        <div className="space-y-3">
+                          <h1
+                            id="section_1"
+                            className="capitalize font-semibold text-xl"
+                          >
+                            {
+                              getCriteria.data.question_data[criteriaSection]
+                                .section
                             }
-                          }}
-                          renderInput={(params) => (
+                          </h1>
+                          <span className="text-md">
+                            Setup store and attention Information
+                          </span>
+
+                          <div className="flex flex-col space-y-2">
+                            <span>Attention: </span>
                             <TextField
                               required
-                              value={selectedStore ?? ""}
-                              {...params}
-                              label="Select store to evaluate"
+                              id="Store"
+                              size="small"
+                              variant="outlined"
+                              onChange={(event) => {
+                                setAttention(event.target.value);
+                              }}
+                              value={attention}
                             />
-                          )}
-                        />
-                      </div>
-                      <div className="flex flex-col space-y-2">
-                        <span>Store Type: </span>
+                          </div>
+                          <div className="flex flex-col space-y-2">
+                            <span>Store: </span>
 
-                        <TextField
-                          disabled
-                          id="StoreType"
-                          size="small"
-                          variant="outlined"
-                          placeholder="This will change after selecting store"
-                          value={selectedStore?.type_name || ""}
-                        />
-                      </div>
-
-                      <div className="flex flex-col space-y-2">
-                        <span>Date of audit: </span>
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="audit date"
-                            views={["month", "day", "year"]}
-                            onError={() => setDisabled(true)}
-                            onAccept={(value) => {
-                              if (dayjs(value)) {
-                                setDisabled(false);
+                            <Autocomplete
+                              disablePortal
+                              id="combo-box-demo"
+                              size="small"
+                              options={
+                                getStoreState.data
+                                  ? getStoreState.data.stores.map(
+                                      (row) => row.store_name
+                                    )
+                                  : []
                               }
-                            }}
-                            onChange={(date) => {
-                              if (date) {
-                                const formattedDate = dayjs(date).format(
-                                  "YYYY-MM-DD 00:00:00"
-                                );
+                              onChange={(event, value: any) => {
+                                if (value && getStoreState.data) {
+                                  const selectedStoreObj =
+                                    getStoreState.data.stores.find(
+                                      (store) => store.store_name === value
+                                    );
+                                  setSelectedStore(selectedStoreObj);
+                                } else {
+                                  setSelectedStore(undefined);
+                                }
+                              }}
+                              renderInput={(params) => (
+                                <TextField
+                                  required
+                                  value={selectedStore ?? ""}
+                                  {...params}
+                                  label="Select store to evaluate"
+                                />
+                              )}
+                            />
+                          </div>
+                          <div className="flex flex-col space-y-2">
+                            <span>Store Type: </span>
 
-                                setAuditDate(formattedDate);
-                              }
-                            }}
-                            value={dayjs(auditDate)}
-                            renderInput={(params) => (
-                              <TextField required {...params} size="small" />
-                            )}
-                          />
-                        </LocalizationProvider>
-                      </div>
+                            <TextField
+                              disabled
+                              id="StoreType"
+                              size="small"
+                              variant="outlined"
+                              placeholder="This will change after selecting store"
+                              value={selectedStore?.type_name || ""}
+                            />
+                          </div>
 
-                      <div className="flex flex-col space-y-2">
-                        <span>For the month of: </span>
+                          <div className="flex flex-col space-y-2">
+                            <span>Date of audit: </span>
 
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Month and Year"
-                            views={["month", "year"]}
-                            onError={() => setDisabled(true)}
-                            onAccept={(value) => {
-                              if (dayjs(value)) {
-                                setDisabled(false);
-                              }
-                            }}
-                            onChange={(date) => {
-                              if (date) {
-                                const formattedDate =
-                                  dayjs(date).format("YYYY-MM-01");
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                label="audit date"
+                                views={["month", "day", "year"]}
+                                onError={() => setDisabled(true)}
+                                onAccept={(value) => {
+                                  if (dayjs(value)) {
+                                    setDisabled(false);
+                                  }
+                                }}
+                                onChange={(date) => {
+                                  if (date) {
+                                    const formattedDate = dayjs(date).format(
+                                      "YYYY-MM-DD 00:00:00"
+                                    );
 
-                                setSelectedDate(formattedDate);
-                              }
-                            }}
-                            value={dayjs(selectedDate)}
-                            renderInput={(params) => (
-                              <TextField required {...params} size="small" />
-                            )}
-                          />
-                        </LocalizationProvider>
+                                    setAuditDate(formattedDate);
+                                  }
+                                }}
+                                value={dayjs(auditDate)}
+                                renderInput={(params) => (
+                                  <TextField
+                                    required
+                                    {...params}
+                                    size="small"
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                          </div>
+
+                          <div className="flex flex-col space-y-2">
+                            <span>For the month of: </span>
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                label="Month and Year"
+                                views={["month", "year"]}
+                                onError={() => setDisabled(true)}
+                                onAccept={(value) => {
+                                  if (dayjs(value)) {
+                                    setDisabled(false);
+                                  }
+                                }}
+                                onChange={(date) => {
+                                  if (date) {
+                                    const formattedDate =
+                                      dayjs(date).format("YYYY-MM-01");
+
+                                    setSelectedDate(formattedDate);
+                                  }
+                                }}
+                                value={dayjs(selectedDate)}
+                                renderInput={(params) => (
+                                  <TextField
+                                    required
+                                    {...params}
+                                    size="small"
+                                  />
+                                )}
+                              />
+                            </LocalizationProvider>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </>
@@ -390,12 +400,8 @@ export function AuditFormContent() {
                         };
 
                         return (
-                          <div key={index} className="flex justify-center">
-                            <Card
-                              className="w-11/12"
-                              variant="outlined"
-                              style={{ width: "80%" }}
-                            >
+                          <div key={index} className="min-w-full">
+                            <Card variant="outlined">
                               <CardContent className="space-y-2">
                                 <div className="flex justify-between">
                                   <Typography
@@ -403,40 +409,10 @@ export function AuditFormContent() {
                                     color="black"
                                     gutterBottom
                                   >
-                                    <span className="whitespace-pre-wrap break-words">
+                                    <span className="whitespace-pre-wrap break-words w-48">
                                       {row.questions}
                                     </span>
                                   </Typography>
-                                  <Button
-                                    onClick={() => {
-                                      setClickedRows((prevClickedRows) => ({
-                                        ...prevClickedRows,
-                                        [row.id]: !prevClickedRows[row.id],
-                                      }));
-
-                                      setFormState((prevFormState) => ({
-                                        ...prevFormState,
-                                        [row.id]: {
-                                          form_rating_id: 0,
-                                          question_id: row.id,
-                                          level: row.level,
-                                          equivalent_point: clickedRows[row.id]
-                                            ? row.equivalent_point
-                                            : 0,
-                                          remarks:
-                                            formState[row.id]?.remarks ?? "",
-                                        },
-                                      }));
-                                    }}
-                                  >
-                                    <AiFillEyeInvisible
-                                      className={`text-xl self-center ${
-                                        clickedRows[row.id]
-                                          ? "text-red-500"
-                                          : "text-black"
-                                      }`}
-                                    />
-                                  </Button>
                                 </div>
                                 <div className="flex space-x-10 text-xs">
                                   <span>Urgency Level: {row.level}</span>
@@ -448,7 +424,7 @@ export function AuditFormContent() {
                                 <Divider flexItem />
 
                                 <div className="flex space-x-5 justify-start">
-                                  <div className="flex space-x-5">
+                                  <div className="flex space-x-2 w-full">
                                     <div className="flex flex-col space-y-1">
                                       <span>Rating: </span>
                                       <StyledRating
@@ -491,14 +467,53 @@ export function AuditFormContent() {
                                         highlightSelectedOnly
                                       />
                                     </div>
-                                    <span>
-                                      {formState?.[row.id]?.form_rating_id ?? 0}
-                                    </span>
+
+                                    <div className="flex flex-col space-y-2">
+                                      <span className="text-center">
+                                        {formState?.[row.id]?.form_rating_id ??
+                                          0}
+                                      </span>
+                                      <IconButton
+                                        onClick={() => {
+                                          setClickedRows((prevClickedRows) => ({
+                                            ...prevClickedRows,
+                                            [row.id]: !prevClickedRows[row.id],
+                                          }));
+
+                                          setFormState((prevFormState) => ({
+                                            ...prevFormState,
+                                            [row.id]: {
+                                              form_rating_id: 0,
+                                              question_id: row.id,
+                                              level: row.level,
+                                              equivalent_point: clickedRows[
+                                                row.id
+                                              ]
+                                                ? row.equivalent_point
+                                                : 0,
+                                              remarks:
+                                                formState[row.id]?.remarks ??
+                                                "",
+                                            },
+                                          }));
+                                        }}
+                                      >
+                                        <AiFillEyeInvisible
+                                          className={`text-xl items-baseline ${
+                                            clickedRows[row.id]
+                                              ? "text-red-500"
+                                              : "text-black"
+                                          }`}
+                                        />
+                                      </IconButton>
+                                    </div>
+
                                     <Divider orientation="vertical" flexItem />
                                     <div className="flex flex-col w-full space-y-2">
                                       <span>Remarks: </span>
 
                                       <TextField
+                                        className="w-full"
                                         name={row.id.toString()}
                                         size="small"
                                         value={
@@ -543,7 +558,7 @@ export function AuditFormContent() {
                 ) : null}
               </div>
 
-              <div className="flex space-x-3 px-5">
+              <div className="flex flex-row space-x-3">
                 {criteriaSection !== 0 ? (
                   <Button
                     className="basis-1/2"
@@ -561,21 +576,31 @@ export function AuditFormContent() {
                   </Button>
                 ) : null}
 
-                <Button
+                <div
                   className={`${
-                    criteriaSection === 0 ? `basis-full` : `basis-1/2`
+                    criteriaSection === 0
+                      ? "flex justify-center w-full"
+                      : "basis-1/2"
                   }`}
-                  type="submit"
-                  disabled={isDisabled}
-                  onClick={() => handleFormSubmit}
-                  variant="contained"
-                  startIcon={<MdNavigateNext className="text-white text-4xl" />}
                 >
-                  {getCriteria.data.question_data.length - 1 ===
-                    criteriaSection || maxLength - 1 === criteriaSection
-                    ? "Submit"
-                    : "Continue"}
-                </Button>
+                  <Button
+                    className={`${
+                      criteriaSection !== 0 ? "w-full" : "basis-1/2"
+                    }`}
+                    type="submit"
+                    disabled={isDisabled}
+                    onClick={() => handleFormSubmit}
+                    variant="contained"
+                    startIcon={
+                      <MdNavigateNext className="text-white text-4xl" />
+                    }
+                  >
+                    {getCriteria.data.question_data.length - 1 ===
+                      criteriaSection || maxLength - 1 === criteriaSection
+                      ? "Submit"
+                      : "Continue"}
+                  </Button>
+                </div>
               </div>
             </div>
           </form>

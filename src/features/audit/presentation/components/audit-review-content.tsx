@@ -281,45 +281,64 @@ export function AuditReviewContent() {
                     <div className="flex flex-col space-y-2">
                       {getResponseState.data.answers[tabStep].criteria.map(
                         (row, index) => (
-                          <div key={index} className=" p-4">
-                            <div>
-                              <span className="text-base md:text-lg">
-                                {row.questions}
-                              </span>
-                              <div className="flex flex-col md:flex-row  md:space-x-2">
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Equivalent point:{" "}
-                                  {row.equivalent_point === 0
-                                    ? "N/A"
-                                    : row.equivalent_point}
-                                </span>
-                                <span className="hidden md:block">
-                                  &#x2022;
-                                </span>
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Urgency Level: {row.urgency_rating}
-                                </span>
+                          <div
+                            key={index}
+                            className={`border-2 border-l-8 rounded-lg p-4 
+                          ${
+                            row.rating === 1
+                              ? "border-[#d9534f]"
+                              : row.rating === 2
+                              ? "border-[#f0ad4e]"
+                              : row.rating === 3
+                              ? "border-[#5cb85c]"
+                              : row.rating === 0 && row.equivalent_point === 0
+                              ? "border-gray-300"
+                              : "border-[#d9534f]"
+                          }`}
+                          >
+                            <div className="flex flex-col space-y-2">
+                              <span className="text-base">{row.questions}</span>
+                              <div className="flex flex-col space-y-2">
+                                <div className="grid grid-cols-4 gap-2 text-sm">
+                                  <div className="grid grid-cols-3 gap-2">
+                                    <div className="grid col-span-2 font-medium">
+                                      <span>Rating:</span>
+                                      <span>Equivalent point:</span>
+                                      <span>Urgency Level:</span>
+                                    </div>
 
-                                <Divider orientation="vertical" flexItem />
+                                    <div className="flex flex-col">
+                                      <span>
+                                        {row.equivalent_point === 0
+                                          ? "N/A"
+                                          : row.rating === null
+                                          ? 0
+                                          : row.rating}
+                                      </span>
+                                      <span>
+                                        {row.equivalent_point === 0
+                                          ? "N/A"
+                                          : row.equivalent_point}
+                                      </span>
+                                      <span>{row.urgency_rating}</span>
+                                    </div>
+                                  </div>
 
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Rating:{" "}
-                                  {row.equivalent_point === 0
-                                    ? "N/A"
-                                    : row.rating === null
-                                    ? 0
-                                    : row.rating}
-                                </span>
-                                <span className="hidden md:block">
-                                  &#x2022;
-                                </span>
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Remarks:{" "}
-                                  {row.remarks === "" ? "N/A" : row.remarks}
-                                </span>
+                                  <div className="grid col-span-3">
+                                    <div className="space-x-1">
+                                      <span className="font-medium">
+                                        Remarks:
+                                      </span>
+                                      <span>
+                                        {row.remarks === ""
+                                          ? "N/A"
+                                          : row.remarks}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <Divider />
                           </div>
                         )
                       )}
