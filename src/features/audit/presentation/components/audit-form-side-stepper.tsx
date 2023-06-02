@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,11 +16,13 @@ import { MdOutlineArrowBackIos } from "react-icons/md";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "features/config/hooks";
 import { selectAuditSection } from "../slices/audit-section.slice";
-import { AUDIT_STEPPER } from "features/shared/constants";
+import { AUDIT_STEPPER, safetySection } from "features/shared/constants";
 import { Audit } from "../pages";
+import { current } from "@reduxjs/toolkit";
 
 export function AuditFormSideStepper() {
   const currentSection = useAppSelector(selectAuditSection);
+  const [activeSteps, setActiveSteps] = useState(0);
 
   useEffect(() => {
     if (
@@ -31,6 +33,14 @@ export function AuditFormSideStepper() {
       AUDIT_STEPPER.pop();
     }
   }, [currentSection.maxLength, AUDIT_STEPPER]);
+
+  useEffect(() => {
+    if (currentSection.section >= 4) {
+      setActiveSteps(currentSection.section - 1);
+    } else {
+      setActiveSteps(currentSection.section);
+    }
+  }, [currentSection.section, activeSteps]);
 
   return (
     <>
@@ -57,16 +67,26 @@ export function AuditFormSideStepper() {
                     <div className="flex ml-40 pb-10">
                       <Box sx={{ maxWidth: 300 }}>
                         <Stepper
-                          activeStep={currentSection.section}
+                          activeStep={activeSteps}
                           orientation="vertical"
                         >
                           {AUDIT_STEPPER.map((step, index) => (
-                            <Step key={step.section}>
-                              {step.section === "4" ? (
-                                <StepContent>{step.section}</StepContent>
-                              ) : (
-                                <StepLabel>{step.section}</StepLabel>
-                              )}
+                            <Step key={index}>
+                              <StepLabel>{step.section}</StepLabel>
+                              {index === 3 ? (
+                                <StepContent>
+                                  <Stepper
+                                    activeStep={currentSection.section - 3}
+                                    orientation="vertical"
+                                  >
+                                    {safetySection.map((steps, iteration) => (
+                                      <Step key={iteration}>
+                                        <StepLabel>{steps.section}</StepLabel>
+                                      </Step>
+                                    ))}
+                                  </Stepper>
+                                </StepContent>
+                              ) : null}
                             </Step>
                           ))}
                         </Stepper>
@@ -79,7 +99,7 @@ export function AuditFormSideStepper() {
               </div>
             </div>
 
-            <div className="flex-1 mt-14 flex justify-center">
+            <div className="flex-1 mt-14">
               <Outlet />
             </div>
           </div>
