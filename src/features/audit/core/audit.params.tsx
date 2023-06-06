@@ -17,6 +17,7 @@ export interface InsertAuditResponseParam {
   selectedTypeId?: string;
   attention: string;
   period: string;
+  date: string;
   answers: AuditEvaluationAnswer;
   result: AuditResultModel;
 }

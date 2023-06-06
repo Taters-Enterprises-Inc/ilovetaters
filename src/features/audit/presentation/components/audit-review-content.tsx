@@ -1,26 +1,29 @@
 import {
   Box,
   Divider,
+  IconButton,
   Tab,
   Tabs,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
-  GetAuditResponseState,
   getAuditResponse,
   selectGetAuditResponse,
 } from "../slices/get-audit-response.slice";
 import { AppDispatch } from "features/config/store";
 import { useAppSelector } from "features/config/hooks";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
-import { closestIndexTo } from "date-fns/esm";
-import { get } from "http";
+import { AiOutlineLink } from "react-icons/ai";
+import { SnackbarAlert } from "features/shared/presentation/components";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -31,7 +34,9 @@ interface TabPanelProps {
 export function AuditReviewContent() {
   const { hash } = useParams();
   const dispatch = useDispatch<AppDispatch>();
+
   const getResponseState = useAppSelector(selectGetAuditResponse);
+  const location = useLocation();
 
   const [result, setResult] = useState<AuditResultModel>({});
 
@@ -45,22 +50,6 @@ export function AuditReviewContent() {
       dispatch(getAuditResponse({ hash }));
     }
   }, [hash, dispatch]);
-
-  const auditPeriod = (dateParam: string, isPeriod: boolean) => {
-    const date = new Date(`${dateParam}-01`);
-    const formattedAuditPeriod = date.toLocaleDateString("en", {
-      month: "long",
-      year: "numeric",
-    });
-
-    const formattedDateAdded = date.toLocaleDateString("en", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    });
-
-    return isPeriod ? formattedAuditPeriod : formattedDateAdded;
-  };
 
   const AuditResponseResultTable = [
     { name: "Category" },
@@ -116,9 +105,33 @@ export function AuditReviewContent() {
           {getResponseState.data ? (
             <>
               <div className="flex flex-col space-y-2 text-lg border-t-8 border-primary shadow-2xl drop-shadow rounded-lg p-5">
-                <span className="text-xl md:text-2xl font-bold tracking-tight">
-                  {getResponseState.data.information.store_name}
-                </span>
+                <div className="flex justify-between items-stretch">
+                  <span className="text-xl text-center self-end md:text-2xl font-bold tracking-tight">
+                    {getResponseState.data.information.store_name}
+                  </span>
+                  <IconButton
+                    onClick={async () => {
+                      const pathname =
+                        window.location.origin + location.pathname;
+                      try {
+                        await navigator.clipboard.writeText(pathname);
+                        <SnackbarAlert
+                          open={true}
+                          severity={"success"}
+                          message={"Url copied to clipboard"}
+                        />;
+                      } catch (error) {
+                        <SnackbarAlert
+                          open={true}
+                          severity={"error"}
+                          message={"Url not copied to clipboard"}
+                        />;
+                      }
+                    }}
+                  >
+                    <AiOutlineLink className="text-2xl self-start" />
+                  </IconButton>
+                </div>
                 <div className="space-y-2">
                   <div className="flex flex-row justify-between text-xs md:text-base">
                     <div className="space-x-1 md:space-x-2">
@@ -127,10 +140,12 @@ export function AuditReviewContent() {
                       </span>
                       <span>&#x2022;</span>
                       <span className="text-center">
-                        {auditPeriod(
-                          getResponseState.data.information.audit_period,
-                          true
-                        )}
+                        {new Date(
+                          getResponseState.data.information.audit_period
+                        ).toLocaleDateString("en", {
+                          month: "long",
+                          year: "numeric",
+                        })}
                       </span>
                     </div>
                     <Divider
@@ -144,10 +159,13 @@ export function AuditReviewContent() {
                       </span>
                       <span>&#x2022;</span>
                       <span className="text-center">
-                        {auditPeriod(
-                          getResponseState.data.information.dateadded,
-                          false
-                        )}
+                        {new Date(
+                          getResponseState.data.information.dateadded
+                        ).toLocaleDateString("en", {
+                          month: "long",
+                          day: "2-digit",
+                          year: "numeric",
+                        })}
                       </span>
                     </div>
                   </div>
@@ -292,36 +310,64 @@ export function AuditReviewContent() {
                     <div className="flex flex-col space-y-2">
                       {getResponseState.data.answers[tabStep].criteria.map(
                         (row, index) => (
-                          <div key={index} className=" p-4">
-                            <div>
-                              <span className="text-base md:text-lg">
-                                {row.questions}
-                              </span>
-                              <div className="flex flex-col md:flex-row  md:space-x-2">
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Equivalent point: {row.equivalent_point}
-                                </span>
-                                <span className="hidden md:block">
-                                  &#x2022;
-                                </span>
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Urgency Level: {row.level}
-                                </span>
+                          <div
+                            key={index}
+                            className={`border-2 border-l-8 rounded-lg p-4 
+                          ${
+                            row.rating === 1
+                              ? "border-[#d9534f]"
+                              : row.rating === 2
+                              ? "border-[#f0ad4e]"
+                              : row.rating === 3
+                              ? "border-[#5cb85c]"
+                              : row.rating === 0 && row.equivalent_point === 0
+                              ? "border-gray-300"
+                              : "border-[#d9534f]"
+                          }`}
+                          >
+                            <div className="flex flex-col space-y-2">
+                              <span className="text-base">{row.questions}</span>
+                              <div className="flex flex-col space-y-2">
+                                <div className="grid grid-cols-4 gap-2 text-sm">
+                                  <div className="grid grid-cols-3 gap-2">
+                                    <div className="grid col-span-2 font-medium">
+                                      <span>Rating:</span>
+                                      <span>Equivalent point:</span>
+                                      <span>Urgency Level:</span>
+                                    </div>
 
-                                <Divider orientation="vertical" flexItem />
+                                    <div className="flex flex-col">
+                                      <span>
+                                        {row.equivalent_point === 0
+                                          ? "N/A"
+                                          : row.rating === null
+                                          ? 0
+                                          : row.rating}
+                                      </span>
+                                      <span>
+                                        {row.equivalent_point === 0
+                                          ? "N/A"
+                                          : row.equivalent_point}
+                                      </span>
+                                      <span>{row.urgency_rating}</span>
+                                    </div>
+                                  </div>
 
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Rating: {row.rating}
-                                </span>
-                                <span className="hidden md:block">
-                                  &#x2022;
-                                </span>
-                                <span className="md:text-sm md:self-center text-xs">
-                                  Remarks: {row.remarks}
-                                </span>
+                                  <div className="grid col-span-3">
+                                    <div className="space-x-1">
+                                      <span className="font-medium">
+                                        Remarks:
+                                      </span>
+                                      <span>
+                                        {row.remarks === ""
+                                          ? "N/A"
+                                          : row.remarks}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <Divider />
                           </div>
                         )
                       )}

@@ -1181,10 +1181,7 @@ export const AUDIT_STEPPER: Array<{ section: string }> = [
     section: "CUSTOMER EXPERIENCE (SERVICE)",
   },
   {
-    section: "SAFETY 3.1 SAFE FOOD HANDLING/ FACILITY SAFETY/FOOD SANITATION",
-  },
-  {
-    section: "SAFETY 3.2 FOOD SAFETY PROCESS FLOW",
+    section: "SAFETY",
   },
   {
     section: "PRODUCT QUALITY/FOOD PREPARATION",
@@ -1200,6 +1197,15 @@ export const AUDIT_STEPPER: Array<{ section: string }> = [
   },
   {
     section: "RESOURCE MANAGEMENT",
+  },
+];
+
+export const safetySection = [
+  {
+    section: "SAFETY 3.1 SAFE FOOD HANDLING/ FACILITY SAFETY/FOOD SANITATION",
+  },
+  {
+    section: "SAFETY 3.2 FOOD SAFETY PROCESS FLOW",
   },
 ];
 
