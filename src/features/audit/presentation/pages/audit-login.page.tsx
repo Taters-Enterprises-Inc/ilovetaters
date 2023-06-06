@@ -10,7 +10,7 @@ import {
   MaterialInputPassword,
 } from "features/shared/presentation/components";
 import React, { FormEvent, useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
   selectLoginAudit,
   LoginAuditState,
@@ -18,10 +18,17 @@ import {
   loginAudit,
 } from "../slices/login-audit.slice";
 
+interface StateType {
+  pathname: string;
+}
+
 export function AuditLogin() {
   const dispatch = useAppDispatch();
   const loginAuditState = useAppSelector(selectLoginAudit);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const location = useLocation();
+  const state = location.state as StateType;
 
   const [identity, setIdentity] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -52,7 +59,11 @@ export function AuditLogin() {
     getAdminSessionState.status === GetAdminSessionState.success &&
     getAdminSessionState.data.admin.is_audit_admin === true
   ) {
-    return <Navigate to={"dashboard"} />;
+    // if (state && state.pathname && state.pathname.includes("/form/review/")) {
+    //   return <Navigate to={state.pathname} />;
+    // } else {
+    return <Navigate to="dashboard" />;
+    // }
   }
 
   return (

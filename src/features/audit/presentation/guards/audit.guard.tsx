@@ -1,7 +1,7 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   GetAdminSessionState,
   getAdminSession,
@@ -10,8 +10,8 @@ import {
 
 export function AuditGuard() {
   const dispatch = useAppDispatch();
-
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(getAdminSession());
@@ -20,7 +20,8 @@ export function AuditGuard() {
   if (
     getAdminSessionState.data &&
     getAdminSessionState.status === GetAdminSessionState.success &&
-    getAdminSessionState.data.admin.is_audit_admin === true
+    (getAdminSessionState.data.admin.is_audit_admin === true ||
+      getAdminSessionState.data.admin.is_admin === true)
   ) {
     return (
       <>
@@ -31,10 +32,14 @@ export function AuditGuard() {
 
   if (
     getAdminSessionState.status === GetAdminSessionState.fail &&
-    getAdminSessionState.data === null
+    getAdminSessionState.data === undefined
   ) {
-    return <Navigate to={"/internal/audit"} />;
+    return (
+      <Navigate
+        to={"/internal/audit"}
+        state={{ pathname: location.pathname }}
+      />
+    );
   }
-
   return null;
 }

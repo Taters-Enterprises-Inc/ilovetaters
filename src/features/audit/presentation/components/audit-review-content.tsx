@@ -1,26 +1,29 @@
 import {
   Box,
   Divider,
+  IconButton,
   Tab,
   Tabs,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
-  GetAuditResponseState,
   getAuditResponse,
   selectGetAuditResponse,
 } from "../slices/get-audit-response.slice";
 import { AppDispatch } from "features/config/store";
 import { useAppSelector } from "features/config/hooks";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
-import { closestIndexTo } from "date-fns/esm";
-import { get } from "http";
+import { AiOutlineLink } from "react-icons/ai";
+import { SnackbarAlert } from "features/shared/presentation/components";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -31,7 +34,9 @@ interface TabPanelProps {
 export function AuditReviewContent() {
   const { hash } = useParams();
   const dispatch = useDispatch<AppDispatch>();
+
   const getResponseState = useAppSelector(selectGetAuditResponse);
+  const location = useLocation();
 
   const [result, setResult] = useState<AuditResultModel>({});
 
@@ -100,9 +105,33 @@ export function AuditReviewContent() {
           {getResponseState.data ? (
             <>
               <div className="flex flex-col space-y-2 text-lg border-t-8 border-primary shadow-2xl drop-shadow rounded-lg p-5">
-                <span className="text-xl md:text-2xl font-bold tracking-tight">
-                  {getResponseState.data.information.store_name}
-                </span>
+                <div className="flex justify-between items-stretch">
+                  <span className="text-xl text-center self-end md:text-2xl font-bold tracking-tight">
+                    {getResponseState.data.information.store_name}
+                  </span>
+                  <IconButton
+                    onClick={async () => {
+                      const pathname =
+                        window.location.origin + location.pathname;
+                      try {
+                        await navigator.clipboard.writeText(pathname);
+                        <SnackbarAlert
+                          open={true}
+                          severity={"success"}
+                          message={"Url copied to clipboard"}
+                        />;
+                      } catch (error) {
+                        <SnackbarAlert
+                          open={true}
+                          severity={"error"}
+                          message={"Url not copied to clipboard"}
+                        />;
+                      }
+                    }}
+                  >
+                    <AiOutlineLink className="text-2xl self-start" />
+                  </IconButton>
+                </div>
                 <div className="space-y-2">
                   <div className="flex flex-row justify-between text-xs md:text-base">
                     <div className="space-x-1 md:space-x-2">
