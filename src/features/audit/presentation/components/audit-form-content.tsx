@@ -82,9 +82,10 @@ export function AuditFormContent() {
   const [selectedStore, setSelectedStore] = useState<
     | {
         id: string;
-        store_type_id: string;
+        mall_type: string;
         store_code: string;
         store_name: string;
+        store_type_id: string;
         type_name: string;
       }
     | undefined

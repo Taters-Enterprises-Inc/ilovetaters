@@ -54,7 +54,7 @@ export function AuditFormSideStepper() {
               <div className="sticky top-5">
                 <Link
                   className="flex ml-2 md:ml-10 mt-5 md:mb-10"
-                  to={"dashboard"}
+                  to={"dashboard/audit"}
                 >
                   <span className="flex font-normal">
                     <MdOutlineArrowBackIos className="mt-[6px] mr-3 text-sm" />
