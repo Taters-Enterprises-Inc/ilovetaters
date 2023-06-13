@@ -1,19 +1,9 @@
-import {
-  Autocomplete,
-  Box,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Tab, Tabs, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getStores, selectGetStores } from "../slices/get-stores.slice";
-import { useDispatch } from "react-redux";
 import {
-  Area,
   Bar,
-  BarChart,
   CartesianGrid,
   ComposedChart,
   Legend,
@@ -23,6 +13,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  getAuditStoreResult,
+  selectGetAuditStoreResult,
+} from "../slices/audit-store-result";
+import { get } from "http";
+import { getAuditResponse } from "../slices/get-audit-response.slice";
+import { format } from "date-fns";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,6 +30,7 @@ interface TabPanelProps {
 export function AuditDashboardContent() {
   const [value, setValue] = useState(0);
   const getStoreState = useAppSelector(selectGetStores);
+  const getStoreResultState = useAppSelector(selectGetAuditStoreResult);
   const dispatch = useAppDispatch();
 
   const [selectedStore, setSelectedStore] = useState<
@@ -47,8 +45,11 @@ export function AuditDashboardContent() {
     | undefined
   >();
 
+  const [selectedSingle, setSelectedSingle] = useState("");
+
   useEffect(() => {
     dispatch(getStores());
+    dispatch(getAuditStoreResult(""));
   }, [dispatch]);
 
   const TabPanel = (props: TabPanelProps) => {
@@ -146,135 +147,164 @@ export function AuditDashboardContent() {
                   </div>
                 </div>
 
-                <div className="flex flex-col border border-primary border-t-8 rounded-t-lg">
-                  <span className="bg-primary p-2 text-white">Comparative</span>
-                  <div className="px-20 py-10 space-y-10">
-                    <div className="flex flex-col space-y-2">
-                      <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        size="small"
-                        options={
-                          getStoreState.data
-                            ? getStoreState.data.stores.map(
-                                (row) => row.store_name
-                              )
-                            : []
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            value={selectedStore ?? ""}
-                            {...params}
-                            label="Select Audit Period"
-                          />
-                        )}
-                      />
-                      <span className="flex justify-center text-lg font-medium">
-                        {selectedStore.store_name} Comparative Audit Score per
-                        Category {"(Audit Period | Need to change)"}
-                      </span>
-
-                      <ResponsiveContainer
-                        className="border-2 border-gray-300 rounded-lg"
-                        width="100%"
-                        height={300}
-                      >
-                        <ComposedChart width={730} height={250} data={data}>
-                          <XAxis dataKey="category" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <CartesianGrid stroke="#f5f5f5" />
-                          <Bar dataKey="key" barSize={20} fill="#413ea0" />
-                          <Line
-                            type="monotone"
-                            dataKey="target"
-                            stroke="#ff7300"
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
-                    <div>
-                      <div className="flex flex-col space-y-3">
-                        <div className="flex flex-col font-medium">
-                          <span className="flex justify-center text-lg">
-                            Comparative Audit Score per Category
-                          </span>
-                          <span className="flex justify-center text-base">
-                            {"(Audit Period | Need to change)"}
-                          </span>
-                        </div>
-                        <div className="flex space-x-5">
-                          {/* need to change from  */}
-                          <Autocomplete
-                            className="basis-1/2"
-                            disablePortal
-                            id="combo-box-demo"
-                            size="small"
-                            options={
-                              getStoreState.data
-                                ? getStoreState.data.stores.map(
-                                    (row) => row.store_name
-                                  )
-                                : []
+                {getStoreResultState.data ? (
+                  <div className="flex flex-col border border-primary border-t-8 rounded-t-lg">
+                    <span className="bg-primary p-2 text-white">
+                      Comparative
+                    </span>
+                    <div className="px-20 py-10 space-y-10">
+                      <div className="flex flex-col space-y-2">
+                        <Autocomplete
+                          disablePortal
+                          id="combo-box-demo"
+                          size="small"
+                          options={
+                            getStoreResultState.data
+                              ? Object.keys(getStoreResultState.data).map(
+                                  (dateString) =>
+                                    new Date(dateString)
+                                      .toLocaleString("default", {
+                                        month: "long",
+                                        year: "numeric",
+                                      })
+                                      .replace(",", "")
+                                )
+                              : []
+                          }
+                          onChange={(event, value: any) => {
+                            if (value) {
+                              const selectedPeriodObj = value;
+                              setSelectedSingle(selectedPeriodObj);
                             }
-                            renderInput={(params) => (
-                              <TextField
-                                value={selectedStore ?? ""}
-                                {...params}
-                                label="Select Audit Period"
-                              />
-                            )}
-                          />
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              value={selectedStore ?? ""}
+                              {...params}
+                              label="Select Audit Period"
+                            />
+                          )}
+                        />
+                        <span className="flex justify-center text-lg font-medium">
+                          {selectedStore.store_name} Comparative Audit Score per
+                          Category {"(Audit Period | Need to change)"}
+                        </span>
 
-                          {/* need to change to  */}
-                          <Autocomplete
-                            className="basis-1/2"
-                            disablePortal
-                            id="combo-box-demo"
-                            size="small"
-                            options={
-                              getStoreState.data
-                                ? getStoreState.data.stores.map(
-                                    (row) => row.store_name
-                                  )
-                                : []
+                        <ResponsiveContainer
+                          className="border-2 border-gray-300 rounded-lg"
+                          width="100%"
+                          height={300}
+                        >
+                          <ComposedChart
+                            width={730}
+                            height={250}
+                            data={
+                              Object.values(getStoreResultState.data)?.[
+                                selectedSingle
+                                  ? Object.keys(
+                                      getStoreResultState.data
+                                    ).indexOf(
+                                      format(
+                                        new Date(selectedSingle),
+                                        "yyyy-MM-dd"
+                                      )
+                                    )
+                                  : -1
+                              ] ?? []
                             }
-                            renderInput={(params) => (
-                              <TextField
-                                value={selectedStore ?? ""}
-                                {...params}
-                                label="Select Audit Period"
-                              />
-                            )}
-                          />
-                        </div>
-                        <div>
-                          <ResponsiveContainer
-                            className="border-2 border-gray-300 rounded-lg"
-                            width="100%"
-                            height={300}
                           >
-                            <ComposedChart width={730} height={250} data={data}>
-                              <XAxis dataKey="category" />
-                              <YAxis />
-                              <Tooltip />
-                              <Legend />
-                              <CartesianGrid stroke="#f5f5f5" />
-                              {/* map over per category */}
-                              <Bar dataKey="key" barSize={20} fill="#413ea0" />
-                              <Line
-                                type="monotone"
-                                dataKey="target"
-                                stroke="#ff7300"
-                              />
-                            </ComposedChart>
-                          </ResponsiveContainer>
+                            <XAxis dataKey="category_name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <CartesianGrid stroke="#f5f5f5" />
+                            <Bar
+                              dataKey="grade"
+                              name={selectedSingle}
+                              barSize={10}
+                              fill="#413ea0"
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="target"
+                              stroke="#ff7300"
+                            />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </div>
+                      <div>
+                        <div className="flex flex-col space-y-3">
+                          <div className="flex flex-col font-medium">
+                            <span className="flex justify-center text-lg">
+                              Comparative Audit Score per Category
+                            </span>
+                            <span className="flex justify-center text-sm">
+                              need to change
+                            </span>
+                          </div>
+                          <div className="flex space-x-5">
+                            <Autocomplete
+                              fullWidth
+                              disablePortal
+                              id="combo-box-demo"
+                              size="small"
+                              options={
+                                getStoreResultState.data
+                                  ? Object.keys(getStoreResultState.data).map(
+                                      (dateString) =>
+                                        new Date(dateString)
+                                          .toLocaleString("default", {
+                                            month: "long",
+                                            year: "numeric",
+                                          })
+                                          .replace(",", "")
+                                    )
+                                  : []
+                              }
+                              renderInput={(params) => (
+                                <TextField
+                                  value={selectedStore ?? ""}
+                                  {...params}
+                                  label="Select Audit Period"
+                                />
+                              )}
+                            />
+                          </div>
+                          <div>
+                            <ResponsiveContainer
+                              className="border-2 border-gray-300 rounded-lg"
+                              width="100%"
+                              height={300}
+                            >
+                              <ComposedChart
+                                width={730}
+                                height={250}
+                                data={data}
+                              >
+                                <XAxis dataKey="category" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <CartesianGrid stroke="#f5f5f5" />
+                                {/* map over per category */}
+                                <Bar
+                                  dataKey="key"
+                                  barSize={20}
+                                  fill="#413ea0"
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="target"
+                                  stroke="#ff7300"
+                                />
+                              </ComposedChart>
+                            </ResponsiveContainer>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ) : null}
 
                 <div className="flex flex-col border border-primary border-t-8 rounded-t-lg">
                   <Tabs

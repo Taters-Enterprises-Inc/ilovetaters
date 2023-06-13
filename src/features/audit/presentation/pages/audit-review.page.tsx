@@ -18,7 +18,7 @@ export function AuditReview() {
           pageTitles: [
             {
               name: "Audit Responses",
-              url: "/internal/audit/responses/quality/audit",
+              url: "/internal/responses/quality/audit",
             },
           ],
         }}

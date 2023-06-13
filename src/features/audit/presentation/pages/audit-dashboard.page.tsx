@@ -15,7 +15,13 @@ export function AuditDashboard() {
             url: "/internal/dashboard/audit",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Dashboard", url: "/internal/dashboard/audit" }],
+          pageTitles: [
+            { name: "Dashboard", url: "/internal/dashboard/audit" },
+            {
+              name: "Quality Audit",
+              url: "/internal/dashboard/audit",
+            },
+          ],
         }}
       />
       <AuditDashboardContent />

@@ -6,7 +6,6 @@ import {
   Divider,
   IconButton,
   IconContainerProps,
-  InputAdornment,
   Rating,
   TextField,
   Typography,
@@ -40,8 +39,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
-import { AiFillEyeInvisible, AiOutlineCalendar } from "react-icons/ai";
-import { max } from "date-fns";
+import { AiFillEyeInvisible } from "react-icons/ai";
 
 interface ClickedRowsState {
   [key: number]: boolean;
@@ -106,7 +104,7 @@ export function AuditFormContent() {
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
       dispatch(resetInsertAuditResponse());
-      navigate(`review/${insertAuditResponseState.data?.hash}`);
+      navigate(`/internal/form/review/${insertAuditResponseState.data?.hash}`);
     }
   }, [dispatch, insertAuditResponseState, navigate]);
 
@@ -210,9 +208,8 @@ export function AuditFormContent() {
   };
 
   useEffect(() => {
-    console.log(selectedDate);
+    console.log(result);
     console.log(formState);
-    console.log(clickedRows);
   }, [formState]);
 
   return (
