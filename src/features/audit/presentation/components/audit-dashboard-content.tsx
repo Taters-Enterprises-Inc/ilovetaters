@@ -1,4 +1,15 @@
-import { Autocomplete, Tab, Tabs, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Divider,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tabs,
+  TextField,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useEffect, useState } from "react";
 import { getStores, selectGetStores } from "../slices/get-stores.slice";
@@ -17,9 +28,9 @@ import {
   getAuditStoreResult,
   selectGetAuditStoreResult,
 } from "../slices/audit-store-result";
-import { get } from "http";
-import { getAuditResponse } from "../slices/get-audit-response.slice";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
+import { createQueryParams } from "features/config/helpers";
+import { spawn } from "child_process";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,11 +57,21 @@ export function AuditDashboardContent() {
   >();
 
   const [selectedSingle, setSelectedSingle] = useState("");
+  const [selectedMultiple, setSelectedMultiple] = useState<string[]>([]);
+
+  const selectedData = selectedMultiple.flatMap(
+    (date) =>
+      getStoreResultState.data?.[format(new Date(date), "yyyy-MM-dd")] || []
+  );
 
   useEffect(() => {
+    const query = createQueryParams({
+      selectedStore: selectedStore?.store_name,
+    });
+
     dispatch(getStores());
-    dispatch(getAuditStoreResult(""));
-  }, [dispatch]);
+    dispatch(getAuditStoreResult(query));
+  }, [dispatch, selectedStore]);
 
   const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
@@ -72,16 +93,11 @@ export function AuditDashboardContent() {
     );
   };
 
-  const data = [
-    { category: "category1", ["key"]: 91, target: 90 },
-    { category: "category2", ["key"]: 79, target: 90 },
-    { category: "category3", ["key"]: 78, target: 90 },
-    { category: "category4", ["key"]: 76, target: 90 },
-    { category: "category5", ["key"]: 76, target: 90 },
-    { category: "category6", ["key"]: 74, target: 90 },
-    { category: "category7", ["key"]: 38, target: 90 },
-    { category: "category8", ["key"]: 11, target: 90 },
-  ];
+  const getRandomColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    const pastelColor = `hsl(${hue}, 50%, 80%)`;
+    return pastelColor;
+  };
 
   return (
     <>
@@ -95,7 +111,6 @@ export function AuditDashboardContent() {
           <div className="flex flex-col space-y-4 px-10 w-full">
             <Autocomplete
               disablePortal
-              id="combo-box-demo"
               size="small"
               options={
                 getStoreState.data
@@ -127,23 +142,104 @@ export function AuditDashboardContent() {
                   <span className="bg-primary p-2 text-white">
                     Store Information & Previous Audit
                   </span>
-                  <div className="flex flex-col  px-2">
-                    <div>
-                      <span className="font-medium">Store Name: </span>
-                      <span>{selectedStore.store_name}</span>
+                  <div className="px-3 pb-3 space-y-2">
+                    <div className="grid grid-cols-2 px-5">
+                      <div>
+                        <span className="font-medium">Store Name: </span>
+                        <span>{selectedStore.store_name}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Store Code: </span>
+                        <span>{selectedStore.store_code}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium">ownership Type: </span>
+                        <span>{selectedStore.mall_type}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Mall Type: </span>
+                        <span>{selectedStore.type_name}</span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-medium">Store Code: </span>
-                      <span>{selectedStore.store_code}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium">ownership Type: </span>
-                      <span>{selectedStore.mall_type}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium">Mall Type: </span>
-                      <span>{selectedStore.type_name}</span>
-                    </div>
+
+                    <Divider />
+                    <span className="flex justify-center text-lg font-medium">
+                      Audit Results
+                    </span>
+
+                    {getStoreResultState.data &&
+                    Object.values(getStoreResultState.data).length !== 0 ? (
+                      <div className="border-2 border-primary rounded-lg flex flex-row space-x-5 p-5 overflow-auto max-h-64">
+                        {Object.keys(getStoreResultState.data).map(
+                          (row, index) => (
+                            <div
+                              key={index}
+                              className="border-t-8 border-primary rounded-t-lg"
+                            >
+                              <span className="flex justify-center text-base text-white bg-primary ">
+                                {format(new Date(row), "MMMM yyyy")}
+                              </span>
+                              <Table className="table-fixed border-2">
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell
+                                      align="right"
+                                      style={{ fontWeight: "bold" }}
+                                    >
+                                      Category
+                                    </TableCell>
+                                    <TableCell
+                                      align="right"
+                                      style={{ fontWeight: "bold" }}
+                                    >
+                                      Grade
+                                    </TableCell>
+                                    <TableCell
+                                      align="right"
+                                      style={{ fontWeight: "bold" }}
+                                    >
+                                      Weight
+                                    </TableCell>
+                                    <TableCell
+                                      align="right"
+                                      style={{
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Final Score
+                                    </TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                {getStoreResultState.data?.[row]?.map(
+                                  (row, index2) => (
+                                    <TableBody key={index2}>
+                                      <TableRow>
+                                        <TableCell align="right">
+                                          {row.category_name}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          {row.grade.toFixed(1)}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          {row.weight.toFixed(1)}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          {row.final_score.toFixed(1)}
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  )
+                                )}
+                              </Table>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    ) : (
+                      <span className="flex justify-center">
+                        No previous audit data
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -156,7 +252,6 @@ export function AuditDashboardContent() {
                       <div className="flex flex-col space-y-2">
                         <Autocomplete
                           disablePortal
-                          id="combo-box-demo"
                           size="small"
                           options={
                             getStoreResultState.data
@@ -187,7 +282,7 @@ export function AuditDashboardContent() {
                         />
                         <span className="flex justify-center text-lg font-medium">
                           {selectedStore.store_name} Comparative Audit Score per
-                          Category {"(Audit Period | Need to change)"}
+                          Category {selectedSingle}
                         </span>
 
                         <ResponsiveContainer
@@ -199,18 +294,14 @@ export function AuditDashboardContent() {
                             width={730}
                             height={250}
                             data={
-                              Object.values(getStoreResultState.data)?.[
-                                selectedSingle
-                                  ? Object.keys(
-                                      getStoreResultState.data
-                                    ).indexOf(
-                                      format(
-                                        new Date(selectedSingle),
-                                        "yyyy-MM-dd"
-                                      )
+                              isValid(new Date(selectedSingle))
+                                ? getStoreResultState.data[
+                                    format(
+                                      new Date(selectedSingle),
+                                      "yyyy-MM-dd"
                                     )
-                                  : -1
-                              ] ?? []
+                                  ]
+                                : []
                             }
                           >
                             <XAxis dataKey="category_name" />
@@ -222,7 +313,7 @@ export function AuditDashboardContent() {
                               dataKey="grade"
                               name={selectedSingle}
                               barSize={10}
-                              fill="#413ea0"
+                              fill={getRandomColor()}
                             />
                             <Line
                               type="monotone"
@@ -239,14 +330,14 @@ export function AuditDashboardContent() {
                               Comparative Audit Score per Category
                             </span>
                             <span className="flex justify-center text-sm">
-                              need to change
+                              {selectedMultiple.join(" vs ")}
                             </span>
                           </div>
                           <div className="flex space-x-5">
                             <Autocomplete
+                              multiple
                               fullWidth
                               disablePortal
-                              id="combo-box-demo"
                               size="small"
                               options={
                                 getStoreResultState.data
@@ -261,9 +352,12 @@ export function AuditDashboardContent() {
                                     )
                                   : []
                               }
+                              onChange={(event, value) => {
+                                setSelectedMultiple(value);
+                              }}
                               renderInput={(params) => (
                                 <TextField
-                                  value={selectedStore ?? ""}
+                                  value={selectedMultiple ?? ""}
                                   {...params}
                                   label="Select Audit Period"
                                 />
@@ -279,19 +373,22 @@ export function AuditDashboardContent() {
                               <ComposedChart
                                 width={730}
                                 height={250}
-                                data={data}
+                                data={selectedData}
                               >
-                                <XAxis dataKey="category" />
+                                <XAxis dataKey="category_name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
                                 <CartesianGrid stroke="#f5f5f5" />
-                                {/* map over per category */}
-                                <Bar
-                                  dataKey="key"
-                                  barSize={20}
-                                  fill="#413ea0"
-                                />
+                                {selectedMultiple.map((row, index) => (
+                                  <Bar
+                                    key={index}
+                                    dataKey="grade"
+                                    name={row}
+                                    barSize={10}
+                                    fill={getRandomColor()}
+                                  />
+                                ))}
                                 <Line
                                   type="monotone"
                                   dataKey="target"
