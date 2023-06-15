@@ -58,6 +58,7 @@ export function AuditDashboardContent() {
 
   const [selectedSingle, setSelectedSingle] = useState("");
   const [selectedMultiple, setSelectedMultiple] = useState<string[]>([]);
+  const [selectedRecurring, setSelectedRecurring] = useState("");
 
   const selectedData = selectedMultiple.flatMap(
     (date) =>
@@ -108,7 +109,7 @@ export function AuditDashboardContent() {
               Internal Quality Audit Dashboard
             </h5>
           </div>
-          <div className="flex flex-col space-y-4 px-10 w-full">
+          <div className="flex flex-col space-y-4 px-10 pb-10 w-full">
             <Autocomplete
               disablePortal
               size="small"
@@ -169,7 +170,7 @@ export function AuditDashboardContent() {
 
                     {getStoreResultState.data &&
                     Object.values(getStoreResultState.data).length !== 0 ? (
-                      <div className="border-2 border-primary rounded-lg flex flex-row space-x-5 p-5 overflow-auto max-h-64">
+                      <div className="flex border-2 border-primary rounded-lg space-x-5 p-5 overflow-auto max-h-64">
                         {Object.keys(getStoreResultState.data).map(
                           (row, index) => (
                             <div
@@ -179,29 +180,29 @@ export function AuditDashboardContent() {
                               <span className="flex justify-center text-base text-white bg-primary ">
                                 {format(new Date(row), "MMMM yyyy")}
                               </span>
-                              <Table className="table-fixed border-2">
+                              <Table className="table-fixed border-2 min-w-[350px]">
                                 <TableHead>
                                   <TableRow>
                                     <TableCell
-                                      align="right"
+                                      align="left"
                                       style={{ fontWeight: "bold" }}
                                     >
                                       Category
                                     </TableCell>
                                     <TableCell
-                                      align="right"
+                                      align="left"
                                       style={{ fontWeight: "bold" }}
                                     >
                                       Grade
                                     </TableCell>
                                     <TableCell
-                                      align="right"
+                                      align="left"
                                       style={{ fontWeight: "bold" }}
                                     >
                                       Weight
                                     </TableCell>
                                     <TableCell
-                                      align="right"
+                                      align="left"
                                       style={{
                                         fontWeight: "bold",
                                       }}
@@ -434,7 +435,38 @@ export function AuditDashboardContent() {
                   </Tabs>
 
                   <TabPanel value={value} index={0}>
-                    Recurring Deviation "To be Updated Previous Audit"
+                    <div>
+                      <div>
+                        <Autocomplete
+                          disablePortal
+                          size="small"
+                          options={
+                            getStoreResultState.data
+                              ? Object.keys(getStoreResultState.data).map(
+                                  (dateString) =>
+                                    new Date(dateString)
+                                      .toLocaleString("default", {
+                                        month: "long",
+                                        year: "numeric",
+                                      })
+                                      .replace(",", "")
+                                )
+                              : []
+                          }
+                          onChange={(event, value: any) => {
+                            setSelectedRecurring(value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              value={selectedRecurring}
+                              {...params}
+                              label="Select Audit Period"
+                            />
+                          )}
+                        />
+                      </div>
+                      <div></div>
+                    </div>
                   </TabPanel>
                   <TabPanel value={value} index={1}>
                     Critical Deviation "To be Updated Previous Audit"
