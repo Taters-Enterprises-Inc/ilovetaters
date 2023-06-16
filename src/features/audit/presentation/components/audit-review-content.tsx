@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   IconButton,
   Tab,
@@ -24,6 +25,8 @@ import {
   getAdminSession,
   selectGetAdminSession,
 } from "features/admin/presentation/slices/get-admin-session.slice";
+import { MdVerified } from "react-icons/md";
+import { ResponseAcknowledgeModal } from "./audit-acknowledge.modal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,9 +41,10 @@ export function AuditReviewContent() {
   const getResponseState = useAppSelector(selectGetAuditResponse);
   const location = useLocation();
 
-  const [result, setResult] = useState<AuditResultModel>({});
-
   const [tabStep, setTabStep] = useState(0);
+
+  const [openResponseAcknowledgeModal, setOpenResponseAcknowledgeModal] =
+    useState(false);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -275,6 +279,45 @@ export function AuditReviewContent() {
                           </tr>
                         </tfoot>
                       </table>
+
+                      <Divider sx={{ marginY: 1 }} />
+
+                      <div className="flex flex-row justify-between">
+                        <div className="flex items-stretch space-x-3 text-base">
+                          <span className="self-center font-medium ">
+                            Audited By:
+                          </span>
+                          <span className="self-center underline underline-offset-2">
+                            {getResponseState.data?.information?.auditor}
+                          </span>
+                        </div>
+                        <div className="mr-2">
+                          {getResponseState.data?.information
+                            ?.isacknowledged ? (
+                            <div className="flex items-stretch space-x-3 text-base">
+                              <span className="self-center font-medium ">
+                                Acknowledged By:
+                              </span>
+                              <span className="self-center underline underline-offset-2">
+                                {
+                                  getResponseState.data?.information
+                                    ?.acknowledged_by
+                                }
+                              </span>
+                              <MdVerified className="self-center text-[#5cb85c] text-2xl" />
+                            </div>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              onClick={() =>
+                                setOpenResponseAcknowledgeModal(true)
+                              }
+                            >
+                              <span>Acknowledged</span>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -379,6 +422,12 @@ export function AuditReviewContent() {
           ) : null}
         </div>
       </div>
+
+      <ResponseAcknowledgeModal
+        open={openResponseAcknowledgeModal}
+        onClose={() => setOpenResponseAcknowledgeModal(false)}
+        hash={hash || ""}
+      />
     </>
   );
 }

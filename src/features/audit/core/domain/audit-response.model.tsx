@@ -2,11 +2,15 @@ export interface GetAuditResponseModel {
   information: {
     id: number;
     attention: string;
+    auditor: string;
+    isacknowledged: boolean;
     audit_period: string;
     dateadded: string;
     type_id: string;
     type_name: string;
     store_name: string;
+    signature_img: string;
+    acknowledged_by: string;
   };
 
   default_weight_info: Array<{

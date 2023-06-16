@@ -12,7 +12,7 @@ export function AuditReview() {
         AuditBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/internal/audit/dashboard",
+            url: "/internal/dashboard/audit",
           },
           className: "lg:h-[200px]",
           pageTitles: [

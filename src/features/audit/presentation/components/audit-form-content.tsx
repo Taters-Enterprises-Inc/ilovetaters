@@ -56,6 +56,7 @@ export function AuditFormContent() {
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
   const [result, setResult] = useState<AuditResultModel>({});
   const [attention, setAttention] = useState("");
+  const [auditorName, setAuditorName] = useState("");
 
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-01")
@@ -150,6 +151,7 @@ export function AuditFormContent() {
           selectedStoreId: selectedStore?.id,
           selectedTypeId: selectedStore?.store_type_id,
           attention,
+          auditorName,
           period: selectedDate,
           date: auditDate,
           answers: formState,
@@ -256,6 +258,21 @@ export function AuditFormContent() {
                               value={attention}
                             />
                           </div>
+
+                          <div className="flex flex-col space-y-2">
+                            <span>Auditor Name: </span>
+                            <TextField
+                              required
+                              id="Store"
+                              size="small"
+                              variant="outlined"
+                              onChange={(event) => {
+                                setAuditorName(event.target.value);
+                              }}
+                              value={auditorName}
+                            />
+                          </div>
+
                           <div className="flex flex-col space-y-2">
                             <span>Store: </span>
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   GetAuditResponseParam,
+  InsertAuditAcknowledgeParam,
   InsertAuditResponseParam,
   LoginAuditParam,
   UpdateAuditSettingsQuestionParam,
@@ -78,6 +79,13 @@ export interface GetAuditStoreResultResponse {
   data: {
     message: string;
     data: GetAuditStoreResultModel;
+  };
+}
+
+export interface GetAuditAcknowledgeResponse {
+  data: {
+    message: string;
+    data: InsertAuditResponseModel;
   };
 }
 
@@ -176,4 +184,19 @@ export function GetAuditStoreResultRepository(
   return axios.get(`${REACT_APP_DOMAIN_URL}api/audit/result${query}`, {
     withCredentials: true,
   });
+}
+
+export function GetAuditAcknowledgeRepository(
+  param: InsertAuditAcknowledgeParam
+): Promise<GetAuditAcknowledgeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/audit/response/answer/${param.hash}`,
+    param,
+    {
+      headers: {
+        "Content-type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
 }

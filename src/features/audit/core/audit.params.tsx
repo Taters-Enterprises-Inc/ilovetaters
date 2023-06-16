@@ -16,10 +16,17 @@ export interface InsertAuditResponseParam {
   selectedStoreId?: string;
   selectedTypeId?: string;
   attention: string;
+  auditorName: string;
   period: string;
   date: string;
   answers: AuditEvaluationAnswer;
   result: AuditResultModel;
+}
+
+export interface InsertAuditAcknowledgeParam {
+  acknowledgeby: string;
+  image: string | File;
+  hash: string;
 }
 
 export interface GetAuditResponseParam {
