@@ -6,7 +6,6 @@ import {
   Divider,
   IconButton,
   IconContainerProps,
-  InputAdornment,
   Rating,
   TextField,
   Typography,
@@ -40,8 +39,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { AuditResultModel } from "features/audit/core/domain/audit-result.model";
-import { AiFillEyeInvisible, AiOutlineCalendar } from "react-icons/ai";
-import { max } from "date-fns";
+import { AiFillEyeInvisible } from "react-icons/ai";
 
 interface ClickedRowsState {
   [key: number]: boolean;
@@ -58,6 +56,7 @@ export function AuditFormContent() {
   const [formState, setFormState] = useState<AuditEvaluationAnswer>({});
   const [result, setResult] = useState<AuditResultModel>({});
   const [attention, setAttention] = useState("");
+  const [auditorName, setAuditorName] = useState("");
 
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-01")
@@ -82,9 +81,10 @@ export function AuditFormContent() {
   const [selectedStore, setSelectedStore] = useState<
     | {
         id: string;
-        store_type_id: string;
+        mall_type: string;
         store_code: string;
         store_name: string;
+        store_type_id: string;
         type_name: string;
       }
     | undefined
@@ -105,7 +105,7 @@ export function AuditFormContent() {
   useEffect(() => {
     if (insertAuditResponseState.status === InsertAuditResponseState.success) {
       dispatch(resetInsertAuditResponse());
-      navigate(`review/${insertAuditResponseState.data?.hash}`);
+      navigate(`/internal/form/review/${insertAuditResponseState.data?.hash}`);
     }
   }, [dispatch, insertAuditResponseState, navigate]);
 
@@ -151,6 +151,7 @@ export function AuditFormContent() {
           selectedStoreId: selectedStore?.id,
           selectedTypeId: selectedStore?.store_type_id,
           attention,
+          auditorName,
           period: selectedDate,
           date: auditDate,
           answers: formState,
@@ -209,9 +210,8 @@ export function AuditFormContent() {
   };
 
   useEffect(() => {
-    console.log(selectedDate);
+    console.log(result);
     console.log(formState);
-    console.log(clickedRows);
   }, [formState]);
 
   return (
@@ -258,6 +258,21 @@ export function AuditFormContent() {
                               value={attention}
                             />
                           </div>
+
+                          <div className="flex flex-col space-y-2">
+                            <span>Auditor Name: </span>
+                            <TextField
+                              required
+                              id="Store"
+                              size="small"
+                              variant="outlined"
+                              onChange={(event) => {
+                                setAuditorName(event.target.value);
+                              }}
+                              value={auditorName}
+                            />
+                          </div>
+
                           <div className="flex flex-col space-y-2">
                             <span>Store: </span>
 

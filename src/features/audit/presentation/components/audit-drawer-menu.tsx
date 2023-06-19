@@ -20,17 +20,22 @@ import {
 import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { GrNext } from "react-icons/gr";
 
-const DashbordItems = [
-  {
-    text: "Dashboard",
-    path: "dashboard",
-    icon: <MdDashboardCustomize size={20} />,
-  },
-];
+// const DashbordItems = [
+//   {
+//     text: "Dashboard",
+//     path: "dashboard",
+//     icon: <MdDashboardCustomize size={20} />,
+//   },
+// ];
 
 const ResponsesItems = [
   {
-    text: "Quality Audit",
+    text: "Dashboard",
+    path: "dashboard/audit",
+    icon: <MdOutlineNavigateNext size={20} />,
+  },
+  {
+    text: "Response",
     path: "responses/quality/audit",
     icon: <MdOutlineNavigateNext size={20} />,
   },
@@ -63,7 +68,7 @@ const Responses = (status: boolean) => {
             backgroundColor: "inherit",
             "& .MuiAccordionSummary-content ": {
               marginY: 0,
-              marginRight: "95px",
+              marginRight: "80px",
             },
             "& .Mui-expanded ": { marginY: expanded ? 0 : undefined },
           }}
@@ -77,7 +82,7 @@ const Responses = (status: boolean) => {
                 !status && "opacity-0 overflow-hidden"
               }`}
             >
-              Responses
+              Quality Audit
             </span>
           </span>
         </AccordionSummary>
@@ -188,37 +193,37 @@ const Settings = (status: boolean) => {
   );
 };
 
-const Navigation = (status: boolean) => {
-  return (
-    <>
-      {DashbordItems.map((items, index) => {
-        const { text, path, icon } = items;
-        return (
-          <NavLink
-            key={index}
-            to={path}
-            className={(navData) =>
-              navData.isActive ? "flex bg-white text-secondary" : "flex"
-            }
-          >
-            <span className="flex items-center px-4 ">
-              <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
-                {icon}
-                <span
-                  className={`whitespace-pre duration-300 ${
-                    !status && "opacity-0 overflow-hidden"
-                  }`}
-                >
-                  {text}
-                </span>
-              </span>
-            </span>
-          </NavLink>
-        );
-      })}
-    </>
-  );
-};
+// const Navigation = (status: boolean) => {
+//   return (
+//     <>
+//       {DashbordItems.map((items, index) => {
+//         const { text, path, icon } = items;
+//         return (
+//           <NavLink
+//             key={index}
+//             to={path}
+//             className={(navData) =>
+//               navData.isActive ? "flex bg-white text-secondary" : "flex"
+//             }
+//           >
+//             <span className="flex items-center px-4 ">
+//               <span className="flex px-[0.5rem] py-[0.85rem] space-x-4 items-center">
+//                 {icon}
+//                 <span
+//                   className={`whitespace-pre duration-300 ${
+//                     !status && "opacity-0 overflow-hidden"
+//                   }`}
+//                 >
+//                   {text}
+//                 </span>
+//               </span>
+//             </span>
+//           </NavLink>
+//         );
+//       })}
+//     </>
+//   );
+// };
 
 export function AuditDrawerMenu() {
   const AuditSideBarState = useAppSelector(selectAuditSideBar);
@@ -231,7 +236,7 @@ export function AuditDrawerMenu() {
     if (logoutAuditState.status === LogoutAuditState.success) {
       dispatch(getAdminSession());
       dispatch(resetLogoutAudit());
-      navigate("/internal/audit");
+      navigate("/internal");
     }
   }, [logoutAuditState, dispatch, navigate]);
 
@@ -239,7 +244,7 @@ export function AuditDrawerMenu() {
     <div className="relative flex flex-col pb-4 m-0 mt-5 text-sm text-white">
       <nav>
         <ul>
-          <li>{Navigation(AuditSideBarState.status)}</li>
+          {/* <li>{Navigation(AuditSideBarState.status)}</li> */}
           <li className="flex">{Responses(AuditSideBarState.status)}</li>
           <li className="flex">{Settings(AuditSideBarState.status)}</li>
           <li>

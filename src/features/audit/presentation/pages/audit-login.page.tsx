@@ -62,7 +62,7 @@ export function AuditLogin() {
     // if (state && state.pathname && state.pathname.includes("/form/review/")) {
     //   return <Navigate to={state.pathname} />;
     // } else {
-    return <Navigate to="dashboard" />;
+    return <Navigate to="dashboard/audit" />;
     // }
   }
 

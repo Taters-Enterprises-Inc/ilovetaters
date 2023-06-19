@@ -15,3 +15,4 @@ export { AuditDrawer } from "./audit-drawer";
 export { AuditSidebarWrapper } from "./audit-sidebar-wrapper";
 export { AuditReviewContent } from "./audit-review-content";
 export { AuditResponseQualityAudit } from "./audit-response-quality-audit";
+export { ResponseAcknowledgeModal } from "./audit-acknowledge.modal";
