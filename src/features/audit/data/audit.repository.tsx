@@ -194,7 +194,7 @@ export function GetAuditAcknowledgeRepository(
     param,
     {
       headers: {
-        "Content-type": "application/json",
+        "Content-type": "multipart/form-data",
       },
       withCredentials: true,
     }

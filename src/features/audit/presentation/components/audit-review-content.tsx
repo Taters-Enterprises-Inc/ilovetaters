@@ -50,10 +50,10 @@ export function AuditReviewContent() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    if (hash) {
+    if (hash && !openResponseAcknowledgeModal) {
       dispatch(getAuditResponse({ hash }));
     }
-  }, [hash, dispatch]);
+  }, [hash, dispatch, openResponseAcknowledgeModal]);
 
   const AuditResponseResultTable = [
     { name: "Category" },
@@ -291,6 +291,9 @@ export function AuditReviewContent() {
                             {getResponseState.data?.information?.auditor}
                           </span>
                         </div>
+
+                        {/*-------- Validation for Specific User ---------*/}
+
                         <div className="mr-2">
                           {getResponseState.data?.information
                             ?.isacknowledged ? (
@@ -317,6 +320,8 @@ export function AuditReviewContent() {
                             </Button>
                           )}
                         </div>
+
+                        {/*-------- Validation for Specific User ---------*/}
                       </div>
                     </div>
                   </div>

@@ -1,9 +1,14 @@
 import { Button, TextField } from "@mui/material";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { UploadFile } from "features/shared/presentation/components";
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { getAuditAcknowledge } from "../slices/audit-acknowledge.slice";
+import {
+  GetAuditAcknowledgeState,
+  getAuditAcknowledge,
+  selectGetAuditAcknowledge,
+} from "../slices/audit-acknowledge.slice";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface ResponseAcknowledgeProps {
   open: boolean;
@@ -13,34 +18,54 @@ interface ResponseAcknowledgeProps {
 
 export function ResponseAcknowledgeModal(props: ResponseAcknowledgeProps) {
   const dispatch = useAppDispatch();
+  const getAcknowledgeState = useAppSelector(selectGetAuditAcknowledge);
 
-  const [formState, setFormState] = useState<{
-    acknowledgeby: string;
-    image: File | string;
-    hash: string;
-  }>({ acknowledgeby: "", image: "", hash: "" });
+  const navigate = useNavigate();
+
+  // const [formState, setFormState] = useState<{
+  //   acknowledgeby: string;
+  //   image: File | string;
+  //   hash: string;
+  // }>({
+  //   acknowledgeby: "",
+  //   image: "",
+  //    hash: ""
+  // });
+
+  const [acknowledgeby, setAcknowledgeBy] = useState("");
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (props.hash) {
-      setFormState({
-        ...formState,
-        hash: props.hash,
-      });
+    if (props.hash != undefined || props.hash != "") {
+      dispatch(getAuditAcknowledge({ acknowledgeby, hash: props.hash }));
+
+      props.onClose();
+      navigate("/internal/form/review/" + props.hash);
     } else {
       return <div>Encountered Problem...</div>;
     }
+
+    // if (props.hash) {
+    //   setFormState({
+    //     ...formState,
+    //     hash: props.hash,
+    //   });
+    // } else {
+    // return <div>Encountered Problem...</div>;
+    // }
   };
 
-  useEffect(() => {
-    if (
-      formState.hash != "" ||
-      (formState.hash != undefined && props.open == true)
-    ) {
-      dispatch(getAuditAcknowledge(formState));
-    }
-  }, [formState.hash, dispatch]);
+  // useEffect(() => {
+  //   if (
+  //     formState.hash != "" ||
+  //     (formState.hash != undefined && props.open == true)
+  //   ) {
+  // dispatch(getAuditAcknowledge(formState));
+  //   }
+  // props.onClose();
+  // navigate("/internal/form/review/" + props.hash);
+  // }, [formState.hash, dispatch]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -74,15 +99,12 @@ export function ResponseAcknowledgeModal(props: ResponseAcknowledgeProps) {
                   size="small"
                   variant="outlined"
                   onChange={(event) => {
-                    setFormState({
-                      ...formState,
-                      acknowledgeby: event.target.value,
-                    });
+                    setAcknowledgeBy(event.target.value);
                   }}
                 />
               </div>
             </div>
-            <div className="flex flex-col space-y-2">
+            {/* <div className="flex flex-col space-y-2">
               <span>Upload E-Signiture:</span>
               <div>
                 <UploadFile
@@ -93,14 +115,14 @@ export function ResponseAcknowledgeModal(props: ResponseAcknowledgeProps) {
                       image: file,
                     });
                   }}
-                  description="500x500"
+                  description="acknowledge"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div>
               <Button fullWidth type="submit" variant="contained">
-                <span>Sign</span>
+                <span>Acknowledge</span>
               </Button>
             </div>
           </form>

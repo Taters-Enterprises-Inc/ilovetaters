@@ -25,7 +25,7 @@ export interface InsertAuditResponseParam {
 
 export interface InsertAuditAcknowledgeParam {
   acknowledgeby: string;
-  image: string | File;
+  // image: string | File;
   hash: string;
 }
 
