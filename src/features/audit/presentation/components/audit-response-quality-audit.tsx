@@ -253,7 +253,7 @@ export function AuditResponseQualityAudit() {
                     <DataTableRow
                       className="cursor-pointer hover:bg-gray-100"
                       onClick={() =>
-                        navigate("/internal/audit/form/review/" + row.hash)
+                        navigate("/internal/form/review/" + row.hash)
                       }
                       key={i}
                     >

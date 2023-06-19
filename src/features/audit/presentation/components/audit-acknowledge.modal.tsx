@@ -7,7 +7,6 @@ import {
   selectGetAuditAcknowledge,
 } from "../slices/audit-acknowledge.slice";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 
 interface ResponseAcknowledgeProps {
   open: boolean;

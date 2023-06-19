@@ -35,10 +35,7 @@ export function AuditGuard() {
     getAdminSessionState.data === undefined
   ) {
     return (
-      <Navigate
-        to={"/internal/audit"}
-        state={{ pathname: location.pathname }}
-      />
+      <Navigate to={"/internal"} state={{ pathname: location.pathname }} />
     );
   }
   return null;

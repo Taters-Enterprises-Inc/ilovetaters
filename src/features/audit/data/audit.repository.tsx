@@ -2,6 +2,7 @@ import axios from "axios";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import {
   GetAuditResponseParam,
+  InsertAuditAcknowledgeParam,
   InsertAuditResponseParam,
   LoginAuditParam,
   UpdateAuditSettingsQuestionParam,
@@ -12,6 +13,7 @@ import { AuditQuestionModel } from "../core/domain/audit-question.model";
 import { InsertAuditResponseModel } from "../core/domain/insert-audit-response.model";
 import { GetAuditResponseModel } from "../core/domain/audit-response.model";
 import { GetAuditResponseInformationQualityAuditInformationModel } from "../core/domain/get-audit-response-quality-audit-information.model";
+import { GetAuditStoreResultModel } from "../core/domain/audit-store-result.model";
 
 export interface LoginAuditResponse {
   data: {
@@ -70,6 +72,20 @@ export interface GetAuditResponseInformationQualityAuditInformationResponse {
   data: {
     message: string;
     data: GetAuditResponseInformationQualityAuditInformationModel;
+  };
+}
+
+export interface GetAuditStoreResultResponse {
+  data: {
+    message: string;
+    data: GetAuditStoreResultModel;
+  };
+}
+
+export interface GetAuditAcknowledgeResponse {
+  data: {
+    message: string;
+    data: InsertAuditResponseModel;
   };
 }
 
@@ -157,6 +173,29 @@ export function GetAuditResponseInformationQualityAuditInformationRepository(
   return axios.get(
     `${REACT_APP_DOMAIN_URL}api/audit/response/quality/audit/information${query}`,
     {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAuditStoreResultRepository(
+  query: string
+): Promise<GetAuditStoreResultResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/audit/result${query}`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAuditAcknowledgeRepository(
+  param: InsertAuditAcknowledgeParam
+): Promise<GetAuditAcknowledgeResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/audit/response/answer/${param.hash}`,
+    param,
+    {
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
       withCredentials: true,
     }
   );

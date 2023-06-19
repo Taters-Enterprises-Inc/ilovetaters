@@ -585,13 +585,13 @@ root.render(
                         </Route>
                       </Route>
 
-                      <Route path="internal/audit" element={<Audit />}>
+                      <Route path="internal" element={<Audit />}>
                         <Route index element={<AuditLogin />} />
 
                         <Route element={<AuditGuard />}>
                           <Route element={<AuditSidebarWrapper />}>
                             <Route
-                              path="dashboard"
+                              path="dashboard/audit"
                               element={<AuditDashboard />}
                             />
 
@@ -615,7 +615,7 @@ root.render(
                             />
                           </Route>
                           <Route element={<AuditFormSideStepper />}>
-                            <Route path="form" element={<AuditForm />} />
+                            <Route path="audit/form" element={<AuditForm />} />
                           </Route>
                         </Route>
                       </Route>

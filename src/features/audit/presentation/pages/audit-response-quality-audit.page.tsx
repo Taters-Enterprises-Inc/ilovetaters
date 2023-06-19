@@ -13,17 +13,17 @@ export function AuditResponseQualityAuditPage() {
         AuditBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/internal/audit/dashboard",
+            url: "/internal/dashboard/audit",
           },
           className: "lg:h-[200px]",
           pageTitles: [
             {
               name: "Responses",
-              url: "/internal/audit/responses",
+              url: "/internal/responses/quality/audit",
             },
             {
               name: "Quality Audit",
-              url: "/internal/audit/responses/quality/audit",
+              url: "/internal/responses/quality/audit",
             },
           ],
         }}
