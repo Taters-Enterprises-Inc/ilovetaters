@@ -1271,3 +1271,25 @@ export const INFLUENCER_CASHOUT_STATUS: Array<{
     color: "#a21013",
   },
 ];
+
+export const STOCK_ORDER_CHIP_BUTTONS: Array<{
+  name: string;
+  color: string;
+}> = [
+  {
+    name: "Store",
+    color: "#a21013",
+  },
+  {
+    name: "RDD",
+    color: "#cca300",
+  },
+  {
+    name: "CDD",
+    color: "#b32400",
+  },
+  {
+    name: "ADD",
+    color: "#004d00",
+  },
+];

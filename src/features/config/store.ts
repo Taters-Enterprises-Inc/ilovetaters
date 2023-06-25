@@ -241,6 +241,10 @@ import getAdminDashboardShopFeaturedProducts from "features/admin/presentation/s
 import getAdminDashboardCustomerFeedbackRatings from "features/admin/presentation/slices/get-admin-dashboard-customer-feedback-ratings.slice";
 import getAuditStoreResult from "features/audit/presentation/slices/audit-store-result";
 import getAuditAcknowledge from "features/audit/presentation/slices/audit-acknowledge.slice";
+import stockOrderSideBar from "features/stock-ordering/presentation/slices/stock-order.slice";
+import getStockOrderStores from "features/stock-ordering/presentation/slices/get-store.slice";
+import insertNewOrder from "features/stock-ordering/presentation/slices/insert-new-order.slice";
+import confirmNewOrder from "features/stock-ordering/presentation/slices/confirm-new-order.slice";
 
 export const store = configureStore({
   reducer: {
@@ -485,6 +489,10 @@ export const store = configureStore({
     getAdminDashboardCustomerFeedbackRatings,
     getAuditStoreResult,
     getAuditAcknowledge,
+    stockOrderSideBar,
+    getStockOrderStores,
+    insertNewOrder,
+    confirmNewOrder,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

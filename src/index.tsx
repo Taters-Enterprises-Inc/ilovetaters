@@ -168,6 +168,14 @@ import {
 } from "features/audit/presentation/components";
 import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 import { ShopProductViewLog } from "features/shop/presentation/logs";
+import { StockAuditSidebarWrapper } from "features/stock-ordering/presentation/components";
+import {
+  StockOrderDashboard,
+  StockOrderOrders,
+  StockOrderView,
+  StoreOrderViewPage,
+} from "features/stock-ordering/presentation/pages";
+import { StockOrderLogin } from "features/stock-ordering/presentation/pages/stock-order-login.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -617,6 +625,25 @@ root.render(
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="audit/form" element={<AuditForm />} />
                           </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="stock-order">
+                        <Route index element={<StockOrderLogin />} />
+                        <Route element={<StockAuditSidebarWrapper />}>
+                          <Route
+                            path="dashboard"
+                            element={<StockOrderDashboard />}
+                          />
+                          <Route path="order" element={<StockOrderOrders />} />
+                          <Route
+                            path="order/view"
+                            element={<StockOrderView />}
+                          />
+                          <Route
+                            path="order/store/view"
+                            element={<StoreOrderViewPage />}
+                          />
                         </Route>
                       </Route>
 
