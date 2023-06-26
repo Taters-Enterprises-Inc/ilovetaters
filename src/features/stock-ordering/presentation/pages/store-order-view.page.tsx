@@ -12,6 +12,18 @@ import {
 import { useState } from "react";
 import dayjs from "dayjs";
 
+interface TableRow {
+  id: number;
+  productId: string;
+  productName: string;
+  uom: string;
+  cost: string;
+  orderQty: string;
+  currentStock: string;
+  commitedQuantity: string;
+  deliveredQuantity: string;
+}
+
 export function StoreOrderViewPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -30,21 +42,19 @@ export function StoreOrderViewPage() {
   const search = query.get("search");
   const status = query.get("status");
 
-  let columns: Array<Column> = [
-    { id: "prodId", label: "Product Id" },
-    { id: "prodName", label: "Product Name" },
+  const [rows, setRows] = useState<TableRow[]>([
     {
-      id: "uom",
-      label: "UOM",
+      id: 1,
+      productId: "x",
+      productName: "x",
+      uom: "x",
+      cost: "x",
+      orderQty: "x",
+      currentStock: "x",
+      commitedQuantity: "x",
+      deliveredQuantity: "x",
     },
-    { id: "cost", label: "Cost" },
-    { id: "orderQty", label: "Order Qty" },
-    { id: "currentStock", label: "Current Stock" },
-
-    { id: "commitedStock", label: "Commited Stock" },
-
-    { id: "deliveredQuantity", label: "Delivered Quantity" },
-  ];
+  ]);
 
   return (
     <>
@@ -71,7 +81,14 @@ export function StoreOrderViewPage() {
         </div>
 
         <div className="pb-1">
-          <StockOrderTable isSupplier={false} isStore={true} />
+          <StockOrderTable
+            isCommitedTextFieldAvailable={false}
+            isStore={true}
+            activeTab={undefined}
+            setRows={undefined}
+            rowData={rows}
+            isDeliveredQtyAvailable={false}
+          />
 
           {/* <Table>
             <TableHead className="bg-black">

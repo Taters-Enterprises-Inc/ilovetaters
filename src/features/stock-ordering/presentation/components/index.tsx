@@ -8,3 +8,4 @@ export { StockOrderChipsButton } from "./stock-order-chips-button";
 export { StockOrderViewContent } from "./stock-order-view-content";
 export { OrderPlaceAndConfirmTable } from "./order-place-and-confirm-table";
 export { StockOrderTable } from "./stock-order-table";
+export { StockOrderLogs } from "./stock-order-logs";

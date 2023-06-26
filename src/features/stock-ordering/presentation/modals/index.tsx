@@ -1,3 +1,9 @@
 export { PlaceOrderModal } from "./place-order.modal";
 export { ConfirmOrdersModal } from "./confirm-order.modal";
 export { SupplierViewOrderModal } from "./supplier-view-order.modal";
+export { ProcurementReviewOrdersModal } from "./procurement-review-orders.modal";
+export { SupplierDispatchOrderModal } from "./supplier-dispatch-order.modal";
+export { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
+export { SupplierEnRouteOrderModal } from "./supplier-en-route-order.modal";
+export { SupplierEnFreightOrderModal } from "./supplier-en-freight-order.modal";
+export { StoreRecieveOrderModal } from "./store-recieve-order.modal";

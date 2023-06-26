@@ -13,9 +13,15 @@ import { TiDocumentAdd } from "react-icons/ti";
 import {
   ConfirmOrdersModal,
   PlaceOrderModal,
+  ProcurementReviewOrdersModal,
+  StoreRecieveOrderModal,
+  SupplierDispatchOrderModal,
+  SupplierEnFreightOrderModal,
+  SupplierEnRouteOrderModal,
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
+import { ProcurementConfirmOrdersModal } from "../modals/procurement-confirm-order.modal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -29,7 +35,25 @@ export function OrderContents() {
 
   const [openPlaceOrderModal, setOpenPlaceOrderModal] = useState(false);
   const [openConfirmOrderModal, setOpenConfirmOrderModal] = useState(false);
-  const [openSupplierViewOrderModal, setopenSupplierViewOrderModal] =
+  const [openSupplierViewOrderModal, setOpenSupplierViewOrderModal] =
+    useState(false);
+  const [openProcurementReviewOrderModal, setOpenProcurementReviewOrderModal] =
+    useState(false);
+  const [
+    openProcurementConfirmOrderModal,
+    setOpenProcurementConfirmOrderModal,
+  ] = useState(false);
+
+  const [openSupplierDispatchOrderModal, setOpenSupplierDispatchOrderModal] =
+    useState(false);
+
+  const [openSupplierEnRouteOrderModal, setOpenSupplierEnRouteOrderModal] =
+    useState(false);
+
+  const [openSupplierEnFreightOrderModal, setOpenSupplierEnFreightOrderModal] =
+    useState(false);
+
+  const [openStoreRecieveOrderModal, setOpenStoreRecieveOrderModal] =
     useState(false);
 
   const [tabValue, setTabValue] = useState(0);
@@ -236,7 +260,23 @@ export function OrderContents() {
                   <DataTableCell>Data Placeholder</DataTableCell>
                   <DataTableCell>
                     <IconButton
-                      onClick={() => setopenSupplierViewOrderModal(true)}
+                      onClick={() => {
+                        if (tabValue === 0) {
+                          setOpenSupplierViewOrderModal(true);
+                        } else if (tabValue === 1) {
+                          setOpenProcurementReviewOrderModal(true);
+                        } else if (tabValue === 2) {
+                          setOpenProcurementConfirmOrderModal(true);
+                        } else if (tabValue === 3) {
+                          setOpenSupplierDispatchOrderModal(true);
+                        } else if (tabValue === 4) {
+                          setOpenSupplierEnRouteOrderModal(true);
+                        } else if (tabValue === 5) {
+                          setOpenSupplierEnFreightOrderModal(true);
+                        } else if (tabValue === 6) {
+                          setOpenStoreRecieveOrderModal(true);
+                        }
+                      }}
                     >
                       <FaEye className="text-lg" />
                     </IconButton>
@@ -272,7 +312,44 @@ export function OrderContents() {
 
       <SupplierViewOrderModal
         open={openSupplierViewOrderModal}
-        onClose={() => setopenSupplierViewOrderModal(false)}
+        onClose={() => setOpenSupplierViewOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <ProcurementReviewOrdersModal
+        open={openProcurementReviewOrderModal}
+        onClose={() => setOpenProcurementReviewOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <ProcurementConfirmOrdersModal
+        open={openProcurementConfirmOrderModal}
+        onClose={() => setOpenProcurementConfirmOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <SupplierDispatchOrderModal
+        open={openSupplierDispatchOrderModal}
+        onClose={() => setOpenSupplierDispatchOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <SupplierEnRouteOrderModal
+        open={openSupplierEnRouteOrderModal}
+        onClose={() => setOpenSupplierEnRouteOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <SupplierEnFreightOrderModal
+        open={openSupplierEnFreightOrderModal}
+        onClose={() => setOpenSupplierEnFreightOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <StoreRecieveOrderModal
+        open={openStoreRecieveOrderModal}
+        onClose={() => setOpenStoreRecieveOrderModal(false)}
+        currentTab={tabValue}
       />
     </>
   );

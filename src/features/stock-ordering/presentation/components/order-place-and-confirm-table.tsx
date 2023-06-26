@@ -159,6 +159,8 @@ export function OrderPlaceAndConfirmTable(
     props.handleTableRows(rows);
   }, [rows]);
 
+  console.log(sampleOptions);
+
   return (
     <div>
       <div className="border-2 border-black rounded-lg pb-1">
@@ -294,7 +296,6 @@ export function OrderPlaceAndConfirmTable(
             <Autocomplete
               id="stock-order-category-name"
               size="small"
-              disabled={props.isDisabled}
               options={
                 Object.values(sampleOptions).map(
                   (value) => Object.keys(value)[0]
