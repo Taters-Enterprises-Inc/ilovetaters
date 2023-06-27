@@ -100,6 +100,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                 <TableCell>
                   {props.isDeliveredQtyAvailable ? (
                     <TextField
+                      required
                       value={row.deliveredQuantity}
                       onChange={(event) => {
                         const updatedRows = props.rowData.map((r) => {

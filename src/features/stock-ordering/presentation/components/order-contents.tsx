@@ -14,10 +14,13 @@ import {
   ConfirmOrdersModal,
   PlaceOrderModal,
   ProcurementReviewOrdersModal,
-  StoreRecieveOrderModal,
+  StorePayBillingModal,
+  StoreReceiveOrderModal,
+  SupplierConfirmModal,
   SupplierDispatchOrderModal,
   SupplierEnFreightOrderModal,
   SupplierEnRouteOrderModal,
+  SupplierUpdateBillingModal,
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
@@ -53,7 +56,16 @@ export function OrderContents() {
   const [openSupplierEnFreightOrderModal, setOpenSupplierEnFreightOrderModal] =
     useState(false);
 
-  const [openStoreRecieveOrderModal, setOpenStoreRecieveOrderModal] =
+  const [openStoreReceiveOrderModal, setOpenStoreReceiveOrderModal] =
+    useState(false);
+
+  const [openSupplierUpdateBillingModal, setOpenSupplierUpdateBillingModal] =
+    useState(false);
+
+  const [openStorePayBillingModal, setOpenStorePayBillingModal] =
+    useState(false);
+
+  const [openSupplierConfirmModal, setOpenSupplierConfirmModal] =
     useState(false);
 
   const [tabValue, setTabValue] = useState(0);
@@ -73,8 +85,8 @@ export function OrderContents() {
     { label: "DISPATCH ORDERS" },
     { label: "ORDERS EN ROUTE" },
     { label: "ORDER IN FREIGHT" },
-    { label: "RECIEVE ORDERS" },
-    { label: "UPDATE ORDERS" },
+    { label: "RECEIVE ORDERS" },
+    { label: "UPDATE BILLING" },
     { label: "PAY BILLING" },
     { label: "CONFIRM PAYMENT" },
     { label: "ORDERS COMPLETE" },
@@ -89,6 +101,7 @@ export function OrderContents() {
       label: "Requested Delivery Date",
     },
     { id: "commitedDeliveryDate", label: "Commited Delivery Date" },
+    { id: "confirmedDate", label: "Order Confirmation Date" },
     { id: "actualDelivery", label: "Actual Delivery Date" },
     { id: "status", label: "status" },
     { id: "billingId", label: "Billing Id" },
@@ -248,16 +261,17 @@ export function OrderContents() {
             >
               <>
                 <DataTableRow>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
-                  <DataTableCell>Data Placeholder</DataTableCell>
+                  <DataTableCell>Taters Acacia Estates</DataTableCell>
+                  <DataTableCell>1</DataTableCell>
+                  <DataTableCell>July 8, 2023</DataTableCell>
+                  <DataTableCell>July 15, 2023</DataTableCell>
+                  <DataTableCell>July 18, 2023</DataTableCell>
+                  <DataTableCell>July 10, 2023</DataTableCell>
+                  <DataTableCell></DataTableCell>
+                  <DataTableCell>Update Order Status</DataTableCell>
+                  <DataTableCell></DataTableCell>
+                  <DataTableCell></DataTableCell>
+                  <DataTableCell>Unpaid</DataTableCell>
                   <DataTableCell>
                     <IconButton
                       onClick={() => {
@@ -274,7 +288,13 @@ export function OrderContents() {
                         } else if (tabValue === 5) {
                           setOpenSupplierEnFreightOrderModal(true);
                         } else if (tabValue === 6) {
-                          setOpenStoreRecieveOrderModal(true);
+                          setOpenStoreReceiveOrderModal(true);
+                        } else if (tabValue === 7) {
+                          setOpenSupplierUpdateBillingModal(true);
+                        } else if (tabValue === 8) {
+                          setOpenStorePayBillingModal(true);
+                        } else if (tabValue === 9) {
+                          setOpenSupplierConfirmModal(true);
                         }
                       }}
                     >
@@ -346,9 +366,27 @@ export function OrderContents() {
         currentTab={tabValue}
       />
 
-      <StoreRecieveOrderModal
-        open={openStoreRecieveOrderModal}
-        onClose={() => setOpenStoreRecieveOrderModal(false)}
+      <StoreReceiveOrderModal
+        open={openStoreReceiveOrderModal}
+        onClose={() => setOpenStoreReceiveOrderModal(false)}
+        currentTab={tabValue}
+      />
+
+      <SupplierUpdateBillingModal
+        open={openSupplierUpdateBillingModal}
+        onClose={() => setOpenSupplierUpdateBillingModal(false)}
+        currentTab={tabValue}
+      />
+
+      <StorePayBillingModal
+        open={openStorePayBillingModal}
+        onClose={() => setOpenStorePayBillingModal(false)}
+        currentTab={tabValue}
+      />
+
+      <SupplierConfirmModal
+        open={openSupplierConfirmModal}
+        onClose={() => setOpenSupplierConfirmModal(false)}
         currentTab={tabValue}
       />
     </>

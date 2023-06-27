@@ -1,11 +1,13 @@
 import { Stack, Divider, Paper, styled, Grid, Button } from "@mui/material";
-import { UploadDeliveryRecieptModal } from "../modals";
+import { PayBillingModal, UploadDeliveryRecieptModal } from "../modals";
 import { useState } from "react";
 import { left } from "@popperjs/core";
 
 export function StockOrderLogs() {
   const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
     useState(false);
+
+  const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -36,27 +38,34 @@ export function StockOrderLogs() {
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Store Name:</span>
-                <span>Taters Store Name</span>
+                <span>Taters Acacia Estates</span>
               </Item>
             </Grid>
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Requested Delivery Date:</span>
-                <span>Test1 1, 2023</span>
+                <span>July 15, 2023</span>
               </Item>
             </Grid>
 
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Commited Delivery Date:</span>
-                <span>Test2 2, 2023</span>
+                <span>July 18, 2023</span>
               </Item>
             </Grid>
 
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Order Review Date:</span>
-                <span>Test2 2, 2023</span>
+                <span>July 10, 2023</span>
+              </Item>
+            </Grid>
+
+            <Grid item xs={5}>
+              <Item>
+                <span className="font-semibold">Order Confirm Date:</span>
+                <span>July 10, 2023</span>
               </Item>
             </Grid>
 
@@ -79,21 +88,28 @@ export function StockOrderLogs() {
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Dispatch Date:</span>
-                <span>Test2 2, 2023</span>
+                <span>July 20, 2023</span>
               </Item>
             </Grid>
 
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Order En Route Date:</span>
-                <span>Test2 3, 2023</span>
+                <span>July 20, 2023</span>
               </Item>
             </Grid>
 
             <Grid item xs={5}>
               <Item>
                 <span className="font-semibold">Order En Freight Date:</span>
-                <span>Test2 3, 2023</span>
+                <span>July 20, 2023</span>
+              </Item>
+            </Grid>
+
+            <Grid item xs={5}>
+              <Item>
+                <span className="font-semibold">Actual Delivery Date:</span>
+                <span>July 20, 2023</span>
               </Item>
             </Grid>
 
@@ -112,6 +128,35 @@ export function StockOrderLogs() {
                 </Button>
               </Item>
             </Grid>
+
+            <Grid item xs={5}>
+              <Item>
+                <span className="font-semibold">Billing Information Ready</span>
+              </Item>
+            </Grid>
+
+            <Grid item xs={5}>
+              <Item sx={{ padding: 0 }}>
+                <Button
+                  fullWidth
+                  size="medium"
+                  onClick={() => setOpenPayBillingModal(true)}
+                  className="font-semibold cursor-pointer"
+                  style={{ color: "inherit" }}
+                >
+                  <span className=" font-semibold text-start">
+                    View payment details
+                  </span>
+                </Button>
+              </Item>
+            </Grid>
+
+            <Grid item xs={5}>
+              <Item>
+                <span className="font-semibold">Payment Confirmed Date: </span>
+                <span>July 24, 2023</span>
+              </Item>
+            </Grid>
           </Grid>
         </div>
       </div>
@@ -120,6 +165,17 @@ export function StockOrderLogs() {
         open={openUploadDeliveryRecieptModal}
         onClose={() => setOpenUploadDeliveryRecieptModal(false)}
         setUploadedReciept={undefined}
+        isButtonAvailable={false}
+      />
+
+      <PayBillingModal
+        open={openPayBillingModal}
+        onClose={() => setOpenPayBillingModal(false)}
+        setUploadedReciept={undefined}
+        billingInformation={{
+          billing_id: "test",
+          billing_amount: "test",
+        }}
         isButtonAvailable={false}
       />
     </>
