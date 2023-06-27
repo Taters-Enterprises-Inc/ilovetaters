@@ -386,6 +386,28 @@ root.render(
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
 
+                        <Route path="stock-order">
+                          <Route index element={<StockOrderLogin />} />
+                          <Route element={<StockAuditSidebarWrapper />}>
+                            <Route
+                              path="dashboard"
+                              element={<StockOrderDashboard />}
+                            />
+                            <Route
+                              path="order"
+                              element={<StockOrderOrders />}
+                            />
+                            <Route
+                              path="order/view"
+                              element={<StockOrderView />}
+                            />
+                            <Route
+                              path="order/store/view"
+                              element={<StoreOrderViewPage />}
+                            />
+                          </Route>
+                        </Route>
+
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
                             <Route element={<AdminSidebarWrapper />}>
@@ -625,25 +647,6 @@ root.render(
                           <Route element={<AuditFormSideStepper />}>
                             <Route path="audit/form" element={<AuditForm />} />
                           </Route>
-                        </Route>
-                      </Route>
-
-                      <Route path="stock-order">
-                        <Route index element={<StockOrderLogin />} />
-                        <Route element={<StockAuditSidebarWrapper />}>
-                          <Route
-                            path="dashboard"
-                            element={<StockOrderDashboard />}
-                          />
-                          <Route path="order" element={<StockOrderOrders />} />
-                          <Route
-                            path="order/view"
-                            element={<StockOrderView />}
-                          />
-                          <Route
-                            path="order/store/view"
-                            element={<StoreOrderViewPage />}
-                          />
                         </Route>
                       </Route>
 

@@ -59,9 +59,6 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     return null;
   }
 
-  console.log(uploadedReceipt);
-  console.log(billingInformation);
-
   return (
     <>
       <div
