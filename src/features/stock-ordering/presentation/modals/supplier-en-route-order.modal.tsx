@@ -7,18 +7,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useState } from "react";
-
-interface TableRow {
-  id: number;
-  productId: string;
-  productName: string;
-  uom: string;
-  cost: string;
-  orderQty: string;
-  currentStock: string;
-  commitedQuantity: string;
-  deliveredQuantity: string;
-}
+import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 
 interface SupplierEnRouteOrderModalProps {
   open: boolean;
@@ -33,20 +22,59 @@ export function SupplierEnRouteOrderModal(
     useState(false);
 
   const [isHidden, setHidden] = useState(false);
-
-  const [rows, setRows] = useState<TableRow[]>([
-    {
-      id: 1,
-      productId: "-",
-      productName: "-",
-      uom: "-",
-      cost: "-",
-      orderQty: "-",
-      currentStock: "-",
-      commitedQuantity: "0",
-      deliveredQuantity: "-",
+  const [rows, setRows] = useState<TableRow>({
+    order_information: {
+      store_name: "Taters Acacia Estate",
+      order_number: "1",
+      requested_delivery_date: "June 28, 2023",
+      commited_delivery_date: "July 28, 2023",
+      order_reviewed_date: "June 28, 2023",
+      order_confirmation_date: "June 28, 2023",
+      view_delivery_receipt: "image.jpg",
+      dispatch_date: "July 10, 2023",
+      order_enroute: "July 10, 2023",
+      actual_delivery_date: "July 20, 2023",
+      view_updated_delivery_receipt: "image.jpg",
+      billing_information_ready: "",
+      view_payment_details: "image.jpg",
+      payment_confirmation: "July 20, 2023",
     },
-  ]);
+    product_data: [
+      {
+        id: "1",
+        productId: "1",
+        productName: "Product 1",
+        uom: "PACK",
+        cost: "100",
+        orderQty: "50",
+        currentStock: "10000",
+        commitedQuantity: "100",
+        deliveredQuantity: "50",
+      },
+      {
+        id: "2",
+        productId: "2",
+        productName: "Product 2",
+        uom: "BAGS",
+        cost: "50",
+        orderQty: "25",
+        currentStock: "500",
+        commitedQuantity: "20",
+        deliveredQuantity: "5",
+      },
+      {
+        id: "3",
+        productId: "3",
+        productName: "Product 3",
+        uom: "BAGS",
+        cost: "50",
+        orderQty: "25",
+        currentStock: "500",
+        commitedQuantity: "20",
+        deliveredQuantity: "5",
+      },
+    ],
+  });
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");

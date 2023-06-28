@@ -81,14 +81,14 @@ export function StoreOrderViewPage() {
         </div>
 
         <div className="pb-1">
-          <StockOrderTable
+          {/* <StockOrderTable
             isCommitedTextFieldAvailable={false}
             isStore={true}
             activeTab={undefined}
             setRows={undefined}
             rowData={rows}
             isDeliveredQtyAvailable={false}
-          />
+          /> */}
 
           {/* <Table>
             <TableHead className="bg-black">

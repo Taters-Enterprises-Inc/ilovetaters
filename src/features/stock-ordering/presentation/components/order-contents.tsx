@@ -8,7 +8,15 @@ import {
 } from "features/shared/presentation/components/data-table";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Box, Fab, IconButton, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Fab,
+  IconButton,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
 import {
   ConfirmOrdersModal,
@@ -25,6 +33,7 @@ import {
 } from "../modals";
 import { FaEye } from "react-icons/fa";
 import { ProcurementConfirmOrdersModal } from "../modals/procurement-confirm-order.modal";
+import { DataList } from "features/shared/presentation/components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -135,6 +144,41 @@ export function OrderContents() {
     );
   };
 
+  const handleAction = () => {
+    switch (tabValue) {
+      case 0:
+        setOpenSupplierViewOrderModal(true);
+        break;
+      case 1:
+        setOpenProcurementReviewOrderModal(true);
+        break;
+      case 2:
+        setOpenProcurementConfirmOrderModal(true);
+        break;
+      case 3:
+        setOpenSupplierDispatchOrderModal(true);
+        break;
+      case 4:
+        setOpenSupplierEnRouteOrderModal(true);
+        break;
+      case 5:
+        setOpenSupplierEnFreightOrderModal(true);
+        break;
+      case 6:
+        setOpenStoreReceiveOrderModal(true);
+        break;
+      case 7:
+        setOpenSupplierUpdateBillingModal(true);
+        break;
+      case 8:
+        setOpenStorePayBillingModal(true);
+        break;
+      case 9:
+        setOpenSupplierConfirmModal(true);
+        break;
+    }
+  };
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
@@ -154,6 +198,7 @@ export function OrderContents() {
             value={tabValue}
             onChange={handleTabChange}
             scrollButtons="auto"
+            allowScrollButtonsMobile
             variant="scrollable"
             TabIndicatorProps={{
               style: {
@@ -173,93 +218,94 @@ export function OrderContents() {
           </Tabs>
 
           <TabPanel index={tabValue} value={tabValue}>
-            <DataTable
-              order={order === "asc" ? "asc" : "desc"}
-              orderBy={orderBy ?? "id"}
-              emptyMessage="No Orders yet."
-              search={search ?? ""}
-              onSearch={(val) => {
-                const params = {
-                  page_no: null,
-                  per_page: perPage,
-                  order_by: orderBy,
-                  order: order,
-                  search: val === "" ? null : val,
-                };
-
-                const queryParams = createQueryParams(params);
-
-                navigate({
-                  pathname: "",
-                  search: queryParams,
-                });
-              }}
-              onRequestSort={(column_selected) => {
-                if (column_selected === "name") {
-                  const isAsc = orderBy === column_selected && order === "asc";
-
+            <div className="hidden md:block">
+              <DataTable
+                order={order === "asc" ? "asc" : "desc"}
+                orderBy={orderBy ?? "id"}
+                emptyMessage="No Orders yet."
+                search={search ?? ""}
+                onSearch={(val) => {
                   const params = {
-                    page_no: pageNo,
-                    per_page: perPage,
-                    order_by: column_selected,
-                    order: isAsc ? "desc" : "asc",
-                    search: search,
-                  };
-
-                  const queryParams = createQueryParams(params);
-
-                  // dispatch(resetGetAuditSettingQuestionsStatus());
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-              columns={columns}
-              onRowsPerPageChange={(event) => {
-                if (perPage !== event.target.value) {
-                  const params = {
-                    page_no: pageNo,
-                    per_page: event.target.value,
-                    order_by: orderBy,
-                    order: order,
-                    search: search,
-                  };
-
-                  const queryParams = createQueryParams(params);
-
-                  // dispatch(resetGetAuditSettingQuestionsStatus());
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }
-              }}
-              onPageChange={(event, newPage) => {
-                const pageNoInt = pageNo ? parseInt(pageNo) : null;
-                if (newPage !== pageNoInt) {
-                  const params = {
-                    page_no: newPage,
+                    page_no: null,
                     per_page: perPage,
                     order_by: orderBy,
                     order: order,
-                    search: search,
+                    search: val === "" ? null : val,
                   };
 
                   const queryParams = createQueryParams(params);
 
-                  // dispatch(resetGetAuditSettingQuestionsStatus());
                   navigate({
                     pathname: "",
                     search: queryParams,
                   });
-                }
-              }}
-              totalRows={25} //To be updated
-              perPage={10} //To be updated
-              page={pageNo ? parseInt(pageNo) : 1}
-            >
-              <>
+                }}
+                onRequestSort={(column_selected) => {
+                  if (column_selected === "name") {
+                    const isAsc =
+                      orderBy === column_selected && order === "asc";
+
+                    const params = {
+                      page_no: pageNo,
+                      per_page: perPage,
+                      order_by: column_selected,
+                      order: isAsc ? "desc" : "asc",
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }
+                }}
+                columns={columns}
+                onRowsPerPageChange={(event) => {
+                  if (perPage !== event.target.value) {
+                    const params = {
+                      page_no: pageNo,
+                      per_page: event.target.value,
+                      order_by: orderBy,
+                      order: order,
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }
+                }}
+                onPageChange={(event, newPage) => {
+                  const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                  if (newPage !== pageNoInt) {
+                    const params = {
+                      page_no: newPage,
+                      per_page: perPage,
+                      order_by: orderBy,
+                      order: order,
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }
+                }}
+                totalRows={25} //To be updated
+                perPage={10} //To be updated
+                page={pageNo ? parseInt(pageNo) : 1}
+              >
                 <DataTableRow>
                   <DataTableCell>Taters Acacia Estates</DataTableCell>
                   <DataTableCell>1</DataTableCell>
@@ -267,46 +313,127 @@ export function OrderContents() {
                   <DataTableCell>July 15, 2023</DataTableCell>
                   <DataTableCell>July 18, 2023</DataTableCell>
                   <DataTableCell>July 10, 2023</DataTableCell>
-                  <DataTableCell></DataTableCell>
+                  <DataTableCell>July 20</DataTableCell>
                   <DataTableCell>Update Order Status</DataTableCell>
-                  <DataTableCell></DataTableCell>
-                  <DataTableCell></DataTableCell>
+                  <DataTableCell>00001</DataTableCell>
+                  <DataTableCell>100000</DataTableCell>
                   <DataTableCell>Unpaid</DataTableCell>
                   <DataTableCell>
-                    <IconButton
-                      onClick={() => {
-                        if (tabValue === 0) {
-                          setOpenSupplierViewOrderModal(true);
-                        } else if (tabValue === 1) {
-                          setOpenProcurementReviewOrderModal(true);
-                        } else if (tabValue === 2) {
-                          setOpenProcurementConfirmOrderModal(true);
-                        } else if (tabValue === 3) {
-                          setOpenSupplierDispatchOrderModal(true);
-                        } else if (tabValue === 4) {
-                          setOpenSupplierEnRouteOrderModal(true);
-                        } else if (tabValue === 5) {
-                          setOpenSupplierEnFreightOrderModal(true);
-                        } else if (tabValue === 6) {
-                          setOpenStoreReceiveOrderModal(true);
-                        } else if (tabValue === 7) {
-                          setOpenSupplierUpdateBillingModal(true);
-                        } else if (tabValue === 8) {
-                          setOpenStorePayBillingModal(true);
-                        } else if (tabValue === 9) {
-                          setOpenSupplierConfirmModal(true);
-                        }
-                      }}
-                    >
+                    <IconButton onClick={handleAction}>
                       <FaEye className="text-lg" />
                     </IconButton>
                   </DataTableCell>
                 </DataTableRow>
-              </>
-            </DataTable>
+              </DataTable>
+            </div>
+
+            <div className="block md:hidden">
+              <DataList
+                search={search ?? ""}
+                emptyMessage={`"No ${columns[tabValue]} redeems yet."`}
+                onSearch={(val) => {
+                  const params = {
+                    page_no: null,
+                    per_page: perPage,
+                    status: status,
+                    order_by: orderBy,
+                    order: order,
+                    search: val === "" ? null : val,
+                  };
+
+                  const queryParams = createQueryParams(params);
+
+                  navigate({
+                    pathname: "",
+                    search: queryParams,
+                  });
+                }}
+                onRowsPerPageChange={(event) => {
+                  if (perPage !== event.target.value) {
+                    const params = {
+                      page_no: pageNo,
+                      per_page: event.target.value,
+                      status: status,
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }
+                }}
+                onPageChange={(event, newPage) => {
+                  const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                  if (newPage !== pageNoInt) {
+                    const params = {
+                      page_no: newPage,
+                      per_page: perPage,
+                      status: status,
+                      search: search,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }
+                }}
+                totalRows={25}
+                perPage={10}
+                page={pageNo ? parseInt(pageNo) : 1}
+              >
+                <div className="py-4">
+                  <div
+                    onClick={handleAction}
+                    className="flex flex-col rounded-sm bg-gray-200 p-1"
+                  >
+                    <div className="flex flex-wrap space-x-2">
+                      <span className="text-xl capitalize font-base">
+                        Taters Acacia Estate
+                      </span>
+                      <span className="text-xl uppercase">#1000</span>
+                      <span className="border-2 rounded-full px-2 capitalize bg-[#f0ad4e]">
+                        Update Order Status
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <div>
+                        <span className="font-semibold">Placement Date: </span>
+                        <span>July 8, 2023</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Requested Date: </span>
+                        <span>July 8, 2023</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">
+                          Order Confirmation Date:
+                        </span>
+                        <span>July 8, 2023</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">
+                          Actual Delivery Date:
+                        </span>
+                        <span>July 8, 2023</span>
+                      </div>
+                    </div>
+                    <div></div>
+                  </div>
+                  <Divider variant="middle" />
+                </div>
+              </DataList>
+            </div>
           </TabPanel>
         </div>
       </div>
+
+      {/* -------------------- */}
 
       <div
         className="absolute right-10 bottom-10"
