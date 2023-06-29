@@ -159,8 +159,6 @@ export function OrderPlaceAndConfirmTable(
     props.handleTableRows(rows);
   }, [rows]);
 
-  console.log(sampleOptions);
-
   return (
     <div>
       <div className="border-2 border-black rounded-lg pb-1">

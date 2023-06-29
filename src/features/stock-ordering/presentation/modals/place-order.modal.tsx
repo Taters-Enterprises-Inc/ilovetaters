@@ -116,72 +116,73 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
+              <div className="flex flex-row space-x-5">
+                <div className="basis-1/2 flex flex-col space-y-2">
+                  <span>Select Store: </span>
+                  <Autocomplete
+                    id="stock-order-selected-store"
+                    size="small"
+                    options={
+                      getStores.data
+                        ? getStores.data.stores.map((row) => row.name)
+                        : []
+                    }
+                    onChange={(event, value: any) => {
+                      if (value && getStores.data) {
+                        const selectedStoreObj = getStores.data.stores.find(
+                          (store) => store.name === value
+                        );
+                        setSelectedStore(selectedStoreObj);
+                      } else {
+                        setSelectedStore(undefined);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        required
+                        value={selectedStore ?? ""}
+                        {...params}
+                        label="Select store to evaluate"
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="basis-1/2 flex flex-col space-y-2">
+                  <span>Delivery Date: </span>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Delivery date"
+                      views={["month", "day", "year"]}
+                      onError={() => setDisabled(true)}
+                      onAccept={(value) => {
+                        if (dayjs(value)) {
+                          setDisabled(false);
+                        }
+                      }}
+                      onChange={(date) => {
+                        if (date) {
+                          const formattedDate =
+                            dayjs(date).format("MMMM DD, YYYY");
+
+                          setDeliveryData(formattedDate);
+                        }
+                      }}
+                      value={dayjs(deliveryDate)}
+                      renderInput={(params) => (
+                        <TextField required {...params} size="small" />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </div>
+              </div>
+
               <OrderPlaceAndConfirmTable
                 isDisabled={false}
                 handleTableRows={handleTableRows}
                 setCategory={setCategory}
               />
               <div className="px-5">
-                <div className="flex flex-row space-x-5">
-                  <div className="basis-1/2 flex flex-col space-y-2">
-                    <span>Select Store: </span>
-                    <Autocomplete
-                      id="stock-order-selected-store"
-                      size="small"
-                      options={
-                        getStores.data
-                          ? getStores.data.stores.map((row) => row.name)
-                          : []
-                      }
-                      onChange={(event, value: any) => {
-                        if (value && getStores.data) {
-                          const selectedStoreObj = getStores.data.stores.find(
-                            (store) => store.name === value
-                          );
-                          setSelectedStore(selectedStoreObj);
-                        } else {
-                          setSelectedStore(undefined);
-                        }
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          value={selectedStore ?? ""}
-                          {...params}
-                          label="Select store to evaluate"
-                        />
-                      )}
-                    />
-                  </div>
-
-                  <div className="basis-1/2 flex flex-col space-y-2">
-                    <span>Delivery Date: </span>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Delivery date"
-                        views={["month", "day", "year"]}
-                        onError={() => setDisabled(true)}
-                        onAccept={(value) => {
-                          if (dayjs(value)) {
-                            setDisabled(false);
-                          }
-                        }}
-                        onChange={(date) => {
-                          if (date) {
-                            const formattedDate =
-                              dayjs(date).format("MMMM DD, YYYY");
-
-                            setDeliveryData(formattedDate);
-                          }
-                        }}
-                        value={dayjs(deliveryDate)}
-                        renderInput={(params) => (
-                          <TextField required {...params} size="small" />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  </div>
-                </div>
                 <div className="mt-5">
                   <Button
                     disabled={isDisabled}
