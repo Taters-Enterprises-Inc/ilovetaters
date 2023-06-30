@@ -1293,3 +1293,17 @@ export const STOCK_ORDER_CHIP_BUTTONS: Array<{
     color: "#004d00",
   },
 ];
+
+export const STOCK_ORDER_CATEGORY: Array<{
+  category_id: string;
+  category_name: string;
+}> = [
+  {
+    category_id: "1",
+    category_name: "Frozen",
+  },
+  {
+    category_id: "2",
+    category_name: "Dry",
+  },
+];

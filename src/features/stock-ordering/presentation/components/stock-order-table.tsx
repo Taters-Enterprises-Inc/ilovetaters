@@ -57,8 +57,8 @@ export function StockOrderTable(props: StockOrderTableProps) {
       id: "uom",
       label: "UOM",
     },
-    { id: "cost", label: "Cost  " },
-    { id: "orderQty", label: "Order Qty  " },
+    { id: "cost", label: "Cost" },
+    { id: "orderQty", label: "Order Quantity" },
     { id: "currentStock", label: "Current Stock" },
     { id: "commitedQuantity", label: "Commited Quantity" },
     { id: "deliveredQuantity", label: "Delivered Quantity" },
@@ -81,13 +81,13 @@ export function StockOrderTable(props: StockOrderTableProps) {
             {props.rowData.product_data.map((row) => (
               <TableBody key={row.id}>
                 <TableRow>
-                  <TableCell>{row.productId}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
-                  <TableCell>{row.uom}</TableCell>
-                  <TableCell>{row.cost}</TableCell>
-                  <TableCell>{row.orderQty}</TableCell>
-                  <TableCell>{row.currentStock}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.orderQty}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.currentStock}</TableCell>
+                  <TableCell sx={{ width: 75 }}>
                     {props.isCommitedTextFieldAvailable ? (
                       <TextField
                         value={row.commitedQuantity}
@@ -116,7 +116,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       row.commitedQuantity
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ width: 75 }}>
                     {props.isDeliveredQtyAvailable ? (
                       <TextField
                         required

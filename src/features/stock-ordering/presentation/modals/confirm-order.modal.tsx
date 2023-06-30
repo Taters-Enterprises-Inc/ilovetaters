@@ -15,6 +15,7 @@ import {
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { store } from "features/config/store";
+import { getStockOrderProducts } from "../slices/get-products.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -44,8 +45,17 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       }
     | undefined
   >();
-  const [category, setCategory] = useState("");
-  const [isDisabled, setDisabled] = useState(false);
+
+  const [category, setCategory] = useState<
+    | {
+        category_id: string;
+        category_name: string;
+      }
+    | undefined
+  >();
+  const [isDisabled, setDisabled] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isEditCancelled, setisEditCancelled] = useState(false);
   const [buttonDisable, setButtonDisable] = useState(true);
   const [deliveryDate, setDeliveryData] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
@@ -88,14 +98,17 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
         deliverydate: deliveryDate,
-        category: category,
+        category: {
+          category_id: category?.category_id ?? "",
+          category_name: category?.category_name ?? "",
+        },
         OrderData: rows,
       })
     );
 
     props.onClose();
 
-    navigate("/stock-order/order/store/view");
+    navigate("/admin/stock-order/order/store/view");
   };
 
   if (props.open) {
@@ -104,6 +117,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(rows);
 
   return (
     <>
@@ -131,6 +146,12 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                 isDisabled={buttonDisable}
                 handleTableRows={handleTableRows}
                 setCategory={setCategory}
+                store={{
+                  store_id: selectedStore?.name ?? "",
+                  store_name: selectedStore?.store_id ?? "",
+                }}
+                isEditCancelled={isEditCancelled}
+                isConfirmOrder={true}
               />
 
               <div className="space-y-5">
@@ -201,15 +222,47 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                     </div>
                   </div>
                   <div className="flex flex-row mt-5 space-x-5">
+                    {isEdit ? (
+                      <div className="basis-1/2 flex flex-row space-x-5">
+                        <Button
+                          onClick={() => {
+                            setButtonDisable(true);
+                            setIsEdit(false);
+                          }}
+                          className="basis-1/2"
+                          fullWidth
+                          variant="contained"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setButtonDisable(true);
+                            setIsEdit(false);
+                            setisEditCancelled(true);
+                          }}
+                          className="basis-1/2"
+                          fullWidth
+                          variant="contained"
+                        >
+                          Confirm Edit
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          setButtonDisable(false);
+                          setIsEdit(true);
+                        }}
+                        className="basis-1/2"
+                        fullWidth
+                        variant="contained"
+                      >
+                        Edit{" "}
+                      </Button>
+                    )}
                     <Button
-                      onClick={() => setButtonDisable(false)}
-                      className="basis-1/2"
-                      fullWidth
-                      variant="contained"
-                    >
-                      Edit
-                    </Button>
-                    <Button
+                      disabled={isEdit}
                       type="submit"
                       className="basis-1/2"
                       fullWidth

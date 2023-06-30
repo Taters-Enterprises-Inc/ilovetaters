@@ -41,7 +41,14 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<{
+    category_id: string;
+    category_name: string;
+  }>({
+    category_id: "",
+    category_name: "",
+  });
+
   const [rows, setRows] = useState<OrderTableData[]>([
     {
       id: 1,
@@ -180,7 +187,13 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
               <OrderPlaceAndConfirmTable
                 isDisabled={false}
                 handleTableRows={handleTableRows}
+                store={{
+                  store_id: selectedStore?.name ?? "",
+                  store_name: selectedStore?.store_id ?? "",
+                }}
                 setCategory={setCategory}
+                isEditCancelled={false}
+                isConfirmOrder={false}
               />
               <div className="px-5">
                 <div className="mt-5">

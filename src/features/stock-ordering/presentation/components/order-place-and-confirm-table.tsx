@@ -11,10 +11,13 @@ import {
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Column } from "features/shared/presentation/components/data-table";
 import { useEffect, useState } from "react";
+import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import {
-  confirmNewOrder,
-  selectconfirmNewOrder,
-} from "../slices/confirm-new-order.slice";
+  getStockOrderProducts,
+  selectGetStockOrderProducts,
+} from "../slices/get-products.slice";
+import { GetStockProductModel } from "features/stock-ordering/core/domain/get-stock-product.model";
+import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 
 interface TableRow {
   id: number;
@@ -27,80 +30,22 @@ interface TableRow {
 
 interface OrderPlaceAndConfirmTableProps {
   isDisabled: boolean;
+  isConfirmOrder: boolean;
+  isEditCancelled: boolean;
   handleTableRows: (TableData: TableRow[]) => void;
-  setCategory: (categoryData: string) => void;
+  setCategory: (categoryData: {
+    category_id: string;
+    category_name: string;
+  }) => void;
+  store: {
+    store_id: string;
+    store_name: string;
+  };
 }
 
 export function OrderPlaceAndConfirmTable(
   props: OrderPlaceAndConfirmTableProps
 ) {
-  const sampleOptions = [
-    {
-      ["frozen"]: [
-        {
-          productId: "1",
-          productName: "Product 1",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "2",
-          productName: "Product 2",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "3",
-          productName: "Product 3",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "4",
-          productName: "Product 4",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-      ],
-    },
-    {
-      ["dry"]: [
-        {
-          productId: "5",
-          productName: "Product 5",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "6",
-          productName: "Product 6",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "7",
-          productName: "Product 7",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-        {
-          productId: "8",
-          productName: "Product 8",
-          uom: "Pack",
-          cost: "50",
-          orderQty: "",
-        },
-      ],
-    },
-  ];
-
   const [rows, setRows] = useState<TableRow[]>([
     {
       id: 1,
@@ -112,9 +57,17 @@ export function OrderPlaceAndConfirmTable(
     },
   ]);
 
+  const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
+  const getProductInformation = useAppSelector(selectGetStockOrderProducts);
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<{
+    category_id: string;
+    category_name: string;
+  }>({
+    category_id: "",
+    category_name: "",
+  });
 
   const addRow = () => {
     const newRow: TableRow = {
@@ -145,26 +98,45 @@ export function OrderPlaceAndConfirmTable(
   ];
 
   useEffect(() => {
-    if (getOrderInformation.data) {
+    if (getOrderInformation.data && props.isConfirmOrder) {
       setCategory(getOrderInformation.data.category);
       setRows(getOrderInformation.data.OrderData);
     }
   }, [getOrderInformation.data]);
 
   useEffect(() => {
-    props.setCategory(category);
+    if (category) {
+      dispatch(
+        getStockOrderProducts({
+          category: category.category_id,
+          store_information: {
+            store_id: props.store.store_id,
+            store_name: props.store.store_name ?? "",
+          },
+        })
+      );
+    }
+  }, [dispatch, category]);
+
+  useEffect(() => {
+    props.setCategory({
+      category_id: category?.category_id ?? "",
+      category_name: category?.category_name ?? "",
+    });
   }, [category]);
 
   useEffect(() => {
-    props.handleTableRows(rows);
+    props.isEditCancelled
+      ? props.handleTableRows(getOrderInformation.data?.OrderData ?? [])
+      : props.handleTableRows(rows);
   }, [rows]);
 
   return (
     <div>
       <div className="border-2 border-black rounded-lg pb-1">
-        {category !== "" ? (
+        {category?.category_name !== "" || category?.category_id !== "" ? (
           <>
-            <Table>
+            <Table sx={{ minWidth: 650 }} size="small">
               <TableHead className="bg-black">
                 <TableRow>
                   {columns.map((row, index) => (
@@ -174,69 +146,63 @@ export function OrderPlaceAndConfirmTable(
                   ))}
                 </TableRow>
               </TableHead>
-              {rows.map((row) => (
-                <TableBody key={row.id}>
-                  <TableRow>
-                    <TableCell>{row.productId}</TableCell>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell sx={{ width: 100 }}>{row.productId}</TableCell>
                     <TableCell>
                       <Autocomplete
                         id="stock-order-product-name"
                         size="small"
                         disabled={props.isDisabled}
-                        options={sampleOptions
-                          .flatMap(
-                            (options) =>
-                              options[category as keyof typeof options] || []
-                          )
-                          .filter((item) => {
-                            const excludedProductIds = rows.map(
-                              (items) => items.productId
-                            );
+                        options={
+                          getProductInformation.data?.products
+                            .flatMap((options) => options)
+                            .filter((item) => {
+                              const excludedItems = rows.map(
+                                (items) => items.productName
+                              );
 
-                            return !excludedProductIds.includes(item.productId);
-                          })
-                          .map((item) => item.productName)}
+                              return !excludedItems.includes(item.product_name);
+                            })
+                            .map((item) => item.product_name) ?? []
+                        }
                         onChange={(event, value) => {
-                          const selectedProduct = sampleOptions
-                            .flatMap(
-                              (options) =>
-                                options[category as keyof typeof options] || []
-                            )
-                            .find((item) => item && item.productName === value);
+                          const getProductInfo =
+                            getProductInformation.data?.products.find(
+                              (prod_name) => {
+                                if (prod_name.product_name === value) {
+                                  return prod_name;
+                                }
+                              }
+                            );
 
                           const updatedRows = rows.map((r) => {
                             if (r.id === row.id) {
                               return {
                                 ...r,
-                                productId: selectedProduct?.productId ?? "",
-                                productName: value ?? "",
-                                uom: selectedProduct?.uom ?? "",
-                                cost: selectedProduct?.cost ?? "",
+                                productId: getProductInfo?.product_id ?? "",
+                                productName: getProductInfo?.product_name ?? "",
+                                uom: getProductInfo?.uom ?? "",
+                                cost: getProductInfo?.cost ?? "",
                               };
                             }
                             return r;
                           });
                           setRows(updatedRows);
                         }}
+                        value={row.productName}
                         renderInput={(params) => (
-                          <TextField
-                            required
-                            value={row.productName}
-                            {...params}
-                            label={
-                              getOrderInformation.data?.OrderData.map((item) =>
-                                row.productId === item.productId
-                                  ? item.productName
-                                  : null
-                              ) ?? "Select Product"
-                            }
-                          />
+                          <TextField required {...params} />
                         )}
                       />
                     </TableCell>
-                    <TableCell>{row.uom}</TableCell>
-                    <TableCell>{row.cost}</TableCell>
-                    <TableCell>
+                    <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
+                    <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
+                    <TableCell sx={{ width: 75 }}>
                       <TextField
                         value={row.orderQty}
                         disabled={props.isDisabled}
@@ -257,21 +223,24 @@ export function OrderPlaceAndConfirmTable(
                       />
                     </TableCell>
                   </TableRow>
-                </TableBody>
-              ))}
+                ))}
+              </TableBody>
             </Table>
 
             <div className="flex justify-between">
               <div className="flex items-stretch">
                 <span className="text-base text-primary capitalize self-center ml-3">
-                  {category}
+                  {category?.category_name}
                 </span>
               </div>
               <div className="flex justify-end mt-2">
                 <Button
                   disabled={props.isDisabled}
                   onClick={() => {
-                    setCategory("");
+                    setCategory({
+                      category_id: "",
+                      category_name: "",
+                    });
                     setRows([]);
                   }}
                 >
@@ -294,18 +263,24 @@ export function OrderPlaceAndConfirmTable(
             <Autocomplete
               id="stock-order-category-name"
               size="small"
+              // disabled={props.store.store_name === "" ? true : false}
               options={
-                Object.values(sampleOptions).map(
-                  (value) => Object.keys(value)[0]
-                ) ?? []
+                STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
               }
               onChange={(event, value) => {
-                setCategory(value || "");
+                STOCK_ORDER_CATEGORY.find((row) => {
+                  if (row.category_name === value) {
+                    setCategory({
+                      category_id: row.category_id ?? "",
+                      category_name: row.category_name ?? "",
+                    });
+                  }
+                });
               }}
               renderInput={(params) => (
                 <TextField
                   required
-                  value={category ?? ""}
+                  value={category.category_name ?? ""}
                   {...params}
                   label="Select product category"
                 />

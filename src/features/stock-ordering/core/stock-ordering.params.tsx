@@ -7,6 +7,17 @@ export interface test {
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
   deliverydate: string;
-  category: string;
+  category: {
+    category_id: string;
+    category_name: string;
+  };
   OrderData: OrderTableData[];
+}
+
+export interface ProductParam {
+  category: string;
+  store_information: {
+    store_id: string;
+    store_name: string;
+  };
 }

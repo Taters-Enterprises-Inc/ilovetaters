@@ -5,6 +5,9 @@ import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { TextField, Button } from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -125,11 +128,11 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
               />
-              {/* <div className="flex pt-5 px-12">
-                <div className="flex items-stretch basis-9/12 space-x-2 px-5">
-                  <span className="flex self-center font-semibold">
-                    Commited Delivery:
-                  </span>
+              <div className="flex items-stretch pt-5 px-12 space-x-5">
+                <span className="basis-1/2 self-center font-semibold text-right">
+                  Commited Delivery:
+                </span>
+                <div className="basis-1/2">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Commited Delivery"
@@ -151,12 +154,12 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className={`"basis-3/12" ${isDisabled ? "hidden" : ""}`}>
-                  <Button type="submit" variant="contained">
+                <div className="basis-4/5">
+                  <Button fullWidth type="submit" variant="contained">
                     Confirm
                   </Button>
                 </div>
-              </div> */}
+              </div>
             </form>
           </div>
         </div>
