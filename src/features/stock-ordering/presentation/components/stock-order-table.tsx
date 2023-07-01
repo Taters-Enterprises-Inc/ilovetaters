@@ -32,9 +32,9 @@ interface TableRow {
     productId: string;
     productName: string;
     uom: string;
-    cost: string;
+    // cost: string;
     orderQty: string;
-    currentStock: string;
+    // currentStock: string;
     commitedQuantity: string;
     deliveredQuantity: string;
   }[];
@@ -57,9 +57,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
       id: "uom",
       label: "UOM",
     },
-    { id: "cost", label: "Cost" },
+    // { id: "cost", label: "Cost" },
     { id: "orderQty", label: "Order Quantity" },
-    { id: "currentStock", label: "Current Stock" },
+    // { id: "currentStock", label: "Current Stock" },
     { id: "commitedQuantity", label: "Commited Quantity" },
     { id: "deliveredQuantity", label: "Delivered Quantity" },
   ];
@@ -78,18 +78,20 @@ export function StockOrderTable(props: StockOrderTableProps) {
                 ))}
               </TableRow>
             </TableHead>
-            {props.rowData.product_data.map((row) => (
-              <TableBody key={row.id}>
+            {props.rowData.product_data.map((row, index) => (
+              <TableBody key={index}>
                 <TableRow>
                   <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
-                  <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
+                  {/* <TableCell sx={{ width: 75 }}>{row.cost}</TableCell> */}
                   <TableCell sx={{ width: 75 }}>{row.orderQty}</TableCell>
-                  <TableCell sx={{ width: 75 }}>{row.currentStock}</TableCell>
+                  {/* <TableCell sx={{ width: 75 }}>{row.currentStock}</TableCell> */}
                   <TableCell sx={{ width: 75 }}>
                     {props.isCommitedTextFieldAvailable ? (
                       <TextField
+                        required
+                        placeholder="0"
                         value={row.commitedQuantity}
                         onChange={(event) => {
                           const updatedRows = props.rowData.product_data.map(
@@ -142,7 +144,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                         variant="outlined"
                       />
                     ) : (
-                      row.deliveredQuantity
+                      row.deliveredQuantity ?? <div>--</div>
                     )}
                   </TableCell>
                 </TableRow>
@@ -153,7 +155,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
 
         <Divider />
 
-        <StockOrderLogs order_details={props.rowData.order_information} />
+        {/* <StockOrderLogs order_details={props.rowData.order_information} /> */}
       </div>
     </div>
   );

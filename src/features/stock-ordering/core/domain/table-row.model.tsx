@@ -20,9 +20,9 @@ export interface TableRow {
     productId: string;
     productName: string;
     uom: string;
-    cost: string;
+    // cost: string;
     orderQty: string;
-    currentStock: string;
+    // currentStock: string;
     commitedQuantity: string;
     deliveredQuantity: string;
   }[];

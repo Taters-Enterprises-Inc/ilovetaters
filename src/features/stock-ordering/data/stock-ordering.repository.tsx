@@ -5,8 +5,13 @@ import { InsertNewOrderModel } from "../core/domain/insert-new-order.model";
 import {
   InsertNewOrderParam,
   ProductParam,
+  currentTab,
+  orderID,
+  reviewOrdersParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
+import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
+import { GetProductDataModel } from "../core/domain/get-product-data.model";
 
 export interface GetStockOrderStoresResponse {
   data: {
@@ -26,6 +31,27 @@ export interface GetStockOrderProductsResponse {
   data: {
     message: string;
     data: GetStockProductModel;
+  };
+}
+
+export interface GetStockOrdersResponse {
+  data: {
+    message: string;
+    data: GetStockOrdersModel;
+  };
+}
+
+export interface GetProductDataResponse {
+  data: {
+    message: string;
+    data: GetProductDataModel;
+  };
+}
+
+export interface updateReviewOrdersResponse {
+  data: {
+    message: string;
+    data: string;
   };
 }
 
@@ -49,10 +75,38 @@ export function InsertNewOrderRepository(
 export function GetStockOrderProductsRepository(
   param: ProductParam
 ): Promise<GetStockOrderProductsResponse> {
-  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/order/products`, param, {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/products`, {
+    params: param,
     headers: {
       "Content-Type": "application/json",
     },
+    withCredentials: true,
+  });
+}
+
+export function GetStockOrdersRepository(
+  query: string,
+  param: currentTab
+): Promise<GetStockOrdersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/orders${query}`, {
+    params: param,
+    withCredentials: true,
+  });
+}
+
+export function GetProductDataRepository(
+  param: orderID
+): Promise<GetProductDataResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/ordered/products`, {
+    params: param,
+    withCredentials: true,
+  });
+}
+
+export function updateReviewOrdersRepository(
+  param: reviewOrdersParam
+): Promise<updateReviewOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/update-order`, param, {
     withCredentials: true,
   });
 }

@@ -1,25 +1,38 @@
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "features/config/hooks";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { TextField, Button } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import {
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
+import {
+  orderID,
+  reviewOrdersParam,
+} from "features/stock-ordering/core/stock-ordering.params";
+import { updateReviewOrders } from "../slices/update-review-orders.slice";
 
 interface PlaceOrdersModalProps {
   open: boolean;
   onClose: () => void;
   currentTab: number;
+  id: string;
 }
 
 export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const getProductDataState = useAppSelector(selectGetProductData);
+
   const [isDisabled, setDisabled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [isCommitedTextFieldAvailable, setIsCommitedTextFieldAvailable] =
     useState(true);
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
@@ -43,41 +56,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       view_payment_details: "image.jpg",
       payment_confirmation: "July 20, 2023",
     },
-    product_data: [
-      {
-        id: "1",
-        productId: "1",
-        productName: "Product 1",
-        uom: "PACK",
-        cost: "100",
-        orderQty: "50",
-        currentStock: "10000",
-        commitedQuantity: "100",
-        deliveredQuantity: "50",
-      },
-      {
-        id: "2",
-        productId: "2",
-        productName: "Product 2",
-        uom: "BAGS",
-        cost: "50",
-        orderQty: "25",
-        currentStock: "500",
-        commitedQuantity: "20",
-        deliveredQuantity: "5",
-      },
-      {
-        id: "3",
-        productId: "3",
-        productName: "Product 3",
-        uom: "BAGS",
-        cost: "50",
-        orderQty: "25",
-        currentStock: "500",
-        commitedQuantity: "20",
-        deliveredQuantity: "5",
-      },
-    ],
+    product_data: [],
   });
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
@@ -85,11 +64,53 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     setIsCommitedTextFieldAvailable(false);
     setDisabled(true);
-    //CommitedDeliveryDate
-    //rows
 
-    // props.onClose();
+    console.log(CommitedDeliveryDate);
+    console.log(rows.product_data.map((row) => row));
+
+    const reviewOrdersProductDataParam: reviewOrdersParam["product_data"] =
+      rows.product_data.map((productsItem, index) => ({
+        id: productsItem.id,
+        productId: productsItem.productId,
+        commitedQuantity: productsItem.commitedQuantity,
+      }));
+
+    const reviewOrdersParamData: reviewOrdersParam = {
+      id: props.id,
+      commitedDelivery: CommitedDeliveryDate,
+      product_data: reviewOrdersProductDataParam,
+    };
+
+    dispatch(updateReviewOrders(reviewOrdersParamData));
   };
+
+  useEffect(() => {
+    const productID: orderID = { orderId: props.id };
+
+    if (props.open) {
+      dispatch(getProductData(productID));
+    }
+  }, [dispatch, props.open]);
+
+  useEffect(() => {
+    if (getProductDataState.data && getProductDataState.data.product_data) {
+      const productData: TableRow["product_data"] =
+        getProductDataState.data.product_data.map((product) => ({
+          id: product.id,
+          productId: product.product_id,
+          productName: product.product_name,
+          uom: product.uom,
+          orderQty: product.order_qty,
+          commitedQuantity: product.commited_qty,
+          deliveredQuantity: product.delivered_qty,
+        }));
+
+      setRows((prevRows) => ({
+        ...prevRows,
+        product_data: productData,
+      }));
+    }
+  }, [getProductDataState.data]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -97,6 +118,8 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(rows);
 
   return (
     <>

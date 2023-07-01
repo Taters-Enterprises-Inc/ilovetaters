@@ -1307,3 +1307,17 @@ export const STOCK_ORDER_CATEGORY: Array<{
     category_name: "Dry",
   },
 ];
+
+export const TAB_NAVIGATION = [
+  { label: "NEW ORDERS" },
+  { label: "REVIEW ORDERS" },
+  { label: "CONFIRM ORDERS" },
+  { label: "DISPATCH ORDERS" },
+  { label: "ORDERS EN ROUTE" },
+  { label: "ORDER IN FREIGHT" },
+  { label: "RECEIVE ORDERS" },
+  { label: "UPDATE BILLING" },
+  { label: "PAY BILLING" },
+  { label: "CONFIRM PAYMENT" },
+  { label: "ORDERS COMPLETE" },
+];

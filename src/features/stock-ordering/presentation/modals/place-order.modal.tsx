@@ -63,15 +63,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    // dispatch(
-    //   insertNewOrder({
-    // selectedStoreId: selectedStore?.store_id,
-    // deliverydate: deliveryDate,
-    // category: category,
-    // OrderData: rows,
-    //   })
-    // );
-
     dispatch(
       confirmNewOrder({
         data: {

@@ -196,7 +196,11 @@ export function OrderPlaceAndConfirmTable(
                         }}
                         value={row.productName}
                         renderInput={(params) => (
-                          <TextField required {...params} />
+                          <TextField
+                            required
+                            {...params}
+                            placeholder="--Select products to order"
+                          />
                         )}
                       />
                     </TableCell>
@@ -204,6 +208,7 @@ export function OrderPlaceAndConfirmTable(
                     <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
                     <TableCell sx={{ width: 75 }}>
                       <TextField
+                        required
                         value={row.orderQty}
                         disabled={props.isDisabled}
                         onChange={(event) => {
@@ -220,6 +225,7 @@ export function OrderPlaceAndConfirmTable(
                         }}
                         size="small"
                         variant="outlined"
+                        placeholder="0"
                       />
                     </TableCell>
                   </TableRow>
@@ -263,7 +269,7 @@ export function OrderPlaceAndConfirmTable(
             <Autocomplete
               id="stock-order-category-name"
               size="small"
-              // disabled={props.store.store_name === "" ? true : false}
+              disabled={props.store.store_name === "" ? true : false}
               options={
                 STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
               }

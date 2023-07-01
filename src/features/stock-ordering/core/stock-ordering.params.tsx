@@ -21,3 +21,21 @@ export interface ProductParam {
     store_name: string;
   };
 }
+
+export interface currentTab {
+  current_tab: number;
+}
+
+export interface orderID {
+  orderId: string;
+}
+
+export interface reviewOrdersParam {
+  id: string;
+  commitedDelivery: string;
+  product_data: {
+    id: string;
+    productId: string;
+    commitedQuantity: string;
+  }[];
+}

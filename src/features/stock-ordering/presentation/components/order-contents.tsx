@@ -1,13 +1,11 @@
 import { createQueryParams } from "features/config/helpers";
-import { useAppDispatch, useQuery } from "features/config/hooks";
-import { DataTable } from "features/shared/presentation/components";
 import {
-  DataTableRow,
-  DataTableCell,
-  Column,
-} from "features/shared/presentation/components/data-table";
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Divider,
@@ -34,6 +32,19 @@ import {
 import { FaEye } from "react-icons/fa";
 import { ProcurementConfirmOrdersModal } from "../modals/procurement-confirm-order.modal";
 import { DataList } from "features/shared/presentation/components";
+import {
+  getStockOrders,
+  resetGetStockOrders,
+  selectGetStockOrders,
+} from "../slices/get-stock-orders.slice";
+import { currentTab } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  Column,
+  DataTable,
+  DataTableCell,
+  DataTableRow,
+} from "features/shared/presentation/components/data-table";
+import { TAB_NAVIGATION } from "features/shared/constants";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,9 +52,31 @@ interface TabPanelProps {
   value: number;
 }
 
+const TabPanel = (props: TabPanelProps) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <div>{children}</div>
+        </Box>
+      )}
+    </div>
+  );
+};
+
 export function OrderContents() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const getStockOrdersState = useAppSelector(selectGetStockOrders);
 
   const [openPlaceOrderModal, setOpenPlaceOrderModal] = useState(false);
   const [openConfirmOrderModal, setOpenConfirmOrderModal] = useState(false);
@@ -77,45 +110,35 @@ export function OrderContents() {
   const [openSupplierConfirmModal, setOpenSupplierConfirmModal] =
     useState(false);
 
-  const [tabValue, setTabValue] = useState(0);
+  const [orderId, setOrderId] = useState("");
+
+  const [tabValue, setTabValue] = useState<number>(0);
 
   const query = useQuery();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
   const orderBy = query.get("order_by");
   const order = query.get("order");
+
   const search = query.get("search");
   const status = query.get("status");
-
-  const TAB_NAVIGATION = [
-    { label: "NEW ORDERS" },
-    { label: "REVIEW ORDERS" },
-    { label: "CONFIRM ORDERS" },
-    { label: "DISPATCH ORDERS" },
-    { label: "ORDERS EN ROUTE" },
-    { label: "ORDER IN FREIGHT" },
-    { label: "RECEIVE ORDERS" },
-    { label: "UPDATE BILLING" },
-    { label: "PAY BILLING" },
-    { label: "CONFIRM PAYMENT" },
-    { label: "ORDERS COMPLETE" },
-  ];
+  const store = query.get("store");
 
   let columns: Array<Column> = [
-    { id: "store", label: "Store" },
-    { id: "orderNumber", label: "Order Number" },
-    { id: "orderPlacementDate", label: "Order Placement Date" },
+    { id: "store_name", label: "Store" },
+    { id: "id", label: "Order Number" },
+    { id: "order_placement_date", label: "Order Placement Date" },
     {
-      id: "requestedDeliveryDate",
+      id: "requested_delivery_date",
       label: "Requested Delivery Date",
     },
-    { id: "commitedDeliveryDate", label: "Commited Delivery Date" },
-    { id: "confirmedDate", label: "Order Confirmation Date" },
-    { id: "actualDelivery", label: "Actual Delivery Date" },
-    { id: "status", label: "status" },
-    { id: "billingId", label: "Billing Id" },
-    { id: "billingAmount", label: "Billing Amount" },
-    { id: "paymentStatus", label: "Payment Status" },
+    { id: "commited_delivery_date", label: "Commited Delivery Date" },
+    { id: "order_confirmation_date", label: "Order Confirmation Date" },
+    { id: "actual_delivery_date", label: "Actual Delivery Date" },
+    { id: "description", label: "status" },
+    { id: "billing_id", label: "Billing Id" },
+    { id: "billing_amount", label: "Billing Amount" },
+    { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
 
@@ -124,30 +147,12 @@ export function OrderContents() {
     setOpenPlaceOrderModal(false);
   };
 
-  const TabPanel = (props: TabPanelProps) => {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }}>
-            <div>{children}</div>
-          </Box>
-        )}
-      </div>
-    );
-  };
-
-  const handleAction = () => {
+  const handleAction = (id: string) => {
+    setOrderId(id);
     switch (tabValue) {
       case 0:
         setOpenSupplierViewOrderModal(true);
+
         break;
       case 1:
         setOpenProcurementReviewOrderModal(true);
@@ -182,6 +187,22 @@ export function OrderContents() {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    const currentTab: currentTab = {
+      current_tab: tabValue,
+    };
+
+    const query = createQueryParams({
+      page_no: pageNo,
+      per_page: perPage,
+      order_by: orderBy,
+      order: order,
+      search: search,
+    });
+
+    dispatch(getStockOrders({ query: query, param: currentTab }));
+  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue]);
 
   return (
     <>
@@ -221,15 +242,17 @@ export function OrderContents() {
             <div className="hidden md:block">
               <DataTable
                 order={order === "asc" ? "asc" : "desc"}
-                orderBy={orderBy ?? "id"}
-                emptyMessage="No Orders yet."
+                orderBy={orderBy ?? "dateadded"}
                 search={search ?? ""}
+                emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
                 onSearch={(val) => {
                   const params = {
                     page_no: null,
                     per_page: perPage,
+                    status: status,
                     order_by: orderBy,
                     order: order,
+                    store: store,
                     search: val === "" ? null : val,
                   };
 
@@ -241,21 +264,23 @@ export function OrderContents() {
                   });
                 }}
                 onRequestSort={(column_selected) => {
-                  if (column_selected === "name") {
+                  if (column_selected !== "action") {
                     const isAsc =
                       orderBy === column_selected && order === "asc";
 
                     const params = {
                       page_no: pageNo,
                       per_page: perPage,
+                      status: status,
                       order_by: column_selected,
                       order: isAsc ? "desc" : "asc",
+                      store: store,
                       search: search,
                     };
 
                     const queryParams = createQueryParams(params);
 
-                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    dispatch(resetGetStockOrders());
                     navigate({
                       pathname: "",
                       search: queryParams,
@@ -268,6 +293,8 @@ export function OrderContents() {
                     const params = {
                       page_no: pageNo,
                       per_page: event.target.value,
+                      status: status,
+                      store: store,
                       order_by: orderBy,
                       order: order,
                       search: search,
@@ -275,7 +302,7 @@ export function OrderContents() {
 
                     const queryParams = createQueryParams(params);
 
-                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    dispatch(resetGetStockOrders());
                     navigate({
                       pathname: "",
                       search: queryParams,
@@ -288,6 +315,8 @@ export function OrderContents() {
                     const params = {
                       page_no: newPage,
                       per_page: perPage,
+                      status: status,
+                      store: store,
                       order_by: orderBy,
                       order: order,
                       search: search,
@@ -295,42 +324,50 @@ export function OrderContents() {
 
                     const queryParams = createQueryParams(params);
 
-                    // dispatch(resetGetAuditSettingQuestionsStatus());
+                    dispatch(resetGetStockOrders());
                     navigate({
                       pathname: "",
                       search: queryParams,
                     });
                   }
                 }}
-                totalRows={25} //To be updated
-                perPage={10} //To be updated
+                totalRows={getStockOrdersState.data?.pagination.total_rows ?? 0}
+                perPage={getStockOrdersState.data?.pagination.per_page ?? 0}
                 page={pageNo ? parseInt(pageNo) : 1}
               >
-                <DataTableRow>
-                  <DataTableCell>Taters Acacia Estates</DataTableCell>
-                  <DataTableCell>1</DataTableCell>
-                  <DataTableCell>July 8, 2023</DataTableCell>
-                  <DataTableCell>July 15, 2023</DataTableCell>
-                  <DataTableCell>July 18, 2023</DataTableCell>
-                  <DataTableCell>July 10, 2023</DataTableCell>
-                  <DataTableCell>July 20</DataTableCell>
-                  <DataTableCell>Update Order Status</DataTableCell>
-                  <DataTableCell>00001</DataTableCell>
-                  <DataTableCell>100000</DataTableCell>
-                  <DataTableCell>Unpaid</DataTableCell>
-                  <DataTableCell>
-                    <IconButton onClick={handleAction}>
-                      <FaEye className="text-lg" />
-                    </IconButton>
-                  </DataTableCell>
-                </DataTableRow>
+                {getStockOrdersState.data?.orders.map((order, index) => (
+                  <DataTableRow key={index}>
+                    <DataTableCell>{order.store_name}</DataTableCell>
+                    <DataTableCell>{order.id}</DataTableCell>
+                    <DataTableCell>{order.order_placement_date}</DataTableCell>
+                    <DataTableCell>
+                      {order.requested_delivery_date}
+                    </DataTableCell>
+                    <DataTableCell>
+                      {order.commited_delivery_date}
+                    </DataTableCell>
+                    <DataTableCell>
+                      {order.order_confirmation_date}
+                    </DataTableCell>
+                    <DataTableCell>{order.actual_delivery_date}</DataTableCell>
+                    <DataTableCell>{order.description}</DataTableCell>
+                    <DataTableCell>{order.billing_id}</DataTableCell>
+                    <DataTableCell>{order.billing_amount}</DataTableCell>
+                    <DataTableCell>{order.short_name}</DataTableCell>
+                    <DataTableCell>
+                      <IconButton onClick={() => handleAction(order.id)}>
+                        <FaEye className="text-lg" />
+                      </IconButton>
+                    </DataTableCell>
+                  </DataTableRow>
+                ))}
               </DataTable>
             </div>
 
-            <div className="block md:hidden">
+            {/* <div className="block md:hidden">
               <DataList
                 search={search ?? ""}
-                emptyMessage={`"No ${columns[tabValue]} redeems yet."`}
+                emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
                 onSearch={(val) => {
                   const params = {
                     page_no: null,
@@ -338,6 +375,7 @@ export function OrderContents() {
                     status: status,
                     order_by: orderBy,
                     order: order,
+                    store: store,
                     search: val === "" ? null : val,
                   };
 
@@ -354,6 +392,7 @@ export function OrderContents() {
                       page_no: pageNo,
                       per_page: event.target.value,
                       status: status,
+                      store: store,
                       search: search,
                     };
 
@@ -372,6 +411,7 @@ export function OrderContents() {
                       page_no: newPage,
                       per_page: perPage,
                       status: status,
+                      store: store,
                       search: search,
                     };
 
@@ -428,7 +468,7 @@ export function OrderContents() {
                   <Divider variant="middle" />
                 </div>
               </DataList>
-            </div>
+            </div> */}
           </TabPanel>
         </div>
       </div>
@@ -457,10 +497,12 @@ export function OrderContents() {
         onClose={() => setOpenConfirmOrderModal(false)}
       />
 
+      {/* --- pass getstockorder id to supplier view order modal */}
       <SupplierViewOrderModal
         open={openSupplierViewOrderModal}
         onClose={() => setOpenSupplierViewOrderModal(false)}
         currentTab={tabValue}
+        id={orderId}
       />
 
       <ProcurementReviewOrdersModal

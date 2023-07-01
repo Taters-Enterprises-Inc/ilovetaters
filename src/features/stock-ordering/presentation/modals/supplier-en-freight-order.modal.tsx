@@ -34,41 +34,7 @@ export function SupplierEnFreightOrderModal(
       view_payment_details: "image.jpg",
       payment_confirmation: "July 20, 2023",
     },
-    product_data: [
-      {
-        id: "1",
-        productId: "1",
-        productName: "Product 1",
-        uom: "PACK",
-        cost: "100",
-        orderQty: "50",
-        currentStock: "10000",
-        commitedQuantity: "100",
-        deliveredQuantity: "50",
-      },
-      {
-        id: "2",
-        productId: "2",
-        productName: "Product 2",
-        uom: "BAGS",
-        cost: "50",
-        orderQty: "25",
-        currentStock: "500",
-        commitedQuantity: "20",
-        deliveredQuantity: "5",
-      },
-      {
-        id: "3",
-        productId: "3",
-        productName: "Product 3",
-        uom: "BAGS",
-        cost: "50",
-        orderQty: "25",
-        currentStock: "500",
-        commitedQuantity: "20",
-        deliveredQuantity: "5",
-      },
-    ],
+    product_data: [],
   });
 
   if (props.open) {
@@ -101,14 +67,14 @@ export function SupplierEnFreightOrderModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
+            {/* <StockOrderTable
               isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
               isStore={false}
               activeTab={props.currentTab}
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
-            />
+            /> */}
             <div className="flex justify-end px-5">
               {isHidden ? null : (
                 <Button onClick={() => setHidden(true)} variant="contained">
