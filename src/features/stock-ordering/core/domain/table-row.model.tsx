@@ -11,7 +11,7 @@ export interface TableRow {
     order_enroute: string;
     actual_delivery_date: string;
     view_updated_delivery_receipt: string;
-    billing_information_ready: string;
+    billing_information_ready: boolean;
     view_payment_details: string;
     payment_confirmation: string;
   };

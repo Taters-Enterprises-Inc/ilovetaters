@@ -23,7 +23,7 @@ interface TableRow {
     order_enroute: string;
     actual_delivery_date: string;
     view_updated_delivery_receipt: string;
-    billing_information_ready: string;
+    billing_information_ready: boolean;
     view_payment_details: string;
     payment_confirmation: string;
   };
@@ -155,7 +155,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
 
         <Divider />
 
-        {/* <StockOrderLogs order_details={props.rowData.order_information} /> */}
+        <StockOrderLogs order_details={props.rowData.order_information} />
       </div>
     </div>
   );

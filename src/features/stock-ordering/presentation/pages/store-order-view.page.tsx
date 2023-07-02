@@ -1,14 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { StockOrderHead, StockOrderTable } from "../components";
-import { Column } from "features/shared/presentation/components/data-table";
+import { StockOrderHead } from "../components";
 import { useAppDispatch, useQuery } from "features/config/hooks";
-import {
-  Table,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableBody,
-} from "@mui/material";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { TableRow as OrderTableData } from "features/stock-ordering/core/domain/table-row.model";
@@ -90,20 +82,20 @@ export function StoreOrderViewPage() {
 
   const [rows, setRows] = useState<OrderTableData>({
     order_information: {
-      store_name: "Taters Acacia Estate",
-      order_number: "1",
-      requested_delivery_date: "June 28, 2023",
-      commited_delivery_date: "July 28, 2023",
-      order_reviewed_date: "June 28, 2023",
-      order_confirmation_date: "June 28, 2023",
-      view_delivery_receipt: "image.jpg",
-      dispatch_date: "July 10, 2023",
-      order_enroute: "July 10, 2023",
-      actual_delivery_date: "July 20, 2023",
-      view_updated_delivery_receipt: "image.jpg",
-      billing_information_ready: "",
-      view_payment_details: "image.jpg",
-      payment_confirmation: "July 20, 2023",
+      store_name: "",
+      order_number: "",
+      requested_delivery_date: "",
+      commited_delivery_date: "",
+      order_reviewed_date: "",
+      order_confirmation_date: "",
+      view_delivery_receipt: "",
+      dispatch_date: "",
+      order_enroute: "",
+      actual_delivery_date: "",
+      view_updated_delivery_receipt: "",
+      billing_information_ready: false,
+      view_payment_details: "",
+      payment_confirmation: "",
     },
     product_data: [],
   });

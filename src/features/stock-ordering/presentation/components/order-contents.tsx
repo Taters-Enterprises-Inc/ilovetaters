@@ -33,6 +33,7 @@ import { FaEye } from "react-icons/fa";
 import { ProcurementConfirmOrdersModal } from "../modals/procurement-confirm-order.modal";
 import { DataList } from "features/shared/presentation/components";
 import {
+  GetStockOrdersState,
   getStockOrders,
   resetGetStockOrders,
   selectGetStockOrders,
@@ -50,6 +51,10 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+interface Modals {
+  [key: string]: boolean;
 }
 
 const TabPanel = (props: TabPanelProps) => {
@@ -78,37 +83,52 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
 
-  const [openPlaceOrderModal, setOpenPlaceOrderModal] = useState(false);
-  const [openConfirmOrderModal, setOpenConfirmOrderModal] = useState(false);
-  const [openSupplierViewOrderModal, setOpenSupplierViewOrderModal] =
-    useState(false);
-  const [openProcurementReviewOrderModal, setOpenProcurementReviewOrderModal] =
-    useState(false);
-  const [
-    openProcurementConfirmOrderModal,
-    setOpenProcurementConfirmOrderModal,
-  ] = useState(false);
+  // const [openPlaceOrderModal, setOpenPlaceOrderModal] = useState(false);
+  // const [openConfirmOrderModal, setOpenConfirmOrderModal] = useState(false);
+  // const [openSupplierViewOrderModal, setOpenSupplierViewOrderModal] =
+  //   useState(false);
+  // const [openProcurementReviewOrderModal, setOpenProcurementReviewOrderModal] =
+  //   useState(false);
+  // const [
+  //   openProcurementConfirmOrderModal,
+  //   setOpenProcurementConfirmOrderModal,
+  // ] = useState(false);
 
-  const [openSupplierDispatchOrderModal, setOpenSupplierDispatchOrderModal] =
-    useState(false);
+  // const [openSupplierDispatchOrderModal, setOpenSupplierDispatchOrderModal] =
+  //   useState(false);
 
-  const [openSupplierEnRouteOrderModal, setOpenSupplierEnRouteOrderModal] =
-    useState(false);
+  // const [openSupplierEnRouteOrderModal, setOpenSupplierEnRouteOrderModal] =
+  //   useState(false);
 
-  const [openSupplierEnFreightOrderModal, setOpenSupplierEnFreightOrderModal] =
-    useState(false);
+  // const [openSupplierEnFreightOrderModal, setOpenSupplierEnFreightOrderModal] =
+  //   useState(false);
 
-  const [openStoreReceiveOrderModal, setOpenStoreReceiveOrderModal] =
-    useState(false);
+  // const [openStoreReceiveOrderModal, setOpenStoreReceiveOrderModal] =
+  //   useState(false);
 
-  const [openSupplierUpdateBillingModal, setOpenSupplierUpdateBillingModal] =
-    useState(false);
+  // const [openSupplierUpdateBillingModal, setOpenSupplierUpdateBillingModal] =
+  //   useState(false);
 
-  const [openStorePayBillingModal, setOpenStorePayBillingModal] =
-    useState(false);
+  // const [openStorePayBillingModal, setOpenStorePayBillingModal] =
+  //   useState(false);
 
-  const [openSupplierConfirmModal, setOpenSupplierConfirmModal] =
-    useState(false);
+  // const [openSupplierConfirmModal, setOpenSupplierConfirmModal] =
+  //   useState(false);
+
+  const [modals, setModals] = useState<Modals>({
+    placeOrder: false,
+    confirmOrder: false,
+    supplierViewOrder: false,
+    procurementReviewOrder: false,
+    procurementConfirmOrder: false,
+    supplierDispatchOrder: false,
+    supplierEnRouteOrder: false,
+    supplierEnFreightOrder: false,
+    storeReceiveOrder: false,
+    supplierUpdateBilling: false,
+    storePayBilling: false,
+    supplierConfirm: false,
+  });
 
   const [orderId, setOrderId] = useState("");
 
@@ -142,44 +162,40 @@ export function OrderContents() {
     { id: "action", label: "Action" },
   ];
 
-  const handleConfirmationModal = (value: boolean) => {
-    setOpenConfirmOrderModal(value);
-    setOpenPlaceOrderModal(false);
+  const handleModalToggle = (modal: string) => {
+    setModals((prevModals) => ({
+      ...prevModals,
+      [modal]: !prevModals[modal],
+    }));
   };
+
+  const handleConfirmationModal = (value: boolean) => {
+    setModals((prevModals) => ({
+      ...prevModals,
+      confirmOrder: value,
+      placeOrder: false,
+    }));
+  };
+
+  // const handleAction = (id: string) => {
+  //   setOrderId(id);
+  //   handleModalToggle("supplierViewOrder");
+  // };
+
+  // const handleConfirmationModal = (value: boolean) => {
+  //   setOpenConfirmOrderModal(value);
+  //   setOpenPlaceOrderModal(false);
+  // };
 
   const handleAction = (id: string) => {
     setOrderId(id);
     switch (tabValue) {
       case 0:
-        setOpenSupplierViewOrderModal(true);
+        handleModalToggle("supplierViewOrder");
 
         break;
       case 1:
-        setOpenProcurementReviewOrderModal(true);
-        break;
-      case 2:
-        setOpenProcurementConfirmOrderModal(true);
-        break;
-      case 3:
-        setOpenSupplierDispatchOrderModal(true);
-        break;
-      case 4:
-        setOpenSupplierEnRouteOrderModal(true);
-        break;
-      case 5:
-        setOpenSupplierEnFreightOrderModal(true);
-        break;
-      case 6:
-        setOpenStoreReceiveOrderModal(true);
-        break;
-      case 7:
-        setOpenSupplierUpdateBillingModal(true);
-        break;
-      case 8:
-        setOpenStorePayBillingModal(true);
-        break;
-      case 9:
-        setOpenSupplierConfirmModal(true);
+        handleModalToggle("procurementReviewOrder");
         break;
     }
   };
@@ -202,7 +218,7 @@ export function OrderContents() {
     });
 
     dispatch(getStockOrders({ query: query, param: currentTab }));
-  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue]);
+  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
 
   return (
     <>
@@ -339,17 +355,61 @@ export function OrderContents() {
                   <DataTableRow key={index}>
                     <DataTableCell>{order.store_name}</DataTableCell>
                     <DataTableCell>{order.id}</DataTableCell>
-                    <DataTableCell>{order.order_placement_date}</DataTableCell>
                     <DataTableCell>
-                      {order.requested_delivery_date}
+                      {order.id !== null
+                        ? new Date(
+                            order.order_placement_date
+                          ).toLocaleDateString("en-PH", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : order.order_placement_date}
                     </DataTableCell>
                     <DataTableCell>
-                      {order.commited_delivery_date}
+                      {order.requested_delivery_date !== null
+                        ? new Date(
+                            order.requested_delivery_date
+                          ).toLocaleDateString("en-PH", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : order.requested_delivery_date}
                     </DataTableCell>
                     <DataTableCell>
-                      {order.order_confirmation_date}
+                      {order.commited_delivery_date !== null
+                        ? new Date(
+                            order.commited_delivery_date
+                          ).toLocaleDateString("en-PH", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : order.commited_delivery_date}
                     </DataTableCell>
-                    <DataTableCell>{order.actual_delivery_date}</DataTableCell>
+                    <DataTableCell>
+                      {order.order_confirmation_date !== null
+                        ? new Date(
+                            order.order_confirmation_date
+                          ).toLocaleDateString("en-PH", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : order.order_confirmation_date}
+                    </DataTableCell>
+                    <DataTableCell>
+                      {order.order_confirmation_date !== null
+                        ? new Date(
+                            order.actual_delivery_date
+                          ).toLocaleDateString("en-PH", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : order.order_confirmation_date}
+                    </DataTableCell>
                     <DataTableCell>{order.description}</DataTableCell>
                     <DataTableCell>{order.billing_id}</DataTableCell>
                     <DataTableCell>{order.billing_amount}</DataTableCell>
@@ -477,7 +537,7 @@ export function OrderContents() {
 
       <div
         className="absolute right-10 bottom-10"
-        onClick={() => setOpenPlaceOrderModal(true)}
+        onClick={() => handleModalToggle("placeOrder")}
       >
         <Fab color="primary">
           <TiDocumentAdd className="text-3xl" />
@@ -485,32 +545,32 @@ export function OrderContents() {
       </div>
 
       <PlaceOrderModal
-        open={openPlaceOrderModal}
+        open={modals.placeOrder}
         onClose={() => {
-          setOpenPlaceOrderModal(false);
+          handleModalToggle("placeOrder");
         }}
         openConfirmationState={handleConfirmationModal}
       />
 
       <ConfirmOrdersModal
-        open={openConfirmOrderModal}
-        onClose={() => setOpenConfirmOrderModal(false)}
+        open={modals.confirmOrder}
+        onClose={() => handleModalToggle("confirmOrder")}
       />
 
-      {/* --- pass getstockorder id to supplier view order modal */}
       <SupplierViewOrderModal
-        open={openSupplierViewOrderModal}
-        onClose={() => setOpenSupplierViewOrderModal(false)}
+        open={modals.supplierViewOrder}
+        onClose={() => handleModalToggle("supplierViewOrder")}
         currentTab={tabValue}
         id={orderId}
       />
 
       <ProcurementReviewOrdersModal
-        open={openProcurementReviewOrderModal}
-        onClose={() => setOpenProcurementReviewOrderModal(false)}
+        open={modals.procurementReviewOrder}
+        onClose={() => handleModalToggle("procurementReviewOrder")}
         currentTab={tabValue}
+        id={orderId}
       />
-
+      {/*
       <ProcurementConfirmOrdersModal
         open={openProcurementConfirmOrderModal}
         onClose={() => setOpenProcurementConfirmOrderModal(false)}
@@ -557,7 +617,7 @@ export function OrderContents() {
         open={openSupplierConfirmModal}
         onClose={() => setOpenSupplierConfirmModal(false)}
         currentTab={tabValue}
-      />
+      /> */}
     </>
   );
 }
