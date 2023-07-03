@@ -53,7 +53,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       }
     | undefined
   >();
-  const [isDisabled, setDisabled] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [isEditCancelled, setisEditCancelled] = useState(false);
   const [buttonDisable, setButtonDisable] = useState(true);
@@ -108,8 +107,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
     props.onClose();
 
-    navigate("/admin/stock-order/order/store/view");
+    // navigate("/admin/stock-order/order/store/view");
   };
+
+  useEffect(() => {
+    if (isEditCancelled) {
+      setRows(getOrderInformation.data?.OrderData ?? []);
+      setisEditCancelled(false);
+    }
+  }, [isEditCancelled]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -117,8 +123,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
-
-  console.log(rows);
 
   return (
     <>
@@ -152,6 +156,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                 }}
                 isEditCancelled={isEditCancelled}
                 isConfirmOrder={true}
+                isEdit={isEdit}
               />
 
               <div className="space-y-5">
@@ -198,12 +203,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                           disabled={buttonDisable}
                           label="Delivery date"
                           views={["month", "day", "year"]}
-                          onError={() => setDisabled(true)}
-                          onAccept={(value) => {
-                            if (dayjs(value)) {
-                              setDisabled(false);
-                            }
-                          }}
                           onChange={(date) => {
                             if (date) {
                               const formattedDate = dayjs(date).format(
@@ -226,6 +225,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                       <div className="basis-1/2 flex flex-row space-x-5">
                         <Button
                           onClick={() => {
+                            setisEditCancelled(true);
+
                             setButtonDisable(true);
                             setIsEdit(false);
                           }}
@@ -239,7 +240,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                           onClick={() => {
                             setButtonDisable(true);
                             setIsEdit(false);
-                            setisEditCancelled(true);
                           }}
                           className="basis-1/2"
                           fullWidth
@@ -258,7 +258,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                         fullWidth
                         variant="contained"
                       >
-                        Edit{" "}
+                        Edit
                       </Button>
                     )}
                     <Button

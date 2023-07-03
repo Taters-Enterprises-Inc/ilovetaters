@@ -14,9 +14,9 @@ import {
 } from "../slices/get-product-data.slice";
 import {
   orderID,
-  reviewOrdersParam,
+  newOrdersParam,
 } from "features/stock-ordering/core/stock-ordering.params";
-import { updateReviewOrders } from "../slices/update-review-orders.slice";
+import { updateNewOrders } from "../slices/update-new-order.slice";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -65,20 +65,20 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     setIsCommitedTextFieldAvailable(false);
     setDisabled(true);
 
-    const reviewOrdersProductDataParam: reviewOrdersParam["product_data"] =
+    const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
       rows.product_data.map((productsItem, index) => ({
         id: productsItem.id,
         productId: productsItem.productId,
         commitedQuantity: productsItem.commitedQuantity,
       }));
 
-    const reviewOrdersParamData: reviewOrdersParam = {
+    const reviewOrdersParamData: newOrdersParam = {
       id: props.id,
       commitedDelivery: CommitedDeliveryDate,
       product_data: reviewOrdersProductDataParam,
     };
 
-    await dispatch(updateReviewOrders(reviewOrdersParamData));
+    await dispatch(updateNewOrders(reviewOrdersParamData));
 
     props.onClose();
   };

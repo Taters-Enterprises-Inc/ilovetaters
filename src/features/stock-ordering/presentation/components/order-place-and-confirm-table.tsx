@@ -32,6 +32,7 @@ interface OrderPlaceAndConfirmTableProps {
   isDisabled: boolean;
   isConfirmOrder: boolean;
   isEditCancelled: boolean;
+  isEdit: boolean;
   handleTableRows: (TableData: TableRow[]) => void;
   setCategory: (categoryData: {
     category_id: string;
@@ -56,6 +57,8 @@ export function OrderPlaceAndConfirmTable(
       orderQty: "",
     },
   ]);
+
+  let tempRows: TableRow[] = [];
 
   const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
@@ -98,14 +101,24 @@ export function OrderPlaceAndConfirmTable(
   ];
 
   useEffect(() => {
-    if (getOrderInformation.data && props.isConfirmOrder) {
+    if (
+      (getOrderInformation.data && props.isConfirmOrder) ||
+      (props.isEditCancelled && getOrderInformation.data)
+    ) {
       setCategory(getOrderInformation.data.category);
       setRows(getOrderInformation.data.OrderData);
     }
-  }, [getOrderInformation.data]);
+  }, [getOrderInformation.data, props.isEditCancelled]);
 
   useEffect(() => {
     if (category) {
+      props.setCategory({
+        category_id: category?.category_id ?? "",
+        category_name: category?.category_name ?? "",
+      });
+    }
+
+    if (category || props.isEdit) {
       dispatch(
         getStockOrderProducts({
           category: category.category_id,
@@ -116,19 +129,10 @@ export function OrderPlaceAndConfirmTable(
         })
       );
     }
-  }, [dispatch, category]);
+  }, [dispatch, category, props.isEdit]);
 
   useEffect(() => {
-    props.setCategory({
-      category_id: category?.category_id ?? "",
-      category_name: category?.category_name ?? "",
-    });
-  }, [category]);
-
-  useEffect(() => {
-    props.isEditCancelled
-      ? props.handleTableRows(getOrderInformation.data?.OrderData ?? [])
-      : props.handleTableRows(rows);
+    props.handleTableRows(rows);
   }, [rows]);
 
   return (
@@ -206,9 +210,10 @@ export function OrderPlaceAndConfirmTable(
                     </TableCell>
                     <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
                     <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
-                    <TableCell sx={{ width: 75 }}>
+                    <TableCell sx={{ width: 125 }}>
                       <TextField
                         required
+                        type="number"
                         value={row.orderQty}
                         disabled={props.isDisabled}
                         onChange={(event) => {

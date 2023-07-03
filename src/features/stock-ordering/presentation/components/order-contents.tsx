@@ -197,6 +197,9 @@ export function OrderContents() {
       case 1:
         handleModalToggle("procurementReviewOrder");
         break;
+      case 2:
+        handleModalToggle("procurementConfirmOrder");
+        break;
     }
   };
 
@@ -570,13 +573,14 @@ export function OrderContents() {
         currentTab={tabValue}
         id={orderId}
       />
-      {/*
-      <ProcurementConfirmOrdersModal
-        open={openProcurementConfirmOrderModal}
-        onClose={() => setOpenProcurementConfirmOrderModal(false)}
-        currentTab={tabValue}
-      />
 
+      <ProcurementConfirmOrdersModal
+        open={modals.procurementConfirmOrder}
+        onClose={() => handleModalToggle("procurementConfirmOrder")}
+        currentTab={tabValue}
+        id={orderId}
+      />
+      {/*
       <SupplierDispatchOrderModal
         open={openSupplierDispatchOrderModal}
         onClose={() => setOpenSupplierDispatchOrderModal(false)}

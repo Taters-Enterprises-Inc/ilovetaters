@@ -30,7 +30,11 @@ export interface orderID {
   orderId: string;
 }
 
-export interface reviewOrdersParam {
+export interface updateStatus {
+  id: string;
+}
+
+export interface newOrdersParam {
   id: string;
   commitedDelivery: string;
   product_data: {

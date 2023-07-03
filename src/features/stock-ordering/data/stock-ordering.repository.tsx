@@ -7,7 +7,8 @@ import {
   ProductParam,
   currentTab,
   orderID,
-  reviewOrdersParam,
+  newOrdersParam,
+  updateStatus,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -48,7 +49,21 @@ export interface GetProductDataResponse {
   };
 }
 
+export interface updateNewOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
 export interface updateReviewOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateConfirmOrdersResponse {
   data: {
     message: string;
     data: string;
@@ -103,10 +118,26 @@ export function GetProductDataRepository(
   });
 }
 
-export function updateReviewOrdersRepository(
-  param: reviewOrdersParam
-): Promise<updateReviewOrdersResponse> {
+export function updateNewOrdersRepository(
+  param: newOrdersParam
+): Promise<updateNewOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/update-order`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updateReviewOrdersRepository(
+  param: updateStatus
+): Promise<updateReviewOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/review-order`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updateConfirmOrdersRepository(
+  param: updateStatus
+): Promise<updateConfirmOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/confirm-order`, param, {
     withCredentials: true,
   });
 }

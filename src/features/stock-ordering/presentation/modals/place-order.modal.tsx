@@ -182,6 +182,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                   store_id: selectedStore?.name ?? "",
                   store_name: selectedStore?.store_id ?? "",
                 }}
+                isEdit={false}
                 setCategory={setCategory}
                 isEditCancelled={false}
                 isConfirmOrder={false}
