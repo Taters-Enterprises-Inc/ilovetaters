@@ -9,6 +9,7 @@ import {
   orderID,
   newOrdersParam,
   updateStatus,
+  receiveOrdersParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -64,6 +65,27 @@ export interface updateReviewOrdersResponse {
 }
 
 export interface updateConfirmOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateDispatchOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateEnrouteOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateReceiveOrdersResponse {
   data: {
     message: string;
     data: string;
@@ -140,4 +162,32 @@ export function updateConfirmOrdersRepository(
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/confirm-order`, param, {
     withCredentials: true,
   });
+}
+
+export function updateDispatchOrdersRepository(
+  param: updateStatus
+): Promise<updateDispatchOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/dispatch-order`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updateEnrouteOrdersRepository(
+  param: updateStatus
+): Promise<updateEnrouteOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/order-en-route`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updateReceiveOrdersRepository(
+  param: receiveOrdersParam
+): Promise<updateReceiveOrdersResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/receive-order-delivery`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }

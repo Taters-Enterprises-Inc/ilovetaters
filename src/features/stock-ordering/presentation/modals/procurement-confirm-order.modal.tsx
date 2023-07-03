@@ -82,7 +82,7 @@ export function ProcurementConfirmOrdersModal(
         billing_information_ready:
           order.billing_id && order.billing_amount ? true : false,
         view_payment_details: order.payment_detail_image,
-        payment_confirmation: order.order_confirmation_date,
+        payment_confirmation: order.payment_confirmation_date,
       };
 
       const productData: TableRow["product_data"] =

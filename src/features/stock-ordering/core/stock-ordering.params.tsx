@@ -30,6 +30,11 @@ export interface orderID {
   orderId: string;
 }
 
+export interface dispatchOrderParam {
+  id: string;
+  deliveryReceipt: File | string;
+}
+
 export interface updateStatus {
   id: string;
 }
@@ -41,5 +46,16 @@ export interface newOrdersParam {
     id: string;
     productId: string;
     commitedQuantity: string;
+  }[];
+}
+
+export interface receiveOrdersParam {
+  id: string;
+  actualDeliveryDate: string;
+  updatedDeliveryReceipt: File | string;
+  product_data: {
+    id: string;
+    productId: string;
+    deliveryQuantity: string;
   }[];
 }

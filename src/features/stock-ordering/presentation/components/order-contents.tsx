@@ -200,6 +200,15 @@ export function OrderContents() {
       case 2:
         handleModalToggle("procurementConfirmOrder");
         break;
+      case 3:
+        handleModalToggle("supplierDispatchOrder");
+        break;
+      case 4:
+        handleModalToggle("supplierEnRouteOrder");
+        break;
+      case 6:
+        handleModalToggle("storeReceiveOrder");
+        break;
     }
   };
 
@@ -403,7 +412,7 @@ export function OrderContents() {
                         : order.order_confirmation_date}
                     </DataTableCell>
                     <DataTableCell>
-                      {order.order_confirmation_date !== null
+                      {order.actual_delivery_date !== null
                         ? new Date(
                             order.actual_delivery_date
                           ).toLocaleDateString("en-PH", {
@@ -411,7 +420,7 @@ export function OrderContents() {
                             day: "numeric",
                             year: "numeric",
                           })
-                        : order.order_confirmation_date}
+                        : order.actual_delivery_date}
                     </DataTableCell>
                     <DataTableCell>{order.description}</DataTableCell>
                     <DataTableCell>{order.billing_id}</DataTableCell>
@@ -580,31 +589,34 @@ export function OrderContents() {
         currentTab={tabValue}
         id={orderId}
       />
-      {/*
+
       <SupplierDispatchOrderModal
-        open={openSupplierDispatchOrderModal}
-        onClose={() => setOpenSupplierDispatchOrderModal(false)}
+        open={modals.supplierDispatchOrder}
+        onClose={() => handleModalToggle("supplierDispatchOrder")}
         currentTab={tabValue}
+        id={orderId}
       />
 
       <SupplierEnRouteOrderModal
-        open={openSupplierEnRouteOrderModal}
-        onClose={() => setOpenSupplierEnRouteOrderModal(false)}
+        open={modals.supplierEnRouteOrder}
+        onClose={() => handleModalToggle("supplierEnRouteOrder")}
         currentTab={tabValue}
+        id={orderId}
       />
 
-      <SupplierEnFreightOrderModal
+      {/* <SupplierEnFreightOrderModal
         open={openSupplierEnFreightOrderModal}
         onClose={() => setOpenSupplierEnFreightOrderModal(false)}
         currentTab={tabValue}
-      />
+      /> */}
 
       <StoreReceiveOrderModal
-        open={openStoreReceiveOrderModal}
-        onClose={() => setOpenStoreReceiveOrderModal(false)}
+        open={modals.storeReceiveOrder}
+        onClose={() => handleModalToggle("storeReceiveOrder")}
         currentTab={tabValue}
+        id={orderId}
       />
-
+      {/*
       <SupplierUpdateBillingModal
         open={openSupplierUpdateBillingModal}
         onClose={() => setOpenSupplierUpdateBillingModal(false)}

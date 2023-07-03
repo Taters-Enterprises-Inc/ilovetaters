@@ -14,8 +14,6 @@ import {
 } from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
-import { store } from "features/config/store";
-import { getStockOrderProducts } from "../slices/get-products.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -90,10 +88,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     setRows(TableData);
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    dispatch(
+    await dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
         deliverydate: deliveryDate,
@@ -104,6 +102,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         OrderData: rows,
       })
     );
+
+    setRows([]);
+    setDeliveryData(dayjs().format("YYYY-MM-DD HH:mm:ss"));
 
     props.onClose();
 

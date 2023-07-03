@@ -251,6 +251,9 @@ import getProductData from "features/stock-ordering/presentation/slices/get-prod
 import updateNewOrders from "features/stock-ordering/presentation/slices/update-new-order.slice";
 import updateReviewOrders from "features/stock-ordering/presentation/slices/update-review-order.slice";
 import updateConfirmOrders from "features/stock-ordering/presentation/slices/update-confirm-order.slice";
+import updateDispatchOrders from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
+import updateEnrouteOrders from "features/stock-ordering/presentation/slices/update-enroute-order.slice";
+import updateReceiveOrders from "features/stock-ordering/presentation/slices/update-receive-order.slice";
 
 export const store = configureStore({
   reducer: {
@@ -505,6 +508,9 @@ export const store = configureStore({
     updateNewOrders,
     updateReviewOrders,
     updateConfirmOrders,
+    updateDispatchOrders,
+    updateEnrouteOrders,
+    updateReceiveOrders,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

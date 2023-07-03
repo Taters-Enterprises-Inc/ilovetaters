@@ -88,7 +88,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       id: "payment_confirmation",
       label: "payment Confirmation",
       isButton: false,
-      isDate: false,
+      isDate: true,
     },
   ];
 

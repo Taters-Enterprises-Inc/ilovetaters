@@ -80,6 +80,26 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     await dispatch(updateNewOrders(reviewOrdersParamData));
 
+    setRows({
+      order_information: {
+        store_name: "",
+        order_number: "",
+        requested_delivery_date: "",
+        commited_delivery_date: "",
+        order_reviewed_date: "",
+        order_confirmation_date: "",
+        view_delivery_receipt: "",
+        dispatch_date: "",
+        order_enroute: "",
+        actual_delivery_date: "",
+        view_updated_delivery_receipt: "",
+        billing_information_ready: false,
+        view_payment_details: "",
+        payment_confirmation: "",
+      },
+      product_data: [],
+    });
+
     props.onClose();
   };
 
@@ -113,7 +133,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
         billing_information_ready:
           order.billing_id && order.billing_amount ? true : false,
         view_payment_details: order.payment_detail_image,
-        payment_confirmation: order.order_confirmation_date,
+        payment_confirmation: order.payment_confirmation_date,
       };
 
       const productData: TableRow["product_data"] =
@@ -140,8 +160,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
-
-  console.log(getProductDataState.data?.order_information?.store_name);
 
   return (
     <>
