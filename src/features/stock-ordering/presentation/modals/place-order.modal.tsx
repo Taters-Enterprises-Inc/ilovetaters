@@ -82,6 +82,10 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   };
 
   useEffect(() => {
+    setDeliveryData(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+  }, [props.open]);
+
+  useEffect(() => {
     dispatch(getStockOrderStores());
   }, [dispatch]);
 

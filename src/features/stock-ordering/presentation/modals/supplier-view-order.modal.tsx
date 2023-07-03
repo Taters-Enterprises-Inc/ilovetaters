@@ -1,5 +1,4 @@
 import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
@@ -17,6 +16,7 @@ import {
   newOrdersParam,
 } from "features/stock-ordering/core/stock-ordering.params";
 import { updateNewOrders } from "../slices/update-new-order.slice";
+import { InitializeModal, InitializeProductData } from "../components";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -27,14 +27,9 @@ interface PlaceOrdersModalProps {
 
 export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [isDisabled, setDisabled] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const [isCommitedTextFieldAvailable, setIsCommitedTextFieldAvailable] =
-    useState(true);
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
@@ -62,9 +57,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    setIsCommitedTextFieldAvailable(false);
-    setDisabled(true);
-
     const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
       rows.product_data.map((productsItem, index) => ({
         id: productsItem.id,
@@ -80,79 +72,94 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     await dispatch(updateNewOrders(reviewOrdersParamData));
 
-    setRows({
-      order_information: {
-        store_name: "",
-        order_number: "",
-        requested_delivery_date: "",
-        commited_delivery_date: "",
-        order_reviewed_date: "",
-        order_confirmation_date: "",
-        view_delivery_receipt: "",
-        dispatch_date: "",
-        order_enroute: "",
-        actual_delivery_date: "",
-        view_updated_delivery_receipt: "",
-        billing_information_ready: false,
-        view_payment_details: "",
-        payment_confirmation: "",
-      },
-      product_data: [],
-    });
-
     props.onClose();
   };
 
-  useEffect(() => {
-    const productID: orderID = { orderId: props.id };
+  // useEffect(() => {
+  //   const productID: orderID = { orderId: props.id };
 
-    if (props.open) {
-      dispatch(getProductData(productID));
-    }
-  }, [dispatch, props.open]);
+  //   if (props.open) {
+  //     dispatch(getProductData(productID));
+  //   }
 
-  useEffect(() => {
-    if (
-      getProductDataState.data &&
-      getProductDataState.data.product_data &&
-      getProductDataState.data.order_information
-    ) {
-      const order = getProductDataState.data?.order_information;
-      const order_information: TableRow["order_information"] = {
-        store_name: order.store_name,
-        order_number: order.id,
-        requested_delivery_date: order.requested_delivery_date,
-        commited_delivery_date: order.commited_delivery_date,
-        order_reviewed_date: order.reviewed_date,
-        order_confirmation_date: order.order_confirmation_date,
-        view_delivery_receipt: order.delivery_receipt,
-        dispatch_date: order.dispatch_date,
-        order_enroute: order.enroute_date,
-        actual_delivery_date: order.actual_delivery_date,
-        view_updated_delivery_receipt: order.updated_delivery_receipt,
-        billing_information_ready:
-          order.billing_id && order.billing_amount ? true : false,
-        view_payment_details: order.payment_detail_image,
-        payment_confirmation: order.payment_confirmation_date,
-      };
+  //   setRows({
+  //     order_information: {
+  //       store_name: "",
+  //       order_number: "",
+  //       requested_delivery_date: "",
+  //       commited_delivery_date: "",
+  //       order_reviewed_date: "",
+  //       order_confirmation_date: "",
+  //       view_delivery_receipt: "",
+  //       dispatch_date: "",
+  //       order_enroute: "",
+  //       actual_delivery_date: "",
+  //       view_updated_delivery_receipt: "",
+  //       billing_information_ready: false,
+  //       view_payment_details: "",
+  //       payment_confirmation: "",
+  //     },
+  //     product_data: [],
+  //   });
 
-      const productData: TableRow["product_data"] =
-        getProductDataState.data.product_data.map((product) => ({
-          id: product.id,
-          productId: product.product_id,
-          productName: product.product_name,
-          uom: product.uom,
-          orderQty: product.order_qty,
-          commitedQuantity: product.commited_qty,
-          deliveredQuantity: product.delivered_qty,
-        }));
+  //   setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+  // }, [dispatch, props.open]);
 
-      setRows({
-        order_information: order_information,
-        product_data: productData,
-      });
-    }
-  }, [getProductDataState.data]);
+  InitializeModal({
+    setRows: setRows,
+    id: props.id,
+    open: props.open,
+  });
+
+  InitializeProductData({
+    setRows: setRows,
+    productData: getProductDataState.data
+      ? getProductDataState.data
+      : undefined,
+  });
+
+  // useEffect(() => {
+  //   if (
+  //     getProductDataState.data &&
+  //     getProductDataState.data.product_data &&
+  //     getProductDataState.data.order_information
+  //   ) {
+  //     const order = getProductDataState.data?.order_information;
+  //     const order_information: TableRow["order_information"] = {
+  //       store_name: order.store_name,
+  //       order_number: order.id,
+  //       requested_delivery_date: order.requested_delivery_date,
+  //       commited_delivery_date: order.commited_delivery_date,
+  //       order_reviewed_date: order.reviewed_date,
+  //       order_confirmation_date: order.order_confirmation_date,
+  //       view_delivery_receipt: order.delivery_receipt,
+  //       dispatch_date: order.dispatch_date,
+  //       order_enroute: order.enroute_date,
+  //       actual_delivery_date: order.actual_delivery_date,
+  //       view_updated_delivery_receipt: order.updated_delivery_receipt,
+  //       billing_information_ready:
+  //         order.billing_id && order.billing_amount ? true : false,
+  //       view_payment_details: order.payment_detail_image,
+  //       payment_confirmation: order.payment_confirmation_date,
+  //     };
+
+  //     const productData: TableRow["product_data"] =
+  //       getProductDataState.data.product_data.map((product) => ({
+  //         id: product.id,
+  //         productId: product.product_id,
+  //         productName: product.product_name,
+  //         uom: product.uom,
+  //         orderQty: product.order_qty,
+  //         commitedQuantity: product.commited_qty,
+  //         deliveredQuantity: product.delivered_qty,
+  //       }));
+
+  //     setRows({
+  //       order_information: order_information,
+  //       product_data: productData,
+  //     });
+  //   }
+  // }, [getProductDataState.data]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -184,7 +191,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
             <form className="overflow-auto" onSubmit={handleSubmit}>
               <StockOrderTable
-                isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
+                isCommitedTextFieldAvailable={true}
                 isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
@@ -199,7 +206,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Commited Delivery"
-                      disabled={isDisabled}
                       views={["month", "day", "year"]}
                       onChange={(date) => {
                         if (date) {
