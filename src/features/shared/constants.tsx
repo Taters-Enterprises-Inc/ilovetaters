@@ -1314,7 +1314,7 @@ export const TAB_NAVIGATION = [
   { label: "CONFIRM ORDERS" },
   { label: "DISPATCH ORDERS" },
   { label: "ORDERS EN ROUTE" },
-  { label: "ORDER IN FREIGHT" },
+  // { label: "ORDER IN FREIGHT" },
   { label: "RECEIVE ORDERS" },
   { label: "UPDATE BILLING" },
   { label: "PAY BILLING" },

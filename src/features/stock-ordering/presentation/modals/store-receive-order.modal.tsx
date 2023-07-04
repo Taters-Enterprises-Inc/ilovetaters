@@ -2,7 +2,11 @@ import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DatePicker,
+  DateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import {
@@ -28,7 +32,6 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [buttonDisable, setButtonDisable] = useState(false);
   const [actualDeliveryDate, setActualDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
@@ -146,7 +149,6 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
       await dispatch(updateReceiveOrders(receiveOrdersParamData));
 
-      setButtonDisable(true);
       props.onClose();
     } else {
       setOpenUploadDeliveryRecieptModal(true);
@@ -214,62 +216,59 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                 isDeliveredQtyAvailable={true}
               />
 
-              {buttonDisable ? null : (
-                <div className="space-y-5">
-                  <div className="px-5">
-                    <div className="flex flex-row space-x-5">
-                      <div className="basis-1/2 flex flex-col space-y-2">
-                        <span>Actual Delivery Date: </span>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            disabled={buttonDisable}
-                            label="Delivery date"
-                            views={["month", "day", "year"]}
-                            onChange={(date) => {
-                              if (date) {
-                                const formattedDate = dayjs(date).format(
-                                  "YYYY-MM-DD 00:00:00"
-                                );
+              <div className="space-y-5">
+                <div className="px-5">
+                  <div className="flex flex-row space-x-5">
+                    <div className="basis-1/2 flex flex-col space-y-2">
+                      <span>Actual Delivery Date: </span>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                          label="Delivery date and time"
+                          views={["year", "month", "day", "hours", "minutes"]}
+                          onChange={(date) => {
+                            if (date) {
+                              const formattedDate = dayjs(date).format(
+                                "YYYY-MM-DD HH:mm:ss"
+                              );
 
-                                setActualDeliveryDate(formattedDate);
-                              }
-                            }}
-                            value={dayjs(actualDeliveryDate)}
-                            renderInput={(params) => (
-                              <TextField required {...params} size="small" />
-                            )}
-                          />
-                        </LocalizationProvider>
-                      </div>
+                              setActualDeliveryDate(formattedDate);
+                            }
+                          }}
+                          value={dayjs(actualDeliveryDate)}
+                          renderInput={(params) => (
+                            <TextField required {...params} size="small" />
+                          )}
+                        />
+                      </LocalizationProvider>
+                    </div>
 
-                      {isValidFile(uploadedReceipt) ? (
-                        <div className="basis-1/12 flex  justify-center items-stretch">
-                          <div className="self-end">
-                            <IconButton
-                              onClick={() =>
-                                setOpenUploadDeliveryRecieptModal(true)
-                              }
-                            >
-                              <MdPreview className=" text-3xl" />
-                            </IconButton>
-                          </div>
+                    {isValidFile(uploadedReceipt) ? (
+                      <div className="basis-1/12 flex  justify-center items-stretch">
+                        <div className="self-end">
+                          <IconButton
+                            onClick={() =>
+                              setOpenUploadDeliveryRecieptModal(true)
+                            }
+                          >
+                            <MdPreview className=" text-3xl" />
+                          </IconButton>
                         </div>
-                      ) : null}
-
-                      <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
-                        <Button
-                          className="self-end"
-                          type="submit"
-                          fullWidth
-                          variant="contained"
-                        >
-                          Confirm
-                        </Button>
                       </div>
+                    ) : null}
+
+                    <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
+                      <Button
+                        className="self-end"
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                      >
+                        Confirm
+                      </Button>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </form>
         </div>

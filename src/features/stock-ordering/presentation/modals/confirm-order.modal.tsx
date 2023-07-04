@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { Autocomplete, Button, TableRow, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DatePicker,
+  DateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { OrderPlaceAndConfirmTable } from "../components";
@@ -31,7 +35,6 @@ interface TableRow {
 
 export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const getStores = useAppSelector(selectGetStockOrderStores);
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
@@ -200,14 +203,13 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                     <div className="basis-1/2 flex flex-col space-y-2">
                       <span>Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          disabled={buttonDisable}
-                          label="Delivery date"
-                          views={["month", "day", "year"]}
+                        <DateTimePicker
+                          label="Delivery date and time"
+                          views={["year", "month", "day", "hours", "minutes"]}
                           onChange={(date) => {
                             if (date) {
                               const formattedDate = dayjs(date).format(
-                                "YYYY-MM-DD 00:00:00"
+                                "YYYY-MM-DD HH:mm:ss"
                               );
 
                               setDeliveryData(formattedDate);

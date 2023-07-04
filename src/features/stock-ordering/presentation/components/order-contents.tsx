@@ -46,6 +46,7 @@ import {
   DataTableRow,
 } from "features/shared/presentation/components/data-table";
 import { TAB_NAVIGATION } from "features/shared/constants";
+import { CompleteModal } from "../modals/complete-order.modal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -128,6 +129,7 @@ export function OrderContents() {
     supplierUpdateBilling: false,
     storePayBilling: false,
     supplierConfirm: false,
+    complete: false,
   });
 
   const [orderId, setOrderId] = useState("");
@@ -206,8 +208,20 @@ export function OrderContents() {
       case 4:
         handleModalToggle("supplierEnRouteOrder");
         break;
-      case 6:
+      case 5:
         handleModalToggle("storeReceiveOrder");
+        break;
+      case 6:
+        handleModalToggle("supplierUpdateBilling");
+        break;
+      case 7:
+        handleModalToggle("storePayBilling");
+        break;
+      case 8:
+        handleModalToggle("supplierConfirm");
+        break;
+      case 9:
+        handleModalToggle("complete");
         break;
     }
   };
@@ -375,6 +389,8 @@ export function OrderContents() {
                             month: "long",
                             day: "numeric",
                             year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
                           })
                         : order.order_placement_date}
                     </DataTableCell>
@@ -386,6 +402,8 @@ export function OrderContents() {
                             month: "long",
                             day: "numeric",
                             year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
                           })
                         : order.requested_delivery_date}
                     </DataTableCell>
@@ -397,6 +415,8 @@ export function OrderContents() {
                             month: "long",
                             day: "numeric",
                             year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
                           })
                         : order.commited_delivery_date}
                     </DataTableCell>
@@ -408,6 +428,8 @@ export function OrderContents() {
                             month: "long",
                             day: "numeric",
                             year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
                           })
                         : order.order_confirmation_date}
                     </DataTableCell>
@@ -419,6 +441,8 @@ export function OrderContents() {
                             month: "long",
                             day: "numeric",
                             year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
                           })
                         : order.actual_delivery_date}
                     </DataTableCell>
@@ -616,24 +640,34 @@ export function OrderContents() {
         currentTab={tabValue}
         id={orderId}
       />
-      {/*
+
       <SupplierUpdateBillingModal
-        open={openSupplierUpdateBillingModal}
-        onClose={() => setOpenSupplierUpdateBillingModal(false)}
+        open={modals.supplierUpdateBilling}
+        onClose={() => handleModalToggle("supplierUpdateBilling")}
         currentTab={tabValue}
+        id={orderId}
       />
 
       <StorePayBillingModal
-        open={openStorePayBillingModal}
-        onClose={() => setOpenStorePayBillingModal(false)}
+        open={modals.storePayBilling}
+        onClose={() => handleModalToggle("storePayBilling")}
         currentTab={tabValue}
+        id={orderId}
       />
 
       <SupplierConfirmModal
-        open={openSupplierConfirmModal}
-        onClose={() => setOpenSupplierConfirmModal(false)}
+        open={modals.supplierConfirm}
+        onClose={() => handleModalToggle("supplierConfirm")}
         currentTab={tabValue}
-      /> */}
+        id={orderId}
+      />
+
+      <CompleteModal
+        open={modals.complete}
+        onClose={() => handleModalToggle("complete")}
+        currentTab={0}
+        id={orderId}
+      />
     </>
   );
 }

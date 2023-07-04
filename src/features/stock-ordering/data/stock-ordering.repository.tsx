@@ -10,6 +10,9 @@ import {
   newOrdersParam,
   updateStatus,
   receiveOrdersParam,
+  updateBillingOrderParam,
+  updateEnRoutePram,
+  updatePayBillingParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -86,6 +89,27 @@ export interface updateEnrouteOrdersResponse {
 }
 
 export interface updateReceiveOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateBillingOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updatePayBillingOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
+export interface updateConfirmPaymentResponse {
   data: {
     message: string;
     data: string;
@@ -173,7 +197,7 @@ export function updateDispatchOrdersRepository(
 }
 
 export function updateEnrouteOrdersRepository(
-  param: updateStatus
+  param: updateEnRoutePram
 ): Promise<updateEnrouteOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/order-en-route`, param, {
     withCredentials: true,
@@ -190,4 +214,28 @@ export function updateReceiveOrdersRepository(
       withCredentials: true,
     }
   );
+}
+
+export function updateBillingOrdersRepository(
+  param: updateBillingOrderParam
+): Promise<updateBillingOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/update-billing`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updatePayBillingOrdersRepository(
+  param: updatePayBillingParam
+): Promise<updatePayBillingOrdersResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing`, param, {
+    withCredentials: true,
+  });
+}
+
+export function updateConfirmPaymentRepository(
+  param: updateStatus
+): Promise<updateConfirmPaymentResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/confirm-payment`, param, {
+    withCredentials: true,
+  });
 }

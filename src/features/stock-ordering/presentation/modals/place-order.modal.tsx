@@ -119,9 +119,10 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
               <div className="flex flex-row space-x-5">
-                <div className="basis-1/2 flex flex-col space-y-2">
+                <div className="basis-full	flex flex-col space-y-2">
                   <span>Select Store: </span>
                   <Autocomplete
+                    fullWidth
                     id="stock-order-selected-store"
                     size="small"
                     options={
@@ -150,7 +151,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                   />
                 </div>
 
-                <div className="basis-1/2 flex flex-col space-y-2">
+                {/* <div className="basis-1/2 flex flex-col space-y-2">
                   <span>Delivery Date: </span>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -176,7 +177,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                       )}
                     />
                   </LocalizationProvider>
-                </div>
+                </div> */}
               </div>
 
               <OrderPlaceAndConfirmTable

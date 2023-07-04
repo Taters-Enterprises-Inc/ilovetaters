@@ -124,6 +124,8 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
         month: "long",
         day: "numeric",
         year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
       });
     } else {
       return value;

@@ -59,3 +59,19 @@ export interface receiveOrdersParam {
     deliveryQuantity: string;
   }[];
 }
+
+export interface updateBillingOrderParam {
+  id: string;
+  billingInformationId: string;
+  billingAmount: string;
+}
+
+export interface updateEnRoutePram {
+  id: string;
+  transport: string;
+}
+
+export interface updatePayBillingParam {
+  id: string;
+  paymentDetailImage: File | string;
+}

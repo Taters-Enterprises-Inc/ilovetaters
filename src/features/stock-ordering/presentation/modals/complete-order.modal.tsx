@@ -1,38 +1,21 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import { AddBillingInformationModal } from "./add-billing-information.modal";
+import { useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
-import { updateBillingOrders } from "../slices/update-billing-order.slice";
 
-interface SupplierUpdateBillingModalProps {
+interface CompleteModalProps {
   open: boolean;
   onClose: () => void;
   currentTab: number;
   id: string;
 }
 
-export function SupplierUpdateBillingModal(
-  props: SupplierUpdateBillingModalProps
-) {
-  const [openAddBillingInformationModal, setOpenAddBillingInformationModal] =
-    useState(false);
-
-  const dispatch = useAppDispatch();
+export function CompleteModal(props: CompleteModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
-
-  const [billingInformation, setBillingInformation] = useState<{
-    billing_id: string;
-    billing_amount: string;
-  }>({
-    billing_id: "",
-    billing_amount: "",
-  });
 
   const [rows, setRows] = useState<TableRow>({
     order_information: {
@@ -54,13 +37,6 @@ export function SupplierUpdateBillingModal(
     product_data: [],
   });
 
-  useEffect(() => {
-    setBillingInformation({
-      billing_id: "",
-      billing_amount: "",
-    });
-  }, [props.open]);
-
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -73,17 +49,6 @@ export function SupplierUpdateBillingModal(
       ? getProductDataState.data
       : undefined,
   });
-
-  const handleSupplierUpdate = async () => {
-    const billingOrdersParamData: updateBillingOrderParam = {
-      id: props.id,
-      billingInformationId: billingInformation.billing_id,
-      billingAmount: billingInformation.billing_amount,
-    };
-
-    await dispatch(updateBillingOrders(billingOrdersParamData));
-    props.onClose();
-  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -100,7 +65,7 @@ export function SupplierUpdateBillingModal(
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Update Order Billing</span>
+            <span className="text-2xl text-white">Complete Modal</span>
             <button
               className="text-2xl text-white"
               onClick={() => {
@@ -121,44 +86,9 @@ export function SupplierUpdateBillingModal(
               rowData={rows}
               isDeliveredQtyAvailable={false}
             />
-
-            <div className="flex flex-row space-x-4">
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => {
-                    setOpenAddBillingInformationModal(true);
-                  }}
-                  fullWidth
-                  variant="contained"
-                >
-                  Add Billing Information
-                </Button>
-              </div>
-              <div className="basis-1/2">
-                <Button
-                  disabled={
-                    billingInformation.billing_amount === "" &&
-                    billingInformation.billing_id === ""
-                      ? true
-                      : false
-                  }
-                  onClick={() => handleSupplierUpdate()}
-                  fullWidth
-                  variant="contained"
-                >
-                  Confirm
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-      <AddBillingInformationModal
-        open={openAddBillingInformationModal}
-        onClose={() => setOpenAddBillingInformationModal(false)}
-        setBillingInformation={setBillingInformation}
-      />
     </>
   );
 }

@@ -5,7 +5,11 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { TextField, Button } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DatePicker,
+  DateTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   getProductData,
@@ -105,6 +109,10 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   //   setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
   // }, [dispatch, props.open]);
 
+  useEffect(() => {
+    setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+  }, [props.open]);
+
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -198,19 +206,19 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
               />
-              <div className="flex items-stretch pt-5 px-12 space-x-5">
+              <div className="flex items-stretch pt-5 space-x-5">
                 <span className="basis-1/2 self-center font-semibold text-right">
                   Commited Delivery:
                 </span>
                 <div className="basis-1/2">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Commited Delivery"
-                      views={["month", "day", "year"]}
+                    <DateTimePicker
+                      label="Delivery date and time"
+                      views={["year", "month", "day", "hours", "minutes"]}
                       onChange={(date) => {
                         if (date) {
                           const formattedDate = dayjs(date).format(
-                            "YYYY-MM-DD 00:00:00"
+                            "YYYY-MM-DD HH:mm:ss"
                           );
 
                           setCommitedDeliveryDate(formattedDate);
@@ -223,7 +231,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="basis-4/5">
+                <div className="basis-4/5 pr-6">
                   <Button fullWidth type="submit" variant="contained">
                     Confirm
                   </Button>

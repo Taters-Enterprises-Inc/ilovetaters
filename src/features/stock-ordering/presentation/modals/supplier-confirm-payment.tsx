@@ -1,15 +1,22 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddBillingInformationModal } from "./add-billing-information.modal";
 import { PayBillingModal } from "./pay-your-billing.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { InitializeModal, InitializeProductData } from "../components";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { selectGetProductData } from "../slices/get-product-data.slice";
+import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
+import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
+import { ViewPaymentInformation } from "./view-payment-information.modal";
 
 interface SupplierConfirmModalProps {
   open: boolean;
   onClose: () => void;
   currentTab: number;
+  id: string;
 }
 
 export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
@@ -17,13 +24,8 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   const [isHidden, setHidden] = useState(false);
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
 
-  const [billingInformation, setBillingInformation] = useState<{
-    billing_id: string;
-    billing_amount: string;
-  }>({
-    billing_id: "testId",
-    billing_amount: "100",
-  });
+  const getProductDataState = useAppSelector(selectGetProductData);
+  const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<TableRow>({
     order_information: {
@@ -45,7 +47,28 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     product_data: [],
   });
 
-  //DISPATCH BILLING INFORMATION HERE
+  InitializeModal({
+    setRows: setRows,
+    id: props.id,
+    open: props.open,
+  });
+
+  InitializeProductData({
+    setRows: setRows,
+    productData: getProductDataState.data
+      ? getProductDataState.data
+      : undefined,
+  });
+
+  const handleValidate = async () => {
+    const updateConfirmPaymentParam: updateStatus = {
+      id: props.id,
+    };
+
+    await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
+
+    props.onClose();
+  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -62,7 +85,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Payment</span>
+            <span className="text-2xl text-white">Confirm Payment</span>
             <button
               className="text-2xl text-white"
               onClick={() => {
@@ -75,54 +98,49 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {/* <StockOrderTable
+            <StockOrderTable
               isCommitedTextFieldAvailable={false}
               isStore={false}
               activeTab={props.currentTab}
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
-            /> */}
+            />
 
-            {isHidden ? null : (
-              <div className="flex flex-row space-x-4">
-                <div className="basis-1/2">
-                  <Button
-                    onClick={() => setOpenPayBillingModal(true)}
-                    fullWidth
-                    variant="contained"
-                  >
-                    View payment information
-                  </Button>
-                </div>
-                <div className="basis-1/2">
-                  <Button
-                    onClick={() => {
-                      //dispatch
-
-                      setHidden(true);
-                    }}
-                    fullWidth
-                    variant="contained"
-                  >
-                    Validate
-                  </Button>
-                </div>
+            <div className="flex flex-row space-x-4">
+              <div className="basis-1/2">
+                <Button
+                  onClick={() => setOpenPayBillingModal(true)}
+                  fullWidth
+                  variant="contained"
+                >
+                  View payment information
+                </Button>
               </div>
-            )}
+              <div className="basis-1/2">
+                <Button
+                  onClick={() => handleValidate()}
+                  fullWidth
+                  variant="contained"
+                >
+                  Validate
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <PayBillingModal
+      <ViewPaymentInformation
         open={openPayBillingModal}
         onClose={() => setOpenPayBillingModal(false)}
         setUploadedReciept={setUploadedReciept}
         billingInformation={{
-          billing_id: billingInformation.billing_id,
-          billing_amount: billingInformation.billing_amount,
+          billing_id:
+            getProductDataState.data?.order_information.billing_id ?? "",
+          billing_amount:
+            getProductDataState.data?.order_information.billing_amount ?? "",
         }}
-        isButtonAvailable={false}
       />
     </>
   );

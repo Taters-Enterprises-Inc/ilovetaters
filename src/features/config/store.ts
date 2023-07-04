@@ -254,6 +254,9 @@ import updateConfirmOrders from "features/stock-ordering/presentation/slices/upd
 import updateDispatchOrders from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
 import updateEnrouteOrders from "features/stock-ordering/presentation/slices/update-enroute-order.slice";
 import updateReceiveOrders from "features/stock-ordering/presentation/slices/update-receive-order.slice";
+import updateBillingOrders from "features/stock-ordering/presentation/slices/update-billing-order.slice";
+import updatePayBillingOrders from "features/stock-ordering/presentation/slices/update-pay-billing.slice";
+import updateConfirmPayment from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
 
 export const store = configureStore({
   reducer: {
@@ -511,6 +514,9 @@ export const store = configureStore({
     updateDispatchOrders,
     updateEnrouteOrders,
     updateReceiveOrders,
+    updateBillingOrders,
+    updatePayBillingOrders,
+    updateConfirmPayment,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

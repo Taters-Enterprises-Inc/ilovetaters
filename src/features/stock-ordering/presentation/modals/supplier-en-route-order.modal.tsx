@@ -2,7 +2,15 @@ import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
-import { TextField, Button } from "@mui/material";
+import {
+  TextField,
+  Button,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormLabel,
+} from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -14,6 +22,7 @@ import {
 } from "../slices/get-product-data.slice";
 import {
   orderID,
+  updateEnRoutePram,
   updateStatus,
 } from "features/stock-ordering/core/stock-ordering.params";
 import { updateEnrouteOrders } from "../slices/update-enroute-order.slice";
@@ -32,10 +41,8 @@ export function SupplierEnRouteOrderModal(
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [isCommitedTextFieldAvailable, setIsCommitedTextFieldAvailable] =
-    useState(false);
+  const [transport, setTransport] = useState("");
 
-  const [isHidden, setHidden] = useState(false);
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
@@ -107,6 +114,10 @@ export function SupplierEnRouteOrderModal(
   //   }
   // }, [getProductDataState.data]);
 
+  useEffect(() => {
+    setTransport("");
+  }, [props.open]);
+
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -121,8 +132,9 @@ export function SupplierEnRouteOrderModal(
   });
 
   const handleEnRoute = async () => {
-    const enRouteOrdersParamData: updateStatus = {
+    const enRouteOrdersParamData: updateEnRoutePram = {
       id: props.id,
+      transport: transport,
     };
 
     await dispatch(updateEnrouteOrders(enRouteOrdersParamData));
@@ -160,7 +172,7 @@ export function SupplierEnRouteOrderModal(
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
             <StockOrderTable
-              isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
+              isCommitedTextFieldAvailable={false}
               isStore={false}
               activeTab={props.currentTab}
               setRows={setRows}
@@ -168,9 +180,46 @@ export function SupplierEnRouteOrderModal(
               isDeliveredQtyAvailable={false}
             />
             <div className="flex justify-end px-5">
-              <Button onClick={() => handleEnRoute()} variant="contained">
-                Order En Route
-              </Button>
+              <div>
+                <FormControl>
+                  <div className="flex flex-row items-stretch space-x-2">
+                    <span className="self-center pb-1 text-lg">
+                      Transport Route:
+                    </span>
+
+                    <RadioGroup
+                      onChange={(event, value) => setTransport(value)}
+                      row
+                      aria-labelledby="transport-group"
+                    >
+                      <FormControlLabel
+                        value="1"
+                        control={<Radio />}
+                        label="Ground Transport"
+                      />
+                      <FormControlLabel
+                        value="2"
+                        control={<Radio />}
+                        label="Ocean Transport"
+                      />
+                      <FormControlLabel
+                        value="3"
+                        control={<Radio />}
+                        label="Air Freight"
+                      />
+                    </RadioGroup>
+                  </div>
+                </FormControl>
+              </div>
+              <div>
+                <Button
+                  disabled={transport === "" || transport === undefined}
+                  onClick={() => handleEnRoute()}
+                  variant="contained"
+                >
+                  Order En Route
+                </Button>
+              </div>
             </div>
           </div>
         </div>
