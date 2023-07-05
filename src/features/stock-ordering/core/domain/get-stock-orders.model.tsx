@@ -19,4 +19,6 @@ export interface GetStockOrdersModel {
       short_name: string;
     }
   ];
+
+  tab: number[];
 }

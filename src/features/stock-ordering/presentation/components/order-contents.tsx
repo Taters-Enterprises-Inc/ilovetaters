@@ -7,6 +7,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
+  Badge,
+  BadgeProps,
   Box,
   Divider,
   Fab,
@@ -14,6 +16,7 @@ import {
   Tab,
   Tabs,
   Typography,
+  styled,
 } from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
 import {
@@ -58,6 +61,15 @@ interface Modals {
   [key: string]: boolean;
 }
 
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
+
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
@@ -84,37 +96,7 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
 
-  // const [openPlaceOrderModal, setOpenPlaceOrderModal] = useState(false);
-  // const [openConfirmOrderModal, setOpenConfirmOrderModal] = useState(false);
-  // const [openSupplierViewOrderModal, setOpenSupplierViewOrderModal] =
-  //   useState(false);
-  // const [openProcurementReviewOrderModal, setOpenProcurementReviewOrderModal] =
-  //   useState(false);
-  // const [
-  //   openProcurementConfirmOrderModal,
-  //   setOpenProcurementConfirmOrderModal,
-  // ] = useState(false);
-
-  // const [openSupplierDispatchOrderModal, setOpenSupplierDispatchOrderModal] =
-  //   useState(false);
-
-  // const [openSupplierEnRouteOrderModal, setOpenSupplierEnRouteOrderModal] =
-  //   useState(false);
-
-  // const [openSupplierEnFreightOrderModal, setOpenSupplierEnFreightOrderModal] =
-  //   useState(false);
-
-  // const [openStoreReceiveOrderModal, setOpenStoreReceiveOrderModal] =
-  //   useState(false);
-
-  // const [openSupplierUpdateBillingModal, setOpenSupplierUpdateBillingModal] =
-  //   useState(false);
-
-  // const [openStorePayBillingModal, setOpenStorePayBillingModal] =
-  //   useState(false);
-
-  // const [openSupplierConfirmModal, setOpenSupplierConfirmModal] =
-  //   useState(false);
+  const [badgeItem, setBadgeItem] = useState(0);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -179,16 +161,6 @@ export function OrderContents() {
     }));
   };
 
-  // const handleAction = (id: string) => {
-  //   setOrderId(id);
-  //   handleModalToggle("supplierViewOrder");
-  // };
-
-  // const handleConfirmationModal = (value: boolean) => {
-  //   setOpenConfirmOrderModal(value);
-  //   setOpenPlaceOrderModal(false);
-  // };
-
   const handleAction = (id: string) => {
     setOrderId(id);
     switch (tabValue) {
@@ -229,6 +201,11 @@ export function OrderContents() {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    const totalRows = getStockOrdersState.data?.pagination.total_rows ?? 0;
+    setBadgeItem(totalRows);
+  }, [getStockOrdersState.data?.pagination.total_rows]);
 
   useEffect(() => {
     const currentTab: currentTab = {
@@ -275,7 +252,14 @@ export function OrderContents() {
                 style={{
                   color: "white",
                 }}
-                label={tabs.label}
+                label={
+                  <Badge
+                    color="primary"
+                    badgeContent={getStockOrdersState.data?.tab[index]}
+                  >
+                    {tabs.label}
+                  </Badge>
+                }
               />
             ))}
           </Tabs>
