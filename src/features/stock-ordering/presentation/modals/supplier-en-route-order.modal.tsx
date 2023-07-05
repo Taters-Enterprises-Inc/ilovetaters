@@ -59,6 +59,7 @@ export function SupplierEnRouteOrderModal(
       billing_information_ready: false,
       view_payment_details: "",
       payment_confirmation: "",
+      transport_route: "",
     },
     product_data: [],
   });

@@ -14,6 +14,7 @@ export interface TableRow {
     billing_information_ready: boolean;
     view_payment_details: string;
     payment_confirmation: string;
+    transport_route: string;
   };
   product_data: {
     id: string;

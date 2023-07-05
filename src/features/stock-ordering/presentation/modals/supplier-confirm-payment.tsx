@@ -11,6 +11,7 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
 import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
 import { ViewPaymentInformation } from "./view-payment-information.modal";
+import { ViewImageModal } from "./view-image.modal";
 
 interface SupplierConfirmModalProps {
   open: boolean;
@@ -21,8 +22,7 @@ interface SupplierConfirmModalProps {
 
 export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
-  const [isHidden, setHidden] = useState(false);
-  const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [uploadedReceipt, setUploadedReciept] = useState<string>("");
 
   const getProductDataState = useAppSelector(selectGetProductData);
   const dispatch = useAppDispatch();
@@ -43,6 +43,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       billing_information_ready: false,
       view_payment_details: "",
       payment_confirmation: "",
+      transport_route: "",
     },
     product_data: [],
   });
@@ -69,6 +70,12 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
 
     props.onClose();
   };
+
+  useEffect(() => {
+    setUploadedReciept(
+      getProductDataState.data?.order_information.payment_detail_image ?? ""
+    );
+  }, [props.open]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -131,16 +138,10 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
         </div>
       </div>
 
-      <ViewPaymentInformation
+      <ViewImageModal
         open={openPayBillingModal}
         onClose={() => setOpenPayBillingModal(false)}
-        setUploadedReciept={setUploadedReciept}
-        billingInformation={{
-          billing_id:
-            getProductDataState.data?.order_information.billing_id ?? "",
-          billing_amount:
-            getProductDataState.data?.order_information.billing_amount ?? "",
-        }}
+        image={uploadedReceipt}
       />
     </>
   );

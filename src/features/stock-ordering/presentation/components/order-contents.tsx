@@ -61,14 +61,14 @@ interface Modals {
   [key: string]: boolean;
 }
 
-const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
-  },
-}));
+// const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+//   "& .MuiBadge-badge": {
+//     right: -3,
+//     top: 13,
+//     border: `2px solid ${theme.palette.background.paper}`,
+//     padding: "0 4px",
+//   },
+// }));
 
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;

@@ -19,6 +19,7 @@ export interface GetProductDataModel {
     delivery_receipt: string;
     updated_delivery_receipt: string;
     payment_detail_image: string;
+    transport_route: string;
   };
   product_data: [
     {

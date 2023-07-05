@@ -1,7 +1,6 @@
 import { Button, Divider, List, ListItem } from "@mui/material";
-import { PayBillingModal, UploadDeliveryRecieptModal } from "../modals";
 import { useState } from "react";
-import { months } from "moment";
+import { ViewImageModal } from "../modals/view-image.modal";
 
 interface StockOrderLogsProps {
   order_details: {
@@ -92,25 +91,22 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
   ];
 
-  const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
-    useState(false);
-
-  const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
+  const [openImagePreviewer, setOpenImagePreviewer] = useState(false);
+  const [image, setImage] = useState<string>("");
 
   const handleOnclick = (id: string) => {
     switch (id) {
       case "view_delivery_receipt":
-        setOpenUploadDeliveryRecieptModal(true);
+        setImage(props.order_details.view_delivery_receipt as string);
         break;
-
-      case "view_updated_delivery_receipt":
-        setOpenUploadDeliveryRecieptModal(true);
-        break;
-
       case "view_payment_details":
-        setOpenPayBillingModal(true);
+        setImage(props.order_details.view_payment_details as string);
+        break;
+      case "view_updated_delivery_receipt":
+        setImage(props.order_details.view_updated_delivery_receipt as string);
         break;
     }
+    setOpenImagePreviewer(true);
   };
 
   const isValidDate = (dateStr: string): boolean => {
@@ -144,30 +140,38 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
             <List>
               {columns.map((row: any, index) => (
                 <div key={index}>
-                  {row.isButton ? (
-                    <div className="flex">
-                      <Button
-                        className="basis-1/2"
-                        onClick={() => handleOnclick(row.id)}
-                        fullWidth
-                        size="small"
-                        variant="text"
-                      >
-                        {row.label}
-                      </Button>
-                    </div>
-                  ) : (
-                    <ListItem className="flex space-x-4" dense={true}>
-                      <span className="basis-1/2 font-semibold break-all capitalize">
-                        {row.label}
-                      </span>
-                      <span className="basis-1/2 capitalize break-all">
-                        {getOrderData(props.order_details[row.id], row.isDate)}
-                      </span>
-                    </ListItem>
-                  )}
-
-                  <Divider variant="middle" />
+                  {props.order_details[row.id] ? (
+                    <>
+                      {row.isButton ? (
+                        <div className="flex">
+                          <Button
+                            className="basis-full"
+                            onClick={() => handleOnclick(row.id)}
+                            fullWidth
+                            size="small"
+                            variant="text"
+                          >
+                            {row.label}
+                          </Button>
+                        </div>
+                      ) : (
+                        <ListItem className="flex space-x-4" dense={true}>
+                          <span className="basis-1/2 font-semibold break-all capitalize">
+                            {row.id === "order_enroute"
+                              ? `${row.label} ${props.order_details.transport_route}:`
+                              : row.label}
+                          </span>
+                          <span className="basis-1/2 capitalize break-all">
+                            {getOrderData(
+                              props.order_details[row.id],
+                              row.isDate
+                            )}
+                          </span>
+                        </ListItem>
+                      )}
+                      <Divider variant="middle" />
+                    </>
+                  ) : null}
                 </div>
               ))}
             </List>
@@ -175,22 +179,10 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
         </div>
       </div>
 
-      <UploadDeliveryRecieptModal
-        open={openUploadDeliveryRecieptModal}
-        onClose={() => setOpenUploadDeliveryRecieptModal(false)}
-        setUploadedReciept={undefined}
-        isButtonAvailable={false}
-      />
-
-      <PayBillingModal
-        open={openPayBillingModal}
-        onClose={() => setOpenPayBillingModal(false)}
-        setUploadedReciept={undefined}
-        billingInformation={{
-          billing_id: "test",
-          billing_amount: "test",
-        }}
-        isButtonAvailable={false}
+      <ViewImageModal
+        open={openImagePreviewer}
+        onClose={() => setOpenImagePreviewer(false)}
+        image={image}
       />
     </>
   );

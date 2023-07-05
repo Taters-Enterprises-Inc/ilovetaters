@@ -13,6 +13,7 @@ import {
   updateBillingOrderParam,
   updateEnRoutePram,
   updatePayBillingParam,
+  dispatchOrderParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -189,9 +190,12 @@ export function updateConfirmOrdersRepository(
 }
 
 export function updateDispatchOrdersRepository(
-  param: updateStatus
+  param: dispatchOrderParam
 ): Promise<updateDispatchOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/dispatch-order`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 }
@@ -211,6 +215,9 @@ export function updateReceiveOrdersRepository(
     `${REACT_APP_DOMAIN_URL}api/stock/receive-order-delivery`,
     param,
     {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       withCredentials: true,
     }
   );
@@ -228,6 +235,9 @@ export function updatePayBillingOrdersRepository(
   param: updatePayBillingParam
 ): Promise<updatePayBillingOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 }

@@ -33,6 +33,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
           order.billing_id && order.billing_amount ? true : false,
         view_payment_details: order.payment_detail_image,
         payment_confirmation: order.payment_confirmation_date,
+        transport_route: order.transport_route,
       };
 
       const productData: TableRow["product_data"] =
