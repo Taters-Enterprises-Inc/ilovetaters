@@ -16,7 +16,6 @@ import {
   getStockOrderProducts,
   selectGetStockOrderProducts,
 } from "../slices/get-products.slice";
-import { GetStockProductModel } from "features/stock-ordering/core/domain/get-stock-product.model";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 
 interface TableRow {
@@ -33,7 +32,7 @@ interface OrderPlaceAndConfirmTableProps {
   isConfirmOrder: boolean;
   isEditCancelled: boolean;
   isEdit: boolean;
-  handleTableRows: (TableData: TableRow[]) => void;
+  handleTableRows: (TableData: TableRow[], avialableDelivery: number) => void;
   setCategory: (categoryData: {
     category_id: string;
     category_name: string;
@@ -57,8 +56,6 @@ export function OrderPlaceAndConfirmTable(
       orderQty: "",
     },
   ]);
-
-  let tempRows: TableRow[] = [];
 
   const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
@@ -132,7 +129,8 @@ export function OrderPlaceAndConfirmTable(
   }, [dispatch, category, props.isEdit]);
 
   useEffect(() => {
-    props.handleTableRows(rows);
+    const aveDeliveryDate = getProductInformation.data?.schedule ?? 0;
+    props.handleTableRows(rows, aveDeliveryDate);
   }, [rows]);
 
   return (

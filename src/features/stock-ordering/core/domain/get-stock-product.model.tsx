@@ -8,4 +8,5 @@ export interface GetStockProductModel {
       orderQty: string;
     }
   ];
+  schedule: number | undefined;
 }

@@ -61,6 +61,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
 
+  const [availableDeliveryDay, setAvailableDeliveryDay] = useState<number>();
+
   const [rows, setRows] = useState<OrderTableData[]>([
     {
       id: 1,
@@ -87,8 +89,12 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     }
   }, [props.open]);
 
-  const handleTableRows = (TableData: OrderTableData[]) => {
+  const handleTableRows = (
+    TableData: OrderTableData[],
+    avialableDelivery: number
+  ) => {
     setRows(TableData);
+    setAvailableDeliveryDay(avialableDelivery);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -110,8 +116,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     setDeliveryData(dayjs().format("YYYY-MM-DD HH:mm:ss"));
 
     props.onClose();
-
-    // navigate("/admin/stock-order/order/store/view");
   };
 
   useEffect(() => {
@@ -120,6 +124,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setisEditCancelled(false);
     }
   }, [isEditCancelled]);
+
+  const deliverySchedules = (
+    date: string | number | Date | dayjs.Dayjs | null | undefined
+  ) => dayjs(date).day() !== availableDeliveryDay;
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -219,6 +227,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
+                          minDateTime={dayjs().subtract(10, "seconds")}
+                          shouldDisableDate={deliverySchedules}
                         />
                       </LocalizationProvider>
                     </div>

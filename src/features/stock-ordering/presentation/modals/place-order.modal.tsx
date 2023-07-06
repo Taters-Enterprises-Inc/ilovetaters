@@ -82,10 +82,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   };
 
   useEffect(() => {
-    setDeliveryData(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-  }, [props.open]);
-
-  useEffect(() => {
     dispatch(getStockOrderStores());
   }, [dispatch]);
 
@@ -150,34 +146,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     )}
                   />
                 </div>
-
-                {/* <div className="basis-1/2 flex flex-col space-y-2">
-                  <span>Delivery Date: </span>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      label="Delivery date"
-                      views={["month", "day", "year"]}
-                      onError={() => setDisabled(true)}
-                      onAccept={(value) => {
-                        if (dayjs(value)) {
-                          setDisabled(false);
-                        }
-                      }}
-                      onChange={(date) => {
-                        if (date) {
-                          const formattedDate =
-                            dayjs(date).format("MMMM DD, YYYY");
-
-                          setDeliveryData(formattedDate);
-                        }
-                      }}
-                      value={dayjs(deliveryDate)}
-                      renderInput={(params) => (
-                        <TextField required {...params} size="small" />
-                      )}
-                    />
-                  </LocalizationProvider>
-                </div> */}
               </div>
 
               <OrderPlaceAndConfirmTable

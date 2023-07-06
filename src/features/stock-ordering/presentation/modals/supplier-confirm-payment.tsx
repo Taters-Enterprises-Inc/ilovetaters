@@ -72,10 +72,8 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   };
 
   useEffect(() => {
-    setUploadedReciept(
-      getProductDataState.data?.order_information.payment_detail_image ?? ""
-    );
-  }, [props.open]);
+    setUploadedReciept(rows.order_information.view_payment_details);
+  }, [rows.order_information.view_payment_details]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
