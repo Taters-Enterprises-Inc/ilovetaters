@@ -33,6 +33,13 @@ export interface orderID {
 export interface dispatchOrderParam {
   id: string;
   deliveryReceipt: File | string;
+  dispatchDeliveryDate: string;
+  transport: string;
+  product_data: {
+    id: string;
+    productId: string;
+    dispatchedQuantity: string;
+  }[];
 }
 
 export interface updateStatus {
@@ -74,4 +81,20 @@ export interface updateEnRoutePram {
 export interface updatePayBillingParam {
   id: string;
   paymentDetailImage: File | string;
+}
+
+export interface updatReviewParam {
+  id: string;
+  remarks: string;
+  product_data: {
+    id: string;
+    productId: string;
+    commitedQuantity: string;
+  }[];
+}
+
+export interface updateDeliveryReceiveApproval {
+  id: string;
+  status: string;
+  remarks: string;
 }

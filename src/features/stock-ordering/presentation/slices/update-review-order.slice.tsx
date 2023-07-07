@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "features/config/store";
-import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
+import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   updateReviewOrdersResponse,
   updateReviewOrdersRepository,
@@ -28,7 +28,7 @@ const initialState: InitialState = {
 
 export const updateReviewOrders = createAsyncThunk(
   "updateReviewOrders",
-  async (param: updateStatus, { rejectWithValue }) => {
+  async (param: updatReviewParam, { rejectWithValue }) => {
     try {
       const response: updateReviewOrdersResponse =
         await updateReviewOrdersRepository(param);

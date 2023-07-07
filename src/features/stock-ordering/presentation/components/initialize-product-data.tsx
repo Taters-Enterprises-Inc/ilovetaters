@@ -34,6 +34,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
         view_payment_details: order.payment_detail_image,
         payment_confirmation: order.payment_confirmation_date,
         transport_route: order.transport_route,
+        remarks: order.remarks,
       };
 
       const productData: TableRow["product_data"] =
@@ -45,6 +46,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
           orderQty: product.order_qty,
           commitedQuantity: product.commited_qty,
           deliveredQuantity: product.delivered_qty,
+          dispatchedQuantity: product.dispatched_qty,
         }));
 
       props.setRows?.({

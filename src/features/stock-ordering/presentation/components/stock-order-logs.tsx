@@ -4,7 +4,7 @@ import { ViewImageModal } from "../modals/view-image.modal";
 
 interface StockOrderLogsProps {
   order_details: {
-    [key: string]: string | number | boolean;
+    [key: string]: string | number | boolean | { remarks: string }[];
   };
 }
 
@@ -30,6 +30,13 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       isDate: true,
     },
     {
+      id: "remarks",
+      label: "remarks after reviewing order: ",
+      isButton: false,
+      isDate: false,
+      identifier: "reviewed",
+    },
+    {
       id: "order_reviewed_date",
       label: "Order Reviewed Date",
       isButton: false,
@@ -43,19 +50,13 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
     {
       id: "view_delivery_receipt",
-      label: "View Delivery Receipt",
+      label: "View Sales Invoice",
       isButton: true,
       isDate: false,
     },
     {
       id: "dispatch_date",
       label: "Dispatch Date",
-      isButton: false,
-      isDate: true,
-    },
-    {
-      id: "order_enroute",
-      label: "Order Enroute",
       isButton: false,
       isDate: true,
     },
@@ -67,15 +68,23 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
     {
       id: "view_updated_delivery_receipt",
-      label: "View Updated Delivery Receipt",
+      label: "View Updated Sales Invoice",
       isButton: true,
       isDate: false,
+    },
+    {
+      id: "remarks",
+      label: "Remarks after approved: ",
+      isButton: false,
+      isDate: false,
+      identifier: "approved",
     },
     {
       id: "billing_information_ready",
       label: "Billing Information Ready",
       isButton: false,
       isDate: false,
+      identifier: "",
     },
     {
       id: "view_payment_details",
@@ -123,9 +132,24 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
         hour: "numeric",
         minute: "numeric",
       });
-    } else {
-      return value;
     }
+
+    return value;
+  };
+
+  const handleRemarks = (
+    value: string | number | boolean | { remarks: string }[],
+    identifier: string
+  ) => {
+    if (Array.isArray(value)) {
+      if (value[0] && identifier === "reviewed") {
+        return value[0].remarks;
+      } else if (value[1] && identifier === "approved") {
+        return value[1].remarks;
+      }
+    }
+
+    return null;
   };
 
   return (
@@ -157,15 +181,23 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                       ) : (
                         <ListItem className="flex space-x-4" dense={true}>
                           <span className="basis-1/2 font-semibold break-all capitalize">
-                            {row.id === "order_enroute"
+                            {row.id === "dispatch_date"
                               ? `${row.label} ${props.order_details.transport_route}:`
                               : row.label}
                           </span>
                           <span className="basis-1/2 capitalize break-all">
-                            {getOrderData(
-                              props.order_details[row.id],
-                              row.isDate
-                            )}
+                            {row.id === "remarks"
+                              ? handleRemarks(
+                                  props.order_details[row.id],
+                                  row.identifier
+                                )
+                              : getOrderData(
+                                  props.order_details[row.id] as
+                                    | string
+                                    | number
+                                    | boolean,
+                                  row.isDate
+                                )}
                           </span>
                         </ListItem>
                       )}
@@ -183,6 +215,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
         open={openImagePreviewer}
         onClose={() => setOpenImagePreviewer(false)}
         image={image}
+        isDownloadable={false}
       />
     </>
   );

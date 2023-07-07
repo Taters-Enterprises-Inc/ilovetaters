@@ -1,21 +1,11 @@
 import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
-import { TextField, Button } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
+import { TextField, Button, Switch } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  getProductData,
-  selectGetProductData,
-} from "../slices/get-product-data.slice";
-import {
-  orderID,
-  updateStatus,
-} from "features/stock-ordering/core/stock-ordering.params";
+import { selectGetProductData } from "../slices/get-product-data.slice";
+import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReviewOrders } from "../slices/update-review-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 
@@ -34,6 +24,7 @@ export function ProcurementReviewOrdersModal(
 
   const [isCommitedTextFieldAvailable, setIsCommitedTextFieldAvailable] =
     useState(false);
+  const [remarks, setRemarks] = useState("");
 
   const [isHidden, setHidden] = useState(false);
 
@@ -54,6 +45,7 @@ export function ProcurementReviewOrdersModal(
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -71,9 +63,25 @@ export function ProcurementReviewOrdersModal(
       : undefined,
   });
 
-  const handleOrderReviewed = async () => {
-    const reviewOrdersParamData: updateStatus = {
+  useEffect(() => {
+    setIsCommitedTextFieldAvailable(false);
+    setRemarks("");
+  }, [props.open]);
+
+  const handleOrderReviewed = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    const reviewOrdersProductDataParam: updatReviewParam["product_data"] =
+      rows.product_data.map((product) => ({
+        id: product.id,
+        productId: product.productId,
+        commitedQuantity: product.commitedQuantity,
+      }));
+
+    const reviewOrdersParamData: updatReviewParam = {
       id: props.id,
+      remarks: remarks,
+      product_data: reviewOrdersProductDataParam,
     };
 
     await dispatch(updateReviewOrders(reviewOrdersParamData));
@@ -92,7 +100,7 @@ export function ProcurementReviewOrdersModal(
     <>
       <div
         id="place-order-modal"
-        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
+        className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm "
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
@@ -110,28 +118,44 @@ export function ProcurementReviewOrdersModal(
             </button>
           </div>
 
-          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-            />
+          <form onSubmit={handleOrderReviewed}>
+            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
+              <div className="flex justify-end items-stretch">
+                <Switch
+                  onChange={(event) => {
+                    setIsCommitedTextFieldAvailable(event.target.checked);
+                  }}
+                  defaultChecked={false}
+                />
+                <span className="font-medium self-center">Enable edit</span>
+              </div>
 
-            <div className="flex justify-end px-5">
-              {getProductDataState.data?.order_information?.reviewed_date !==
-              null ? null : (
-                <Button
-                  onClick={() => handleOrderReviewed()}
-                  variant="contained"
-                >
+              <StockOrderTable
+                isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
+                isStore={false}
+                activeTab={props.currentTab}
+                setRows={setRows}
+                rowData={rows}
+                isDeliveredQtyAvailable={false}
+                isDispatchedQtyAvailable={false}
+              />
+
+              <div className="flex flex-col px-5">
+                <span>Remarks: </span>
+                <TextField
+                  value={remarks}
+                  onChange={(event) => setRemarks(event.target.value)}
+                  multiline
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <Button fullWidth type="submit" variant="contained">
                   Order Reviewed
                 </Button>
-              )}
+              </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

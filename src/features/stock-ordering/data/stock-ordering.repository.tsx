@@ -14,6 +14,8 @@ import {
   updateEnRoutePram,
   updatePayBillingParam,
   dispatchOrderParam,
+  updatReviewParam,
+  updateDeliveryReceiveApproval,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -117,6 +119,13 @@ export interface updateConfirmPaymentResponse {
   };
 }
 
+export interface updateDeliveryReceiveApprovalOrdersResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
 export function GetStockOrderStoresRepository(): Promise<GetStockOrderStoresResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/stores`, {
     withCredentials: true,
@@ -174,7 +183,7 @@ export function updateNewOrdersRepository(
 }
 
 export function updateReviewOrdersRepository(
-  param: updateStatus
+  param: updatReviewParam
 ): Promise<updateReviewOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/review-order`, param, {
     withCredentials: true,
@@ -248,4 +257,16 @@ export function updateConfirmPaymentRepository(
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/confirm-payment`, param, {
     withCredentials: true,
   });
+}
+
+export function updateDeliveryReceiveApprovalOrdersRepository(
+  param: updateDeliveryReceiveApproval
+): Promise<updateDeliveryReceiveApprovalOrdersResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/order/delivery-receive-approval`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }

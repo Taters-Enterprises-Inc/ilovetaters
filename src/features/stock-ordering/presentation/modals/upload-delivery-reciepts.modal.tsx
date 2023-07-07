@@ -1,11 +1,5 @@
 import { IoMdClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "features/config/hooks";
-import { StockOrderTable } from "../components/stock-order-table";
-import { TextField, Button } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import { UploadFile } from "features/shared/presentation/components/upload-file";
 
@@ -44,7 +38,7 @@ export function UploadDeliveryRecieptModal(
       >
         <div className="w-[97%] lg:w-[25%] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Add Delivery Reciept</span>
+            <span className="text-2xl text-white">Upload Sales Invoice</span>
             <button
               className="text-2xl text-white"
               onClick={() => {

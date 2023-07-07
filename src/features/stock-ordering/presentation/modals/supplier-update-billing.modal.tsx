@@ -51,6 +51,7 @@ export function SupplierUpdateBillingModal(
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -121,6 +122,7 @@ export function SupplierUpdateBillingModal(
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
+              isDispatchedQtyAvailable={false}
             />
 
             <div className="flex flex-row space-x-4">

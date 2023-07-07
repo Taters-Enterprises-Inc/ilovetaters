@@ -1,6 +1,5 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button } from "@mui/material";
 import { useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
@@ -34,6 +33,7 @@ export function CompleteModal(props: CompleteModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -86,6 +86,7 @@ export function CompleteModal(props: CompleteModalProps) {
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
+              isDispatchedQtyAvailable={false}
             />
           </div>
         </div>

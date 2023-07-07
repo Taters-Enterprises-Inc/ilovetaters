@@ -15,16 +15,18 @@ export interface TableRow {
     view_payment_details: string;
     payment_confirmation: string;
     transport_route: string;
+    remarks: {
+      remarks: string;
+    }[];
   };
   product_data: {
     id: string;
     productId: string;
     productName: string;
     uom: string;
-    // cost: string;
     orderQty: string;
-    // currentStock: string;
     commitedQuantity: string;
     deliveredQuantity: string;
+    dispatchedQuantity: string;
   }[];
 }

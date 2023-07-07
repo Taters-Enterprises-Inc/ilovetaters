@@ -1,13 +1,8 @@
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Autocomplete, Button, TableRow, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  LocalizationProvider,
-  DatePicker,
-  DateTimePicker,
-} from "@mui/x-date-pickers";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { OrderPlaceAndConfirmTable } from "../components";
@@ -127,7 +122,12 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const deliverySchedules = (
     date: string | number | Date | dayjs.Dayjs | null | undefined
-  ) => dayjs(date).day() !== availableDeliveryDay;
+  ) => {
+    const nearestDate = dayjs()
+      .add(1, "week")
+      .day(Number(availableDeliveryDay));
+    return dayjs(date).isBefore(nearestDate);
+  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");

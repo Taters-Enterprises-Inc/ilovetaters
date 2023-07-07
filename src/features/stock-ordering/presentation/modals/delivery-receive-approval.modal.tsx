@@ -1,35 +1,30 @@
 import { IoMdClose } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  Button,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from "@mui/material";
+import { StockOrderTable } from "../components/stock-order-table";
+import { Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
-import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateEnRoutePram } from "features/stock-ordering/core/stock-ordering.params";
-import { updateEnrouteOrders } from "../slices/update-enroute-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { selectGetProductData } from "../slices/get-product-data.slice";
+import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
+import { updateDeliveryReceiveApprovalOrders } from "../slices/update-delivery-receive-approval.slice";
 
-interface SupplierEnRouteOrderModalProps {
+interface DeliveryReceiveApprovalModalProps {
   open: boolean;
   onClose: () => void;
   currentTab: number;
   id: string;
 }
 
-export function SupplierEnRouteOrderModal(
-  props: SupplierEnRouteOrderModalProps
+export function DeliveryReceiveApprovalModal(
+  props: DeliveryReceiveApprovalModalProps
 ) {
-  const dispatch = useAppDispatch();
+  const [remarks, setRemarks] = useState("");
+
   const getProductDataState = useAppSelector(selectGetProductData);
+  const dispatch = useAppDispatch();
 
-  const [transport, setTransport] = useState("");
-
-  const [, setRows] = useState<TableRow>({
+  const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
       order_number: "",
@@ -51,10 +46,6 @@ export function SupplierEnRouteOrderModal(
     product_data: [],
   });
 
-  useEffect(() => {
-    setTransport("");
-  }, [props.open]);
-
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -68,13 +59,21 @@ export function SupplierEnRouteOrderModal(
       : undefined,
   });
 
-  const handleEnRoute = async () => {
-    const enRouteOrdersParamData: updateEnRoutePram = {
+  useEffect(() => {
+    setRemarks("");
+  }, [props.open]);
+
+  const handleValidate = async (status: string) => {
+    const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval = {
       id: props.id,
-      transport: transport,
+      status: status,
+      remarks: remarks,
     };
 
-    await dispatch(updateEnrouteOrders(enRouteOrdersParamData));
+    await dispatch(
+      updateDeliveryReceiveApprovalOrders(updateDeliveryReceiveApprovalParam)
+    );
+
     props.onClose();
   };
 
@@ -94,7 +93,7 @@ export function SupplierEnRouteOrderModal(
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-2xl text-white">
-              Supplier Orders En Route
+              Delivery Receive Approval
             </span>
             <button
               className="text-2xl text-white"
@@ -108,7 +107,7 @@ export function SupplierEnRouteOrderModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {/* <StockOrderTable
+            <StockOrderTable
               isCommitedTextFieldAvailable={false}
               isStore={false}
               activeTab={props.currentTab}
@@ -116,47 +115,35 @@ export function SupplierEnRouteOrderModal(
               rowData={rows}
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
-            /> */}
-            <div className="flex justify-end px-5">
-              <div>
-                {/*need to have date*/}
-                <FormControl>
-                  <div className="flex flex-row items-stretch space-x-2">
-                    <span className="self-center pb-1 text-lg">
-                      Transport Route:
-                    </span>
+            />
 
-                    <RadioGroup
-                      onChange={(event, value) => setTransport(value)}
-                      row
-                      aria-labelledby="transport-group"
-                    >
-                      <FormControlLabel
-                        value="1"
-                        control={<Radio />}
-                        label="Ground Transport"
-                      />
-                      <FormControlLabel
-                        value="2"
-                        control={<Radio />}
-                        label="Ocean Transport"
-                      />
-                      <FormControlLabel
-                        value="3"
-                        control={<Radio />}
-                        label="Air Freight"
-                      />
-                    </RadioGroup>
-                  </div>
-                </FormControl>
-              </div>
-              <div>
+            <div className="flex flex-col px-5">
+              <span>Remarks: </span>
+              <TextField
+                value={remarks}
+                onChange={(event) => setRemarks(event.target.value)}
+                inputProps={{ maxLength: 128 }}
+                multiline
+              />
+            </div>
+
+            <div className="flex flex-row space-x-4">
+              <div className="basis-1/2">
                 <Button
-                  disabled={transport === "" || transport === undefined}
-                  onClick={() => handleEnRoute()}
+                  onClick={() => handleValidate("4")}
+                  fullWidth
                   variant="contained"
                 >
-                  Order En Route
+                  Reject
+                </Button>
+              </div>
+              <div className="basis-1/2">
+                <Button
+                  onClick={() => handleValidate("6")}
+                  fullWidth
+                  variant="contained"
+                >
+                  Approve
                 </Button>
               </div>
             </div>

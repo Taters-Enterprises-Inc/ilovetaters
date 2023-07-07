@@ -1,18 +1,10 @@
 import { IoMdClose } from "react-icons/io";
-import { StockOrderTable } from "../components/stock-order-table";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  orderID,
-  updateStatus,
-} from "features/stock-ordering/core/stock-ordering.params";
-import {
-  getProductData,
-  selectGetProductData,
-} from "../slices/get-product-data.slice";
+import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
+import { selectGetProductData } from "../slices/get-product-data.slice";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { updateReviewOrders } from "../slices/update-review-order.slice";
 import { updateConfirmOrders } from "../slices/update-confirm-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 
@@ -50,6 +42,7 @@ export function ProcurementConfirmOrdersModal(
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -107,14 +100,14 @@ export function ProcurementConfirmOrdersModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
+            {/* <StockOrderTable
               isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
               isStore={false}
               activeTab={props.currentTab}
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
-            />
+            /> */}
             <div className="flex justify-end px-5">
               <Button
                 onClick={() => handleOrderConfirmed()}

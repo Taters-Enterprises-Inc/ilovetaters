@@ -27,23 +27,24 @@ interface TableRow {
     view_payment_details: string;
     payment_confirmation: string;
     transport_route: string;
+    remarks: { remarks: string }[];
   };
   product_data: {
     id: string;
     productId: string;
     productName: string;
     uom: string;
-    // cost: string;
     orderQty: string;
-    // currentStock: string;
     commitedQuantity: string;
     deliveredQuantity: string;
+    dispatchedQuantity: string;
   }[];
 }
 
 interface StockOrderTableProps {
   isCommitedTextFieldAvailable: boolean;
   isDeliveredQtyAvailable: boolean;
+  isDispatchedQtyAvailable: boolean;
   isStore: Boolean;
   activeTab: Number | undefined;
   rowData: TableRow;
@@ -58,10 +59,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
       id: "uom",
       label: "UOM",
     },
-    // { id: "cost", label: "Cost" },
     { id: "orderQty", label: "Order Quantity" },
-    // { id: "currentStock", label: "Current Stock" },
     { id: "commitedQuantity", label: "Commited Quantity" },
+    { id: "dispatchedQuantity", label: "Dispatched Quantity" },
     { id: "deliveredQuantity", label: "Delivered Quantity" },
   ];
 
@@ -85,9 +85,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                   <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
-                  {/* <TableCell sx={{ width: 75 }}>{row.cost}</TableCell> */}
                   <TableCell sx={{ width: 75 }}>{row.orderQty}</TableCell>
-                  {/* <TableCell sx={{ width: 75 }}>{row.currentStock}</TableCell> */}
                   <TableCell sx={{ width: 75 }}>
                     {props.isCommitedTextFieldAvailable ? (
                       <TextField
@@ -120,8 +118,39 @@ export function StockOrderTable(props: StockOrderTableProps) {
                     )}
                   </TableCell>
                   <TableCell sx={{ width: 75 }}>
+                    {props.isDispatchedQtyAvailable ? (
+                      <TextField
+                        placeholder="0"
+                        required
+                        value={row.dispatchedQuantity}
+                        onChange={(event) => {
+                          const updatedRows = props.rowData.product_data.map(
+                            (r) => {
+                              if (r.id === row.id) {
+                                return {
+                                  ...r,
+                                  dispatchedQuantity: event.target.value ?? "",
+                                };
+                              }
+                              return r;
+                            }
+                          );
+                          props.setRows?.({
+                            ...props.rowData,
+                            product_data: updatedRows,
+                          });
+                        }}
+                        size="small"
+                        variant="outlined"
+                      />
+                    ) : (
+                      row.dispatchedQuantity ?? <div>--</div>
+                    )}
+                  </TableCell>
+                  <TableCell sx={{ width: 75 }}>
                     {props.isDeliveredQtyAvailable ? (
                       <TextField
+                        placeholder="0"
                         required
                         value={row.deliveredQuantity}
                         onChange={(event) => {

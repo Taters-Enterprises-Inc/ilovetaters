@@ -2,15 +2,12 @@ import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AddBillingInformationModal } from "./add-billing-information.modal";
-import { PayBillingModal } from "./pay-your-billing.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
 import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
-import { ViewPaymentInformation } from "./view-payment-information.modal";
 import { ViewImageModal } from "./view-image.modal";
 
 interface SupplierConfirmModalProps {
@@ -44,6 +41,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -110,6 +108,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
+              isDispatchedQtyAvailable={false}
             />
 
             <div className="flex flex-row space-x-4">
@@ -137,6 +136,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       </div>
 
       <ViewImageModal
+        isDownloadable={true}
         open={openPayBillingModal}
         onClose={() => setOpenPayBillingModal(false)}
         image={uploadedReceipt}

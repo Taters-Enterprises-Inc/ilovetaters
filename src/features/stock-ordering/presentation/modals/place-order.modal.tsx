@@ -1,22 +1,15 @@
 import { IoMdClose } from "react-icons/io";
 import { useState, useEffect } from "react";
-import { Autocomplete, Button, TableRow, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Autocomplete, Button, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { OrderPlaceAndConfirmTable } from "../components";
 import {
   getStockOrderStores,
   selectGetStockOrderStores,
 } from "../slices/get-store.slice";
-import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
-import {
-  confirmNewOrder,
-  selectconfirmNewOrder,
-} from "../slices/confirm-new-order.slice";
+import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 
 interface PlaceOrdersModalProps {
   open: boolean;

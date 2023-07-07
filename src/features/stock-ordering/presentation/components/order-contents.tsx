@@ -27,7 +27,6 @@ import {
   StoreReceiveOrderModal,
   SupplierConfirmModal,
   SupplierDispatchOrderModal,
-  SupplierEnFreightOrderModal,
   SupplierEnRouteOrderModal,
   SupplierUpdateBillingModal,
   SupplierViewOrderModal,
@@ -50,6 +49,7 @@ import {
 } from "features/shared/presentation/components/data-table";
 import { TAB_NAVIGATION } from "features/shared/constants";
 import { CompleteModal } from "../modals/complete-order.modal";
+import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -112,6 +112,7 @@ export function OrderContents() {
     storePayBilling: false,
     supplierConfirm: false,
     complete: false,
+    deliveryReceiveApproval: false,
   });
 
   const [orderId, setOrderId] = useState("");
@@ -166,33 +167,29 @@ export function OrderContents() {
     switch (tabValue) {
       case 0:
         handleModalToggle("supplierViewOrder");
-
         break;
       case 1:
         handleModalToggle("procurementReviewOrder");
         break;
       case 2:
-        handleModalToggle("procurementConfirmOrder");
-        break;
-      case 3:
         handleModalToggle("supplierDispatchOrder");
         break;
-      case 4:
-        handleModalToggle("supplierEnRouteOrder");
-        break;
-      case 5:
+      case 3:
         handleModalToggle("storeReceiveOrder");
         break;
-      case 6:
+      case 4:
+        handleModalToggle("deliveryReceiveApproval");
+        break;
+      case 5:
         handleModalToggle("supplierUpdateBilling");
         break;
-      case 7:
+      case 6:
         handleModalToggle("storePayBilling");
         break;
-      case 8:
+      case 7:
         handleModalToggle("supplierConfirm");
         break;
-      case 9:
+      case 8:
         handleModalToggle("complete");
         break;
     }
@@ -268,7 +265,7 @@ export function OrderContents() {
             <div className="hidden md:block">
               <DataTable
                 order={order === "asc" ? "asc" : "desc"}
-                orderBy={orderBy ?? "dateadded"}
+                orderBy={orderBy ?? "order_placement_date"}
                 search={search ?? ""}
                 emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
                 onSearch={(val) => {
@@ -649,7 +646,14 @@ export function OrderContents() {
       <CompleteModal
         open={modals.complete}
         onClose={() => handleModalToggle("complete")}
-        currentTab={0}
+        currentTab={tabValue}
+        id={orderId}
+      />
+
+      <DeliveryReceiveApprovalModal
+        open={modals.deliveryReceiveApproval}
+        onClose={() => handleModalToggle("deliveryReceiveApproval")}
+        currentTab={tabValue}
         id={orderId}
       />
     </>

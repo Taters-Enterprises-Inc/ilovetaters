@@ -20,6 +20,9 @@ export interface GetProductDataModel {
     updated_delivery_receipt: string;
     payment_detail_image: string;
     transport_route: string;
+    remarks: Array<{
+      remarks: string;
+    }>;
   };
   product_data: [
     {
@@ -31,6 +34,7 @@ export interface GetProductDataModel {
       order_qty: string;
       commited_qty: string;
       delivered_qty: string;
+      dispatched_qty: string;
       total_cost: string;
       order_information_id: string;
     }

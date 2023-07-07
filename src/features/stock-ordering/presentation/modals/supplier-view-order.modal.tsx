@@ -5,20 +5,10 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { TextField, Button } from "@mui/material";
-import {
-  LocalizationProvider,
-  DatePicker,
-  DateTimePicker,
-} from "@mui/x-date-pickers";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  getProductData,
-  selectGetProductData,
-} from "../slices/get-product-data.slice";
-import {
-  orderID,
-  newOrdersParam,
-} from "features/stock-ordering/core/stock-ordering.params";
+import { selectGetProductData } from "../slices/get-product-data.slice";
+import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateNewOrders } from "../slices/update-new-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 
@@ -55,6 +45,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -133,6 +124,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 setRows={setRows}
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
+                isDispatchedQtyAvailable={false}
               />
               <div className="flex items-stretch pt-5 space-x-5">
                 <span className="basis-1/2 self-center font-semibold text-right">

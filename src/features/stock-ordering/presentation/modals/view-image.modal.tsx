@@ -1,13 +1,25 @@
 import { IoMdClose } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { Button } from "@mui/material";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface ViewImageModalProps {
   open: boolean;
   onClose: () => void;
   image: File | string;
+  isDownloadable: boolean;
 }
 
 export function ViewImageModal(props: ViewImageModalProps) {
+  const handlePaymentDownload = () => {
+    const url =
+      "https://site.test/staging/api/stock/ordered/download-payment/-1688640199.jpg";
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "";
+    link.target = "_blank";
+    link.click();
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -31,10 +43,21 @@ export function ViewImageModal(props: ViewImageModalProps) {
               <IoMdClose />
             </button>
           </div>
-          <div className="bg-white p-1">
+          <div className="flex flex-col space-y-3 bg-white p-1">
             <img
-              src={`https://site.test/staging/api/assets/uploads/screenshots/${props.image}`}
+              src={`${REACT_APP_DOMAIN_URL}api/assets/uploads/screenshots/${props.image}`}
+              alt="sales invoice"
             />
+
+            {props.isDownloadable ? (
+              <Button
+                onClick={() => handlePaymentDownload()}
+                fullWidth
+                variant="contained"
+              >
+                Download
+              </Button>
+            ) : null}
           </div>
         </div>
       </div>

@@ -2,17 +2,13 @@ import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AddBillingInformationModal } from "./add-billing-information.modal";
-import { PayBillingModal } from "./pay-your-billing.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import {
-  updateBillingOrderParam,
-  updatePayBillingParam,
-} from "features/stock-ordering/core/stock-ordering.params";
+import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
+import { PayBillingModal } from "./pay-your-billing.modal";
 
 interface StorePayBillingModalProps {
   open: boolean;
@@ -52,6 +48,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      remarks: [],
     },
     product_data: [],
   });
@@ -147,6 +144,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
               setRows={setRows}
               rowData={rows}
               isDeliveredQtyAvailable={false}
+              isDispatchedQtyAvailable={false}
             />
 
             <div className="flex flex-row space-x-4">
