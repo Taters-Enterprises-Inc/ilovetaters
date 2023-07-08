@@ -49,6 +49,7 @@ export interface updateStatus {
 export interface newOrdersParam {
   id: string;
   commitedDelivery: string;
+  remarks: string;
   product_data: {
     id: string;
     productId: string;

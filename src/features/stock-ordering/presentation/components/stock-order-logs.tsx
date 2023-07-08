@@ -29,13 +29,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       isButton: false,
       isDate: true,
     },
-    {
-      id: "remarks",
-      label: "remarks after reviewing order: ",
-      isButton: false,
-      isDate: false,
-      identifier: "reviewed",
-    },
+
     {
       id: "order_reviewed_date",
       label: "Order Reviewed Date",
@@ -72,13 +66,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       isButton: true,
       isDate: false,
     },
-    {
-      id: "remarks",
-      label: "Remarks after approved: ",
-      isButton: false,
-      isDate: false,
-      identifier: "approved",
-    },
+
     {
       id: "billing_information_ready",
       label: "Billing Information Ready",
@@ -97,6 +85,16 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       label: "payment Confirmation",
       isButton: false,
       isDate: true,
+    },
+  ];
+
+  let remarkColumn = [
+    {
+      id: "remarks",
+      label: "remarks after reviewing order: ",
+      isButton: false,
+      isDate: false,
+      identifier: "reviewed",
     },
   ];
 
@@ -152,6 +150,8 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     return null;
   };
 
+  console.log(props.order_details.remarks);
+
   return (
     <>
       <div className=" p-4 space-y-2">
@@ -185,20 +185,33 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                               ? `${row.label} ${props.order_details.transport_route}:`
                               : row.label}
                           </span>
+
                           <span className="basis-1/2 capitalize break-all">
+                            {getOrderData(
+                              props.order_details[row.id] as
+                                | string
+                                | number
+                                | boolean,
+                              row.isDate
+                            )}
+                          </span>
+
+                          {/* <span className="basis-1/2 capitalize break-all">
                             {row.id === "remarks"
-                              ? handleRemarks(
+                              ? 
+                              handleRemarks(
                                   props.order_details[row.id],
                                   row.identifier
                                 )
-                              : getOrderData(
+                              : 
+                              getOrderData(
                                   props.order_details[row.id] as
                                     | string
                                     | number
                                     | boolean,
                                   row.isDate
                                 )}
-                          </span>
+                          </span> */}
                         </ListItem>
                       )}
                       <Divider variant="middle" />
@@ -206,6 +219,24 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                   ) : null}
                 </div>
               ))}
+
+              <ListItem className="flex space-x-4" dense={true}>
+                <span className="basis-1/2 font-semibold break-all capitalize">
+                  Remarks:
+                </span>
+                <span className="basis-1/2 capitalize break-all">
+                  {Array.isArray(props.order_details["remarks"]) &&
+                    props.order_details["remarks"].length > 0 && (
+                      <div>
+                        {
+                          props.order_details["remarks"][
+                            props.order_details["remarks"].length - 1
+                          ].remarks
+                        }
+                      </div>
+                    )}
+                </span>
+              </ListItem>
             </List>
           </div>
         </div>

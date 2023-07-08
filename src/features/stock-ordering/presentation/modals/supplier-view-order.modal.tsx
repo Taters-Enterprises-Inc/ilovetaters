@@ -24,6 +24,8 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
   const getProductDataState = useAppSelector(selectGetProductData);
 
+  const [remarks, setRemarks] = useState("");
+
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
@@ -63,6 +65,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     const reviewOrdersParamData: newOrdersParam = {
       id: props.id,
       commitedDelivery: CommitedDeliveryDate,
+      remarks: remarks,
       product_data: reviewOrdersProductDataParam,
     };
 
@@ -73,6 +76,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
   useEffect(() => {
     setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+    setRemarks("");
   }, [props.open]);
 
   InitializeModal({
@@ -126,6 +130,16 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 isDeliveredQtyAvailable={false}
                 isDispatchedQtyAvailable={false}
               />
+
+              <div className="flex flex-col px-5 mt-2">
+                <span>Remarks: </span>
+                <TextField
+                  value={remarks}
+                  onChange={(event) => setRemarks(event.target.value)}
+                  inputProps={{ maxLength: 128 }}
+                  multiline
+                />
+              </div>
               <div className="flex items-stretch pt-5 space-x-5">
                 <span className="basis-1/2 self-center font-semibold text-right">
                   Commited Delivery:
