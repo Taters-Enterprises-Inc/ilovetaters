@@ -97,9 +97,17 @@ const SideBarContent = () => {
                 }`}
       >
         <div>
-          <div className="text-base">FirstName LastName</div>
+          <div className="text-base">
+            {getAdminSessionState.data?.admin.user_details.first_name +
+              " " +
+              getAdminSessionState.data?.admin.user_details.last_name}
+          </div>
 
-          <div className="text-xs">Group</div>
+          <div className="text-xs">
+            {getAdminSessionState.data?.admin.user_details.groups.map(
+              (row) => row.name
+            )}
+          </div>
         </div>
       </div>
 

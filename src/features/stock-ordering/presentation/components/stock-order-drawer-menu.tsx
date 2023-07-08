@@ -18,10 +18,16 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { getAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { GrNext } from "react-icons/gr";
 import { selectstockOrderSideBar } from "../slices/stock-order.slice";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "features/admin/presentation/slices/logout-admin.slice";
 
 export function StockOrderDrawerMenu() {
   const stockOrderSideBarState = useAppSelector(selectstockOrderSideBar);
-
+  const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -38,13 +44,13 @@ export function StockOrderDrawerMenu() {
     },
   ];
 
-  //   useEffect(() => {
-  //     if (logoutAuditState.status === LogoutAuditState.success) {
-  //       dispatch(getAdminSession());
-  //       dispatch(resetLogoutAudit());
-  //       navigate("/internal");
-  //     }
-  //   }, [logoutAuditState, dispatch, navigate]);
+  useEffect(() => {
+    if (getLogoutAdminState.status === LogoutAdminState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+  }, [getLogoutAdminState, dispatch, navigate]);
 
   return (
     <div className="relative flex flex-col pb-4 m-0 mt-10 text-sm text-white">
@@ -82,10 +88,10 @@ export function StockOrderDrawerMenu() {
             })}
           </li>
 
-          {/* <li>
+          <li>
             <button
               onClick={() => {
-                // dispatch(logoutAudit());
+                dispatch(logoutAdmin());
               }}
               className="flex w-full"
             >
@@ -95,7 +101,8 @@ export function StockOrderDrawerMenu() {
 
                   <span
                     className={`whitespace-pre duration-300 ${
-                      !stockOrderSideBarState.status && "opacity-0 overflow-hidden"
+                      !stockOrderSideBarState.status &&
+                      "opacity-0 overflow-hidden"
                     }`}
                   >
                     Logout
@@ -103,7 +110,7 @@ export function StockOrderDrawerMenu() {
                 </span>
               </span>
             </button>
-          </li> */}
+          </li>
         </ul>
       </nav>
     </div>

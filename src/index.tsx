@@ -81,6 +81,7 @@ import {
   AdminInfluencerCashout,
   AdminSnackshopDashboard,
   AdminCustomerFeedbackDashboard,
+  AdminLandingPage,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -383,26 +384,26 @@ root.render(
 
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
-
-                        <Route path="stock-order">
-                          <Route element={<StockAuditSidebarWrapper />}>
-                            <Route
-                              path="dashboard"
-                              element={<StockOrderDashboard />}
-                            />
-                            <Route
-                              path="order"
-                              element={<StockOrderOrders />}
-                            />
-                            <Route
-                              path="order/view"
-                              element={<StockOrderView />}
-                            />
-                          </Route>
-                        </Route>
-
+                        <Route path="landing" element={<AdminLandingPage />} />
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
+                            <Route path="stock-order">
+                              <Route element={<StockAuditSidebarWrapper />}>
+                                <Route
+                                  path="dashboard"
+                                  element={<StockOrderDashboard />}
+                                />
+                                <Route
+                                  path="order"
+                                  element={<StockOrderOrders />}
+                                />
+                                <Route
+                                  path="order/view"
+                                  element={<StockOrderView />}
+                                />
+                              </Route>
+                            </Route>
+
                             <Route element={<AdminSidebarWrapper />}>
                               <Route path="dashboard">
                                 <Route
