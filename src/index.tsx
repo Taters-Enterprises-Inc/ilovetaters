@@ -173,9 +173,7 @@ import {
   StockOrderDashboard,
   StockOrderOrders,
   StockOrderView,
-  StoreOrderViewPage,
 } from "features/stock-ordering/presentation/pages";
-import { StockOrderLogin } from "features/stock-ordering/presentation/pages/stock-order-login.page";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -387,7 +385,6 @@ root.render(
                         <Route index element={<AdminLogin />} />
 
                         <Route path="stock-order">
-                          <Route index element={<StockOrderLogin />} />
                           <Route element={<StockAuditSidebarWrapper />}>
                             <Route
                               path="dashboard"
@@ -400,10 +397,6 @@ root.render(
                             <Route
                               path="order/view"
                               element={<StockOrderView />}
-                            />
-                            <Route
-                              path="order/store/view"
-                              element={<StoreOrderViewPage />}
                             />
                           </Route>
                         </Route>

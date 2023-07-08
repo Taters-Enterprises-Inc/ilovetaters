@@ -38,6 +38,12 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
   const [rows, setRows] = useState<OrderTableData[]>([]);
 
+  useEffect(() => {
+    setSelectedStore({ store_id: "", name: "" });
+
+    setCategory({ category_id: "", category_name: "" });
+  }, [props.open]);
+
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
