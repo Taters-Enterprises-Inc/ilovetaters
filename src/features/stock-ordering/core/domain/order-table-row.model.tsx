@@ -1,5 +1,4 @@
 export interface OrderTableData {
-  id: number;
   productId: string;
   productName: string;
   uom: string;

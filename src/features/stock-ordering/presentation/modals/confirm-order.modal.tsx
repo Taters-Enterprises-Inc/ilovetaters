@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { OrderPlaceAndConfirmTable } from "../components";
+import { StockOrderConfirmTable } from "../components";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import {
   selectGetStockOrderStores,
@@ -60,7 +60,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const [rows, setRows] = useState<OrderTableData[]>([
     {
-      id: 1,
       productId: "",
       productName: "",
       uom: "",
@@ -79,7 +78,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         return store.store_id === getOrderInformation.data?.selectedStoreId;
       });
 
-      setDeliveryData(getOrderInformation.data.deliverydate);
       setSelectedStore(getSelectedStore);
     }
   }, [props.open]);
@@ -158,8 +156,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
-              <OrderPlaceAndConfirmTable
-                isDisabled={buttonDisable}
+              <StockOrderConfirmTable
                 handleTableRows={handleTableRows}
                 setCategory={setCategory}
                 store={{

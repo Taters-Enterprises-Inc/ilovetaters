@@ -2,14 +2,14 @@ import { IoMdClose } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import dayjs from "dayjs";
-import { OrderPlaceAndConfirmTable } from "../components";
+import { StockOrderProductSelector } from "../components";
 import {
   getStockOrderStores,
   selectGetStockOrderStores,
 } from "../slices/get-store.slice";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { confirmNewOrder } from "../slices/confirm-new-order.slice";
+import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -30,28 +30,13 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     | undefined
   >();
   const [isDisabled, setDisabled] = useState(false);
-  const [deliveryDate, setDeliveryData] = useState(
-    dayjs().format("YYYY-MM-DD HH:mm:ss")
-  );
 
   const [category, setCategory] = useState<{
     category_id: string;
     category_name: string;
-  }>({
-    category_id: "",
-    category_name: "",
-  });
+  }>();
 
-  const [rows, setRows] = useState<OrderTableData[]>([
-    {
-      id: 1,
-      productId: "",
-      productName: "",
-      uom: "",
-      cost: "",
-      orderQty: "",
-    },
-  ]);
+  const [rows, setRows] = useState<OrderTableData[]>([]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -60,18 +45,12 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       confirmNewOrder({
         data: {
           selectedStoreId: selectedStore?.store_id,
-          deliverydate: deliveryDate,
           category: category,
           OrderData: rows,
         },
       })
     );
-
     props.openConfirmationState(true);
-  };
-
-  const handleTableRows = (TableData: OrderTableData[]) => {
-    setRows(TableData);
   };
 
   useEffect(() => {
@@ -107,53 +86,114 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <div className="flex flex-row space-x-5">
-                <div className="basis-full	flex flex-col space-y-2">
-                  <span>Select Store: </span>
-                  <Autocomplete
-                    fullWidth
-                    id="stock-order-selected-store"
-                    size="small"
-                    options={
-                      getStores.data
-                        ? getStores.data.stores.map((row) => row.name)
-                        : []
-                    }
-                    onChange={(event, value: any) => {
-                      if (value && getStores.data) {
-                        const selectedStoreObj = getStores.data.stores.find(
-                          (store) => store.name === value
-                        );
-                        setSelectedStore(selectedStoreObj);
-                      } else {
-                        setSelectedStore(undefined);
+              <>
+                <div className="flex flex-row space-x-5">
+                  <div className="basis-full	flex flex-col space-y-2">
+                    <span>Select Store: </span>
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      options={
+                        getStores.data
+                          ? getStores.data.stores.map((row) => row.name)
+                          : []
                       }
+                      onChange={(event, value: any) => {
+                        if (value && getStores.data) {
+                          const selectedStoreObj = getStores.data.stores.find(
+                            (store) => store.name === value
+                          );
+                          setSelectedStore(selectedStoreObj);
+                          setDisabled(false);
+                        } else {
+                          setSelectedStore(undefined);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          value={selectedStore ?? ""}
+                          {...params}
+                          label="Select store to evaluate"
+                        />
+                      )}
+                    />
+                  </div>
+                  {/* set to basis 1/2 after enabling again */}
+                  {/* <div className="basis-1/2	flex flex-col space-y-2">
+                    <span>Ship to address: </span>
+                    <Autocomplete
+                      fullWidth
+                      size="small"
+                      options={[]}
+                      onChange={(event, value: any) => {
+                        if (value && getStores.data) {
+                          const selectedStoreObj = getStores.data.stores.find(
+                            (store) => store.name === value
+                          );
+                          setSelectedStore(selectedStoreObj);
+                          setDisabled(false);
+                        } else {
+                          setSelectedStore(undefined);
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          value={selectedStore ?? ""}
+                          {...params}
+                          label="Ship to address"
+                        />
+                      )}
+                    />
+                  </div> */}
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <span>Select product Category: </span>
+
+                  <Autocomplete
+                    id="stock-order-category-name"
+                    size="small"
+                    disabled={
+                      selectedStore?.store_id === undefined &&
+                      selectedStore?.name === undefined
+                    }
+                    options={
+                      STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
+                    }
+                    onChange={(event, value) => {
+                      STOCK_ORDER_CATEGORY.find((row) => {
+                        if (row.category_name === value) {
+                          setCategory({
+                            category_id: row.category_id ?? "",
+                            category_name: row.category_name ?? "",
+                          });
+                        }
+                      });
                     }}
                     renderInput={(params) => (
                       <TextField
                         required
-                        value={selectedStore ?? ""}
+                        value={category?.category_name ?? ""}
                         {...params}
-                        label="Select store to evaluate"
+                        label="Select product category"
                       />
                     )}
                   />
                 </div>
-              </div>
-
-              <OrderPlaceAndConfirmTable
-                isDisabled={false}
-                handleTableRows={handleTableRows}
-                store={{
-                  store_id: selectedStore?.name ?? "",
-                  store_name: selectedStore?.store_id ?? "",
-                }}
-                isEdit={false}
-                setCategory={setCategory}
-                isEditCancelled={false}
-                isConfirmOrder={false}
-              />
-              <div className="px-5">
+              </>
+              {selectedStore?.name &&
+              selectedStore.store_id &&
+              category?.category_id ? (
+                <div className="border-2 border-secondary rounded-lg max-h-fit p-2">
+                  <StockOrderProductSelector
+                    category_id={category.category_id}
+                    selected_store={selectedStore}
+                    setRows={setRows}
+                  />
+                </div>
+              ) : null}
+              <div>
                 <div className="mt-5">
                   <Button
                     disabled={isDisabled}

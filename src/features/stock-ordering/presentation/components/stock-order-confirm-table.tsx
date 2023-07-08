@@ -17,22 +17,16 @@ import {
   selectGetStockOrderProducts,
 } from "../slices/get-products.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
+import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 
-interface TableRow {
-  id: number;
-  productId: string;
-  productName: string;
-  uom: string;
-  cost: string;
-  orderQty: string;
-}
-
-interface OrderPlaceAndConfirmTableProps {
-  isDisabled: boolean;
+interface StockOrderConfirmTableProps {
   isConfirmOrder: boolean;
   isEditCancelled: boolean;
   isEdit: boolean;
-  handleTableRows: (TableData: TableRow[], avialableDelivery: number) => void;
+  handleTableRows: (
+    TableData: OrderTableData[],
+    avialableDelivery: number
+  ) => void;
   setCategory: (categoryData: {
     category_id: string;
     category_name: string;
@@ -43,19 +37,8 @@ interface OrderPlaceAndConfirmTableProps {
   };
 }
 
-export function OrderPlaceAndConfirmTable(
-  props: OrderPlaceAndConfirmTableProps
-) {
-  const [rows, setRows] = useState<TableRow[]>([
-    {
-      id: 1,
-      productId: "",
-      productName: "",
-      uom: "",
-      cost: "",
-      orderQty: "",
-    },
-  ]);
+export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
+  const [rows, setRows] = useState<OrderTableData[]>([]);
 
   const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
@@ -68,23 +51,6 @@ export function OrderPlaceAndConfirmTable(
     category_id: "",
     category_name: "",
   });
-
-  const addRow = () => {
-    const newRow: TableRow = {
-      id: rows.length + 1,
-      productId: "",
-      productName: "",
-      uom: "",
-      cost: "",
-      orderQty: "",
-    };
-
-    setRows((prevRows) => [...prevRows, newRow]);
-  };
-
-  const deleteRow = () => {
-    setRows((prevRows) => prevRows.slice(0, prevRows.length - 1));
-  };
 
   let columns: Array<Column> = [
     { id: "prodId", label: "Product Id" },
@@ -133,6 +99,8 @@ export function OrderPlaceAndConfirmTable(
     props.handleTableRows(rows, aveDeliveryDate);
   }, [rows]);
 
+  console.log(getOrderInformation.data?.OrderData);
+
   return (
     <div>
       <div className="border-2 border-black rounded-lg pb-1">
@@ -149,62 +117,67 @@ export function OrderPlaceAndConfirmTable(
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.map((row, rowsIndex) => (
                   <TableRow
-                    key={row.id}
+                    key={rowsIndex}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell sx={{ width: 100 }}>{row.productId}</TableCell>
                     <TableCell>
-                      <Autocomplete
-                        id="stock-order-product-name"
-                        size="small"
-                        disabled={props.isDisabled}
-                        options={
-                          getProductInformation.data?.products
-                            .flatMap((options) => options)
-                            .filter((item) => {
-                              const excludedItems = rows.map(
-                                (items) => items.productName
+                      {props.isEdit ? (
+                        <Autocomplete
+                          size="small"
+                          options={
+                            getProductInformation.data?.products
+                              .flatMap((options) => options)
+                              .filter((item) => {
+                                const excludedItems = rows.map(
+                                  (items) => items.productName
+                                );
+
+                                return !excludedItems.includes(
+                                  item.product_name
+                                );
+                              })
+                              .map((item) => item.product_name) ?? []
+                          }
+                          onChange={(event, value) => {
+                            const getProductInfo =
+                              getProductInformation.data?.products.find(
+                                (prod_name) => {
+                                  if (prod_name.product_name === value) {
+                                    return prod_name;
+                                  }
+                                }
                               );
 
-                              return !excludedItems.includes(item.product_name);
-                            })
-                            .map((item) => item.product_name) ?? []
-                        }
-                        onChange={(event, value) => {
-                          const getProductInfo =
-                            getProductInformation.data?.products.find(
-                              (prod_name) => {
-                                if (prod_name.product_name === value) {
-                                  return prod_name;
-                                }
+                            const updatedRows = rows.map((r, index) => {
+                              if (index === rowsIndex) {
+                                return {
+                                  ...r,
+                                  productId: getProductInfo?.product_id ?? "",
+                                  productName:
+                                    getProductInfo?.product_name ?? "",
+                                  uom: getProductInfo?.uom ?? "",
+                                  cost: getProductInfo?.cost ?? "",
+                                };
                               }
-                            );
-
-                          const updatedRows = rows.map((r) => {
-                            if (r.id === row.id) {
-                              return {
-                                ...r,
-                                productId: getProductInfo?.product_id ?? "",
-                                productName: getProductInfo?.product_name ?? "",
-                                uom: getProductInfo?.uom ?? "",
-                                cost: getProductInfo?.cost ?? "",
-                              };
-                            }
-                            return r;
-                          });
-                          setRows(updatedRows);
-                        }}
-                        value={row.productName}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            {...params}
-                            placeholder="--Select products to order"
-                          />
-                        )}
-                      />
+                              return r;
+                            });
+                            setRows(updatedRows);
+                          }}
+                          value={row.productName}
+                          renderInput={(params) => (
+                            <TextField
+                              required
+                              {...params}
+                              placeholder="--Select products to order"
+                            />
+                          )}
+                        />
+                      ) : (
+                        row.productName
+                      )}
                     </TableCell>
                     <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
                     <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
@@ -213,10 +186,9 @@ export function OrderPlaceAndConfirmTable(
                         required
                         type="number"
                         value={row.orderQty}
-                        disabled={props.isDisabled}
                         onChange={(event) => {
-                          const updatedRows = rows.map((r) => {
-                            if (r.id === row.id) {
+                          const updatedRows = rows.map((r, index) => {
+                            if (index === rowsIndex) {
                               return {
                                 ...r,
                                 orderQty: event.target.value,
@@ -241,27 +213,6 @@ export function OrderPlaceAndConfirmTable(
                 <span className="text-base text-primary capitalize self-center ml-3">
                   {category?.category_name}
                 </span>
-              </div>
-              <div className="flex justify-end mt-2">
-                <Button
-                  disabled={props.isDisabled}
-                  onClick={() => {
-                    setCategory({
-                      category_id: "",
-                      category_name: "",
-                    });
-                    setRows([]);
-                  }}
-                >
-                  Reset
-                </Button>
-
-                <Button disabled={props.isDisabled} onClick={deleteRow}>
-                  Delete
-                </Button>
-                <Button disabled={props.isDisabled} onClick={addRow}>
-                  Add
-                </Button>
               </div>
             </div>
           </>
