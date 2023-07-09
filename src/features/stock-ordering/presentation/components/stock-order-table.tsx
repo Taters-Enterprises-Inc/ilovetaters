@@ -114,7 +114,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                         variant="outlined"
                       />
                     ) : (
-                      row.commitedQuantity
+                      row.commitedQuantity ?? <div>--</div>
                     )}
                   </TableCell>
                   <TableCell sx={{ width: 75 }}>

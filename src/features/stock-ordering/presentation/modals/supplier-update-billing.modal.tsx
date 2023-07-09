@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateBillingOrders } from "../slices/update-billing-order.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface SupplierUpdateBillingModalProps {
   open: boolean;
@@ -55,6 +56,22 @@ export function SupplierUpdateBillingModal(
     },
     product_data: [],
   });
+
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 4 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
 
   useEffect(() => {
     setBillingInformation({
@@ -124,35 +141,36 @@ export function SupplierUpdateBillingModal(
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
             />
-
-            <div className="flex flex-row space-x-4">
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => {
-                    setOpenAddBillingInformationModal(true);
-                  }}
-                  fullWidth
-                  variant="contained"
-                >
-                  Add Billing Information
-                </Button>
+            {setEnabled() ? (
+              <div className="flex flex-row space-x-4">
+                <div className="basis-1/2">
+                  <Button
+                    onClick={() => {
+                      setOpenAddBillingInformationModal(true);
+                    }}
+                    fullWidth
+                    variant="contained"
+                  >
+                    Add Billing Information
+                  </Button>
+                </div>
+                <div className="basis-1/2">
+                  <Button
+                    disabled={
+                      billingInformation.billing_amount === "" &&
+                      billingInformation.billing_id === ""
+                        ? true
+                        : false
+                    }
+                    onClick={() => handleSupplierUpdate()}
+                    fullWidth
+                    variant="contained"
+                  >
+                    Confirm
+                  </Button>
+                </div>
               </div>
-              <div className="basis-1/2">
-                <Button
-                  disabled={
-                    billingInformation.billing_amount === "" &&
-                    billingInformation.billing_id === ""
-                      ? true
-                      : false
-                  }
-                  onClick={() => handleSupplierUpdate()}
-                  fullWidth
-                  variant="contained"
-                >
-                  Confirm
-                </Button>
-              </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>

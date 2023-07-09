@@ -27,7 +27,6 @@ import {
   StoreReceiveOrderModal,
   SupplierConfirmModal,
   SupplierDispatchOrderModal,
-  SupplierEnRouteOrderModal,
   SupplierUpdateBillingModal,
   SupplierViewOrderModal,
 } from "../modals";
@@ -50,6 +49,14 @@ import {
 import { TAB_NAVIGATION } from "features/shared/constants";
 import { CompleteModal } from "../modals/complete-order.modal";
 import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
+import {
+  getAdminGroups,
+  selectGetAdminGroups,
+} from "features/admin/presentation/slices/get-admin-groups.slice";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -95,6 +102,8 @@ export function OrderContents() {
   const navigate = useNavigate();
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
 
   const [badgeItem, setBadgeItem] = useState(0);
 
@@ -219,6 +228,10 @@ export function OrderContents() {
 
     dispatch(getStockOrders({ query: query, param: currentTab }));
   }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
+
+  useEffect(() => {
+    dispatch(getAdminGroups());
+  }, []);
 
   return (
     <>
@@ -550,16 +563,23 @@ export function OrderContents() {
         </div>
       </div>
 
-      {/* -------------------- */}
-
-      <div
-        className="absolute right-10 bottom-10"
-        onClick={() => handleModalToggle("placeOrder")}
-      >
-        <Fab color="primary">
-          <TiDocumentAdd className="text-3xl" />
-        </Fab>
-      </div>
+      {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
+        (user_data, index) => {
+          return user_data.id === 1 ||
+            user_data.id === 2 ||
+            user_data.id === 6 ? (
+            <div
+              key={index}
+              className="absolute right-10 bottom-10"
+              onClick={() => handleModalToggle("placeOrder")}
+            >
+              <Fab color="primary">
+                <TiDocumentAdd className="text-3xl" />
+              </Fab>
+            </div>
+          ) : null;
+        }
+      )}
 
       <PlaceOrderModal
         open={modals.placeOrder}
@@ -601,19 +621,6 @@ export function OrderContents() {
         currentTab={tabValue}
         id={orderId}
       />
-
-      <SupplierEnRouteOrderModal
-        open={modals.supplierEnRouteOrder}
-        onClose={() => handleModalToggle("supplierEnRouteOrder")}
-        currentTab={tabValue}
-        id={orderId}
-      />
-
-      {/* <SupplierEnFreightOrderModal
-        open={openSupplierEnFreightOrderModal}
-        onClose={() => setOpenSupplierEnFreightOrderModal(false)}
-        currentTab={tabValue}
-      /> */}
 
       <StoreReceiveOrderModal
         open={modals.storeReceiveOrder}

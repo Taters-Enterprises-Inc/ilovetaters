@@ -11,6 +11,8 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateNewOrders } from "../slices/update-new-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { get } from "http";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -74,6 +76,22 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     props.onClose();
   };
 
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 4 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
+
   useEffect(() => {
     setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     setRemarks("");
@@ -122,7 +140,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
             <form className="overflow-auto" onSubmit={handleSubmit}>
               <StockOrderTable
-                isCommitedTextFieldAvailable={true}
+                isCommitedTextFieldAvailable={setEnabled()}
                 isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
@@ -131,46 +149,50 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 isDispatchedQtyAvailable={false}
               />
 
-              <div className="flex flex-col px-5 mt-2">
-                <span>Remarks: </span>
-                <TextField
-                  value={remarks}
-                  onChange={(event) => setRemarks(event.target.value)}
-                  inputProps={{ maxLength: 128 }}
-                  multiline
-                />
-              </div>
-              <div className="flex items-stretch pt-5 space-x-5">
-                <span className="basis-1/2 self-center font-semibold text-right">
-                  Commited Delivery:
-                </span>
-                <div className="basis-1/2">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateTimePicker
-                      label="Delivery date and time"
-                      views={["year", "month", "day", "hours", "minutes"]}
-                      onChange={(date) => {
-                        if (date) {
-                          const formattedDate = dayjs(date).format(
-                            "YYYY-MM-DD HH:mm:ss"
-                          );
-
-                          setCommitedDeliveryDate(formattedDate);
-                        }
-                      }}
-                      value={dayjs(CommitedDeliveryDate)}
-                      renderInput={(params) => (
-                        <TextField required {...params} size="small" />
-                      )}
+              {setEnabled() ? (
+                <div>
+                  <div className="flex flex-col px-5 mt-2">
+                    <span>Remarks: </span>
+                    <TextField
+                      value={remarks}
+                      onChange={(event) => setRemarks(event.target.value)}
+                      inputProps={{ maxLength: 128 }}
+                      multiline
                     />
-                  </LocalizationProvider>
+                  </div>
+                  <div className="flex items-stretch pt-5 space-x-5">
+                    <span className="basis-1/2 self-center font-semibold text-right">
+                      Commited Delivery:
+                    </span>
+                    <div className="basis-1/2">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                          label="Delivery date and time"
+                          views={["year", "month", "day", "hours", "minutes"]}
+                          onChange={(date) => {
+                            if (date) {
+                              const formattedDate = dayjs(date).format(
+                                "YYYY-MM-DD HH:mm:ss"
+                              );
+
+                              setCommitedDeliveryDate(formattedDate);
+                            }
+                          }}
+                          value={dayjs(CommitedDeliveryDate)}
+                          renderInput={(params) => (
+                            <TextField required {...params} size="small" />
+                          )}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                    <div className="basis-4/5 pr-6">
+                      <Button fullWidth type="submit" variant="contained">
+                        Confirm
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="basis-4/5 pr-6">
-                  <Button fullWidth type="submit" variant="contained">
-                    Confirm
-                  </Button>
-                </div>
-              </div>
+              ) : null}
             </form>
           </div>
         </div>

@@ -97,15 +97,17 @@ const SideBarContent = () => {
                 }`}
       >
         <div>
-          <div className="text-base">
+          <div className="text-lg">
             {getAdminSessionState.data?.admin.user_details.first_name +
               " " +
               getAdminSessionState.data?.admin.user_details.last_name}
           </div>
 
-          <div className="text-xs">
-            {getAdminSessionState.data?.admin.user_details.groups.map(
-              (row) => row.name
+          <div className="flex flex-col text-xs">
+            {getAdminSessionState.data?.admin.user_details.sos_groups.map(
+              (row, index) => (
+                <span key={index}>{row.description}</span>
+              )
             )}
           </div>
         </div>

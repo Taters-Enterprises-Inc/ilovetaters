@@ -16,6 +16,7 @@ import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { receiveOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReceiveOrders } from "../slices/update-receive-order.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface StoreReceiveOrderModalProps {
   open: boolean;
@@ -62,6 +63,22 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     setUploadedReciept("");
   }, [props.open]);
+
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 1 || user_group.id === 2 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
 
   InitializeModal({
     setRows: setRows,
@@ -160,63 +177,65 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                 activeTab={props.currentTab}
                 setRows={setRows}
                 rowData={rows}
-                isDeliveredQtyAvailable={true}
+                isDeliveredQtyAvailable={setEnabled()}
                 isDispatchedQtyAvailable={false}
               />
 
-              <div className="space-y-5">
-                <div className="px-5">
-                  <div className="flex flex-row space-x-5">
-                    <div className="basis-1/2 flex flex-col space-y-2">
-                      <span>Actual Delivery Date: </span>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                          label="Delivery date and time"
-                          views={["year", "month", "day", "hours", "minutes"]}
-                          onChange={(date) => {
-                            if (date) {
-                              const formattedDate = dayjs(date).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              );
+              {setEnabled() ? (
+                <div className="space-y-5">
+                  <div className="px-5">
+                    <div className="flex flex-row space-x-5">
+                      <div className="basis-1/2 flex flex-col space-y-2">
+                        <span>Actual Delivery Date: </span>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DateTimePicker
+                            label="Delivery date and time"
+                            views={["year", "month", "day", "hours", "minutes"]}
+                            onChange={(date) => {
+                              if (date) {
+                                const formattedDate = dayjs(date).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                );
 
-                              setActualDeliveryDate(formattedDate);
-                            }
-                          }}
-                          value={dayjs(actualDeliveryDate)}
-                          renderInput={(params) => (
-                            <TextField required {...params} size="small" />
-                          )}
-                        />
-                      </LocalizationProvider>
-                    </div>
-
-                    {isValidFile(uploadedReceipt) ? (
-                      <div className="basis-1/12 flex  justify-center items-stretch">
-                        <div className="self-end">
-                          <IconButton
-                            onClick={() =>
-                              setOpenUploadDeliveryRecieptModal(true)
-                            }
-                          >
-                            <MdPreview className=" text-3xl" />
-                          </IconButton>
-                        </div>
+                                setActualDeliveryDate(formattedDate);
+                              }
+                            }}
+                            value={dayjs(actualDeliveryDate)}
+                            renderInput={(params) => (
+                              <TextField required {...params} size="small" />
+                            )}
+                          />
+                        </LocalizationProvider>
                       </div>
-                    ) : null}
 
-                    <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
-                      <Button
-                        className="self-end"
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                      >
-                        Confirm
-                      </Button>
+                      {isValidFile(uploadedReceipt) ? (
+                        <div className="basis-1/12 flex  justify-center items-stretch">
+                          <div className="self-end">
+                            <IconButton
+                              onClick={() =>
+                                setOpenUploadDeliveryRecieptModal(true)
+                              }
+                            >
+                              <MdPreview className=" text-3xl" />
+                            </IconButton>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
+                        <Button
+                          className="self-end"
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                        >
+                          Confirm
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </form>
         </div>

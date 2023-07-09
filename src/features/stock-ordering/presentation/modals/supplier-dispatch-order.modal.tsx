@@ -19,6 +19,7 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface SupplierDispatchOrderModalProps {
   open: boolean;
@@ -88,6 +89,22 @@ export function SupplierDispatchOrderModal(
     }
 
     return true;
+  };
+
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 4 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
   };
 
   InitializeModal({
@@ -167,93 +184,94 @@ export function SupplierDispatchOrderModal(
                 setRows={setRows}
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={true}
+                isDispatchedQtyAvailable={setEnabled()}
               />
+              {setEnabled() ? (
+                <div className="flex flex-col px-5">
+                  <div>
+                    <FormControl required={true}>
+                      <div className="flex flex-row items-stretch space-x-2">
+                        <span className="self-center pb-1 text-lg">
+                          Transport Route:
+                        </span>
 
-              <div className="flex flex-col px-5">
-                <div>
-                  <FormControl required={true}>
-                    <div className="flex flex-row items-stretch space-x-2">
-                      <span className="self-center pb-1 text-lg">
-                        Transport Route:
-                      </span>
+                        <RadioGroup
+                          onChange={(event, value) => setTransport(value)}
+                          value={transport}
+                          row
+                          aria-labelledby="transport-group"
+                        >
+                          <FormControlLabel
+                            value="1"
+                            control={<Radio />}
+                            label="Ground Transport"
+                          />
+                          <FormControlLabel
+                            value="2"
+                            control={<Radio />}
+                            label="Ocean Transport"
+                          />
+                          <FormControlLabel
+                            value="3"
+                            control={<Radio />}
+                            label="Air Freight"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </FormControl>
+                  </div>
 
-                      <RadioGroup
-                        onChange={(event, value) => setTransport(value)}
-                        value={transport}
-                        row
-                        aria-labelledby="transport-group"
-                      >
-                        <FormControlLabel
-                          value="1"
-                          control={<Radio />}
-                          label="Ground Transport"
+                  <div className="flex">
+                    <div className="basis-1/2 flex flex-col space-y-2">
+                      <span>Dispatched Delivery Date: </span>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                          label="Delivery date and time"
+                          views={["year", "month", "day", "hours", "minutes"]}
+                          onChange={(date) => {
+                            if (date) {
+                              const formattedDate = dayjs(date).format(
+                                "YYYY-MM-DD HH:mm:ss"
+                              );
+
+                              setDispachedDelivery(formattedDate);
+                            }
+                          }}
+                          value={dayjs(dispatchedDelivery)}
+                          renderInput={(params) => (
+                            <TextField required {...params} size="small" />
+                          )}
                         />
-                        <FormControlLabel
-                          value="2"
-                          control={<Radio />}
-                          label="Ocean Transport"
-                        />
-                        <FormControlLabel
-                          value="3"
-                          control={<Radio />}
-                          label="Air Freight"
-                        />
-                      </RadioGroup>
+                      </LocalizationProvider>
                     </div>
-                  </FormControl>
-                </div>
 
-                <div className="flex">
-                  <div className="basis-1/2 flex flex-col space-y-2">
-                    <span>Dispatched Delivery Date: </span>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DateTimePicker
-                        label="Delivery date and time"
-                        views={["year", "month", "day", "hours", "minutes"]}
-                        onChange={(date) => {
-                          if (date) {
-                            const formattedDate = dayjs(date).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            );
+                    <div className="basis-1/2 flex flex-col space-y-2 px-5">
+                      <>
+                        <Button
+                          size="small"
+                          onClick={() => {
+                            setOpenUploadDeliveryRecieptModal(true);
+                          }}
+                          variant="contained"
+                        >
+                          Upload Sales Invoice
+                        </Button>
 
-                            setDispachedDelivery(formattedDate);
+                        <Button
+                          disabled={
+                            !isValidFile(uploadedReceipt) || transport === ""
                           }
-                        }}
-                        value={dayjs(dispatchedDelivery)}
-                        renderInput={(params) => (
-                          <TextField required {...params} size="small" />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  </div>
-
-                  <div className="basis-1/2 flex flex-col space-y-2 px-5">
-                    <>
-                      <Button
-                        size="small"
-                        onClick={() => {
-                          setOpenUploadDeliveryRecieptModal(true);
-                        }}
-                        variant="contained"
-                      >
-                        Upload Sales Invoice
-                      </Button>
-
-                      <Button
-                        disabled={
-                          !isValidFile(uploadedReceipt) || transport === ""
-                        }
-                        type="submit"
-                        size="small"
-                        variant="contained"
-                      >
-                        Dispatch Order
-                      </Button>
-                    </>
+                          type="submit"
+                          size="small"
+                          variant="contained"
+                        >
+                          Dispatch Order
+                        </Button>
+                      </>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </form>
         </div>

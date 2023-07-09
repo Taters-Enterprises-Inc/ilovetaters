@@ -8,6 +8,7 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReviewOrders } from "../slices/update-review-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface ProcurementReviewOrdersModalProps {
   open: boolean;
@@ -22,11 +23,9 @@ export function ProcurementReviewOrdersModal(
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [isCommitedTextFieldAvailable, setIsCommitedTextFieldAvailable] =
-    useState(false);
-  const [remarks, setRemarks] = useState("");
+  const [isEditEnabled, setIsEditEnabled] = useState(false);
 
-  const [isHidden, setHidden] = useState(false);
+  const [remarks, setRemarks] = useState("");
 
   const [rows, setRows] = useState<TableRow>({
     order_information: {
@@ -50,6 +49,22 @@ export function ProcurementReviewOrdersModal(
     product_data: [],
   });
 
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 3 || user_group.id === 6 || isEditEnabled) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
+
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -64,7 +79,7 @@ export function ProcurementReviewOrdersModal(
   });
 
   useEffect(() => {
-    setIsCommitedTextFieldAvailable(false);
+    setIsEditEnabled(false);
     setRemarks("");
   }, [props.open]);
 
@@ -120,18 +135,20 @@ export function ProcurementReviewOrdersModal(
 
           <form onSubmit={handleOrderReviewed}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <div className="flex justify-end items-stretch">
-                <Switch
-                  onChange={(event) => {
-                    setIsCommitedTextFieldAvailable(event.target.checked);
-                  }}
-                  defaultChecked={false}
-                />
-                <span className="font-medium self-center">Enable edit</span>
-              </div>
+              {setEnabled() ? (
+                <div className="flex justify-end items-stretch">
+                  <Switch
+                    onChange={(event) => {
+                      setIsEditEnabled(event.target.checked);
+                    }}
+                    defaultChecked={false}
+                  />
+                  <span className="font-medium self-center">Enable edit</span>
+                </div>
+              ) : null}
 
               <StockOrderTable
-                isCommitedTextFieldAvailable={isCommitedTextFieldAvailable}
+                isCommitedTextFieldAvailable={isEditEnabled}
                 isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
@@ -140,20 +157,23 @@ export function ProcurementReviewOrdersModal(
                 isDispatchedQtyAvailable={false}
               />
 
-              <div className="flex flex-col px-5">
-                <span>Remarks: </span>
-                <TextField
-                  value={remarks}
-                  onChange={(event) => setRemarks(event.target.value)}
-                  multiline
-                />
-              </div>
-
-              <div className="flex justify-end">
-                <Button fullWidth type="submit" variant="contained">
-                  Order Reviewed
-                </Button>
-              </div>
+              {setEnabled() || isEditEnabled ? (
+                <>
+                  <div className="flex flex-col px-5">
+                    <span>Remarks: </span>
+                    <TextField
+                      value={remarks}
+                      onChange={(event) => setRemarks(event.target.value)}
+                      multiline
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button fullWidth type="submit" variant="contained">
+                      Order Reviewed
+                    </Button>
+                  </div>
+                </>
+              ) : null}
             </div>
           </form>
         </div>

@@ -150,8 +150,6 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     return null;
   };
 
-  console.log(props.order_details.remarks);
-
   return (
     <>
       <div className=" p-4 space-y-2">

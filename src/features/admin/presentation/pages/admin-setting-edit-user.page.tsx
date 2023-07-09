@@ -1,5 +1,5 @@
 import { AdminHead } from "../components";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -24,12 +24,16 @@ import {
   MaterialInputPassword,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
+import { FormControlLabel, FormGroup, Switch } from "@mui/material";
+import { RiSurroundSoundLine } from "react-icons/ri";
 
 export function AdminSettingEditUser() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
+
+  const [stockOrderingEnabled, setStockOrderingEnabled] = useState(false);
 
   const getAdminUserState = useAppSelector(selectGetAdminUser);
   const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
@@ -44,6 +48,7 @@ export function AdminSettingEditUser() {
     password: string;
     confirmPassword: string;
     groups: Array<number> | null;
+    stock_order_group: Array<number> | null;
   }>({
     firstName: "",
     lastName: "",
@@ -53,6 +58,7 @@ export function AdminSettingEditUser() {
     password: "",
     confirmPassword: "",
     groups: null,
+    stock_order_group: null,
   });
 
   const handleInputChange = (evt: any) => {
@@ -97,6 +103,19 @@ export function AdminSettingEditUser() {
         }
       }
 
+      let stock_order_groups = null;
+      if (getAdminUserState.data.stockOrderGroup) {
+        const currentStockOrderGroups = getAdminUserState.data.stockOrderGroup;
+
+        for (let i = 0; i < currentStockOrderGroups.length; i++) {
+          if (stock_order_groups === null) {
+            stock_order_groups = [currentStockOrderGroups[i].id];
+          } else {
+            stock_order_groups.push(currentStockOrderGroups[i].id);
+          }
+        }
+      }
+
       setFormState({
         firstName: getAdminUserState.data.first_name,
         lastName: getAdminUserState.data.last_name,
@@ -106,6 +125,7 @@ export function AdminSettingEditUser() {
         password: "",
         confirmPassword: "",
         groups: groups,
+        stock_order_group: stock_order_groups,
       });
     }
   }, [getAdminUserState]);
@@ -121,6 +141,11 @@ export function AdminSettingEditUser() {
     }
     e.preventDefault();
   };
+
+  getAdminUserState.data?.stockOrderGroup?.map((element) => {
+    console.log(element.id);
+  });
+
   return (
     <>
       <AdminHead
@@ -194,8 +219,11 @@ export function AdminSettingEditUser() {
               />
 
               <div className="flex flex-wrap">
-                {getAdminGroupsState.data?.map((group) => (
-                  <div className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base">
+                {getAdminGroupsState.data?.shop.map((group, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
+                  >
                     <Checkbox
                       color="primary"
                       value={group.id}
@@ -229,6 +257,78 @@ export function AdminSettingEditUser() {
                   </div>
                 ))}
               </div>
+
+              <div className="flex flex-col">
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={
+                          getAdminUserState.data?.stockOrderGroup?.length !== 0
+                        }
+                        onChange={(event) =>
+                          setStockOrderingEnabled(event.target.checked)
+                        }
+                      />
+                    }
+                    label="Enable Stock Ordering"
+                  />
+
+                  {stockOrderingEnabled === true ||
+                  getAdminUserState.data?.stockOrderGroup?.length !== 0 ? (
+                    <div className="flex flex-wrap">
+                      {getAdminGroupsState.data?.stock_order.map(
+                        (stock_order_gr, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
+                          >
+                            <Checkbox
+                              color="primary"
+                              value={stock_order_gr.id}
+                              defaultChecked={
+                                getAdminUserState.data?.stockOrderGroup
+                                  ?.length === 0
+                                  ? false
+                                  : getAdminUserState.data?.stockOrderGroup?.some(
+                                      (element) => {
+                                        if (element.id === stock_order_gr.id) {
+                                          return true;
+                                        }
+                                        return false;
+                                      }
+                                    )
+                              }
+                              onChange={(event) => {
+                                let groups = formState.stock_order_group;
+
+                                if (groups === null) {
+                                  groups = [stock_order_gr.id];
+                                } else if (
+                                  groups.some((e) => e === stock_order_gr.id)
+                                ) {
+                                  groups = groups.filter(
+                                    (e) => e !== stock_order_gr.id
+                                  );
+                                } else {
+                                  groups.push(stock_order_gr.id);
+                                }
+
+                                setFormState({
+                                  ...formState,
+                                  stock_order_group: groups,
+                                });
+                              }}
+                            />
+                            <span>{stock_order_gr.description}</span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : null}
+                </FormGroup>
+              </div>
+
               <button
                 type="submit"
                 className="px-4 py-2 text-white rounded-lg bg-button w-fit"

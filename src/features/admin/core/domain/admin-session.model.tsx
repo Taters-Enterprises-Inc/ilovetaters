@@ -27,6 +27,11 @@ export interface AdminSessionModel {
         name: string;
         description: string;
       }>;
+      sos_groups: Array<{
+        id: number;
+        name: string;
+        description: string;
+      }>;
       stores: Array<{
         store_id: number;
         name: string;

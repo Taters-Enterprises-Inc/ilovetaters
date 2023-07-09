@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
 import { updateDeliveryReceiveApprovalOrders } from "../slices/update-delivery-receive-approval.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface DeliveryReceiveApprovalModalProps {
   open: boolean;
@@ -45,6 +46,22 @@ export function DeliveryReceiveApprovalModal(
     },
     product_data: [],
   });
+
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 3 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
 
   InitializeModal({
     setRows: setRows,
@@ -116,37 +133,39 @@ export function DeliveryReceiveApprovalModal(
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
             />
-
-            <div className="flex flex-col px-5">
-              <span>Remarks: </span>
-              <TextField
-                value={remarks}
-                onChange={(event) => setRemarks(event.target.value)}
-                inputProps={{ maxLength: 128 }}
-                multiline
-              />
-            </div>
-
-            <div className="flex flex-row space-x-4">
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => handleValidate("4")}
-                  fullWidth
-                  variant="contained"
-                >
-                  Reject
-                </Button>
-              </div>
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => handleValidate("6")}
-                  fullWidth
-                  variant="contained"
-                >
-                  Approve
-                </Button>
-              </div>
-            </div>
+            {setEnabled() ? (
+              <>
+                <div className="flex flex-col px-5">
+                  <span>Remarks: </span>
+                  <TextField
+                    value={remarks}
+                    onChange={(event) => setRemarks(event.target.value)}
+                    inputProps={{ maxLength: 128 }}
+                    multiline
+                  />
+                </div>
+                <div className="flex flex-row space-x-4">
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => handleValidate("4")}
+                      fullWidth
+                      variant="contained"
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => handleValidate("6")}
+                      fullWidth
+                      variant="contained"
+                    >
+                      Approve
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </div>

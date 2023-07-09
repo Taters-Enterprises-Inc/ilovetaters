@@ -9,6 +9,7 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
 import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
 import { ViewImageModal } from "./view-image.modal";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface SupplierConfirmModalProps {
   open: boolean;
@@ -45,6 +46,22 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     },
     product_data: [],
   });
+
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
+  const setEnabled = () => {
+    const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
+
+    let result = false;
+
+    user?.map((user_group) => {
+      if (user_group.id === 4 || user_group.id === 6) {
+        result = true;
+      }
+    });
+
+    return result;
+  };
 
   InitializeModal({
     setRows: setRows,
@@ -111,26 +128,28 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
               isDispatchedQtyAvailable={false}
             />
 
-            <div className="flex flex-row space-x-4">
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => setOpenPayBillingModal(true)}
-                  fullWidth
-                  variant="contained"
-                >
-                  View payment information
-                </Button>
+            {setEnabled() ? (
+              <div className="flex flex-row space-x-4">
+                <div className="basis-1/2">
+                  <Button
+                    onClick={() => setOpenPayBillingModal(true)}
+                    fullWidth
+                    variant="contained"
+                  >
+                    View payment information
+                  </Button>
+                </div>
+                <div className="basis-1/2">
+                  <Button
+                    onClick={() => handleValidate()}
+                    fullWidth
+                    variant="contained"
+                  >
+                    Validate
+                  </Button>
+                </div>
               </div>
-              <div className="basis-1/2">
-                <Button
-                  onClick={() => handleValidate()}
-                  fullWidth
-                  variant="contained"
-                >
-                  Validate
-                </Button>
-              </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>
