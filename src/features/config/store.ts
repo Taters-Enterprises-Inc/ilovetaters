@@ -241,6 +241,23 @@ import getAdminDashboardShopFeaturedProducts from "features/admin/presentation/s
 import getAdminDashboardCustomerFeedbackRatings from "features/admin/presentation/slices/get-admin-dashboard-customer-feedback-ratings.slice";
 import getAuditStoreResult from "features/audit/presentation/slices/audit-store-result";
 import getAuditAcknowledge from "features/audit/presentation/slices/audit-acknowledge.slice";
+import stockOrderSideBar from "features/stock-ordering/presentation/slices/stock-order.slice";
+import getStockOrderStores from "features/stock-ordering/presentation/slices/get-store.slice";
+import insertNewOrder from "features/stock-ordering/presentation/slices/insert-new-order.slice";
+import confirmNewOrder from "features/stock-ordering/presentation/slices/confirm-new-order.slice";
+import getStockOrderProducts from "features/stock-ordering/presentation/slices/get-products.slice";
+import getStockOrders from "features/stock-ordering/presentation/slices/get-stock-orders.slice";
+import getProductData from "features/stock-ordering/presentation/slices/get-product-data.slice";
+import updateNewOrders from "features/stock-ordering/presentation/slices/update-new-order.slice";
+import updateReviewOrders from "features/stock-ordering/presentation/slices/update-review-order.slice";
+import updateConfirmOrders from "features/stock-ordering/presentation/slices/update-confirm-order.slice";
+import updateDispatchOrders from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
+import updateEnrouteOrders from "features/stock-ordering/presentation/slices/update-enroute-order.slice";
+import updateReceiveOrders from "features/stock-ordering/presentation/slices/update-receive-order.slice";
+import updateBillingOrders from "features/stock-ordering/presentation/slices/update-billing-order.slice";
+import updatePayBillingOrders from "features/stock-ordering/presentation/slices/update-pay-billing.slice";
+import updateConfirmPayment from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
+import updateDeliveryReceiveApprovalOrders from "features/stock-ordering/presentation/slices/update-delivery-receive-approval.slice";
 
 export const store = configureStore({
   reducer: {
@@ -485,6 +502,23 @@ export const store = configureStore({
     getAdminDashboardCustomerFeedbackRatings,
     getAuditStoreResult,
     getAuditAcknowledge,
+    stockOrderSideBar,
+    getStockOrderStores,
+    insertNewOrder,
+    confirmNewOrder,
+    getStockOrderProducts,
+    getStockOrders,
+    getProductData,
+    updateNewOrders,
+    updateReviewOrders,
+    updateConfirmOrders,
+    updateDispatchOrders,
+    updateEnrouteOrders,
+    updateReceiveOrders,
+    updateBillingOrders,
+    updatePayBillingOrders,
+    updateConfirmPayment,
+    updateDeliveryReceiveApprovalOrders,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

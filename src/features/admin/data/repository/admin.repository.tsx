@@ -209,7 +209,7 @@ export interface GetAdminUserResponse {
 export interface GetAdminGroupsResponse {
   data: {
     message: string;
-    data: Array<GroupModel>;
+    data: GroupModel;
   };
 }
 

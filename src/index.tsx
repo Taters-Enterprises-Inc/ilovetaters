@@ -81,6 +81,7 @@ import {
   AdminInfluencerCashout,
   AdminSnackshopDashboard,
   AdminCustomerFeedbackDashboard,
+  AdminLandingPage,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -168,6 +169,12 @@ import {
 } from "features/audit/presentation/components";
 import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 import { ShopProductViewLog } from "features/shop/presentation/logs";
+import { StockAuditSidebarWrapper } from "features/stock-ordering/presentation/components";
+import {
+  StockOrderDashboard,
+  StockOrderOrders,
+  StockOrderView,
+} from "features/stock-ordering/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -377,9 +384,26 @@ root.render(
 
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
-
+                        <Route path="landing" element={<AdminLandingPage />} />
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
+                            <Route path="stock-order">
+                              <Route element={<StockAuditSidebarWrapper />}>
+                                <Route
+                                  path="dashboard"
+                                  element={<StockOrderDashboard />}
+                                />
+                                <Route
+                                  path="order"
+                                  element={<StockOrderOrders />}
+                                />
+                                <Route
+                                  path="order/view"
+                                  element={<StockOrderView />}
+                                />
+                              </Route>
+                            </Route>
+
                             <Route element={<AdminSidebarWrapper />}>
                               <Route path="dashboard">
                                 <Route

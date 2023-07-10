@@ -8,5 +8,6 @@ export interface UserModel {
   email: string;
   phone: string;
   company: string;
-  groups: Array<GroupModel>;
+  groups: GroupModel["shop"];
+  stockOrderGroup: GroupModel["stock_order"];
 }
