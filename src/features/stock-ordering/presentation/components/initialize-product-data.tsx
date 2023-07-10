@@ -47,6 +47,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
           commitedQuantity: product.commited_qty,
           deliveredQuantity: product.delivered_qty,
           dispatchedQuantity: product.dispatched_qty,
+          total_cost: product.total_cost,
         }));
 
       props.setRows?.({

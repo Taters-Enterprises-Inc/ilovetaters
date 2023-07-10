@@ -28,5 +28,6 @@ export interface TableRow {
     commitedQuantity: string;
     deliveredQuantity: string;
     dispatchedQuantity: string;
+    total_cost: string;
   }[];
 }

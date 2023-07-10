@@ -38,6 +38,7 @@ interface TableRow {
     commitedQuantity: string;
     deliveredQuantity: string;
     dispatchedQuantity: string;
+    total_cost: string;
   }[];
 }
 
@@ -63,6 +64,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
     { id: "commitedQuantity", label: "Commited Quantity" },
     { id: "dispatchedQuantity", label: "Dispatched Quantity" },
     { id: "deliveredQuantity", label: "Delivered Quantity" },
+    { id: "total_cost", label: "Total Cost" },
   ];
 
   return (
@@ -177,6 +179,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       row.deliveredQuantity ?? <div>--</div>
                     )}
                   </TableCell>
+                  <TableCell>{row.total_cost ?? <div>--</div>}</TableCell>
                 </TableRow>
               </TableBody>
             ))}
