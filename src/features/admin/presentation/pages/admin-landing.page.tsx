@@ -21,7 +21,7 @@ import {
 
 const nav = [
   {
-    url: "/admin/dashboard",
+    url: "/admin/dashboard/customer-feedback",
     label: "shop",
   },
   {
