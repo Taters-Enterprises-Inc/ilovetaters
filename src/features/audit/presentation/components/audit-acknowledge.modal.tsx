@@ -1,14 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { UploadFile } from "features/shared/presentation/components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import {
-  GetAuditAcknowledgeState,
   getAuditAcknowledge,
   selectGetAuditAcknowledge,
 } from "../slices/audit-acknowledge.slice";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface ResponseAcknowledgeProps {
   open: boolean;

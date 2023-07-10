@@ -17,7 +17,7 @@ export enum GetAdminGroupsState {
 interface InitialState {
   status: GetAdminGroupsState;
   message: string;
-  data: Array<GroupModel> | undefined;
+  data: GroupModel | undefined;
 }
 
 const initialState: InitialState = {
