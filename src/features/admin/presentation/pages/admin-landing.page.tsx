@@ -1,47 +1,63 @@
-import styled from "@emotion/styled";
-import {
-  ButtonBase,
-  Box,
-  Typography,
-  createTheme,
-  Button,
-  ButtonGroup,
-  IconButton,
-  Divider,
-  Stack,
-  Container,
-} from "@mui/material";
+import { Divider, Button } from "@mui/material";
+import { Container, Stack } from "@mui/system";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import {
-  getAdminSession,
   selectGetAdminSession,
+  getAdminSession,
+  GetAdminSessionState,
 } from "../slices/get-admin-session.slice";
 
-const nav = [
-  {
-    url: "/admin/dashboard/customer-feedback",
-    label: "shop",
-  },
-  {
-    url: "/admin/stock-order/dashboard",
-    label: "stock ordering",
-  },
-];
+interface Nav {
+  [key: string]: boolean;
+}
 
 export function AdminLandingPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
+  const [navAvailability, setNavAvailability] = useState<Nav>({
+    shop: false,
+    sos: false,
+  });
+
+  let nav = [
+    {
+      url: "/admin/dashboard/customer-feedback",
+      label: "shop",
+      availability: navAvailability.shop,
+    },
+    {
+      url: "/admin/stock-order/dashboard",
+      label: "stock ordering",
+      availability: navAvailability.sos,
+    },
+  ];
+
   useEffect(() => {
     dispatch(getAdminSession());
   }, [dispatch]);
 
-  console.log(
-    getAdminSessionState.data?.admin?.user_details?.sos_groups?.length !== 0
-  );
+  useEffect(() => {
+    if (getAdminSessionState.data) {
+      const userAdmin = getAdminSessionState.data?.admin?.user_details;
+
+      setNavAvailability((prevState) => ({
+        ...prevState,
+        shop: userAdmin?.groups?.length !== 0,
+        sos: userAdmin?.sos_groups?.length !== 0,
+      }));
+    }
+  }, [getAdminSessionState.data]);
+
+  const handleModalToggle = (nav: string) => {
+    setNavAvailability((prevState: Nav) => ({
+      ...prevState,
+      [nav]: !prevState[nav],
+    }));
+  };
 
   return (
     <Container
@@ -60,19 +76,17 @@ export function AdminLandingPage() {
         spacing={2}
       >
         {nav.map((navItem, index) => (
-          <>
-            {(getAdminSessionState.data?.admin?.user_details?.sos_groups
-              ?.length !== 0 ||
-              index === 0) && (
+          <div key={index}>
+            {navItem.availability && (
               <Button
-                key={index}
+                fullWidth
                 onClick={() => navigate(navItem.url)}
                 variant="contained"
               >
                 {navItem.label}
               </Button>
             )}
-          </>
+          </div>
         ))}
       </Stack>
     </Container>

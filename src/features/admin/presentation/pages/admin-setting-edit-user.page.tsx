@@ -265,6 +265,8 @@ export function AdminSettingEditUser() {
                       <Switch
                         checked={
                           getAdminUserState.data?.stockOrderGroup?.length !== 0
+                            ? true
+                            : stockOrderingEnabled
                         }
                         onChange={(event) =>
                           setStockOrderingEnabled(event.target.checked)

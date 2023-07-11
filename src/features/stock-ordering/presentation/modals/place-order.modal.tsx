@@ -202,7 +202,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
               <div>
                 <div className="mt-5">
                   <Button
-                    disabled={isDisabled}
+                    disabled={isDisabled || rows.length === 0}
                     type="submit"
                     fullWidth
                     variant="contained"

@@ -62,7 +62,12 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
     let result = false;
 
     user?.map((user_group) => {
-      if (user_group.id === 1 || user_group.id === 2 || user_group.id === 6) {
+      if (
+        user_group.id === 1 ||
+        user_group.id === 2 ||
+        user_group.id === 6 ||
+        user_group.id === 7
+      ) {
         result = true;
       }
     });
