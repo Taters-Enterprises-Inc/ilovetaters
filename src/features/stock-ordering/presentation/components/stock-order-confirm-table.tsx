@@ -6,7 +6,6 @@ import {
   TableBody,
   Autocomplete,
   TextField,
-  Button,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Column } from "features/shared/presentation/components/data-table";
@@ -184,14 +183,17 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                     <TableCell sx={{ width: 125 }}>
                       <TextField
                         required
-                        type="number"
+                        type="text"
                         value={row.orderQty}
+                        inputProps={{ maxLength: 4 }}
                         onChange={(event) => {
+                          let value = event.target.value.replace(/\D/g, "");
+
                           const updatedRows = rows.map((r, index) => {
                             if (index === rowsIndex) {
                               return {
                                 ...r,
-                                orderQty: event.target.value,
+                                orderQty: value,
                               };
                             }
                             return r;

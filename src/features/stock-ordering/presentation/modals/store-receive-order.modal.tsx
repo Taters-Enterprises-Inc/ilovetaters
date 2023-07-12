@@ -32,6 +32,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   const [actualDeliveryDate, setActualDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
+
   const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
     useState(false);
 
@@ -145,6 +146,15 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     return true;
   };
 
+  const isZero = () => {
+    let zero = false;
+    rows.product_data.map((product) => {
+      if (Number(product.deliveredQuantity) === 0) zero = true;
+    });
+
+    return zero;
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -224,6 +234,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
                       <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
                         <Button
+                          disabled={isZero()}
                           className="self-end"
                           type="submit"
                           fullWidth

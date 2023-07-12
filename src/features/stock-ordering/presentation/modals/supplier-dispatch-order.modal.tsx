@@ -148,6 +148,15 @@ export function SupplierDispatchOrderModal(
     props.onClose();
   };
 
+  const isZero = () => {
+    let zero = false;
+    rows.product_data.map((product) => {
+      if (Number(product.dispatchedQuantity) === 0) zero = true;
+    });
+
+    return zero;
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -259,7 +268,9 @@ export function SupplierDispatchOrderModal(
 
                         <Button
                           disabled={
-                            !isValidFile(uploadedReceipt) || transport === ""
+                            !isValidFile(uploadedReceipt) ||
+                            transport === "" ||
+                            isZero()
                           }
                           type="submit"
                           size="small"

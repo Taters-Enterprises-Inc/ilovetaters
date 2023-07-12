@@ -23,6 +23,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
 
   const getProductDataState = useAppSelector(selectGetProductData);
+
   const dispatch = useAppDispatch();
 
   const [billingInformation, setBillingInformation] = useState<{

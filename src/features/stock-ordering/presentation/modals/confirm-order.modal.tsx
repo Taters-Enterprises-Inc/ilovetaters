@@ -127,6 +127,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     return dayjs(date).isBefore(nearestDate);
   };
 
+  const isZero = () => {
+    let zero = false;
+    rows.map((product) => {
+      if (Number(product.orderQty) === 0) zero = true;
+    });
+
+    return zero;
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -272,7 +281,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                       </Button>
                     )}
                     <Button
-                      disabled={isEdit}
+                      disabled={isEdit || isZero()}
                       type="submit"
                       className="basis-1/2"
                       fullWidth

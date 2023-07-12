@@ -110,6 +110,15 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       : undefined,
   });
 
+  const isZero = () => {
+    let zero = false;
+    rows.product_data.map((product) => {
+      if (Number(product.commitedQuantity) === 0) zero = true;
+    });
+
+    return zero;
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -186,7 +195,12 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                       </LocalizationProvider>
                     </div>
                     <div className="basis-4/5 pr-6">
-                      <Button fullWidth type="submit" variant="contained">
+                      <Button
+                        disabled={isZero()}
+                        fullWidth
+                        type="submit"
+                        variant="contained"
+                      >
                         Confirm
                       </Button>
                     </div>

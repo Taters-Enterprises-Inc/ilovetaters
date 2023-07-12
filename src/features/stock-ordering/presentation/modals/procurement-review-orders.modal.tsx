@@ -25,6 +25,10 @@ export function ProcurementReviewOrdersModal(
 
   const [isEditEnabled, setIsEditEnabled] = useState(false);
 
+  const [productDataOld, setProductDataOld] = useState<
+    TableRow["product_data"]
+  >([]);
+
   const [remarks, setRemarks] = useState("");
 
   const [rows, setRows] = useState<TableRow>({
@@ -104,6 +108,15 @@ export function ProcurementReviewOrdersModal(
     props.onClose();
   };
 
+  const isZero = () => {
+    let zero = false;
+    rows.product_data.map((product) => {
+      if (Number(product.commitedQuantity) === 0) zero = true;
+    });
+
+    return zero;
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -139,6 +152,14 @@ export function ProcurementReviewOrdersModal(
                 <div className="flex justify-end items-stretch">
                   <Switch
                     onChange={(event) => {
+                      if (!event.target.checked) {
+                        setRows({
+                          order_information: rows.order_information,
+                          product_data: productDataOld,
+                        });
+                      }
+
+                      setProductDataOld(rows.product_data);
                       setIsEditEnabled(event.target.checked);
                     }}
                     defaultChecked={false}
@@ -168,7 +189,12 @@ export function ProcurementReviewOrdersModal(
                     />
                   </div>
                   <div className="flex justify-end">
-                    <Button fullWidth type="submit" variant="contained">
+                    <Button
+                      disabled={isZero()}
+                      fullWidth
+                      type="submit"
+                      variant="contained"
+                    >
                       Order Reviewed
                     </Button>
                   </div>
