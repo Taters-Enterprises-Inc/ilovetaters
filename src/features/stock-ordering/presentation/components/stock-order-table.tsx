@@ -6,9 +6,18 @@ import {
   TableBody,
   TextField,
   Divider,
+  Skeleton,
 } from "@mui/material";
 import { Column } from "features/shared/presentation/components/data-table";
 import { StockOrderLogs } from "./stock-order-logs";
+import NumberFormat from "react-number-format";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 
 interface TableRow {
   order_information: {
@@ -81,8 +90,8 @@ export function StockOrderTable(props: StockOrderTableProps) {
                 ))}
               </TableRow>
             </TableHead>
-            {props.rowData.product_data.map((row, index) => (
-              <TableBody key={index}>
+            <TableBody>
+              {props.rowData.product_data.map((row, index) => (
                 <TableRow>
                   <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
@@ -93,14 +102,22 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       <TextField
                         required
                         placeholder="0"
+                        type="text"
                         value={row.commitedQuantity}
+                        inputProps={{ maxLength: 4 }}
                         onChange={(event) => {
+                          let value = event.target.value.replace(/\D/g, "");
+
+                          if (value > row.orderQty) {
+                            value = row.orderQty;
+                          }
+
                           const updatedRows = props.rowData.product_data.map(
                             (r) => {
                               if (r.id === row.id) {
                                 return {
                                   ...r,
-                                  commitedQuantity: event.target.value ?? "",
+                                  commitedQuantity: value ?? "",
                                 };
                               }
                               return r;
@@ -125,13 +142,20 @@ export function StockOrderTable(props: StockOrderTableProps) {
                         placeholder="0"
                         required
                         value={row.dispatchedQuantity}
+                        inputProps={{ maxLength: 4 }}
                         onChange={(event) => {
+                          let value = event.target.value.replace(/\D/g, "");
+
+                          if (value > row.commitedQuantity) {
+                            value = row.commitedQuantity;
+                          }
+
                           const updatedRows = props.rowData.product_data.map(
                             (r) => {
                               if (r.id === row.id) {
                                 return {
                                   ...r,
-                                  dispatchedQuantity: event.target.value ?? "",
+                                  dispatchedQuantity: value ?? "",
                                 };
                               }
                               return r;
@@ -155,13 +179,20 @@ export function StockOrderTable(props: StockOrderTableProps) {
                         placeholder="0"
                         required
                         value={row.deliveredQuantity}
+                        inputProps={{ maxLength: 4 }}
                         onChange={(event) => {
+                          let value = event.target.value.replace(/\D/g, "");
+
+                          if (value > row.dispatchedQuantity) {
+                            value = row.dispatchedQuantity;
+                          }
+
                           const updatedRows = props.rowData.product_data.map(
                             (r) => {
                               if (r.id === row.id) {
                                 return {
                                   ...r,
-                                  deliveredQuantity: event.target.value ?? "",
+                                  deliveredQuantity: value ?? "",
                                 };
                               }
                               return r;
@@ -179,10 +210,14 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       row.deliveredQuantity ?? <div>--</div>
                     )}
                   </TableCell>
-                  <TableCell>{row.total_cost ?? <div>--</div>}</TableCell>
+                  <TableCell>
+                    {Number(row.total_cost).toLocaleString("en-US", {
+                      maximumFractionDigits: 2,
+                    }) ?? <div>--</div>}
+                  </TableCell>
                 </TableRow>
-              </TableBody>
-            ))}
+              ))}
+            </TableBody>
           </Table>
         </div>
 
