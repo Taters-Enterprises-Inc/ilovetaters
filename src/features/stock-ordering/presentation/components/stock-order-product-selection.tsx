@@ -76,6 +76,9 @@ export function StockOrderProductSelector(
     };
 
     dispatch(getStockOrderProducts(productParams));
+
+    setLeft([]);
+    setRight([]);
   }, [dispatch, props.category_id]);
 
   useEffect(() => {

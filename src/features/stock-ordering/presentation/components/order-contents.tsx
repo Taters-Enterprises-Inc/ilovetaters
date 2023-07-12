@@ -567,7 +567,8 @@ export function OrderContents() {
         (user_data, index) => {
           return user_data.id === 1 ||
             user_data.id === 2 ||
-            user_data.id === 6 ? (
+            user_data.id === 6 ||
+            user_data.id === 9 ? (
             <div
               key={index}
               className="absolute right-10 bottom-10"
