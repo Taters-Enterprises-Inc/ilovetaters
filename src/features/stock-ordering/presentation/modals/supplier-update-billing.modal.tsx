@@ -143,7 +143,7 @@ export function SupplierUpdateBillingModal(
             />
             {setEnabled() ? (
               <div className="flex flex-row space-x-4">
-                <div className="basis-1/2">
+                {/* <div className="basis-1/2">
                   <Button
                     onClick={() => {
                       setOpenAddBillingInformationModal(true);
@@ -153,15 +153,15 @@ export function SupplierUpdateBillingModal(
                   >
                     Add Billing Information
                   </Button>
-                </div>
-                <div className="basis-1/2">
+                </div> */}
+                <div className="basis-full">
                   <Button
-                    disabled={
-                      billingInformation.billing_amount === "" &&
-                      billingInformation.billing_id === ""
-                        ? true
-                        : false
-                    }
+                    // disabled={
+                    //   billingInformation.billing_amount === "" &&
+                    //   billingInformation.billing_id === ""
+                    //     ? true
+                    //     : false
+                    // }
                     onClick={() => handleSupplierUpdate()}
                     fullWidth
                     variant="contained"
@@ -174,12 +174,12 @@ export function SupplierUpdateBillingModal(
           </div>
         </div>
       </div>
-
+      {/* 
       <AddBillingInformationModal
         open={openAddBillingInformationModal}
         onClose={() => setOpenAddBillingInformationModal(false)}
         setBillingInformation={setBillingInformation}
-      />
+      /> */}
     </>
   );
 }
