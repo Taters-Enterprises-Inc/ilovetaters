@@ -12,6 +12,8 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Divider,
+  IconButton,
   MenuItem,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -24,6 +26,7 @@ import {
   resetLogoutAdmin,
   selectLogoutAdmin,
 } from "features/admin/presentation/slices/logout-admin.slice";
+import { BsArrowReturnLeft } from "react-icons/bs";
 
 export function StockOrderDrawerMenu() {
   const stockOrderSideBarState = useAppSelector(selectstockOrderSideBar);

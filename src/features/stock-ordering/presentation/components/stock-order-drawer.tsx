@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Drawer } from "@mui/material";
+import { Box, Button, Divider, Drawer, IconButton } from "@mui/material";
 import { BSCDrawerTabs } from "features/bsc/presentation/components/bsc-drawer-tabs";
 import { toggleBSCSideBar } from "features/bsc/presentation/slices/bsc-sidebar.slice";
 import { FaBars } from "react-icons/fa";
@@ -13,6 +13,8 @@ import {
   togglestockOrderSideBar,
 } from "../slices/stock-order.slice";
 import { StockOrderDrawerMenu } from "./stock-order-drawer-menu";
+import { BsArrowReturnLeft } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = "17rem";
 
@@ -59,6 +61,7 @@ const SideBarContent = () => {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <Box className="relative h-screen bg-secondary font-['Varela_Round'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
@@ -88,6 +91,19 @@ const SideBarContent = () => {
         >
           Stock Order System
         </h1>
+      </div>
+      <div>
+        <IconButton
+          onClick={() => {
+            navigate("/admin/landing");
+          }}
+          sx={{ width: "100%" }}
+        >
+          <div className="flex text-white text-sm space-x-2 mt-2 w-full">
+            <BsArrowReturnLeft />
+            <span>Return to menu page</span>
+          </div>
+        </IconButton>
       </div>
       <div
         className={`whitespace-pre duration-300 mt-3 px-4 text-white 
