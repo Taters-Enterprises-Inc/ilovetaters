@@ -16,6 +16,7 @@ import {
   dispatchOrderParam,
   updatReviewParam,
   updateDeliveryReceiveApproval,
+  storeIdParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -126,8 +127,10 @@ export interface updateDeliveryReceiveApprovalOrdersResponse {
   };
 }
 
-export function GetStockOrderStoresRepository(): Promise<GetStockOrderStoresResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/stores`, {
+export function GetStockOrderStoresRepository(
+  store_id: string
+): Promise<GetStockOrderStoresResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/order/stores${store_id}`, {
     withCredentials: true,
   });
 }

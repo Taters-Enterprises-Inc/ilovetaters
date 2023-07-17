@@ -41,7 +41,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       }
     | undefined
   >();
-
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [category, setCategory] = useState<
     | {
         category_id: string;
@@ -52,9 +52,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [isEditCancelled, setisEditCancelled] = useState(false);
   const [buttonDisable, setButtonDisable] = useState(true);
-  const [deliveryDate, setDeliveryData] = useState(
-    dayjs().format("YYYY-MM-DD HH:mm:ss")
-  );
+  const [deliveryDate, setDeliveryData] = useState("");
+  const [deliveryDateError, setDeliveryDateError] = useState(false);
 
   const [availableDeliveryDay, setAvailableDeliveryDay] = useState<number>();
 
@@ -69,16 +68,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   ]);
 
   useEffect(() => {
-    dispatch(getStockOrderStores());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (getOrderInformation.data) {
       const getSelectedStore = getStores.data?.stores.find((store) => {
         return store.store_id === getOrderInformation.data?.selectedStoreId;
       });
 
+      setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
       setSelectedStore(getSelectedStore);
+      setDeliveryData("");
+      setRows([]);
     }
   }, [props.open]);
 
@@ -97,6 +95,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
         deliverydate: deliveryDate,
+        selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         category: {
           category_id: category?.category_id ?? "",
           category_name: category?.category_name ?? "",
@@ -104,9 +103,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         OrderData: rows,
       })
     );
-
-    setRows([]);
-    setDeliveryData(dayjs().format("YYYY-MM-DD HH:mm:ss"));
 
     props.onClose();
   };
@@ -215,6 +211,35 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                     </div>
 
                     <div className="basis-1/2 flex flex-col space-y-2">
+                      <span>Select Address: </span>
+                      <Autocomplete
+                        id="stock-order-selected-store"
+                        size="small"
+                        disabled={buttonDisable}
+                        options={
+                          getStores.data
+                            ? getStores.data.ship_to_address.map(
+                                (row) => row.ship_to_address
+                              )
+                            : []
+                        }
+                        onChange={(event, value: any) => {
+                          setSelectedAddress(value);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            required
+                            value={selectedAddress ?? ""}
+                            {...params}
+                            label={
+                              selectedAddress ?? "Select address to deliver"
+                            }
+                          />
+                        )}
+                      />
+                    </div>
+
+                    <div className="basis-1/2 flex flex-col space-y-2">
                       <span>Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker
@@ -226,7 +251,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                                 "YYYY-MM-DD HH:mm:ss"
                               );
 
-                              setDeliveryData(formattedDate);
+                              if (dayjs(formattedDate).isValid()) {
+                                setDeliveryData(formattedDate);
+
+                                const isDateDisabled =
+                                  deliverySchedules(formattedDate);
+                                setDeliveryDateError(isDateDisabled);
+                              } else {
+                                setDeliveryDateError(true);
+                              }
                             }
                           }}
                           value={dayjs(deliveryDate)}
@@ -281,7 +314,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                       </Button>
                     )}
                     <Button
-                      disabled={isEdit || isZero()}
+                      disabled={isEdit || isZero() || deliveryDateError}
                       type="submit"
                       className="basis-1/2"
                       fullWidth

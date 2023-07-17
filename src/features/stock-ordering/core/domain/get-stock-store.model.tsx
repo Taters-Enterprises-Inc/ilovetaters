@@ -3,4 +3,8 @@ export interface GetStockStoreModel {
     store_id: string;
     name: string;
   }>;
+  ship_to_address: Array<{
+    ship_to_address: string;
+    store_id: string;
+  }>;
 }

@@ -1,6 +1,10 @@
 import { Button, Divider, List, ListItem } from "@mui/material";
 import { useState } from "react";
 import { ViewImageModal } from "../modals/view-image.modal";
+import { useAppDispatch, useQuery } from "features/config/hooks";
+import { createQueryParams } from "features/config/helpers";
+import { useNavigate } from "react-router-dom";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface StockOrderLogsProps {
   order_details: {
@@ -62,7 +66,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
     {
       id: "view_updated_delivery_receipt",
-      label: "View Updated Sales Invoice",
+      label: "Download Updated Sales Invoice",
       isButton: true,
       isDate: false,
     },
@@ -100,20 +104,30 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
 
   const [openImagePreviewer, setOpenImagePreviewer] = useState(false);
   const [image, setImage] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleOnclick = (id: string) => {
     switch (id) {
       case "view_delivery_receipt":
         setImage(props.order_details.view_delivery_receipt as string);
+        setOpenImagePreviewer(true);
+
         break;
       case "view_payment_details":
         setImage(props.order_details.view_payment_details as string);
+        setOpenImagePreviewer(true);
+
         break;
       case "view_updated_delivery_receipt":
-        setImage(props.order_details.view_updated_delivery_receipt as string);
+        if ("order_number" in props.order_details) {
+          const id = props.order_details.order_number;
+          const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+
+          window.open(link, "_blank");
+        }
+
         break;
     }
-    setOpenImagePreviewer(true);
   };
 
   const isValidDate = (dateStr: string): boolean => {

@@ -10,6 +10,7 @@ import {
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
+import { createQueryParams } from "features/config/helpers";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -29,6 +30,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       }
     | undefined
   >();
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [isDisabled, setDisabled] = useState(false);
 
   const [category, setCategory] = useState<{
@@ -40,7 +42,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
   useEffect(() => {
     setSelectedStore({ store_id: "", name: "" });
-
     setCategory({ category_id: "", category_name: "" });
   }, [props.open]);
 
@@ -51,6 +52,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       confirmNewOrder({
         data: {
           selectedStoreId: selectedStore?.store_id,
+          selectedAddress: selectedAddress,
           category: category,
           OrderData: rows,
         },
@@ -60,8 +62,12 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   };
 
   useEffect(() => {
-    dispatch(getStockOrderStores());
-  }, [dispatch]);
+    const query = createQueryParams({
+      store_id: selectedStore?.store_id ?? "",
+    });
+
+    dispatch(getStockOrderStores(query));
+  }, [dispatch, selectedStore?.store_id]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -94,7 +100,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
               <>
                 <div className="flex flex-row space-x-5">
-                  <div className="basis-full	flex flex-col space-y-2">
+                  <div className="basis-1/2	flex flex-col space-y-2">
                     <span>Select Store: </span>
                     <Autocomplete
                       fullWidth
@@ -126,33 +132,30 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     />
                   </div>
                   {/* set to basis 1/2 after enabling again */}
-                  {/* <div className="basis-1/2	flex flex-col space-y-2">
+                  <div className="basis-1/2	flex flex-col space-y-2">
                     <span>Ship to address: </span>
                     <Autocomplete
                       fullWidth
+                      disabled={selectedStore?.store_id === ""}
                       size="small"
-                      options={[]}
+                      options={
+                        getStores.data?.ship_to_address.map(
+                          (address) => address.ship_to_address
+                        ) ?? []
+                      }
                       onChange={(event, value: any) => {
-                        if (value && getStores.data) {
-                          const selectedStoreObj = getStores.data.stores.find(
-                            (store) => store.name === value
-                          );
-                          setSelectedStore(selectedStoreObj);
-                          setDisabled(false);
-                        } else {
-                          setSelectedStore(undefined);
-                        }
+                        setSelectedAddress(value);
                       }}
                       renderInput={(params) => (
                         <TextField
                           required
-                          value={selectedStore ?? ""}
+                          value={selectedAddress ?? ""}
                           {...params}
                           label="Ship to address"
                         />
                       )}
                     />
-                  </div> */}
+                  </div>
                 </div>
                 <div className="flex flex-col space-y-2">
                   <span>Select product Category: </span>

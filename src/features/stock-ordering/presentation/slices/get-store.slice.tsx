@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 import { GetAuditStoreModel } from "features/audit/core/domain/get-store-model.model";
 import { RootState } from "features/config/store";
 import { GetStockStoreModel } from "features/stock-ordering/core/domain/get-stock-store.model";
+import { storeIdParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   GetStockOrderStoresRepository,
   GetStockOrderStoresResponse,
@@ -29,10 +30,10 @@ const initialState: InitialState = {
 
 export const getStockOrderStores = createAsyncThunk(
   "getStockOrderStores",
-  async (_, { rejectWithValue }) => {
+  async (param: string, { rejectWithValue }) => {
     try {
       const response: GetStockOrderStoresResponse =
-        await GetStockOrderStoresRepository();
+        await GetStockOrderStoresRepository(param);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

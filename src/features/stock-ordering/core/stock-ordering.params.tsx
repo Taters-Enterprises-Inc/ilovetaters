@@ -6,6 +6,7 @@ export interface test {
 
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
+  selectedAddress: string;
   deliverydate: string;
   category: {
     category_id: string;
@@ -98,4 +99,8 @@ export interface updateDeliveryReceiveApproval {
   id: string;
   status: string;
   remarks: string;
+}
+
+export interface storeIdParam {
+  store_id: string;
 }

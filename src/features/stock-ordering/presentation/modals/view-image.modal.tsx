@@ -11,13 +11,9 @@ interface ViewImageModalProps {
 
 export function ViewImageModal(props: ViewImageModalProps) {
   const handlePaymentDownload = () => {
-    const url =
-      "https://site.test/staging/api/stock/ordered/download-payment/-1688640199.jpg";
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "";
-    link.target = "_blank";
-    link.click();
+    const url = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download-payment/${props.image}`;
+
+    window.open(url, "_blank");
   };
 
   if (props.open) {
