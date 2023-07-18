@@ -11,6 +11,7 @@ import { OrderTableData } from "features/stock-ordering/core/domain/order-table-
 import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -22,6 +23,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
 
   const getStores = useAppSelector(selectGetStockOrderStores);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const [selectedStore, setSelectedStore] = useState<
     | {
@@ -64,10 +66,11 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   useEffect(() => {
     const query = createQueryParams({
       store_id: selectedStore?.store_id ?? "",
+      user_id: getAdminSessionState.data?.admin.user_id ?? "",
     });
 
     dispatch(getStockOrderStores(query));
-  }, [dispatch, selectedStore?.store_id]);
+  }, [dispatch, selectedStore]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
