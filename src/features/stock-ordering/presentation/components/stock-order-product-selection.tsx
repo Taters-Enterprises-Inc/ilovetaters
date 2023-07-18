@@ -79,7 +79,7 @@ export function StockOrderProductSelector(
 
     setLeft([]);
     setRight([]);
-  }, [dispatch, props.category_id]);
+  }, [dispatch, props.category_id, props.selected_store]);
 
   useEffect(() => {
     if (getProductInformation.data?.products) {
