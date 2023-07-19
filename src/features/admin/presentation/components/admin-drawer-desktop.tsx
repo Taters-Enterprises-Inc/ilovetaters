@@ -105,8 +105,15 @@ export function AdminDrawerDesktop() {
             sx={{ width: "100%" }}
           >
             <div className="flex text-white text-sm space-x-2 mt-2 w-full">
-              <BsArrowReturnLeft />
-              <span>Return to menu page</span>
+              <BsArrowReturnLeft
+                className={`${
+                  !adminSideBarState.status &&
+                  "translate-y-16 translate-x-4 text-xl"
+                }`}
+              />
+              <span className={`${!adminSideBarState.status && "hidden"}`}>
+                Return to menu page
+              </span>
             </div>
           </IconButton>
         </div>

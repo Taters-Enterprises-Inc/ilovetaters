@@ -119,6 +119,8 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                             (store) => store.name === value
                           );
                           setSelectedStore(selectedStoreObj);
+                          setSelectedAddress("");
+
                           setDisabled(false);
                         } else {
                           setSelectedStore(undefined);
@@ -139,6 +141,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     <span>Ship to address: </span>
                     <Autocomplete
                       fullWidth
+                      value={selectedAddress}
                       disabled={selectedStore?.store_id === ""}
                       size="small"
                       options={
