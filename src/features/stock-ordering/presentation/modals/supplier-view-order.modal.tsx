@@ -25,6 +25,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
 
   const getProductDataState = useAppSelector(selectGetProductData);
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const [remarks, setRemarks] = useState("");
 
@@ -68,6 +69,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       id: props.id,
       commitedDelivery: CommitedDeliveryDate,
       remarks: remarks,
+      user_id: getAdminSessionState.data?.admin.user_id ?? "",
       product_data: reviewOrdersProductDataParam,
     };
 
@@ -75,8 +77,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     props.onClose();
   };
-
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;

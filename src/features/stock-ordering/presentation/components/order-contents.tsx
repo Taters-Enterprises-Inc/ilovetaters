@@ -31,7 +31,6 @@ import {
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
-import { ProcurementConfirmOrdersModal } from "../modals/procurement-confirm-order.modal";
 import { DataList } from "features/shared/presentation/components";
 import {
   GetStockOrdersState,
@@ -605,13 +604,6 @@ export function OrderContents() {
       <ProcurementReviewOrdersModal
         open={modals.procurementReviewOrder}
         onClose={() => handleModalToggle("procurementReviewOrder")}
-        currentTab={tabValue}
-        id={orderId}
-      />
-
-      <ProcurementConfirmOrdersModal
-        open={modals.procurementConfirmOrder}
-        onClose={() => handleModalToggle("procurementConfirmOrder")}
         currentTab={tabValue}
         id={orderId}
       />

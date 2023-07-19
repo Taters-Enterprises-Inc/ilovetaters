@@ -105,6 +105,7 @@ export function ProcurementReviewOrdersModal(
     const reviewOrdersParamData: updatReviewParam = {
       id: props.id,
       remarks: remarks,
+      user_id: getAdminSessionState.data?.admin?.user_id ?? "",
       product_data: reviewOrdersProductDataParam,
     };
 

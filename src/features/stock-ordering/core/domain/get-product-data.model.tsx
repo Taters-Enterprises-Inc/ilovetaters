@@ -21,6 +21,9 @@ export interface GetProductDataModel {
     payment_detail_image: string;
     transport_route: string;
     remarks: Array<{
+      date: string;
+      first_name: string;
+      last_name: string;
       remarks: string;
     }>;
   };

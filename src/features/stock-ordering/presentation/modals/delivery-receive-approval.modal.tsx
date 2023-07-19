@@ -84,6 +84,7 @@ export function DeliveryReceiveApprovalModal(
     const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval = {
       id: props.id,
       status: status,
+      user_id: getAdminSessionState.data?.admin?.user_id ?? "",
       remarks: remarks,
     };
 

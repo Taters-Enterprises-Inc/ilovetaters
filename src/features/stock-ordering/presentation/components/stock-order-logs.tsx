@@ -1,18 +1,43 @@
-import { Button, Divider, List, ListItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { ViewImageModal } from "../modals/view-image.modal";
-import { useAppDispatch, useQuery } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { createQueryParams } from "features/config/helpers";
 import { useNavigate } from "react-router-dom";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface StockOrderLogsProps {
   order_details: {
-    [key: string]: string | number | boolean | { remarks: string }[];
+    [key: string]:
+      | string
+      | number
+      | boolean
+      | {
+          date: string;
+          first_name: string;
+          last_name: string;
+          remarks: string;
+        }[];
   };
 }
 
 export function StockOrderLogs(props: StockOrderLogsProps) {
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   let columns = [
     { id: "store_name", label: "Store", isButton: false, isDate: false },
     {
@@ -237,6 +262,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                   Remarks:
                 </span>
                 <span className="basis-1/2 capitalize break-all">
+                  {/* 
                   {Array.isArray(props.order_details["remarks"]) &&
                     props.order_details["remarks"].length > 0 && (
                       <div>
@@ -245,6 +271,25 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                             props.order_details["remarks"].length - 1
                           ].remarks
                         }
+                      </div>
+                    )} 
+                    */}
+                  {Array.isArray(props.order_details["remarks"]) &&
+                    props.order_details["remarks"].length > 0 && (
+                      <div className="space-y-1">
+                        {props.order_details["remarks"].map((log) => (
+                          <div className="border border-gray-300 rounded-lg shadow py-2 px-5">
+                            <span className="text-base">{log.remarks}</span>
+                            <div className="flex flex-row text-xs space-x-5">
+                              <div className="space-x-2">
+                                <span>{log.first_name}</span>
+                                <span>{log.last_name}</span>
+                              </div>
+                              <Divider orientation="vertical" flexItem />
+                              <span>{log.date}</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     )}
                 </span>

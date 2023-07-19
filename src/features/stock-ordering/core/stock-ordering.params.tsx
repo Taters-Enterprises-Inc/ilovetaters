@@ -51,6 +51,7 @@ export interface newOrdersParam {
   id: string;
   commitedDelivery: string;
   remarks: string;
+  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -88,6 +89,7 @@ export interface updatePayBillingParam {
 export interface updatReviewParam {
   id: string;
   remarks: string;
+  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -98,6 +100,7 @@ export interface updatReviewParam {
 export interface updateDeliveryReceiveApproval {
   id: string;
   status: string;
+  user_id: string;
   remarks: string;
 }
 

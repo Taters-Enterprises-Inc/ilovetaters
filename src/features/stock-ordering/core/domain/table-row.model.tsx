@@ -16,6 +16,9 @@ export interface TableRow {
     payment_confirmation: string;
     transport_route: string;
     remarks: {
+      date: string;
+      first_name: string;
+      last_name: string;
       remarks: string;
     }[];
   };

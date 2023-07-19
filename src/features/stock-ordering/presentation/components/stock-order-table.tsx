@@ -6,18 +6,12 @@ import {
   TableBody,
   TextField,
   Divider,
-  Skeleton,
+  ButtonGroup,
+  Button,
 } from "@mui/material";
 import { Column } from "features/shared/presentation/components/data-table";
 import { StockOrderLogs } from "./stock-order-logs";
-import NumberFormat from "react-number-format";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  GetProductDataState,
-  getProductData,
-  selectGetProductData,
-} from "../slices/get-product-data.slice";
+import { useState } from "react";
 
 interface TableRow {
   order_information: {
@@ -36,7 +30,12 @@ interface TableRow {
     view_payment_details: string;
     payment_confirmation: string;
     transport_route: string;
-    remarks: { remarks: string }[];
+    remarks: {
+      date: string;
+      first_name: string;
+      last_name: string;
+      remarks: string;
+    }[];
   };
   product_data: {
     id: string;
@@ -92,120 +91,312 @@ export function StockOrderTable(props: StockOrderTableProps) {
             </TableHead>
             <TableBody>
               {props.rowData.product_data.map((row, index) => (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.orderQty}</TableCell>
                   <TableCell sx={{ width: 75 }}>
                     {props.isCommitedTextFieldAvailable ? (
-                      <TextField
-                        required
-                        placeholder="0"
-                        type="text"
-                        value={row.commitedQuantity}
-                        inputProps={{ maxLength: 4 }}
-                        onChange={(event) => {
-                          let value = event.target.value.replace(/\D/g, "");
+                      <div className="flex flex-row">
+                        <ButtonGroup
+                          disableElevation
+                          size="small"
+                          variant="contained"
+                          aria-label="outlined primary button group"
+                        >
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val = Number(r.commitedQuantity) - 1;
+                                    const commitedQuantity = val >= 0 ? val : 0;
+                                    return {
+                                      ...r,
+                                      commitedQuantity:
+                                        commitedQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
 
-                          if (value > row.orderQty) {
-                            value = row.orderQty;
-                          }
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            -
+                          </Button>
+                          <TextField
+                            required
+                            placeholder="0"
+                            type="text"
+                            sx={{ width: 65 }}
+                            value={row.commitedQuantity}
+                            inputProps={{ maxLength: 4 }}
+                            onChange={(event) => {
+                              let value = event.target.value.replace(/\D/g, "");
 
-                          const updatedRows = props.rowData.product_data.map(
-                            (r) => {
-                              if (r.id === row.id) {
-                                return {
-                                  ...r,
-                                  commitedQuantity: value ?? "",
-                                };
+                              if (value > row.orderQty) {
+                                value = row.orderQty;
                               }
-                              return r;
-                            }
-                          );
 
-                          props.setRows?.({
-                            ...props.rowData,
-                            product_data: updatedRows,
-                          });
-                        }}
-                        size="small"
-                        variant="outlined"
-                      />
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    return {
+                                      ...r,
+                                      commitedQuantity: value ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                            size="small"
+                            variant="outlined"
+                          />
+
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val = Number(r.commitedQuantity) + 1;
+                                    const commitedQuantity =
+                                      val < 9999 ? val : 9999;
+
+                                    return {
+                                      ...r,
+                                      commitedQuantity:
+                                        commitedQuantity > Number(row.orderQty)
+                                          ? row.orderQty
+                                          : commitedQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     ) : (
                       row.commitedQuantity ?? <div>--</div>
                     )}
                   </TableCell>
                   <TableCell sx={{ width: 75 }}>
                     {props.isDispatchedQtyAvailable ? (
-                      <TextField
-                        placeholder="0"
-                        required
-                        value={row.dispatchedQuantity}
-                        inputProps={{ maxLength: 4 }}
-                        onChange={(event) => {
-                          let value = event.target.value.replace(/\D/g, "");
+                      <div className="flex flex-row">
+                        <ButtonGroup
+                          disableElevation
+                          size="small"
+                          variant="contained"
+                          aria-label="outlined primary button group"
+                        >
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val =
+                                      Number(r.dispatchedQuantity) - 1;
+                                    const dispatchedQuantity =
+                                      val >= 0 ? val : 0;
+                                    return {
+                                      ...r,
+                                      dispatchedQuantity:
+                                        dispatchedQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
 
-                          if (value > row.commitedQuantity) {
-                            value = row.commitedQuantity;
-                          }
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            -
+                          </Button>
 
-                          const updatedRows = props.rowData.product_data.map(
-                            (r) => {
-                              if (r.id === row.id) {
-                                return {
-                                  ...r,
-                                  dispatchedQuantity: value ?? "",
-                                };
+                          <TextField
+                            placeholder="0"
+                            required
+                            value={row.dispatchedQuantity}
+                            sx={{ width: 65 }}
+                            inputProps={{ maxLength: 4 }}
+                            onChange={(event) => {
+                              let value = event.target.value.replace(/\D/g, "");
+
+                              if (value > row.commitedQuantity) {
+                                value = row.commitedQuantity;
                               }
-                              return r;
-                            }
-                          );
-                          props.setRows?.({
-                            ...props.rowData,
-                            product_data: updatedRows,
-                          });
-                        }}
-                        size="small"
-                        variant="outlined"
-                      />
+
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    return {
+                                      ...r,
+                                      dispatchedQuantity: value ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                            size="small"
+                            variant="outlined"
+                          />
+
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val =
+                                      Number(r.dispatchedQuantity) + 1;
+                                    const dispatchedQuantity =
+                                      val < 9999 ? val : 9999;
+                                    return {
+                                      ...r,
+                                      dispatchedQuantity:
+                                        dispatchedQuantity >
+                                        Number(row.commitedQuantity)
+                                          ? row.commitedQuantity
+                                          : dispatchedQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     ) : (
                       row.dispatchedQuantity ?? <div>--</div>
                     )}
                   </TableCell>
                   <TableCell sx={{ width: 75 }}>
                     {props.isDeliveredQtyAvailable ? (
-                      <TextField
-                        placeholder="0"
-                        required
-                        value={row.deliveredQuantity}
-                        inputProps={{ maxLength: 4 }}
-                        onChange={(event) => {
-                          let value = event.target.value.replace(/\D/g, "");
+                      <div className="flex flex-row">
+                        <ButtonGroup
+                          disableElevation
+                          size="small"
+                          variant="contained"
+                          aria-label="outlined primary button group"
+                        >
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val = Number(r.deliveredQuantity) - 1;
+                                    const deliveredQuantity =
+                                      val >= 0 ? val : 0;
+                                    return {
+                                      ...r,
+                                      deliveredQuantity:
+                                        deliveredQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
 
-                          if (value > row.dispatchedQuantity) {
-                            value = row.dispatchedQuantity;
-                          }
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            -
+                          </Button>
 
-                          const updatedRows = props.rowData.product_data.map(
-                            (r) => {
-                              if (r.id === row.id) {
-                                return {
-                                  ...r,
-                                  deliveredQuantity: value ?? "",
-                                };
+                          <TextField
+                            placeholder="0"
+                            required
+                            sx={{ width: 65 }}
+                            value={row.deliveredQuantity}
+                            inputProps={{ maxLength: 4 }}
+                            onChange={(event) => {
+                              let value = event.target.value.replace(/\D/g, "");
+
+                              if (value > row.dispatchedQuantity) {
+                                value = row.dispatchedQuantity;
                               }
-                              return r;
-                            }
-                          );
-                          props.setRows?.({
-                            ...props.rowData,
-                            product_data: updatedRows,
-                          });
-                        }}
-                        size="small"
-                        variant="outlined"
-                      />
+
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    return {
+                                      ...r,
+                                      deliveredQuantity: value ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                            size="small"
+                            variant="outlined"
+                          />
+
+                          <Button
+                            onClick={() => {
+                              const updatedRows =
+                                props.rowData.product_data.map((r) => {
+                                  if (r.id === row.id) {
+                                    const val = Number(r.deliveredQuantity) + 1;
+                                    const deliveredQuantity =
+                                      val < 9999 ? val : 9999;
+                                    return {
+                                      ...r,
+                                      deliveredQuantity:
+                                        deliveredQuantity >
+                                        Number(row.dispatchedQuantity)
+                                          ? row.deliveredQuantity
+                                          : deliveredQuantity.toString() ?? "",
+                                    };
+                                  }
+                                  return r;
+                                });
+
+                              props.setRows?.({
+                                ...props.rowData,
+                                product_data: updatedRows,
+                              });
+                            }}
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     ) : (
                       row.deliveredQuantity ?? <div>--</div>
                     )}

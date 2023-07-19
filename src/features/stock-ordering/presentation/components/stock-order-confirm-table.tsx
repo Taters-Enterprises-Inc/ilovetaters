@@ -6,6 +6,8 @@ import {
   TableBody,
   Autocomplete,
   TextField,
+  Button,
+  ButtonGroup,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Column } from "features/shared/presentation/components/data-table";
@@ -98,8 +100,6 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
     props.handleTableRows(rows, aveDeliveryDate);
   }, [rows]);
 
-  console.log(getOrderInformation.data?.OrderData);
-
   return (
     <div>
       <div className="border-2 border-black rounded-lg pb-1">
@@ -181,29 +181,78 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                     <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
                     <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
                     <TableCell sx={{ width: 125 }}>
-                      <TextField
-                        required
-                        type="text"
-                        value={row.orderQty}
-                        inputProps={{ maxLength: 4 }}
-                        onChange={(event) => {
-                          let value = event.target.value.replace(/\D/g, "");
+                      <div className="flex flex-row">
+                        <ButtonGroup
+                          disableElevation
+                          size="small"
+                          variant="contained"
+                          aria-label="outlined primary button group"
+                        >
+                          <Button
+                            onClick={() => {
+                              const updatedRows = rows.map((r, index) => {
+                                if (index === rowsIndex) {
+                                  const val = Number(r.orderQty) - 1;
+                                  const orderQty = val >= 0 ? val : 0;
+                                  return {
+                                    ...r,
+                                    orderQty: orderQty.toString(),
+                                  };
+                                }
+                                return r;
+                              });
+                              setRows(updatedRows);
+                            }}
+                          >
+                            -
+                          </Button>
+                          <TextField
+                            required
+                            type="text"
+                            sx={{ width: 65 }}
+                            value={row.orderQty}
+                            inputProps={{ maxLength: 4 }}
+                            onChange={(event) => {
+                              let value = event.target.value.replace(/\D/g, "");
 
-                          const updatedRows = rows.map((r, index) => {
-                            if (index === rowsIndex) {
-                              return {
-                                ...r,
-                                orderQty: value,
-                              };
-                            }
-                            return r;
-                          });
-                          setRows(updatedRows);
-                        }}
-                        size="small"
-                        variant="outlined"
-                        placeholder="0"
-                      />
+                              const updatedRows = rows.map((r, index) => {
+                                if (index === rowsIndex) {
+                                  return {
+                                    ...r,
+                                    orderQty: value,
+                                  };
+                                }
+                                return r;
+                              });
+                              setRows(updatedRows);
+                            }}
+                            size="small"
+                            variant="outlined"
+                            placeholder="0"
+                          />
+                          <Button
+                            onClick={() => {
+                              const updatedRows = rows.map((r, index) => {
+                                if (index === rowsIndex) {
+                                  const val = isNaN(Number(r.orderQty))
+                                    ? 1
+                                    : Number(r.orderQty) + 1;
+
+                                  const orderQty = val < 9999 ? val : 9999;
+                                  return {
+                                    ...r,
+                                    orderQty: orderQty.toString(),
+                                  };
+                                }
+                                return r;
+                              });
+                              setRows(updatedRows);
+                            }}
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
