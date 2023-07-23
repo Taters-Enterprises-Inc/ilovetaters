@@ -17,6 +17,7 @@ interface TableRow {
   order_information: {
     store_name: string;
     order_number: string;
+    ship_to_address: string;
     requested_delivery_date: string;
     commited_delivery_date: string;
     order_reviewed_date: string;
@@ -139,10 +140,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
-                              if (value > row.orderQty) {
-                                value = row.orderQty;
-                              }
-
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -175,9 +172,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                     return {
                                       ...r,
                                       commitedQuantity:
-                                        commitedQuantity > Number(row.orderQty)
-                                          ? row.orderQty
-                                          : commitedQuantity.toString() ?? "",
+                                        commitedQuantity.toString() ?? "",
                                     };
                                   }
                                   return r;
@@ -242,10 +237,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
-                              if (value > row.commitedQuantity) {
-                                value = row.commitedQuantity;
-                              }
-
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -277,10 +268,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                     return {
                                       ...r,
                                       dispatchedQuantity:
-                                        dispatchedQuantity >
-                                        Number(row.commitedQuantity)
-                                          ? row.commitedQuantity
-                                          : dispatchedQuantity.toString() ?? "",
+                                        dispatchedQuantity.toString() ?? "",
                                     };
                                   }
                                   return r;
@@ -344,10 +332,6 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
-                              if (value > row.dispatchedQuantity) {
-                                value = row.dispatchedQuantity;
-                              }
-
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -378,10 +362,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                     return {
                                       ...r,
                                       deliveredQuantity:
-                                        deliveredQuantity >
-                                        Number(row.dispatchedQuantity)
-                                          ? row.deliveredQuantity
-                                          : deliveredQuantity.toString() ?? "",
+                                        deliveredQuantity.toString() ?? "",
                                     };
                                   }
                                   return r;

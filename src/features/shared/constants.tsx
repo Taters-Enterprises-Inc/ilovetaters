@@ -1309,13 +1309,13 @@ export const STOCK_ORDER_CATEGORY: Array<{
 ];
 
 export const TAB_NAVIGATION = [
-  { label: "NEW ORDERS" },
-  { label: "REVIEW ORDERS" },
-  { label: "DISPATCH ORDERS" },
-  { label: "RECEIVE ORDERS" },
-  { label: "DELIVERY RECEIVE APPROVAL" },
-  { label: "UPDATE BILLING" },
-  { label: "PAY BILLING" },
-  { label: "CONFIRM PAYMENT" },
+  { label: "NEW ORDR", label2: "(MULTI-M SUPPLIER)" },
+  { label: "REVIEW ORDR", label2: "(TEI PROCUREMENT)" },
+  { label: "DISP ORDR", label2: "(MULTI-M SUPPLIER)" },
+  { label: "RECV ORDR", label2: "(TEI STORE)" },
+  { label: "DEL RECV APPRV", label2: "(TEI STORE MGR)" },
+  { label: "UPD BILL", label2: "(MULTI-M FINANCE)" },
+  { label: "PAY BILL", label2: "(TEI FINANCE)" },
+  { label: "CONF PAY", label2: "(MULTI-M FINANCE)" },
   { label: "ORDERS COMPLETE" },
 ];

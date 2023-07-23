@@ -29,6 +29,7 @@ const columns: Array<Column> = [
   { id: "first_name", label: "First Name" },
   { id: "last_name", label: "Last Name" },
   { id: "email", label: "Email" },
+  { id: "stock", label: "Stock Order Group" },
   { id: "groups", label: "Groups" },
   { id: "status", label: "Status" },
   { id: "store", label: "Store" },
@@ -69,6 +70,8 @@ export function AdminSettingUsers() {
       });
     }
   }, [dispatch, pageNo, perPage, orderBy, order, search, userId]);
+
+  console.log();
 
   return (
     <>
@@ -288,6 +291,15 @@ export function AdminSettingUsers() {
                       <DataTableCell>{row.last_name}</DataTableCell>
                       <DataTableCell>{row.email}</DataTableCell>
                       <DataTableCell>
+                        {row.stockOrderGroup.map((group) => (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: group.name,
+                            }}
+                          />
+                        ))}
+                      </DataTableCell>
+                      <DataTableCell>
                         {row.groups.map((group) => (
                           <div
                             dangerouslySetInnerHTML={{
@@ -296,6 +308,7 @@ export function AdminSettingUsers() {
                           />
                         ))}
                       </DataTableCell>
+
                       <DataTableCell>
                         {row.active === 1 ? (
                           <span className="px-2 py-1 text-xs text-white font-['Varela_Round'] bg-green-700 rounded-full ">

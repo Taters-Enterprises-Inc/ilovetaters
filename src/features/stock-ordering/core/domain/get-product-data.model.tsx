@@ -2,6 +2,7 @@ export interface GetProductDataModel {
   order_information: {
     store_name: string;
     id: string;
+    ship_to_address: string;
     category_name: string;
     order_placement_date: string;
     requested_delivery_date: string;

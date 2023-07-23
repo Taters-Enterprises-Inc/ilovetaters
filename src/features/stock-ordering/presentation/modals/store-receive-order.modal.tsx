@@ -28,6 +28,7 @@ interface StoreReceiveOrderModalProps {
 export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
+  const [remarks, setRemarks] = useState("");
 
   const [actualDeliveryDate, setActualDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
@@ -41,6 +42,8 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
+
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -63,6 +66,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   useEffect(() => {
     setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     setUploadedReciept("");
+    setRemarks("");
   }, [props.open]);
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
@@ -75,7 +79,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     user?.map((user_group) => {
       if (
         user_group.id === 1 ||
-        user_group.id === 2 ||
+        // user_group.id === 2 ||
         user_group.id === 9 ||
         user_group.id === 6
       ) {
@@ -114,6 +118,8 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
         id: props.id,
         actualDeliveryDate: actualDeliveryDate,
         updatedDeliveryReceipt: uploadedReceipt,
+        remarks: remarks,
+        user_id: getAdminSessionState.data?.admin.user_id ?? "",
         product_data: receieveOrdersProductDataParam,
       };
 
@@ -151,13 +157,13 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     return true;
   };
 
-  const isZero = () => {
-    let zero = false;
+  const isQuantityEmpty = () => {
+    let empty = false;
     rows.product_data.map((product) => {
-      if (Number(product.deliveredQuantity) === 0) zero = true;
+      if (product.commitedQuantity === "") empty = true;
     });
 
-    return zero;
+    return empty;
   };
 
   if (props.open) {
@@ -199,7 +205,17 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
               {setEnabled() ? (
                 <div className="space-y-5">
                   <div className="px-5">
-                    <div className="flex flex-row space-x-5">
+                    <div className="flex flex-col mt-2">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+
+                    <div className="flex flex-row space-x-5 mt-2">
                       <div className="basis-1/2 flex flex-col space-y-2">
                         <span>Actual Delivery Date: </span>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -239,7 +255,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
                       <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
                         <Button
-                          disabled={isZero()}
+                          disabled={isQuantityEmpty()}
                           className="self-end"
                           type="submit"
                           fullWidth

@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { Button, Divider, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UploadFile } from "features/shared/presentation/components";
 
 interface PayBillingModalProps {
@@ -55,7 +55,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <div className="flex flex-row space-x-5">
+              {/* <div className="flex flex-row space-x-5">
                 <span className="font-semibold">Billing ID: </span>
                 <span>{props.billingInformation.billing_id}</span>
               </div>
@@ -65,7 +65,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
                 <span>{props.billingInformation.billing_amount}</span>
               </div>
 
-              <Divider />
+              <Divider /> */}
               <div>
                 <UploadFile
                   image={uploadedReceipt}

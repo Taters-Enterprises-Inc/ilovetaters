@@ -24,10 +24,7 @@ interface StockOrderConfirmTableProps {
   isConfirmOrder: boolean;
   isEditCancelled: boolean;
   isEdit: boolean;
-  handleTableRows: (
-    TableData: OrderTableData[],
-    avialableDelivery: number
-  ) => void;
+  handleTableRows: (TableData: OrderTableData[]) => void;
   setCategory: (categoryData: {
     category_id: string;
     category_name: string;
@@ -96,8 +93,7 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
   }, [dispatch, category, props.isEdit]);
 
   useEffect(() => {
-    const aveDeliveryDate = getProductInformation.data?.schedule ?? 0;
-    props.handleTableRows(rows, aveDeliveryDate);
+    props.handleTableRows(rows);
   }, [rows]);
 
   return (

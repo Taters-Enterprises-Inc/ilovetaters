@@ -19,6 +19,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
       const order = props.productData?.order_information;
       const order_information: TableRow["order_information"] = {
         store_name: order.store_name,
+        ship_to_address: order.ship_to_address,
         order_number: order.id,
         requested_delivery_date: order.requested_delivery_date,
         commited_delivery_date: order.commited_delivery_date,

@@ -56,6 +56,10 @@ import {
   getAdminSession,
   selectGetAdminSession,
 } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  getStockOrderStores,
+  selectGetStockOrderStores,
+} from "../slices/get-store.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -66,15 +70,6 @@ interface TabPanelProps {
 interface Modals {
   [key: string]: boolean;
 }
-
-// const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-//   "& .MuiBadge-badge": {
-//     right: -3,
-//     top: 13,
-//     border: `2px solid ${theme.palette.background.paper}`,
-//     padding: "0 4px",
-//   },
-// }));
 
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
@@ -102,7 +97,7 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
+  const getStore = useAppSelector(selectGetStockOrderStores);
 
   const [badgeItem, setBadgeItem] = useState(0);
 
@@ -149,8 +144,8 @@ export function OrderContents() {
     { id: "order_confirmation_date", label: "Order Confirmation Date" },
     { id: "actual_delivery_date", label: "Actual Delivery Date" },
     { id: "description", label: "status" },
-    { id: "billing_id", label: "Billing Id" },
-    { id: "billing_amount", label: "Billing Amount" },
+    // { id: "billing_id", label: "Billing Id" },
+    // { id: "billing_amount", label: "Billing Amount" },
     { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
@@ -213,24 +208,33 @@ export function OrderContents() {
   }, [getStockOrdersState.data?.pagination.total_rows]);
 
   useEffect(() => {
-    const currentTab: currentTab = {
-      current_tab: tabValue,
-    };
+    if (getStore.data) {
+      const currentTab: currentTab = {
+        current_tab: tabValue,
+        store_id: getStore.data?.stores.map((stores) => stores.store_id),
+      };
 
-    const query = createQueryParams({
-      page_no: pageNo,
-      per_page: perPage,
-      order_by: orderBy,
-      order: order,
-      search: search,
-    });
+      const query = createQueryParams({
+        page_no: pageNo,
+        per_page: perPage,
+        order_by: orderBy,
+        order: order,
+        search: search,
+      });
 
-    dispatch(getStockOrders({ query: query, param: currentTab }));
-  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
-
-  useEffect(() => {
-    dispatch(getAdminGroups());
-  }, []);
+      dispatch(getStockOrders({ query: query, param: currentTab }));
+    }
+  }, [
+    dispatch,
+    pageNo,
+    perPage,
+    orderBy,
+    order,
+    search,
+    tabValue,
+    modals,
+    getStore.data,
+  ]);
 
   return (
     <>
@@ -266,7 +270,10 @@ export function OrderContents() {
                     color="primary"
                     badgeContent={getStockOrdersState.data?.tab[index]}
                   >
-                    {tabs.label}
+                    <div className="flex flex-col">
+                      <span className="text-sm">{tabs.label}</span>
+                      <span className="text-xs">{tabs.label2}</span>
+                    </div>
                   </Badge>
                 }
               />
@@ -277,7 +284,7 @@ export function OrderContents() {
             <div className="hidden md:block">
               <DataTable
                 order={order === "asc" ? "asc" : "desc"}
-                orderBy={orderBy ?? "order_placement_date"}
+                orderBy={orderBy ?? "last_updated"}
                 search={search ?? ""}
                 emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
                 onSearch={(val) => {
@@ -440,8 +447,8 @@ export function OrderContents() {
                         : order.actual_delivery_date}
                     </DataTableCell>
                     <DataTableCell>{order.description}</DataTableCell>
-                    <DataTableCell>{order.billing_id}</DataTableCell>
-                    <DataTableCell>{order.billing_amount}</DataTableCell>
+                    {/* <DataTableCell>{order.billing_id}</DataTableCell>
+                    <DataTableCell>{order.billing_amount}</DataTableCell> */}
                     <DataTableCell>{order.short_name}</DataTableCell>
                     <DataTableCell>
                       <IconButton onClick={() => handleAction(order.id)}>

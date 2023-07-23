@@ -28,6 +28,8 @@ export function DeliveryReceiveApprovalModal(
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
+
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -141,7 +143,7 @@ export function DeliveryReceiveApprovalModal(
                   <TextField
                     value={remarks}
                     onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 128 }}
+                    inputProps={{ maxLength: 512 }}
                     multiline
                   />
                 </div>

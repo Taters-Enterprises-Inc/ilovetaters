@@ -41,6 +41,12 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
   let columns = [
     { id: "store_name", label: "Store", isButton: false, isDate: false },
     {
+      id: "ship_to_address",
+      label: "Ship to Address",
+      isButton: false,
+      isDate: false,
+    },
+    {
       id: "order_number",
       label: "Order Number",
       isButton: false,
@@ -217,13 +223,13 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                         </div>
                       ) : (
                         <ListItem className="flex space-x-4" dense={true}>
-                          <span className="basis-1/2 font-semibold break-all capitalize">
+                          <span className="basis-1/2 font-semibold capitalize whitespace-normal">
                             {row.id === "dispatch_date"
                               ? `${row.label} ${props.order_details.transport_route}:`
                               : row.label}
                           </span>
 
-                          <span className="basis-1/2 capitalize break-all">
+                          <span className="basis-1/2 capitalize whitespace-normal">
                             {getOrderData(
                               props.order_details[row.id] as
                                 | string
@@ -232,23 +238,6 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                               row.isDate
                             )}
                           </span>
-
-                          {/* <span className="basis-1/2 capitalize break-all">
-                            {row.id === "remarks"
-                              ? 
-                              handleRemarks(
-                                  props.order_details[row.id],
-                                  row.identifier
-                                )
-                              : 
-                              getOrderData(
-                                  props.order_details[row.id] as
-                                    | string
-                                    | number
-                                    | boolean,
-                                  row.isDate
-                                )}
-                          </span> */}
                         </ListItem>
                       )}
                       <Divider variant="middle" />
@@ -261,25 +250,15 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
                 <span className="basis-1/2 font-semibold break-all capitalize">
                   Remarks:
                 </span>
-                <span className="basis-1/2 capitalize break-all">
-                  {/* 
+                <span className="basis-1/2">
                   {Array.isArray(props.order_details["remarks"]) &&
                     props.order_details["remarks"].length > 0 && (
                       <div>
-                        {
-                          props.order_details["remarks"][
-                            props.order_details["remarks"].length - 1
-                          ].remarks
-                        }
-                      </div>
-                    )} 
-                    */}
-                  {Array.isArray(props.order_details["remarks"]) &&
-                    props.order_details["remarks"].length > 0 && (
-                      <div className="space-y-1">
                         {props.order_details["remarks"].map((log) => (
-                          <div className="border border-gray-300 rounded-lg shadow py-2 px-5">
-                            <span className="text-base">{log.remarks}</span>
+                          <div className="border border-gray-300 rounded-lg shadow space-y-2 py-2 px-5">
+                            <span className="text-base whitespace-normal normal-case">
+                              {log.remarks}
+                            </span>
                             <div className="flex flex-row text-xs space-x-5">
                               <div className="space-x-2">
                                 <span>{log.first_name}</span>

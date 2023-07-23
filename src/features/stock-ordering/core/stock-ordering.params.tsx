@@ -1,3 +1,4 @@
+import { DeliverySchedule } from "./domain/delivery-schedule.model";
 import { OrderTableData } from "./domain/order-table-row.model";
 
 export interface test {
@@ -7,7 +8,9 @@ export interface test {
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
   selectedAddress: string;
-  deliverydate: string;
+  deliveryScheduleData: DeliverySchedule | undefined;
+  remarks: string;
+  user_id: string;
   category: {
     category_id: string;
     category_name: string;
@@ -25,6 +28,7 @@ export interface ProductParam {
 
 export interface currentTab {
   current_tab: number;
+  store_id: string[] | undefined;
 }
 
 export interface orderID {
@@ -36,6 +40,8 @@ export interface dispatchOrderParam {
   deliveryReceipt: File | string;
   dispatchDeliveryDate: string;
   transport: string;
+  remarks: string;
+  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -45,6 +51,8 @@ export interface dispatchOrderParam {
 
 export interface updateStatus {
   id: string;
+  remarks: string;
+  user_id: string;
 }
 
 export interface newOrdersParam {
@@ -63,6 +71,8 @@ export interface receiveOrdersParam {
   id: string;
   actualDeliveryDate: string;
   updatedDeliveryReceipt: File | string;
+  remarks: string;
+  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -74,6 +84,8 @@ export interface updateBillingOrderParam {
   id: string;
   billingInformationId: string;
   billingAmount: string;
+  remarks: string;
+  user_id: string;
 }
 
 export interface updateEnRoutePram {
@@ -84,6 +96,8 @@ export interface updateEnRoutePram {
 export interface updatePayBillingParam {
   id: string;
   paymentDetailImage: File | string;
+  remarks: string;
+  user_id: string;
 }
 
 export interface updatReviewParam {

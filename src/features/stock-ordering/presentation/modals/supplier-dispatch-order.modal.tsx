@@ -43,10 +43,14 @@ export function SupplierDispatchOrderModal(
   );
 
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [remarks, setRemarks] = useState("");
+
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
       order_number: "",
+      ship_to_address: "",
+
       requested_delivery_date: "",
       commited_delivery_date: "",
       order_reviewed_date: "",
@@ -124,6 +128,7 @@ export function SupplierDispatchOrderModal(
     setUploadedReciept("");
     setDispachedDelivery(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     setTransport("");
+    setRemarks("");
   }, [props.open]);
 
   const handleDispatchOrder = async (e: { preventDefault: () => void }) => {
@@ -141,6 +146,8 @@ export function SupplierDispatchOrderModal(
       deliveryReceipt: uploadedReceipt,
       dispatchDeliveryDate: dispatchedDelivery,
       transport: transport,
+      remarks: remarks,
+      user_id: getAdminSessionState.data?.admin.user_id ?? "",
       product_data: dispatchedOrdersProductDataParam,
     };
 
@@ -148,13 +155,13 @@ export function SupplierDispatchOrderModal(
     props.onClose();
   };
 
-  const isZero = () => {
-    let zero = false;
+  const isQuantityEmpty = () => {
+    let empty = false;
     rows.product_data.map((product) => {
-      if (Number(product.dispatchedQuantity) === 0) zero = true;
+      if (product.commitedQuantity === "") empty = true;
     });
 
-    return zero;
+    return empty;
   };
 
   if (props.open) {
@@ -197,10 +204,10 @@ export function SupplierDispatchOrderModal(
               />
               {setEnabled() ? (
                 <div className="flex flex-col px-5">
-                  <div>
+                  <div className="flex flex-row space-x-3">
                     <FormControl required={true}>
-                      <div className="flex flex-row items-stretch space-x-2">
-                        <span className="self-center pb-1 text-lg">
+                      <div className="flex flex-col items-stretch space-x-2">
+                        <span className="self-start pb-1 text-lg">
                           Transport Route:
                         </span>
 
@@ -228,10 +235,8 @@ export function SupplierDispatchOrderModal(
                         </RadioGroup>
                       </div>
                     </FormControl>
-                  </div>
 
-                  <div className="flex">
-                    <div className="basis-1/2 flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-2">
                       <span>Dispatched Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker
@@ -250,13 +255,27 @@ export function SupplierDispatchOrderModal(
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
+                          minDateTime={dayjs()}
                         />
                       </LocalizationProvider>
                     </div>
+                  </div>
 
-                    <div className="basis-1/2 flex flex-col space-y-2 px-5">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col mt-2">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+
+                    <div className="flex flex-row space-x-2">
                       <>
                         <Button
+                          fullWidth
                           size="small"
                           onClick={() => {
                             setOpenUploadDeliveryRecieptModal(true);
@@ -267,10 +286,11 @@ export function SupplierDispatchOrderModal(
                         </Button>
 
                         <Button
+                          fullWidth
                           disabled={
                             !isValidFile(uploadedReceipt) ||
                             transport === "" ||
-                            isZero()
+                            isQuantityEmpty()
                           }
                           type="submit"
                           size="small"

@@ -12,6 +12,7 @@ import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -41,10 +42,18 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   }>();
 
   const [rows, setRows] = useState<OrderTableData[]>([]);
+  const [schedule, setDeliverySchedule] = useState<DeliverySchedule>();
 
   useEffect(() => {
     setSelectedStore({ store_id: "", name: "" });
     setCategory({ category_id: "", category_name: "" });
+    setSelectedAddress("");
+    setDeliverySchedule({
+      cutoff: "",
+      is_mwf: false,
+      is_tths: false,
+      leadtime: "",
+    });
   }, [props.open]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -57,6 +66,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
           selectedAddress: selectedAddress,
           category: category,
           OrderData: rows,
+          deliveryScheduleData: schedule as DeliverySchedule,
         },
       })
     );
@@ -120,6 +130,10 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                           );
                           setSelectedStore(selectedStoreObj);
                           setSelectedAddress("");
+                          setCategory({
+                            category_id: "",
+                            category_name: "",
+                          });
 
                           setDisabled(false);
                         } else {
@@ -136,7 +150,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                       )}
                     />
                   </div>
-                  {/* set to basis 1/2 after enabling again */}
                   <div className="basis-1/2	flex flex-col space-y-2">
                     <span>Ship to address: </span>
                     <Autocomplete
@@ -169,10 +182,8 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                   <Autocomplete
                     id="stock-order-category-name"
                     size="small"
-                    disabled={
-                      selectedStore?.store_id === undefined &&
-                      selectedStore?.name === undefined
-                    }
+                    value={category?.category_name ?? ""}
+                    defaultValue=""
                     options={
                       STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
                     }
@@ -189,7 +200,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     renderInput={(params) => (
                       <TextField
                         required
-                        value={category?.category_name ?? ""}
                         {...params}
                         label="Select product category"
                       />
@@ -205,6 +215,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     category_id={category.category_id}
                     selected_store={selectedStore}
                     setRows={setRows}
+                    setDeliverySchedule={setDeliverySchedule}
                   />
                 </div>
               ) : null}

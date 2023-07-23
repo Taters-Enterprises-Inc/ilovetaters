@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
@@ -21,13 +21,15 @@ interface SupplierConfirmModalProps {
 export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
   const [uploadedReceipt, setUploadedReciept] = useState<string>("");
-
+  const [remarks, setRemarks] = useState("");
   const getProductDataState = useAppSelector(selectGetProductData);
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
+
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -79,6 +81,8 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   const handleValidate = async () => {
     const updateConfirmPaymentParam: updateStatus = {
       id: props.id,
+      remarks: remarks,
+      user_id: getAdminSessionState.data?.admin.user_id ?? "",
     };
 
     await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
@@ -89,6 +93,10 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   useEffect(() => {
     setUploadedReciept(rows.order_information.view_payment_details);
   }, [rows.order_information.view_payment_details]);
+
+  useEffect(() => {
+    setRemarks("");
+  }, [props.open]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -129,25 +137,36 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
             />
 
             {setEnabled() ? (
-              <div className="flex flex-row space-x-4">
-                <div className="basis-1/2">
-                  <Button
-                    onClick={() => setOpenPayBillingModal(true)}
-                    fullWidth
-                    variant="contained"
-                  >
-                    View payment information
-                  </Button>
+              <div className="space-y-2">
+                <div className="flex flex-col mt-2 ">
+                  <span>Remarks: </span>
+                  <TextField
+                    value={remarks}
+                    onChange={(event) => setRemarks(event.target.value)}
+                    inputProps={{ maxLength: 512 }}
+                    multiline
+                  />
                 </div>
-                <div className="basis-1/2">
-                  <Button
-                    onClick={() => handleValidate()}
-                    fullWidth
-                    variant="contained"
-                  >
-                    Validate
-                  </Button>
-                </div>
+                <div className="flex flex-row space-x-4">
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => setOpenPayBillingModal(true)}
+                      fullWidth
+                      variant="contained"
+                    >
+                      View payment information
+                    </Button>
+                  </div>
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => handleValidate()}
+                      fullWidth
+                      variant="contained"
+                    >
+                      Validate
+                    </Button>
+                  </div>
+                </div>{" "}
               </div>
             ) : null}
           </div>

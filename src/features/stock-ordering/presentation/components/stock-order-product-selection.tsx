@@ -12,13 +12,15 @@ import {
   Skeleton,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   getStockOrderProducts,
   selectGetStockOrderProducts,
 } from "../slices/get-products.slice";
 import { ProductParam } from "features/stock-ordering/core/stock-ordering.params";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
+import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
+import { GetStockProductModel } from "features/stock-ordering/core/domain/get-stock-product.model";
 
 function not(a: readonly ProductArray[], b: readonly ProductArray[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -34,6 +36,7 @@ function union(a: readonly ProductArray[], b: readonly ProductArray[]) {
 
 interface StockOrderProductSelectorProps {
   setRows: ((rows: OrderTableData[]) => void) | undefined;
+  setDeliverySchedule: ((sched: DeliverySchedule) => void) | undefined;
   category_id: string;
   selected_store: {
     store_id: string;
@@ -115,6 +118,11 @@ export function StockOrderProductSelector(
     );
 
     props.setRows?.(rightProductData);
+
+    const deliverySchedules: GetStockProductModel["schedule"] =
+      getProductInformation.data?.schedule;
+
+    props.setDeliverySchedule?.(deliverySchedules as DeliverySchedule);
   }, [right]);
 
   const handleToggle = (value: ProductArray) => () => {

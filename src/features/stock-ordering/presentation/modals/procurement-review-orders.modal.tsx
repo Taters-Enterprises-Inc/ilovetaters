@@ -34,6 +34,8 @@ export function ProcurementReviewOrdersModal(
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
+
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -114,13 +116,13 @@ export function ProcurementReviewOrdersModal(
     props.onClose();
   };
 
-  const isZero = () => {
-    let zero = false;
+  const isQuantityEmpty = () => {
+    let empty = false;
     rows.product_data.map((product) => {
-      if (Number(product.commitedQuantity) === 0) zero = true;
+      if (product.commitedQuantity === "") empty = true;
     });
 
-    return zero;
+    return empty;
   };
 
   if (props.open) {
@@ -191,12 +193,13 @@ export function ProcurementReviewOrdersModal(
                     <TextField
                       value={remarks}
                       onChange={(event) => setRemarks(event.target.value)}
+                      inputProps={{ maxLength: 512 }}
                       multiline
                     />
                   </div>
                   <div className="flex justify-end">
                     <Button
-                      disabled={isZero()}
+                      disabled={isQuantityEmpty()}
                       fullWidth
                       type="submit"
                       variant="contained"

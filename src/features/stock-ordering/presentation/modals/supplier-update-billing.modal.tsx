@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AddBillingInformationModal } from "./add-billing-information.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
@@ -10,6 +10,7 @@ import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateBillingOrders } from "../slices/update-billing-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface SupplierUpdateBillingModalProps {
   open: boolean;
@@ -34,10 +35,13 @@ export function SupplierUpdateBillingModal(
     billing_id: "",
     billing_amount: "",
   });
+  const [remarks, setRemarks] = useState("");
 
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
+
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -78,6 +82,7 @@ export function SupplierUpdateBillingModal(
       billing_id: "",
       billing_amount: "",
     });
+    setRemarks("");
   }, [props.open]);
 
   InitializeModal({
@@ -98,6 +103,8 @@ export function SupplierUpdateBillingModal(
       id: props.id,
       billingInformationId: billingInformation.billing_id,
       billingAmount: billingInformation.billing_amount,
+      remarks: remarks,
+      user_id: getAdminSessionState.data?.admin.user_id ?? "",
     };
 
     await dispatch(updateBillingOrders(billingOrdersParamData));
@@ -142,32 +149,40 @@ export function SupplierUpdateBillingModal(
               isDispatchedQtyAvailable={false}
             />
             {setEnabled() ? (
-              <div className="flex flex-row space-x-4">
-                {/* <div className="basis-1/2">
-                  <Button
-                    onClick={() => {
-                      setOpenAddBillingInformationModal(true);
-                    }}
-                    fullWidth
-                    variant="contained"
-                  >
-                    Add Billing Information
-                  </Button>
-                </div> */}
-                <div className="basis-full">
-                  <Button
-                    // disabled={
-                    //   billingInformation.billing_amount === "" &&
-                    //   billingInformation.billing_id === ""
-                    //     ? true
-                    //     : false
-                    // }
-                    onClick={() => handleSupplierUpdate()}
-                    fullWidth
-                    variant="contained"
-                  >
-                    Confirm
-                  </Button>
+              <div className="px-5 space-y-2">
+                <div className="flex flex-col mt-2 ">
+                  <span>Remarks: </span>
+                  <TextField
+                    value={remarks}
+                    onChange={(event) => setRemarks(event.target.value)}
+                    inputProps={{ maxLength: 512 }}
+                    multiline
+                  />
+                </div>
+                <div className="flex flex-row space-x-4">
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => {
+                        const id = props.id;
+                        const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+
+                        window.open(link, "_blank");
+                      }}
+                      fullWidth
+                      variant="contained"
+                    >
+                      Download Updated Sales Invoice
+                    </Button>
+                  </div>
+                  <div className="basis-1/2">
+                    <Button
+                      onClick={() => handleSupplierUpdate()}
+                      fullWidth
+                      variant="contained"
+                    >
+                      Confirm
+                    </Button>
+                  </div>
                 </div>
               </div>
             ) : null}

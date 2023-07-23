@@ -19,6 +19,7 @@ export function CompleteModal(props: CompleteModalProps) {
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",

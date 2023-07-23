@@ -36,6 +36,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      ship_to_address: "",
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -113,7 +114,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const isZero = () => {
     let zero = false;
     rows.product_data.map((product) => {
-      if (Number(product.commitedQuantity) === 0) zero = true;
+      if (product.commitedQuantity === "") zero = true;
     });
 
     return zero;
@@ -165,7 +166,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                     <TextField
                       value={remarks}
                       onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 128 }}
+                      inputProps={{ maxLength: 512 }}
                       multiline
                     />
                   </div>
@@ -191,6 +192,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
+                          minDateTime={dayjs()}
                         />
                       </LocalizationProvider>
                     </div>
