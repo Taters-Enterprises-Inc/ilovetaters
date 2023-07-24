@@ -57,7 +57,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     let result = false;
 
     user?.map((user_group) => {
-      if (user_group.id === 4 || user_group.id === 6) {
+      if (user_group.id === 4 || user_group.id === 6 || user_group.id === 10) {
         result = true;
       }
     });
