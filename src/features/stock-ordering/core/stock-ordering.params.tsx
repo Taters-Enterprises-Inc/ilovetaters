@@ -8,7 +8,7 @@ export interface test {
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
   selectedAddress: string;
-  deliveryScheduleData: DeliverySchedule | undefined;
+  deliveryScheduleData: string | DeliverySchedule | undefined;
   remarks: string;
   user_id: string;
   category: {

@@ -77,12 +77,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     let result = false;
 
     user?.map((user_group) => {
-      if (
-        user_group.id === 1 ||
-        // user_group.id === 2 ||
-        user_group.id === 9 ||
-        user_group.id === 6
-      ) {
+      if (user_group.id === 4) {
         result = true;
       }
     });

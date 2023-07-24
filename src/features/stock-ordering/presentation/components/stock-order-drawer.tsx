@@ -126,13 +126,13 @@ const SideBarContent = () => {
               getAdminSessionState.data?.admin.user_details.last_name}
           </div>
 
-          <div className="flex flex-col text-xs">
+          {/* <div className="flex flex-col text-xs">
             {getAdminSessionState.data?.admin.user_details.sos_groups.map(
               (row, index) => (
                 <span key={index}>{row.description}</span>
               )
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

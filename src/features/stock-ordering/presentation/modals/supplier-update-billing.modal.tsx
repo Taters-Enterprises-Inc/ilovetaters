@@ -69,7 +69,7 @@ export function SupplierUpdateBillingModal(
     let result = false;
 
     user?.map((user_group) => {
-      if (user_group.id === 4 || user_group.id === 6 || user_group.id === 10) {
+      if (user_group.id === 6) {
         result = true;
       }
     });

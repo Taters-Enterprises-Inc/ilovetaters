@@ -85,7 +85,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     let result = false;
 
     user?.map((user_group) => {
-      if (user_group.id === 4 || user_group.id === 6) {
+      if (user_group.id === 1) {
         result = true;
       }
     });

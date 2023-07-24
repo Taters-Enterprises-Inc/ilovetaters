@@ -104,6 +104,7 @@ export function AdminSettingEditUser() {
       }
 
       let stock_order_groups = null;
+
       if (getAdminUserState.data.stockOrderGroup) {
         const currentStockOrderGroups = getAdminUserState.data.stockOrderGroup;
 
@@ -125,10 +126,10 @@ export function AdminSettingEditUser() {
         password: "",
         confirmPassword: "",
         groups: groups,
-        stock_order_group: stock_order_groups,
+        stock_order_group: stockOrderingEnabled ? stock_order_groups : null,
       });
     }
-  }, [getAdminUserState]);
+  }, [getAdminUserState, stockOrderingEnabled]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (id) {
@@ -141,10 +142,6 @@ export function AdminSettingEditUser() {
     }
     e.preventDefault();
   };
-
-  getAdminUserState.data?.stockOrderGroup?.map((element) => {
-    console.log(element.id);
-  });
 
   return (
     <>
@@ -263,11 +260,7 @@ export function AdminSettingEditUser() {
                   <FormControlLabel
                     control={
                       <Switch
-                        checked={
-                          getAdminUserState.data?.stockOrderGroup?.length !== 0
-                            ? true
-                            : stockOrderingEnabled
-                        }
+                        checked={stockOrderingEnabled}
                         onChange={(event) =>
                           setStockOrderingEnabled(event.target.checked)
                         }
@@ -276,8 +269,7 @@ export function AdminSettingEditUser() {
                     label="Enable Stock Ordering"
                   />
 
-                  {stockOrderingEnabled === true ||
-                  getAdminUserState.data?.stockOrderGroup?.length !== 0 ? (
+                  {stockOrderingEnabled === true ? (
                     <div className="flex flex-wrap">
                       {getAdminGroupsState.data?.stock_order.map(
                         (stock_order_gr, index) => (
@@ -322,7 +314,7 @@ export function AdminSettingEditUser() {
                                 });
                               }}
                             />
-                            <span>{stock_order_gr.description}</span>
+                            <span>{stock_order_gr.name}</span>
                           </div>
                         )
                       )}

@@ -57,7 +57,7 @@ export function DeliveryReceiveApprovalModal(
     let result = false;
 
     user?.map((user_group) => {
-      if (user_group.id === 2 || user_group.id === 9 || user_group.id === 6) {
+      if (user_group.id === 5) {
         result = true;
       }
     });

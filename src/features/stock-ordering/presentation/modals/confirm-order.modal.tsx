@@ -92,7 +92,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     await dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
-        deliveryScheduleData: getOrderInformation.data?.deliveryScheduleData,
+        deliveryScheduleData: deliveryDate,
         selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         remarks: remarks,
         user_id: getAdminSessionState.data?.admin.user_id ?? "",
@@ -118,8 +118,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     date: string | number | Date | dayjs.Dayjs | null | undefined
   ) => {
     const dayIndex = dayjs(date).day();
-    const schedule: InsertNewOrderParam["deliveryScheduleData"] =
-      getOrderInformation.data?.deliveryScheduleData;
+    const schedule: DeliverySchedule = getOrderInformation.data
+      ?.deliveryScheduleData as DeliverySchedule;
 
     if (!schedule?.is_mwf && !schedule?.is_tths) {
       setLeadTime(Number(schedule?.leadtime));
@@ -155,6 +155,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(deliveryDate);
 
   return (
     <>
@@ -271,8 +273,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                               if (dayjs(formattedDate).isValid()) {
                                 setDeliveryData(formattedDate);
 
-                                // const isDateDisabled = deliverySchedules(formattedDate);
-                                // setDeliveryDateError(isDateDisabled);
+                                const isDateDisabled =
+                                  deliverySchedules(formattedDate);
+                                setDeliveryDateError(isDateDisabled);
                               } else {
                                 setDeliveryDateError(true);
                               }
@@ -341,7 +344,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                       </Button>
                     )}
                     <Button
-                      disabled={isEdit || isQuantityEmpty()}
+                      disabled={
+                        isEdit || isQuantityEmpty() || deliveryDateError
+                      }
                       type="submit"
                       className="basis-1/2"
                       fullWidth

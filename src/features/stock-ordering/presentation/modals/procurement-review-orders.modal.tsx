@@ -63,12 +63,7 @@ export function ProcurementReviewOrdersModal(
     let result = false;
 
     user?.map((user_group) => {
-      if (
-        user_group.id === 3 ||
-        user_group.id === 6 ||
-        user_group.id === 9 ||
-        isEditEnabled
-      ) {
+      if (user_group.id === 2 || isEditEnabled) {
         result = true;
       }
     });

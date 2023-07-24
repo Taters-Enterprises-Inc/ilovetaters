@@ -571,10 +571,7 @@ export function OrderContents() {
 
       {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
         (user_data, index) => {
-          return user_data.id === 1 ||
-            user_data.id === 2 ||
-            user_data.id === 6 ||
-            user_data.id === 9 ? (
+          return user_data.id === 10 ? (
             <div
               key={index}
               className="absolute right-10 bottom-10"
