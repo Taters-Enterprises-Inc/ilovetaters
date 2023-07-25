@@ -286,7 +286,11 @@ export function OrderContents() {
                   >
                     <div
                       className={`flex flex-col ${
-                        index + 1 !== 4 && "text-white"
+                        getAdminSessionState.data?.admin.user_details.sos_groups.some(
+                          (group) => index + 1 === group.id
+                        )
+                          ? "text-black"
+                          : "text-white"
                       }`}
                     >
                       <span className="text-sm">{tabs.label}</span>
