@@ -1317,5 +1317,5 @@ export const TAB_NAVIGATION = [
   { label: "UPD BILL", label2: "(MULTI-M FINANCE)" },
   { label: "PAY BILL", label2: "(TEI FINANCE)" },
   { label: "CONF PAY", label2: "(MULTI-M FINANCE)" },
-  { label: "ORDERS COMPLETE" },
+  { label: "ORDERS", label2: "COMPLETE" },
 ];

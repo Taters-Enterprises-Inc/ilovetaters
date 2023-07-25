@@ -255,24 +255,50 @@ export function OrderContents() {
             variant="scrollable"
             TabIndicatorProps={{
               style: {
-                backgroundColor: "white",
+                backgroundColor:
+                  getAdminSessionState.data?.admin.user_details.sos_groups.some(
+                    (group) => tabValue + 1 === group.id
+                  )
+                    ? "black"
+                    : "white",
               },
             }}
           >
             {TAB_NAVIGATION.map((tabs, index) => (
               <Tab
                 key={index}
-                style={{
-                  color: "white",
-                }}
+                sx={getAdminSessionState.data?.admin.user_details.sos_groups.map(
+                  (group) =>
+                    index + 1 === group.id
+                      ? {
+                          backgroundColor: "white",
+                          borderTopRightRadius: 5,
+                          borderTopLeftRadius: 5,
+                          borderLeft: 1,
+                          borderRight: 1,
+                        }
+                      : { Color: "white" }
+                )}
                 label={
                   <Badge
                     color="primary"
                     badgeContent={getStockOrdersState.data?.tab[index]}
                   >
-                    <div className="flex flex-col">
+                    <div
+                      className={`flex flex-col ${
+                        index + 1 !== 4 && "text-white"
+                      }`}
+                    >
                       <span className="text-sm">{tabs.label}</span>
-                      <span className="text-xs">{tabs.label2}</span>
+                      <span
+                        className={`${
+                          TAB_NAVIGATION.length - 1 === index
+                            ? "text-sm"
+                            : "text-xs"
+                        }`}
+                      >
+                        {tabs.label2}
+                      </span>
                     </div>
                   </Badge>
                 }
