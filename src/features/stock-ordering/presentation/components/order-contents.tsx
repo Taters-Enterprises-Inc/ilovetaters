@@ -10,12 +10,10 @@ import {
   Badge,
   BadgeProps,
   Box,
-  Divider,
   Fab,
   IconButton,
   Tab,
   Tabs,
-  Typography,
   styled,
 } from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
@@ -31,9 +29,7 @@ import {
   SupplierViewOrderModal,
 } from "../modals";
 import { FaEye } from "react-icons/fa";
-import { DataList } from "features/shared/presentation/components";
 import {
-  GetStockOrdersState,
   getStockOrders,
   resetGetStockOrders,
   selectGetStockOrders,
@@ -48,18 +44,8 @@ import {
 import { TAB_NAVIGATION } from "features/shared/constants";
 import { CompleteModal } from "../modals/complete-order.modal";
 import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
-import {
-  getAdminGroups,
-  selectGetAdminGroups,
-} from "features/admin/presentation/slices/get-admin-groups.slice";
-import {
-  getAdminSession,
-  selectGetAdminSession,
-} from "features/admin/presentation/slices/get-admin-session.slice";
-import {
-  getStockOrderStores,
-  selectGetStockOrderStores,
-} from "../slices/get-store.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { selectGetStockOrderStores } from "../slices/get-store.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -90,6 +76,16 @@ const TabPanel = (props: TabPanelProps) => {
     </div>
   );
 };
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: -13,
+    border: `2px solid #ffcd17`,
+    backgroundColor: "#ffcd17",
+    padding: "0 4px",
+  },
+}));
 
 export function OrderContents() {
   const dispatch = useAppDispatch();
@@ -271,28 +267,28 @@ export function OrderContents() {
                   (group) =>
                     index + 1 === group.id
                       ? {
-                          backgroundColor: "white",
+                          backgroundColor: "#a21013",
                           borderTopRightRadius: 5,
                           borderTopLeftRadius: 5,
                           borderLeft: 1,
                           borderRight: 1,
+                          paddingY: 3,
                         }
-                      : { Color: "white" }
+                      : { Color: "white", paddingY: 3 }
                 )}
                 label={
-                  <Badge
-                    color="primary"
-                    badgeContent={getStockOrdersState.data?.tab[index]}
+                  <StyledBadge
+                    badgeContent={
+                      getStockOrdersState.data?.tab[index] !== 0 ? (
+                        <span className="text-sm">
+                          {getStockOrdersState.data?.tab[index]}
+                        </span>
+                      ) : (
+                        0
+                      )
+                    }
                   >
-                    <div
-                      className={`flex flex-col ${
-                        getAdminSessionState.data?.admin.user_details.sos_groups.some(
-                          (group) => index + 1 === group.id
-                        )
-                          ? "text-black"
-                          : "text-white"
-                      }`}
-                    >
+                    <div className="flex flex-col text-white">
                       <span className="text-sm">{tabs.label}</span>
                       <span
                         className={`${
@@ -304,7 +300,7 @@ export function OrderContents() {
                         {tabs.label2}
                       </span>
                     </div>
-                  </Badge>
+                  </StyledBadge>
                 }
               />
             ))}
