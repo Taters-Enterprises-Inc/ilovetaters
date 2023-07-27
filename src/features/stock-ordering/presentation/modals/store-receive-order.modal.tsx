@@ -227,6 +227,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                               }
                             }}
                             value={dayjs(actualDeliveryDate)}
+                            minDateTime={dayjs().subtract(7, "day")}
                             renderInput={(params) => (
                               <TextField required {...params} size="small" />
                             )}

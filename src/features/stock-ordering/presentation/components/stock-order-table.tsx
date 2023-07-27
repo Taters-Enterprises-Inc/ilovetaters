@@ -140,6 +140,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
+                              value =
+                                value > row.orderQty ? row.orderQty : value;
+
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -167,7 +170,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                   if (r.id === row.id) {
                                     const val = Number(r.commitedQuantity) + 1;
                                     const commitedQuantity =
-                                      val < 9999 ? val : 9999;
+                                      val < Number(row.orderQty)
+                                        ? val
+                                        : Number(row.orderQty);
 
                                     return {
                                       ...r,
@@ -237,6 +242,11 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
+                              value =
+                                value > row.commitedQuantity
+                                  ? row.commitedQuantity
+                                  : value;
+
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -264,7 +274,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                     const val =
                                       Number(r.dispatchedQuantity) + 1;
                                     const dispatchedQuantity =
-                                      val < 9999 ? val : 9999;
+                                      val < Number(row.commitedQuantity)
+                                        ? val
+                                        : Number(row.commitedQuantity);
                                     return {
                                       ...r,
                                       dispatchedQuantity:
@@ -332,6 +344,11 @@ export function StockOrderTable(props: StockOrderTableProps) {
                             onChange={(event) => {
                               let value = event.target.value.replace(/\D/g, "");
 
+                              value =
+                                value > row.dispatchedQuantity
+                                  ? row.dispatchedQuantity
+                                  : value;
+
                               const updatedRows =
                                 props.rowData.product_data.map((r) => {
                                   if (r.id === row.id) {
@@ -358,7 +375,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                   if (r.id === row.id) {
                                     const val = Number(r.deliveredQuantity) + 1;
                                     const deliveredQuantity =
-                                      val < 9999 ? val : 9999;
+                                      val < Number(row.dispatchedQuantity)
+                                        ? val
+                                        : Number(row.dispatchedQuantity);
                                     return {
                                       ...r,
                                       deliveredQuantity:
