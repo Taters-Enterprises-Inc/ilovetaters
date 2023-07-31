@@ -10,7 +10,6 @@ export interface InsertNewOrderParam {
   selectedAddress: string;
   deliveryScheduleData: string | DeliverySchedule | undefined;
   remarks: string;
-  user_id: string;
   category: {
     category_id: string;
     category_name: string;
@@ -38,10 +37,9 @@ export interface orderID {
 export interface dispatchOrderParam {
   id: string;
   deliveryReceipt: File | string;
-  dispatchDeliveryDate: string;
+  dispatchDeliveryDate: string | null;
   transport: string;
   remarks: string;
-  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -52,14 +50,13 @@ export interface dispatchOrderParam {
 export interface updateStatus {
   id: string;
   remarks: string;
-  user_id: string;
+  status: string;
 }
 
 export interface newOrdersParam {
   id: string;
   commitedDelivery: string;
   remarks: string;
-  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -72,7 +69,6 @@ export interface receiveOrdersParam {
   actualDeliveryDate: string;
   updatedDeliveryReceipt: File | string;
   remarks: string;
-  user_id: string;
   product_data: {
     id: string;
     productId: string;
@@ -82,10 +78,9 @@ export interface receiveOrdersParam {
 
 export interface updateBillingOrderParam {
   id: string;
-  billingInformationId: string;
-  billingAmount: string;
   remarks: string;
-  user_id: string;
+  uploadedReceipt: File | string;
+  withNewSI: boolean;
 }
 
 export interface updateEnRoutePram {
@@ -97,13 +92,12 @@ export interface updatePayBillingParam {
   id: string;
   paymentDetailImage: File | string;
   remarks: string;
-  user_id: string;
 }
 
 export interface updatReviewParam {
   id: string;
   remarks: string;
-  user_id: string;
+  status: string;
   product_data: {
     id: string;
     productId: string;
@@ -114,10 +108,14 @@ export interface updatReviewParam {
 export interface updateDeliveryReceiveApproval {
   id: string;
   status: string;
-  user_id: string;
   remarks: string;
 }
 
 export interface storeIdParam {
   store_id: string;
+}
+
+export interface updateCancelledStatus {
+  id: string;
+  remarks: string;
 }

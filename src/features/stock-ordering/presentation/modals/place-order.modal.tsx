@@ -76,7 +76,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   useEffect(() => {
     const query = createQueryParams({
       store_id: selectedStore?.store_id ?? "",
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
     });
 
     dispatch(getStockOrderStores(query));

@@ -16,6 +16,7 @@ import { useState } from "react";
 interface TableRow {
   order_information: {
     store_name: string;
+    store_id: string;
     order_number: string;
     ship_to_address: string;
     requested_delivery_date: string;

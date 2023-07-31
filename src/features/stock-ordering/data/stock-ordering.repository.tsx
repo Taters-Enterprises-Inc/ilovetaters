@@ -10,13 +10,14 @@ import {
   newOrdersParam,
   updateStatus,
   receiveOrdersParam,
-  updateBillingOrderParam,
   updateEnRoutePram,
   updatePayBillingParam,
   dispatchOrderParam,
   updatReviewParam,
   updateDeliveryReceiveApproval,
   storeIdParam,
+  updateCancelledStatus,
+  updateBillingOrderParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -127,6 +128,13 @@ export interface updateDeliveryReceiveApprovalOrdersResponse {
   };
 }
 
+export interface updateOrderCancelledResponse {
+  data: {
+    message: string;
+    data: string;
+  };
+}
+
 export function GetStockOrderStoresRepository(
   store_id: string
 ): Promise<GetStockOrderStoresResponse> {
@@ -159,11 +167,9 @@ export function GetStockOrderProductsRepository(
 }
 
 export function GetStockOrdersRepository(
-  query: string,
-  param: currentTab
+  query: string
 ): Promise<GetStockOrdersResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/orders${query}`, {
-    params: param,
     withCredentials: true,
   });
 }
@@ -239,6 +245,9 @@ export function updateBillingOrdersRepository(
   param: updateBillingOrderParam
 ): Promise<updateBillingOrdersResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/update-billing`, param, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 }
@@ -272,4 +281,12 @@ export function updateDeliveryReceiveApprovalOrdersRepository(
       withCredentials: true,
     }
   );
+}
+
+export function updateOrderCancelledRepository(
+  param: updateCancelledStatus
+): Promise<updateOrderCancelledResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/cancelled`, param, {
+    withCredentials: true,
+  });
 }

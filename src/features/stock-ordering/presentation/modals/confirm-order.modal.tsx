@@ -95,7 +95,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         deliveryScheduleData: deliveryDate,
         selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         remarks: remarks,
-        user_id: getAdminSessionState.data?.admin.user_id ?? "",
         category: {
           category_id: category?.category_id ?? "",
           category_name: category?.category_name ?? "",
@@ -159,8 +158,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
-
-  console.log(deliveryDate);
 
   return (
     <>

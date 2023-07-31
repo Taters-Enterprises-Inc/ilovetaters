@@ -2,24 +2,28 @@ import { IoMdClose } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import {
-  TextField,
   Button,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
+  TextField,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
-import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  dispatchOrderParam,
+  updateCancelledStatus,
+} from "features/stock-ordering/core/stock-ordering.params";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
-import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 
 interface SupplierDispatchOrderModalProps {
   open: boolean;
@@ -38,11 +42,12 @@ export function SupplierDispatchOrderModal(
     useState(false);
 
   const [transport, setTransport] = useState("");
-  const [dispatchedDelivery, setDispachedDelivery] = useState(
-    dayjs().format("YYYY-MM-DD HH:mm:ss")
+  const [dispatchedDelivery, setDispachedDelivery] = useState<string | null>(
+    null
   );
-
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [preview, setPreview] = useState(false);
+  const [uploadButton, setuploadButton] = useState(true);
   const [remarks, setRemarks] = useState("");
 
   const [rows, setRows] = useState<TableRow>({
@@ -50,6 +55,7 @@ export function SupplierDispatchOrderModal(
       store_name: "",
       order_number: "",
       ship_to_address: "",
+      store_id: "",
 
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -78,7 +84,8 @@ export function SupplierDispatchOrderModal(
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);
@@ -126,9 +133,11 @@ export function SupplierDispatchOrderModal(
 
   useEffect(() => {
     setUploadedReciept("");
-    setDispachedDelivery(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+    setDispachedDelivery(null);
     setTransport("");
     setRemarks("");
+    setuploadButton(true);
+    setPreview(false);
   }, [props.open]);
 
   const handleDispatchOrder = async (e: { preventDefault: () => void }) => {
@@ -144,10 +153,10 @@ export function SupplierDispatchOrderModal(
     const dispatchOrdersParamData: dispatchOrderParam = {
       id: props.id,
       deliveryReceipt: uploadedReceipt,
-      dispatchDeliveryDate: dispatchedDelivery,
+      dispatchDeliveryDate:
+        dayjs(dispatchedDelivery).format("hh:mm:ss a") ?? null,
       transport: transport,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
       product_data: dispatchedOrdersProductDataParam,
     };
 
@@ -155,10 +164,26 @@ export function SupplierDispatchOrderModal(
     props.onClose();
   };
 
+  const handleCancelOrder = async () => {
+    const cancelOrderParam: updateCancelledStatus = {
+      id: props.id,
+      remarks: remarks,
+    };
+
+    await dispatch(updateOrderCancelled(cancelOrderParam));
+
+    props.onClose();
+  };
+
   const isQuantityEmpty = () => {
     let empty = false;
     rows.product_data.map((product) => {
-      if (product.commitedQuantity === "") empty = true;
+      if (
+        product.commitedQuantity === "" ||
+        product.commitedQuantity === null
+      ) {
+        empty = true;
+      }
     });
 
     return empty;
@@ -200,12 +225,12 @@ export function SupplierDispatchOrderModal(
                 setRows={setRows}
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={setEnabled()}
+                isDispatchedQtyAvailable={setEnabled() && !preview}
               />
               {setEnabled() ? (
                 <div className="flex flex-col px-5">
                   <div className="flex flex-row space-x-3">
-                    <FormControl required={true}>
+                    <FormControl disabled={preview} required={true}>
                       <div className="flex flex-col items-stretch space-x-2">
                         <span className="self-start pb-1 text-lg">
                           Transport Route:
@@ -239,23 +264,16 @@ export function SupplierDispatchOrderModal(
                     <div className="flex flex-col space-y-2">
                       <span>Dispatched Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                          label="Delivery date and time"
-                          views={["year", "month", "day", "hours", "minutes"]}
+                        <TimePicker
+                          disabled={preview}
+                          label="Dispatch Time Picker"
+                          value={dispatchedDelivery}
                           onChange={(date) => {
-                            if (date) {
-                              const formattedDate = dayjs(date).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              );
-
-                              setDispachedDelivery(formattedDate);
-                            }
+                            setDispachedDelivery(date);
                           }}
-                          value={dayjs(dispatchedDelivery)}
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
-                          minDateTime={dayjs()}
                         />
                       </LocalizationProvider>
                     </div>
@@ -274,30 +292,68 @@ export function SupplierDispatchOrderModal(
 
                     <div className="flex flex-row space-x-2">
                       <>
-                        <Button
-                          fullWidth
-                          size="small"
-                          onClick={() => {
-                            setOpenUploadDeliveryRecieptModal(true);
-                          }}
-                          variant="contained"
-                        >
-                          Upload Sales Invoice
-                        </Button>
-
-                        <Button
-                          fullWidth
-                          disabled={
-                            !isValidFile(uploadedReceipt) ||
-                            transport === "" ||
-                            isQuantityEmpty()
-                          }
-                          type="submit"
-                          size="small"
-                          variant="contained"
-                        >
-                          Dispatch Order
-                        </Button>
+                        <div className="basis-1/2">
+                          <Button
+                            fullWidth
+                            size="small"
+                            sx={{ color: "white", backgroundColor: "#CC5801" }}
+                            onClick={() => {
+                              setOpenUploadDeliveryRecieptModal(true);
+                            }}
+                            variant="contained"
+                          >
+                            Upload Sales Invoice
+                          </Button>
+                        </div>
+                        <div className="basis-1/2">
+                          {preview ? (
+                            <Button
+                              fullWidth
+                              sx={{
+                                color: "white",
+                                backgroundColor: "#CC5801",
+                              }}
+                              type="submit"
+                              size="small"
+                              variant="contained"
+                            >
+                              Dispatch Order
+                            </Button>
+                          ) : (
+                            <Button
+                              fullWidth
+                              sx={{
+                                color: "white",
+                                backgroundColor: "#CC5801",
+                              }}
+                              disabled={
+                                !isValidFile(uploadedReceipt) ||
+                                transport === "" ||
+                                isQuantityEmpty() ||
+                                dispatchedDelivery === ""
+                              }
+                              onClick={(event) => {
+                                event.preventDefault();
+                                setuploadButton(false);
+                                setPreview(true);
+                              }}
+                              size="small"
+                              variant="contained"
+                            >
+                              Preview
+                            </Button>
+                          )}
+                          <Button
+                            fullWidth
+                            onClick={handleCancelOrder}
+                            size="small"
+                            variant="text"
+                          >
+                            <span className="text-xs underline">
+                              Cancel Order
+                            </span>
+                          </Button>
+                        </div>
                       </>
                     </div>
                   </div>
@@ -312,7 +368,7 @@ export function SupplierDispatchOrderModal(
         open={openUploadDeliveryRecieptModal}
         onClose={() => setOpenUploadDeliveryRecieptModal(false)}
         setUploadedReciept={setUploadedReciept}
-        isButtonAvailable={true}
+        isButtonAvailable={uploadButton}
       />
     </>
   );

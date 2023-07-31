@@ -7,4 +7,8 @@ export interface GetStockStoreModel {
     ship_to_address: string;
     store_id: string;
   }>;
+  window_time: {
+    end_Time: string;
+    start_time: string;
+  };
 }

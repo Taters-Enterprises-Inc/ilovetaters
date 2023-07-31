@@ -38,6 +38,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
     order_information: {
       store_name: "",
       ship_to_address: "",
+      store_id: "",
 
       order_number: "",
       requested_delivery_date: "",
@@ -99,7 +100,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       id: props.id,
       paymentDetailImage: uploadedReceipt,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
     };
 
     await dispatch(updatePayBillingOrders(updatePayBillingParam));
@@ -116,7 +116,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+    const allowedExtensions = ["jpg", "jpeg", "png"];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);

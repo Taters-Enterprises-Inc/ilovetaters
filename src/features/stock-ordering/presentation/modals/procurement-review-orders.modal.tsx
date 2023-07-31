@@ -25,9 +25,7 @@ export function ProcurementReviewOrdersModal(
 
   const [isEditEnabled, setIsEditEnabled] = useState(false);
 
-  const [productDataOld, setProductDataOld] = useState<
-    TableRow["product_data"]
-  >([]);
+  const [status, setStatus] = useState("");
 
   const [remarks, setRemarks] = useState("");
 
@@ -35,6 +33,7 @@ export function ProcurementReviewOrdersModal(
     order_information: {
       store_name: "",
       ship_to_address: "",
+      store_id: "",
 
       order_number: "",
       requested_delivery_date: "",
@@ -102,8 +101,8 @@ export function ProcurementReviewOrdersModal(
     const reviewOrdersParamData: updatReviewParam = {
       id: props.id,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin?.user_id ?? "",
       product_data: reviewOrdersProductDataParam,
+      status: status,
     };
 
     await dispatch(updateReviewOrders(reviewOrdersParamData));
@@ -151,28 +150,8 @@ export function ProcurementReviewOrdersModal(
 
           <form onSubmit={handleOrderReviewed}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              {setEnabled() ? (
-                <div className="flex justify-end items-stretch">
-                  <Switch
-                    onChange={(event) => {
-                      if (!event.target.checked) {
-                        setRows({
-                          order_information: rows.order_information,
-                          product_data: productDataOld,
-                        });
-                      }
-
-                      setProductDataOld(rows.product_data);
-                      setIsEditEnabled(event.target.checked);
-                    }}
-                    defaultChecked={false}
-                  />
-                  <span className="font-medium self-center">Enable edit</span>
-                </div>
-              ) : null}
-
               <StockOrderTable
-                isCommitedTextFieldAvailable={isEditEnabled}
+                isCommitedTextFieldAvailable={false}
                 isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
@@ -192,12 +171,25 @@ export function ProcurementReviewOrdersModal(
                       multiline
                     />
                   </div>
-                  <div className="flex justify-end">
+                  <div className="flex space-x-2">
                     <Button
                       disabled={isQuantityEmpty()}
                       fullWidth
                       type="submit"
+                      onClick={() => setStatus("1")}
                       variant="contained"
+                      sx={{ color: "white", backgroundColor: "#CC5801" }}
+                    >
+                      Send back to New Order
+                    </Button>
+
+                    <Button
+                      disabled={isQuantityEmpty()}
+                      fullWidth
+                      type="submit"
+                      onClick={() => setStatus("3")}
+                      variant="contained"
+                      sx={{ color: "white", backgroundColor: "#CC5801" }}
                     >
                       Order Reviewed
                     </Button>

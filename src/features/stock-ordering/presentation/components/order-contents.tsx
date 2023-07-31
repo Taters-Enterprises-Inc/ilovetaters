@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { TiDocumentAdd } from "react-icons/ti";
 import {
+  CancelledModal,
   ConfirmOrdersModal,
   PlaceOrderModal,
   ProcurementReviewOrdersModal,
@@ -79,7 +80,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
-    right: -3,
+    right: 3,
     top: -13,
     border: `2px solid #ffcd17`,
     backgroundColor: "#ffcd17",
@@ -112,6 +113,7 @@ export function OrderContents() {
     supplierConfirm: false,
     complete: false,
     deliveryReceiveApproval: false,
+    cancelled: false,
   });
 
   const [orderId, setOrderId] = useState("");
@@ -191,6 +193,9 @@ export function OrderContents() {
       case 8:
         handleModalToggle("complete");
         break;
+      case 9:
+        handleModalToggle("cancelled");
+        break;
     }
   };
 
@@ -205,20 +210,16 @@ export function OrderContents() {
 
   useEffect(() => {
     if (getStore.data) {
-      const currentTab: currentTab = {
-        current_tab: tabValue,
-        store_id: getStore.data?.stores.map((stores) => stores.store_id),
-      };
-
       const query = createQueryParams({
         page_no: pageNo,
         per_page: perPage,
         order_by: orderBy,
         order: order,
         search: search,
+        current_tab: tabValue,
       });
 
-      dispatch(getStockOrders({ query: query, param: currentTab }));
+      dispatch(getStockOrders(query));
     }
   }, [
     dispatch,
@@ -241,252 +242,247 @@ export function OrderContents() {
           </span>
         </div>
 
-        <div className="bg-paper border-2 border-t-8 rounded-t-lg border-secondary">
-          <Tabs
-            className="bg-secondary text-white "
-            value={tabValue}
-            onChange={handleTabChange}
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            variant="scrollable"
-            TabIndicatorProps={{
-              style: {
-                backgroundColor:
-                  getAdminSessionState.data?.admin.user_details.sos_groups.some(
-                    (group) => tabValue + 1 === group.id
-                  )
-                    ? "black"
-                    : "white",
-              },
-            }}
-          >
-            {TAB_NAVIGATION.map((tabs, index) => (
-              <Tab
-                key={index}
-                sx={getAdminSessionState.data?.admin.user_details.sos_groups.map(
-                  (group) =>
-                    index + 1 === group.id
-                      ? {
-                          backgroundColor: "#a21013",
-                          borderTopRightRadius: 5,
-                          borderTopLeftRadius: 5,
-                          borderLeft: 1,
-                          borderRight: 1,
-                          paddingY: 3,
-                        }
-                      : { Color: "white", paddingY: 3 }
-                )}
-                label={
-                  <StyledBadge
-                    badgeContent={
-                      getStockOrdersState.data?.tab[index] !== 0 ? (
-                        <span className="text-sm">
-                          {getStockOrdersState.data?.tab[index]}
+        {getStockOrdersState.data ? (
+          <div className="bg-paper border-2 border-t-8 rounded-t-lg border-secondary">
+            <Tabs
+              className="bg-secondary text-white "
+              value={tabValue}
+              onChange={handleTabChange}
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              variant="scrollable"
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor:
+                    getAdminSessionState.data?.admin.user_details.sos_groups.some(
+                      (group) => tabValue + 1 === group.id
+                    )
+                      ? "black"
+                      : "white",
+                },
+              }}
+            >
+              {TAB_NAVIGATION.map((tabs, index) => (
+                <Tab
+                  key={index}
+                  sx={getAdminSessionState.data?.admin.user_details.sos_groups.map(
+                    (group) =>
+                      index + 1 === group.id
+                        ? {
+                            backgroundColor: "#a21013",
+                            borderTopRightRadius: 5,
+                            borderTopLeftRadius: 5,
+                            borderLeft: 1,
+                            borderRight: 1,
+                            paddingY: 3,
+                          }
+                        : { Color: "white", paddingY: 3 }
+                  )}
+                  label={
+                    <StyledBadge
+                      max={99}
+                      badgeContent={getStockOrdersState.data?.tab[index]}
+                    >
+                      <div className="flex flex-col text-white">
+                        <span className="text-sm">{tabs.label}</span>
+                        <span
+                          className={`${
+                            TAB_NAVIGATION.length - 1 === index ||
+                            TAB_NAVIGATION.length - 2 === index
+                              ? "text-sm"
+                              : "text-xs"
+                          }`}
+                        >
+                          {tabs.label2}
                         </span>
-                      ) : (
-                        0
-                      )
+                      </div>
+                    </StyledBadge>
+                  }
+                />
+              ))}
+            </Tabs>
+
+            <TabPanel index={tabValue} value={tabValue}>
+              <div className="hidden md:block">
+                <DataTable
+                  order={order === "asc" ? "asc" : "desc"}
+                  orderBy={orderBy ?? "last_updated"}
+                  search={search ?? ""}
+                  emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
+                  onSearch={(val) => {
+                    const params = {
+                      page_no: null,
+                      per_page: perPage,
+                      status: status,
+                      order_by: orderBy,
+                      order: order,
+                      store: store,
+                      search: val === "" ? null : val,
+                    };
+
+                    const queryParams = createQueryParams(params);
+
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }}
+                  onRequestSort={(column_selected) => {
+                    if (column_selected !== "action") {
+                      const isAsc =
+                        orderBy === column_selected && order === "asc";
+
+                      const params = {
+                        page_no: pageNo,
+                        per_page: perPage,
+                        status: status,
+                        order_by: column_selected,
+                        order: isAsc ? "desc" : "asc",
+                        store: store,
+                        search: search,
+                      };
+
+                      const queryParams = createQueryParams(params);
+
+                      dispatch(resetGetStockOrders());
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
                     }
-                  >
-                    <div className="flex flex-col text-white">
-                      <span className="text-sm">{tabs.label}</span>
-                      <span
-                        className={`${
-                          TAB_NAVIGATION.length - 1 === index
-                            ? "text-sm"
-                            : "text-xs"
-                        }`}
-                      >
-                        {tabs.label2}
-                      </span>
-                    </div>
-                  </StyledBadge>
-                }
-              />
-            ))}
-          </Tabs>
+                  }}
+                  columns={columns}
+                  onRowsPerPageChange={(event) => {
+                    if (perPage !== event.target.value) {
+                      const params = {
+                        page_no: pageNo,
+                        per_page: event.target.value,
+                        status: status,
+                        store: store,
+                        order_by: orderBy,
+                        order: order,
+                        search: search,
+                      };
 
-          <TabPanel index={tabValue} value={tabValue}>
-            <div className="hidden md:block">
-              <DataTable
-                order={order === "asc" ? "asc" : "desc"}
-                orderBy={orderBy ?? "last_updated"}
-                search={search ?? ""}
-                emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
-                onSearch={(val) => {
-                  const params = {
-                    page_no: null,
-                    per_page: perPage,
-                    status: status,
-                    order_by: orderBy,
-                    order: order,
-                    store: store,
-                    search: val === "" ? null : val,
-                  };
+                      const queryParams = createQueryParams(params);
 
-                  const queryParams = createQueryParams(params);
+                      dispatch(resetGetStockOrders());
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }
+                  }}
+                  onPageChange={(event, newPage) => {
+                    const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                    if (newPage !== pageNoInt) {
+                      const params = {
+                        page_no: newPage,
+                        per_page: perPage,
+                        status: status,
+                        store: store,
+                        order_by: orderBy,
+                        order: order,
+                        search: search,
+                      };
 
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }}
-                onRequestSort={(column_selected) => {
-                  if (column_selected !== "action") {
-                    const isAsc =
-                      orderBy === column_selected && order === "asc";
+                      const queryParams = createQueryParams(params);
 
-                    const params = {
-                      page_no: pageNo,
-                      per_page: perPage,
-                      status: status,
-                      order_by: column_selected,
-                      order: isAsc ? "desc" : "asc",
-                      store: store,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    dispatch(resetGetStockOrders());
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-                columns={columns}
-                onRowsPerPageChange={(event) => {
-                  if (perPage !== event.target.value) {
-                    const params = {
-                      page_no: pageNo,
-                      per_page: event.target.value,
-                      status: status,
-                      store: store,
-                      order_by: orderBy,
-                      order: order,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    dispatch(resetGetStockOrders());
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-                onPageChange={(event, newPage) => {
-                  const pageNoInt = pageNo ? parseInt(pageNo) : null;
-                  if (newPage !== pageNoInt) {
-                    const params = {
-                      page_no: newPage,
-                      per_page: perPage,
-                      status: status,
-                      store: store,
-                      order_by: orderBy,
-                      order: order,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    dispatch(resetGetStockOrders());
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-                totalRows={getStockOrdersState.data?.pagination.total_rows ?? 0}
-                perPage={getStockOrdersState.data?.pagination.per_page ?? 0}
-                page={pageNo ? parseInt(pageNo) : 1}
-              >
-                {getStockOrdersState.data?.orders.map((order, index) => (
-                  <DataTableRow key={index}>
-                    <DataTableCell>{order.store_name}</DataTableCell>
-                    <DataTableCell>{order.id}</DataTableCell>
-                    <DataTableCell>
-                      {order.id !== null
-                        ? new Date(
-                            order.order_placement_date
-                          ).toLocaleDateString("en-PH", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          })
-                        : order.order_placement_date}
-                    </DataTableCell>
-                    <DataTableCell>
-                      {order.requested_delivery_date !== null
-                        ? new Date(
-                            order.requested_delivery_date
-                          ).toLocaleDateString("en-PH", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          })
-                        : order.requested_delivery_date}
-                    </DataTableCell>
-                    <DataTableCell>
-                      {order.commited_delivery_date !== null
-                        ? new Date(
-                            order.commited_delivery_date
-                          ).toLocaleDateString("en-PH", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          })
-                        : order.commited_delivery_date}
-                    </DataTableCell>
-                    <DataTableCell>
-                      {order.order_confirmation_date !== null
-                        ? new Date(
-                            order.order_confirmation_date
-                          ).toLocaleDateString("en-PH", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          })
-                        : order.order_confirmation_date}
-                    </DataTableCell>
-                    <DataTableCell>
-                      {order.actual_delivery_date !== null
-                        ? new Date(
-                            order.actual_delivery_date
-                          ).toLocaleDateString("en-PH", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          })
-                        : order.actual_delivery_date}
-                    </DataTableCell>
-                    <DataTableCell>{order.description}</DataTableCell>
-                    {/* <DataTableCell>{order.billing_id}</DataTableCell>
+                      dispatch(resetGetStockOrders());
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }
+                  }}
+                  totalRows={getStockOrdersState.data?.pagination.total_rows}
+                  perPage={getStockOrdersState.data?.pagination.per_page}
+                  page={pageNo ? parseInt(pageNo) : 1}
+                >
+                  {getStockOrdersState.data?.orders.map((order, index) => (
+                    <DataTableRow key={index}>
+                      <DataTableCell>{order.store_name}</DataTableCell>
+                      <DataTableCell>{order.id}</DataTableCell>
+                      <DataTableCell>
+                        {order.id !== null
+                          ? new Date(
+                              order.order_placement_date
+                            ).toLocaleDateString("en-PH", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })
+                          : order.order_placement_date}
+                      </DataTableCell>
+                      <DataTableCell>
+                        {order.requested_delivery_date !== null
+                          ? new Date(
+                              order.requested_delivery_date
+                            ).toLocaleDateString("en-PH", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })
+                          : order.requested_delivery_date}
+                      </DataTableCell>
+                      <DataTableCell>
+                        {order.commited_delivery_date !== null
+                          ? new Date(
+                              order.commited_delivery_date
+                            ).toLocaleDateString("en-PH", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })
+                          : order.commited_delivery_date}
+                      </DataTableCell>
+                      <DataTableCell>
+                        {order.order_confirmation_date !== null
+                          ? new Date(
+                              order.order_confirmation_date
+                            ).toLocaleDateString("en-PH", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })
+                          : order.order_confirmation_date}
+                      </DataTableCell>
+                      <DataTableCell>
+                        {order.actual_delivery_date !== null
+                          ? new Date(
+                              order.actual_delivery_date
+                            ).toLocaleDateString("en-PH", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })
+                          : order.actual_delivery_date}
+                      </DataTableCell>
+                      <DataTableCell>{order.description}</DataTableCell>
+                      {/* <DataTableCell>{order.billing_id}</DataTableCell>
                     <DataTableCell>{order.billing_amount}</DataTableCell> */}
-                    <DataTableCell>{order.short_name}</DataTableCell>
-                    <DataTableCell>
-                      <IconButton onClick={() => handleAction(order.id)}>
-                        <FaEye className="text-lg" />
-                      </IconButton>
-                    </DataTableCell>
-                  </DataTableRow>
-                ))}
-              </DataTable>
-            </div>
+                      <DataTableCell>{order.short_name}</DataTableCell>
+                      <DataTableCell>
+                        <IconButton onClick={() => handleAction(order.id)}>
+                          <FaEye className="text-lg" />
+                        </IconButton>
+                      </DataTableCell>
+                    </DataTableRow>
+                  ))}
+                </DataTable>
+              </div>
 
-            {/* <div className="block md:hidden">
+              {/* <div className="block md:hidden">
               <DataList
                 search={search ?? ""}
                 emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
@@ -591,13 +587,14 @@ export function OrderContents() {
                 </div>
               </DataList>
             </div> */}
-          </TabPanel>
-        </div>
+            </TabPanel>
+          </div>
+        ) : null}
       </div>
 
       {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
         (user_data, index) => {
-          return user_data.id === 10 ? (
+          return user_data.id === 0 ? (
             <div
               key={index}
               className="absolute right-10 bottom-10"
@@ -683,6 +680,13 @@ export function OrderContents() {
       <DeliveryReceiveApprovalModal
         open={modals.deliveryReceiveApproval}
         onClose={() => handleModalToggle("deliveryReceiveApproval")}
+        currentTab={tabValue}
+        id={orderId}
+      />
+
+      <CancelledModal
+        open={modals.cancelled}
+        onClose={() => handleModalToggle("cancelled")}
         currentTab={tabValue}
         id={orderId}
       />

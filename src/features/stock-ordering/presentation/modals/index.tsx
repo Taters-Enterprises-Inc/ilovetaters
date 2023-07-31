@@ -10,3 +10,4 @@ export { AddBillingInformationModal } from "./add-billing-information.modal";
 export { StorePayBillingModal } from "./store-pay-billing.modal";
 export { PayBillingModal } from "./pay-your-billing.modal";
 export { SupplierConfirmModal } from "./supplier-confirm-payment";
+export { CancelledModal } from "./cancelled-order.modal";

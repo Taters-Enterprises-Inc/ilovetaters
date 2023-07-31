@@ -13,7 +13,7 @@ interface CompleteModalProps {
   id: string;
 }
 
-export function CompleteModal(props: CompleteModalProps) {
+export function CancelledModal(props: CompleteModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
 
   const [rows, setRows] = useState<TableRow>({
@@ -69,7 +69,7 @@ export function CompleteModal(props: CompleteModalProps) {
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Complete Modal</span>
+            <span className="text-2xl text-white">Cancelled Orders</span>
             <button
               className="text-2xl text-white"
               onClick={() => {

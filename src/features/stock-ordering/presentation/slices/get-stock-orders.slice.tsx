@@ -29,14 +29,10 @@ const initialState: InitialState = {
 
 export const getStockOrders = createAsyncThunk(
   "getStockOrders",
-  async (
-    { query, param }: { query: string; param: currentTab },
-    { rejectWithValue }
-  ) => {
+  async (query: string, { rejectWithValue }) => {
     try {
       const response: GetStockOrdersResponse = await GetStockOrdersRepository(
-        query,
-        param
+        query
       );
       return response.data;
     } catch (error) {

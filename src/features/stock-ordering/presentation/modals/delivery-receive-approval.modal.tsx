@@ -29,6 +29,7 @@ export function DeliveryReceiveApprovalModal(
     order_information: {
       store_name: "",
       ship_to_address: "",
+      store_id: "",
 
       order_number: "",
       requested_delivery_date: "",
@@ -86,7 +87,6 @@ export function DeliveryReceiveApprovalModal(
     const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval = {
       id: props.id,
       status: status,
-      user_id: getAdminSessionState.data?.admin?.user_id ?? "",
       remarks: remarks,
     };
 

@@ -1,6 +1,7 @@
 export interface TableRow {
   order_information: {
     store_name: string;
+    store_id: string;
     ship_to_address: string;
     order_number: string;
     requested_delivery_date: string;

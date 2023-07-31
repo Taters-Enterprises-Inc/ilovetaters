@@ -8,11 +8,21 @@ import { TextField, Button } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  newOrdersParam,
+  updateCancelledStatus,
+  updateStatus,
+} from "features/stock-ordering/core/stock-ordering.params";
 import { updateNewOrders } from "../slices/update-new-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { get } from "http";
+import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
+import {
+  getStockOrderStores,
+  selectGetStockOrderStores,
+} from "../slices/get-store.slice";
+import { createQueryParams } from "features/config/helpers";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -26,9 +36,9 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
   const getProductDataState = useAppSelector(selectGetProductData);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-
+  const getStoreState = useAppSelector(selectGetStockOrderStores);
   const [remarks, setRemarks] = useState("");
-
+  const [preview, setPreview] = useState(false);
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
@@ -36,6 +46,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
+      store_id: "",
       ship_to_address: "",
       order_number: "",
       requested_delivery_date: "",
@@ -70,11 +81,21 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       id: props.id,
       commitedDelivery: CommitedDeliveryDate,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
       product_data: reviewOrdersProductDataParam,
     };
 
     await dispatch(updateNewOrders(reviewOrdersParamData));
+
+    props.onClose();
+  };
+
+  const handleCancelledOrder = async () => {
+    const cancelParameter: updateCancelledStatus = {
+      id: props.id,
+      remarks: remarks,
+    };
+
+    await dispatch(updateOrderCancelled(cancelParameter));
 
     props.onClose();
   };
@@ -93,11 +114,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     return result;
   };
 
-  useEffect(() => {
-    setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-    setRemarks("");
-  }, [props.open]);
-
   InitializeModal({
     setRows: setRows,
     id: props.id,
@@ -111,13 +127,59 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       : undefined,
   });
 
-  const isZero = () => {
-    let zero = false;
+  useEffect(() => {
+    setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+    setRemarks("");
+    setPreview(false);
+  }, [props.open]);
+
+  useEffect(() => {
+    if (rows.order_information) {
+      const query = createQueryParams({
+        store_id: rows.order_information.store_id,
+      });
+
+      dispatch(getStockOrderStores(query));
+    }
+  }, [rows.order_information]);
+
+  const isQuantityEmpty = () => {
+    let empty = false;
     rows.product_data.map((product) => {
-      if (product.commitedQuantity === "") zero = true;
+      if (
+        product.commitedQuantity === "" ||
+        product.commitedQuantity === null
+      ) {
+        empty = true;
+      }
     });
 
-    return zero;
+    return empty;
+  };
+
+  const convertTo12HourFormat = (time: string) => {
+    const formattedTime = dayjs(time, "HH:mm:ss").format("h:mm A");
+    return formattedTime;
+  };
+
+  const getTimeLimit = (type: string) => {
+    switch (type) {
+      case "start":
+        if (getStoreState.data?.window_time) {
+          const { start_time } = getStoreState.data.window_time;
+          return dayjs(start_time, "HH:mm:ss");
+        }
+        break;
+
+      case "end":
+        if (getStoreState.data?.window_time) {
+          const { end_Time } = getStoreState.data.window_time;
+          return dayjs(end_Time, "HH:mm:ss");
+        }
+        break;
+    }
+
+    return dayjs();
   };
 
   if (props.open) {
@@ -135,7 +197,8 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       >
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
-            <span className="text-2xl text-white">Supplier View Order</span>
+            <span className="text-2xl text-white">Supplier View Order </span>
+
             <button
               className="text-2xl text-white"
               onClick={() => {
@@ -150,7 +213,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
             <form className="overflow-auto" onSubmit={handleSubmit}>
               <StockOrderTable
-                isCommitedTextFieldAvailable={setEnabled()}
+                isCommitedTextFieldAvailable={setEnabled() && !preview}
                 isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
@@ -160,8 +223,8 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
               />
 
               {setEnabled() ? (
-                <div>
-                  <div className="flex flex-col px-5 mt-2">
+                <div className="px-2">
+                  <div className="flex flex-col mt-2">
                     <span>Remarks: </span>
                     <TextField
                       value={remarks}
@@ -170,13 +233,32 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                       multiline
                     />
                   </div>
-                  <div className="flex items-stretch pt-5 space-x-5">
-                    <span className="basis-1/2 self-center font-semibold text-right">
-                      Commited Delivery:
-                    </span>
-                    <div className="basis-1/2">
+                  <div className="flex pt-5 space-x-5">
+                    <div className="basis-1/2 flex flex-col space-y-2">
+                      <div className="flex space-x-2">
+                        <span className="font-normal">Commited Delivery:</span>
+                        {getStoreState.data?.window_time ? (
+                          <>
+                            <span>
+                              {convertTo12HourFormat(
+                                getStoreState.data.window_time.start_time
+                              )}
+                            </span>
+                            <span>-</span>
+                            <span>
+                              {convertTo12HourFormat(
+                                getStoreState.data.window_time.end_Time
+                              )}
+                            </span>
+                          </>
+                        ) : (
+                          <span>Can be delivered anytime</span>
+                        )}
+                      </div>
+
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker
+                          disabled={preview}
                           label="Delivery date and time"
                           views={["year", "month", "day", "hours", "minutes"]}
                           onChange={(date) => {
@@ -192,18 +274,46 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
-                          minDateTime={dayjs()}
+                          minDate={dayjs()}
+                          minTime={getTimeLimit("start")}
+                          maxTime={getTimeLimit("end")}
                         />
                       </LocalizationProvider>
                     </div>
-                    <div className="basis-4/5 pr-6">
+
+                    <div className="basis-1/2">
+                      {preview ? (
+                        <Button
+                          fullWidth
+                          type="submit"
+                          variant="contained"
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Confirm
+                        </Button>
+                      ) : (
+                        <Button
+                          disabled={isQuantityEmpty()}
+                          fullWidth
+                          variant="contained"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setPreview(true);
+                          }}
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Preview
+                        </Button>
+                      )}
                       <Button
-                        disabled={isZero()}
                         fullWidth
-                        type="submit"
-                        variant="contained"
+                        variant="text"
+                        size="small"
+                        onClick={handleCancelledOrder}
                       >
-                        Confirm
+                        <span className="text-primary underline">
+                          Cancel Order
+                        </span>
                       </Button>
                     </div>
                   </div>

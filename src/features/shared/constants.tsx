@@ -1318,4 +1318,5 @@ export const TAB_NAVIGATION = [
   { label: "PAY BILL", label2: "(TEI FINANCE)" },
   { label: "CONF PAY", label2: "(MULTI-M FINANCE)" },
   { label: "ORDERS", label2: "COMPLETE" },
+  { label: "CANCELLED", label2: "ORDERS" },
 ];

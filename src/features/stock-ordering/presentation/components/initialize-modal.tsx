@@ -22,6 +22,7 @@ export const InitializeModal = (props: InitializeModalProps) => {
     props.setRows?.({
       order_information: {
         store_name: "",
+        store_id: "",
         ship_to_address: "",
         order_number: "",
         requested_delivery_date: "",

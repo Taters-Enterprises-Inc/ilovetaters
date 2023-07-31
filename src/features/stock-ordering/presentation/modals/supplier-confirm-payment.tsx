@@ -29,6 +29,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     order_information: {
       store_name: "",
       ship_to_address: "",
+      store_id: "",
 
       order_number: "",
       requested_delivery_date: "",
@@ -78,11 +79,11 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       : undefined,
   });
 
-  const handleValidate = async () => {
+  const handleValidate = async (status: string) => {
     const updateConfirmPaymentParam: updateStatus = {
       id: props.id,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
+      status: status,
     };
 
     await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
@@ -147,8 +148,8 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                     multiline
                   />
                 </div>
-                <div className="flex flex-row space-x-4">
-                  <div className="basis-1/2">
+                <div className="flex flex-col space-y-2 ">
+                  <div className="basis-full">
                     <Button
                       onClick={() => setOpenPayBillingModal(true)}
                       fullWidth
@@ -157,16 +158,29 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                       View payment information
                     </Button>
                   </div>
-                  <div className="basis-1/2">
-                    <Button
-                      onClick={() => handleValidate()}
-                      fullWidth
-                      variant="contained"
-                    >
-                      Validate
-                    </Button>
+
+                  <div className="flex space-x-4">
+                    <div className="basis-1/2">
+                      <Button
+                        onClick={() => handleValidate("7")}
+                        fullWidth
+                        variant="contained"
+                      >
+                        Return to Tei Finance
+                      </Button>
+                    </div>
+
+                    <div className="basis-1/2">
+                      <Button
+                        onClick={() => handleValidate("8")}
+                        fullWidth
+                        variant="contained"
+                      >
+                        Validate
+                      </Button>
+                    </div>
                   </div>
-                </div>{" "}
+                </div>
               </div>
             ) : null}
           </div>

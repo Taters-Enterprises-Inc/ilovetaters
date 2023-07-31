@@ -43,6 +43,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     order_information: {
       store_name: "",
       ship_to_address: "",
+      store_id: "",
 
       order_number: "",
       requested_delivery_date: "",
@@ -114,7 +115,6 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
         actualDeliveryDate: actualDeliveryDate,
         updatedDeliveryReceipt: uploadedReceipt,
         remarks: remarks,
-        user_id: getAdminSessionState.data?.admin.user_id ?? "",
         product_data: receieveOrdersProductDataParam,
       };
 
@@ -135,7 +135,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);

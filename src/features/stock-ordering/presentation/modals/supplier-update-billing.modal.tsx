@@ -1,16 +1,19 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button, TextField } from "@mui/material";
+import { Button, IconButton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AddBillingInformationModal } from "./add-billing-information.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateBillingOrders } from "../slices/update-billing-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
+import { MdPreview } from "react-icons/md";
+import { createQueryParams } from "features/config/helpers";
+import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 
 interface SupplierUpdateBillingModalProps {
   open: boolean;
@@ -22,11 +25,14 @@ interface SupplierUpdateBillingModalProps {
 export function SupplierUpdateBillingModal(
   props: SupplierUpdateBillingModalProps
 ) {
-  const [openAddBillingInformationModal, setOpenAddBillingInformationModal] =
-    useState(false);
-
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
+
+  const [warning, setWarning] = useState(false);
+  const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
+    useState(false);
+
+  const [uploadedReceipt, setUploadedReciept] = useState<string | File>();
 
   const [billingInformation, setBillingInformation] = useState<{
     billing_id: string;
@@ -41,7 +47,7 @@ export function SupplierUpdateBillingModal(
     order_information: {
       store_name: "",
       ship_to_address: "",
-
+      store_id: "",
       order_number: "",
       requested_delivery_date: "",
       commited_delivery_date: "",
@@ -83,7 +89,18 @@ export function SupplierUpdateBillingModal(
       billing_amount: "",
     });
     setRemarks("");
+    setWarning(false);
   }, [props.open]);
+
+  useEffect(() => {
+    if (rows.product_data && uploadedReceipt === undefined) {
+      const isWarning = rows.product_data.some(
+        (product) => product.dispatchedQuantity !== product.deliveredQuantity
+      );
+
+      if (isWarning) setWarning(true);
+    }
+  }, [rows]);
 
   InitializeModal({
     setRows: setRows,
@@ -99,16 +116,42 @@ export function SupplierUpdateBillingModal(
   });
 
   const handleSupplierUpdate = async () => {
-    const billingOrdersParamData: updateBillingOrderParam = {
+    const query: updateBillingOrderParam = {
       id: props.id,
-      billingInformationId: billingInformation.billing_id,
-      billingAmount: billingInformation.billing_amount,
       remarks: remarks,
-      user_id: getAdminSessionState.data?.admin.user_id ?? "",
+      uploadedReceipt: uploadedReceipt ?? "",
+      withNewSI: uploadedReceipt ? true : false,
     };
 
-    await dispatch(updateBillingOrders(billingOrdersParamData));
+    await dispatch(updateBillingOrders(query));
+
     props.onClose();
+  };
+
+  const isValidFile = (file: string | File | undefined): boolean => {
+    if (!file) {
+      return false;
+    }
+
+    if (typeof file === "string") {
+      return true;
+    }
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const isValidExtension =
+      fileExtension && allowedExtensions.includes(fileExtension);
+
+    if (!isValidExtension) {
+      return false;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      return false;
+    }
+
+    return true;
   };
 
   if (props.open) {
@@ -159,6 +202,18 @@ export function SupplierUpdateBillingModal(
                     multiline
                   />
                 </div>
+
+                <div
+                  className={`${
+                    warning || uploadedReceipt ? "" : "hidden"
+                  } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
+                >
+                  <span className="font-semibold">Warning:</span>
+                  <span className="text-sm">
+                    Dispatch quantity and delivered quantity does not match.
+                    Must upload updated sales invoice
+                  </span>
+                </div>
                 <div className="flex flex-row space-x-4">
                   <div className="basis-1/2">
                     <Button
@@ -170,31 +225,62 @@ export function SupplierUpdateBillingModal(
                       }}
                       fullWidth
                       variant="contained"
+                      sx={{ color: "white", backgroundColor: "#CC5801" }}
                     >
-                      Download Updated Sales Invoice
+                      Download Sales Invoice
                     </Button>
                   </div>
+
                   <div className="basis-1/2">
-                    <Button
-                      onClick={() => handleSupplierUpdate()}
-                      fullWidth
-                      variant="contained"
-                    >
-                      Confirm
-                    </Button>
+                    {!warning ? (
+                      <Button
+                        onClick={() => handleSupplierUpdate()}
+                        fullWidth
+                        variant="contained"
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      >
+                        Confirm
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          setOpenUploadDeliveryRecieptModal(true);
+                          setWarning(false);
+                        }}
+                        fullWidth
+                        variant="contained"
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      >
+                        Upload updated sales invoice
+                      </Button>
+                    )}
                   </div>
+                  {uploadedReceipt && isValidFile(uploadedReceipt) ? (
+                    <div className="basis-1/12 flex  justify-center items-stretch">
+                      <div className="self-end">
+                        <IconButton
+                          onClick={() =>
+                            setOpenUploadDeliveryRecieptModal(true)
+                          }
+                        >
+                          <MdPreview className="text-3xl" />
+                        </IconButton>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ) : null}
           </div>
         </div>
       </div>
-      {/* 
-      <AddBillingInformationModal
-        open={openAddBillingInformationModal}
-        onClose={() => setOpenAddBillingInformationModal(false)}
-        setBillingInformation={setBillingInformation}
-      /> */}
+
+      <UploadDeliveryRecieptModal
+        open={openUploadDeliveryRecieptModal}
+        onClose={() => setOpenUploadDeliveryRecieptModal(false)}
+        setUploadedReciept={setUploadedReciept}
+        isButtonAvailable={true}
+      />
     </>
   );
 }
