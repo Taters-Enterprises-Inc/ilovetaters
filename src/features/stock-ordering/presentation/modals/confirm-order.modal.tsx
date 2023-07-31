@@ -131,11 +131,11 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
       if (schedule.is_mwf) {
         return (
-          dayIndex === 2 || dayIndex === 4 || dayIndex === 6 || dayIndex === 7
+          dayIndex === 2 || dayIndex === 4 || dayIndex === 6 || dayIndex === 0
         );
       } else if (schedule.is_tths) {
         return (
-          dayIndex === 1 || dayIndex === 3 || dayIndex === 5 || dayIndex === 7
+          dayIndex === 1 || dayIndex === 3 || dayIndex === 5 || dayIndex === 0
         );
       }
     }
