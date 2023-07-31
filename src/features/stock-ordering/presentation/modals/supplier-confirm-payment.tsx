@@ -154,6 +154,10 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                       onClick={() => setOpenPayBillingModal(true)}
                       fullWidth
                       variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
                       View payment information
                     </Button>
@@ -165,6 +169,10 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                         onClick={() => handleValidate("7")}
                         fullWidth
                         variant="contained"
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
                       >
                         Return to Tei Finance
                       </Button>
@@ -175,6 +183,10 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                         onClick={() => handleValidate("8")}
                         fullWidth
                         variant="contained"
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
                       >
                         Validate
                       </Button>

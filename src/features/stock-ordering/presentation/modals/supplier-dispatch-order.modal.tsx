@@ -330,7 +330,7 @@ export function SupplierDispatchOrderModal(
                                 !isValidFile(uploadedReceipt) ||
                                 transport === "" ||
                                 isQuantityEmpty() ||
-                                dispatchedDelivery === ""
+                                dispatchedDelivery === null
                               }
                               onClick={(event) => {
                                 event.preventDefault();

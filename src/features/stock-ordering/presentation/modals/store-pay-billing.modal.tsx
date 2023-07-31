@@ -182,31 +182,40 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                     multiline
                   />
                 </div>
+
                 <div className="flex flex-row space-x-4">
-                  <div className="basis-1/2">
+                  {/* <div className="basis-1/2">
                     <Button
                       onClick={() => setOpenPayBillingModal(true)}
                       fullWidth
                       variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
                       Pay Billing
                     </Button>
-                  </div>
-                  <div className="basis-1/2">
+                  </div> */}
+                  <div className="basis-full">
                     <Button
-                      disabled={
-                        isValidFile(uploadedReceipt) && uploadedReceipt !== ""
-                          ? false
-                          : true
-                      }
+                      // disabled={
+                      //   isValidFile(uploadedReceipt) && uploadedReceipt !== ""
+                      //     ? false
+                      //     : true
+                      // }
                       onClick={() => handlePayBilling()}
                       fullWidth
                       variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
                       Confirm
                     </Button>
                   </div>
-                </div>{" "}
+                </div>
               </div>
             ) : null}
           </div>

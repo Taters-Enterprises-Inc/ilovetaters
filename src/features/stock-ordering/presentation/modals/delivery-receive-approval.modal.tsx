@@ -153,6 +153,10 @@ export function DeliveryReceiveApprovalModal(
                       onClick={() => handleValidate("4")}
                       fullWidth
                       variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
                       Reject
                     </Button>
@@ -162,6 +166,10 @@ export function DeliveryReceiveApprovalModal(
                       onClick={() => handleValidate("6")}
                       fullWidth
                       variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CC5801",
+                      }}
                     >
                       Approve
                     </Button>

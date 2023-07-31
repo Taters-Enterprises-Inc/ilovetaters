@@ -256,6 +256,10 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                           type="submit"
                           fullWidth
                           variant="contained"
+                          sx={{
+                            color: "white",
+                            backgroundColor: "#CC5801",
+                          }}
                         >
                           Confirm
                         </Button>
