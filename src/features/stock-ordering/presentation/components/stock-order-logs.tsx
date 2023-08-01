@@ -140,13 +140,21 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
   const handleOnclick = (id: string) => {
     switch (id) {
       case "view_delivery_receipt":
-        setImage(props.order_details.view_delivery_receipt as string);
-        setOpenImagePreviewer(true);
+        // setImage(props.order_details.view_delivery_receipt as string);
+        // setOpenImagePreviewer(true);
+        const filename_delivery_receipt = props.order_details
+          .view_delivery_receipt as string;
+        const url_delivery_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download-payment/${filename_delivery_receipt}`;
+        window.open(url_delivery_receipt, "_blank");
 
         break;
       case "view_payment_details":
-        setImage(props.order_details.view_payment_details as string);
-        setOpenImagePreviewer(true);
+        // setImage(props.order_details.view_payment_details as string);
+        // setOpenImagePreviewer(true);
+        const filename_payment_details = props.order_details
+          .view_payment_details as string;
+        const url_payment_details = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download-payment/${filename_payment_details}`;
+        window.open(url_payment_details, "_blank");
 
         break;
       case "view_updated_delivery_receipt":
