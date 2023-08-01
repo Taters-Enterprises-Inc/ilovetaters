@@ -601,6 +601,7 @@ export function OrderContents() {
                   tooltipTitle="Pay Billing"
                   onClick={() => {
                     setOrderId("");
+                    // setTabValue(7);
                     handleModalToggle("storePayBilling");
                   }}
                 />
