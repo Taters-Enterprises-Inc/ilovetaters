@@ -12,6 +12,9 @@ import {
   Box,
   Fab,
   IconButton,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
   Tab,
   Tabs,
   styled,
@@ -103,16 +106,13 @@ export function OrderContents() {
     confirmOrder: false,
     supplierViewOrder: false,
     procurementReviewOrder: false,
-    procurementConfirmOrder: false,
     supplierDispatchOrder: false,
-    supplierEnRouteOrder: false,
-    supplierEnFreightOrder: false,
     storeReceiveOrder: false,
+    deliveryReceiveApproval: false,
     supplierUpdateBilling: false,
     storePayBilling: false,
     supplierConfirm: false,
     complete: false,
-    deliveryReceiveApproval: false,
     cancelled: false,
   });
 
@@ -164,39 +164,8 @@ export function OrderContents() {
   };
 
   const handleAction = (id: string) => {
+    handleModalToggle(Object.keys(modals)[tabValue + 2]);
     setOrderId(id);
-    switch (tabValue) {
-      case 0:
-        handleModalToggle("supplierViewOrder");
-        break;
-      case 1:
-        handleModalToggle("procurementReviewOrder");
-        break;
-      case 2:
-        handleModalToggle("supplierDispatchOrder");
-        break;
-      case 3:
-        handleModalToggle("storeReceiveOrder");
-        break;
-      case 4:
-        handleModalToggle("deliveryReceiveApproval");
-        break;
-      case 5:
-        handleModalToggle("supplierUpdateBilling");
-        break;
-      case 6:
-        handleModalToggle("storePayBilling");
-        break;
-      case 7:
-        handleModalToggle("supplierConfirm");
-        break;
-      case 8:
-        handleModalToggle("complete");
-        break;
-      case 9:
-        handleModalToggle("cancelled");
-        break;
-    }
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -592,7 +561,7 @@ export function OrderContents() {
         ) : null}
       </div>
 
-      {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
+      {/* {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
         (user_data, index) => {
           return user_data.id === 0 ? (
             <div
@@ -606,7 +575,40 @@ export function OrderContents() {
             </div>
           ) : null;
         }
-      )}
+      )} */}
+
+      <SpeedDial
+        ariaLabel="SpeedDial place order"
+        sx={{ position: "absolute", bottom: 40, right: 40 }}
+        icon={<SpeedDialIcon />}
+      >
+        {getAdminSessionState.data?.admin.user_details.sos_groups.map(
+          (user_data, index) => {
+            if (user_data.id === 0) {
+              return (
+                <SpeedDialAction
+                  key={index}
+                  icon={<TiDocumentAdd className="text-3xl" />}
+                  tooltipTitle="Place Order"
+                  onClick={() => handleModalToggle("placeOrder")}
+                />
+              );
+            } else if (user_data.id === 7) {
+              return (
+                <SpeedDialAction
+                  key={index}
+                  icon={<TiDocumentAdd className="text-3xl" />}
+                  tooltipTitle="Pay Billing"
+                  onClick={() => {
+                    setOrderId("");
+                    handleModalToggle("storePayBilling");
+                  }}
+                />
+              );
+            }
+          }
+        )}
+      </SpeedDial>
 
       <PlaceOrderModal
         open={modals.placeOrder}
