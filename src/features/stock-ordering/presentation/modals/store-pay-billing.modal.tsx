@@ -184,7 +184,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                 </div>
 
                 <div className="flex flex-row space-x-4">
-                  {/* <div className="basis-1/2">
+                  <div className="basis-1/2">
                     <Button
                       onClick={() => setOpenPayBillingModal(true)}
                       fullWidth
@@ -196,14 +196,14 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                     >
                       Pay Billing
                     </Button>
-                  </div> */}
+                  </div>
                   <div className="basis-full">
                     <Button
-                      // disabled={
-                      //   isValidFile(uploadedReceipt) && uploadedReceipt !== ""
-                      //     ? false
-                      //     : true
-                      // }
+                      disabled={
+                        isValidFile(uploadedReceipt) && uploadedReceipt !== ""
+                          ? false
+                          : true
+                      }
                       onClick={() => handlePayBilling()}
                       fullWidth
                       variant="contained"
