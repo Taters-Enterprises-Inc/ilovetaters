@@ -10,7 +10,6 @@ import {
   Badge,
   BadgeProps,
   Box,
-  Fab,
   IconButton,
   SpeedDial,
   SpeedDialAction,
@@ -178,29 +177,17 @@ export function OrderContents() {
   }, [getStockOrdersState.data?.pagination.total_rows]);
 
   useEffect(() => {
-    if (getStore.data) {
-      const query = createQueryParams({
-        page_no: pageNo,
-        per_page: perPage,
-        order_by: orderBy,
-        order: order,
-        search: search,
-        current_tab: tabValue,
-      });
+    const query = createQueryParams({
+      page_no: pageNo,
+      per_page: perPage,
+      order_by: orderBy,
+      order: order,
+      search: search,
+      current_tab: tabValue,
+    });
 
-      dispatch(getStockOrders(query));
-    }
-  }, [
-    dispatch,
-    pageNo,
-    perPage,
-    orderBy,
-    order,
-    search,
-    tabValue,
-    modals,
-    getStore.data,
-  ]);
+    dispatch(getStockOrders(query));
+  }, [dispatch, pageNo, perPage, orderBy, order, search, tabValue, modals]);
 
   return (
     <>
@@ -561,55 +548,50 @@ export function OrderContents() {
         ) : null}
       </div>
 
-      {/* {getAdminSessionState.data?.admin?.user_details?.sos_groups?.map(
+      {getAdminSessionState.data?.admin.user_details.sos_groups.map(
         (user_data, index) => {
-          return user_data.id === 0 ? (
-            <div
-              key={index}
-              className="absolute right-10 bottom-10"
-              onClick={() => handleModalToggle("placeOrder")}
-            >
-              <Fab color="primary">
-                <TiDocumentAdd className="text-3xl" />
-              </Fab>
-            </div>
-          ) : null;
-        }
-      )} */}
+          const isPlaceOrderAvailable =
+            getAdminSessionState.data?.admin.user_details.sos_groups.some(
+              (user) => user.id === 0
+            );
+          const isPayBillingAvailable =
+            getAdminSessionState.data?.admin.user_details.sos_groups.some(
+              (user) => user.id === 7
+            );
 
-      <SpeedDial
-        ariaLabel="SpeedDial place order"
-        sx={{ position: "absolute", bottom: 40, right: 40 }}
-        icon={<SpeedDialIcon />}
-      >
-        {getAdminSessionState.data?.admin.user_details.sos_groups.map(
-          (user_data, index) => {
-            if (user_data.id === 0) {
-              return (
-                <SpeedDialAction
-                  key={index}
-                  icon={<TiDocumentAdd className="text-3xl" />}
-                  tooltipTitle="Place Order"
-                  onClick={() => handleModalToggle("placeOrder")}
-                />
-              );
-            } else if (user_data.id === 7) {
-              return (
-                <SpeedDialAction
-                  key={index}
-                  icon={<TiDocumentAdd className="text-3xl" />}
-                  tooltipTitle="Pay Billing"
-                  onClick={() => {
-                    setOrderId("");
-                    // setTabValue(7);
-                    handleModalToggle("storePayBilling");
-                  }}
-                />
-              );
-            }
-          }
-        )}
-      </SpeedDial>
+          return (
+            <div key={index}>
+              {user_data.id === 0 || user_data.id === 7 ? (
+                <SpeedDial
+                  ariaLabel={"speed-dial-finance-and-store"}
+                  sx={{ position: "absolute", bottom: 40, right: 40 }}
+                  icon={<SpeedDialIcon />}
+                >
+                  {isPlaceOrderAvailable ? (
+                    <SpeedDialAction
+                      icon={<TiDocumentAdd className="text-3xl" />}
+                      tooltipTitle="Place Order"
+                      onClick={() => handleModalToggle("placeOrder")}
+                    />
+                  ) : null}
+
+                  {isPayBillingAvailable ? (
+                    <SpeedDialAction
+                      icon={<TiDocumentAdd className="text-3xl" />}
+                      tooltipTitle="Pay Billing"
+                      onClick={async () => {
+                        setOrderId("");
+                        await setTabValue(6);
+                        handleModalToggle("storePayBilling");
+                      }}
+                    />
+                  ) : null}
+                </SpeedDial>
+              ) : null}
+            </div>
+          );
+        }
+      )}
 
       <PlaceOrderModal
         open={modals.placeOrder}

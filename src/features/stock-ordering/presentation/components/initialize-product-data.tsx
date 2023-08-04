@@ -36,6 +36,7 @@ export const InitializeProductData = (props: InitializeProductDataProps) => {
         view_payment_details: order.payment_detail_image,
         payment_confirmation: order.payment_confirmation_date,
         transport_route: order.transport_route,
+        region_id: order.region_id,
         remarks: order.remarks,
       };
 

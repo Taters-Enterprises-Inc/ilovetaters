@@ -1,12 +1,12 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
-import { useAppSelector } from "features/config/hooks";
-import { selectGetStockOrderProducts } from "../slices/get-products.slice";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetStockOrders } from "../slices/get-stock-orders.slice";
-import { keys } from "@mui/system";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { PayBillingModal } from "../modals";
+import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
+import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "OrderID", width: 70 },
@@ -28,16 +28,18 @@ const columns: GridColDef[] = [
   },
 ];
 
-export function PayMultipleOrder() {
+interface PayMultipleOrderProps {
+  onClose: (close: boolean) => void;
+}
+
+export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [order_id, setOrderId] = useState<GridSelectionModel>([]);
   const [remarks, setRemarks] = useState("");
 
   const getStockOrders = useAppSelector(selectGetStockOrders);
-
-  const handleOnRowSelect = (value: GridSelectionModel) => {
-    console.log(value);
-  };
+  const dispatch = useAppDispatch();
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -65,9 +67,21 @@ export function PayMultipleOrder() {
     return true;
   };
 
+  const handlePayBilling = async () => {
+    const payBilingParam: updatePayBillingParam = {
+      id: order_id,
+      paymentDetailImage: uploadedReceipt,
+      remarks: remarks,
+    };
+
+    await dispatch(updatePayBillingOrders(payBilingParam));
+
+    props.onClose(true);
+  };
+
   return (
     <>
-      <div>
+      <div className="space-y-2">
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={
@@ -85,7 +99,17 @@ export function PayMultipleOrder() {
             rowsPerPageOptions={[10]}
             columns={columns}
             checkboxSelection
-            onSelectionModelChange={handleOnRowSelect}
+            onSelectionModelChange={(id) => setOrderId(id)}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <span>Remarks: </span>
+          <TextField
+            value={remarks}
+            onChange={(event) => setRemarks(event.target.value)}
+            inputProps={{ maxLength: 512 }}
+            multiline
           />
         </div>
 
@@ -105,13 +129,16 @@ export function PayMultipleOrder() {
           </div>
           <div className="basis-1/2">
             <Button
-              disabled={
-                isValidFile(uploadedReceipt) && uploadedReceipt !== ""
-                  ? false
-                  : true
-              }
               fullWidth
               variant="contained"
+              onClick={handlePayBilling}
+              disabled={
+                !(
+                  isValidFile(uploadedReceipt) &&
+                  uploadedReceipt !== "" &&
+                  order_id?.length !== 0
+                )
+              }
               sx={{
                 color: "white",
                 backgroundColor: "#CC5801",

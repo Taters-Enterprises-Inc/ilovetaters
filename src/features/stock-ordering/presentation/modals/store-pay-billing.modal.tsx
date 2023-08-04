@@ -44,6 +44,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      region_id: 0,
       remarks: [],
     },
     product_data: [],
@@ -126,7 +127,9 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                 />
               </>
             ) : (
-              <PayMultipleOrder />
+              <PayMultipleOrder
+                onClose={(close: boolean) => close && props.onClose()}
+              />
             )}
           </div>
 

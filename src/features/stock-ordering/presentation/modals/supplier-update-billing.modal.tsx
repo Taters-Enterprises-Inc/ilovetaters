@@ -2,7 +2,6 @@ import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AddBillingInformationModal } from "./add-billing-information.modal";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
@@ -12,8 +11,8 @@ import { selectGetAdminSession } from "features/admin/presentation/slices/get-ad
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
-import { createQueryParams } from "features/config/helpers";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
+import { isValid } from "date-fns";
 
 interface SupplierUpdateBillingModalProps {
   open: boolean;
@@ -28,19 +27,21 @@ export function SupplierUpdateBillingModal(
   const dispatch = useAppDispatch();
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [warning, setWarning] = useState(false);
+  const [warningMismatch, setWarningMismatch] = useState(false);
+  const [warningNonNCR, setwarningNonNCR] = useState(false);
+
   const [openUploadDeliveryRecieptModal, setOpenUploadDeliveryRecieptModal] =
     useState(false);
+  const [openuploadedGoodsReceipt, setUploadedGoodsReceiptModal] =
+    useState(false);
 
-  const [uploadedReceipt, setUploadedReciept] = useState<string | File>();
+  const [uploadedGoodsReceipt, setUploadedGoodsReciept] = useState<
+    string | File
+  >();
+  const [uploadedRegionReceipt, setUploadedRegionReciept] = useState<
+    string | File
+  >();
 
-  const [billingInformation, setBillingInformation] = useState<{
-    billing_id: string;
-    billing_amount: string;
-  }>({
-    billing_id: "",
-    billing_amount: "",
-  });
   const [remarks, setRemarks] = useState("");
 
   const [rows, setRows] = useState<TableRow>({
@@ -62,6 +63,8 @@ export function SupplierUpdateBillingModal(
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      region_id: 0,
+
       remarks: [],
     },
     product_data: [],
@@ -84,21 +87,24 @@ export function SupplierUpdateBillingModal(
   };
 
   useEffect(() => {
-    setBillingInformation({
-      billing_id: "",
-      billing_amount: "",
-    });
     setRemarks("");
-    setWarning(false);
+    setUploadedGoodsReciept("");
+    setUploadedRegionReciept("");
   }, [props.open]);
 
   useEffect(() => {
-    if (rows.product_data && uploadedReceipt === undefined) {
-      const isWarning = rows.product_data.some(
+    if (
+      rows.product_data &&
+      (uploadedGoodsReceipt === "" || uploadedRegionReceipt === "")
+    ) {
+      const isWarningMismatch = rows.product_data.some(
         (product) => product.dispatchedQuantity !== product.deliveredQuantity
       );
 
-      if (isWarning) setWarning(true);
+      const isWarningNonNCR = rows.order_information.region_id !== 2;
+
+      setWarningMismatch(isWarningMismatch);
+      setwarningNonNCR(isWarningNonNCR);
     }
   }, [rows]);
 
@@ -116,14 +122,16 @@ export function SupplierUpdateBillingModal(
   });
 
   const handleSupplierUpdate = async () => {
-    const query: updateBillingOrderParam = {
+    const updateBillingOrderParam: updateBillingOrderParam = {
       id: props.id,
       remarks: remarks,
-      uploadedReceipt: uploadedReceipt ?? "",
-      withNewSI: uploadedReceipt ? true : false,
+      uploadedGoodsReceipt: uploadedGoodsReceipt ?? "",
+      uploadedRegionReceipt: uploadedRegionReceipt ?? "",
+      withNewSI: uploadedGoodsReceipt || uploadedRegionReceipt ? true : false,
     };
 
-    await dispatch(updateBillingOrders(query));
+    console.log(updateBillingOrderParam);
+    await dispatch(updateBillingOrders(updateBillingOrderParam));
 
     props.onClose();
   };
@@ -205,7 +213,7 @@ export function SupplierUpdateBillingModal(
 
                 <div
                   className={`${
-                    warning || uploadedReceipt ? "" : "hidden"
+                    warningMismatch ? "" : "hidden"
                   } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
                 >
                   <span className="font-semibold">Warning:</span>
@@ -214,6 +222,19 @@ export function SupplierUpdateBillingModal(
                     Must upload updated sales invoice
                   </span>
                 </div>
+
+                <div
+                  className={`${
+                    warningNonNCR ? "" : "hidden"
+                  } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
+                >
+                  <span className="font-semibold">Warning:</span>
+                  <span className="text-sm">
+                    Store location is not in NCR region. Must upload updated
+                    sales invoice
+                  </span>
+                </div>
+
                 <div className="flex flex-row space-x-4">
                   <div className="basis-1/2">
                     <Button
@@ -232,42 +253,89 @@ export function SupplierUpdateBillingModal(
                   </div>
 
                   <div className="basis-1/2">
-                    {!warning ? (
-                      <Button
-                        onClick={() => handleSupplierUpdate()}
-                        fullWidth
-                        variant="contained"
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Confirm
-                      </Button>
+                    {(warningMismatch &&
+                      !warningNonNCR &&
+                      isValidFile(uploadedGoodsReceipt)) ||
+                    (!warningMismatch &&
+                      warningNonNCR &&
+                      isValidFile(uploadedRegionReceipt)) ||
+                    (warningMismatch &&
+                      warningNonNCR &&
+                      isValidFile(uploadedGoodsReceipt) &&
+                      isValidFile(uploadedRegionReceipt)) ||
+                    (!warningMismatch && !warningNonNCR) ? (
+                      <div className="space-y-2">
+                        <Button
+                          onClick={() => handleSupplierUpdate()}
+                          fullWidth
+                          variant="contained"
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Confirm
+                        </Button>
+
+                        <div className="space-x-3">
+                          {warningMismatch && (
+                            <Button
+                              onClick={() => setUploadedGoodsReceiptModal(true)}
+                              size="small"
+                              variant="outlined"
+                            >
+                              Change SI (Goods)
+                            </Button>
+                          )}
+
+                          {warningNonNCR && (
+                            <Button
+                              onClick={() =>
+                                setOpenUploadDeliveryRecieptModal(true)
+                              }
+                              size="small"
+                              variant="outlined"
+                            >
+                              change SI (Region)
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     ) : (
-                      <Button
-                        onClick={() => {
-                          setOpenUploadDeliveryRecieptModal(true);
-                          setWarning(false);
-                        }}
-                        fullWidth
-                        variant="contained"
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Upload updated sales invoice
-                      </Button>
+                      <div className="space-y-2">
+                        {warningMismatch &&
+                          !isValidFile(uploadedGoodsReceipt) && (
+                            <Button
+                              id="goods"
+                              onClick={() => setUploadedGoodsReceiptModal(true)}
+                              fullWidth
+                              variant="contained"
+                              sx={{
+                                color: "white",
+                                backgroundColor: "#CC5801",
+                              }}
+                            >
+                              Upload updated sales invoice (GOODS)
+                            </Button>
+                          )}
+
+                        {warningNonNCR &&
+                          !isValidFile(uploadedRegionReceipt) && (
+                            <Button
+                              id="region"
+                              onClick={() =>
+                                setOpenUploadDeliveryRecieptModal(true)
+                              }
+                              fullWidth
+                              variant="contained"
+                              sx={{
+                                color: "white",
+                                backgroundColor: "#CC5801",
+                              }}
+                            >
+                              Upload updated sales invoice (REGION)
+                            </Button>
+                          )}
+                      </div>
                     )}
                   </div>
-                  {uploadedReceipt && isValidFile(uploadedReceipt) ? (
-                    <div className="basis-1/12 flex  justify-center items-stretch">
-                      <div className="self-end">
-                        <IconButton
-                          onClick={() =>
-                            setOpenUploadDeliveryRecieptModal(true)
-                          }
-                        >
-                          <MdPreview className="text-3xl" />
-                        </IconButton>
-                      </div>
-                    </div>
-                  ) : null}
                 </div>
               </div>
             ) : null}
@@ -276,9 +344,16 @@ export function SupplierUpdateBillingModal(
       </div>
 
       <UploadDeliveryRecieptModal
+        open={openuploadedGoodsReceipt}
+        onClose={() => setUploadedGoodsReceiptModal(false)}
+        setUploadedReciept={setUploadedGoodsReciept}
+        isButtonAvailable={true}
+      />
+
+      <UploadDeliveryRecieptModal
         open={openUploadDeliveryRecieptModal}
         onClose={() => setOpenUploadDeliveryRecieptModal(false)}
-        setUploadedReciept={setUploadedReciept}
+        setUploadedReciept={setUploadedRegionReciept}
         isButtonAvailable={true}
       />
     </>
