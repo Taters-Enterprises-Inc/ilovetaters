@@ -12,3 +12,4 @@ export { StockOrderLogs } from "./stock-order-logs";
 export { InitializeModal } from "./initialize-modal";
 export { InitializeProductData } from "./initialize-product-data";
 export { StockOrderProductSelector } from "./stock-order-product-selection";
+export { PayMultipleOrder } from "./pay-multiple-order";

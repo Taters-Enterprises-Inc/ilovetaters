@@ -46,6 +46,7 @@ export function DeliveryReceiveApprovalModal(
       payment_confirmation: "",
       transport_route: "",
       remarks: [],
+      region_id: 0,
     },
     product_data: [],
   });

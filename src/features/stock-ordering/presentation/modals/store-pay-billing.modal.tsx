@@ -1,15 +1,12 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
-import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
-import { PayBillingModal } from "./pay-your-billing.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { PayMultipleOrder } from "../components/pay-multiple-order";
 
 interface StorePayBillingModalProps {
   open: boolean;
@@ -27,13 +24,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
 
   const dispatch = useAppDispatch();
 
-  const [billingInformation, setBillingInformation] = useState<{
-    billing_id: string;
-    billing_amount: string;
-  }>({
-    billing_id: "testId",
-    billing_amount: "100",
-  });
   const [rows, setRows] = useState<TableRow>({
     order_information: {
       store_name: "",
@@ -54,6 +44,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      region_id: 0,
       remarks: [],
     },
     product_data: [],
@@ -76,8 +67,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
   };
 
   useEffect(() => {
-    setBillingInformation({ billing_id: "", billing_amount: "" });
-
     setUploadedReciept("");
     setRemarks("");
   }, [props.open]);
@@ -94,44 +83,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
       ? getProductDataState.data
       : undefined,
   });
-
-  const handlePayBilling = async () => {
-    const updatePayBillingParam: updatePayBillingParam = {
-      id: props.id,
-      paymentDetailImage: uploadedReceipt,
-      remarks: remarks,
-    };
-
-    await dispatch(updatePayBillingOrders(updatePayBillingParam));
-
-    props.onClose();
-  };
-
-  const isValidFile = (file: string | File | undefined): boolean => {
-    if (!file) {
-      return false;
-    }
-
-    if (typeof file === "string") {
-      return true;
-    }
-
-    const allowedExtensions = ["jpg", "jpeg", "png"];
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const isValidExtension =
-      fileExtension && allowedExtensions.includes(fileExtension);
-
-    if (!isValidExtension) {
-      return false;
-    }
-
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSizeInBytes) {
-      return false;
-    }
-
-    return true;
-  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -159,81 +110,30 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
               <IoMdClose />
             </button>
           </div>
-
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={false}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-              isDispatchedQtyAvailable={false}
-            />
-
-            {setEnabled() ? (
-              <div className="px-5 space-y-2">
-                <div className="flex flex-col mt-2 ">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
+            {props.id ? (
+              <>
+                <div className="border border-gary-200 shadow-md rounded-md px-5 py-3 border-l-8 border-l-tertiary">
+                  <div>Chillin' and Billin' - Awaiting Payment!...</div>
                 </div>
-
-                <div className="flex flex-row space-x-4">
-                  <div className="basis-1/2">
-                    <Button
-                      onClick={() => setOpenPayBillingModal(true)}
-                      fullWidth
-                      variant="contained"
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Pay Billing
-                    </Button>
-                  </div>
-                  <div className="basis-full">
-                    <Button
-                      disabled={
-                        isValidFile(uploadedReceipt) && uploadedReceipt !== ""
-                          ? false
-                          : true
-                      }
-                      onClick={() => handlePayBilling()}
-                      fullWidth
-                      variant="contained"
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ) : null}
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                />
+              </>
+            ) : (
+              <PayMultipleOrder
+                onClose={(close: boolean) => close && props.onClose()}
+              />
+            )}
           </div>
         </div>
       </div>
-
-      <PayBillingModal
-        open={openPayBillingModal}
-        onClose={() => setOpenPayBillingModal(false)}
-        setUploadedReciept={setUploadedReciept}
-        billingInformation={{
-          billing_id:
-            getProductDataState.data?.order_information.billing_id ?? "",
-          billing_amount:
-            getProductDataState.data?.order_information.billing_amount ?? "",
-        }}
-        isButtonAvailable={true}
-      />
     </>
   );
 }

@@ -8,10 +8,6 @@ interface PayBillingModalProps {
   onClose: () => void;
   setUploadedReciept: ((file: File | string) => void) | undefined;
 
-  billingInformation: {
-    billing_id: string;
-    billing_amount: string;
-  };
   isButtonAvailable: boolean;
 }
 

@@ -36,6 +36,7 @@ export function CompleteModal(props: CompleteModalProps) {
       view_payment_details: "",
       payment_confirmation: "",
       transport_route: "",
+      region_id: 0,
       remarks: [],
     },
     product_data: [],

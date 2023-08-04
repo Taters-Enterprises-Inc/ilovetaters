@@ -1,3 +1,4 @@
+import { GridSelectionModel } from "@mui/x-data-grid";
 import { DeliverySchedule } from "./domain/delivery-schedule.model";
 import { OrderTableData } from "./domain/order-table-row.model";
 
@@ -79,7 +80,8 @@ export interface receiveOrdersParam {
 export interface updateBillingOrderParam {
   id: string;
   remarks: string;
-  uploadedReceipt: File | string;
+  uploadedGoodsReceipt: File | string;
+  uploadedRegionReceipt: File | string;
   withNewSI: boolean;
 }
 
@@ -89,7 +91,7 @@ export interface updateEnRoutePram {
 }
 
 export interface updatePayBillingParam {
-  id: string;
+  id: string[] | GridSelectionModel;
   paymentDetailImage: File | string;
   remarks: string;
 }

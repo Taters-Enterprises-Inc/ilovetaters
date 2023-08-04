@@ -30,7 +30,7 @@ export function AdminLandingPage() {
       availability: navAvailability.shop,
     },
     {
-      url: "/admin/stock-order/dashboard",
+      url: "/admin/stock-order/order",
       label: "stock ordering",
       availability: navAvailability.sos,
     },

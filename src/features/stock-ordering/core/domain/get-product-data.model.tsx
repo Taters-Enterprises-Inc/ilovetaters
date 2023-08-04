@@ -22,6 +22,7 @@ export interface GetProductDataModel {
     updated_delivery_receipt: string;
     payment_detail_image: string;
     transport_route: string;
+    region_id: number;
     remarks: Array<{
       date: string;
       first_name: string;

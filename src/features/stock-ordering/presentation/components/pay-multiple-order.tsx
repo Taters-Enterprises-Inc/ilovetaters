@@ -1,0 +1,161 @@
+import * as React from "react";
+import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { selectGetStockOrders } from "../slices/get-stock-orders.slice";
+import { Button, TextField } from "@mui/material";
+import { useState } from "react";
+import { PayBillingModal } from "../modals";
+import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
+import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
+
+const columns: GridColDef[] = [
+  { field: "id", headerName: "OrderID", width: 70 },
+  { field: "store_name", headerName: "Store name", width: 200 },
+  {
+    field: "order_placement_date",
+    headerName: "Order Placement",
+    width: 160,
+  },
+  {
+    field: "requested_delivery_date",
+    headerName: "Request Delivery",
+    width: 160,
+  },
+  {
+    field: "commited_delivery_date",
+    headerName: "Commited Delivery",
+    width: 160,
+  },
+];
+
+interface PayMultipleOrderProps {
+  onClose: (close: boolean) => void;
+}
+
+export function PayMultipleOrder(props: PayMultipleOrderProps) {
+  const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
+  const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
+  const [order_id, setOrderId] = useState<GridSelectionModel>([]);
+  const [remarks, setRemarks] = useState("");
+
+  const getStockOrders = useAppSelector(selectGetStockOrders);
+  const dispatch = useAppDispatch();
+
+  const isValidFile = (file: string | File | undefined): boolean => {
+    if (!file) {
+      return false;
+    }
+
+    if (typeof file === "string") {
+      return true;
+    }
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const isValidExtension =
+      fileExtension && allowedExtensions.includes(fileExtension);
+
+    if (!isValidExtension) {
+      return false;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handlePayBilling = async () => {
+    const payBilingParam: updatePayBillingParam = {
+      id: order_id,
+      paymentDetailImage: uploadedReceipt,
+      remarks: remarks,
+    };
+
+    await dispatch(updatePayBillingOrders(payBilingParam));
+
+    props.onClose(true);
+  };
+
+  return (
+    <>
+      <div className="space-y-2">
+        <div style={{ height: 400, width: "100%" }}>
+          <DataGrid
+            rows={
+              getStockOrders.data?.orders.map((row) => {
+                return {
+                  id: row.id,
+                  store_name: row.store_name,
+                  order_placement_date: row.order_placement_date,
+                  requested_delivery_date: row.requested_delivery_date,
+                  commited_delivery_date: row.commited_delivery_date,
+                };
+              }) ?? []
+            }
+            pageSize={5}
+            rowsPerPageOptions={[10]}
+            columns={columns}
+            checkboxSelection
+            onSelectionModelChange={(id) => setOrderId(id)}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <span>Remarks: </span>
+          <TextField
+            value={remarks}
+            onChange={(event) => setRemarks(event.target.value)}
+            inputProps={{ maxLength: 512 }}
+            multiline
+          />
+        </div>
+
+        <div className="flex flex-row space-x-4">
+          <div className="basis-1/2">
+            <Button
+              onClick={() => setOpenPayBillingModal(true)}
+              fullWidth
+              variant="contained"
+              sx={{
+                color: "white",
+                backgroundColor: "#CC5801",
+              }}
+            >
+              Pay Billing
+            </Button>
+          </div>
+          <div className="basis-1/2">
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handlePayBilling}
+              disabled={
+                !(
+                  isValidFile(uploadedReceipt) &&
+                  uploadedReceipt !== "" &&
+                  order_id?.length !== 0
+                )
+              }
+              sx={{
+                color: "white",
+                backgroundColor: "#CC5801",
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <PayBillingModal
+        open={openPayBillingModal}
+        onClose={() => setOpenPayBillingModal(false)}
+        setUploadedReciept={setUploadedReciept}
+        isButtonAvailable={true}
+      />
+    </>
+  );
+}
