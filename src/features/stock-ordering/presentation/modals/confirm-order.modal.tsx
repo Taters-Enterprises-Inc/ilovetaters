@@ -103,6 +103,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       })
     );
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

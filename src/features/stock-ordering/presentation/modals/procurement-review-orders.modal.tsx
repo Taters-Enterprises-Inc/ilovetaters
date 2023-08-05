@@ -108,6 +108,7 @@ export function ProcurementReviewOrdersModal(
 
     await dispatch(updateReviewOrders(reviewOrdersParamData));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

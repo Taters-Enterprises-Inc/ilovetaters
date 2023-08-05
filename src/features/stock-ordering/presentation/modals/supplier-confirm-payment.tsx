@@ -89,6 +89,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
 
     await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

@@ -19,6 +19,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
 
     props.setUploadedReciept?.(uploadedReceipt);
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

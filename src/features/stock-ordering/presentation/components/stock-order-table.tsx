@@ -73,7 +73,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
     },
     { id: "orderQty", label: "Order Quantity" },
     { id: "commitedQuantity", label: "Commited Quantity" },
-    { id: "dispatchedQuantity", label: "Dispatched Quantity" },
+    // { id: "dispatchedQuantity", label: "Dispatched Quantity" },
     { id: "deliveredQuantity", label: "Delivered Quantity" },
     { id: "total_cost", label: "Total Cost" },
   ];
@@ -94,7 +94,16 @@ export function StockOrderTable(props: StockOrderTableProps) {
             </TableHead>
             <TableBody>
               {props.rowData.product_data.map((row, index) => (
-                <TableRow key={index}>
+                <TableRow
+                  key={index}
+                  sx={{
+                    backgroundColor:
+                      row.commitedQuantity !== row.deliveredQuantity &&
+                      row.deliveredQuantity
+                        ? "red"
+                        : "",
+                  }}
+                >
                   <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
                   <TableCell>{row.productName}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
@@ -199,7 +208,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                       row.commitedQuantity ?? <div>--</div>
                     )}
                   </TableCell>
-                  <TableCell sx={{ width: 75 }}>
+                  {/* <TableCell sx={{ width: 75 }}>
                     {props.isDispatchedQtyAvailable ? (
                       <div className="flex flex-row">
                         <ButtonGroup
@@ -301,7 +310,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                     ) : (
                       row.dispatchedQuantity ?? <div>--</div>
                     )}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell sx={{ width: 75 }}>
                     {props.isDeliveredQtyAvailable ? (
                       <div className="flex flex-row">
@@ -347,8 +356,8 @@ export function StockOrderTable(props: StockOrderTableProps) {
                               let value = event.target.value.replace(/\D/g, "");
 
                               value =
-                                value > row.dispatchedQuantity
-                                  ? row.dispatchedQuantity
+                                value > row.commitedQuantity
+                                  ? row.commitedQuantity
                                   : value;
 
                               const updatedRows =
@@ -377,9 +386,9 @@ export function StockOrderTable(props: StockOrderTableProps) {
                                   if (r.id === row.id) {
                                     const val = Number(r.deliveredQuantity) + 1;
                                     const deliveredQuantity =
-                                      val < Number(row.dispatchedQuantity)
+                                      val < Number(row.commitedQuantity)
                                         ? val
-                                        : Number(row.dispatchedQuantity);
+                                        : Number(row.commitedQuantity);
                                     return {
                                       ...r,
                                       deliveredQuantity:

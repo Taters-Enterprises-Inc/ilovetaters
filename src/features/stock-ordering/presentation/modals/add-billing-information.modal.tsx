@@ -27,6 +27,7 @@ export function AddBillingInformationModal(
       billing_amount: billingAmount,
     });
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

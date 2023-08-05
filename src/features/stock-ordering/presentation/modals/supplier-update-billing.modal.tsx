@@ -98,7 +98,7 @@ export function SupplierUpdateBillingModal(
       (uploadedGoodsReceipt === "" || uploadedRegionReceipt === "")
     ) {
       const isWarningMismatch = rows.product_data.some(
-        (product) => product.dispatchedQuantity !== product.deliveredQuantity
+        (product) => product.commitedQuantity !== product.deliveredQuantity
       );
 
       const isWarningNonNCR = rows.order_information.region_id !== 2;
@@ -133,6 +133,7 @@ export function SupplierUpdateBillingModal(
     console.log(updateBillingOrderParam);
     await dispatch(updateBillingOrders(updateBillingOrderParam));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

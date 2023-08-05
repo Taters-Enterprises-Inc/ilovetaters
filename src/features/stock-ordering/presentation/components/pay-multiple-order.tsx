@@ -76,6 +76,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
 
     await dispatch(updatePayBillingOrders(payBilingParam));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose(true);
   };
 

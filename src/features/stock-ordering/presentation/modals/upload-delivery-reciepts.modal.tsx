@@ -20,6 +20,7 @@ export function UploadDeliveryRecieptModal(
 
     props.setUploadedReciept?.(uploadedReceipt);
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

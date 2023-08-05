@@ -4,7 +4,7 @@ import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, ButtonGroup } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { selectGetProductData } from "../slices/get-product-data.slice";
@@ -23,6 +23,7 @@ import {
   selectGetStockOrderStores,
 } from "../slices/get-store.slice";
 import { createQueryParams } from "features/config/helpers";
+import { AiOutlineDownload } from "react-icons/ai";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -87,6 +88,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     await dispatch(updateNewOrders(reviewOrdersParamData));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 
@@ -98,6 +100,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
 
     await dispatch(updateOrderCancelled(cancelParameter));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 
@@ -200,15 +203,29 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-2xl text-white">Supplier View Order </span>
 
-            <button
-              className="text-2xl text-white"
-              onClick={() => {
-                document.body.classList.remove("overflow-hidden");
-                props.onClose();
-              }}
-            >
-              <IoMdClose />
-            </button>
+            <div className="space-x-3">
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  //Waiting for download endpoint
+
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <AiOutlineDownload />
+              </button>
+
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <IoMdClose />
+              </button>
+            </div>
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
@@ -282,7 +299,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                       </LocalizationProvider>
                     </div>
 
-                    <div className="basis-1/2">
+                    <div className="basis-1/2 space-y-3">
                       {preview ? (
                         <Button
                           fullWidth
@@ -306,16 +323,22 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                           Preview
                         </Button>
                       )}
-                      <Button
-                        fullWidth
-                        variant="text"
-                        size="small"
-                        onClick={handleCancelledOrder}
-                      >
-                        <span className="text-primary underline">
-                          Cancel Order
-                        </span>
-                      </Button>
+
+                      <ButtonGroup fullWidth size="small" variant="text">
+                        <Button onClick={handleCancelledOrder}>
+                          <span className="text-primary underline">
+                            Cancel Order
+                          </span>
+                        </Button>
+
+                        {preview && (
+                          <Button onClick={() => setPreview(false)}>
+                            <span className="text-primary underline">
+                              Re-edit
+                            </span>
+                          </Button>
+                        )}
+                      </ButtonGroup>
                     </div>
                   </div>
                 </div>

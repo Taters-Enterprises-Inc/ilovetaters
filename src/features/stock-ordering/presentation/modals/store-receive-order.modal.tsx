@@ -121,6 +121,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
       await dispatch(updateReceiveOrders(receiveOrdersParamData));
 
+      document.body.classList.remove("overflow-hidden");
       props.onClose();
     } else {
       setOpenUploadDeliveryRecieptModal(true);

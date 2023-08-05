@@ -95,6 +95,7 @@ export function DeliveryReceiveApprovalModal(
       updateDeliveryReceiveApprovalOrders(updateDeliveryReceiveApprovalParam)
     );
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 

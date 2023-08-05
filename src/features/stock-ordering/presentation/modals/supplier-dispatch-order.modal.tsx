@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import {
   Button,
+  ButtonGroup,
   FormControl,
   FormControlLabel,
   Radio,
@@ -24,6 +25,7 @@ import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AiOutlineDownload } from "react-icons/ai";
 
 interface SupplierDispatchOrderModalProps {
   open: boolean;
@@ -162,6 +164,8 @@ export function SupplierDispatchOrderModal(
     };
 
     await dispatch(updateDispatchOrders(dispatchOrdersParamData));
+
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 
@@ -173,6 +177,7 @@ export function SupplierDispatchOrderModal(
 
     await dispatch(updateOrderCancelled(cancelOrderParam));
 
+    document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
 
@@ -206,15 +211,29 @@ export function SupplierDispatchOrderModal(
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-2xl text-white">Supplier Dispatch Order</span>
-            <button
-              className="text-2xl text-white"
-              onClick={() => {
-                document.body.classList.remove("overflow-hidden");
-                props.onClose();
-              }}
-            >
-              <IoMdClose />
-            </button>
+            <div className="space-x-3">
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  //Waiting for download endpoint
+
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <AiOutlineDownload />
+              </button>
+
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <IoMdClose />
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleDispatchOrder}>
@@ -226,7 +245,7 @@ export function SupplierDispatchOrderModal(
                 setRows={setRows}
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={setEnabled() && !preview}
+                isDispatchedQtyAvailable={false}
               />
               {setEnabled() ? (
                 <div className="flex flex-col px-5">
@@ -291,71 +310,80 @@ export function SupplierDispatchOrderModal(
                       />
                     </div>
 
-                    <div className="flex flex-row space-x-2">
-                      <>
-                        <div className="basis-1/2">
+                    <div className="flex flex-col space-y-2">
+                      <ButtonGroup fullWidth size="small">
+                        <Button
+                          sx={{
+                            color: "white",
+                            backgroundColor: "#CC5801",
+                          }}
+                          onClick={() => {
+                            setOpenUploadDeliveryRecieptModal(true);
+                          }}
+                          variant="contained"
+                        >
+                          Upload Sales Invoice
+                        </Button>
+
+                        {preview ? (
                           <Button
-                            fullWidth
-                            size="small"
-                            sx={{ color: "white", backgroundColor: "#CC5801" }}
-                            onClick={() => {
-                              setOpenUploadDeliveryRecieptModal(true);
+                            sx={{
+                              color: "white",
+                              backgroundColor: "#CC5801",
+                            }}
+                            type="submit"
+                            variant="contained"
+                          >
+                            Dispatch Order
+                          </Button>
+                        ) : (
+                          <Button
+                            sx={{
+                              color: "white",
+                              backgroundColor: "#CC5801",
+                            }}
+                            disabled={
+                              !isValidFile(uploadedReceipt) ||
+                              transport === "" ||
+                              isQuantityEmpty() ||
+                              dispatchedDelivery === null
+                            }
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setuploadButton(false);
+                              setPreview(true);
                             }}
                             variant="contained"
                           >
-                            Upload Sales Invoice
+                            Preview
                           </Button>
-                        </div>
-                        <div className="basis-1/2">
-                          {preview ? (
-                            <Button
-                              fullWidth
-                              sx={{
-                                color: "white",
-                                backgroundColor: "#CC5801",
-                              }}
-                              type="submit"
-                              size="small"
-                              variant="contained"
-                            >
-                              Dispatch Order
-                            </Button>
-                          ) : (
-                            <Button
-                              fullWidth
-                              sx={{
-                                color: "white",
-                                backgroundColor: "#CC5801",
-                              }}
-                              disabled={
-                                !isValidFile(uploadedReceipt) ||
-                                transport === "" ||
-                                isQuantityEmpty() ||
-                                dispatchedDelivery === null
-                              }
-                              onClick={(event) => {
-                                event.preventDefault();
-                                setuploadButton(false);
-                                setPreview(true);
-                              }}
-                              size="small"
-                              variant="contained"
-                            >
-                              Preview
-                            </Button>
-                          )}
+                        )}
+                      </ButtonGroup>
+                      <ButtonGroup
+                        sx={{ justifyContent: "flex-end" }}
+                        size="small"
+                        variant="text"
+                      >
+                        <Button
+                          sx={{ flexBasis: "25%" }}
+                          onClick={handleCancelOrder}
+                        >
+                          <span className="text-primary underline">
+                            Cancel Order
+                          </span>
+                        </Button>
+
+                        {preview && (
                           <Button
-                            fullWidth
-                            onClick={handleCancelOrder}
-                            size="small"
-                            variant="text"
+                            sx={{ flexBasis: "25%" }}
+                            onClick={() => setPreview(false)}
                           >
-                            <span className="text-xs underline">
-                              Cancel Order
+                            <span className="text-primary underline">
+                              Re-edit
                             </span>
                           </Button>
-                        </div>
-                      </>
+                        )}
+                      </ButtonGroup>
                     </div>
                   </div>
                 </div>
