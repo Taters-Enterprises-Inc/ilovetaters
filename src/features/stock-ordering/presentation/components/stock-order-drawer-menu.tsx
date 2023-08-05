@@ -35,11 +35,11 @@ export function StockOrderDrawerMenu() {
   const navigate = useNavigate();
 
   const menuitems = [
-    {
-      text: "Dashboard",
-      path: "dashboard",
-      icon: <MdDashboardCustomize size={20} />,
-    },
+    // {
+    //   text: "Dashboard",
+    //   path: "dashboard",
+    //   icon: <MdDashboardCustomize size={20} />,
+    // },
     {
       text: "Order",
       path: "order",

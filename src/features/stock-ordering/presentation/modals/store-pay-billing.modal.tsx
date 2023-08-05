@@ -132,66 +132,6 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
               />
             )}
           </div>
-
-          {/* <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={false}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-              isDispatchedQtyAvailable={false}
-            />
-
-            {setEnabled() ? (
-              <div className="px-5 space-y-2">
-                <div className="flex flex-col mt-2 ">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
-                </div>
-
-                <div className="flex flex-row space-x-4">
-                  <div className="basis-1/2">
-                    <Button
-                      onClick={() => setOpenPayBillingModal(true)}
-                      fullWidth
-                      variant="contained"
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Pay Billing
-                    </Button>
-                  </div>
-                  <div className="basis-1/2">
-                    <Button
-                      disabled={
-                        isValidFile(uploadedReceipt) && uploadedReceipt !== ""
-                          ? false
-                          : true
-                      }
-                      onClick={() => handlePayBilling()}
-                      fullWidth
-                      variant="contained"
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </div> */}
         </div>
       </div>
     </>
