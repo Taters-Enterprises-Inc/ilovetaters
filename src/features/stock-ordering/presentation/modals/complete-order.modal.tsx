@@ -91,6 +91,7 @@ export function CompleteModal(props: CompleteModalProps) {
               rowData={rows}
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
+              isUpdateBilling={false}
             />
           </div>
         </div>

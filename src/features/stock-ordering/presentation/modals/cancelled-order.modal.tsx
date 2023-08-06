@@ -91,6 +91,7 @@ export function CancelledModal(props: CompleteModalProps) {
               rowData={rows}
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
+              isUpdateBilling={false}
             />
           </div>
         </div>

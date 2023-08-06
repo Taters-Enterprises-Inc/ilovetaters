@@ -10,6 +10,7 @@ import {
   Badge,
   BadgeProps,
   Box,
+  Divider,
   IconButton,
   SpeedDial,
   SpeedDialAction,
@@ -49,6 +50,7 @@ import { CompleteModal } from "../modals/complete-order.modal";
 import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
+import { DataList } from "features/shared/presentation/components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -138,11 +140,9 @@ export function OrderContents() {
       label: "Requested Delivery Date",
     },
     { id: "commited_delivery_date", label: "Commited Delivery Date" },
-    { id: "order_confirmation_date", label: "Order Confirmation Date" },
     { id: "actual_delivery_date", label: "Actual Delivery Date" },
     { id: "description", label: "status" },
-    // { id: "billing_id", label: "Billing Id" },
-    // { id: "billing_amount", label: "Billing Amount" },
+
     { id: "short_name", label: "Payment Status" },
     { id: "action", label: "Action" },
   ];
@@ -169,6 +169,16 @@ export function OrderContents() {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const dateSetup = (date: string) => {
+    return new Date(date).toLocaleDateString("en-PH", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    });
   };
 
   useEffect(() => {
@@ -398,19 +408,7 @@ export function OrderContents() {
                             })
                           : order.commited_delivery_date}
                       </DataTableCell>
-                      <DataTableCell>
-                        {order.order_confirmation_date !== null
-                          ? new Date(
-                              order.order_confirmation_date
-                            ).toLocaleDateString("en-PH", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                            })
-                          : order.order_confirmation_date}
-                      </DataTableCell>
+
                       <DataTableCell>
                         {order.actual_delivery_date !== null
                           ? new Date(
@@ -438,55 +436,19 @@ export function OrderContents() {
                 </DataTable>
               </div>
 
-              {/* <div className="block md:hidden">
-              <DataList
-                search={search ?? ""}
-                emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
-                onSearch={(val) => {
-                  const params = {
-                    page_no: null,
-                    per_page: perPage,
-                    status: status,
-                    order_by: orderBy,
-                    order: order,
-                    store: store,
-                    search: val === "" ? null : val,
-                  };
-
-                  const queryParams = createQueryParams(params);
-
-                  navigate({
-                    pathname: "",
-                    search: queryParams,
-                  });
-                }}
-                onRowsPerPageChange={(event) => {
-                  if (perPage !== event.target.value) {
+              <div className="block md:hidden">
+                <DataList
+                  search={search ?? ""}
+                  emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
+                  onSearch={(val) => {
                     const params = {
-                      page_no: pageNo,
-                      per_page: event.target.value,
-                      status: status,
-                      store: store,
-                      search: search,
-                    };
-
-                    const queryParams = createQueryParams(params);
-
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }
-                }}
-                onPageChange={(event, newPage) => {
-                  const pageNoInt = pageNo ? parseInt(pageNo) : null;
-                  if (newPage !== pageNoInt) {
-                    const params = {
-                      page_no: newPage,
+                      page_no: null,
                       per_page: perPage,
                       status: status,
+                      order_by: orderBy,
+                      order: order,
                       store: store,
-                      search: search,
+                      search: val === "" ? null : val,
                     };
 
                     const queryParams = createQueryParams(params);
@@ -495,54 +457,96 @@ export function OrderContents() {
                       pathname: "",
                       search: queryParams,
                     });
-                  }
-                }}
-                totalRows={25}
-                perPage={10}
-                page={pageNo ? parseInt(pageNo) : 1}
-              >
-                <div className="py-4">
-                  <div
-                    onClick={handleAction}
-                    className="flex flex-col rounded-sm bg-gray-200 p-1"
-                  >
-                    <div className="flex flex-wrap space-x-2">
-                      <span className="text-xl capitalize font-base">
-                        Taters Acacia Estate
-                      </span>
-                      <span className="text-xl uppercase">#1000</span>
-                      <span className="border-2 rounded-full px-2 capitalize bg-[#f0ad4e]">
-                        Update Order Status
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <div>
-                        <span className="font-semibold">Placement Date: </span>
-                        <span>July 8, 2023</span>
+                  }}
+                  onRowsPerPageChange={(event) => {
+                    if (perPage !== event.target.value) {
+                      const params = {
+                        page_no: pageNo,
+                        per_page: event.target.value,
+                        status: status,
+                        store: store,
+                        order_by: orderBy,
+                        order: order,
+                        search: search,
+                      };
+
+                      const queryParams = createQueryParams(params);
+
+                      dispatch(resetGetStockOrders());
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }
+                  }}
+                  onPageChange={(event, newPage) => {
+                    const pageNoInt = pageNo ? parseInt(pageNo) : null;
+                    if (newPage !== pageNoInt) {
+                      const params = {
+                        page_no: newPage,
+                        per_page: perPage,
+                        status: status,
+                        store: store,
+                        order_by: orderBy,
+                        order: order,
+                        search: search,
+                      };
+
+                      const queryParams = createQueryParams(params);
+
+                      dispatch(resetGetStockOrders());
+                      navigate({
+                        pathname: "",
+                        search: queryParams,
+                      });
+                    }
+                  }}
+                  totalRows={getStockOrdersState.data?.pagination.total_rows}
+                  perPage={getStockOrdersState.data?.pagination.per_page}
+                  page={pageNo ? parseInt(pageNo) : 1}
+                >
+                  <div className="space-y-2 mt-2">
+                    {getStockOrdersState.data.orders.map((order, index) => (
+                      <div
+                        onClick={() => handleAction(order.id)}
+                        className="flex flex-col border border-gray-200 rounded-md shadow-sm p-2 bg-white"
+                      >
+                        <div className="flex justify-between text-normal">
+                          <span className="normal-case">
+                            {order.store_name}
+                          </span>
+                          <span>#{order.id}</span>
+                        </div>
+                        <div className="text-sm">
+                          <span>Status: </span>
+                          <span className="lowercase">{order.description}</span>
+                        </div>
+
+                        <div className="text-xs capitalize space-x-1">
+                          <span>Placement date:</span>
+                          <span>{dateSetup(order.order_placement_date)}</span>
+                        </div>
+
+                        {order.commited_delivery_date && (
+                          <div className="text-xs capitalize space-x-1">
+                            <span>Confirmation date:</span>
+                            <span>
+                              {dateSetup(order.commited_delivery_date)}
+                            </span>
+                          </div>
+                        )}
+
+                        {order.actual_delivery_date && (
+                          <div className="text-xs capitalize space-x-1">
+                            <span>Actual Delivery Date:</span>
+                            <span>{dateSetup(order.actual_delivery_date)}</span>
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <span className="font-semibold">Requested Date: </span>
-                        <span>July 8, 2023</span>
-                      </div>
-                      <div>
-                        <span className="font-semibold">
-                          Order Confirmation Date:
-                        </span>
-                        <span>July 8, 2023</span>
-                      </div>
-                      <div>
-                        <span className="font-semibold">
-                          Actual Delivery Date:
-                        </span>
-                        <span>July 8, 2023</span>
-                      </div>
-                    </div>
-                    <div></div>
+                    ))}
                   </div>
-                  <Divider variant="middle" />
-                </div>
-              </DataList>
-            </div> */}
+                </DataList>
+              </div>
             </TabPanel>
           </div>
         ) : null}

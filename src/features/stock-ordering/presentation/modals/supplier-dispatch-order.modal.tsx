@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   FormControl,
   FormControlLabel,
+  FormLabel,
   Radio,
   RadioGroup,
   TextField,
@@ -246,42 +247,48 @@ export function SupplierDispatchOrderModal(
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
                 isDispatchedQtyAvailable={false}
+                isUpdateBilling={false}
               />
               {setEnabled() ? (
-                <div className="flex flex-col px-5">
-                  <div className="flex flex-row space-x-3">
-                    <FormControl disabled={preview} required={true}>
-                      <div className="flex flex-col items-stretch space-x-2">
-                        <span className="self-start pb-1 text-lg">
-                          Transport Route:
-                        </span>
+                <div className="flex flex-col px-3 space-y-3">
+                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
+                    <FormControl
+                      sx={{
+                        flexBasis: { md: "50%" },
+                        alignSelf: { md: "flex-end" },
+                      }}
+                      disabled={preview}
+                      required
+                    >
+                      <FormLabel id="transport-route-label">
+                        Transport Route
+                      </FormLabel>
 
-                        <RadioGroup
-                          onChange={(event, value) => setTransport(value)}
-                          value={transport}
-                          row
-                          aria-labelledby="transport-group"
-                        >
-                          <FormControlLabel
-                            value="1"
-                            control={<Radio />}
-                            label="Ground Transport"
-                          />
-                          <FormControlLabel
-                            value="2"
-                            control={<Radio />}
-                            label="Ocean Transport"
-                          />
-                          <FormControlLabel
-                            value="3"
-                            control={<Radio />}
-                            label="Air Freight"
-                          />
-                        </RadioGroup>
-                      </div>
+                      <RadioGroup
+                        onChange={(event, value) => setTransport(value)}
+                        value={transport}
+                        row
+                        aria-labelledby="transport-route"
+                      >
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio size="small" />}
+                          label="Ground"
+                        />
+                        <FormControlLabel
+                          value="2"
+                          control={<Radio size="small" />}
+                          label="Ocean"
+                        />
+                        <FormControlLabel
+                          value="3"
+                          control={<Radio size="small" />}
+                          label="Air"
+                        />
+                      </RadioGroup>
                     </FormControl>
 
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-2 md:basis-1/2">
                       <span>Dispatched Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <TimePicker
@@ -299,92 +306,90 @@ export function SupplierDispatchOrderModal(
                     </div>
                   </div>
 
-                  <div className="flex flex-col space-y-2">
-                    <div className="flex flex-col mt-2">
-                      <span>Remarks: </span>
-                      <TextField
-                        value={remarks}
-                        onChange={(event) => setRemarks(event.target.value)}
-                        inputProps={{ maxLength: 512 }}
-                        multiline
-                      />
-                    </div>
+                  <div className="flex flex-col mt-2">
+                    <span>Remarks: </span>
+                    <TextField
+                      value={remarks}
+                      onChange={(event) => setRemarks(event.target.value)}
+                      inputProps={{ maxLength: 512 }}
+                      multiline
+                    />
+                  </div>
 
-                    <div className="flex flex-col space-y-2">
-                      <ButtonGroup fullWidth size="small">
+                  <div className="flex flex-col space-y-2">
+                    <ButtonGroup fullWidth size="small">
+                      <Button
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
+                        onClick={() => {
+                          setOpenUploadDeliveryRecieptModal(true);
+                        }}
+                        variant="contained"
+                      >
+                        Upload Sales Invoice
+                      </Button>
+
+                      {preview ? (
                         <Button
                           sx={{
                             color: "white",
                             backgroundColor: "#CC5801",
                           }}
-                          onClick={() => {
-                            setOpenUploadDeliveryRecieptModal(true);
+                          type="submit"
+                          variant="contained"
+                        >
+                          Dispatch Order
+                        </Button>
+                      ) : (
+                        <Button
+                          sx={{
+                            color: "white",
+                            backgroundColor: "#CC5801",
+                          }}
+                          disabled={
+                            !isValidFile(uploadedReceipt) ||
+                            transport === "" ||
+                            isQuantityEmpty() ||
+                            dispatchedDelivery === null
+                          }
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setuploadButton(false);
+                            setPreview(true);
                           }}
                           variant="contained"
                         >
-                          Upload Sales Invoice
+                          Preview
                         </Button>
-
-                        {preview ? (
-                          <Button
-                            sx={{
-                              color: "white",
-                              backgroundColor: "#CC5801",
-                            }}
-                            type="submit"
-                            variant="contained"
-                          >
-                            Dispatch Order
-                          </Button>
-                        ) : (
-                          <Button
-                            sx={{
-                              color: "white",
-                              backgroundColor: "#CC5801",
-                            }}
-                            disabled={
-                              !isValidFile(uploadedReceipt) ||
-                              transport === "" ||
-                              isQuantityEmpty() ||
-                              dispatchedDelivery === null
-                            }
-                            onClick={(event) => {
-                              event.preventDefault();
-                              setuploadButton(false);
-                              setPreview(true);
-                            }}
-                            variant="contained"
-                          >
-                            Preview
-                          </Button>
-                        )}
-                      </ButtonGroup>
-                      <ButtonGroup
-                        sx={{ justifyContent: "flex-end" }}
-                        size="small"
-                        variant="text"
+                      )}
+                    </ButtonGroup>
+                    <ButtonGroup
+                      sx={{ justifyContent: "flex-end" }}
+                      size="small"
+                      variant="text"
+                    >
+                      <Button
+                        sx={{ flexBasis: "25%" }}
+                        onClick={handleCancelOrder}
                       >
+                        <span className="text-primary underline">
+                          Cancel Order
+                        </span>
+                      </Button>
+
+                      {preview && (
                         <Button
                           sx={{ flexBasis: "25%" }}
-                          onClick={handleCancelOrder}
+                          onClick={() => setPreview(false)}
                         >
                           <span className="text-primary underline">
-                            Cancel Order
+                            Re-edit
                           </span>
                         </Button>
-
-                        {preview && (
-                          <Button
-                            sx={{ flexBasis: "25%" }}
-                            onClick={() => setPreview(false)}
-                          >
-                            <span className="text-primary underline">
-                              Re-edit
-                            </span>
-                          </Button>
-                        )}
-                      </ButtonGroup>
-                    </div>
+                      )}
+                    </ButtonGroup>
                   </div>
                 </div>
               ) : null}

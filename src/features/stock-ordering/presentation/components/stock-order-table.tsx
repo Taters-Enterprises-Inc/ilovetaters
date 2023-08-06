@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Column } from "features/shared/presentation/components/data-table";
 import { StockOrderLogs } from "./stock-order-logs";
-import { useState } from "react";
 
 interface TableRow {
   order_information: {
@@ -58,6 +57,7 @@ interface StockOrderTableProps {
   isDeliveredQtyAvailable: boolean;
   isDispatchedQtyAvailable: boolean;
   isStore: Boolean;
+  isUpdateBilling: boolean;
   activeTab: Number | undefined;
   rowData: TableRow;
   setRows: ((rows: TableRow) => void) | undefined;
@@ -99,7 +99,7 @@ export function StockOrderTable(props: StockOrderTableProps) {
                   sx={{
                     backgroundColor:
                       row.commitedQuantity !== row.deliveredQuantity &&
-                      row.deliveredQuantity
+                      props.isUpdateBilling
                         ? "red"
                         : "",
                   }}

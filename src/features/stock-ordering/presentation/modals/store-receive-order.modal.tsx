@@ -197,6 +197,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                 rowData={rows}
                 isDeliveredQtyAvailable={setEnabled()}
                 isDispatchedQtyAvailable={false}
+                isUpdateBilling={false}
               />
 
               {setEnabled() ? (
@@ -212,8 +213,8 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                       />
                     </div>
 
-                    <div className="flex flex-row space-x-5 mt-2">
-                      <div className="basis-1/2 flex flex-col space-y-2">
+                    <div className="flex flex-col md:flex-row md:space-x-3 space-y-4 mt-2">
+                      <div className="md:basis-1/2 flex flex-col space-y-2">
                         <span>Actual Delivery Date: </span>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DateTimePicker
@@ -237,34 +238,41 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                         </LocalizationProvider>
                       </div>
 
-                      {isValidFile(uploadedReceipt) ? (
-                        <div className="basis-1/12 flex  justify-center items-stretch">
-                          <div className="self-end">
-                            <IconButton
-                              onClick={() =>
-                                setOpenUploadDeliveryRecieptModal(true)
-                              }
-                            >
-                              <MdPreview className=" text-3xl" />
-                            </IconButton>
-                          </div>
-                        </div>
-                      ) : null}
-
-                      <div className="basis-2/5 flex items-stretch space-x-5 pb-1">
-                        <Button
-                          disabled={isQuantityEmpty()}
-                          className="self-end"
-                          type="submit"
-                          fullWidth
-                          variant="contained"
-                          sx={{
-                            color: "white",
-                            backgroundColor: "#CC5801",
-                          }}
+                      <div className="md:basis-1/2 flex items-stretch">
+                        <div
+                          className={`${
+                            isValidFile(uploadedReceipt)
+                              ? "basis-4/5"
+                              : "basis-full"
+                          } "flex self-end space-x-5"`}
                         >
-                          Confirm
-                        </Button>
+                          <Button
+                            disabled={isQuantityEmpty()}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{
+                              color: "white",
+                              backgroundColor: "#CC5801",
+                            }}
+                          >
+                            Confirm
+                          </Button>
+                        </div>
+
+                        {isValidFile(uploadedReceipt) ? (
+                          <div className="basis-1/5 flex  justify-center items-stretch">
+                            <div className="self-end">
+                              <IconButton
+                                onClick={() =>
+                                  setOpenUploadDeliveryRecieptModal(true)
+                                }
+                              >
+                                <MdPreview className=" text-3xl" />
+                              </IconButton>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { Button, TextField } from "@mui/material";
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
@@ -137,6 +137,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
               rowData={rows}
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
+              isUpdateBilling={false}
             />
 
             {setEnabled() ? (
@@ -166,11 +167,9 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                   </div>
 
                   <div className="flex space-x-4">
-                    <div className="basis-1/2">
+                    <ButtonGroup fullWidth variant="contained">
                       <Button
                         onClick={() => handleValidate("7")}
-                        fullWidth
-                        variant="contained"
                         sx={{
                           color: "white",
                           backgroundColor: "#CC5801",
@@ -178,13 +177,9 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                       >
                         Return to Tei Finance
                       </Button>
-                    </div>
 
-                    <div className="basis-1/2">
                       <Button
-                        onClick={() => handleValidate("8")}
-                        fullWidth
-                        variant="contained"
+                        onClick={() => handleValidate("9")}
                         sx={{
                           color: "white",
                           backgroundColor: "#CC5801",
@@ -192,7 +187,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                       >
                         Validate
                       </Button>
-                    </div>
+                    </ButtonGroup>
                   </div>
                 </div>
               </div>

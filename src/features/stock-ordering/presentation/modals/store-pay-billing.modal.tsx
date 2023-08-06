@@ -124,6 +124,7 @@ export function StorePayBillingModal(props: StorePayBillingModalProps) {
                   rowData={rows}
                   isDeliveredQtyAvailable={false}
                   isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
                 />
               </>
             ) : (

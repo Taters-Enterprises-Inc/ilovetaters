@@ -1,7 +1,7 @@
 import { IoMdClose } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
-import { TextField, Button, Switch } from "@mui/material";
+import { TextField, Button, Switch, ButtonGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
@@ -160,6 +160,7 @@ export function ProcurementReviewOrdersModal(
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
                 isDispatchedQtyAvailable={false}
+                isUpdateBilling={false}
               />
 
               {setEnabled() || isEditEnabled ? (
@@ -173,13 +174,12 @@ export function ProcurementReviewOrdersModal(
                       multiline
                     />
                   </div>
-                  <div className="flex space-x-2">
+
+                  <ButtonGroup fullWidth variant="contained">
                     <Button
                       disabled={isQuantityEmpty()}
-                      fullWidth
                       type="submit"
                       onClick={() => setStatus("1")}
-                      variant="contained"
                       sx={{ color: "white", backgroundColor: "#CC5801" }}
                     >
                       Send back to New Order
@@ -187,15 +187,13 @@ export function ProcurementReviewOrdersModal(
 
                     <Button
                       disabled={isQuantityEmpty()}
-                      fullWidth
                       type="submit"
                       onClick={() => setStatus("3")}
-                      variant="contained"
                       sx={{ color: "white", backgroundColor: "#CC5801" }}
                     >
                       Order Reviewed
                     </Button>
-                  </div>
+                  </ButtonGroup>
                 </>
               ) : null}
             </div>

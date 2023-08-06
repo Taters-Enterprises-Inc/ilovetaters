@@ -238,10 +238,11 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 rowData={rows}
                 isDeliveredQtyAvailable={false}
                 isDispatchedQtyAvailable={false}
+                isUpdateBilling={false}
               />
 
               {setEnabled() ? (
-                <div className="px-2">
+                <div className="px-2 space-y-3">
                   <div className="flex flex-col mt-2">
                     <span>Remarks: </span>
                     <TextField
@@ -251,10 +252,10 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                       multiline
                     />
                   </div>
-                  <div className="flex pt-5 space-x-5">
-                    <div className="basis-1/2 flex flex-col space-y-2">
-                      <div className="flex space-x-2">
-                        <span className="font-normal">Commited Delivery:</span>
+                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-5 ">
+                    <div className="basis-full md:basis-1/2 flex flex-col space-y-4">
+                      <div className="flex flex-wrap space-x-2 text-sm md:pt-4 md:text-base">
+                        <span>Commited Delivery:</span>
                         {getStoreState.data?.window_time ? (
                           <>
                             <span>
@@ -299,7 +300,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                       </LocalizationProvider>
                     </div>
 
-                    <div className="basis-1/2 space-y-3">
+                    <div className="basis-full md:basis-1/2 space-y-3">
                       {preview ? (
                         <Button
                           fullWidth

@@ -199,6 +199,7 @@ export function SupplierUpdateBillingModal(
               rowData={rows}
               isDeliveredQtyAvailable={false}
               isDispatchedQtyAvailable={false}
+              isUpdateBilling={true}
             />
             {setEnabled() ? (
               <div className="px-5 space-y-2">
@@ -249,7 +250,7 @@ export function SupplierUpdateBillingModal(
                       variant="contained"
                       sx={{ color: "white", backgroundColor: "#CC5801" }}
                     >
-                      Download Sales Invoice
+                      Download SI
                     </Button>
                   </div>
 
