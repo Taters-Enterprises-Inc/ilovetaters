@@ -50,7 +50,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "xls", "xlsx"];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);
