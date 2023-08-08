@@ -182,11 +182,6 @@ export function OrderContents() {
   };
 
   useEffect(() => {
-    const totalRows = getStockOrdersState.data?.pagination.total_rows ?? 0;
-    setBadgeItem(totalRows);
-  }, [getStockOrdersState.data?.pagination.total_rows]);
-
-  useEffect(() => {
     const query = createQueryParams({
       page_no: pageNo,
       per_page: perPage,
@@ -371,60 +366,26 @@ export function OrderContents() {
                       <DataTableCell>{order.id}</DataTableCell>
                       <DataTableCell>
                         {order.id !== null
-                          ? new Date(
-                              order.order_placement_date
-                            ).toLocaleDateString("en-PH", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                            })
+                          ? dateSetup(order.order_placement_date)
                           : order.order_placement_date}
                       </DataTableCell>
                       <DataTableCell>
                         {order.requested_delivery_date !== null
-                          ? new Date(
-                              order.requested_delivery_date
-                            ).toLocaleDateString("en-PH", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                            })
+                          ? dateSetup(order.requested_delivery_date)
                           : order.requested_delivery_date}
                       </DataTableCell>
                       <DataTableCell>
                         {order.commited_delivery_date !== null
-                          ? new Date(
-                              order.commited_delivery_date
-                            ).toLocaleDateString("en-PH", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                            })
+                          ? dateSetup(order.commited_delivery_date)
                           : order.commited_delivery_date}
                       </DataTableCell>
 
                       <DataTableCell>
                         {order.actual_delivery_date !== null
-                          ? new Date(
-                              order.actual_delivery_date
-                            ).toLocaleDateString("en-PH", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                            })
+                          ? dateSetup(order.actual_delivery_date)
                           : order.actual_delivery_date}
                       </DataTableCell>
                       <DataTableCell>{order.description}</DataTableCell>
-                      {/* <DataTableCell>{order.billing_id}</DataTableCell>
-                    <DataTableCell>{order.billing_amount}</DataTableCell> */}
                       <DataTableCell>{order.short_name}</DataTableCell>
                       <DataTableCell>
                         <IconButton onClick={() => handleAction(order.id)}>
@@ -563,9 +524,14 @@ export function OrderContents() {
               (user) => user.id === 7
             );
 
+          const modalIsOpen = Object.keys(modals)
+            .map((key) => modals[key])
+            .some((modal) => modal);
+
           return (
             <div key={index}>
-              {user_data.id === 0 || user_data.id === 7 ? (
+              {(user_data.id === 0 && !modalIsOpen) ||
+              (user_data.id === 7 && !modalIsOpen) ? (
                 <SpeedDial
                   ariaLabel={"speed-dial-finance-and-store"}
                   sx={{ position: "absolute", bottom: 40, right: 40 }}
