@@ -1,6 +1,12 @@
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
-import { Autocomplete, Button, TableRow, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  ButtonGroup,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,7 +18,11 @@ import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
-import { InsertNewOrderParam } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  InsertNewOrderParam,
+  ProductParam,
+} from "features/stock-ordering/core/stock-ordering.params";
+import { getStockOrderProducts } from "../slices/get-products.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -33,7 +43,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const getStores = useAppSelector(selectGetStockOrderStores);
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   const [selectedStore, setSelectedStore] = useState<
     | {
@@ -78,6 +87,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setSelectedStore(getSelectedStore);
       setDeliveryData("");
       setRemarks("");
+      setIsEdit(false);
       setRows([]);
     }
   }, [props.open]);
@@ -147,10 +157,55 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const isQuantityEmpty = () => {
     let empty = false;
     rows.map((product) => {
-      if (product.orderQty === "") empty = true;
+      if (product.orderQty === "" || deliveryDate === "") empty = true;
     });
 
     return empty;
+  };
+
+  const editProduct = () => {
+    if (selectedStore && category) {
+      const productParams: ProductParam = {
+        category: category.category_id,
+        store_information: {
+          store_id: selectedStore.store_id,
+          store_name: selectedStore.name,
+        },
+      };
+
+      // dispatch(getStockOrderProducts(productParams));
+
+      setButtonDisable(false);
+      setIsEdit(true);
+    }
+  };
+
+  const handleCancelButton = () => {
+    setisEditCancelled(true);
+    setButtonDisable(true);
+    setIsEdit(false);
+  };
+
+  const handleConfirmEdit = () => {
+    setButtonDisable(true);
+    setIsEdit(false);
+  };
+
+  const handleRequestedDeliveryDate = (
+    date: string | number | Date | dayjs.Dayjs | null | undefined
+  ) => {
+    if (date) {
+      const formattedDate = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+
+      if (dayjs(formattedDate).isValid()) {
+        setDeliveryData(formattedDate);
+
+        const isDateDisabled = deliverySchedules(formattedDate);
+        setDeliveryDateError(isDateDisabled);
+      } else {
+        setDeliveryDateError(true);
+      }
+    }
   };
 
   if (props.open) {
@@ -185,6 +240,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
               <StockOrderConfirmTable
                 handleTableRows={handleTableRows}
                 setCategory={setCategory}
+                category={{
+                  category_id: category?.category_id ?? "",
+                  category_name: category?.category_name ?? "",
+                }}
                 store={{
                   store_id: selectedStore?.name ?? "",
                   store_name: selectedStore?.store_id ?? "",
@@ -195,7 +254,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
               />
 
               <div className="space-y-3">
-                <div className="flex flex-col space-y-1 md:flex-row md:space-x-3">
+                <div className="flex flex-col md:flex-row md:space-x-3">
                   <div className="md:basis-1/3 flex flex-col space-y-2">
                     <span>Select Store: </span>
                     <Autocomplete
@@ -263,23 +322,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                       <DateTimePicker
                         label="Delivery date and time"
                         views={["year", "month", "day", "hours", "minutes"]}
-                        onChange={(date) => {
-                          if (date) {
-                            const formattedDate = dayjs(date).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            );
-
-                            if (dayjs(formattedDate).isValid()) {
-                              setDeliveryData(formattedDate);
-
-                              const isDateDisabled =
-                                deliverySchedules(formattedDate);
-                              setDeliveryDateError(isDateDisabled);
-                            } else {
-                              setDeliveryDateError(true);
-                            }
-                          }
-                        }}
+                        onChange={handleRequestedDeliveryDate}
                         value={dayjs(deliveryDate)}
                         renderInput={(params) => (
                           <TextField required {...params} size="small" />
@@ -301,56 +344,40 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                   />
                 </div>
 
-                <div className="flex flex-row mt-5 space-x-5">
+                <div className="flex flex-col">
                   {isEdit ? (
-                    <div className="basis-1/2 flex flex-row space-x-5">
+                    <ButtonGroup fullWidth variant="contained">
                       <Button
-                        onClick={() => {
-                          setisEditCancelled(true);
-
-                          setButtonDisable(true);
-                          setIsEdit(false);
-                        }}
-                        className="basis-1/2"
-                        fullWidth
-                        variant="contained"
+                        onClick={handleCancelButton}
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
                       >
                         Cancel
                       </Button>
                       <Button
-                        onClick={() => {
-                          setButtonDisable(true);
-                          setIsEdit(false);
-                        }}
-                        className="basis-1/2"
-                        fullWidth
-                        variant="contained"
+                        onClick={handleConfirmEdit}
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
                       >
                         Confirm Edit
                       </Button>
-                    </div>
+                    </ButtonGroup>
                   ) : (
-                    <Button
-                      onClick={() => {
-                        setButtonDisable(false);
-                        setIsEdit(true);
-                      }}
-                      className="basis-1/2"
-                      fullWidth
-                      variant="contained"
-                    >
-                      Edit
-                    </Button>
+                    <ButtonGroup fullWidth variant="contained">
+                      <Button
+                        onClick={editProduct}
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        disabled={isQuantityEmpty() || deliveryDateError}
+                        type="submit"
+                        sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      >
+                        Confirm
+                      </Button>
+                    </ButtonGroup>
                   )}
-                  <Button
-                    disabled={isEdit || isQuantityEmpty() || deliveryDateError}
-                    type="submit"
-                    className="basis-1/2"
-                    fullWidth
-                    variant="contained"
-                  >
-                    Confirm
-                  </Button>
                 </div>
               </div>
             </div>

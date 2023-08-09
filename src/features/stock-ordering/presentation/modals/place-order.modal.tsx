@@ -110,8 +110,8 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <div className="flex flex-col space-y-3 md:flex-row md:space-x-5">
-                <div className="basis-full md:basis-1/2	flex flex-col space-y-2">
+              <div className="flex flex-col md:flex-row md:space-x-5">
+                <div className="md:basis-1/2	flex flex-col space-y-2">
                   <span>Select Store: </span>
                   <Autocomplete
                     fullWidth
@@ -148,7 +148,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                     )}
                   />
                 </div>
-                <div className="basis-full md:basis-1/2	flex flex-col space-y-2">
+                <div className="md:basis-1/2	flex flex-col space-y-2">
                   <span>Ship to address: </span>
                   <Autocomplete
                     fullWidth
@@ -174,6 +174,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                   />
                 </div>
               </div>
+
               <div className="flex flex-col space-y-2">
                 <span>Select product Category: </span>
 
@@ -224,6 +225,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                   type="submit"
                   fullWidth
                   variant="contained"
+                  sx={{ color: "white", backgroundColor: "#CC5801" }}
                 >
                   Submit
                 </Button>
