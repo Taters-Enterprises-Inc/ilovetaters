@@ -110,125 +110,123 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <>
-                <div className="flex flex-row space-x-5">
-                  <div className="basis-1/2	flex flex-col space-y-2">
-                    <span>Select Store: </span>
-                    <Autocomplete
-                      fullWidth
-                      size="small"
-                      options={
-                        getStores.data
-                          ? getStores.data.stores.map((row) => row.name)
-                          : []
-                      }
-                      onChange={(event, value: any) => {
-                        if (value && getStores.data) {
-                          const selectedStoreObj = getStores.data.stores.find(
-                            (store) => store.name === value
-                          );
-                          setSelectedStore(selectedStoreObj);
-                          setSelectedAddress("");
-                          setCategory({
-                            category_id: "",
-                            category_name: "",
-                          });
-
-                          setDisabled(false);
-                        } else {
-                          setSelectedStore(undefined);
-                        }
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          value={selectedStore ?? ""}
-                          {...params}
-                          label="Select store to evaluate"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="basis-1/2	flex flex-col space-y-2">
-                    <span>Ship to address: </span>
-                    <Autocomplete
-                      fullWidth
-                      value={selectedAddress}
-                      disabled={selectedStore?.store_id === ""}
-                      size="small"
-                      options={
-                        getStores.data?.ship_to_address.map(
-                          (address) => address.ship_to_address
-                        ) ?? []
-                      }
-                      onChange={(event, value: any) => {
-                        setSelectedAddress(value);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          value={selectedAddress ?? ""}
-                          {...params}
-                          label="Ship to address"
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <span>Select product Category: </span>
-
+              <div className="flex flex-col space-y-3 md:flex-row md:space-x-5">
+                <div className="basis-full md:basis-1/2	flex flex-col space-y-2">
+                  <span>Select Store: </span>
                   <Autocomplete
-                    id="stock-order-category-name"
+                    fullWidth
                     size="small"
-                    value={category?.category_name ?? ""}
-                    defaultValue=""
                     options={
-                      STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
+                      getStores.data
+                        ? getStores.data.stores.map((row) => row.name)
+                        : []
                     }
-                    onChange={(event, value) => {
-                      STOCK_ORDER_CATEGORY.find((row) => {
-                        if (row.category_name === value) {
-                          setCategory({
-                            category_id: row.category_id ?? "",
-                            category_name: row.category_name ?? "",
-                          });
-                        }
-                      });
+                    onChange={(event, value: any) => {
+                      if (value && getStores.data) {
+                        const selectedStoreObj = getStores.data.stores.find(
+                          (store) => store.name === value
+                        );
+                        setSelectedStore(selectedStoreObj);
+                        setSelectedAddress("");
+                        setCategory({
+                          category_id: "",
+                          category_name: "",
+                        });
+
+                        setDisabled(false);
+                      } else {
+                        setSelectedStore(undefined);
+                      }
                     }}
                     renderInput={(params) => (
                       <TextField
                         required
+                        value={selectedStore ?? ""}
                         {...params}
-                        label="Select product category"
+                        label="Select store to evaluate"
                       />
                     )}
                   />
                 </div>
-              </>
-              {selectedStore?.name &&
-              selectedStore.store_id &&
-              category?.category_id ? (
-                <div className="border-2 border-secondary rounded-lg max-h-fit p-2">
-                  <StockOrderProductSelector
-                    category_id={category.category_id}
-                    selected_store={selectedStore}
-                    setRows={setRows}
-                    setDeliverySchedule={setDeliverySchedule}
+                <div className="basis-full md:basis-1/2	flex flex-col space-y-2">
+                  <span>Ship to address: </span>
+                  <Autocomplete
+                    fullWidth
+                    value={selectedAddress}
+                    disabled={selectedStore?.store_id === ""}
+                    size="small"
+                    options={
+                      getStores.data?.ship_to_address.map(
+                        (address) => address.ship_to_address
+                      ) ?? []
+                    }
+                    onChange={(event, value: any) => {
+                      setSelectedAddress(value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        required
+                        value={selectedAddress ?? ""}
+                        {...params}
+                        label="Ship to address"
+                      />
+                    )}
                   />
                 </div>
-              ) : null}
-              <div>
-                <div className="mt-5">
-                  <Button
-                    disabled={isDisabled || rows.length === 0}
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                  >
-                    Submit
-                  </Button>
-                </div>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <span>Select product Category: </span>
+
+                <Autocomplete
+                  id="stock-order-category-name"
+                  size="small"
+                  value={category?.category_name ?? ""}
+                  defaultValue=""
+                  options={
+                    STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
+                  }
+                  onChange={(event, value) => {
+                    STOCK_ORDER_CATEGORY.find((row) => {
+                      if (row.category_name === value) {
+                        setCategory({
+                          category_id: row.category_id ?? "",
+                          category_name: row.category_name ?? "",
+                        });
+                      }
+                    });
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      required
+                      {...params}
+                      label="Select product category"
+                    />
+                  )}
+                />
+              </div>
+
+              {selectedStore?.name &&
+                selectedStore.store_id &&
+                category?.category_id && (
+                  <div className="border-2 border-secondary overflow-auto rounded-lg max-h-fit p-2">
+                    <StockOrderProductSelector
+                      category_id={category.category_id}
+                      selected_store={selectedStore}
+                      setRows={setRows}
+                      setDeliverySchedule={setDeliverySchedule}
+                    />
+                  </div>
+                )}
+
+              <div className="mt-5">
+                <Button
+                  disabled={isDisabled || rows.length === 0}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
+                  Submit
+                </Button>
               </div>
             </div>
           </form>

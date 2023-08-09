@@ -181,7 +181,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
+            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 space-y-5 border-secondary">
               <StockOrderConfirmTable
                 handleTableRows={handleTableRows}
                 setCategory={setCategory}
@@ -194,169 +194,163 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                 isEdit={isEdit}
               />
 
-              <div className="space-y-5">
-                <div className="px-5">
-                  <div className="flex flex-row space-x-5">
-                    <div className="basis-1/2 flex flex-col space-y-2">
-                      <span>Select Store: </span>
-                      <Autocomplete
-                        id="stock-order-selected-store"
-                        size="small"
-                        disabled
-                        options={
-                          getStores.data
-                            ? getStores.data.stores.map((row) => row.name)
-                            : []
+              <div className="space-y-3">
+                <div className="flex flex-col space-y-1 md:flex-row md:space-x-3">
+                  <div className="md:basis-1/3 flex flex-col space-y-2">
+                    <span>Select Store: </span>
+                    <Autocomplete
+                      id="stock-order-selected-store"
+                      size="small"
+                      disabled
+                      options={
+                        getStores.data
+                          ? getStores.data.stores.map((row) => row.name)
+                          : []
+                      }
+                      onChange={(event, value: any) => {
+                        if (value && getStores.data) {
+                          const selectedStoreObj = getStores.data.stores.find(
+                            (store) => store.name === value
+                          );
+                          setSelectedStore(selectedStoreObj);
+                        } else {
+                          setSelectedStore(undefined);
                         }
-                        onChange={(event, value: any) => {
-                          if (value && getStores.data) {
-                            const selectedStoreObj = getStores.data.stores.find(
-                              (store) => store.name === value
-                            );
-                            setSelectedStore(selectedStoreObj);
-                          } else {
-                            setSelectedStore(undefined);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          value={selectedStore ?? ""}
+                          {...params}
+                          label={
+                            selectedStore?.name ?? "Select store to evaluate"
                           }
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            value={selectedStore ?? ""}
-                            {...params}
-                            label={
-                              selectedStore?.name ?? "Select store to evaluate"
-                            }
-                          />
-                        )}
-                      />
-                    </div>
-
-                    <div className="basis-1/2 flex flex-col space-y-2">
-                      <span>Select Address: </span>
-                      <Autocomplete
-                        id="stock-order-selected-store"
-                        size="small"
-                        disabled={buttonDisable}
-                        options={
-                          getStores.data
-                            ? getStores.data.ship_to_address.map(
-                                (row) => row.ship_to_address
-                              )
-                            : []
-                        }
-                        onChange={(event, value: any) => {
-                          setSelectedAddress(value);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            value={selectedAddress ?? ""}
-                            {...params}
-                            label={
-                              selectedAddress ?? "Select address to deliver"
-                            }
-                          />
-                        )}
-                      />
-                    </div>
-
-                    <div className="basis-1/2 flex flex-col space-y-2">
-                      <span>Delivery Date: </span>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                          label="Delivery date and time"
-                          views={["year", "month", "day", "hours", "minutes"]}
-                          onChange={(date) => {
-                            if (date) {
-                              const formattedDate = dayjs(date).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              );
-
-                              if (dayjs(formattedDate).isValid()) {
-                                setDeliveryData(formattedDate);
-
-                                const isDateDisabled =
-                                  deliverySchedules(formattedDate);
-                                setDeliveryDateError(isDateDisabled);
-                              } else {
-                                setDeliveryDateError(true);
-                              }
-                            }
-                          }}
-                          value={dayjs(deliveryDate)}
-                          renderInput={(params) => (
-                            <TextField required {...params} size="small" />
-                          )}
-                          minDateTime={dayjs().add(leadTime ?? 2, "day")}
-                          shouldDisableDate={deliverySchedules}
                         />
-                      </LocalizationProvider>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col mt-2 ">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
+                      )}
                     />
                   </div>
 
-                  <div className="flex flex-row mt-5 space-x-5">
-                    {isEdit ? (
-                      <div className="basis-1/2 flex flex-row space-x-5">
-                        <Button
-                          onClick={() => {
-                            setisEditCancelled(true);
+                  <div className="md:basis-1/3 flex flex-col space-y-2">
+                    <span>Select Address: </span>
+                    <Autocomplete
+                      id="stock-order-selected-store"
+                      size="small"
+                      disabled={buttonDisable}
+                      options={
+                        getStores.data
+                          ? getStores.data.ship_to_address.map(
+                              (row) => row.ship_to_address
+                            )
+                          : []
+                      }
+                      onChange={(event, value: any) => {
+                        setSelectedAddress(value);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          required
+                          value={selectedAddress ?? ""}
+                          {...params}
+                          label={selectedAddress ?? "Select address to deliver"}
+                        />
+                      )}
+                    />
+                  </div>
 
-                            setButtonDisable(true);
-                            setIsEdit(false);
-                          }}
-                          className="basis-1/2"
-                          fullWidth
-                          variant="contained"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setButtonDisable(true);
-                            setIsEdit(false);
-                          }}
-                          className="basis-1/2"
-                          fullWidth
-                          variant="contained"
-                        >
-                          Confirm Edit
-                        </Button>
-                      </div>
-                    ) : (
+                  <div className="md:basis-1/3 flex flex-col space-y-2">
+                    <span>Delivery Date: </span>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateTimePicker
+                        label="Delivery date and time"
+                        views={["year", "month", "day", "hours", "minutes"]}
+                        onChange={(date) => {
+                          if (date) {
+                            const formattedDate = dayjs(date).format(
+                              "YYYY-MM-DD HH:mm:ss"
+                            );
+
+                            if (dayjs(formattedDate).isValid()) {
+                              setDeliveryData(formattedDate);
+
+                              const isDateDisabled =
+                                deliverySchedules(formattedDate);
+                              setDeliveryDateError(isDateDisabled);
+                            } else {
+                              setDeliveryDateError(true);
+                            }
+                          }
+                        }}
+                        value={dayjs(deliveryDate)}
+                        renderInput={(params) => (
+                          <TextField required {...params} size="small" />
+                        )}
+                        minDateTime={dayjs().add(leadTime ?? 2, "day")}
+                        shouldDisableDate={deliverySchedules}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </div>
+
+                <div className="flex flex-col mt-2 ">
+                  <span>Remarks: </span>
+                  <TextField
+                    value={remarks}
+                    onChange={(event) => setRemarks(event.target.value)}
+                    inputProps={{ maxLength: 512 }}
+                    multiline
+                  />
+                </div>
+
+                <div className="flex flex-row mt-5 space-x-5">
+                  {isEdit ? (
+                    <div className="basis-1/2 flex flex-row space-x-5">
                       <Button
                         onClick={() => {
-                          setButtonDisable(false);
-                          setIsEdit(true);
+                          setisEditCancelled(true);
+
+                          setButtonDisable(true);
+                          setIsEdit(false);
                         }}
                         className="basis-1/2"
                         fullWidth
                         variant="contained"
                       >
-                        Edit
+                        Cancel
                       </Button>
-                    )}
+                      <Button
+                        onClick={() => {
+                          setButtonDisable(true);
+                          setIsEdit(false);
+                        }}
+                        className="basis-1/2"
+                        fullWidth
+                        variant="contained"
+                      >
+                        Confirm Edit
+                      </Button>
+                    </div>
+                  ) : (
                     <Button
-                      disabled={
-                        isEdit || isQuantityEmpty() || deliveryDateError
-                      }
-                      type="submit"
+                      onClick={() => {
+                        setButtonDisable(false);
+                        setIsEdit(true);
+                      }}
                       className="basis-1/2"
                       fullWidth
                       variant="contained"
                     >
-                      Confirm
+                      Edit
                     </Button>
-                  </div>
+                  )}
+                  <Button
+                    disabled={isEdit || isQuantityEmpty() || deliveryDateError}
+                    type="submit"
+                    className="basis-1/2"
+                    fullWidth
+                    variant="contained"
+                  >
+                    Confirm
+                  </Button>
                 </div>
               </div>
             </div>
