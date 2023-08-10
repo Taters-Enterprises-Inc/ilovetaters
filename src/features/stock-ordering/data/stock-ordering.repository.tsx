@@ -22,6 +22,7 @@ import {
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
 import { GetProductDataModel } from "../core/domain/get-product-data.model";
+import { GetPayBillingSiModel } from "../core/domain/get-pay-billing-si.model";
 
 export interface GetStockOrderStoresResponse {
   data: {
@@ -132,6 +133,13 @@ export interface updateOrderCancelledResponse {
   data: {
     message: string;
     data: string;
+  };
+}
+
+export interface GetPayBillingSiResponse {
+  data: {
+    message: string;
+    data: GetPayBillingSiModel;
   };
 }
 
@@ -287,6 +295,12 @@ export function updateOrderCancelledRepository(
   param: updateCancelledStatus
 ): Promise<updateOrderCancelledResponse> {
   return axios.post(`${REACT_APP_DOMAIN_URL}api/stock/cancelled`, param, {
+    withCredentials: true,
+  });
+}
+
+export function GetPayBillingSiRepository(): Promise<GetPayBillingSiResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing`, {
     withCredentials: true,
   });
 }

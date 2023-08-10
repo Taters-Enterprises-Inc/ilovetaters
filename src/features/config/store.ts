@@ -259,6 +259,7 @@ import updatePayBillingOrders from "features/stock-ordering/presentation/slices/
 import updateConfirmPayment from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
 import updateDeliveryReceiveApprovalOrders from "features/stock-ordering/presentation/slices/update-delivery-receive-approval.slice";
 import updateOrderCancelled from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
+import getPayBillingSi from "features/stock-ordering/presentation/slices/get-pay-billing-si.slice";
 
 export const store = configureStore({
   reducer: {
@@ -521,6 +522,7 @@ export const store = configureStore({
     updateConfirmPayment,
     updateDeliveryReceiveApprovalOrders,
     updateOrderCancelled,
+    getPayBillingSi,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect } from "react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetStockOrders } from "../slices/get-stock-orders.slice";
@@ -7,6 +7,10 @@ import { useState } from "react";
 import { PayBillingModal } from "../modals";
 import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
 import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
+import {
+  getPayBillingSi,
+  selectGetPayBillingSi,
+} from "../slices/get-pay-billing-si.slice";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "OrderID", width: 70 },
@@ -39,7 +43,30 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [remarks, setRemarks] = useState("");
 
   const getStockOrders = useAppSelector(selectGetStockOrders);
+  const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
+
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getPayBillingSi());
+  }, [dispatch]);
+
+  const buttonStyle = {
+    color: "white",
+    backgroundColor: "#CC5801",
+  };
+
+  const rows = getStockOrders.data?.orders.map((row) => {
+    return {
+      id: row.id,
+      store_name: row.store_name,
+      order_placement_date: row.order_placement_date,
+      requested_delivery_date: row.requested_delivery_date,
+      commited_delivery_date: row.commited_delivery_date,
+    };
+  });
+
+  console.log(getPayBillingSiState.data?.orders);
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -85,17 +112,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
       <div className="space-y-2">
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={
-              getStockOrders.data?.orders.map((row) => {
-                return {
-                  id: row.id,
-                  store_name: row.store_name,
-                  order_placement_date: row.order_placement_date,
-                  requested_delivery_date: row.requested_delivery_date,
-                  commited_delivery_date: row.commited_delivery_date,
-                };
-              }) ?? []
-            }
+            rows={rows ?? []}
             pageSize={5}
             rowsPerPageOptions={[10]}
             columns={columns}
@@ -120,10 +137,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
               onClick={() => setOpenPayBillingModal(true)}
               fullWidth
               variant="contained"
-              sx={{
-                color: "white",
-                backgroundColor: "#CC5801",
-              }}
+              sx={buttonStyle}
             >
               Pay Billing
             </Button>
@@ -140,10 +154,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
                   order_id?.length !== 0
                 )
               }
-              sx={{
-                color: "white",
-                backgroundColor: "#CC5801",
-              }}
+              sx={buttonStyle}
             >
               Confirm
             </Button>
