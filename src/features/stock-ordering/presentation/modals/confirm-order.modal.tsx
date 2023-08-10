@@ -77,6 +77,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     },
   ]);
 
+  const shipToAddressOption = getStores.data?.ship_to_address.map(
+    (row) => row.ship_to_address
+  );
+
   useEffect(() => {
     if (getOrderInformation.data) {
       const getSelectedStore = getStores.data?.stores.find((store) => {
@@ -91,6 +95,13 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setRows([]);
     }
   }, [props.open]);
+
+  useEffect(() => {
+    if (isEditCancelled) {
+      setRows(getOrderInformation.data?.OrderData ?? []);
+      setisEditCancelled(false);
+    }
+  }, [isEditCancelled]);
 
   const handleTableRows = (TableData: OrderTableData[]) => {
     setRows(TableData);
@@ -116,13 +127,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     props.onClose();
   };
-
-  useEffect(() => {
-    if (isEditCancelled) {
-      setRows(getOrderInformation.data?.OrderData ?? []);
-      setisEditCancelled(false);
-    }
-  }, [isEditCancelled]);
 
   const deliverySchedules = (
     date: string | number | Date | dayjs.Dayjs | null | undefined
@@ -157,27 +161,20 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const isQuantityEmpty = () => {
     let empty = false;
     rows.map((product) => {
-      if (product.orderQty === "" || deliveryDate === "") empty = true;
+      if (
+        product.orderQty === "" ||
+        product.orderQty === "0" ||
+        deliveryDate === ""
+      )
+        empty = true;
     });
 
     return empty;
   };
 
   const editProduct = () => {
-    if (selectedStore && category) {
-      const productParams: ProductParam = {
-        category: category.category_id,
-        store_information: {
-          store_id: selectedStore.store_id,
-          store_name: selectedStore.name,
-        },
-      };
-
-      // dispatch(getStockOrderProducts(productParams));
-
-      setButtonDisable(false);
-      setIsEdit(true);
-    }
+    setButtonDisable(false);
+    setIsEdit(true);
   };
 
   const handleCancelButton = () => {
@@ -257,61 +254,29 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                 <div className="flex flex-col md:flex-row md:space-x-3">
                   <div className="md:basis-1/3 flex flex-col space-y-2">
                     <span>Select Store: </span>
-                    <Autocomplete
+
+                    <TextField
+                      disabled
                       id="stock-order-selected-store"
                       size="small"
-                      disabled
-                      options={
-                        getStores.data
-                          ? getStores.data.stores.map((row) => row.name)
-                          : []
-                      }
-                      onChange={(event, value: any) => {
-                        if (value && getStores.data) {
-                          const selectedStoreObj = getStores.data.stores.find(
-                            (store) => store.name === value
-                          );
-                          setSelectedStore(selectedStoreObj);
-                        } else {
-                          setSelectedStore(undefined);
-                        }
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          value={selectedStore ?? ""}
-                          {...params}
-                          label={
-                            selectedStore?.name ?? "Select store to evaluate"
-                          }
-                        />
-                      )}
+                      required
+                      value={selectedStore?.name ?? ""}
                     />
                   </div>
 
                   <div className="md:basis-1/3 flex flex-col space-y-2">
                     <span>Select Address: </span>
                     <Autocomplete
-                      id="stock-order-selected-store"
+                      id="stock-order-selected-address"
                       size="small"
                       disabled={buttonDisable}
-                      options={
-                        getStores.data
-                          ? getStores.data.ship_to_address.map(
-                              (row) => row.ship_to_address
-                            )
-                          : []
-                      }
-                      onChange={(event, value: any) => {
-                        setSelectedAddress(value);
+                      options={shipToAddressOption ?? []}
+                      onChange={(event, value: string | null) => {
+                        setSelectedAddress(value ?? "");
                       }}
+                      value={selectedAddress ?? ""}
                       renderInput={(params) => (
-                        <TextField
-                          required
-                          value={selectedAddress ?? ""}
-                          {...params}
-                          label={selectedAddress ?? "Select address to deliver"}
-                        />
+                        <TextField required {...params} />
                       )}
                     />
                   </div>

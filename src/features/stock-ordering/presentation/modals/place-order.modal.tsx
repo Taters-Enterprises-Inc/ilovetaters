@@ -24,8 +24,8 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
 
   const getStores = useAppSelector(selectGetStockOrderStores);
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
-
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [isDisabled, setDisabled] = useState(false);
   const [selectedStore, setSelectedStore] = useState<
     | {
         store_id: string;
@@ -33,8 +33,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       }
     | undefined
   >();
-  const [selectedAddress, setSelectedAddress] = useState("");
-  const [isDisabled, setDisabled] = useState(false);
 
   const [category, setCategory] = useState<{
     category_id: string;

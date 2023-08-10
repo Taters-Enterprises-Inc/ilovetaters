@@ -19,6 +19,7 @@ import {
 } from "../slices/get-products.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
+import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 
 interface StockOrderConfirmTableProps {
   isConfirmOrder: boolean;
@@ -39,23 +40,23 @@ interface StockOrderConfirmTableProps {
   };
 }
 
+const columns: Array<Column> = [
+  { id: "prodId", label: "Product Id" },
+  { id: "prodName", label: "Product Name" },
+  {
+    id: "uom",
+    label: "UOM",
+  },
+  { id: "cost", label: "Cost  " },
+  { id: "orderQty", label: "Order Qty  " },
+];
+
 export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
   const [rows, setRows] = useState<OrderTableData[]>([]);
 
   const dispatch = useAppDispatch();
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
   const getProductInformation = useAppSelector(selectGetStockOrderProducts);
-
-  let columns: Array<Column> = [
-    { id: "prodId", label: "Product Id" },
-    { id: "prodName", label: "Product Name" },
-    {
-      id: "uom",
-      label: "UOM",
-    },
-    { id: "cost", label: "Cost  " },
-    { id: "orderQty", label: "Order Qty  " },
-  ];
 
   useEffect(() => {
     props.handleTableRows(rows);
@@ -66,14 +67,50 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
         category_name: getOrderInformation.data?.category.category_name,
       });
     }
+  }, [rows, getOrderInformation.data, props.isEditCancelled]);
 
+  //Need to refactor this block of code
+  useEffect(() => {
     if (
       (getOrderInformation.data && props.isConfirmOrder) ||
       (props.isEditCancelled && getOrderInformation.data)
     ) {
       setRows(getOrderInformation.data.OrderData);
     }
-  }, [rows, getOrderInformation.data, props.isEditCancelled]);
+  }, [getOrderInformation.data, props.isEditCancelled]);
+
+  const productOptions = getProductInformation.data?.products
+    .flatMap((options) => options)
+    .filter((item) => {
+      const excludedItems = rows.map((items) => items.productName);
+
+      return !excludedItems.includes(item.product_name);
+    })
+    .map((item) => item.product_name);
+
+  const handleProductChange = (value: string, rowsIndex: number) => {
+    const getProductInfo = getProductInformation.data?.products.find(
+      (prod_name) => {
+        if (prod_name.product_name === value) {
+          return prod_name;
+        }
+      }
+    );
+
+    const updatedRows = rows.map((r, index) => {
+      if (index === rowsIndex) {
+        return {
+          ...r,
+          productId: getProductInfo?.product_id ?? "",
+          productName: getProductInfo?.product_name ?? "",
+          uom: getProductInfo?.uom ?? "",
+          cost: getProductInfo?.cost ?? "",
+        };
+      }
+      return r;
+    });
+    setRows(updatedRows);
+  };
 
   return (
     <div>
@@ -89,143 +126,48 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, rowsIndex) => (
-              <TableRow
-                key={rowsIndex}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell sx={{ width: 100 }}>{row.productId}</TableCell>
-                <TableCell>
-                  {props.isEdit ? (
-                    <Autocomplete
-                      size="small"
-                      options={
-                        getProductInformation.data?.products
-                          .flatMap((options) => options)
-                          .filter((item) => {
-                            const excludedItems = rows.map(
-                              (items) => items.productName
-                            );
+            {rows.map((productProperty, rowsIndex) => {
+              const { productId, productName, uom, cost, orderQty } =
+                productProperty;
 
-                            return !excludedItems.includes(item.product_name);
-                          })
-                          .map((item) => item.product_name) ?? []
-                      }
-                      onChange={(event, value) => {
-                        const getProductInfo =
-                          getProductInformation.data?.products.find(
-                            (prod_name) => {
-                              if (prod_name.product_name === value) {
-                                return prod_name;
-                              }
-                            }
-                          );
-
-                        const updatedRows = rows.map((r, index) => {
-                          if (index === rowsIndex) {
-                            return {
-                              ...r,
-                              productId: getProductInfo?.product_id ?? "",
-                              productName: getProductInfo?.product_name ?? "",
-                              uom: getProductInfo?.uom ?? "",
-                              cost: getProductInfo?.cost ?? "",
-                            };
-                          }
-                          return r;
-                        });
-                        setRows(updatedRows);
-                      }}
-                      value={row.productName}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          {...params}
-                          placeholder="--Select products to order"
-                        />
-                      )}
-                    />
-                  ) : (
-                    row.productName
-                  )}
-                </TableCell>
-                <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
-                <TableCell sx={{ width: 75 }}>{row.cost}</TableCell>
-                <TableCell sx={{ width: 125 }}>
-                  <div className="flex flex-row">
-                    <ButtonGroup
-                      disableElevation
-                      size="small"
-                      variant="contained"
-                      aria-label="outlined primary button group"
-                    >
-                      <Button
-                        onClick={() => {
-                          const updatedRows = rows.map((r, index) => {
-                            if (index === rowsIndex) {
-                              const val = Number(r.orderQty) - 1;
-                              const orderQty = val >= 0 ? val : 0;
-                              return {
-                                ...r,
-                                orderQty: orderQty.toString(),
-                              };
-                            }
-                            return r;
-                          });
-                          setRows(updatedRows);
-                        }}
-                      >
-                        -
-                      </Button>
-                      <TextField
-                        required
-                        type="text"
-                        sx={{ width: 65 }}
-                        value={row.orderQty}
-                        inputProps={{ maxLength: 4 }}
-                        onChange={(event) => {
-                          let value = event.target.value.replace(/\D/g, "");
-
-                          const updatedRows = rows.map((r, index) => {
-                            if (index === rowsIndex) {
-                              return {
-                                ...r,
-                                orderQty: value,
-                              };
-                            }
-                            return r;
-                          });
-                          setRows(updatedRows);
-                        }}
+              return (
+                <TableRow key={rowsIndex}>
+                  <TableCell sx={{ width: 100 }}>{productId}</TableCell>
+                  <TableCell>
+                    {props.isEdit ? (
+                      <Autocomplete
                         size="small"
-                        variant="outlined"
-                        placeholder="0"
+                        options={productOptions ?? []}
+                        onChange={(event, value) =>
+                          handleProductChange(value ?? "", rowsIndex)
+                        }
+                        value={productName}
+                        renderInput={(params) => (
+                          <TextField
+                            required
+                            {...params}
+                            placeholder="--Select products to order"
+                          />
+                        )}
                       />
-                      <Button
-                        onClick={() => {
-                          const updatedRows = rows.map((r, index) => {
-                            if (index === rowsIndex) {
-                              const val = isNaN(Number(r.orderQty))
-                                ? 1
-                                : Number(r.orderQty) + 1;
-
-                              const orderQty = val < 9999 ? val : 9999;
-                              return {
-                                ...r,
-                                orderQty: orderQty.toString(),
-                              };
-                            }
-                            return r;
-                          });
-                          setRows(updatedRows);
-                        }}
-                      >
-                        +
-                      </Button>
-                    </ButtonGroup>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                    ) : (
+                      productName
+                    )}
+                  </TableCell>
+                  <TableCell sx={{ width: 75 }}>{uom}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{cost}</TableCell>
+                  <TableCell sx={{ width: 125 }}>
+                    <StockOrderHandleQuantity
+                      rows={rows}
+                      setRows={setRows}
+                      rowsIndex={rowsIndex}
+                      currentValue={orderQty}
+                      propertyKey={"orderQty"}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
 

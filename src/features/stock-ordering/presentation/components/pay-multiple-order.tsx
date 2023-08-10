@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetStockOrders } from "../slices/get-stock-orders.slice";
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { PayBillingModal } from "../modals";
@@ -13,7 +12,9 @@ import {
 } from "../slices/get-pay-billing-si.slice";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "OrderID", width: 70 },
+  { field: "id", headerName: "Sales Invoice", width: 100 },
+
+  { field: "order_id", headerName: "OrderID", width: 70 },
   { field: "store_name", headerName: "Store name", width: 200 },
   {
     field: "order_placement_date",
@@ -42,7 +43,6 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [order_id, setOrderId] = useState<GridSelectionModel>([]);
   const [remarks, setRemarks] = useState("");
 
-  const getStockOrders = useAppSelector(selectGetStockOrders);
   const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
 
   const dispatch = useAppDispatch();
@@ -56,17 +56,24 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     backgroundColor: "#CC5801",
   };
 
-  const rows = getStockOrders.data?.orders.map((row) => {
+  const newRow = getPayBillingSiState.data?.orders.map((row) => {
+    const {
+      si,
+      order_id,
+      store,
+      order_placement_date,
+      requested_delivery_date,
+      commited_delivery_date,
+    } = row;
     return {
-      id: row.id,
-      store_name: row.store_name,
-      order_placement_date: row.order_placement_date,
-      requested_delivery_date: row.requested_delivery_date,
-      commited_delivery_date: row.commited_delivery_date,
+      id: si,
+      order_id: order_id,
+      store_name: store,
+      order_placement_date: order_placement_date,
+      requested_delivery_date: requested_delivery_date,
+      commited_delivery_date: commited_delivery_date,
     };
   });
-
-  console.log(getPayBillingSiState.data?.orders);
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -112,7 +119,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
       <div className="space-y-2">
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={rows ?? []}
+            rows={newRow ?? []}
             pageSize={5}
             rowsPerPageOptions={[10]}
             columns={columns}
