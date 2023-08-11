@@ -1,9 +1,17 @@
 import { IoMdClose } from "react-icons/io";
 import { useState, useEffect } from "react";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Backdrop,
+  Button,
+  CircularProgress,
+  Skeleton,
+  TextField,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderProductSelector } from "../components";
 import {
+  GetStockOrderStoresState,
   getStockOrderStores,
   selectGetStockOrderStores,
 } from "../slices/get-store.slice";
@@ -11,8 +19,8 @@ import { OrderTableData } from "features/stock-ordering/core/domain/order-table-
 import { confirmNewOrder } from "../slices/confirm-new-order.slice";
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { createQueryParams } from "features/config/helpers";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
+import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -20,24 +28,26 @@ interface PlaceOrdersModalProps {
   openConfirmationState: (value: boolean) => void;
 }
 
+interface selectedStore {
+  store_id: string;
+  name: string;
+}
+
+interface category {
+  category_id: string;
+  category_name: string;
+}
+
 export function PlaceOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
 
   const getStores = useAppSelector(selectGetStockOrderStores);
-  const [selectedAddress, setSelectedAddress] = useState("");
-  const [isDisabled, setDisabled] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<
-    | {
-        store_id: string;
-        name: string;
-      }
-    | undefined
-  >();
 
-  const [category, setCategory] = useState<{
-    category_id: string;
-    category_name: string;
-  }>();
+  const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const [isDisabled, setDisabled] = useState(true);
+  const [selectedStore, setSelectedStore] = useState<selectedStore>();
+
+  const [category, setCategory] = useState<category>();
 
   const [rows, setRows] = useState<OrderTableData[]>([]);
   const [schedule, setDeliverySchedule] = useState<DeliverySchedule>();
@@ -46,6 +56,7 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     setSelectedStore({ store_id: "", name: "" });
     setCategory({ category_id: "", category_name: "" });
     setSelectedAddress("");
+    setDisabled(true);
     setDeliverySchedule({
       cutoff: "",
       is_mwf: false,
@@ -53,23 +64,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
       leadtime: "",
     });
   }, [props.open]);
-
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    dispatch(
-      confirmNewOrder({
-        data: {
-          selectedStoreId: selectedStore?.store_id,
-          selectedAddress: selectedAddress,
-          category: category,
-          OrderData: rows,
-          deliveryScheduleData: schedule as DeliverySchedule,
-        },
-      })
-    );
-    props.openConfirmationState(true);
-  };
 
   useEffect(() => {
     const query = createQueryParams({
@@ -79,6 +73,23 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     dispatch(getStockOrderStores(query));
   }, [dispatch, selectedStore]);
 
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    dispatch(
+      confirmNewOrder({
+        data: {
+          selectedStoreId: selectedStore?.store_id,
+          selectedAddress: selectedAddress as string,
+          category: category,
+          OrderData: rows,
+          deliveryScheduleData: schedule as DeliverySchedule,
+        },
+      })
+    );
+    props.openConfirmationState(true);
+  };
+
   if (props.open) {
     document.body.classList.add("overflow-hidden");
   } else {
@@ -86,13 +97,15 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     return null;
   }
 
+  console.log(selectedAddress);
+
   return (
     <>
       <div
         id="place-order-modal"
         className="fixed inset-0 z-30 flex items-start justify-center overflow-auto bg-black bg-opacity-30 backdrop-blur-sm"
       >
-        <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
+        <div className="w-[97%] h-24 lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-2xl text-white">Place Order</span>
             <button
@@ -108,101 +121,94 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <div className="flex flex-col md:flex-row md:space-x-5">
-                <div className="md:basis-1/2	flex flex-col space-y-2">
-                  <span>Select Store: </span>
-                  <Autocomplete
-                    fullWidth
-                    size="small"
-                    options={
-                      getStores.data
-                        ? getStores.data.stores.map((row) => row.name)
-                        : []
-                    }
-                    onChange={(event, value: any) => {
-                      if (value && getStores.data) {
-                        const selectedStoreObj = getStores.data.stores.find(
-                          (store) => store.name === value
-                        );
-                        setSelectedStore(selectedStoreObj);
-                        setSelectedAddress("");
-                        setCategory({
-                          category_id: "",
-                          category_name: "",
-                        });
-
-                        setDisabled(false);
-                      } else {
-                        setSelectedStore(undefined);
-                      }
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        required
-                        value={selectedStore ?? ""}
-                        {...params}
-                        label="Select store to evaluate"
+              {getStores.data &&
+              GetStockOrderStoresState.success === getStores.status ? (
+                <>
+                  <div className="flex flex-col md:flex-row md:space-x-5">
+                    <div className="md:basis-1/2	flex flex-col space-y-2">
+                      <span>Select Store: </span>
+                      <MaterialInputAutoComplete
+                        colorTheme={"black"}
+                        required={true}
+                        fullWidth={true}
+                        size={"small"}
+                        options={getStores.data.stores}
+                        getOptionLabel={(option) => option.name || ""}
+                        value={selectedStore}
+                        label={"Select store to evaluate"}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.name
+                        }
+                        onChange={(event, value) => {
+                          setSelectedStore(value);
+                          setSelectedAddress("");
+                          setCategory({
+                            category_id: "",
+                            category_name: "",
+                          });
+                          setDisabled(false);
+                        }}
                       />
-                    )}
-                  />
-                </div>
-                <div className="md:basis-1/2	flex flex-col space-y-2">
-                  <span>Ship to address: </span>
-                  <Autocomplete
-                    fullWidth
-                    value={selectedAddress}
-                    disabled={selectedStore?.store_id === ""}
-                    size="small"
-                    options={
-                      getStores.data?.ship_to_address.map(
-                        (address) => address.ship_to_address
-                      ) ?? []
-                    }
-                    onChange={(event, value: any) => {
-                      setSelectedAddress(value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        required
-                        value={selectedAddress ?? ""}
-                        {...params}
-                        label="Ship to address"
+                    </div>
+
+                    <div className="md:basis-1/2	flex flex-col space-y-2">
+                      <span>Ship to address: </span>
+
+                      <MaterialInputAutoComplete
+                        colorTheme={"black"}
+                        disabled={isDisabled}
+                        required={true}
+                        fullWidth={true}
+                        size={"small"}
+                        options={getStores.data.address}
+                        getOptionLabel={(option) =>
+                          option.ship_to_address || ""
+                        }
+                        value={selectedAddress}
+                        label={"Ship to"}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.ship_to_address
+                        }
+                        onChange={(event, value) => {
+                          setSelectedAddress(value);
+                        }}
                       />
-                    )}
-                  />
-                </div>
-              </div>
+                    </div>
+                  </div>
 
-              <div className="flex flex-col space-y-2">
-                <span>Select product Category: </span>
+                  {STOCK_ORDER_CATEGORY && (
+                    <div className="flex flex-col space-y-2">
+                      <span>Select product Category: </span>
 
-                <Autocomplete
-                  id="stock-order-category-name"
-                  size="small"
-                  value={category?.category_name ?? ""}
-                  defaultValue=""
-                  options={
-                    STOCK_ORDER_CATEGORY.map((row) => row.category_name) ?? []
-                  }
-                  onChange={(event, value) => {
-                    STOCK_ORDER_CATEGORY.find((row) => {
-                      if (row.category_name === value) {
-                        setCategory({
-                          category_id: row.category_id ?? "",
-                          category_name: row.category_name ?? "",
-                        });
-                      }
-                    });
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      required
-                      {...params}
-                      label="Select product category"
-                    />
+                      <MaterialInputAutoComplete
+                        colorTheme={"black"}
+                        disabled={isDisabled}
+                        required={true}
+                        fullWidth={true}
+                        size={"small"}
+                        options={STOCK_ORDER_CATEGORY}
+                        getOptionLabel={(option) => option.category_name || ""}
+                        value={category}
+                        label={"Category"}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.name
+                        }
+                        onChange={(event, value) => {
+                          setCategory(value);
+                        }}
+                      />
+                    </div>
                   )}
-                />
-              </div>
+                </>
+              ) : (
+                <div className="flex flex-col">
+                  <div className="flex">
+                    <Skeleton animation="wave" />
+                    <Skeleton animation="wave" />
+                  </div>
+                  <Skeleton animation="wave" />
+                </div>
+              )}
 
               {selectedStore?.name &&
                 selectedStore.store_id &&

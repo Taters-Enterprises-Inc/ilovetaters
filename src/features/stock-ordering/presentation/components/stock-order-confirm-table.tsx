@@ -20,6 +20,7 @@ import {
 import { STOCK_ORDER_CATEGORY } from "features/shared/constants";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
+import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 
 interface StockOrderConfirmTableProps {
   isConfirmOrder: boolean;
@@ -88,23 +89,24 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
     })
     .map((item) => item.product_name);
 
-  const handleProductChange = (value: string, rowsIndex: number) => {
-    const getProductInfo = getProductInformation.data?.products.find(
-      (prod_name) => {
-        if (prod_name.product_name === value) {
-          return prod_name;
-        }
-      }
-    );
-
+  const handleProductChange = (
+    value: {
+      product_id: string;
+      product_name: string;
+      uom: string;
+      cost: string;
+    },
+    rowsIndex: number
+  ) => {
     const updatedRows = rows.map((r, index) => {
       if (index === rowsIndex) {
+        const { product_id, product_name, uom, cost } = value;
         return {
           ...r,
-          productId: getProductInfo?.product_id ?? "",
-          productName: getProductInfo?.product_name ?? "",
-          uom: getProductInfo?.uom ?? "",
-          cost: getProductInfo?.cost ?? "",
+          productId: product_id,
+          productName: product_name,
+          uom: uom,
+          cost: cost,
         };
       }
       return r;
@@ -134,21 +136,30 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
                 <TableRow key={rowsIndex}>
                   <TableCell sx={{ width: 100 }}>{productId}</TableCell>
                   <TableCell>
-                    {props.isEdit ? (
-                      <Autocomplete
-                        size="small"
-                        options={productOptions ?? []}
-                        onChange={(event, value) =>
-                          handleProductChange(value ?? "", rowsIndex)
-                        }
-                        value={productName}
-                        renderInput={(params) => (
-                          <TextField
-                            required
-                            {...params}
-                            placeholder="--Select products to order"
-                          />
+                    {props.isEdit && getProductInformation.data ? (
+                      <MaterialInputAutoComplete
+                        colorTheme={"black"}
+                        required={true}
+                        fullWidth={true}
+                        size={"small"}
+                        options={getProductInformation.data.products.filter(
+                          (item) => {
+                            const excludedItems = rows.map(
+                              (items) => items.productName
+                            );
+
+                            return !excludedItems.includes(item.product_name);
+                          }
                         )}
+                        getOptionLabel={(option) => option.product_name || ""}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.product_name
+                        }
+                        label={productName}
+                        onChange={(event, value) => {
+                          handleProductChange(value, rowsIndex);
+                        }}
+                        filterSelectedOptions
                       />
                     ) : (
                       productName

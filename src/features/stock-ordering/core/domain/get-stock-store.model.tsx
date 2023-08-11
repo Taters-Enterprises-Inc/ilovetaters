@@ -3,9 +3,8 @@ export interface GetStockStoreModel {
     store_id: string;
     name: string;
   }>;
-  ship_to_address: Array<{
+  address: Array<{
     ship_to_address: string;
-    store_id: string;
   }>;
   window_time: {
     end_Time: string;

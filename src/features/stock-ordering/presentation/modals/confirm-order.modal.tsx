@@ -1,12 +1,6 @@
 import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
-import {
-  Autocomplete,
-  Button,
-  ButtonGroup,
-  TableRow,
-  TextField,
-} from "@mui/material";
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -16,26 +10,22 @@ import { OrderTableData } from "features/stock-ordering/core/domain/order-table-
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import { insertNewOrder } from "../slices/insert-new-order.slice";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
-import {
-  InsertNewOrderParam,
-  ProductParam,
-} from "features/stock-ordering/core/stock-ordering.params";
-import { getStockOrderProducts } from "../slices/get-products.slice";
+import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-interface TableRow {
-  id: number;
-  productId: string;
-  productName: string;
-  uom: string;
-  cost: string;
-  orderQty: string;
+interface selectedStore {
+  store_id: string;
+  name: string;
+}
+
+interface category {
+  category_id: string;
+  category_name: string;
 }
 
 export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
@@ -44,42 +34,16 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const getStores = useAppSelector(selectGetStockOrderStores);
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
 
-  const [selectedStore, setSelectedStore] = useState<
-    | {
-        store_id: string;
-        name: string;
-      }
-    | undefined
-  >();
+  const [selectedStore, setSelectedStore] = useState<selectedStore>();
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [category, setCategory] = useState<
-    | {
-        category_id: string;
-        category_name: string;
-      }
-    | undefined
-  >();
+  const [category, setCategory] = useState<category>();
   const [isEdit, setIsEdit] = useState(false);
   const [isEditCancelled, setisEditCancelled] = useState(false);
-  const [buttonDisable, setButtonDisable] = useState(true);
   const [deliveryDate, setDeliveryData] = useState("");
   const [deliveryDateError, setDeliveryDateError] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [leadTime, setLeadTime] = useState<number>();
-
-  const [rows, setRows] = useState<OrderTableData[]>([
-    {
-      productId: "",
-      productName: "",
-      uom: "",
-      cost: "",
-      orderQty: "",
-    },
-  ]);
-
-  const shipToAddressOption = getStores.data?.ship_to_address.map(
-    (row) => row.ship_to_address
-  );
+  const [rows, setRows] = useState<OrderTableData[]>([]);
 
   useEffect(() => {
     if (getOrderInformation.data) {
@@ -173,18 +137,16 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   };
 
   const editProduct = () => {
-    setButtonDisable(false);
     setIsEdit(true);
   };
 
   const handleCancelButton = () => {
     setisEditCancelled(true);
-    setButtonDisable(true);
     setIsEdit(false);
   };
 
-  const handleConfirmEdit = () => {
-    setButtonDisable(true);
+  const handleConfirmEdit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
     setIsEdit(false);
   };
 
@@ -211,6 +173,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(selectedAddress);
 
   return (
     <>
@@ -249,102 +213,110 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                 isConfirmOrder={true}
                 isEdit={isEdit}
               />
+              {getStores.data && (
+                <div className="space-y-3">
+                  <div className="flex flex-col md:flex-row md:space-x-3">
+                    <div className="md:basis-1/3 flex flex-col space-y-2">
+                      <span>Select Store: </span>
 
-              <div className="space-y-3">
-                <div className="flex flex-col md:flex-row md:space-x-3">
-                  <div className="md:basis-1/3 flex flex-col space-y-2">
-                    <span>Select Store: </span>
-
-                    <TextField
-                      disabled
-                      id="stock-order-selected-store"
-                      size="small"
-                      required
-                      value={selectedStore?.name ?? ""}
-                    />
-                  </div>
-
-                  <div className="md:basis-1/3 flex flex-col space-y-2">
-                    <span>Select Address: </span>
-                    <Autocomplete
-                      id="stock-order-selected-address"
-                      size="small"
-                      disabled={buttonDisable}
-                      options={shipToAddressOption ?? []}
-                      onChange={(event, value: string | null) => {
-                        setSelectedAddress(value ?? "");
-                      }}
-                      value={selectedAddress ?? ""}
-                      renderInput={(params) => (
-                        <TextField required {...params} />
-                      )}
-                    />
-                  </div>
-
-                  <div className="md:basis-1/3 flex flex-col space-y-2">
-                    <span>Delivery Date: </span>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DateTimePicker
-                        label="Delivery date and time"
-                        views={["year", "month", "day", "hours", "minutes"]}
-                        onChange={handleRequestedDeliveryDate}
-                        value={dayjs(deliveryDate)}
-                        renderInput={(params) => (
-                          <TextField required {...params} size="small" />
-                        )}
-                        minDateTime={dayjs().add(leadTime ?? 2, "day")}
-                        shouldDisableDate={deliverySchedules}
+                      <TextField
+                        disabled
+                        id="stock-order-selected-store"
+                        size="small"
+                        required
+                        value={selectedStore?.name ?? ""}
                       />
-                    </LocalizationProvider>
+                    </div>
+
+                    <div className="md:basis-1/3 flex flex-col space-y-2">
+                      <span>Select Address: </span>
+                      <MaterialInputAutoComplete
+                        colorTheme={"black"}
+                        disabled={!isEdit}
+                        required={true}
+                        fullWidth={true}
+                        size={"small"}
+                        options={getStores.data?.address}
+                        getOptionLabel={(option) =>
+                          option.ship_to_address || ""
+                        }
+                        value={selectedAddress}
+                        label={"Ship to"}
+                        isOptionEqualToValue={(option, value) =>
+                          option.name === value.name
+                        }
+                        onChange={(event, value) => {
+                          setSelectedAddress(value);
+                        }}
+                      />
+                    </div>
+
+                    <div className="md:basis-1/3 flex flex-col space-y-2">
+                      <span>Delivery Date: </span>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                          label="Delivery date and time"
+                          views={["year", "month", "day", "hours", "minutes"]}
+                          onChange={handleRequestedDeliveryDate}
+                          value={dayjs(deliveryDate)}
+                          renderInput={(params) => (
+                            <TextField required {...params} size="small" />
+                          )}
+                          minDateTime={dayjs().add(leadTime ?? 2, "day")}
+                          shouldDisableDate={deliverySchedules}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col mt-2 ">
+                    <span>Remarks: </span>
+                    <TextField
+                      value={remarks}
+                      onChange={(event) => setRemarks(event.target.value)}
+                      inputProps={{ maxLength: 512 }}
+                      multiline
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    {isEdit ? (
+                      <ButtonGroup fullWidth variant="contained">
+                        <Button
+                          onClick={handleCancelButton}
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          disabled={!selectedAddress ? true : false}
+                          onClick={handleConfirmEdit}
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Confirm Edit
+                        </Button>
+                      </ButtonGroup>
+                    ) : (
+                      <ButtonGroup fullWidth variant="contained">
+                        <Button
+                          onClick={editProduct}
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Edit
+                        </Button>
+
+                        <Button
+                          disabled={isQuantityEmpty() || deliveryDateError}
+                          type="submit"
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                        >
+                          Confirm
+                        </Button>
+                      </ButtonGroup>
+                    )}
                   </div>
                 </div>
-
-                <div className="flex flex-col mt-2 ">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  {isEdit ? (
-                    <ButtonGroup fullWidth variant="contained">
-                      <Button
-                        onClick={handleCancelButton}
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={handleConfirmEdit}
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Confirm Edit
-                      </Button>
-                    </ButtonGroup>
-                  ) : (
-                    <ButtonGroup fullWidth variant="contained">
-                      <Button
-                        onClick={editProduct}
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Edit
-                      </Button>
-
-                      <Button
-                        disabled={isQuantityEmpty() || deliveryDateError}
-                        type="submit"
-                        sx={{ color: "white", backgroundColor: "#CC5801" }}
-                      >
-                        Confirm
-                      </Button>
-                    </ButtonGroup>
-                  )}
-                </div>
-              </div>
+              )}
             </div>
           </form>
         </div>
