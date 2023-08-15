@@ -91,8 +91,11 @@ export interface updateEnRoutePram {
 }
 
 export interface updatePayBillingParam {
-  id: string[] | GridSelectionModel;
-  paymentDetailImage: File | string;
+  selectedData: Array<{
+    invoice: string | undefined;
+    orderId: string | undefined;
+  }>;
+  paymentFile: File | string;
   remarks: string;
 }
 

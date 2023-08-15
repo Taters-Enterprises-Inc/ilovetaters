@@ -202,9 +202,9 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
                 </>
               ) : (
                 <div className="flex flex-col">
-                  <div className="flex">
-                    <Skeleton animation="wave" />
-                    <Skeleton animation="wave" />
+                  <div className="flex space-x-5">
+                    <Skeleton sx={{ flexBasis: "50%" }} animation="wave" />
+                    <Skeleton sx={{ flexBasis: "50%" }} animation="wave" />
                   </div>
                   <Skeleton animation="wave" />
                 </div>

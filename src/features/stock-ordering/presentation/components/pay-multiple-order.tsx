@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridSelectionApi,
+  GridSelectionModel,
+} from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
@@ -37,10 +42,15 @@ interface PayMultipleOrderProps {
   onClose: (close: boolean) => void;
 }
 
+interface selectedData {
+  invoice: string | undefined;
+  orderId: string | undefined;
+}
+
 export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [openPayBillingModal, setOpenPayBillingModal] = useState(false);
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
-  const [order_id, setOrderId] = useState<GridSelectionModel>([]);
+  const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
   const [remarks, setRemarks] = useState("");
 
   const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
@@ -56,7 +66,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     backgroundColor: "#CC5801",
   };
 
-  const newRow = getPayBillingSiState.data?.orders.map((row) => {
+  const InvoiceData = getPayBillingSiState.data?.orders.map((row) => {
     const {
       si,
       order_id,
@@ -84,7 +94,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "xls", "xlsx"];
+    const allowedExtensions = ["xls", "xlsx"];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);
@@ -103,8 +113,8 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
 
   const handlePayBilling = async () => {
     const payBilingParam: updatePayBillingParam = {
-      id: order_id,
-      paymentDetailImage: uploadedReceipt,
+      selectedData: selectedData ?? [],
+      paymentFile: uploadedReceipt,
       remarks: remarks,
     };
 
@@ -114,17 +124,29 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     props.onClose(true);
   };
 
+  const handleOnSelectionModelChange = (
+    selectedInvoice: GridSelectionModel
+  ) => {
+    const selectedRowsData = selectedInvoice.map((id) => {
+      const filter = InvoiceData?.find((data) => data.id === id);
+
+      return { invoice: filter?.id, orderId: filter?.order_id };
+    });
+
+    setSelectedData(selectedRowsData);
+  };
+
   return (
     <>
       <div className="space-y-2">
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
-            rows={newRow ?? []}
+            rows={InvoiceData ?? []}
             pageSize={5}
             rowsPerPageOptions={[10]}
             columns={columns}
             checkboxSelection
-            onSelectionModelChange={(id) => setOrderId(id)}
+            onSelectionModelChange={handleOnSelectionModelChange}
           />
         </div>
 
@@ -158,7 +180,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
                 !(
                   isValidFile(uploadedReceipt) &&
                   uploadedReceipt !== "" &&
-                  order_id?.length !== 0
+                  selectedData?.length !== 0
                 )
               }
               sx={buttonStyle}

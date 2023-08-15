@@ -146,7 +146,7 @@ export function SupplierUpdateBillingModal(
       return true;
     }
 
-    const allowedExtensions = ["jpg", "jpeg", "png", "pdf", "xls", "xlsx"];
+    const allowedExtensions = ["xls", "xlsx"];
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     const isValidExtension =
       fileExtension && allowedExtensions.includes(fileExtension);
@@ -237,7 +237,7 @@ export function SupplierUpdateBillingModal(
                   </span>
                 </div>
 
-                <div className="flex flex-row space-x-4">
+                <div className="flex flex-col space-y-5 md:flex-row md:space-x-5 md:space-y-0">
                   <div className="basis-1/2">
                     <Button
                       onClick={() => {
@@ -266,7 +266,7 @@ export function SupplierUpdateBillingModal(
                       isValidFile(uploadedGoodsReceipt) &&
                       isValidFile(uploadedRegionReceipt)) ||
                     (!warningMismatch && !warningNonNCR) ? (
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         <Button
                           onClick={() => handleSupplierUpdate()}
                           fullWidth
@@ -276,12 +276,13 @@ export function SupplierUpdateBillingModal(
                           Confirm
                         </Button>
 
-                        <div className="space-x-3">
+                        <div className="flex flex-col space-y-1 md:flex-row md:space-x-3 md:space-y-0">
                           {warningMismatch && (
                             <Button
                               onClick={() => setUploadedGoodsReceiptModal(true)}
                               size="small"
                               variant="outlined"
+                              sx={{ flexBasis: "50%" }}
                             >
                               Change SI (Goods)
                             </Button>
@@ -294,6 +295,7 @@ export function SupplierUpdateBillingModal(
                               }
                               size="small"
                               variant="outlined"
+                              sx={{ flexBasis: "50%" }}
                             >
                               change SI (Region)
                             </Button>
