@@ -52,17 +52,6 @@ export function PayBillingModal(props: PayBillingModalProps) {
 
           <form onSubmit={handleSubmit}>
             <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              {/* <div className="flex flex-row space-x-5">
-                <span className="font-semibold">Billing ID: </span>
-                <span>{props.billingInformation.billing_id}</span>
-              </div>
-
-              <div className="flex flex-row space-x-5">
-                <span className="font-semibold">Billing Amount: </span>
-                <span>{props.billingInformation.billing_amount}</span>
-              </div>
-
-              <Divider /> */}
               <div>
                 <UploadFile
                   image={uploadedReceipt}
@@ -72,8 +61,8 @@ export function PayBillingModal(props: PayBillingModalProps) {
                   description="DeliveryReciept"
                 />
                 <h4 className="mt-1 text-sm leading-5 text-secondary">
-                  <strong>Note:</strong> JPG is the only supported file type.
-                  Maximum file size is 2MB.
+                  <strong>Note:</strong>
+                  Maximum file size is 5MB.
                 </h4>
               </div>
 

@@ -61,8 +61,8 @@ export function UploadDeliveryRecieptModal(
                 description="DeliveryReciept"
               />
               <h4 className="mt-1 text-sm leading-5 text-secondary">
-                <strong>Note:</strong> JPG is the only supported file type.
-                Maximum file size is 2MB.
+                <strong>Note:</strong>
+                Maximum file size is 5MB.
               </h4>
               {props.isButtonAvailable ? (
                 <div>
