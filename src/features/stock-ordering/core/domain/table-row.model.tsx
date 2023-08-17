@@ -1,4 +1,4 @@
-export interface TableRow {
+export interface StockOrderingInformationModel {
   order_information: {
     store_name: string;
     store_id: string;
@@ -7,13 +7,10 @@ export interface TableRow {
     requested_delivery_date: string;
     commited_delivery_date: string;
     order_reviewed_date: string;
-    order_confirmation_date: string;
     view_delivery_receipt: string;
     dispatch_date: string;
-    order_enroute: string;
     actual_delivery_date: string;
     view_updated_delivery_receipt: string;
-    billing_information_ready: boolean;
     view_payment_details: string;
     payment_confirmation: string;
     transport_route: string;
@@ -24,6 +21,8 @@ export interface TableRow {
       last_name: string;
       remarks: string;
     }[];
+    updated_delivery_goods_receipt: string;
+    updated_delivery_region_receipt: string;
   };
   product_data: {
     id: string;

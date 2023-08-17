@@ -1,24 +1,5 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { ViewImageModal } from "../modals/view-image.modal";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useQuery,
-} from "features/config/hooks";
-import { createQueryParams } from "features/config/helpers";
-import { useNavigate } from "react-router-dom";
+import { Button, Divider, List, ListItem } from "@mui/material";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface StockOrderLogsProps {
   order_details: {
@@ -36,8 +17,6 @@ interface StockOrderLogsProps {
 }
 
 export function StockOrderLogs(props: StockOrderLogsProps) {
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
-
   let columns = [
     { id: "store_name", label: "Store", isButton: false, isDate: false },
     {
@@ -71,15 +50,10 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       isButton: false,
       isDate: true,
     },
-    {
-      id: "order_confirmation_date",
-      label: "Order Confirmation Date",
-      isButton: false,
-      isDate: true,
-    },
+
     {
       id: "view_delivery_receipt",
-      label: "View Sales Invoice",
+      label: "Download Sales Invoice",
       isButton: true,
       isDate: false,
     },
@@ -103,13 +77,6 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
 
     {
-      id: "billing_information_ready",
-      label: "Billing Information Ready",
-      isButton: false,
-      isDate: false,
-      identifier: "",
-    },
-    {
       id: "view_payment_details",
       label: "View Payment Details",
       isButton: true,
@@ -121,42 +88,36 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
       isButton: false,
       isDate: true,
     },
-  ];
-
-  let remarkColumn = [
     {
-      id: "remarks",
-      label: "remarks after reviewing order: ",
-      isButton: false,
-      isDate: false,
-      identifier: "reviewed",
+      id: "updated_delivery_goods_receipt",
+      label: "Updated Goods Sales Invoice",
+      isButton: true,
+      isData: false,
+    },
+    {
+      id: "updated_delivery_region_receipt",
+      label: "Updated Goods Region Invoice",
+      isButton: true,
+      isData: false,
     },
   ];
-
-  const [openImagePreviewer, setOpenImagePreviewer] = useState(false);
-  const [image, setImage] = useState<string>("");
-  const navigate = useNavigate();
 
   const handleOnclick = (id: string) => {
     switch (id) {
       case "view_delivery_receipt":
-        // setImage(props.order_details.view_delivery_receipt as string);
-        // setOpenImagePreviewer(true);
-        const filename_delivery_receipt = props.order_details
-          .view_delivery_receipt as string;
-        const url_delivery_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download-payment/${filename_delivery_receipt}`;
-        window.open(url_delivery_receipt, "_blank");
+        // const filename_delivery_receipt = props.order_details
+        //   .view_delivery_receipt as string;
+        // const url_delivery_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_delivery_receipt}`;
+        // window.open(url_delivery_receipt, "_blank");
 
-        break;
-      case "view_payment_details":
-        // setImage(props.order_details.view_payment_details as string);
-        // setOpenImagePreviewer(true);
-        const filename_payment_details = props.order_details
-          .view_payment_details as string;
-        const url_payment_details = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download-payment/${filename_payment_details}`;
-        window.open(url_payment_details, "_blank");
+        if ("order_number" in props.order_details) {
+          const id = props.order_details.order_number;
+          const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-multim-si-pdf/${id}`;
 
+          window.open(link, "_blank");
+        }
         break;
+
       case "view_updated_delivery_receipt":
         if ("order_number" in props.order_details) {
           const id = props.order_details.order_number;
@@ -164,6 +125,27 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
 
           window.open(link, "_blank");
         }
+        break;
+
+      case "updated_delivery_goods_receipt":
+        const filename_updated_delivery_goods_receipt = props.order_details
+          .view_delivery_receipt as string;
+        const url_updated_delivery_goods_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_updated_delivery_goods_receipt}`;
+        window.open(url_updated_delivery_goods_receipt, "_blank");
+        break;
+
+      case "updated_delivery_region_receipt":
+        const filenameupdated_delivery_region_receipt = props.order_details
+          .view_delivery_receipt as string;
+        const urlupdated_delivery_region_receipt = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filenameupdated_delivery_region_receipt}`;
+        window.open(urlupdated_delivery_region_receipt, "_blank");
+        break;
+
+      case "view_payment_details":
+        const filename_payment_details = props.order_details
+          .view_payment_details as string;
+        const url_payment_details = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${filename_payment_details}`;
+        window.open(url_payment_details, "_blank");
 
         break;
     }
@@ -285,13 +267,6 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
           </div>
         </div>
       </div>
-
-      <ViewImageModal
-        open={openImagePreviewer}
-        onClose={() => setOpenImagePreviewer(false)}
-        image={image}
-        isDownloadable={false}
-      />
     </>
   );
 }

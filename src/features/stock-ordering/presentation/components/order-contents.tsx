@@ -171,14 +171,22 @@ export function OrderContents() {
     setTabValue(newValue);
   };
 
-  const dateSetup = (date: string) => {
-    return new Date(date).toLocaleDateString("en-PH", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    });
+  const dateSetup = (date: string, withTime: boolean) => {
+    if (withTime) {
+      return new Date(date).toLocaleDateString("en-PH", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      });
+    } else {
+      return new Date(date).toLocaleDateString("en-PH", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
   };
 
   useEffect(() => {
@@ -366,23 +374,23 @@ export function OrderContents() {
                       <DataTableCell>{order.id}</DataTableCell>
                       <DataTableCell>
                         {order.id !== null
-                          ? dateSetup(order.order_placement_date)
+                          ? dateSetup(order.order_placement_date, true)
                           : order.order_placement_date}
                       </DataTableCell>
                       <DataTableCell>
                         {order.requested_delivery_date !== null
-                          ? dateSetup(order.requested_delivery_date)
+                          ? dateSetup(order.requested_delivery_date, false)
                           : order.requested_delivery_date}
                       </DataTableCell>
                       <DataTableCell>
                         {order.commited_delivery_date !== null
-                          ? dateSetup(order.commited_delivery_date)
+                          ? dateSetup(order.commited_delivery_date, true)
                           : order.commited_delivery_date}
                       </DataTableCell>
 
                       <DataTableCell>
                         {order.actual_delivery_date !== null
-                          ? dateSetup(order.actual_delivery_date)
+                          ? dateSetup(order.actual_delivery_date, true)
                           : order.actual_delivery_date}
                       </DataTableCell>
                       <DataTableCell>{order.description}</DataTableCell>
@@ -485,14 +493,16 @@ export function OrderContents() {
 
                         <div className="text-xs capitalize space-x-1">
                           <span>Placement date:</span>
-                          <span>{dateSetup(order.order_placement_date)}</span>
+                          <span>
+                            {dateSetup(order.order_placement_date, true)}
+                          </span>
                         </div>
 
                         {order.commited_delivery_date && (
                           <div className="text-xs capitalize space-x-1">
                             <span>Confirmation date:</span>
                             <span>
-                              {dateSetup(order.commited_delivery_date)}
+                              {dateSetup(order.commited_delivery_date, true)}
                             </span>
                           </div>
                         )}
@@ -500,7 +510,9 @@ export function OrderContents() {
                         {order.actual_delivery_date && (
                           <div className="text-xs capitalize space-x-1">
                             <span>Actual Delivery Date:</span>
-                            <span>{dateSetup(order.actual_delivery_date)}</span>
+                            <span>
+                              {dateSetup(order.actual_delivery_date, true)}
+                            </span>
                           </div>
                         )}
                       </div>

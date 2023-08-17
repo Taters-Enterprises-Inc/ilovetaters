@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { TextField, Button, ButtonGroup } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -24,6 +24,8 @@ import {
 } from "../slices/get-store.slice";
 import { createQueryParams } from "features/config/helpers";
 import { AiOutlineDownload } from "react-icons/ai";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { PopupModal } from ".";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -43,31 +45,11 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
     dayjs().format("YYYY-MM-DD HH:mm:ss")
   );
+  const [openPopUp, setOpenPopUp] = useState(false);
 
-  const [rows, setRows] = useState<TableRow>({
-    order_information: {
-      store_name: "",
-      store_id: "",
-      ship_to_address: "",
-      order_number: "",
-      requested_delivery_date: "",
-      commited_delivery_date: "",
-      order_reviewed_date: "",
-      order_confirmation_date: "",
-      view_delivery_receipt: "",
-      dispatch_date: "",
-      order_enroute: "",
-      actual_delivery_date: "",
-      view_updated_delivery_receipt: "",
-      billing_information_ready: false,
-      view_payment_details: "",
-      payment_confirmation: "",
-      transport_route: "",
-      region_id: 0,
-      remarks: [],
-    },
-    product_data: [],
-  });
+  const [rows, setRows] = useState<StockOrderingInformationModel>(
+    productDataInitialState
+  );
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -93,15 +75,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   };
 
   const handleCancelledOrder = async () => {
-    const cancelParameter: updateCancelledStatus = {
-      id: props.id,
-      remarks: remarks,
-    };
-
-    await dispatch(updateOrderCancelled(cancelParameter));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
+    setOpenPopUp(true);
   };
 
   const setEnabled = () => {
@@ -135,6 +109,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
     setRemarks("");
     setPreview(false);
+    setOpenPopUp(false);
   }, [props.open]);
 
   useEffect(() => {
@@ -348,6 +323,18 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
           </div>
         </div>
       </div>
+
+      <PopupModal
+        open={openPopUp}
+        onClose={() => setOpenPopUp(false)}
+        title={"Cancel Order"}
+        message={"Are you sure you want to cancel your order?"}
+        remarks={remarks}
+        id={props.id}
+        orderCancelled={(isCancelled: boolean) =>
+          isCancelled && props.onClose()
+        }
+      />
     </>
   );
 }

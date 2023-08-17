@@ -1,0 +1,23 @@
+export const productDataInitialState = {
+  order_information: {
+    store_name: "",
+    store_id: "",
+    ship_to_address: "",
+    order_number: "",
+    requested_delivery_date: "",
+    commited_delivery_date: "",
+    order_reviewed_date: "",
+    view_delivery_receipt: "",
+    dispatch_date: "",
+    actual_delivery_date: "",
+    view_updated_delivery_receipt: "",
+    view_payment_details: "",
+    payment_confirmation: "",
+    transport_route: "",
+    region_id: 0,
+    remarks: [],
+    updated_delivery_goods_receipt: "",
+    updated_delivery_region_receipt: "",
+  },
+  product_data: [],
+};

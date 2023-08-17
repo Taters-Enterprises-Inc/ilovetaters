@@ -2,7 +2,11 @@ import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  DateTimePicker,
+  DatePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { StockOrderConfirmTable } from "../components";
@@ -154,7 +158,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     date: string | number | Date | dayjs.Dayjs | null | undefined
   ) => {
     if (date) {
-      const formattedDate = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+      const formattedDate = dayjs(date).format("YYYY-MM-DD");
 
       if (dayjs(formattedDate).isValid()) {
         setDeliveryData(formattedDate);
@@ -254,15 +258,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                     <div className="md:basis-1/3 flex flex-col space-y-2">
                       <span>Delivery Date: </span>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                          label="Delivery date and time"
-                          views={["year", "month", "day", "hours", "minutes"]}
+                        <DatePicker
+                          label="Delivery date"
+                          views={["year", "month", "day"]}
                           onChange={handleRequestedDeliveryDate}
                           value={dayjs(deliveryDate)}
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
-                          minDateTime={dayjs().add(leadTime ?? 2, "day")}
+                          minDate={dayjs().add(leadTime ?? 2, "day")}
                           shouldDisableDate={deliverySchedules}
                         />
                       </LocalizationProvider>

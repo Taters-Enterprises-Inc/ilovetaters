@@ -15,7 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
-import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import {
   dispatchOrderParam,
   updateCancelledStatus,
@@ -27,6 +27,8 @@ import { selectGetAdminSession } from "features/admin/presentation/slices/get-ad
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AiOutlineDownload } from "react-icons/ai";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { PopupModal } from "./popup.modal";
 
 interface SupplierDispatchOrderModalProps {
   open: boolean;
@@ -52,32 +54,11 @@ export function SupplierDispatchOrderModal(
   const [preview, setPreview] = useState(false);
   const [uploadButton, setuploadButton] = useState(true);
   const [remarks, setRemarks] = useState("");
+  const [openPopUp, setOpenPopUp] = useState(false);
 
-  const [rows, setRows] = useState<TableRow>({
-    order_information: {
-      store_name: "",
-      order_number: "",
-      ship_to_address: "",
-      store_id: "",
-
-      requested_delivery_date: "",
-      commited_delivery_date: "",
-      order_reviewed_date: "",
-      order_confirmation_date: "",
-      view_delivery_receipt: "",
-      dispatch_date: "",
-      order_enroute: "",
-      actual_delivery_date: "",
-      view_updated_delivery_receipt: "",
-      billing_information_ready: false,
-      view_payment_details: "",
-      payment_confirmation: "",
-      transport_route: "",
-      region_id: 0,
-      remarks: [],
-    },
-    product_data: [],
-  });
+  const [rows, setRows] = useState<StockOrderingInformationModel>(
+    productDataInitialState
+  );
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -143,6 +124,7 @@ export function SupplierDispatchOrderModal(
     setRemarks("");
     setuploadButton(true);
     setPreview(false);
+    setOpenPopUp(false);
   }, [props.open]);
 
   const handleDispatchOrder = async (e: { preventDefault: () => void }) => {
@@ -171,16 +153,8 @@ export function SupplierDispatchOrderModal(
     props.onClose();
   };
 
-  const handleCancelOrder = async () => {
-    const cancelOrderParam: updateCancelledStatus = {
-      id: props.id,
-      remarks: remarks,
-    };
-
-    await dispatch(updateOrderCancelled(cancelOrderParam));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
+  const handleCancelOrder = () => {
+    setOpenPopUp(true);
   };
 
   const isQuantityEmpty = () => {
@@ -404,6 +378,18 @@ export function SupplierDispatchOrderModal(
         onClose={() => setOpenUploadDeliveryRecieptModal(false)}
         setUploadedReciept={setUploadedReciept}
         isButtonAvailable={uploadButton}
+      />
+
+      <PopupModal
+        open={openPopUp}
+        onClose={() => setOpenPopUp(false)}
+        title={"Cancel Order"}
+        message={"Are you sure you want to cancel your order?"}
+        remarks={remarks}
+        id={props.id}
+        orderCancelled={(isCancelled: boolean) =>
+          isCancelled && props.onClose()
+        }
       />
     </>
   );

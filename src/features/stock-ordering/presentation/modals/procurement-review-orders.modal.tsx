@@ -3,12 +3,13 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import { TextField, Button, Switch, ButtonGroup } from "@mui/material";
 import { useEffect, useState } from "react";
-import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReviewOrders } from "../slices/update-review-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 
 interface ProcurementReviewOrdersModalProps {
   open: boolean;
@@ -29,31 +30,9 @@ export function ProcurementReviewOrdersModal(
 
   const [remarks, setRemarks] = useState("");
 
-  const [rows, setRows] = useState<TableRow>({
-    order_information: {
-      store_name: "",
-      ship_to_address: "",
-      store_id: "",
-
-      order_number: "",
-      requested_delivery_date: "",
-      commited_delivery_date: "",
-      order_reviewed_date: "",
-      order_confirmation_date: "",
-      view_delivery_receipt: "",
-      dispatch_date: "",
-      order_enroute: "",
-      actual_delivery_date: "",
-      view_updated_delivery_receipt: "",
-      billing_information_ready: false,
-      view_payment_details: "",
-      payment_confirmation: "",
-      transport_route: "",
-      region_id: 0,
-      remarks: [],
-    },
-    product_data: [],
-  });
+  const [rows, setRows] = useState<StockOrderingInformationModel>(
+    productDataInitialState
+  );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 

@@ -1,10 +1,11 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
 import { useState } from "react";
-import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 
 interface CompleteModalProps {
   open: boolean;
@@ -16,31 +17,9 @@ interface CompleteModalProps {
 export function CancelledModal(props: CompleteModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
 
-  const [rows, setRows] = useState<TableRow>({
-    order_information: {
-      store_name: "",
-      store_id: "",
-
-      ship_to_address: "",
-      order_number: "",
-      requested_delivery_date: "",
-      commited_delivery_date: "",
-      order_reviewed_date: "",
-      order_confirmation_date: "",
-      view_delivery_receipt: "",
-      dispatch_date: "",
-      order_enroute: "",
-      actual_delivery_date: "",
-      view_updated_delivery_receipt: "",
-      billing_information_ready: false,
-      view_payment_details: "",
-      payment_confirmation: "",
-      transport_route: "",
-      region_id: 0,
-      remarks: [],
-    },
-    product_data: [],
-  });
+  const [rows, setRows] = useState<StockOrderingInformationModel>(
+    productDataInitialState
+  );
 
   InitializeModal({
     setRows: setRows,

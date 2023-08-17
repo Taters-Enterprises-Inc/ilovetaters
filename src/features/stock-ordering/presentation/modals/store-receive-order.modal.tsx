@@ -12,11 +12,12 @@ import {
 } from "../components";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
-import { TableRow } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { receiveOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import { updateReceiveOrders } from "../slices/update-receive-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 
 interface StoreReceiveOrderModalProps {
   open: boolean;
@@ -39,31 +40,9 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
 
-  const [rows, setRows] = useState<TableRow>({
-    order_information: {
-      store_name: "",
-      ship_to_address: "",
-      store_id: "",
-
-      order_number: "",
-      requested_delivery_date: "",
-      commited_delivery_date: "",
-      order_reviewed_date: "",
-      order_confirmation_date: "",
-      view_delivery_receipt: "",
-      dispatch_date: "",
-      order_enroute: "",
-      actual_delivery_date: "",
-      view_updated_delivery_receipt: "",
-      billing_information_ready: false,
-      view_payment_details: "",
-      payment_confirmation: "",
-      transport_route: "",
-      region_id: 0,
-      remarks: [],
-    },
-    product_data: [],
-  });
+  const [rows, setRows] = useState<StockOrderingInformationModel>(
+    productDataInitialState
+  );
 
   useEffect(() => {
     setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));

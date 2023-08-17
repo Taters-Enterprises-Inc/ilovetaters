@@ -1,20 +1,20 @@
 import { useEffect } from "react";
-import {
-  DataGrid,
-  GridColDef,
-  GridSelectionApi,
-  GridSelectionModel,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { PayBillingModal } from "../modals";
-import { updatePayBillingOrders } from "../slices/update-pay-billing.slice";
+import {
+  selectupdatePayBillingOrders,
+  updatePayBillingOrders,
+  updatePayBillingOrdersState,
+} from "../slices/update-pay-billing.slice";
 import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   getPayBillingSi,
   selectGetPayBillingSi,
 } from "../slices/get-pay-billing-si.slice";
+import { SnackbarAlert } from "features/shared/presentation/components";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "Sales Invoice", width: 100 },
@@ -40,6 +40,7 @@ const columns: GridColDef[] = [
 
 interface PayMultipleOrderProps {
   onClose: (close: boolean) => void;
+  open: boolean;
 }
 
 interface selectedData {
@@ -52,14 +53,12 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
   const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
   const [remarks, setRemarks] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
 
   const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
+  const getBillingState = useAppSelector(selectupdatePayBillingOrders);
 
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getPayBillingSi());
-  }, [dispatch]);
 
   const buttonStyle = {
     color: "white",
@@ -111,6 +110,23 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     return true;
   };
 
+  useEffect(() => {
+    dispatch(getPayBillingSi());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (updatePayBillingOrdersState.fail === getBillingState.status) {
+      setOpenAlert(true);
+    } else if (updatePayBillingOrdersState.success === getBillingState.status) {
+      setOpenAlert(false);
+      props.onClose(true);
+    }
+  }, [getBillingState.status]);
+
+  useEffect(() => {
+    setTimeout(() => setOpenAlert(false), 5000);
+  }, [openAlert]);
+
   const handlePayBilling = async () => {
     const payBilingParam: updatePayBillingParam = {
       selectedData: selectedData ?? [],
@@ -119,9 +135,6 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     };
 
     await dispatch(updatePayBillingOrders(payBilingParam));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose(true);
   };
 
   const handleOnSelectionModelChange = (
@@ -196,6 +209,12 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
         onClose={() => setOpenPayBillingModal(false)}
         setUploadedReciept={setUploadedReciept}
         isButtonAvailable={true}
+      />
+
+      <SnackbarAlert
+        open={openAlert}
+        severity={"error"}
+        message={getBillingState.message}
       />
     </>
   );
