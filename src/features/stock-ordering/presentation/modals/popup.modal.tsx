@@ -3,6 +3,7 @@ import { updateCancelledStatus } from "features/stock-ordering/core/stock-orderi
 import React from "react";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { useAppDispatch } from "features/config/hooks";
+import { AiFillWarning } from "react-icons/ai";
 
 interface CompleteModalProps {
   open: boolean;
@@ -44,14 +45,17 @@ export function PopupModal(props: CompleteModalProps) {
               {props.title}
             </span>
           </div>
-          <div className="bg-paper p-3 rounded-b-md space-y-8">
-            <span>{props.message}</span>
-
+          <div className="flex flex-col bg-paper p-3 rounded-b-md space-y-8">
+            <div className="flex space-x-3">
+              <AiFillWarning className="text-2xl text-tertiary" />
+              <span>{props.message}</span>
+            </div>
             <div className="flex space-x-3">
               <Button
                 fullWidth
                 size="small"
                 onClick={handleCancelOrder}
+                variant="contained"
                 sx={{ color: "white", backgroundColor: "#CC5801" }}
               >
                 Yes
@@ -59,6 +63,7 @@ export function PopupModal(props: CompleteModalProps) {
               <Button
                 fullWidth
                 size="small"
+                variant="contained"
                 onClick={() => props.onClose()}
                 sx={{ color: "white", backgroundColor: "#CC5801" }}
               >

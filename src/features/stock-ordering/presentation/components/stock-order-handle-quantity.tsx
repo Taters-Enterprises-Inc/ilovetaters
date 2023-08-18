@@ -1,21 +1,34 @@
 import { ButtonGroup, Button, TextField } from "@mui/material";
+import { getRowsStateFromCache } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import React from "react";
 
 interface StockOrderHandleQuantityProps {
-  rows: OrderTableData[];
-  setRows: (row: OrderTableData[]) => void;
+  rows: any[];
+  setRows: (row: any[]) => void;
   rowsIndex: number;
   currentValue: string;
   propertyKey: string;
+  precedingPropertyKey?: string;
 }
 
 export function StockOrderHandleQuantity(props: StockOrderHandleQuantityProps) {
   const handleQuantityButtonChange = (event: {
     currentTarget: { id: string };
   }) => {
-    const updatedRows = props.rows.map((r, index) => {
-      let value = isNaN(Number(r.orderQty)) ? 0 : Number(r.orderQty);
+    const updatedRows = props.rows.map((r: any, index: number) => {
+      let value = isNaN(Number(props.currentValue))
+        ? 0
+        : Number(props.currentValue);
+
+      value = value >= 0 ? value : 0;
+
+      if (props.precedingPropertyKey) {
+        value =
+          value < r?.[props.precedingPropertyKey ?? ""]
+            ? value
+            : r?.[props.precedingPropertyKey ?? ""] - 1;
+      }
 
       if (index === props.rowsIndex) {
         if (event.currentTarget.id === "minus") {
@@ -41,7 +54,7 @@ export function StockOrderHandleQuantity(props: StockOrderHandleQuantityProps) {
   ) => {
     let value = event.target.value.replace(/\D/g, "");
 
-    const updatedRows = props.rows.map((r, index) => {
+    const updatedRows = props.rows.map((r: any, index: number) => {
       if (index === props.rowsIndex) {
         return {
           ...r,
