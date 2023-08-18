@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { StockOrderHead } from "../components";
+import { StockOrderHead, ProfileContent } from "../components";
 
-export function StockOrderDashboard() {
+export function ProfilePage() {
   return (
     <>
       <StockOrderHead
@@ -11,11 +10,12 @@ export function StockOrderDashboard() {
             url: "/admin/stock-order/dashboard",
           },
           className: "lg:h-[200px]",
-          pageTitles: [
-            { name: "Dashboard", url: "/admin/stock-order/dashboard" },
-          ],
+          pageTitles: [{ name: "Profile", url: "/admin/stock-order/order" }],
         }}
       />
+      <div className="p-8">
+        <ProfileContent />
+      </div>
     </>
   );
 }

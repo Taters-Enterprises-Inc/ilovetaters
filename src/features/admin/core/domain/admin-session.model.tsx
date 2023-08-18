@@ -29,7 +29,7 @@ export interface AdminSessionModel {
       }>;
       sos_groups: Array<{
         id: number;
-        name: string;
+        short_name: string;
         description: string;
       }>;
       stores: Array<{

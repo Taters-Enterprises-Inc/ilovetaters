@@ -13,3 +13,5 @@ export { InitializeProductData } from "./initialize-product-data";
 export { StockOrderProductSelector } from "./stock-order-product-selection";
 export { PayMultipleOrder } from "./pay-multiple-order";
 export { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
+export { ProfileContent } from "./profile-content";
+export { ChangePassword } from "./change-password";

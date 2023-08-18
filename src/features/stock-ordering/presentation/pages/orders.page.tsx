@@ -11,10 +11,10 @@ export function StockOrderOrders() {
         StockOrderBreadCrumbsProps={{
           home: {
             title: "Home",
-            url: "/stock-order/dashboard",
+            url: "/admin/stock-order/dashboard",
           },
           className: "lg:h-[200px]",
-          pageTitles: [{ name: "Orders", url: "/stock-order/order" }],
+          pageTitles: [{ name: "Orders", url: "/admin/stock-order/order" }],
         }}
       />
       <div className="p-8">

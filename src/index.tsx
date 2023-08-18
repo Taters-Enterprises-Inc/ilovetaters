@@ -171,6 +171,7 @@ import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 import { ShopProductViewLog } from "features/shop/presentation/logs";
 import { StockAuditSidebarWrapper } from "features/stock-ordering/presentation/components";
 import {
+  ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
   StockOrderView,
@@ -400,6 +401,10 @@ root.render(
                                 <Route
                                   path="order/view"
                                   element={<StockOrderView />}
+                                />
+                                <Route
+                                  path="profile"
+                                  element={<ProfilePage />}
                                 />
                               </Route>
                             </Route>
