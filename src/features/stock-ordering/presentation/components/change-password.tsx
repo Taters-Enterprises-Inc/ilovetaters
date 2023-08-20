@@ -1,8 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import { error } from "console";
 import { id } from "date-fns/locale";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputPassword } from "features/shared/presentation/components";
-import { ChangeEventHandler, useState } from "react";
+import { changePasswordParam } from "features/stock-ordering/core/stock-ordering.params";
+import { ChangeEventHandler, useEffect, useState } from "react";
+import { changePassword } from "../slices/change-password.slice";
+import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 
 interface passwordStateData {
   currentPassword: string;
@@ -22,6 +26,9 @@ interface passwordErrorState {
 }
 
 export function ChangePassword() {
+  const dispatch = useAppDispatch();
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
+
   const [passwordState, setPasswordState] = useState<passwordStateData>({
     currentPassword: "",
     newPassword: "",
@@ -45,6 +52,16 @@ export function ChangePassword() {
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    if (getAdminSessionState.data) {
+      const passwordStateParam: changePasswordParam = {
+        currentPassword: passwordState.currentPassword,
+        newPassword: passwordState.newPassword,
+        confirmPassword: passwordState.confirmPassword,
+      };
+      const id = getAdminSessionState.data?.admin?.user_id;
+      dispatch(changePassword({ param: passwordStateParam, id: id }));
+    }
   };
 
   const handleError = (name: string, isError: boolean, message: string) => {
@@ -63,38 +80,55 @@ export function ChangePassword() {
     const value = event.target.value;
     const name = event.target.name;
 
-    if (value.length < 8) {
-      handleError(name, true, "Password must contain at least 8 characters");
-    } else {
-      handleError(name, false, "");
-
-      const hasLowercase = /[a-z]/.test(value);
-      const hasUppercase = /[A-Z]/.test(value);
-      const hasNumber = /\d/.test(value);
-      const hasSpecialChar = /[!@#$%^&*()_+[\]{};':"\\|,.<>/?]+/.test(value);
-
-      if (value.length > 32) {
-        return "Password is too long.";
-      }
-
-      if (!hasLowercase || !hasUppercase || !hasNumber || !hasSpecialChar) {
-        handleError(
-          name,
-          true,
-          "password must at least contain uppercase character, lowercase character, number, and symbol"
-        );
+    if (name === "newPassword" || name === "confirmPassword") {
+      if (value.length < 8) {
+        handleError(name, true, "Password must contain at least 8 characters");
       } else {
         handleError(name, false, "");
 
-        setPasswordState({
-          ...passwordState,
-          [event.target.name]: event.target.value,
-        });
+        const hasLowercase = /[a-z]/.test(value);
+        const hasUppercase = /[A-Z]/.test(value);
+        const hasNumber = /\d/.test(value);
+        const hasSpecialChar = /[!@#$%^&*()_+[\]{};':"\\|,.<>/?]+/.test(value);
+
+        if (value.length > 32) {
+          return "Password is too long.";
+        }
+
+        if (!hasLowercase || !hasUppercase || !hasNumber || !hasSpecialChar) {
+          handleError(
+            name,
+            true,
+            "password must at least contain uppercase character, lowercase character, number, and symbol"
+          );
+        } else {
+          handleError(name, false, "");
+
+          setPasswordState({
+            ...passwordState,
+            [event.target.name]: event.target.value,
+          });
+        }
       }
+    } else {
+      setPasswordState({
+        ...passwordState,
+        [event.target.name]: event.target.value,
+      });
     }
   };
 
-  console.log(passwordState);
+  useEffect(() => {
+    if (passwordState.confirmPassword !== passwordState.newPassword) {
+      handleError(
+        "confirmPassword",
+        true,
+        "Confirm password does not match with new password"
+      );
+    } else {
+      handleError("confirmPassword", false, "");
+    }
+  }, [passwordState.confirmPassword, passwordState.newPassword]);
 
   return (
     <>
