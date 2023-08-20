@@ -75,7 +75,7 @@ export function LoginChooserModal() {
           <h1 className="text-3xl font-['Bebas_Neue'] tracking-[3px] text-center">
             Hi! Welcome to Taters
           </h1>
-          <h2 className="text-xs text-center">
+          {/* <h2 className="text-xs text-center">
             Continue with us by connecting your existing account
           </h2>
           <button
@@ -84,7 +84,7 @@ export function LoginChooserModal() {
           >
             <BsFacebook className="mr-2" />
             <span>Continue with Facebook</span>
-          </button>
+          </button> */}
           <button
             onClick={() => {
               dispatch(closeLoginChooserModal());

@@ -53,7 +53,7 @@ export const SERVICES_DESKTOP = [
     textColor: "white",
     backgroundPosition: "center center",
     url: "popclub",
-    image: "api/assets/images/home/cards/taters_popclub.jpg",
+    image: "api/assets/images/home/cards/POPCLUB.png",
   },
   {
     title: "Taters Caters",
@@ -71,7 +71,7 @@ export const SERVICES_DESKTOP = [
     textColor: "black",
     backgroundPosition: "center center",
     url: "reseller",
-    image: "api/assets/images/home/cards/taters_reseller.jpg",
+    image: "api/assets/images/home/cards/RESELLER.png",
   },
   {
     title: "Branches",
