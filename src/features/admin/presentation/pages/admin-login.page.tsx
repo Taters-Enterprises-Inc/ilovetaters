@@ -52,7 +52,7 @@ export function AdminLogin() {
     getAdminSessionState.data &&
     getAdminSessionState.status === GetAdminSessionState.success
   ) {
-    return <Navigate to={"/admin/dashboard"} />;
+    return <Navigate to={"/admin/landing"} />;
   }
 
   return (

@@ -23,8 +23,6 @@ import {
   UpdateAdminSettingShopProductStatusParam,
   UpdateStoreCateringProductParam,
   UpdateAdminCateringOrderItemRemarksParam,
-  GetAdminSalesParam,
-  GetAdminTotalSalesParam,
   CreateAdminSettingStoreParam,
   GetAdminCateringPackageFlavorsParam,
   GetAdminSettingStoreParam,
@@ -35,8 +33,11 @@ import {
   CopyAdminSettingCateringPackageParam,
   UpdateAdminSettingCateringPackageStatusParam,
   CreateAdminSettingPopclubDealParam,
+  AdminInfluencerApplicationChangeStatusParam,
   EditAdminSettingPopclubDealParam,
   UpdateAdminSettingPopclubDealStatusParam,
+  CreateAdminInfluencerPromoParam,
+  AdminInfluencerCashoutChangeStatusParam,
   ValidatePartnerCompanyEmployeeIdNumberParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
@@ -88,6 +89,15 @@ import { AdminPopclubCategory } from "features/admin/core/domain/admin-popclub-c
 import { AdminPopclubProduct } from "features/admin/core/domain/admin-popclub-product.model";
 import { PopclubStoreModel } from "features/admin/core/domain/popclub-store.model";
 import { GetAdminSettingPopclubDealModel } from "features/admin/core/domain/get-admin-setting-popclub-deal.model";
+import { GetAdminInfluencerApplicationsModel } from "features/admin/core/domain/get-admin-influencer-applications.model";
+import { AdminInfluencerApplicationModel } from "features/admin/core/domain/admin-influencer-application.model";
+import { GetAdminInfluencerPromosModel } from "features/admin/core/domain/get-admin-influencer-promos.model";
+import { AdminInfluencerModel } from "features/admin/core/domain/admin-influencer.model";
+import { GetAdminInfluencerCashoutsModel } from "features/admin/core/domain/get-admin-influencer-cashouts.model";
+import { AdminInfluencerCashoutModel } from "features/admin/core/domain/admin-influencer-cashout.model";
+import { AdminUsersTotalModel } from "features/admin/core/domain/admin-users-total.model";
+import { AdminFeaturedProductModel } from "features/admin/core/domain/admin-featured-product.model";
+import { AdminCustomerFeedbackRatingsSectionAvarageModel } from "features/admin/core/domain/admin-customer-feedback-ratings-section-avarage.model";
 
 export interface LoginAdminResponse {
   data: {
@@ -199,7 +209,7 @@ export interface GetAdminUserResponse {
 export interface GetAdminGroupsResponse {
   data: {
     message: string;
-    data: Array<GroupModel>;
+    data: GroupModel;
   };
 }
 
@@ -504,17 +514,10 @@ export interface GetAdminCateringPackageFlavorsResponse {
   };
 }
 
-export interface GetAdminSalesResponse {
+export interface GetAdminDashboardShopSalesHistoryResponse {
   data: {
     message: string;
     data: Array<SaleModel>;
-  };
-}
-
-export interface GetAdminTotalSalesResponse {
-  data: {
-    message: string;
-    data: TotalSalesModel;
   };
 }
 
@@ -689,7 +692,20 @@ export interface GetAdminSettingPopclubDealResponse {
   };
 }
 
-export interface EditAdminSettingPopclubDealResponse {
+export interface GetAdminInfluencerApplicationsResponse {
+  data: {
+    message: string;
+    data: GetAdminInfluencerApplicationsModel;
+  };
+}
+
+export interface GetAdminInfluencerApplicationResponse {
+  data: {
+    message: string;
+    data: AdminInfluencerApplicationModel;
+  };
+}
+export interface AdminInfluencerApplicationChangeStatusResponse {
   data: {
     message: string;
   };
@@ -701,10 +717,206 @@ export interface UpdateAdminSettingPopclubDealStatusResponse {
   };
 }
 
+export interface EditAdminSettingPopclubDealResponse {
+  data: {
+    message: string;
+  };
+}
 export interface ValidatePartnerCompanyEmployeeIdNumberAdminResponse {
   data: {
     message: string;
   };
+}
+
+export interface GetAdminInfluencerPromosResponse {
+  data: {
+    message: string;
+    data: GetAdminInfluencerPromosModel;
+  };
+}
+
+export interface GetAdminInfluencersResponse {
+  data: {
+    message: string;
+    data: Array<AdminInfluencerModel>;
+  };
+}
+
+export interface CreateAdminInfluencerPromoResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminInfluencerCashoutsResponse {
+  data: {
+    message: string;
+    data: GetAdminInfluencerCashoutsModel;
+  };
+}
+
+export interface GetAdminInfluencerCashoutResponse {
+  data: {
+    message: string;
+    data: AdminInfluencerCashoutModel;
+  };
+}
+
+export interface AdminInfluencerCashoutChangeStatusResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface GetAdminDashboardShopTransactionTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopCompletedTransactionTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopInitialCheckoutTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopProductViewTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopAddToCartTotalResponse {
+  data: {
+    message: string;
+    data: number;
+  };
+}
+
+export interface GetAdminDashboardShopUsersTotalResponse {
+  data: {
+    message: string;
+    data: Array<AdminUsersTotalModel>;
+  };
+}
+
+export interface GetAdminDashboardShopFeaturedProductsResponse {
+  data: {
+    message: string;
+    data: Array<AdminFeaturedProductModel>;
+  };
+}
+
+export interface GetAdminDashboardCustomerFeedbackRatingsResponse {
+  data: {
+    message: string;
+    data: Array<AdminCustomerFeedbackRatingsSectionAvarageModel>;
+  };
+}
+
+export function GetAdminDashboardCustomerFeedbackRatingsRepository(
+  query: string
+): Promise<GetAdminDashboardCustomerFeedbackRatingsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/customer-feedback/ratings${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopFeaturedProductsRepository(): Promise<GetAdminDashboardShopFeaturedProductsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/featured-products`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopUsersTotalRepository(): Promise<GetAdminDashboardShopUsersTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/users-total`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopAddToCartTotalRepository(): Promise<GetAdminDashboardShopAddToCartTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/add-to-cart-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopProductViewTotalRepository(): Promise<GetAdminDashboardShopProductViewTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/product-view-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopInitialCheckoutTotalRepository(): Promise<GetAdminDashboardShopInitialCheckoutTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/initial-checkout-logs`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopCompletedTransactionTotalRepository(): Promise<GetAdminDashboardShopCompletedTransactionTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-completed-transaction`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminDashboardShopTransactionTotalRepository(): Promise<GetAdminDashboardShopTransactionTotalResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/total-transaction`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminInfluencerCashoutChangeStatusRepository(
+  param: AdminInfluencerCashoutChangeStatusParam
+): Promise<AdminInfluencerCashoutChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashout/change-status`,
+    param,
+    { withCredentials: true }
+  );
+}
+
+export function GetAdminInfluencerCashoutRepository(
+  id: string
+): Promise<GetAdminInfluencerCashoutResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashout/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 export function ValidatePartnerCompanyEmployeeIdNumberAdminRepository(
@@ -716,6 +928,52 @@ export function ValidatePartnerCompanyEmployeeIdNumberAdminRepository(
     {
       withCredentials: true,
     }
+  );
+}
+
+export function GetAdminInfluencerCashoutsRepository(
+  query: string
+): Promise<GetAdminInfluencerCashoutsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/cashouts${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function CreateAdminInfluencerPromoRepository(
+  param: CreateAdminInfluencerPromoParam
+): Promise<CreateAdminInfluencerPromoResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/admin/influencer`, param, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminInfluencersRepository(): Promise<GetAdminInfluencersResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/influencers`, {
+    withCredentials: true,
+  });
+}
+
+export function GetAdminInfluencerPromosRepository(
+  query: string
+): Promise<GetAdminInfluencerPromosResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/promos${query}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function AdminInfluencerApplicationChangeStatusRepository(
+  param: AdminInfluencerApplicationChangeStatusParam
+): Promise<AdminInfluencerApplicationChangeStatusResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/application/change-status`,
+    param,
+    { withCredentials: true }
   );
 }
 
@@ -741,6 +999,28 @@ export function EditAdminSettingPopclubDealRepository(
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminInfluencerApplicationRepository(
+  id: string
+): Promise<GetAdminInfluencerApplicationResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/application/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
+}
+
+export function GetAdminInfluencerApplicationsRepository(
+  query: string
+): Promise<GetAdminInfluencerApplicationsResponse> {
+  return axios.get(
+    `${REACT_APP_DOMAIN_URL}api/admin/influencer/applications${query}`,
+    {
       withCredentials: true,
     }
   );
@@ -1008,23 +1288,13 @@ export function UpdateStoreCateringProductRepository(
   );
 }
 
-export function GetAdminTotalSalesRepository(
-  param: GetAdminTotalSalesParam
-): Promise<GetAdminTotalSalesResponse> {
+export function GetAdminDashboardShopSalesHistoryRepository(): Promise<GetAdminDashboardShopSalesHistoryResponse> {
   return axios.get(
-    `${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}/sum`,
+    `${REACT_APP_DOMAIN_URL}api/admin/dashboard/shop/sales-history`,
     {
       withCredentials: true,
     }
   );
-}
-
-export function GetAdminSalesRepository(
-  param: GetAdminSalesParam
-): Promise<GetAdminSalesResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/admin/sales/${param.service}`, {
-    withCredentials: true,
-  });
 }
 
 export function GetAdminProductsRepository(): Promise<GetAdminProductsResponse> {

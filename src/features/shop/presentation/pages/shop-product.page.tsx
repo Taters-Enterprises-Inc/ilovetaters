@@ -5,12 +5,8 @@ import {
 } from "react-icons/ai";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFastfood, MdStore } from "react-icons/md";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  BsCartX,
-  BsFillCalendar2WeekFill,
-  BsFillCartPlusFill,
-} from "react-icons/bs";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { BsCartX, BsFillCartPlusFill } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
   changeProductPrice,
@@ -72,6 +68,8 @@ import { StoreVisitStoreChooserModal } from "features/popclub/presentation/modal
 import { selectRedeemDeal } from "features/popclub/presentation/slices/redeem-deal.slice";
 import { redeemValidators } from "features/popclub/presentation/slices/redeem-validators.slice";
 import { openLoginChooserModal } from "features/shared/presentation/slices/login-chooser-modal.slice";
+import { BsBookmarkStarFill } from "react-icons/bs";
+import { insertShopProductViewLog } from "../slices/insert-shop-product-view-log.slice";
 
 let quantityId: any;
 
@@ -89,7 +87,7 @@ export type ShopMultiFlavorType = {
 export function ShopProduct() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  let { hash } = useParams();
+  const { hash } = useParams();
   const location = useLocation();
 
   const [setDisabled] = useState(true);
@@ -193,6 +191,15 @@ export function ShopProduct() {
 
   useEffect(() => {
     if (currentSize !== "") {
+      if (getProductDetailsState.data) {
+        dispatch(
+          insertShopProductViewLog({
+            product_id: getProductDetailsState.data.product.id,
+            product_variant_option_id: parseInt(currentSize),
+          })
+        );
+      }
+
       dispatch(
         getProductSku({
           prod_flavor: "",

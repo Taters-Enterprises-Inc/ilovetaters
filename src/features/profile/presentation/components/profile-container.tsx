@@ -14,6 +14,7 @@ interface ProfileContainerProps {
     | "raffle"
     | "gift-cards"
     | "user-discount"
+    | "influencer"
     | "inbox";
 }
 
