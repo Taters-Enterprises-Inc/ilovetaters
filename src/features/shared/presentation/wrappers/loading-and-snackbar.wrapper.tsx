@@ -343,19 +343,6 @@ import {
   selectCreateAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
 import {
-  ApplyInfluencerState,
-  selectApplyInfluencer,
-} from "features/profile/presentation/slices/apply-influencer.slice";
-import {
-  selectUpdateInfluencer,
-  UpdateInfluencerState,
-} from "features/profile/presentation/slices/update-influencer.slice";
-import {
-  AdminInfluencerApplicationChangeStatusState,
-  selectAdminInfluencerApplicationChangeStatus,
-} from "features/admin/presentation/slices/admin-influencer-application-change-status.slice";
-
-import {
   EditAdminSettingPopclubDealState,
   selectEditAdminSettingPopclubDeal,
 } from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
@@ -363,27 +350,6 @@ import {
   selectValidatePartnerCompanyEmployeeIdNumberAdmin,
   ValidatePartnerCompanyEmployeeIdNumberAdminState,
 } from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
-
-import {
-  selectGetSnackshopInfluencerPromo,
-  GetSnackshopInfluencerPromoState,
-} from "features/shop/presentation/slices/get-snackshop-influencer-promo.slice";
-import {
-  selectUploadContractInfluencer,
-  UploadContractInfluencerState,
-} from "features/profile/presentation/slices/upload-contract-influencer.slice";
-import {
-  CreateAdminInfluencerPromoState,
-  selectCreateAdminInfluencerPromo,
-} from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
-import {
-  selectInfluencerCashout,
-  InfluencerCashoutState,
-} from "features/profile/presentation/slices/influencer-cashout.slice";
-import {
-  selectAdminInfluencerCashoutChangeStatus,
-  AdminInfluencerCashoutChangeStatusState,
-} from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -578,58 +544,12 @@ export function LoadingAndSnackbarWrapper() {
   const createAdminSettingPopclubDealState = useAppSelector(
     selectCreateAdminSettingPopclubDeal
   );
-  const applyInfluencerState = useAppSelector(selectApplyInfluencer);
-  const updateInfluencerState = useAppSelector(selectUpdateInfluencer);
-  const adminInfluencerApplicationChangeStatusState = useAppSelector(
-    selectAdminInfluencerApplicationChangeStatus
-  );
   const editAdminSettingPopclubDealState = useAppSelector(
     selectEditAdminSettingPopclubDeal
   );
-  const getSnackshopInfluencerPromoState = useAppSelector(
-    selectGetSnackshopInfluencerPromo
-  );
-
-  const uploadContractInfluencerState = useAppSelector(
-    selectUploadContractInfluencer
-  );
-  const createAdminInfluencerPromoState = useAppSelector(
-    selectCreateAdminInfluencerPromo
-  );
-  const influencerCashoutState = useAppSelector(selectInfluencerCashout);
-
-  const adminInfluencerCashoutChangeStatusState = useAppSelector(
-    selectAdminInfluencerCashoutChangeStatus
-  );
-
   const validatePartnerCompanyEmployeeIdNumberAdminState = useAppSelector(
     selectValidatePartnerCompanyEmployeeIdNumberAdmin
   );
-
-  useEffect(() => {
-    switch (adminInfluencerCashoutChangeStatusState.status) {
-      case AdminInfluencerCashoutChangeStatusState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case AdminInfluencerCashoutChangeStatusState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case AdminInfluencerCashoutChangeStatusState.success:
-        showAlert(
-          setSuccessAlert,
-          adminInfluencerCashoutChangeStatusState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-      case AdminInfluencerCashoutChangeStatusState.fail:
-        showAlert(
-          setFailsAlert,
-          adminInfluencerCashoutChangeStatusState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [adminInfluencerCashoutChangeStatusState]);
 
   useEffect(() => {
     switch (validatePartnerCompanyEmployeeIdNumberAdminState.status) {
@@ -655,145 +575,6 @@ export function LoadingAndSnackbarWrapper() {
         break;
     }
   }, [validatePartnerCompanyEmployeeIdNumberAdminState]);
-
-  useEffect(() => {
-    switch (influencerCashoutState.status) {
-      case InfluencerCashoutState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case InfluencerCashoutState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case InfluencerCashoutState.success:
-        showAlert(setSuccessAlert, influencerCashoutState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case InfluencerCashoutState.fail:
-        showAlert(setFailsAlert, influencerCashoutState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [influencerCashoutState]);
-
-  useEffect(() => {
-    switch (createAdminInfluencerPromoState.status) {
-      case CreateAdminInfluencerPromoState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case CreateAdminInfluencerPromoState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case CreateAdminInfluencerPromoState.success:
-        showAlert(setSuccessAlert, createAdminInfluencerPromoState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case CreateAdminInfluencerPromoState.fail:
-        showAlert(setFailsAlert, createAdminInfluencerPromoState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [createAdminInfluencerPromoState]);
-
-  useEffect(() => {
-    switch (uploadContractInfluencerState.status) {
-      case UploadContractInfluencerState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case UploadContractInfluencerState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case UploadContractInfluencerState.success:
-        showAlert(setSuccessAlert, uploadContractInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case UploadContractInfluencerState.fail:
-        showAlert(setFailsAlert, uploadContractInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [uploadContractInfluencerState]);
-
-  useEffect(() => {
-    switch (getSnackshopInfluencerPromoState.status) {
-      case GetSnackshopInfluencerPromoState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case GetSnackshopInfluencerPromoState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case GetSnackshopInfluencerPromoState.success:
-        showAlert(setSuccessAlert, getSnackshopInfluencerPromoState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case GetSnackshopInfluencerPromoState.fail:
-        showAlert(setFailsAlert, getSnackshopInfluencerPromoState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [getSnackshopInfluencerPromoState]);
-
-  useEffect(() => {
-    switch (adminInfluencerApplicationChangeStatusState.status) {
-      case AdminInfluencerApplicationChangeStatusState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case AdminInfluencerApplicationChangeStatusState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case AdminInfluencerApplicationChangeStatusState.success:
-        showAlert(
-          setSuccessAlert,
-          adminInfluencerApplicationChangeStatusState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-      case AdminInfluencerApplicationChangeStatusState.fail:
-        showAlert(
-          setFailsAlert,
-          adminInfluencerApplicationChangeStatusState.message
-        );
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [adminInfluencerApplicationChangeStatusState]);
-
-  useEffect(() => {
-    switch (updateInfluencerState.status) {
-      case UpdateInfluencerState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case UpdateInfluencerState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateInfluencerState.success:
-        showAlert(setSuccessAlert, updateInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case UpdateInfluencerState.fail:
-        showAlert(setFailsAlert, updateInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [updateInfluencerState]);
-
-  useEffect(() => {
-    switch (applyInfluencerState.status) {
-      case ApplyInfluencerState.inProgress:
-        setOpenBackdropLoading(true);
-        break;
-      case ApplyInfluencerState.initial:
-        setOpenBackdropLoading(false);
-        break;
-      case ApplyInfluencerState.success:
-        showAlert(setSuccessAlert, applyInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-      case ApplyInfluencerState.fail:
-        showAlert(setFailsAlert, applyInfluencerState.message);
-        setOpenBackdropLoading(false);
-        break;
-    }
-  }, [applyInfluencerState]);
 
   useEffect(() => {
     switch (editAdminSettingPopclubDealState.status) {

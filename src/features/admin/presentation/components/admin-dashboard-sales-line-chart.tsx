@@ -8,30 +8,28 @@ import {
   CartesianGrid,
 } from "recharts";
 import { useAppSelector } from "features/config/hooks";
-import { selectGetAdminDashboardShopSalesHistory } from "../slices/get-admin-dashboard-shop-sales-history.slice";
+import { selectGetAdminSales } from "../slices/get-admin-sales.slice";
 import moment from "moment";
+import { useState } from "react";
 import NumberFormat from "react-number-format";
-import { intToShortString } from "features/config/helpers";
 
 export function AdminDashboardSalesLineChart() {
-  const getAdminDashboardShopSalesHistoryState = useAppSelector(
-    selectGetAdminDashboardShopSalesHistory
-  );
+  const getAdminSalesState = useAppSelector(selectGetAdminSales);
 
   return (
-    <ResponsiveContainer width="100%">
-      <AreaChart data={getAdminDashboardShopSalesHistoryState.data}>
+    <ResponsiveContainer width="100%" height={400}>
+      <AreaChart data={getAdminSalesState.data}>
         <defs>
           <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#a21013" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#a21013" stopOpacity={0} />
+            <stop offset="5%" stopColor="#22201A" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#22201A" stopOpacity={0} />
           </linearGradient>
         </defs>
 
         <Area
           type="monotone"
-          dataKey="purchase_amount"
-          stroke="#a21013"
+          dataKey="quantity"
+          stroke="#22201A"
           fill="url(#color)"
           fillOpacity={1}
         />
@@ -43,23 +41,15 @@ export function AdminDashboardSalesLineChart() {
           tickFormatter={(str) => {
             const date = moment(str);
 
-            return date.format("dddd").substring(0, 3);
-          }}
-          style={{
-            fontSize: "0.7rem",
+            return date.format("MMM D");
           }}
         />
 
         <YAxis
-          dataKey="purchase_amount"
+          dataKey="quantity"
           axisLine={false}
           tickLine={false}
-          tickFormatter={(value) => intToShortString(parseInt(value))}
-          width={25}
           padding={{ bottom: 15 }}
-          style={{
-            fontSize: "0.7rem",
-          }}
         />
 
         <Tooltip content={<CustomTooltip />} />
@@ -82,15 +72,11 @@ function CustomTooltip({
   if (active && label && payload) {
     return (
       <div className="p-2 bg-white tooltip">
-        <span className="text-xl">
-          <NumberFormat
-            value={payload[0].value.toFixed(2)}
-            displayType={"text"}
-            thousandSeparator={true}
-            prefix={"₱"}
-          />
-        </span>
         <h4>{moment(label).format("LL")}</h4>
+
+        <span>
+          <b>Orders:</b> {payload[0].value}
+        </span>
       </div>
     );
   }

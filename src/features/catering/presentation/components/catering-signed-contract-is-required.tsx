@@ -75,8 +75,8 @@ export function CateringSignedContractIsRequired() {
             <div>
               <p className="m-0 font-bold">Signed contract is required</p>
               <p className="text-xs ">
-                We have successfully verified the store, please read the
-                contract and upload it with signature.
+                We have succesfully verified the store, please read the contract
+                and upload it with signature.
               </p>
             </div>
           </div>
@@ -103,7 +103,7 @@ export function CateringSignedContractIsRequired() {
               <div>
                 <p className="m-0 font-bold">Signed contract is required</p>
                 <p className="text-xs ">
-                  We have successfully verified the store, please read the
+                  We have succesfully verified the store, please read the
                   contract and upload it with signature.
                 </p>
               </div>

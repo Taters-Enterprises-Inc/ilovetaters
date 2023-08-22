@@ -85,14 +85,10 @@ export function UnExpiredRedeem() {
               <div className="flex items-start justify-start h-full">
                 {showInfo ? (
                   <Link
-                    to={`/popclub/deal/${
+                    to={
+                      "/popclub/deal/" +
                       getLatestUnexpiredRedeemState.data.deal_hash
-                    }${
-                      getLatestUnexpiredRedeemState.data.redeem_code
-                        ? "?referral-code=" +
-                          getLatestUnexpiredRedeemState.data.referral_code
-                        : ""
-                    }`}
+                    }
                     className="flex flex-col items-stretch flex-1 max-h-[75px] sm:max-h-fit min-h-[75px]  rounded-l-xl shadow-lg bg-secondary"
                   >
                     <div className="flex-1 h-full px-4 py-2 overflow-auto text-xs sm:overflow-hidden">

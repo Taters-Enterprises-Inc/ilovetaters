@@ -26,7 +26,6 @@ interface MaterialInputAutoCompleteProps {
   size?: "small" | "medium" | undefined;
   fullWidth?: boolean;
   required?: boolean;
-  disabled?: boolean;
   isOptionEqualToValue: (option: any, value: any) => boolean;
 }
 
@@ -36,7 +35,6 @@ export function MaterialInputAutoComplete(
   return (
     <Autocomplete
       disablePortal
-      disabled={props.disabled}
       multiple={props.multiple}
       options={props.options}
       sx={props.sx}

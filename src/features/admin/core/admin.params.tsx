@@ -108,11 +108,6 @@ export interface AdminUserDiscountChangeStatusParam {
   status: number;
 }
 
-export interface AdminInfluencerApplicationChangeStatusParam {
-  influencerUserId: number;
-  status: number;
-}
-
 export interface AdminSurveyVerificationChangeStatusParam {
   surveyVerificationId: number;
   invoiceNo: string;
@@ -141,6 +136,9 @@ export interface AdminCateringBookingUpdateStatusParam {
 
 export interface AdminShopOrderUpdateStatusParam {
   transactionId: number;
+  transactionHash: string;
+  mobileUserId: number | null;
+  fbUserId: number | null;
   status: number;
 }
 
@@ -209,6 +207,10 @@ export interface UpdateAdminSettingShopProductStatusParam {
 export interface UpdateAdminCateringOrderItemRemarksParam {
   orderItemId: number;
   remarks: string;
+}
+
+export interface GetAdminSalesParam {
+  service: "overall" | "snackshop" | "catering" | "popclub";
 }
 
 export interface GetAdminTotalSalesParam {
@@ -348,8 +350,6 @@ export interface CreateAdminSettingPopclubDealParam {
   originalPrice: string;
   promoPrice: string;
   promoDiscountPercentage: string;
-  subTotalPromoDiscount: string;
-  influencerDiscount: string;
   minimumPurchase: string;
   isFreeDelivery: boolean;
   isPartnerCompany: boolean;
@@ -405,16 +405,5 @@ export interface EditAdminSettingPopclubDealParam {
 
 export interface UpdateAdminSettingPopclubDealStatusParam {
   deal_id: number;
-  status: number;
-}
-
-export interface CreateAdminInfluencerPromoParam {
-  customerDiscountPercentage: string;
-  influencerDiscountPercentage: string;
-  influencer: string;
-}
-
-export interface AdminInfluencerCashoutChangeStatusParam {
-  influencerCashoutId: number;
   status: number;
 }

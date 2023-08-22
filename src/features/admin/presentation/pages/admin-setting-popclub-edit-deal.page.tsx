@@ -418,15 +418,6 @@ export function AdminSettingPopclubEditDeal() {
               label="Url Id"
               fullWidth
             />
-            <MaterialInput
-              required
-              colorTheme="black"
-              onChange={handleInputChange}
-              value={formState.urlId}
-              name="urlId"
-              label="Url Id"
-              fullWidth
-            />
 
             <MaterialInput
               required

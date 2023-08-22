@@ -5,4 +5,3 @@ export { Profile } from "./profile.page";
 export { ProfilePopclubRedeems } from "./profile-popclub-redeems.page";
 export { ProfileUserDiscount } from "./profile-user-discount.page";
 export { ProfileInbox } from "./profile-inbox.page";
-export { ProfileInfluencer } from "./profile-influencer.page";

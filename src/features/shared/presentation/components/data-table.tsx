@@ -98,11 +98,7 @@ export function DataTable(props: DataTableProps) {
         <Pagination
           page={props.page}
           onChange={props.onPageChange}
-          count={
-            Number.isFinite(Math.round(props.totalRows / props.perPage))
-              ? Math.round(props.totalRows / props.perPage)
-              : 0
-          }
+          count={Math.round(props.totalRows / props.perPage)}
           variant="outlined"
           shape="rounded"
         />

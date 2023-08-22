@@ -12,12 +12,7 @@ import {
   selectGetDeal,
 } from "features/popclub/presentation/slices/get-deal.slice";
 import { getRedeem } from "features/popclub/presentation/slices/get-redeem.slice";
-import {
-  INFLUENCER_STATUS,
-  ORDER_STATUS,
-  pusher,
-  USER_DISCOUNT_STATUS,
-} from "features/shared/constants";
+import { ORDER_STATUS, pusher } from "features/shared/constants";
 import {
   getOrders,
   GetOrdersState,
@@ -29,9 +24,6 @@ import {
   selectGetCateringOrders,
 } from "features/catering/presentation/slices/get-catering-orders.slice";
 import { getNotifications } from "../slices/get-notifications.slice";
-import { getInbox } from "features/profile/presentation/slices/get-inbox.slice";
-import { getUserDiscount } from "features/profile/presentation/slices/get-user-discount.slice";
-import { getInfluencer } from "features/profile/presentation/slices/get-influencer.slice";
 
 export function UserNotificationWrapper() {
   const dispatch = useAppDispatch();
@@ -55,73 +47,6 @@ export function UserNotificationWrapper() {
   });
 
   useEffect(() => {
-    pusher.unsubscribe("user-influencer");
-    const influencerChannel = pusher.subscribe("user-influencer");
-
-    influencerChannel.bind(
-      "influencer-update",
-      (data: {
-        fb_user_id?: number;
-        mobile_user_id?: number;
-        status: number;
-      }) => {
-        if (
-          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
-          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
-        ) {
-          showAlert(setSuccessAlert, INFLUENCER_STATUS[data.status].name);
-
-          dispatch(getNotifications());
-          dispatch(getInfluencer());
-        }
-      }
-    );
-
-    influencerChannel.bind(
-      "influencer-cashout-update",
-      (data: {
-        fb_user_id?: number;
-        mobile_user_id?: number;
-        message: string;
-      }) => {
-        if (
-          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
-          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
-        ) {
-          showAlert(setSuccessAlert, data.message);
-
-          dispatch(getNotifications());
-          dispatch(getInfluencer());
-        }
-      }
-    );
-  }, [getSessionState, dispatch]);
-
-  useEffect(() => {
-    pusher.unsubscribe("user-discount");
-    const discountChannel = pusher.subscribe("user-discount");
-
-    discountChannel.bind(
-      "discount-update",
-      (data: {
-        fb_user_id?: number;
-        mobile_user_id?: number;
-        status: number;
-      }) => {
-        if (
-          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
-          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
-        ) {
-          showAlert(setSuccessAlert, USER_DISCOUNT_STATUS[data.status].name);
-
-          dispatch(getNotifications());
-          dispatch(getUserDiscount());
-        }
-      }
-    );
-  }, [getSessionState, dispatch]);
-
-  useEffect(() => {
     pusher.unsubscribe("user-inbox");
     const inboxChannel = pusher.subscribe("user-inbox");
 
@@ -139,26 +64,6 @@ export function UserNotificationWrapper() {
           showAlert(setSuccessAlert, data.message);
 
           dispatch(getNotifications());
-          dispatch(getInbox(""));
-        }
-      }
-    );
-
-    inboxChannel.bind(
-      "inbox-influencer-promo",
-      (data: {
-        fb_user_id?: number;
-        mobile_user_id?: number;
-        message: string;
-      }) => {
-        if (
-          getSessionState.data?.userData.fb_user_id === data.fb_user_id ||
-          getSessionState.data?.userData.mobile_user_id === data.mobile_user_id
-        ) {
-          showAlert(setSuccessAlert, data.message);
-
-          dispatch(getNotifications());
-          dispatch(getInbox(""));
         }
       }
     );

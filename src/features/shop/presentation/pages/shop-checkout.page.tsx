@@ -33,30 +33,20 @@ import { PageTitleAndBreadCrumbs } from "features/shared/presentation/components
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { IoMdClose } from "react-icons/io";
 import { removeItemFromCartShop } from "features/shop/presentation/slices/remove-item-from-cart-shop.slice";
+import { popUpSnackBar } from "features/shared/presentation/slices/pop-snackbar.slice";
 import {
   MaterialInput,
   MaterialPhoneInput,
   Media,
 } from "features/shared/presentation/components";
 import { ShopPaymentMethod } from "../components";
-import {
-  GetLatestUnexpiredRedeemState,
-  selectGetLatestUnexpiredRedeem,
-} from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
+import { selectGetLatestUnexpiredRedeem } from "features/popclub/presentation/slices/get-latest-unexpired-redeem.slice";
 import {
   getAvailableUserDiscount,
   selectGetAvailableUserDiscount,
 } from "features/shared/presentation/slices/get-available-user-discount.slice";
 import { getNotifications } from "features/shared/presentation/slices/get-notifications.slice";
 import ReactGA from "react-ga";
-
-import {
-  getSnackshopInfluencerPromo,
-  selectGetSnackshopInfluencerPromo,
-  GetSnackshopInfluencerPromoState,
-  resetGetSnackshopInfluencerPromoState,
-} from "../slices/get-snackshop-influencer-promo.slice";
-import { insertShopInitialCheckoutLog } from "../slices/insert-shop-initial-checkout-log.slice";
 
 export function ShopCheckout() {
   const navigate = useNavigate();
@@ -76,15 +66,11 @@ export function ShopCheckout() {
   const [openAddContactModal, setOpenAddContactModal] = useState(false);
   const [cashOnDelivery, setCashOnDelivery] = useState<number>();
 
-  const [referralCode, setReferralCode] = useState("");
-
   const isDeliveryApplied = useRef(false);
   const getContactsState = useAppSelector(selectGetContacts);
   const addContactState = useAppSelector(selectAddContact);
   const getSessionState = useAppSelector(selectGetSession);
   const checkoutOrdersState = useAppSelector(selectCheckoutOrders);
-
-  const shopInitialCheckoutLogInserted = useRef(false);
 
   const getLatestUnexpiredRedeemState = useAppSelector(
     selectGetLatestUnexpiredRedeem
@@ -94,36 +80,9 @@ export function ShopCheckout() {
     selectGetAvailableUserDiscount
   );
 
-  const getSnackshopInfluencerPromoState = useAppSelector(
-    selectGetSnackshopInfluencerPromo
-  );
-
-  useEffect(() => {
-    if (
-      getSessionState.status === GetSessionState.success &&
-      getLatestUnexpiredRedeemState.status ===
-        GetLatestUnexpiredRedeemState.success &&
-      shopInitialCheckoutLogInserted.current === false
-    ) {
-      dispatch(
-        insertShopInitialCheckoutLog({
-          subtotal: calculateSubTotalPrice(),
-          discount: calculateDiscount(),
-          deliveryFee: calculateDeliveryFee(),
-        })
-      );
-
-      shopInitialCheckoutLogInserted.current = true;
-    }
-  }, [dispatch, getSessionState, getLatestUnexpiredRedeemState]);
-
   useEffect(() => {
     dispatch(getAvailableUserDiscount());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(resetGetSnackshopInfluencerPromoState());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -180,13 +139,7 @@ export function ShopCheckout() {
   };
 
   const handleCheckout = (e: FormEvent<HTMLFormElement>) => {
-    dispatch(
-      checkoutOrders({
-        ...formState,
-        referralCode:
-          getSnackshopInfluencerPromoState.data?.referral_code ?? "",
-      })
-    );
+    dispatch(checkoutOrders(formState));
     e.preventDefault();
   };
 
@@ -297,7 +250,14 @@ export function ShopCheckout() {
         );
     }
 
-    return calculatedPrice;
+    return (
+      <NumberFormat
+        value={calculatedPrice.toFixed(2)}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={"₱"}
+      />
+    );
   };
 
   const calculateDeliveryFee = () => {
@@ -333,12 +293,19 @@ export function ShopCheckout() {
       ) {
         isDeliveryApplied.current = true;
 
-        return 0;
+        return <>₱ 0.00</>;
       }
 
-      return getSessionState.data.distance_rate_price;
+      return (
+        <NumberFormat
+          value={getSessionState.data.distance_rate_price.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
     } else {
-      return 0;
+      return "₱ 0.00";
     }
   };
 
@@ -360,10 +327,7 @@ export function ShopCheckout() {
         );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data ||
-      getSnackshopInfluencerPromoState.data?.customer_discount
-    ) {
+    if (getLatestUnexpiredRedeemState.data) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
         discountedPrice =
@@ -378,15 +342,17 @@ export function ShopCheckout() {
           parseFloat(
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
-      if (getSnackshopInfluencerPromoState.data?.customer_discount)
-        discountedPrice =
-          calculatedPrice *
-          parseFloat(getSnackshopInfluencerPromoState.data.customer_discount);
-
-      return discountedPrice;
+      return (
+        <NumberFormat
+          value={discountedPrice.toFixed(2)}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={"₱"}
+        />
+      );
     }
 
-    return 0;
+    return "₱ 0.00";
   };
 
   const calculateTotalPrice = () => {
@@ -497,10 +463,7 @@ export function ShopCheckout() {
         );
     }
 
-    if (
-      getLatestUnexpiredRedeemState.data ||
-      getSnackshopInfluencerPromoState.data
-    ) {
+    if (getLatestUnexpiredRedeemState.data) {
       let discountedPrice = 0;
       if (getLatestUnexpiredRedeemState.data?.promo_discount_percentage)
         discountedPrice =
@@ -515,12 +478,6 @@ export function ShopCheckout() {
           parseFloat(
             getLatestUnexpiredRedeemState.data.subtotal_promo_discount
           );
-
-      if (getSnackshopInfluencerPromoState.data?.customer_discount)
-        discountedPrice =
-          calculatedPrice *
-          parseFloat(getSnackshopInfluencerPromoState.data.customer_discount);
-
       calculatedPrice -= discountedPrice;
     }
 
@@ -781,50 +738,6 @@ export function ShopCheckout() {
         </h3>
       );
     }
-  };
-
-  const influencerAndCustomerDiscount = () => {
-    if (getSnackshopInfluencerPromoState.data) {
-      let calculatedPrice = 0;
-
-      const orders = getSessionState.data?.orders;
-
-      if (orders) {
-        for (let i = 0; i < orders.length; i++) {
-          calculatedPrice += orders[i].prod_calc_amount;
-        }
-      }
-
-      let influencerDiscount = parseFloat(
-        getSnackshopInfluencerPromoState.data.influencer_discount
-      );
-      influencerDiscount = calculatedPrice * influencerDiscount;
-
-      return (
-        <div className="text-sm">
-          <span>
-            <b>
-              {getSnackshopInfluencerPromoState.data.fb_user_name ??
-                "" +
-                  " " +
-                  getSnackshopInfluencerPromoState.data.mobile_user_name ??
-                ""}
-            </b>{" "}
-            will get{" "}
-          </span>
-          <b>
-            <NumberFormat
-              value={influencerDiscount.toFixed(2)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={"₱"}
-            />
-          </b>
-        </div>
-      );
-    }
-
-    return null;
   };
 
   return (
@@ -1204,35 +1117,16 @@ export function ShopCheckout() {
                     <div className="grid grid-cols-2 text-secondary ">
                       <span>Subtotal:</span>
                       <span className="text-end">
-                        <NumberFormat
-                          value={calculateSubTotalPrice().toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        {calculateSubTotalPrice()}
                       </span>
                       <span>Discount:</span>
-                      <span className="text-end">
-                        -
-                        <NumberFormat
-                          value={calculateDiscount().toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
-                      </span>
+                      <span className="text-end">- {calculateDiscount()}</span>
 
                       {calculateAvailableUserDiscount()}
 
                       <span>Delivery Fee:</span>
                       <span className="text-end">
-                        +
-                        <NumberFormat
-                          value={calculateDeliveryFee().toFixed(2)}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"₱"}
-                        />
+                        + {calculateDeliveryFee()}
                       </span>
                       {cashOnDelivery ? (
                         <>
@@ -1248,55 +1142,6 @@ export function ShopCheckout() {
                           </span>
                         </>
                       ) : null}
-                    </div>
-                    <div>
-                      <div className="flex">
-                        <MaterialInput
-                          colorTheme="black"
-                          required={false}
-                          label="Referral Code"
-                          name="referralCode"
-                          fullWidth
-                          value={referralCode}
-                          onChange={(e) => {
-                            if (
-                              getSnackshopInfluencerPromoState.status !==
-                              GetSnackshopInfluencerPromoState.success
-                            ) {
-                              const value = e.target.value;
-                              setReferralCode(value);
-                            }
-                          }}
-                          className="rounded-none"
-                        />
-                        {getSnackshopInfluencerPromoState.data ? (
-                          <button
-                            type="button"
-                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-green-900 py-2 rounded-r-lg shadow-lg`}
-                          >
-                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                              Applied
-                            </span>
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              dispatch(
-                                getSnackshopInfluencerPromo({
-                                  referralCode,
-                                })
-                              );
-                            }}
-                            type="button"
-                            className={`text-white border w-[200px] border-white text-xl flex space-x-2 justify-center items-center bg-[#CC5801] py-2 rounded-r-lg shadow-lg`}
-                          >
-                            <span className="text-2xl font-['Bebas_Neue'] tracking-[3px] font-light mt-1">
-                              Apply
-                            </span>
-                          </button>
-                        )}
-                      </div>
-                      {influencerAndCustomerDiscount()}
                     </div>
 
                     <h1 className="text-4xl font-bold text-center text-secondary">

@@ -11,10 +11,7 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  DataList,
-  MaterialSwitch,
-} from "features/shared/presentation/components";
+import { DataList, MaterialSwitch } from "features/shared/presentation/components";
 import { createQueryParams } from "features/config/helpers";
 import {
   getAdminSettingCateringPackages,
@@ -23,6 +20,7 @@ import {
 } from "../slices/get-admin-setting-catering-packages.slice";
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { AiFillFolderAdd } from "react-icons/ai";
+import Checkbox from "@mui/material/Checkbox";
 import {
   updateAdminSettingCateringPackageStatus,
   selectUpdateAdminSettingCateringPackageStatus,
@@ -309,10 +307,8 @@ export function AdminSettingCateringPackages() {
                         </DataTableCell>
 
                         <DataTableCell>
-                          <MaterialSwitch
-                            label=""
-                            checked={row.status === 1 ? true : false}
-                            onChange={(e) => {
+                          <MaterialSwitch label=""
+                            checked={row.status === 1 ? true : false}onChange={(e) => {
                               const checked = e.target.checked;
                               dispatch(
                                 openMessageModal({
@@ -345,8 +341,7 @@ export function AdminSettingCateringPackages() {
                                   ],
                                 })
                               );
-                            }}
-                          />
+                            }}/>
                         </DataTableCell>
 
                         <DataTableCell>

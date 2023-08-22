@@ -110,7 +110,7 @@ export function AdminUserDiscounts() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-end">
+      <div className="flex flex-col  lg:flex-row lg:items-end">
         <span className="px-4 text-secondary text-3xl font-['Bebas_Neue'] flex-1">
           User Discount
         </span>
@@ -199,72 +199,57 @@ export function AdminUserDiscounts() {
             >
               <hr className="mt-4" />
 
-              {getAdminUserDiscountsStates.data.discounts.map((row, i) => {
-                const notification: NotificationModel | undefined =
-                  getAdminNotificationsState.data?.user_discount.unseen_notifications.find(
-                    (notification) => notification.discount_user_id === row.id
-                  );
+              {getAdminUserDiscountsStates.data.discounts.map((row, i) => (
+                <div
+                  onClick={() => {
+                    const params = {
+                      page_no: pageNo,
+                      per_page: perPage,
+                      status: status,
+                      id: row.id,
+                      search: search,
+                    };
 
-                return (
-                  <div
-                    onClick={() => {
-                      if (notification) {
-                        dispatch(
-                          updateAdminNotificationDateSeen(notification.id)
-                        );
-                      }
+                    const queryParams = createQueryParams(params);
 
-                      const params = {
-                        page_no: pageNo,
-                        per_page: perPage,
-                        status: status,
-                        id: row.id,
-                        search: search,
-                      };
-
-                      const queryParams = createQueryParams(params);
-
-                      navigate({
-                        pathname: "",
-                        search: queryParams,
-                      });
-                    }}
-                    className={`flex flex-col px-4 py-2 border-b ${
-                      notification ? "bg-gray-200" : ""
-                    }`}
-                    key={i}
-                  >
-                    <span className="flex flex-wrap items-center space-x-1 text-xl">
-                      <span>
-                        {row.first_name +
-                          " " +
-                          row.middle_name +
-                          " " +
-                          row.last_name}
-                      </span>
-
-                      <span
-                        className="px-2 py-1 text-xs rounded-full "
-                        style={{
-                          color: "white",
-                          backgroundColor:
-                            ADMIN_USER_DISCOUNT_STATUS[row.status].color,
-                        }}
-                      >
-                        {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
-                      </span>
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }}
+                  className="flex flex-col px-4 py-2 border-b"
+                  key={i}
+                >
+                  <span className="flex flex-wrap items-center space-x-1 text-xl">
+                    <span>
+                      {row.first_name +
+                        " " +
+                        row.middle_name +
+                        " " +
+                        row.last_name}
                     </span>
 
-                    <span className="text-xs text-gray-600">
-                      <strong> ID Number:</strong> {row.id_number}
+                    <span
+                      className="px-2 py-1 text-xs rounded-full "
+                      style={{
+                        color: "white",
+                        backgroundColor:
+                          ADMIN_USER_DISCOUNT_STATUS[row.status].color,
+                      }}
+                    >
+                      {ADMIN_USER_DISCOUNT_STATUS[row.status].name}
                     </span>
-                    <span className="text-xs text-gray-600">
-                      <strong>Application Date: </strong>
-                      <Moment format="lll">{row.dateadded}</Moment>
-                    </span>
-                  </div>
-                );
-              })}
+                  </span>
+
+                  <span className="text-xs text-gray-600">
+                    <strong> ID Number:</strong> {row.id_number}
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    <strong>Application Date: </strong>
+                    <Moment format="lll">{row.dateadded}</Moment>
+                  </span>
+                </div>
+              ))}
             </DataList>
           </div>
           <div className="hidden p-4 lg:block">

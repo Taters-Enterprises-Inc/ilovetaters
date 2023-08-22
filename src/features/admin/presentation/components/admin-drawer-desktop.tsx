@@ -11,9 +11,6 @@ import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 import { FaBars } from "react-icons/fa";
 import { AdminDrawerTabs } from ".";
-import { IconButton } from "@mui/material";
-import { BsArrowReturnLeft } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
 
 const drawerWidth = "16rem";
 
@@ -59,7 +56,7 @@ export function AdminDrawerDesktop() {
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const navigate = useNavigate();
+
   return (
     <Drawer
       anchor="left"
@@ -96,26 +93,6 @@ export function AdminDrawerDesktop() {
           >
             TEI Shop Admin
           </h1>
-        </div>
-        <div>
-          <IconButton
-            onClick={() => {
-              navigate("/admin/landing");
-            }}
-            sx={{ width: "100%" }}
-          >
-            <div className="flex text-white text-sm space-x-2 mt-2 w-full">
-              <BsArrowReturnLeft
-                className={`${
-                  !adminSideBarState.status &&
-                  "translate-y-16 translate-x-4 text-xl"
-                }`}
-              />
-              <span className={`${!adminSideBarState.status && "hidden"}`}>
-                Return to menu page
-              </span>
-            </div>
-          </IconButton>
         </div>
         <div
           className={`whitespace-pre duration-300 mt-3 px-4 text-white 
