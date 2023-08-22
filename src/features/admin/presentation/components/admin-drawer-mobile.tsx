@@ -10,11 +10,15 @@ import { selectGetAdminSession } from "../slices/get-admin-session.slice";
 
 import { FaBars } from "react-icons/fa";
 import { AdminDrawerTabs } from ".";
+import { IconButton } from "@mui/material";
+import { BsArrowReturnLeft } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export function AdminDrawerMobile() {
   const adminSideBarState = useAppSelector(selectAdminSideBar);
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -52,6 +56,19 @@ export function AdminDrawerMobile() {
           >
             TEI Shop Admin
           </h1>
+        </div>
+        <div>
+          <IconButton
+            onClick={() => {
+              navigate("/admin/landing");
+            }}
+            sx={{ width: "100%" }}
+          >
+            <div className="flex text-white text-sm space-x-2 mt-2 w-full">
+              <BsArrowReturnLeft />
+              <span>Return to menu page</span>
+            </div>
+          </IconButton>
         </div>
 
         <div

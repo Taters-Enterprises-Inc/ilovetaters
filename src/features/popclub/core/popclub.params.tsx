@@ -5,6 +5,7 @@ export interface GetRedeemParam {
 export interface RedeemDealParam {
   hash: string;
   remarks: string;
+  referralCode?: string;
 }
 
 export interface GetDealProductVariantsParam {

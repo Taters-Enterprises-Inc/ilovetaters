@@ -56,6 +56,7 @@ export default function BSCDrawerDesktop() {
   const BSCSideBarState = useAppSelector(selectBSCSideBar);
   const dispatch = useAppDispatch();
   const getBscSessionState = useAppSelector(selectGetBscSession);
+
   return (
     <Drawer
       anchor="left"

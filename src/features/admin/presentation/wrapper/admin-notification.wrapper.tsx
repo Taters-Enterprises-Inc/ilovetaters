@@ -17,6 +17,10 @@ import { getAdminShopOrder } from "features/admin/presentation/slices/get-admin-
 import { getAdminCateringBooking } from "features/admin/presentation/slices/get-admin-catering-booking.slice";
 import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifications.slice";
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
+import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
+import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
+import { getAdminInfluencerCashout } from "../slices/get-admin-influencer-cashout.slice";
+import { getAdminInfluencerCashouts } from "../slices/get-admin-influencer-cashouts.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -184,6 +188,57 @@ export function AdminNotificationWrapper() {
         ) {
           toast("🦄 " + data.message);
           dispatch(getAdminUserDiscounts(""));
+          dispatch(getAdminNotifications());
+        }
+      }
+    );
+  }, [getAdminSessionState, dispatch, query]);
+
+  useEffect(() => {
+    pusher.unsubscribe("admin-influencer");
+    const discountUserChannel = pusher.subscribe("admin-influencer");
+
+    discountUserChannel.bind(
+      "influencer-application",
+      (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin
+        ) {
+          toast("🦄 " + data.message);
+          dispatch(getAdminInfluencerApplications(""));
+          dispatch(getAdminNotifications());
+        }
+      }
+    );
+
+    discountUserChannel.bind("influencer-cashout", (data: TransactionParam) => {
+      if (
+        getAdminSessionState.data?.admin.is_admin ||
+        getAdminSessionState.data?.admin.is_csr_admin
+      ) {
+        toast("🦄 " + data.message);
+        dispatch(getAdminInfluencerCashouts(""));
+        dispatch(getAdminNotifications());
+      }
+    });
+
+    discountUserChannel.bind(
+      "influencer-application-with-id",
+      (data: TransactionParam) => {
+        if (
+          getAdminSessionState.data?.admin.is_admin ||
+          getAdminSessionState.data?.admin.is_csr_admin
+        ) {
+          toast("🦄 " + data.message);
+
+          const influencerId = query.get("id");
+
+          if (influencerId) {
+            dispatch(getAdminInfluencerApplication(influencerId));
+          }
+
+          dispatch(getAdminInfluencerApplications(""));
           dispatch(getAdminNotifications());
         }
       }

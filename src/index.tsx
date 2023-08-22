@@ -75,6 +75,13 @@ import {
   AdminSettingPopClubDeal,
   AdminSettingPopclubCreateDeal,
   AdminSettingPopclubEditDeal,
+  AdminInfluencerApplication,
+  AdminInfluencerPromo,
+  AdminInfluencerCreatePromo,
+  AdminInfluencerCashout,
+  AdminSnackshopDashboard,
+  AdminCustomerFeedbackDashboard,
+  AdminLandingPage,
 } from "features/admin/presentation/pages";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { CateringHome } from "features/catering/presentation/pages/catering-home.page";
@@ -102,6 +109,7 @@ import {
   ProfileSnackshopOrders,
   ProfilePopclubRedeems,
   ProfileInbox,
+  ProfileInfluencer,
 } from "features/profile/presentation/pages";
 import { ProfileUserDiscount } from "features/profile/presentation/pages";
 import { Bsc } from "features/bsc/presentation/pages/bsc.page";
@@ -131,7 +139,6 @@ import {
 
 import { BSCSidebarWrapper } from "features/bsc/presentation/components/bsc-sidebar-wrapper";
 import { BscGuard } from "features/bsc/presentation/guards/bsc.guard";
-import { AdminDashboard } from "features/admin/presentation/pages/admin-dashboard.page";
 import {
   SeeMeCatering,
   SeeMeSnackshop,
@@ -147,6 +154,27 @@ import {
   AdminNotificationWrapper,
   AdminSidebarWrapper,
 } from "features/admin/presentation/wrapper";
+import {
+  Audit,
+  AuditDashboard,
+  AuditForm,
+  AuditLogin,
+  AuditResponseQualityAuditPage,
+  AuditReview,
+  AuditSettingsQuestions,
+} from "features/audit/presentation/pages";
+import {
+  AuditFormSideStepper,
+  AuditSidebarWrapper,
+} from "features/audit/presentation/components";
+import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
+import { ShopProductViewLog } from "features/shop/presentation/logs";
+import { StockAuditSidebarWrapper } from "features/stock-ordering/presentation/components";
+import {
+  StockOrderDashboard,
+  StockOrderOrders,
+  StockOrderView,
+} from "features/stock-ordering/presentation/pages";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -220,6 +248,11 @@ root.render(
                                 path="user-discount"
                                 element={<ProfileUserDiscount />}
                               />
+
+                              <Route
+                                path="influencer"
+                                element={<ProfileInfluencer />}
+                              />
                             </Route>
                           </Route>
 
@@ -247,7 +280,9 @@ root.render(
                                 path="cart/:cart_id"
                                 element={<ShopEditCartItem />}
                               />
-                              <Route path=":hash" element={<ShopProduct />} />
+                              <Route element={<ShopProductViewLog />}>
+                                <Route path=":hash" element={<ShopProduct />} />
+                              </Route>
                             </Route>
 
                             <Route path="order/:hash" element={<ShopOrder />} />
@@ -349,14 +384,37 @@ root.render(
 
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
-
+                        <Route path="landing" element={<AdminLandingPage />} />
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
+                            <Route path="stock-order">
+                              <Route element={<StockAuditSidebarWrapper />}>
+                                <Route
+                                  path="dashboard"
+                                  element={<StockOrderDashboard />}
+                                />
+                                <Route
+                                  path="order"
+                                  element={<StockOrderOrders />}
+                                />
+                                <Route
+                                  path="order/view"
+                                  element={<StockOrderView />}
+                                />
+                              </Route>
+                            </Route>
+
                             <Route element={<AdminSidebarWrapper />}>
-                              <Route
-                                path="dashboard"
-                                element={<AdminDashboard />}
-                              />
+                              <Route path="dashboard">
+                                <Route
+                                  path="snackshop"
+                                  element={<AdminSnackshopDashboard />}
+                                />
+                                <Route
+                                  path="customer-feedback"
+                                  element={<AdminCustomerFeedbackDashboard />}
+                                />
+                              </Route>
                               <Route
                                 path="order"
                                 element={<AdminShopOrder />}
@@ -374,6 +432,27 @@ root.render(
                                 path="user-discount"
                                 element={<AdminUserDiscount />}
                               />
+                              <Route path="influencer">
+                                <Route
+                                  path="application"
+                                  element={<AdminInfluencerApplication />}
+                                />
+                                <Route
+                                  path="cashout"
+                                  element={<AdminInfluencerCashout />}
+                                />
+                                <Route path="promo">
+                                  <Route
+                                    index
+                                    element={<AdminInfluencerPromo />}
+                                  />
+                                  <Route
+                                    path="create"
+                                    element={<AdminInfluencerCreatePromo />}
+                                  />
+                                </Route>
+                              </Route>
+
                               <Route
                                 path="survey-verification"
                                 element={<AdminSurveyVerification />}
@@ -526,6 +605,41 @@ root.render(
                                 </Route>
                               </Route>
                             </Route>
+                          </Route>
+                        </Route>
+                      </Route>
+
+                      <Route path="internal" element={<Audit />}>
+                        <Route index element={<AuditLogin />} />
+
+                        <Route element={<AuditGuard />}>
+                          <Route element={<AuditSidebarWrapper />}>
+                            <Route
+                              path="dashboard/audit"
+                              element={<AuditDashboard />}
+                            />
+
+                            <Route path="responses">
+                              <Route
+                                path="quality/audit"
+                                element={<AuditResponseQualityAuditPage />}
+                              />
+                            </Route>
+
+                            <Route path="settings">
+                              <Route
+                                path="questions"
+                                element={<AuditSettingsQuestions />}
+                              />
+                            </Route>
+
+                            <Route
+                              path="form/review/:hash"
+                              element={<AuditReview />}
+                            />
+                          </Route>
+                          <Route element={<AuditFormSideStepper />}>
+                            <Route path="audit/form" element={<AuditForm />} />
                           </Route>
                         </Route>
                       </Route>

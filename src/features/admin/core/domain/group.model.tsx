@@ -1,5 +1,13 @@
 export interface GroupModel {
-  id: number;
-  name: string;
-  description: string;
+  shop: Array<{
+    shop: any;
+    id: number;
+    name: string;
+    description: string;
+  }>;
+  stock_order: Array<{
+    id: number;
+    name: string;
+    description: string;
+  }>;
 }

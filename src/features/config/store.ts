@@ -157,11 +157,7 @@ import getAdminStoreCateringProducts from "features/admin/presentation/slices/ge
 import updateStoreCateringProduct from "features/admin/presentation/slices/update-store-catering-product.slice";
 import updateAdminCateringOrderItemRemarks from "features/admin/presentation/slices/update-admin-catering-order-item-remarks.slice";
 import getAdminCateringPackageFlavors from "features/admin/presentation/slices/get-admin-catering-package-flavors.slice";
-import getAdminSales from "features/admin/presentation/slices/get-admin-sales.slice";
-import getAdminSnackshopTotalSales from "features/admin/presentation/slices/get-admin-snackshop-total-sales.slice";
-import getAdminCateringTotalSales from "features/admin/presentation/slices/get-admin-catering-total-sales.slice";
-import getAdminPopClubTotalSales from "features/admin/presentation/slices/get-admin-popclub-total-sales.slice";
-import getAdminOverallTotalSales from "features/admin/presentation/slices/get-admin-overall-total-sales.slice";
+import getAdminDashboardShopSalesHistory from "features/admin/presentation/slices/get-admin-dashboard-shop-sales-history.slice";
 import getAdminStoreMenus from "features/admin/presentation/slices/get-admin-store-menus.slice";
 import createAdminSettingStore from "features/admin/presentation/slices/create-admin-setting-store.slice";
 import getAdminRegionStoreCombinations from "features/admin/presentation/slices/get-admin-region-store-combinations.slice";
@@ -201,9 +197,69 @@ import getAdminSettingDealProducts from "features/admin/presentation/slices/get-
 import getAdminPopclubStores from "features/admin/presentation/slices/get-admin-popclub-stores.slice";
 import createAdminSettingPopclubDeal from "features/admin/presentation/slices/create-admin-setting-popclub-deal.slice";
 import getAdminSettingPopclubDeal from "features/admin/presentation/slices/get-admin-setting-popclub-deal.slice";
+import applyInfluencer from "features/profile/presentation/slices/apply-influencer.slice";
+import getInfluencer from "features/profile/presentation/slices/get-influencer.slice";
+import updateInfluencer from "features/profile/presentation/slices/update-influencer.slice";
+import getAdminInfluencerApplications from "features/admin/presentation/slices/get-admin-influencer-applications.slice";
+import getAdminInfluencerApplication from "features/admin/presentation/slices/get-admin-influencer-application.slice";
+import adminInfluencerApplicationChangeStatus from "features/admin/presentation/slices/admin-influencer-application-change-status.slice";
 import editAdminSettingPopclubDeal from "features/admin/presentation/slices/edit-admin-setting-popclub-deal.slice";
 import updateAdminSettingPopclubDealStatus from "features/admin/presentation/slices/update-admin-setting-popclub-deal-status.slice";
+import getInfluencerDealRedeems from "features/profile/presentation/slices/get-influencer-referees.slice";
+import getSnackshopInfluencerPromo from "features/shop/presentation/slices/get-snackshop-influencer-promo.slice";
+import getInfluencerReferees from "features/profile/presentation/slices/get-influencer-referees.slice";
+import uploadContractInfluencer from "features/profile/presentation/slices/upload-contract-influencer.slice";
+import getAdminInfluencerPromos from "features/admin/presentation/slices/get-admin-influencer-promos.slice";
+import getAdminInfluencers from "features/admin/presentation/slices/get-admin-influencers.slice";
+import createAdminInfluencerPromo from "features/admin/presentation/slices/create-admin-influencer-promo.slice";
+import influencerCashout from "features/profile/presentation/slices/influencer-cashout.slice";
+import getAdminInfluencerCashouts from "features/admin/presentation/slices/get-admin-influencer-cashouts.slice";
+import getAdminInfluencerCashout from "features/admin/presentation/slices/get-admin-influencer-cashout.slice";
+import adminInfluencerCashoutChangeStatus from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
+import getInfluencerCashouts from "features/profile/presentation/slices/get-influencer-cashouts.slice";
 import validatePartnerCompanyEmployeeIdNumberAdmin from "features/admin/presentation/slices/validate-partner-company-employee-id-number.slice";
+import auditSideBar from "features/audit/presentation/slices/audit-sidebar-slice";
+import loginAudit from "features/audit/presentation/slices/login-audit.slice";
+import logoutAudit from "features/audit/presentation/slices/logout-audit.slice";
+import getAuditSettingQuestions from "features/audit/presentation/slices/get-audit-setting-questions.slice";
+import updateAuditSettingsQuestion from "features/audit/presentation/slices/update-admin-settings-questions.slice";
+import getStores from "features/audit/presentation/slices/get-stores.slice";
+import getAuditEvaluationFormQuestion from "features/audit/presentation/slices/get-audit-evaluation-form_questions.slice";
+import AuditSection from "features/audit/presentation/slices/audit-section.slice";
+import insertAuditResponse from "features/audit/presentation/slices/insert-audit-response.slice";
+import getAuditResponse from "features/audit/presentation/slices/get-audit-response.slice";
+import getAuditResponseInformationQualityAuditInformation from "features/audit/presentation/slices/get-audit-response-quality-audit-information.slice";
+import getAdminDashboardShopTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-transaction-total.slice";
+import getAdminDashboardShopCompletedTransactionTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-completed-transaction-total.slice";
+import insertShopProductViewLog from "features/shop/presentation/slices/insert-shop-product-view-log.slice";
+import insertShopInitialCheckoutLog from "features/shop/presentation/slices/insert-shop-initial-checkout-log.slice";
+import getAdminDashboardShopAddToCartTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-add-to-cart-total.slice";
+import getAdminDashboardShopProductViewTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-product-view-total.slice";
+import getAdminDashboardShopInitialCheckoutTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-initial-checkout-total.slice";
+import getAdminDashboardShopUsersTotal from "features/admin/presentation/slices/get-admin-dashboard-shop-users-total.slice";
+import getAdminDashboardShopFeaturedProducts from "features/admin/presentation/slices/get-admin-dashboard-shop-featured-products.slice";
+import getAdminDashboardCustomerFeedbackRatings from "features/admin/presentation/slices/get-admin-dashboard-customer-feedback-ratings.slice";
+import getAuditStoreResult from "features/audit/presentation/slices/audit-store-result";
+import getAuditAcknowledge from "features/audit/presentation/slices/audit-acknowledge.slice";
+import stockOrderSideBar from "features/stock-ordering/presentation/slices/stock-order.slice";
+import getStockOrderStores from "features/stock-ordering/presentation/slices/get-store.slice";
+import insertNewOrder from "features/stock-ordering/presentation/slices/insert-new-order.slice";
+import confirmNewOrder from "features/stock-ordering/presentation/slices/confirm-new-order.slice";
+import getStockOrderProducts from "features/stock-ordering/presentation/slices/get-products.slice";
+import getStockOrders from "features/stock-ordering/presentation/slices/get-stock-orders.slice";
+import getProductData from "features/stock-ordering/presentation/slices/get-product-data.slice";
+import updateNewOrders from "features/stock-ordering/presentation/slices/update-new-order.slice";
+import updateReviewOrders from "features/stock-ordering/presentation/slices/update-review-order.slice";
+import updateConfirmOrders from "features/stock-ordering/presentation/slices/update-confirm-order.slice";
+import updateDispatchOrders from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
+import updateEnrouteOrders from "features/stock-ordering/presentation/slices/update-enroute-order.slice";
+import updateReceiveOrders from "features/stock-ordering/presentation/slices/update-receive-order.slice";
+import updateBillingOrders from "features/stock-ordering/presentation/slices/update-billing-order.slice";
+import updatePayBillingOrders from "features/stock-ordering/presentation/slices/update-pay-billing.slice";
+import updateConfirmPayment from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
+import updateDeliveryReceiveApprovalOrders from "features/stock-ordering/presentation/slices/update-delivery-receive-approval.slice";
+import updateOrderCancelled from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
+import getPayBillingSi from "features/stock-ordering/presentation/slices/get-pay-billing-si.slice";
 
 export const store = configureStore({
   reducer: {
@@ -364,11 +420,7 @@ export const store = configureStore({
     updateStoreCateringProduct,
     updateAdminCateringOrderItemRemarks,
     getAdminCateringPackageFlavors,
-    getAdminSales,
-    getAdminSnackshopTotalSales,
-    getAdminCateringTotalSales,
-    getAdminPopClubTotalSales,
-    getAdminOverallTotalSales,
+    getAdminDashboardShopSalesHistory,
     getAdminStoreMenus,
     createAdminSettingStore,
     getAdminRegionStoreCombinations,
@@ -408,9 +460,69 @@ export const store = configureStore({
     getAdminPopclubStores,
     createAdminSettingPopclubDeal,
     getAdminSettingPopclubDeal,
+    applyInfluencer,
+    getInfluencer,
+    updateInfluencer,
+    getAdminInfluencerApplications,
+    getAdminInfluencerApplication,
+    adminInfluencerApplicationChangeStatus,
     editAdminSettingPopclubDeal,
     updateAdminSettingPopclubDealStatus,
+    getInfluencerDealRedeems,
+    getSnackshopInfluencerPromo,
+    getInfluencerReferees,
+    uploadContractInfluencer,
+    getAdminInfluencerPromos,
+    getAdminInfluencers,
+    createAdminInfluencerPromo,
+    influencerCashout,
+    getAdminInfluencerCashouts,
+    getAdminInfluencerCashout,
+    adminInfluencerCashoutChangeStatus,
+    getInfluencerCashouts,
     validatePartnerCompanyEmployeeIdNumberAdmin,
+    auditSideBar,
+    loginAudit,
+    logoutAudit,
+    getAuditSettingQuestions,
+    updateAuditSettingsQuestion,
+    getStores,
+    getAuditEvaluationFormQuestion,
+    AuditSection,
+    insertAuditResponse,
+    getAuditResponse,
+    getAuditResponseInformationQualityAuditInformation,
+    getAdminDashboardShopTransactionTotal,
+    getAdminDashboardShopCompletedTransactionTotal,
+    insertShopProductViewLog,
+    insertShopInitialCheckoutLog,
+    getAdminDashboardShopAddToCartTotal,
+    getAdminDashboardShopProductViewTotal,
+    getAdminDashboardShopInitialCheckoutTotal,
+    getAdminDashboardShopUsersTotal,
+    getAdminDashboardShopFeaturedProducts,
+    getAdminDashboardCustomerFeedbackRatings,
+    getAuditStoreResult,
+    getAuditAcknowledge,
+    stockOrderSideBar,
+    getStockOrderStores,
+    insertNewOrder,
+    confirmNewOrder,
+    getStockOrderProducts,
+    getStockOrders,
+    getProductData,
+    updateNewOrders,
+    updateReviewOrders,
+    updateConfirmOrders,
+    updateDispatchOrders,
+    updateEnrouteOrders,
+    updateReceiveOrders,
+    updateBillingOrders,
+    updatePayBillingOrders,
+    updateConfirmPayment,
+    updateDeliveryReceiveApprovalOrders,
+    updateOrderCancelled,
+    getPayBillingSi,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

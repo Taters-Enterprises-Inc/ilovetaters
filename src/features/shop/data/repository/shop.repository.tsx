@@ -14,9 +14,13 @@ import {
   GetProductDetailsParam,
   GetProductSkuParam,
   AddToCartShopParam,
+  GetSnackshopInfluencerPromoParam,
+  InsertShopProductViewLogParam,
+  InsertShopInitialCheckoutLogParam,
 } from "features/shop/core/shop.params";
 import { CheckoutOrdersModel } from "features/shop/core/domain/checkout-orders.model";
 import { SnackshopDealModel } from "features/shop/core/domain/snackshop-deal.model";
+import { GetSnackshopInfluencerPromoModel } from "features/shop/core/domain/get-snackshop-influencer-promo.model";
 
 export interface GetCategoryProductsResponse {
   data: {
@@ -88,6 +92,59 @@ export interface GetSnackshopDealsResponse {
     message: string;
     data: Array<SnackshopDealModel>;
   };
+}
+
+export interface GetSnackshopInfluencerPromoResponse {
+  data: {
+    message: string;
+    data: GetSnackshopInfluencerPromoModel;
+  };
+}
+
+export interface InsertShopProductViewLogResponse {
+  data: {
+    message: string;
+  };
+}
+
+export interface InsertShopInitialCheckoutLogResponse {
+  data: {
+    message: string;
+  };
+}
+
+export function InsertShopInitialCheckoutLogRepository(
+  param: InsertShopInitialCheckoutLogParam
+): Promise<InsertShopInitialCheckoutLogResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/shop/initial-checkout-log`,
+    param,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+}
+
+export function InsertShopProductViewLogRepository(
+  param: InsertShopProductViewLogParam
+): Promise<InsertShopProductViewLogResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/shop/product/view-log`, param, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}
+
+export function GetSnackshopInfluencerPromoRepository(
+  param: GetSnackshopInfluencerPromoParam
+): Promise<GetSnackshopInfluencerPromoResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/shop/influencer-promo`, param, {
+    withCredentials: true,
+  });
 }
 
 export function GetSnackshopDealsRepository(): Promise<GetSnackshopDealsResponse> {
