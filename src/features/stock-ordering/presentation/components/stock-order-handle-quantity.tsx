@@ -55,6 +55,13 @@ export function StockOrderHandleQuantity(props: StockOrderHandleQuantityProps) {
     let value = event.target.value.replace(/\D/g, "");
 
     const updatedRows = props.rows.map((r: any, index: number) => {
+      if (props.precedingPropertyKey) {
+        value =
+          value < r?.[props.precedingPropertyKey]
+            ? value
+            : r?.[props.precedingPropertyKey];
+      }
+
       if (index === props.rowsIndex) {
         return {
           ...r,

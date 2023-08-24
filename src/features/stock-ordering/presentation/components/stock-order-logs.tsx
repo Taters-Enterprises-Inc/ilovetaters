@@ -71,7 +71,7 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     },
     {
       id: "view_updated_delivery_receipt",
-      label: "Download Updated Sales Invoice",
+      label: "Download Theoretical Sales Invoice",
       isButton: true,
       isDate: false,
     },
