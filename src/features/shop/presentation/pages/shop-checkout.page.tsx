@@ -1253,7 +1253,7 @@ export function ShopCheckout() {
                       <div className="flex">
                         <MaterialInput
                           colorTheme="black"
-                          required
+                          required={false}
                           label="Referral Code"
                           name="referralCode"
                           fullWidth
