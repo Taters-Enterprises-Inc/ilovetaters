@@ -27,6 +27,7 @@ import {
   selectLogoutAdmin,
 } from "features/admin/presentation/slices/logout-admin.slice";
 import { BsArrowReturnLeft } from "react-icons/bs";
+import { BsFillPersonFill } from "react-icons/bs";
 
 export function StockOrderDrawerMenu() {
   const stockOrderSideBarState = useAppSelector(selectstockOrderSideBar);
@@ -44,6 +45,11 @@ export function StockOrderDrawerMenu() {
       text: "Order",
       path: "order",
       icon: <MdDashboardCustomize size={20} />,
+    },
+    {
+      text: "Profile",
+      path: "profile",
+      icon: <BsFillPersonFill size={20} />,
     },
   ];
 

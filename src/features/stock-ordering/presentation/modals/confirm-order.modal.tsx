@@ -178,8 +178,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     return null;
   }
 
-  console.log(selectedAddress);
-
   return (
     <>
       <div

@@ -97,8 +97,6 @@ export function PlaceOrderModal(props: PlaceOrdersModalProps) {
     return null;
   }
 
-  console.log(selectedAddress);
-
   return (
     <>
       <div

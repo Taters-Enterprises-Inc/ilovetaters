@@ -80,6 +80,8 @@ export function StockOrderConfirmTable(props: StockOrderConfirmTableProps) {
     }
   }, [getOrderInformation.data, props.isEditCancelled]);
 
+  //------
+
   const productOptions = getProductInformation.data?.products
     .flatMap((options) => options)
     .filter((item) => {

@@ -169,8 +169,12 @@ import {
 } from "features/audit/presentation/components";
 import { AuditGuard } from "features/audit/presentation/guards/audit.guard";
 import { ShopProductViewLog } from "features/shop/presentation/logs";
-import { StockAuditSidebarWrapper } from "features/stock-ordering/presentation/components";
 import {
+  StockAuditSidebarWrapper,
+  StockOrderingBadgeWrapper,
+} from "features/stock-ordering/presentation/components";
+import {
+  ProfilePage,
   StockOrderDashboard,
   StockOrderOrders,
   StockOrderView,
@@ -387,20 +391,26 @@ root.render(
                         <Route path="landing" element={<AdminLandingPage />} />
                         <Route element={<AdminNotificationWrapper />}>
                           <Route element={<AdminGuard />}>
-                            <Route path="stock-order">
-                              <Route element={<StockAuditSidebarWrapper />}>
-                                <Route
-                                  path="dashboard"
-                                  element={<StockOrderDashboard />}
-                                />
-                                <Route
-                                  path="order"
-                                  element={<StockOrderOrders />}
-                                />
-                                <Route
-                                  path="order/view"
-                                  element={<StockOrderView />}
-                                />
+                            <Route element={<StockOrderingBadgeWrapper />}>
+                              <Route path="stock-order">
+                                <Route element={<StockAuditSidebarWrapper />}>
+                                  <Route
+                                    path="dashboard"
+                                    element={<StockOrderDashboard />}
+                                  />
+                                  <Route
+                                    path="order"
+                                    element={<StockOrderOrders />}
+                                  />
+                                  <Route
+                                    path="order/view"
+                                    element={<StockOrderView />}
+                                  />
+                                  <Route
+                                    path="profile"
+                                    element={<ProfilePage />}
+                                  />
+                                </Route>
                               </Route>
                             </Route>
 
