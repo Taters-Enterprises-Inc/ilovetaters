@@ -1,12 +1,20 @@
-import { Button, TextField } from "@mui/material";
-import { error } from "console";
-import { id } from "date-fns/locale";
+import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputPassword } from "features/shared/presentation/components";
-import { changePasswordParam } from "features/stock-ordering/core/stock-ordering.params";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { changePassword } from "../slices/change-password.slice";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
+import { changePasswordParam } from "features/admin/core/admin.params";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
+import { useNavigate } from "react-router-dom";
 
 interface passwordStateData {
   currentPassword: string;
@@ -26,8 +34,10 @@ interface passwordErrorState {
 }
 
 export function ChangePassword() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
 
   const [passwordState, setPasswordState] = useState<passwordStateData>({
     currentPassword: "",
@@ -61,8 +71,18 @@ export function ChangePassword() {
       };
       const id = getAdminSessionState.data?.admin?.user_id;
       dispatch(changePassword({ param: passwordStateParam, id: id }));
+
+      dispatch(logoutAdmin());
     }
   };
+
+  useEffect(() => {
+    if (getLogoutAdminState.status === LogoutAdminState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+  }, [getLogoutAdminState, dispatch, navigate]);
 
   const handleError = (name: string, isError: boolean, message: string) => {
     setErrorMessage({
@@ -99,7 +119,7 @@ export function ChangePassword() {
           handleError(
             name,
             true,
-            "password must at least contain uppercase character, lowercase character, number, and symbol"
+            "Password must at least contain uppercase character, lowercase character, number, and symbol"
           );
         } else {
           handleError(name, false, "");

@@ -1,7 +1,6 @@
 import { Divider } from "@mui/material";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { useAppSelector } from "features/config/hooks";
-import { ChangePassword } from "./change-password";
 
 export function ProfileContent() {
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
@@ -88,12 +87,12 @@ export function ProfileContent() {
               ))}
             </div>
 
-            <div className="flex-auto flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 space-y-5 w-full md:w-1/3">
+            {/* <div className="flex-auto flex-col border border-gray-200 rounded-md shadow-sm bg-white p-5 space-y-5 w-full md:w-1/3">
               <span className="text-secondary text-2xl font-['Bebas_Neue']">
                 Change Password
               </span>
               <ChangePassword />
-            </div>
+            </div> */}
           </div>
         </div>
       ) : null}

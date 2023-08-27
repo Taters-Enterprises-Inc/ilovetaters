@@ -18,6 +18,8 @@ import {
   MaterialInput,
   MaterialInputPassword,
 } from "features/shared/presentation/components";
+import { AdminForgotPasswordModal } from "../modals";
+import Button from "@mui/material/Button/Button";
 
 export function AdminLogin() {
   const dispatch = useAppDispatch();
@@ -26,6 +28,8 @@ export function AdminLogin() {
 
   const [identity, setIdentity] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState(false);
 
   useEffect(() => {
     if (loginAdminState.status === LoginAdminState.success) {
@@ -112,7 +116,14 @@ export function AdminLogin() {
               <p className="flex items-center">
                 <input className="mr-2" type="checkbox" /> Remember Me
               </p>
-              <a href="#">Forgot Password?</a>
+              <Button
+                variant="text"
+                sx={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenForgotPasswordModal(true)}
+              >
+                Forgot Password?
+              </Button>
             </div>
             <button
               type="submit"
@@ -123,6 +134,11 @@ export function AdminLogin() {
           </form>
         </div>
       </div>
+
+      <AdminForgotPasswordModal
+        open={openForgotPasswordModal}
+        onClose={() => setOpenForgotPasswordModal(false)}
+      />
     </main>
   );
 }

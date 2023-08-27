@@ -124,9 +124,3 @@ export interface updateCancelledStatus {
   id: string;
   remarks: string;
 }
-
-export interface changePasswordParam {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}

@@ -39,6 +39,7 @@ import {
   CreateAdminInfluencerPromoParam,
   AdminInfluencerCashoutChangeStatusParam,
   ValidatePartnerCompanyEmployeeIdNumberParam,
+  changePasswordParam,
 } from "features/admin/core/admin.params";
 import { AdminCateringBookingModel } from "features/admin/core/domain/admin-catering-booking.model";
 import { AdminPopclubRedeemModel } from "features/admin/core/domain/admin-popclub-redeem.model";
@@ -821,6 +822,12 @@ export interface GetAdminDashboardCustomerFeedbackRatingsResponse {
   data: {
     message: string;
     data: Array<AdminCustomerFeedbackRatingsSectionAvarageModel>;
+  };
+}
+
+export interface changePasswordResponse {
+  data: {
+    message: string;
   };
 }
 
@@ -1902,4 +1909,17 @@ export function LogoutAdminRepository(): Promise<LogoutAdminResponse> {
   return axios.get(`${REACT_APP_DOMAIN_URL}api/auth/logout`, {
     withCredentials: true,
   });
+}
+
+export function changePasswordRepository(param: {
+  param: changePasswordParam;
+  id: string;
+}): Promise<changePasswordResponse> {
+  return axios.post(
+    `${REACT_APP_DOMAIN_URL}api/stock/change-password/${param.id}`,
+    param,
+    {
+      withCredentials: true,
+    }
+  );
 }

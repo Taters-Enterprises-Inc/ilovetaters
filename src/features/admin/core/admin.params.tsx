@@ -418,3 +418,9 @@ export interface AdminInfluencerCashoutChangeStatusParam {
   influencerCashoutId: number;
   status: number;
 }
+
+export interface changePasswordParam {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

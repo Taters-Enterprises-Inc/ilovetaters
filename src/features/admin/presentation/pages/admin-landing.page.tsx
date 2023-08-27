@@ -1,13 +1,27 @@
-import { Divider, Button } from "@mui/material";
-import { Container, Stack } from "@mui/system";
+import {
+  Divider,
+  Button,
+  Fade,
+  Paper,
+  Popper,
+  PopperPlacementType,
+  ButtonGroup,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {
   selectGetAdminSession,
   getAdminSession,
-  GetAdminSessionState,
 } from "../slices/get-admin-session.slice";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { AdminChangePasswordModal } from "../modals";
 
 interface Nav {
   [key: string]: boolean;
@@ -17,7 +31,23 @@ export function AdminLandingPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
 
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState<PopperPlacementType>();
+
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+      setOpen((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+
+  //If there's a new navigation just add new property here
   const [navAvailability, setNavAvailability] = useState<Nav>({
     shop: false,
     sos: false,
@@ -26,7 +56,7 @@ export function AdminLandingPage() {
   let nav = [
     {
       url: "/admin/dashboard/customer-feedback",
-      label: "shop",
+      label: "Administration",
       availability: navAvailability.shop,
     },
     {
@@ -36,10 +66,14 @@ export function AdminLandingPage() {
     },
   ];
 
+  const { first_name, last_name } =
+    getAdminSessionState.data?.admin.user_details ?? {};
+
   useEffect(() => {
     dispatch(getAdminSession());
   }, [dispatch]);
 
+  //handle the new property here
   useEffect(() => {
     if (getAdminSessionState.data) {
       const userAdmin = getAdminSessionState.data?.admin?.user_details;
@@ -52,43 +86,95 @@ export function AdminLandingPage() {
     }
   }, [getAdminSessionState.data]);
 
-  const handleModalToggle = (nav: string) => {
-    setNavAvailability((prevState: Nav) => ({
-      ...prevState,
-      [nav]: !prevState[nav],
-    }));
-  };
+  useEffect(() => {
+    if (getLogoutAdminState.status === LogoutAdminState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+  }, [getLogoutAdminState, dispatch, navigate]);
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-      }}
-    >
-      <Stack
-        direction="column"
-        divider={<Divider orientation="vertical" flexItem />}
-        spacing={2}
-      >
-        {nav.map((navItem, index) => (
-          <div key={index}>
-            {navItem.availability && (
-              <Button
-                fullWidth
-                onClick={() => navigate(navItem.url)}
-                variant="contained"
-              >
-                {navItem.label}
-              </Button>
-            )}
+    <>
+      <div className="flex flex-col bg-paper h-screen">
+        <div className="px-5 space-y-10 my-16 ">
+          <h1 className="flex justify-center item-end text-3xl font-bold font-serif text-center">
+            Taters Group Webwork Ecosystem
+          </h1>
+
+          <div className="px-16">
+            <Divider sx={{ borderBottomWidth: 2 }} />
           </div>
-        ))}
-      </Stack>
-    </Container>
+
+          <div className="flex justify-center">
+            <span className="z-10 border border-secondary rounded-l-md bg-button text-white px-5 ">
+              You are logged in as {first_name + " " + last_name}
+            </span>
+            <button onClick={handleClick("bottom-end")}>
+              <IoMdArrowDropdown
+                size={26}
+                className="rounded-r-md border border-secondary text-white bg-button"
+              />
+            </button>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-5">
+            {nav.map((button, index) => {
+              const { label, url, availability } = button;
+
+              return (
+                <>
+                  {availability && (
+                    <Button
+                      key={index}
+                      fullWidth
+                      variant="outlined"
+                      size="small"
+                      color="secondary"
+                      sx={{ maxWidth: { sm: "full", md: "fit-content" } }}
+                      onClick={() => navigate(url)}
+                    >
+                      <span className="text-2xl text-black">{label}</span>
+                    </Button>
+                  )}
+                </>
+              );
+            })}
+          </div>
+        </div>
+
+        <Popper
+          open={open}
+          anchorEl={anchorEl}
+          placement={placement}
+          transition
+        >
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={350}>
+              <Paper variant="outlined">
+                <ButtonGroup orientation="vertical">
+                  <Button
+                    variant="text"
+                    onClick={() => setOpenChangePasswordModal(true)}
+                  >
+                    Change Password
+                  </Button>
+                  <Button
+                    variant="text"
+                    onClick={() => dispatch(logoutAdmin())}
+                  >
+                    Logout
+                  </Button>
+                </ButtonGroup>
+              </Paper>
+            </Fade>
+          )}
+        </Popper>
+      </div>
+      <AdminChangePasswordModal
+        open={openChangePasswordModal}
+        onClose={() => setOpenChangePasswordModal(false)}
+      />
+    </>
   );
 }
