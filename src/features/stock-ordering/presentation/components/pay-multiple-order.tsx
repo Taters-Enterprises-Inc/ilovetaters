@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
-import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useQuery,
+} from "features/config/hooks";
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { PayBillingModal } from "../modals";
@@ -15,6 +19,9 @@ import {
   selectGetPayBillingSi,
 } from "../slices/get-pay-billing-si.slice";
 import { SnackbarAlert } from "features/shared/presentation/components";
+import { InvoiceFilter } from "./invoice-filter";
+import { createQueryParams } from "features/config/helpers";
+import { useNavigate } from "react-router-dom";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "Sales Invoice", width: 100 },
@@ -54,11 +61,16 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
   const [remarks, setRemarks] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
+  const [searc, setSearch] = useState("");
+
+  const query = useQuery();
+  const invoiceSearch = query.get("invoiceSearch");
 
   const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
   const getBillingState = useAppSelector(selectupdatePayBillingOrders);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const buttonStyle = {
     color: "white",
@@ -66,21 +78,13 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   };
 
   const InvoiceData = getPayBillingSiState.data?.orders.map((row) => {
-    const {
-      si,
-      order_id,
-      store,
-      order_placement_date,
-      requested_delivery_date,
-      commited_delivery_date,
-    } = row;
     return {
-      id: si,
-      order_id: order_id,
-      store_name: store,
-      order_placement_date: order_placement_date,
-      requested_delivery_date: requested_delivery_date,
-      commited_delivery_date: commited_delivery_date,
+      id: row.si,
+      order_id: row.order_id,
+      store_name: row.store,
+      order_placement_date: row.order_placement_date,
+      requested_delivery_date: row.requested_delivery_date,
+      commited_delivery_date: row.commited_delivery_date,
     };
   });
 
@@ -111,8 +115,11 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   };
 
   useEffect(() => {
-    dispatch(getPayBillingSi());
-  }, [dispatch]);
+    const query = createQueryParams({
+      invoiceSearch: invoiceSearch,
+    });
+    dispatch(getPayBillingSi(query));
+  }, [dispatch, invoiceSearch]);
 
   useEffect(() => {
     if (updatePayBillingOrdersState.fail === getBillingState.status) {
@@ -160,6 +167,23 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
             columns={columns}
             checkboxSelection
             onSelectionModelChange={handleOnSelectionModelChange}
+            components={{
+              Toolbar: () => (
+                <InvoiceFilter
+                  search={invoiceSearch ?? ""}
+                  onSearch={(val) => {
+                    const params = {
+                      invoiceSearch: val === "" ? null : val,
+                    };
+                    const queryParams = createQueryParams(params);
+                    navigate({
+                      pathname: "",
+                      search: queryParams,
+                    });
+                  }}
+                />
+              ),
+            }}
           />
         </div>
 

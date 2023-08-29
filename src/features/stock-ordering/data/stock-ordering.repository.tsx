@@ -299,8 +299,10 @@ export function updateOrderCancelledRepository(
   });
 }
 
-export function GetPayBillingSiRepository(): Promise<GetPayBillingSiResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing`, {
+export function GetPayBillingSiRepository(
+  param: string
+): Promise<GetPayBillingSiResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing${param}`, {
     withCredentials: true,
   });
 }

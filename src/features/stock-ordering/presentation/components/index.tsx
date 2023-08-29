@@ -15,3 +15,4 @@ export { PayMultipleOrder } from "./pay-multiple-order";
 export { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 export { ProfileContent } from "./profile-content";
 export { StockOrderingBadgeWrapper } from "./stock-ordering-badge-wrapper";
+export { InvoiceFilter } from "./invoice-filter";

@@ -98,9 +98,6 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getStore = useAppSelector(selectGetStockOrderStores);
-
-  const [badgeItem, setBadgeItem] = useState(0);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -288,9 +285,7 @@ export function OrderContents() {
                       store: store,
                       search: val === "" ? null : val,
                     };
-
                     const queryParams = createQueryParams(params);
-
                     navigate({
                       pathname: "",
                       search: queryParams,
