@@ -5,7 +5,7 @@ import {
   useAppSelector,
   useQuery,
 } from "features/config/hooks";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField, debounce } from "@mui/material";
 import { useState } from "react";
 import { PayBillingModal } from "../modals";
 import {
@@ -15,6 +15,7 @@ import {
 } from "../slices/update-pay-billing.slice";
 import { updatePayBillingParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
+  GetPayBillingSiState,
   getPayBillingSi,
   selectGetPayBillingSi,
 } from "../slices/get-pay-billing-si.slice";
@@ -61,7 +62,6 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
   const [remarks, setRemarks] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
-  const [searc, setSearch] = useState("");
 
   const query = useQuery();
   const invoiceSearch = query.get("invoiceSearch");
@@ -156,6 +156,17 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     setSelectedData(selectedRowsData);
   };
 
+  const debouncedSearch = debounce((val) => {
+    const params = {
+      invoiceSearch: val === "" ? null : val,
+    };
+    const queryParams = createQueryParams(params);
+    navigate({
+      pathname: "",
+      search: queryParams,
+    });
+  }, 500);
+
   return (
     <>
       <div className="space-y-2">
@@ -169,19 +180,23 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
             onSelectionModelChange={handleOnSelectionModelChange}
             components={{
               Toolbar: () => (
-                <InvoiceFilter
-                  search={invoiceSearch ?? ""}
-                  onSearch={(val) => {
-                    const params = {
-                      invoiceSearch: val === "" ? null : val,
-                    };
-                    const queryParams = createQueryParams(params);
-                    navigate({
-                      pathname: "",
-                      search: queryParams,
-                    });
-                  }}
-                />
+                <div className="flex ">
+                  <span className="flex items-center px-3">
+                    Search Sales Invoice:
+                  </span>
+
+                  <InvoiceFilter
+                    search={invoiceSearch ?? ""}
+                    onSearch={(val) => {
+                      debouncedSearch(val);
+                    }}
+                  />
+
+                  {GetPayBillingSiState.success !==
+                  getPayBillingSiState.status ? (
+                    <CircularProgress size={25} />
+                  ) : null}
+                </div>
               ),
             }}
           />

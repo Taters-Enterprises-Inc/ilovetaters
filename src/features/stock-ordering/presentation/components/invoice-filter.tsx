@@ -8,19 +8,13 @@ interface InvoiceFilterProps {
 }
 
 export function InvoiceFilter(props: InvoiceFilterProps) {
-  const handleOnSearch = (event: { target: { value: any } }) => {
-    let value = event.target.value;
-
-    props.onSearch(value);
-  };
-
   return (
     <GridToolbarContainer sx={{ padding: 1 }}>
       <MaterialInput
         colorTheme="black"
-        label="Search"
         size="small"
         name="search"
+        autoFocus
         defaultValue={props.search}
         onChange={(e) => {
           props.onSearch(e.target.value);

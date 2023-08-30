@@ -25,6 +25,7 @@
     "credit-card-type": "^9.1.0",
     "date-fns": "^2.29.2",
     "env-cmd": "^10.1.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "pusher-js": "^7.4.0",
@@ -83,6 +84,7 @@
   },
   "devDependencies": {
     "@types/google.maps": "^3.49.2",
+    "@types/lodash.throttle": "^4.1.7",
     "@types/react": "^18.0.17",
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
