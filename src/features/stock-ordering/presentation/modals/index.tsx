@@ -11,3 +11,4 @@ export { PayBillingModal } from "./pay-your-billing.modal";
 export { SupplierConfirmModal } from "./supplier-confirm-payment";
 export { CancelledModal } from "./cancelled-order.modal";
 export { PopupModal } from "./popup.modal";
+export { ExcelPreviewModal } from "./excel-preview.modal";

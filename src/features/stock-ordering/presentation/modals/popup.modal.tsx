@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
 import { updateCancelledStatus } from "features/stock-ordering/core/stock-ordering.params";
-import React from "react";
 import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { useAppDispatch } from "features/config/hooks";
 import { AiFillWarning } from "react-icons/ai";
