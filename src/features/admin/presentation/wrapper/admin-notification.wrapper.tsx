@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,7 +8,11 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { getAdminShopOrders } from "features/admin/presentation/slices/get-admin-shop-orders.slice";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  GetAdminSessionState,
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import { pusher } from "features/shared/constants";
@@ -19,7 +23,6 @@ import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifica
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
 import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
 import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
-import { getAdminInfluencerCashout } from "../slices/get-admin-influencer-cashout.slice";
 import { getAdminInfluencerCashouts } from "../slices/get-admin-influencer-cashouts.slice";
 
 interface TransactionParam {
@@ -29,6 +32,7 @@ interface TransactionParam {
 
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const query = useQuery();
 
@@ -244,6 +248,19 @@ export function AdminNotificationWrapper() {
       }
     );
   }, [getAdminSessionState, dispatch, query]);
+
+  useEffect(() => {
+    pusher.unsubscribe("admin-session");
+    const adminSessionChannel = pusher.subscribe("admin-session");
+
+    adminSessionChannel.bind("admin-login-session", (data: string) => {
+      if (GetAdminSessionState.success === getAdminSessionState.status) {
+        if (getAdminSessionState.data?.admin.session_id !== data) {
+          navigate("/admin");
+        }
+      }
+    });
+  }, [getAdminSessionState]);
 
   return (
     <>
