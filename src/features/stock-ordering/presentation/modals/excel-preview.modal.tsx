@@ -19,8 +19,37 @@ export function ExcelPreviewModal(props: ExcelPreviewModalProps) {
         const workbook = XLSX.read(data, { type: "array" });
         const firstSheetName = workbook.SheetNames[0];
         const firstSheet = workbook.Sheets[firstSheetName];
-        const dataJson = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-        setSheetData(dataJson);
+        const dataJson: any[] = XLSX.utils.sheet_to_json(firstSheet, {
+          header: 1,
+        });
+
+        // Find the maximum number of columns and rows
+        let maxColumns = 0;
+        let maxRows = 0;
+
+        dataJson.forEach((row) => {
+          maxColumns = Math.max(maxColumns, row.length);
+          maxRows++;
+        });
+
+        const filledData: any[][] = [];
+
+        for (let rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+          const rowData: any[] = [];
+
+          for (let colIndex = 0; colIndex < maxColumns; colIndex++) {
+            const cellValue =
+              rowIndex < dataJson.length && colIndex < dataJson[rowIndex].length
+                ? dataJson[rowIndex][colIndex]
+                : "";
+
+            rowData.push(cellValue);
+          }
+
+          filledData.push(rowData);
+        }
+
+        setSheetData(filledData);
       };
       if (props.file instanceof File) {
         reader.readAsArrayBuffer(props.file);
