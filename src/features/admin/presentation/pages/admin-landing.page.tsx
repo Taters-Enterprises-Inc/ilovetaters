@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import {
   selectGetAdminSession,
   getAdminSession,
+  GetAdminSessionState,
 } from "../slices/get-admin-session.slice";
 import {
   LogoutAdminState,
@@ -69,10 +70,6 @@ export function AdminLandingPage() {
   const { first_name, last_name } =
     getAdminSessionState.data?.admin.user_details ?? {};
 
-  useEffect(() => {
-    dispatch(getAdminSession());
-  }, [dispatch]);
-
   //handle the new property here
   useEffect(() => {
     if (getAdminSessionState.data) {
@@ -96,81 +93,83 @@ export function AdminLandingPage() {
 
   return (
     <>
-      <div className="flex flex-col bg-paper h-screen">
-        <div className="px-5 space-y-10 my-16 ">
-          <h1 className="flex justify-center item-end text-3xl font-bold font-serif text-center">
-            Taters Group Webwork Ecosystem
-          </h1>
+      {GetAdminSessionState.success === getAdminSessionState.status && (
+        <div className="flex flex-col bg-paper h-screen">
+          <div className="px-5 space-y-10 my-16 ">
+            <h1 className="flex justify-center item-end text-3xl font-bold font-serif text-center">
+              Taters Group Webwork Ecosystem
+            </h1>
 
-          <div className="px-16">
-            <Divider sx={{ borderBottomWidth: 2 }} />
+            <div className="px-16">
+              <Divider sx={{ borderBottomWidth: 2 }} />
+            </div>
+
+            <div className="flex justify-center">
+              <span className="z-10 border border-secondary rounded-l-md bg-button text-white px-5 ">
+                You are logged in as {first_name + " " + last_name}
+              </span>
+              <button onClick={handleClick("bottom-end")}>
+                <IoMdArrowDropdown
+                  size={26}
+                  className="rounded-r-md border border-secondary text-white bg-button"
+                />
+              </button>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-5">
+              {nav.map((button, index) => {
+                const { label, url, availability } = button;
+
+                return (
+                  <>
+                    {availability && (
+                      <Button
+                        key={index}
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        color="secondary"
+                        sx={{ maxWidth: { sm: "full", md: "fit-content" } }}
+                        onClick={() => navigate(url)}
+                      >
+                        <span className="text-2xl text-black">{label}</span>
+                      </Button>
+                    )}
+                  </>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex justify-center">
-            <span className="z-10 border border-secondary rounded-l-md bg-button text-white px-5 ">
-              You are logged in as {first_name + " " + last_name}
-            </span>
-            <button onClick={handleClick("bottom-end")}>
-              <IoMdArrowDropdown
-                size={26}
-                className="rounded-r-md border border-secondary text-white bg-button"
-              />
-            </button>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-5">
-            {nav.map((button, index) => {
-              const { label, url, availability } = button;
-
-              return (
-                <>
-                  {availability && (
+          <Popper
+            open={open}
+            anchorEl={anchorEl}
+            placement={placement}
+            transition
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper variant="outlined">
+                  <ButtonGroup orientation="vertical">
                     <Button
-                      key={index}
-                      fullWidth
-                      variant="outlined"
-                      size="small"
-                      color="secondary"
-                      sx={{ maxWidth: { sm: "full", md: "fit-content" } }}
-                      onClick={() => navigate(url)}
+                      variant="text"
+                      onClick={() => setOpenChangePasswordModal(true)}
                     >
-                      <span className="text-2xl text-black">{label}</span>
+                      Change Password
                     </Button>
-                  )}
-                </>
-              );
-            })}
-          </div>
+                    <Button
+                      variant="text"
+                      onClick={() => dispatch(logoutAdmin())}
+                    >
+                      Logout
+                    </Button>
+                  </ButtonGroup>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
         </div>
-
-        <Popper
-          open={open}
-          anchorEl={anchorEl}
-          placement={placement}
-          transition
-        >
-          {({ TransitionProps }) => (
-            <Fade {...TransitionProps} timeout={350}>
-              <Paper variant="outlined">
-                <ButtonGroup orientation="vertical">
-                  <Button
-                    variant="text"
-                    onClick={() => setOpenChangePasswordModal(true)}
-                  >
-                    Change Password
-                  </Button>
-                  <Button
-                    variant="text"
-                    onClick={() => dispatch(logoutAdmin())}
-                  >
-                    Logout
-                  </Button>
-                </ButtonGroup>
-              </Paper>
-            </Fade>
-          )}
-        </Popper>
-      </div>
+      )}
       <AdminChangePasswordModal
         open={openChangePasswordModal}
         onClose={() => setOpenChangePasswordModal(false)}

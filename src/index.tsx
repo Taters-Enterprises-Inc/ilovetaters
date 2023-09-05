@@ -389,10 +389,10 @@ root.render(
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
                         <Route element={<AdminNotificationWrapper />}>
-                          <Route
+                          {/* <Route
                             path="landing"
                             element={<AdminLandingPage />}
-                          />
+                          /> */}
 
                           <Route element={<AdminGuard />}>
                             <Route

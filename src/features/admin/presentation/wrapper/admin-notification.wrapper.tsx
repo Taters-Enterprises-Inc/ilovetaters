@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -253,14 +253,50 @@ export function AdminNotificationWrapper() {
     pusher.unsubscribe("admin-session");
     const adminSessionChannel = pusher.subscribe("admin-session");
 
-    adminSessionChannel.bind("admin-login-session", (data: string) => {
-      if (GetAdminSessionState.success === getAdminSessionState.status) {
-        if (getAdminSessionState.data?.admin.session_id !== data) {
-          navigate("/admin");
+    adminSessionChannel.bind(
+      "admin-login-session",
+      (data: {
+        stored_session_id: string;
+        user_id: string;
+        logout: boolean;
+      }) => {
+        if (
+          GetAdminSessionState.success === getAdminSessionState.status &&
+          data.stored_session_id &&
+          data.user_id &&
+          data.user_id === getAdminSessionState.data?.admin.user_id
+        ) {
+          if (
+            getAdminSessionState.data?.admin.session_id !==
+            data.stored_session_id
+          ) {
+            navigate("/admin");
+          }
         }
       }
+    );
+
+    adminSessionChannel.bind("no-admin-session", (data: boolean) => {
+      // if (
+      //   data &&
+      //   GetAdminSessionState.success === getAdminSessionState.status &&
+      //   !getAdminSessionState.data
+      // ) {
+      //   navigate("/admin");
+      // }
+      if (data) {
+        console.log("tigger: no session data");
+      }
     });
-  }, [getAdminSessionState]);
+
+    adminSessionChannel.bind("no-session-redirect-to-admin", (data: string) => {
+      // if (getAdminSessionState.data?.admin.user_id === data) {
+      //   window.location.reload();
+      // }
+
+      console.log(data);
+    });
+  }, [getAdminSessionState.data?.admin.session_id]);
 
   return (
     <>
