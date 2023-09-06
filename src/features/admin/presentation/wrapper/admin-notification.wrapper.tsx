@@ -276,26 +276,7 @@ export function AdminNotificationWrapper() {
       }
     );
 
-    adminSessionChannel.bind("no-admin-session", (data: boolean) => {
-      // if (
-      //   data &&
-      //   GetAdminSessionState.success === getAdminSessionState.status &&
-      //   !getAdminSessionState.data
-      // ) {
-      //   navigate("/admin");
-      // }
-      if (data) {
-        console.log("tigger: no session data");
-      }
-    });
-
-    adminSessionChannel.bind("no-session-redirect-to-admin", (data: string) => {
-      // if (getAdminSessionState.data?.admin.user_id === data) {
-      //   window.location.reload();
-      // }
-
-      console.log(data);
-    });
+    
   }, [getAdminSessionState.data?.admin.session_id]);
 
   return (
