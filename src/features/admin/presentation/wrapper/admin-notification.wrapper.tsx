@@ -276,8 +276,7 @@ export function AdminNotificationWrapper() {
         ) {
           if (
             getAdminSessionState.data?.admin.session_id !==
-              data.stored_session_id ||
-            data.logout
+            data.stored_session_id
           ) {
             dispatch(logoutAdmin());
           }
