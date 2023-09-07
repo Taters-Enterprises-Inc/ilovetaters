@@ -1911,15 +1911,10 @@ export function LogoutAdminRepository(): Promise<LogoutAdminResponse> {
   });
 }
 
-export function changePasswordRepository(param: {
-  param: changePasswordParam;
-  id: string;
-}): Promise<changePasswordResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/stock/change-password/${param.id}`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
+export function changePasswordRepository(
+  param: changePasswordParam
+): Promise<changePasswordResponse> {
+  return axios.post(`${REACT_APP_DOMAIN_URL}api/auth/change-password`, param, {
+    withCredentials: true,
+  });
 }

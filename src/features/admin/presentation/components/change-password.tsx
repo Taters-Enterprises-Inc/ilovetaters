@@ -2,7 +2,11 @@ import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { MaterialInputPassword } from "features/shared/presentation/components";
 import { useEffect, useState } from "react";
-import { changePassword } from "../slices/change-password.slice";
+import {
+  changePassword,
+  changePasswordState,
+  selectchangePassword,
+} from "../slices/change-password.slice";
 import {
   getAdminSession,
   selectGetAdminSession,
@@ -37,6 +41,7 @@ export function ChangePassword() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const changeAdminPasswordState = useAppSelector(selectchangePassword);
   const getLogoutAdminState = useAppSelector(selectLogoutAdmin);
 
   const [passwordState, setPasswordState] = useState<passwordStateData>({
@@ -69,12 +74,15 @@ export function ChangePassword() {
         newPassword: passwordState.newPassword,
         confirmPassword: passwordState.confirmPassword,
       };
-      const id = getAdminSessionState.data?.admin?.user_id;
-      dispatch(changePassword({ param: passwordStateParam, id: id }));
-
-      dispatch(logoutAdmin());
+      dispatch(changePassword(passwordStateParam));
     }
   };
+
+  useEffect(() => {
+    if (changeAdminPasswordState.status === changePasswordState.success) {
+      dispatch(logoutAdmin());
+    }
+  }, [changeAdminPasswordState, dispatch]);
 
   useEffect(() => {
     if (getLogoutAdminState.status === LogoutAdminState.success) {
@@ -165,6 +173,7 @@ export function ChangePassword() {
                   {errorState.currentPassword.errorMessage}
                 </span>
               }
+              id={"currentPassword"}
               name={"currentPassword"}
               colorTheme={"black"}
             />
@@ -180,6 +189,7 @@ export function ChangePassword() {
                   {errorState.newPassword.errorMessage}
                 </span>
               }
+              id={"newPassword"}
               name={"newPassword"}
               colorTheme={"black"}
             />
@@ -195,6 +205,7 @@ export function ChangePassword() {
                   {errorState.confirmPassword.errorMessage}
                 </span>
               }
+              id={"confirmPassword"}
               name={"confirmPassword"}
               colorTheme={"black"}
             />

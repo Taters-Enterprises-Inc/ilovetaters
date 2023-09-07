@@ -26,10 +26,7 @@ const initialState: InitialState = {
 
 export const changePassword = createAsyncThunk(
   "changePassword",
-  async (
-    param: { param: changePasswordParam; id: string },
-    { rejectWithValue }
-  ) => {
+  async (param: changePasswordParam, { rejectWithValue }) => {
     try {
       const response: changePasswordResponse = await changePasswordRepository(
         param
