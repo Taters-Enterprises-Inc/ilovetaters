@@ -2,7 +2,7 @@
   "name": "ilovetaters",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://www.ilovetaters.com/",
+  "homepage": "https://www.ilovetaters.com",
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
@@ -61,8 +61,8 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test",
-    "build:prod": "env-cmd -f ./.env.prod react-scripts build",
-    "build:staging": "env-cmd -f ./.env.staging react-scripts build",
+    "build:prod": "env-cmd -f ./.env.prod react-scripts --max_old_space_size=4096 build",
+    "build:staging": "env-cmd -f ./.env.staging react-scripts --max_old_space_size=4096 build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -84,6 +84,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/google.maps": "^3.49.2",
     "@types/lodash.throttle": "^4.1.7",
     "@types/react": "^18.0.17",

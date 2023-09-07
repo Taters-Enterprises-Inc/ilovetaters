@@ -18,8 +18,6 @@ export function AdminGuard() {
   if (
     getAdminSessionState.status === GetAdminSessionState.fail &&
     getAdminSessionState.data === null
-
-    // && getAdminSessionState.data === null
   ) {
     return <Navigate to={"/admin"} />;
   }

@@ -24,6 +24,12 @@ import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice"
 import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
 import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
 import { getAdminInfluencerCashouts } from "../slices/get-admin-influencer-cashouts.slice";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
 
 interface TransactionParam {
   store_id: number;
@@ -34,6 +40,8 @@ export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const logoutAdminState = useAppSelector(selectLogoutAdmin);
+
   const query = useQuery();
 
   useEffect(() => {
@@ -268,16 +276,23 @@ export function AdminNotificationWrapper() {
         ) {
           if (
             getAdminSessionState.data?.admin.session_id !==
-            data.stored_session_id
+              data.stored_session_id ||
+            data.logout
           ) {
-            navigate("/admin");
+            dispatch(logoutAdmin());
           }
         }
       }
     );
+  }, [getAdminSessionState, navigate]);
 
-    
-  }, [getAdminSessionState.data?.admin.session_id]);
+  useEffect(() => {
+    if (logoutAdminState.status === LogoutAdminState.success) {
+      // dispatch(getAdminSession());
+      // dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+  }, [logoutAdminState, navigate]);
 
   return (
     <>
