@@ -6,10 +6,15 @@ import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updatReviewParam } from "features/stock-ordering/core/stock-ordering.params";
-import { updateReviewOrders } from "../slices/update-review-order.slice";
+import {
+  selectupdateReviewOrders,
+  updateReviewOrders,
+  updateReviewOrdersState,
+} from "../slices/update-review-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 interface ProcurementReviewOrdersModalProps {
   open: boolean;
@@ -35,6 +40,7 @@ export function ProcurementReviewOrdersModal(
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const stockUpdateReviewOrderState = useAppSelector(selectupdateReviewOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -86,10 +92,16 @@ export function ProcurementReviewOrdersModal(
     };
 
     await dispatch(updateReviewOrders(reviewOrdersParamData));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
+
+  useEffect(() => {
+    if (
+      stockUpdateReviewOrderState.status === updateReviewOrdersState.success
+    ) {
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
+    }
+  }, [stockUpdateReviewOrderState]);
 
   const isQuantityEmpty = () => {
     let empty = false;
@@ -144,7 +156,7 @@ export function ProcurementReviewOrdersModal(
 
               {setEnabled() || isEditEnabled ? (
                 <>
-                  <div className="flex flex-col px-5">
+                  <div className="flex flex-col">
                     <span>Remarks: </span>
                     <TextField
                       value={remarks}
@@ -154,25 +166,29 @@ export function ProcurementReviewOrdersModal(
                     />
                   </div>
 
-                  <ButtonGroup fullWidth variant="contained">
+                  <div className="flex space-x-3">
                     <Button
+                      fullWidth
+                      variant="contained"
                       disabled={isQuantityEmpty()}
                       type="submit"
                       onClick={() => setStatus("1")}
-                      sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
                     >
                       Send back to New Order
                     </Button>
 
                     <Button
+                      fullWidth
+                      variant="contained"
                       disabled={isQuantityEmpty()}
                       type="submit"
                       onClick={() => setStatus("3")}
-                      sx={{ color: "white", backgroundColor: "#CC5801" }}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
                     >
                       Order Reviewed
                     </Button>
-                  </ButtonGroup>
+                  </div>
                 </>
               ) : null}
             </div>

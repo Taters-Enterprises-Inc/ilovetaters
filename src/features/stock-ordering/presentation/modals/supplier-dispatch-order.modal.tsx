@@ -17,7 +17,11 @@ import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
+import {
+  selectupdateDispatchOrders,
+  updateDispatchOrders,
+  updateDispatchOrdersState,
+} from "../slices/update-dispatch-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
@@ -25,6 +29,7 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { PopupModal } from "./popup.modal";
 import { ExcelPreviewModal } from "./excel-preview.modal";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 // import { verifyDispatchOrders } from "../slices/verify-dispatch-invoice.slice";
 
 interface SupplierDispatchOrderModalProps {
@@ -86,6 +91,7 @@ export function SupplierDispatchOrderModal(
   };
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const dispatchOrderState = useAppSelector(selectupdateDispatchOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -145,10 +151,14 @@ export function SupplierDispatchOrderModal(
     };
 
     await dispatch(updateDispatchOrders(dispatchOrdersParamData));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
+
+  useEffect(() => {
+    if (dispatchOrderState.status === updateDispatchOrdersState.success) {
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
+    }
+  }, [dispatchOrderState]);
 
   const handleCancelOrder = () => {
     setOpenPopUp(true);
@@ -173,11 +183,6 @@ export function SupplierDispatchOrderModal(
     event.preventDefault();
     setuploadButton(false);
     setPreview(true);
-  };
-
-  const buttonStyle = {
-    color: "white",
-    backgroundColor: "#CC5801",
   };
 
   if (props.open) {
@@ -305,7 +310,7 @@ export function SupplierDispatchOrderModal(
                       <Button
                         fullWidth
                         size="small"
-                        sx={buttonStyle}
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
                         onClick={() => {
                           setOpenUploadDeliveryRecieptModal(true);
                         }}
@@ -320,7 +325,7 @@ export function SupplierDispatchOrderModal(
                           size="small"
                           type="submit"
                           variant="contained"
-                          sx={buttonStyle}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Dispatch Order
                         </Button>
@@ -330,7 +335,7 @@ export function SupplierDispatchOrderModal(
                           size="small"
                           variant="contained"
                           onClick={handlePreviewButton}
-                          sx={buttonStyle}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                           disabled={
                             !isValidFile(uploadedReceipt) ||
                             transport === "" ||

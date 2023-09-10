@@ -8,16 +8,14 @@ import { TextField, Button, ButtonGroup } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { selectGetProductData } from "../slices/get-product-data.slice";
+import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
-  newOrdersParam,
-  updateCancelledStatus,
-  updateStatus,
-} from "features/stock-ordering/core/stock-ordering.params";
-import { updateNewOrders } from "../slices/update-new-order.slice";
+  selectupdateNewOrders,
+  updateNewOrders,
+  updateNewOrdersState,
+} from "../slices/update-new-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { get } from "http";
-import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import {
   getStockOrderStores,
   selectGetStockOrderStores,
@@ -40,6 +38,8 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getStoreState = useAppSelector(selectGetStockOrderStores);
+  const stockUpdateNewOrder = useAppSelector(selectupdateNewOrders);
+
   const [remarks, setRemarks] = useState("");
   const [preview, setPreview] = useState(false);
   const [CommitedDeliveryDate, setCommitedDeliveryDate] = useState(
@@ -69,10 +69,14 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     };
 
     await dispatch(updateNewOrders(reviewOrdersParamData));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
+
+  useEffect(() => {
+    if (stockUpdateNewOrder.status === updateNewOrdersState.success) {
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
+    }
+  }, [stockUpdateNewOrder]);
 
   const handleCancelledOrder = async () => {
     setOpenPopUp(true);

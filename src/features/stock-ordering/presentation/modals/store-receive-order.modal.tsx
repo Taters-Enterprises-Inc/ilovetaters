@@ -15,9 +15,14 @@ import { MdPreview } from "react-icons/md";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { receiveOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
-import { updateReceiveOrders } from "../slices/update-receive-order.slice";
+import {
+  selectupdateReceiveOrders,
+  updateReceiveOrders,
+  updateReceiveOrdersState,
+} from "../slices/update-receive-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 interface StoreReceiveOrderModalProps {
   open: boolean;
@@ -51,6 +56,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
   }, [props.open]);
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const receiveOrderState = useAppSelector(selectupdateReceiveOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -99,13 +105,17 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
       };
 
       await dispatch(updateReceiveOrders(receiveOrdersParamData));
-
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
     } else {
       setOpenUploadDeliveryRecieptModal(true);
     }
   };
+
+  useEffect(() => {
+    if (receiveOrderState.status === updateReceiveOrdersState.success) {
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
+    }
+  }, [receiveOrderState]);
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -230,10 +240,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{
-                              color: "white",
-                              backgroundColor: "#CC5801",
-                            }}
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
                           >
                             Confirm
                           </Button>

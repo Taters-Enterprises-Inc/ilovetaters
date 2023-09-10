@@ -384,6 +384,30 @@ import {
   selectAdminInfluencerCashoutChangeStatus,
   AdminInfluencerCashoutChangeStatusState,
 } from "features/admin/presentation/slices/admin-influencer-cashout-change-status.slice";
+import {
+  InsertNewOrderState,
+  selectInsertNewOrder,
+} from "features/stock-ordering/presentation/slices/insert-new-order.slice";
+import {
+  selectupdateNewOrders,
+  updateNewOrdersState,
+} from "features/stock-ordering/presentation/slices/update-new-order.slice";
+import {
+  selectupdateReviewOrders,
+  updateReviewOrdersState,
+} from "features/stock-ordering/presentation/slices/update-review-order.slice";
+import {
+  selectupdateDispatchOrders,
+  updateDispatchOrdersState,
+} from "features/stock-ordering/presentation/slices/update-dispatch-order.slice";
+import {
+  selectupdateReceiveOrders,
+  updateReceiveOrdersState,
+} from "features/stock-ordering/presentation/slices/update-receive-order.slice";
+import {
+  selectupdateDeliveryReceiveApprovalOrders,
+  updateDeliveryReceiveApprovalOrdersState,
+} from "features/stock-ordering/presentation/slices/update-delivery-receive-approval.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -605,6 +629,133 @@ export function LoadingAndSnackbarWrapper() {
   const validatePartnerCompanyEmployeeIdNumberAdminState = useAppSelector(
     selectValidatePartnerCompanyEmployeeIdNumberAdmin
   );
+
+  const insertStockOrderingNewOrder = useAppSelector(selectInsertNewOrder);
+  const updateStockOrderNewOrder = useAppSelector(selectupdateNewOrders);
+  const stockUpdateReviewOrderState = useAppSelector(selectupdateReviewOrders);
+  const stockUpdateDispatchOrderState = useAppSelector(
+    selectupdateDispatchOrders
+  );
+  const stockUpdateReceiveOrderState = useAppSelector(
+    selectupdateReceiveOrders
+  );
+  const stockDeliveryRecieveApprovalState = useAppSelector(
+    selectupdateDeliveryReceiveApprovalOrders
+  );
+
+  useEffect(() => {
+    switch (stockDeliveryRecieveApprovalState.status) {
+      case updateDeliveryReceiveApprovalOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateDeliveryReceiveApprovalOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateDeliveryReceiveApprovalOrdersState.success:
+        showAlert(setSuccessAlert, stockDeliveryRecieveApprovalState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateDeliveryReceiveApprovalOrdersState.fail:
+        showAlert(setFailsAlert, stockDeliveryRecieveApprovalState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockDeliveryRecieveApprovalState]);
+
+  useEffect(() => {
+    switch (stockUpdateReceiveOrderState.status) {
+      case updateReceiveOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateReceiveOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateReceiveOrdersState.success:
+        showAlert(setSuccessAlert, stockUpdateReceiveOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateReceiveOrdersState.fail:
+        showAlert(setFailsAlert, stockUpdateReceiveOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateReceiveOrderState]);
+
+  useEffect(() => {
+    switch (stockUpdateDispatchOrderState.status) {
+      case updateDispatchOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateDispatchOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateDispatchOrdersState.success:
+        showAlert(setSuccessAlert, stockUpdateDispatchOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateDispatchOrdersState.fail:
+        showAlert(setFailsAlert, stockUpdateDispatchOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateDispatchOrderState]);
+
+  useEffect(() => {
+    switch (stockUpdateReviewOrderState.status) {
+      case updateReviewOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateReviewOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateReviewOrdersState.success:
+        showAlert(setSuccessAlert, stockUpdateReviewOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateReviewOrdersState.fail:
+        showAlert(setFailsAlert, stockUpdateReviewOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateReviewOrderState]);
+
+  useEffect(() => {
+    switch (updateStockOrderNewOrder.status) {
+      case updateNewOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateNewOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateNewOrdersState.success:
+        showAlert(setSuccessAlert, updateStockOrderNewOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateNewOrdersState.fail:
+        showAlert(setFailsAlert, updateStockOrderNewOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [updateStockOrderNewOrder]);
+
+  useEffect(() => {
+    switch (insertStockOrderingNewOrder.status) {
+      case InsertNewOrderState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case InsertNewOrderState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case InsertNewOrderState.success:
+        showAlert(setSuccessAlert, insertStockOrderingNewOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+      case InsertNewOrderState.fail:
+        showAlert(setFailsAlert, insertStockOrderingNewOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [insertStockOrderingNewOrder]);
 
   useEffect(() => {
     switch (adminInfluencerCashoutChangeStatusState.status) {
