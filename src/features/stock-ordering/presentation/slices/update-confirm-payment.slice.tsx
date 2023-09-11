@@ -17,13 +17,11 @@ export enum updateConfirmPaymentState {
 interface InitialState {
   status: updateConfirmPaymentState;
   message: string;
-  data: string | undefined;
 }
 
 const initialState: InitialState = {
   status: updateConfirmPaymentState.initial,
   message: "",
-  data: undefined,
 };
 
 export const updateConfirmPayment = createAsyncThunk(
@@ -60,21 +58,19 @@ export const updateConfirmPaymentSlice = createSlice({
       })
       .addCase(updateConfirmPayment.fulfilled, (state, action) => {
         if (action.payload) {
-          const { message, data } = action.payload;
+          const { message } = action.payload;
           state.status = updateConfirmPaymentState.success;
           state.message = message;
-          state.data = data;
         }
       })
       .addCase(updateConfirmPayment.rejected, (state, action) => {
         state.status = updateConfirmPaymentState.fail;
         state.message = action.payload as string;
-        state.data = undefined;
       });
   },
 });
 
-export const selectupdateConfirmPayment = (state: RootState) =>
+export const selectUpdateConfirmPayment = (state: RootState) =>
   state.updateConfirmPayment;
 
 export const { resetupdateConfirmPayment } = updateConfirmPaymentSlice.actions;

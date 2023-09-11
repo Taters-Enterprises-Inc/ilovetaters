@@ -77,7 +77,7 @@ export const updateOrderCancelledSlice = createSlice({
   },
 });
 
-export const selectupdateOrderCancelled = (state: RootState) =>
+export const selectUpdateOrderCancelled = (state: RootState) =>
   state.updateOrderCancelled;
 
 export const { resetupdateOrderCancelled } = updateOrderCancelledSlice.actions;

@@ -167,6 +167,17 @@ export function OrderContents() {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    const params = {
+      tab: newValue,
+    };
+
+    const queryParams = createQueryParams(params);
+
+    navigate({
+      pathname: "",
+      search: queryParams,
+    });
+
     setTabValue(newValue);
   };
 
@@ -195,7 +206,7 @@ export function OrderContents() {
       order_by: orderBy,
       order: order,
       search: search,
-      current_tab: tabValue,
+      tab: tabValue,
     });
 
     dispatch(getStockOrders(query));
@@ -560,7 +571,16 @@ export function OrderContents() {
                       tooltipTitle="Pay Billing"
                       onClick={async () => {
                         setOrderId("");
-                        await setTabValue(6);
+                        const params = {
+                          tab: 6,
+                        };
+
+                        const queryParams = createQueryParams(params);
+
+                        navigate({
+                          pathname: "",
+                          search: queryParams,
+                        });
                         handleModalToggle("storePayBilling");
                       }}
                     />

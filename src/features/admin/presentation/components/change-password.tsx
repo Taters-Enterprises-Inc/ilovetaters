@@ -168,6 +168,7 @@ export function ChangePassword() {
               onChange={handleOnPasswordChange}
               size="small"
               error={errorState.currentPassword.isError}
+              autoComplete="off"
               helperText={
                 <span className="text-red">
                   {errorState.currentPassword.errorMessage}
@@ -184,6 +185,7 @@ export function ChangePassword() {
               onChange={handleOnPasswordChange}
               size="small"
               error={errorState.newPassword.isError}
+              autoComplete="off"
               helperText={
                 <span className="text-red">
                   {errorState.newPassword.errorMessage}
@@ -200,6 +202,7 @@ export function ChangePassword() {
               onChange={handleOnPasswordChange}
               size="small"
               error={errorState.confirmPassword.isError}
+              autoComplete="off"
               helperText={
                 <span className="text-red">
                   {errorState.confirmPassword.errorMessage}

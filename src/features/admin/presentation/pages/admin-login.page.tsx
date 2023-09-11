@@ -105,6 +105,7 @@ export function AdminLogin() {
                 size="small"
                 name="password"
                 colorTheme="white"
+                autoComplete="off"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);

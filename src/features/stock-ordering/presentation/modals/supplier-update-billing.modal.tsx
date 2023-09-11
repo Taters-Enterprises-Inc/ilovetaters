@@ -6,9 +6,16 @@ import { StockOrderingInformationModel } from "features/stock-ordering/core/doma
 import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateBillingOrders } from "../slices/update-billing-order.slice";
+import {
+  selectUpdateBillingOrders,
+  updateBillingOrders,
+  updateBillingOrdersState,
+} from "../slices/update-billing-order.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  STOCK_ORDERING_BUTTON_STYLE,
+} from "features/shared/constants";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
@@ -50,6 +57,7 @@ export function SupplierUpdateBillingModal(
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const updateBillingState = useAppSelector(selectUpdateBillingOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -111,10 +119,14 @@ export function SupplierUpdateBillingModal(
 
     console.log(updateBillingOrderParam);
     await dispatch(updateBillingOrders(updateBillingOrderParam));
-
-    document.body.classList.remove("overflow-hidden");
-    props.onClose();
   };
+
+  useEffect(() => {
+    if (updateBillingState.status === updateBillingOrdersState.success) {
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
+    }
+  }, [updateBillingState]);
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
@@ -250,7 +262,7 @@ export function SupplierUpdateBillingModal(
                           onClick={() => handleSupplierUpdate()}
                           fullWidth
                           variant="contained"
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Confirm
                         </Button>
@@ -290,10 +302,7 @@ export function SupplierUpdateBillingModal(
                               onClick={() => setUploadedGoodsReceiptModal(true)}
                               fullWidth
                               variant="contained"
-                              sx={{
-                                color: "white",
-                                backgroundColor: "#CC5801",
-                              }}
+                              sx={STOCK_ORDERING_BUTTON_STYLE}
                             >
                               Upload updated sales invoice (GOODS)
                             </Button>
@@ -308,10 +317,7 @@ export function SupplierUpdateBillingModal(
                               }
                               fullWidth
                               variant="contained"
-                              sx={{
-                                color: "white",
-                                backgroundColor: "#CC5801",
-                              }}
+                              sx={STOCK_ORDERING_BUTTON_STYLE}
                             >
                               Upload updated sales invoice (REGION)
                             </Button>

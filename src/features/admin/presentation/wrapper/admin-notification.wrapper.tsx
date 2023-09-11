@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -30,6 +30,7 @@ import {
   resetLogoutAdmin,
   selectLogoutAdmin,
 } from "../slices/logout-admin.slice";
+import AdminSessionExpireModal from "../modals/admin-session-expire.modal";
 
 interface TransactionParam {
   store_id: number;
@@ -40,7 +41,7 @@ export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const logoutAdminState = useAppSelector(selectLogoutAdmin);
+  const [openSessionExpireModal, setOpenSessionExpireModal] = useState(false);
 
   const query = useQuery();
 
@@ -278,20 +279,12 @@ export function AdminNotificationWrapper() {
             getAdminSessionState.data?.admin.session_id !==
             data.stored_session_id
           ) {
-            dispatch(logoutAdmin());
+            setOpenSessionExpireModal(true);
           }
         }
       }
     );
   }, [getAdminSessionState, navigate]);
-
-  useEffect(() => {
-    if (logoutAdminState.status === LogoutAdminState.success) {
-      // dispatch(getAdminSession());
-      // dispatch(resetLogoutAdmin());
-      navigate("/admin");
-    }
-  }, [logoutAdminState, navigate]);
 
   return (
     <>
@@ -308,6 +301,11 @@ export function AdminNotificationWrapper() {
         theme="light"
       />
       <Outlet />
+
+      <AdminSessionExpireModal
+        open={openSessionExpireModal}
+        onClose={() => setOpenSessionExpireModal(false)}
+      />
     </>
   );
 }

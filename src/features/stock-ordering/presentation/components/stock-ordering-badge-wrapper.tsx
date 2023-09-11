@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { getStockOrders } from "../slices/get-stock-orders.slice";
+import { createQueryParams } from "features/config/helpers";
 
 interface TransactionParam {
   store_id: number;
@@ -21,6 +22,14 @@ export function StockOrderingBadgeWrapper() {
   const dispatch = useAppDispatch();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const query = useQuery();
+  const pageNo = query.get("page_no");
+  const perPage = query.get("per_page");
+  const orderBy = query.get("order_by");
+  const order = query.get("order");
+  const search = query.get("search");
+  const status = query.get("status");
+  const store = query.get("store");
+  const tabValue = query.get("tab");
 
   useEffect(() => {
     pusher.unsubscribe("admin-stock-ordering");
@@ -37,7 +46,17 @@ export function StockOrderingBadgeWrapper() {
             (store) => store.store_id === data.store_id
           )
         ) {
-          dispatch(getStockOrders(""));
+          const query = createQueryParams({
+            page_no: pageNo,
+            per_page: perPage,
+            order_by: orderBy,
+            order: order,
+            search: search,
+            tab: tabValue,
+          });
+
+          dispatch(getStockOrders(query));
+          // dispatch(getStockOrders(""));
         }
       }
     );

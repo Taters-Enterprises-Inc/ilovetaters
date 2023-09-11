@@ -7,9 +7,9 @@ import {
 } from "features/config/hooks";
 import { Button, CircularProgress, TextField, debounce } from "@mui/material";
 import { useState } from "react";
-import { PayBillingModal } from "../modals";
+import { ExcelPreviewModal, PayBillingModal } from "../modals";
 import {
-  selectupdatePayBillingOrders,
+  selectUpdatePayBillingOrders,
   updatePayBillingOrders,
   updatePayBillingOrdersState,
 } from "../slices/update-pay-billing.slice";
@@ -19,10 +19,10 @@ import {
   getPayBillingSi,
   selectGetPayBillingSi,
 } from "../slices/get-pay-billing-si.slice";
-import { SnackbarAlert } from "features/shared/presentation/components";
 import { InvoiceFilter } from "./invoice-filter";
 import { createQueryParams } from "features/config/helpers";
 import { useNavigate } from "react-router-dom";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "Sales Invoice", width: 100 },
@@ -61,21 +61,16 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
   const [selectedData, setSelectedData] = useState<Array<selectedData>>([]);
   const [remarks, setRemarks] = useState("");
-  const [openAlert, setOpenAlert] = useState(false);
+  const [openExcelPreview, setOpenExcelPreview] = useState(false);
 
   const query = useQuery();
   const invoiceSearch = query.get("invoiceSearch");
 
   const getPayBillingSiState = useAppSelector(selectGetPayBillingSi);
-  const getBillingState = useAppSelector(selectupdatePayBillingOrders);
+  const billingState = useAppSelector(selectUpdatePayBillingOrders);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const buttonStyle = {
-    color: "white",
-    backgroundColor: "#CC5801",
-  };
 
   const InvoiceData = getPayBillingSiState.data?.orders.map((row) => {
     return {
@@ -122,17 +117,11 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
   }, [dispatch, invoiceSearch]);
 
   useEffect(() => {
-    if (updatePayBillingOrdersState.fail === getBillingState.status) {
-      setOpenAlert(true);
-    } else if (updatePayBillingOrdersState.success === getBillingState.status) {
-      setOpenAlert(false);
+    if (updatePayBillingOrdersState.success === billingState.status) {
+      document.body.classList.remove("overflow-hidden");
       props.onClose(true);
     }
-  }, [getBillingState.status]);
-
-  useEffect(() => {
-    setTimeout(() => setOpenAlert(false), 5000);
-  }, [openAlert]);
+  }, [billingState]);
 
   const handlePayBilling = async () => {
     const payBilingParam: updatePayBillingParam = {
@@ -212,18 +201,17 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
           />
         </div>
 
-        <div className="flex flex-row space-x-4">
-          <div className="basis-1/2">
+        <div className="flex flex-col space-y-2">
+          <div className="flex space-x-3">
             <Button
               onClick={() => setOpenPayBillingModal(true)}
               fullWidth
               variant="contained"
-              sx={buttonStyle}
+              sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Pay Billing
             </Button>
-          </div>
-          <div className="basis-1/2">
+
             <Button
               fullWidth
               variant="contained"
@@ -235,11 +223,21 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
                   selectedData?.length !== 0
                 )
               }
-              sx={buttonStyle}
+              sx={STOCK_ORDERING_BUTTON_STYLE}
             >
               Confirm
             </Button>
           </div>
+          {uploadedReceipt && (
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setOpenExcelPreview(true)}
+              sx={STOCK_ORDERING_BUTTON_STYLE}
+            >
+              Preview Excel File
+            </Button>
+          )}
         </div>
       </div>
 
@@ -250,10 +248,10 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
         isButtonAvailable={true}
       />
 
-      <SnackbarAlert
-        open={openAlert}
-        severity={"error"}
-        message={getBillingState.message}
+      <ExcelPreviewModal
+        open={openExcelPreview}
+        onClose={() => setOpenExcelPreview(false)}
+        file={uploadedReceipt}
       />
     </>
   );

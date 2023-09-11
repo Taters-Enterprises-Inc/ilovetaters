@@ -408,6 +408,19 @@ import {
   selectupdateDeliveryReceiveApprovalOrders,
   updateDeliveryReceiveApprovalOrdersState,
 } from "features/stock-ordering/presentation/slices/update-delivery-receive-approval.slice";
+import {
+  selectUpdateBillingOrders,
+  updateBillingOrdersState,
+} from "features/stock-ordering/presentation/slices/update-billing-order.slice";
+import {
+  selectUpdatePayBillingOrders,
+  updatePayBillingOrdersState,
+} from "features/stock-ordering/presentation/slices/update-pay-billing.slice";
+import {
+  selectUpdateConfirmPayment,
+  updateConfirmPaymentState,
+} from "features/stock-ordering/presentation/slices/update-confirm-payment.slice";
+import { selectUpdateOrderCancelled, updateOrderCancelledState } from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
 
 const SweetAlert = withReactContent(Swal);
 
@@ -642,6 +655,92 @@ export function LoadingAndSnackbarWrapper() {
   const stockDeliveryRecieveApprovalState = useAppSelector(
     selectupdateDeliveryReceiveApprovalOrders
   );
+  const stockUpdateBillingOrderState = useAppSelector(
+    selectUpdateBillingOrders
+  );
+  const stockUpdatePayBillingOrderState = useAppSelector(
+    selectUpdatePayBillingOrders
+  );
+  const stockUpdateConfirmPaymentState = useAppSelector(
+    selectUpdateConfirmPayment
+  );
+  const stockCancelOrder = useAppSelector(selectUpdateOrderCancelled)
+
+  useEffect(() => {
+    switch (stockCancelOrder.status) {
+      case updateOrderCancelledState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateOrderCancelledState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateOrderCancelledState.success:
+        showAlert(setSuccessAlert, stockCancelOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateOrderCancelledState.fail:
+        showAlert(setFailsAlert, stockCancelOrder.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockCancelOrder]);
+
+  useEffect(() => {
+    switch (stockUpdateConfirmPaymentState.status) {
+      case updateConfirmPaymentState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateConfirmPaymentState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateConfirmPaymentState.success:
+        showAlert(setSuccessAlert, stockUpdateConfirmPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateConfirmPaymentState.fail:
+        showAlert(setFailsAlert, stockUpdateConfirmPaymentState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateConfirmPaymentState]);
+
+  useEffect(() => {
+    switch (stockUpdatePayBillingOrderState.status) {
+      case updatePayBillingOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updatePayBillingOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updatePayBillingOrdersState.success:
+        showAlert(setSuccessAlert, stockUpdatePayBillingOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updatePayBillingOrdersState.fail:
+        showAlert(setFailsAlert, stockUpdatePayBillingOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdatePayBillingOrderState]);
+
+  useEffect(() => {
+    switch (stockUpdateBillingOrderState.status) {
+      case updateBillingOrdersState.initial:
+        setOpenBackdropLoading(true);
+        break;
+      case updateBillingOrdersState.inProgress:
+        setOpenBackdropLoading(false);
+        break;
+      case updateBillingOrdersState.success:
+        showAlert(setSuccessAlert, stockUpdateBillingOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+      case updateBillingOrdersState.fail:
+        showAlert(setFailsAlert, stockUpdateBillingOrderState.message);
+        setOpenBackdropLoading(false);
+        break;
+    }
+  }, [stockUpdateBillingOrderState]);
 
   useEffect(() => {
     switch (stockDeliveryRecieveApprovalState.status) {
