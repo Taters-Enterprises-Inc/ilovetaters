@@ -1,32 +1,41 @@
 import { Button } from "@mui/material";
-import { updateCancelledStatus } from "features/stock-ordering/core/stock-ordering.params";
-import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
-import { useAppDispatch } from "features/config/hooks";
 import { AiFillWarning } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
+import { useEffect } from "react";
+import { getAdminSession } from "../slices/get-admin-session.slice";
 
-interface CompleteModalProps {
+interface AdminSessionExpireModalProps {
   open: boolean;
   onClose: () => void;
-  title: string;
-  message: string;
-  remarks: string;
-  id: string;
-  orderCancelled: (isCancelled: boolean) => void;
 }
-
-export function PopupModal(props: CompleteModalProps) {
+export default function AdminSessionExpireModal(
+  props: AdminSessionExpireModalProps
+) {
   const dispatch = useAppDispatch();
+  const logoutAdminState = useAppSelector(selectLogoutAdmin);
 
-  const handleCancelOrder = async () => {
-    const cancelParameter: updateCancelledStatus = {
-      id: props.id,
-      remarks: props.remarks,
-    };
-    dispatch(updateOrderCancelled(cancelParameter));
-    document.body.classList.remove("overflow-hidden");
+  const navigate = useNavigate();
 
-    props.orderCancelled(true);
+  const handleLogout = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    dispatch(logoutAdmin());
   };
+
+  useEffect(() => {
+    if (logoutAdminState.status === LogoutAdminState.success) {
+      dispatch(getAdminSession());
+      dispatch(resetLogoutAdmin());
+      navigate("/admin");
+    }
+  }, [logoutAdminState, navigate]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -41,32 +50,23 @@ export function PopupModal(props: CompleteModalProps) {
         <div className="w-[50%] lg:w-[400px] my-32 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-sm text-white font-semibold">
-              {props.title}
+              Session Expire Notice
             </span>
           </div>
           <div className="flex flex-col bg-paper p-3 rounded-b-md space-y-8">
             <div className="flex space-x-3">
               <AiFillWarning className="text-2xl text-tertiary" />
-              <span>{props.message}</span>
+              <span>Another device has logged in into your account</span>
             </div>
             <div className="flex space-x-3">
               <Button
                 fullWidth
                 size="small"
-                onClick={handleCancelOrder}
+                onClick={handleLogout}
                 variant="contained"
                 sx={{ color: "white", backgroundColor: "#CC5801" }}
               >
-                Yes
-              </Button>
-              <Button
-                fullWidth
-                size="small"
-                variant="contained"
-                onClick={() => props.onClose()}
-                sx={{ color: "white", backgroundColor: "#CC5801" }}
-              >
-                No
+                Ok
               </Button>
             </div>
           </div>

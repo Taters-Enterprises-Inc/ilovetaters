@@ -65,7 +65,7 @@ const SideBarContent = () => {
 
   return (
     <Box className="relative h-screen bg-secondary font-['Varela_Round'] duration-500 z-10 overflow-y-auto overflow-x-hidden">
-      <DrawerHeader className="!min-h-[0px] px-4 relative flex justify-end text-white top-5">
+      <DrawerHeader className="!min-h-[0px] px-4 relative flex justify-end text-white top-5 space-x-3">
         <FaBars
           className={`cursor-pointer ${
             !stockOrderSideBar.status && "-translate-x-4"
@@ -75,15 +75,16 @@ const SideBarContent = () => {
           }}
         />
       </DrawerHeader>
-      <div className="flex items-center px-4 gap-x-4">
+
+      <div className="flex items-center px-4 space-x-2">
         <img
           src={require("assets/favicon.png")}
           className={`duration-500 bg-white border-4 rounded-full cursor-pointer border-primary -mt-2
-            ${!stockOrderSideBar.status && "translate-y-12"}`}
+            ${!stockOrderSideBar.status && "translate-y-14"}`}
           alt="taters admin logo"
         />
         <h1
-          className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2
+          className={`whitespace-pre duration-300 text-white origin-left font-medium -mt-2 pr-8
           ${
             !stockOrderSideBar.status &&
             "opacity-0 translate-x-28 overflow-hidden"
@@ -92,7 +93,8 @@ const SideBarContent = () => {
           Stock Order System
         </h1>
       </div>
-      <div>
+
+      <div className="mt-2">
         <IconButton
           onClick={() => {
             navigate("/admin/landing");
@@ -112,18 +114,23 @@ const SideBarContent = () => {
           </div>
         </IconButton>
       </div>
+
       <div
-        className={`whitespace-pre duration-300 mt-3 px-4 text-white 
+        className={`whitespace-pre duration-300 px-4 text-white 
                 ${
                   !stockOrderSideBar.status &&
                   "opacity-0 translate-x-28 overflow-hidden "
                 }`}
       >
         <div>
-          <div className="text-lg">
+          <div className="text-lg capitalize">
             {getAdminSessionState.data?.admin.user_details.first_name +
               " " +
               getAdminSessionState.data?.admin.user_details.last_name}
+          </div>
+
+          <div className="flex flex-col text-xs">
+            {getAdminSessionState.data?.admin.user_details.company}
           </div>
 
           {/* <div className="flex flex-col text-xs">
@@ -162,7 +169,6 @@ export function StockOrderDrawer() {
       </div>
 
       <div className="hidden md:block">
-        {/* <div> */}
         <Drawers
           anchor="left"
           variant="permanent"

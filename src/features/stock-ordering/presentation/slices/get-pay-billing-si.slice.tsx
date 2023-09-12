@@ -28,10 +28,11 @@ const initialState: InitialState = {
 
 export const getPayBillingSi = createAsyncThunk(
   "getPayBillingSi",
-  async (_, { rejectWithValue }) => {
+  async (param: string, { rejectWithValue }) => {
     try {
-      const response: GetPayBillingSiResponse =
-        await GetPayBillingSiRepository();
+      const response: GetPayBillingSiResponse = await GetPayBillingSiRepository(
+        param
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

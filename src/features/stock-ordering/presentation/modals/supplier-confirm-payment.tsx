@@ -7,10 +7,15 @@ import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
-import { updateConfirmPayment } from "../slices/update-confirm-payment.slice";
+import {
+  selectUpdateConfirmPayment,
+  updateConfirmPayment,
+  updateConfirmPaymentState,
+} from "../slices/update-confirm-payment.slice";
 import { ViewImageModal } from "./view-image.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 interface SupplierConfirmModalProps {
   open: boolean;
@@ -31,6 +36,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const confirmPaymentState = useAppSelector(selectUpdateConfirmPayment);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -66,7 +72,7 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       status: status,
     };
 
-    await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
+    dispatch(updateConfirmPayment(updateConfirmPaymentParam));
 
     document.body.classList.remove("overflow-hidden");
     props.onClose();
@@ -146,27 +152,23 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                   </div> */}
 
                   <div className="flex space-x-4">
-                    <ButtonGroup fullWidth variant="contained">
-                      <Button
-                        onClick={() => handleValidate("7")}
-                        sx={{
-                          color: "white",
-                          backgroundColor: "#CC5801",
-                        }}
-                      >
-                        Return to Tei Finance
-                      </Button>
+                    {/* <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => handleValidate("7")}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      Return to Tei Finance
+                    </Button> */}
 
-                      <Button
-                        onClick={() => handleValidate("9")}
-                        sx={{
-                          color: "white",
-                          backgroundColor: "#CC5801",
-                        }}
-                      >
-                        Validate
-                      </Button>
-                    </ButtonGroup>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => handleValidate("9")}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      Validate
+                    </Button>
                   </div>
                 </div>
               </div>

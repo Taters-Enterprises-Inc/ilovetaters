@@ -7,7 +7,11 @@ import { InitializeModal, InitializeProductData } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
-import { updateDeliveryReceiveApprovalOrders } from "../slices/update-delivery-receive-approval.slice";
+import {
+  selectupdateDeliveryReceiveApprovalOrders,
+  updateDeliveryReceiveApprovalOrders,
+  updateDeliveryReceiveApprovalOrdersState,
+} from "../slices/update-delivery-receive-approval.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 
@@ -31,6 +35,9 @@ export function DeliveryReceiveApprovalModal(
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const deliveryRecieveApprovalState = useAppSelector(
+    selectupdateDeliveryReceiveApprovalOrders
+  );
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -70,7 +77,7 @@ export function DeliveryReceiveApprovalModal(
       remarks: remarks,
     };
 
-    await dispatch(
+    dispatch(
       updateDeliveryReceiveApprovalOrders(updateDeliveryReceiveApprovalParam)
     );
 
@@ -120,7 +127,7 @@ export function DeliveryReceiveApprovalModal(
             />
             {setEnabled() ? (
               <>
-                <div className="flex flex-col px-5">
+                <div className="flex flex-col">
                   <span>Remarks: </span>
                   <TextField
                     value={remarks}
@@ -129,28 +136,30 @@ export function DeliveryReceiveApprovalModal(
                     multiline
                   />
                 </div>
-                <div className="flex flex-row space-x-4">
-                  <ButtonGroup fullWidth variant="contained">
-                    <Button
-                      onClick={() => handleValidate("4")}
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Reject
-                    </Button>
+                <div className="flex space-x-3">
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => handleValidate("4")}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#CC5801",
+                    }}
+                  >
+                    Reject
+                  </Button>
 
-                    <Button
-                      onClick={() => handleValidate("6")}
-                      sx={{
-                        color: "white",
-                        backgroundColor: "#CC5801",
-                      }}
-                    >
-                      Approve
-                    </Button>
-                  </ButtonGroup>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => handleValidate("6")}
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#CC5801",
+                    }}
+                  >
+                    Approve
+                  </Button>
                 </div>
               </>
             ) : null}

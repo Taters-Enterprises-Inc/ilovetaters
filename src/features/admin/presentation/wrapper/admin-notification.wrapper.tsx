@@ -1,5 +1,5 @@
-import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -8,7 +8,11 @@ import {
   useQuery,
 } from "features/config/hooks";
 import { getAdminShopOrders } from "features/admin/presentation/slices/get-admin-shop-orders.slice";
-import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
+import {
+  GetAdminSessionState,
+  getAdminSession,
+  selectGetAdminSession,
+} from "features/admin/presentation/slices/get-admin-session.slice";
 import { getAdminCateringBookings } from "features/admin/presentation/slices/get-admin-catering-bookings.slice";
 import { getAdminPopclubRedeems } from "features/admin/presentation/slices/get-admin-popclub-redeems.slice";
 import { pusher } from "features/shared/constants";
@@ -19,8 +23,14 @@ import { getAdminSurveyVerifications } from "../slices/get-admin-survey-verifica
 import { getAdminUserDiscounts } from "../slices/get-admin-user-discounts.slice";
 import { getAdminInfluencerApplications } from "../slices/get-admin-influencer-applications.slice";
 import { getAdminInfluencerApplication } from "../slices/get-admin-influencer-application.slice";
-import { getAdminInfluencerCashout } from "../slices/get-admin-influencer-cashout.slice";
 import { getAdminInfluencerCashouts } from "../slices/get-admin-influencer-cashouts.slice";
+import {
+  LogoutAdminState,
+  logoutAdmin,
+  resetLogoutAdmin,
+  selectLogoutAdmin,
+} from "../slices/logout-admin.slice";
+import AdminSessionExpireModal from "../modals/admin-session-expire.modal";
 
 interface TransactionParam {
   store_id: number;
@@ -29,7 +39,10 @@ interface TransactionParam {
 
 export function AdminNotificationWrapper() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const [openSessionExpireModal, setOpenSessionExpireModal] = useState(false);
+
   const query = useQuery();
 
   useEffect(() => {
@@ -245,6 +258,34 @@ export function AdminNotificationWrapper() {
     );
   }, [getAdminSessionState, dispatch, query]);
 
+  useEffect(() => {
+    pusher.unsubscribe("admin-session");
+    const adminSessionChannel = pusher.subscribe("admin-session");
+
+    adminSessionChannel.bind(
+      "admin-login-session",
+      (data: {
+        stored_session_id: string;
+        user_id: string;
+        logout: boolean;
+      }) => {
+        if (
+          GetAdminSessionState.success === getAdminSessionState.status &&
+          data.stored_session_id &&
+          data.user_id &&
+          data.user_id === getAdminSessionState.data?.admin.user_id
+        ) {
+          if (
+            getAdminSessionState.data?.admin.session_id !==
+            data.stored_session_id
+          ) {
+            setOpenSessionExpireModal(true);
+          }
+        }
+      }
+    );
+  }, [getAdminSessionState, navigate]);
+
   return (
     <>
       <ToastContainer
@@ -260,6 +301,11 @@ export function AdminNotificationWrapper() {
         theme="light"
       />
       <Outlet />
+
+      <AdminSessionExpireModal
+        open={openSessionExpireModal}
+        onClose={() => setOpenSessionExpireModal(false)}
+      />
     </>
   );
 }

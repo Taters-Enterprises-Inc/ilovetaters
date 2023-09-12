@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import {
   Button,
-  ButtonGroup,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -16,19 +15,22 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  dispatchOrderParam,
-  updateCancelledStatus,
-} from "features/stock-ordering/core/stock-ordering.params";
+import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { selectGetProductData } from "../slices/get-product-data.slice";
-import { updateDispatchOrders } from "../slices/update-dispatch-order.slice";
+import {
+  selectupdateDispatchOrders,
+  updateDispatchOrders,
+  updateDispatchOrdersState,
+} from "../slices/update-dispatch-order.slice";
 import { InitializeModal, InitializeProductData } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
-import { updateOrderCancelled } from "../slices/update-order-cancelled.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AiOutlineDownload } from "react-icons/ai";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { PopupModal } from "./popup.modal";
+import { ExcelPreviewModal } from "./excel-preview.modal";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+// import { verifyDispatchOrders } from "../slices/verify-dispatch-invoice.slice";
 
 interface SupplierDispatchOrderModalProps {
   open: boolean;
@@ -89,6 +91,7 @@ export function SupplierDispatchOrderModal(
   };
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const dispatchOrderState = useAppSelector(selectupdateDispatchOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -147,7 +150,7 @@ export function SupplierDispatchOrderModal(
       product_data: dispatchedOrdersProductDataParam,
     };
 
-    await dispatch(updateDispatchOrders(dispatchOrdersParamData));
+    dispatch(updateDispatchOrders(dispatchOrdersParamData));
 
     document.body.classList.remove("overflow-hidden");
     props.onClose();
@@ -169,6 +172,13 @@ export function SupplierDispatchOrderModal(
     });
 
     return empty;
+  };
+
+  const [openExcelPreview, setOpenExcelPreview] = useState(false);
+  const handlePreviewButton = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    setuploadButton(false);
+    setPreview(true);
   };
 
   if (props.open) {
@@ -274,7 +284,12 @@ export function SupplierDispatchOrderModal(
                             setDispachedDelivery(date);
                           }}
                           renderInput={(params) => (
-                            <TextField required {...params} size="small" />
+                            <TextField
+                              required
+                              {...params}
+                              autoComplete="off"
+                              size="small"
+                            />
                           )}
                         />
                       </LocalizationProvider>
@@ -291,13 +306,12 @@ export function SupplierDispatchOrderModal(
                     />
                   </div>
 
-                  <div className="flex flex-col space-y-2">
-                    <ButtonGroup fullWidth size="small">
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex flex-col md:flex-row gap-3">
                       <Button
-                        sx={{
-                          color: "white",
-                          backgroundColor: "#CC5801",
-                        }}
+                        fullWidth
+                        size="small"
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
                         onClick={() => {
                           setOpenUploadDeliveryRecieptModal(true);
                         }}
@@ -308,63 +322,62 @@ export function SupplierDispatchOrderModal(
 
                       {preview ? (
                         <Button
-                          sx={{
-                            color: "white",
-                            backgroundColor: "#CC5801",
-                          }}
+                          fullWidth
+                          size="small"
                           type="submit"
                           variant="contained"
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Dispatch Order
                         </Button>
                       ) : (
                         <Button
-                          sx={{
-                            color: "white",
-                            backgroundColor: "#CC5801",
-                          }}
+                          fullWidth
+                          size="small"
+                          variant="contained"
+                          onClick={handlePreviewButton}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                           disabled={
                             !isValidFile(uploadedReceipt) ||
                             transport === "" ||
                             isQuantityEmpty() ||
                             dispatchedDelivery === null
                           }
-                          onClick={(event) => {
-                            event.preventDefault();
-                            setuploadButton(false);
-                            setPreview(true);
-                          }}
-                          variant="contained"
                         >
                           Preview
                         </Button>
                       )}
-                    </ButtonGroup>
-                    <ButtonGroup
-                      sx={{ justifyContent: "flex-end" }}
-                      size="small"
-                      variant="text"
-                    >
-                      <Button
-                        sx={{ flexBasis: "25%" }}
-                        onClick={handleCancelOrder}
-                      >
-                        <span className="text-primary underline">
-                          Cancel Order
-                        </span>
-                      </Button>
+                    </div>
 
-                      {preview && (
+                    <div className="flex justify-between">
+                      {preview && uploadedReceipt && (
                         <Button
-                          sx={{ flexBasis: "25%" }}
-                          onClick={() => setPreview(false)}
+                          onClick={() => setOpenExcelPreview(true)}
+                          size="small"
+                          variant="text"
                         >
-                          <span className="text-primary underline">
-                            Re-edit
-                          </span>
+                          {Object.values(uploadedReceipt).map((name) => name)}
                         </Button>
                       )}
-                    </ButtonGroup>
+                      <div>
+                        <Button size="small" onClick={handleCancelOrder}>
+                          <span className="text-primary underline">
+                            Cancel Order
+                          </span>
+                        </Button>
+
+                        {preview && (
+                          <Button
+                            size="small"
+                            onClick={() => setPreview(false)}
+                          >
+                            <span className="text-primary underline">
+                              Re-edit
+                            </span>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : null}
@@ -377,7 +390,13 @@ export function SupplierDispatchOrderModal(
         open={openUploadDeliveryRecieptModal}
         onClose={() => setOpenUploadDeliveryRecieptModal(false)}
         setUploadedReciept={setUploadedReciept}
-        isButtonAvailable={uploadButton}
+        isButtonAvailable={true}
+      />
+
+      <ExcelPreviewModal
+        open={openExcelPreview}
+        onClose={() => setOpenExcelPreview(false)}
+        file={uploadedReceipt}
       />
 
       <PopupModal

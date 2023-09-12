@@ -1320,3 +1320,8 @@ export const TAB_NAVIGATION = [
   { label: "ORDERS", label2: "COMPLETE" },
   { label: "CANCELLED", label2: "ORDERS" },
 ];
+
+export const STOCK_ORDERING_BUTTON_STYLE = {
+  color: "white",
+  backgroundColor: "#CC5801",
+};

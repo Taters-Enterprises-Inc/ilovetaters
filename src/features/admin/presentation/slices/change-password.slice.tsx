@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { id } from "date-fns/locale";
-import { RootState } from "features/config/store";
-import { changePasswordParam } from "features/stock-ordering/core/stock-ordering.params";
+import { changePasswordParam } from "features/admin/core/admin.params";
 import {
   changePasswordResponse,
   changePasswordRepository,
-} from "features/stock-ordering/data/stock-ordering.repository";
+} from "features/admin/data/repository/admin.repository";
+import { RootState } from "features/config/store";
 
 export enum changePasswordState {
   initial,
@@ -27,10 +26,7 @@ const initialState: InitialState = {
 
 export const changePassword = createAsyncThunk(
   "changePassword",
-  async (
-    param: { param: changePasswordParam; id: string },
-    { rejectWithValue }
-  ) => {
+  async (param: changePasswordParam, { rejectWithValue }) => {
     try {
       const response: changePasswordResponse = await changePasswordRepository(
         param

@@ -2,20 +2,22 @@ import { IoMdClose } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import {
-  LocalizationProvider,
-  DateTimePicker,
-  DatePicker,
-} from "@mui/x-date-pickers";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { StockOrderConfirmTable } from "../components";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
-import { insertNewOrder } from "../slices/insert-new-order.slice";
+import {
+  InsertNewOrderState,
+  insertNewOrder,
+  resetInsertNewOrder,
+  selectInsertNewOrder,
+} from "../slices/insert-new-order.slice";
 import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
+import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -37,6 +39,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const getStores = useAppSelector(selectGetStockOrderStores);
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
+  const insertNewUserState = useAppSelector(selectInsertNewOrder);
 
   const [selectedStore, setSelectedStore] = useState<selectedStore>();
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -78,7 +81,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    await dispatch(
+    dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
         deliveryScheduleData: deliveryDate,
@@ -281,40 +284,48 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                     />
                   </div>
 
-                  <div className="flex flex-col">
+                  <div className="flex space-x-3">
                     {isEdit ? (
-                      <ButtonGroup fullWidth variant="contained">
+                      <>
                         <Button
+                          fullWidth
+                          variant="contained"
                           onClick={handleCancelButton}
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Cancel
                         </Button>
                         <Button
+                          fullWidth
+                          variant="contained"
                           disabled={!selectedAddress ? true : false}
                           onClick={handleConfirmEdit}
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Confirm Edit
                         </Button>
-                      </ButtonGroup>
+                      </>
                     ) : (
-                      <ButtonGroup fullWidth variant="contained">
+                      <>
                         <Button
+                          fullWidth
+                          variant="contained"
                           onClick={editProduct}
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Edit
                         </Button>
 
                         <Button
+                          fullWidth
+                          variant="contained"
                           disabled={isQuantityEmpty() || deliveryDateError}
                           type="submit"
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
                         >
                           Confirm
                         </Button>
-                      </ButtonGroup>
+                      </>
                     )}
                   </div>
                 </div>

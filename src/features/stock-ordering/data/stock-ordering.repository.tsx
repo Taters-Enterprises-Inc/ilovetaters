@@ -15,10 +15,8 @@ import {
   dispatchOrderParam,
   updatReviewParam,
   updateDeliveryReceiveApproval,
-  storeIdParam,
   updateCancelledStatus,
   updateBillingOrderParam,
-  changePasswordParam,
 } from "../core/stock-ordering.params";
 import { GetStockProductModel } from "../core/domain/get-stock-product.model";
 import { GetStockOrdersModel } from "../core/domain/get-stock-orders.model";
@@ -141,12 +139,6 @@ export interface GetPayBillingSiResponse {
   data: {
     message: string;
     data: GetPayBillingSiModel;
-  };
-}
-
-export interface changePasswordResponse {
-  data: {
-    message: string;
   };
 }
 
@@ -306,21 +298,10 @@ export function updateOrderCancelledRepository(
   });
 }
 
-export function GetPayBillingSiRepository(): Promise<GetPayBillingSiResponse> {
-  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing`, {
+export function GetPayBillingSiRepository(
+  param: string
+): Promise<GetPayBillingSiResponse> {
+  return axios.get(`${REACT_APP_DOMAIN_URL}api/stock/pay-billing${param}`, {
     withCredentials: true,
   });
-}
-
-export function changePasswordRepository(param: {
-  param: changePasswordParam;
-  id: string;
-}): Promise<changePasswordResponse> {
-  return axios.post(
-    `${REACT_APP_DOMAIN_URL}api/stock/change-password/${param.id}`,
-    param,
-    {
-      withCredentials: true,
-    }
-  );
 }

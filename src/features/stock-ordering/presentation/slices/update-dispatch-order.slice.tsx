@@ -17,13 +17,11 @@ export enum updateDispatchOrdersState {
 interface InitialState {
   status: updateDispatchOrdersState;
   message: string;
-  data: string | undefined;
 }
 
 const initialState: InitialState = {
   status: updateDispatchOrdersState.initial,
   message: "",
-  data: undefined,
 };
 
 export const updateDispatchOrders = createAsyncThunk(
@@ -60,16 +58,14 @@ export const updateDispatchOrdersSlice = createSlice({
       })
       .addCase(updateDispatchOrders.fulfilled, (state, action) => {
         if (action.payload) {
-          const { message, data } = action.payload;
+          const { message } = action.payload;
           state.status = updateDispatchOrdersState.success;
           state.message = message;
-          state.data = data;
         }
       })
       .addCase(updateDispatchOrders.rejected, (state, action) => {
         state.status = updateDispatchOrdersState.fail;
         state.message = action.payload as string;
-        state.data = undefined;
       });
   },
 });

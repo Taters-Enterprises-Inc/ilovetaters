@@ -9,3 +9,5 @@ export { AdminSurveyVerificationModal } from "./admin-survey-verification.modal"
 export { AdminSurveyAnswerSheetModal } from "./admin-survey-answer-sheet.modal";
 export { AdminInfluencerApplicationModal } from "./admin-influencer-application-modal";
 export { AdminInfluencerCashoutModal } from "./admin-influencer-cashout-modal";
+export { AdminChangePasswordModal } from "./admin-change-password.modal";
+export { AdminForgotPasswordModal } from "./admin-forgot-password.modal";

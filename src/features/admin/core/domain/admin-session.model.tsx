@@ -15,6 +15,7 @@ export interface AdminSessionModel {
     is_catering_available: boolean;
     is_popclub_store_visit_available: boolean;
     is_popclub_snacks_delivered_available: boolean;
+    session_id: string;
 
     user_details: {
       id: number;

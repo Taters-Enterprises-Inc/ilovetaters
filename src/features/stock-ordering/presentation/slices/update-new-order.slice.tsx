@@ -17,13 +17,11 @@ export enum updateNewOrdersState {
 interface InitialState {
   status: updateNewOrdersState;
   message: string;
-  data: string | undefined;
 }
 
 const initialState: InitialState = {
   status: updateNewOrdersState.initial,
   message: "",
-  data: undefined,
 };
 
 export const updateNewOrders = createAsyncThunk(
@@ -61,16 +59,14 @@ export const updateNewOrdersSlice = createSlice({
       })
       .addCase(updateNewOrders.fulfilled, (state, action) => {
         if (action.payload) {
-          const { message, data } = action.payload;
+          const { message } = action.payload;
           state.status = updateNewOrdersState.success;
           state.message = message;
-          state.data = data;
         }
       })
       .addCase(updateNewOrders.rejected, (state, action) => {
         state.status = updateNewOrdersState.fail;
         state.message = action.payload as string;
-        state.data = undefined;
       });
   },
 });

@@ -38,7 +38,6 @@ import {
   resetGetStockOrders,
   selectGetStockOrders,
 } from "../slices/get-stock-orders.slice";
-import { currentTab } from "features/stock-ordering/core/stock-ordering.params";
 import {
   Column,
   DataTable,
@@ -50,7 +49,10 @@ import { CompleteModal } from "../modals/complete-order.modal";
 import { DeliveryReceiveApprovalModal } from "../modals/delivery-receive-approval.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
-import { DataList } from "features/shared/presentation/components";
+import {
+  BackdropLoading,
+  DataList,
+} from "features/shared/presentation/components";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -98,9 +100,6 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const getStore = useAppSelector(selectGetStockOrderStores);
-
-  const [badgeItem, setBadgeItem] = useState(0);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -119,8 +118,6 @@ export function OrderContents() {
 
   const [orderId, setOrderId] = useState("");
 
-  const [tabValue, setTabValue] = useState<number>(0);
-
   const query = useQuery();
   const pageNo = query.get("page_no");
   const perPage = query.get("per_page");
@@ -130,6 +127,7 @@ export function OrderContents() {
   const search = query.get("search");
   const status = query.get("status");
   const store = query.get("store");
+  const tabValue = query.get("tab");
 
   let columns: Array<Column> = [
     { id: "store_name", label: "Store" },
@@ -163,12 +161,17 @@ export function OrderContents() {
   };
 
   const handleAction = (id: string) => {
-    handleModalToggle(Object.keys(modals)[tabValue + 2]);
+    handleModalToggle(Object.keys(modals)[Number(tabValue) + 2]);
     setOrderId(id);
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
+    const queryParams = createQueryParams({ tab: newValue });
+
+    navigate({
+      pathname: "",
+      search: queryParams,
+    });
   };
 
   const dateSetup = (date: string, withTime: boolean) => {
@@ -196,7 +199,7 @@ export function OrderContents() {
       order_by: orderBy,
       order: order,
       search: search,
-      current_tab: tabValue,
+      tab: tabValue,
     });
 
     dispatch(getStockOrders(query));
@@ -215,7 +218,7 @@ export function OrderContents() {
           <div className="bg-paper border-2 border-t-8 rounded-t-lg border-secondary">
             <Tabs
               className="bg-secondary text-white "
-              value={tabValue}
+              value={Number(tabValue)}
               onChange={handleTabChange}
               scrollButtons="auto"
               allowScrollButtonsMobile
@@ -224,7 +227,7 @@ export function OrderContents() {
                 style: {
                   backgroundColor:
                     getAdminSessionState.data?.admin.user_details.sos_groups.some(
-                      (group) => tabValue + 1 === group.id
+                      (group) => Number(tabValue) + 1 === group.id
                     )
                       ? "black"
                       : "white",
@@ -271,13 +274,15 @@ export function OrderContents() {
               ))}
             </Tabs>
 
-            <TabPanel index={tabValue} value={tabValue}>
+            <TabPanel index={Number(tabValue)} value={Number(tabValue)}>
               <div className="hidden md:block">
                 <DataTable
                   order={order === "asc" ? "asc" : "desc"}
                   orderBy={orderBy ?? "last_updated"}
                   search={search ?? ""}
-                  emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
+                  emptyMessage={`"No ${
+                    TAB_NAVIGATION[Number(tabValue)].label
+                  } yet."`}
                   onSearch={(val) => {
                     const params = {
                       page_no: null,
@@ -288,9 +293,7 @@ export function OrderContents() {
                       store: store,
                       search: val === "" ? null : val,
                     };
-
                     const queryParams = createQueryParams(params);
-
                     navigate({
                       pathname: "",
                       search: queryParams,
@@ -408,7 +411,9 @@ export function OrderContents() {
               <div className="block md:hidden">
                 <DataList
                   search={search ?? ""}
-                  emptyMessage={`"No ${TAB_NAVIGATION[tabValue].label} yet."`}
+                  emptyMessage={`"No ${
+                    TAB_NAVIGATION[Number(tabValue)].label
+                  } yet."`}
                   onSearch={(val) => {
                     const params = {
                       page_no: null,
@@ -563,7 +568,12 @@ export function OrderContents() {
                       tooltipTitle="Pay Billing"
                       onClick={async () => {
                         setOrderId("");
-                        await setTabValue(6);
+                        const queryParams = createQueryParams({ tab: 6 });
+
+                        navigate({
+                          pathname: "",
+                          search: queryParams,
+                        });
                         handleModalToggle("storePayBilling");
                       }}
                     />
@@ -591,70 +601,70 @@ export function OrderContents() {
       <SupplierViewOrderModal
         open={modals.supplierViewOrder}
         onClose={() => handleModalToggle("supplierViewOrder")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <ProcurementReviewOrdersModal
         open={modals.procurementReviewOrder}
         onClose={() => handleModalToggle("procurementReviewOrder")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <SupplierDispatchOrderModal
         open={modals.supplierDispatchOrder}
         onClose={() => handleModalToggle("supplierDispatchOrder")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <StoreReceiveOrderModal
         open={modals.storeReceiveOrder}
         onClose={() => handleModalToggle("storeReceiveOrder")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <SupplierUpdateBillingModal
         open={modals.supplierUpdateBilling}
         onClose={() => handleModalToggle("supplierUpdateBilling")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <StorePayBillingModal
         open={modals.storePayBilling}
         onClose={() => handleModalToggle("storePayBilling")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <SupplierConfirmModal
         open={modals.supplierConfirm}
         onClose={() => handleModalToggle("supplierConfirm")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <CompleteModal
         open={modals.complete}
         onClose={() => handleModalToggle("complete")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <DeliveryReceiveApprovalModal
         open={modals.deliveryReceiveApproval}
         onClose={() => handleModalToggle("deliveryReceiveApproval")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
 
       <CancelledModal
         open={modals.cancelled}
         onClose={() => handleModalToggle("cancelled")}
-        currentTab={tabValue}
+        currentTab={Number(tabValue)}
         id={orderId}
       />
     </>

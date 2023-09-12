@@ -9,12 +9,18 @@ import { useEffect } from "react";
 
 export function AdminGuard() {
   const dispatch = useAppDispatch();
-
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
     dispatch(getAdminSession());
   }, [dispatch]);
+
+  if (
+    getAdminSessionState.status === GetAdminSessionState.fail &&
+    getAdminSessionState.data === null
+  ) {
+    return <Navigate to={"/admin"} />;
+  }
 
   if (
     getAdminSessionState.data &&
@@ -25,13 +31,6 @@ export function AdminGuard() {
         <Outlet />
       </>
     );
-  }
-
-  if (
-    getAdminSessionState.status === GetAdminSessionState.fail &&
-    getAdminSessionState.data === null
-  ) {
-    return <Navigate to={"/admin"} />;
   }
 
   return null;

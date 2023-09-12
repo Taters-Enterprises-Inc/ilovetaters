@@ -17,13 +17,11 @@ export enum updateDeliveryReceiveApprovalOrdersState {
 interface InitialState {
   status: updateDeliveryReceiveApprovalOrdersState;
   message: string;
-  data: string | undefined;
 }
 
 const initialState: InitialState = {
   status: updateDeliveryReceiveApprovalOrdersState.initial,
   message: "",
-  data: undefined,
 };
 
 export const updateDeliveryReceiveApprovalOrders = createAsyncThunk(
@@ -62,10 +60,9 @@ export const updateDeliveryReceiveApprovalOrdersSlice = createSlice({
         updateDeliveryReceiveApprovalOrders.fulfilled,
         (state, action) => {
           if (action.payload) {
-            const { message, data } = action.payload;
+            const { message } = action.payload;
             state.status = updateDeliveryReceiveApprovalOrdersState.success;
             state.message = message;
-            state.data = data;
           }
         }
       )
@@ -74,7 +71,6 @@ export const updateDeliveryReceiveApprovalOrdersSlice = createSlice({
         (state, action) => {
           state.status = updateDeliveryReceiveApprovalOrdersState.fail;
           state.message = action.payload as string;
-          state.data = undefined;
         }
       );
   },

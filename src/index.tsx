@@ -388,9 +388,18 @@ root.render(
 
                       <Route path="admin" element={<Admin />}>
                         <Route index element={<AdminLogin />} />
-                        <Route path="landing" element={<AdminLandingPage />} />
                         <Route element={<AdminNotificationWrapper />}>
+                          {/* <Route
+                            path="landing"
+                            element={<AdminLandingPage />}
+                          /> */}
+
                           <Route element={<AdminGuard />}>
+                            <Route
+                              path="landing"
+                              element={<AdminLandingPage />}
+                            />
+
                             <Route element={<StockOrderingBadgeWrapper />}>
                               <Route path="stock-order">
                                 <Route element={<StockAuditSidebarWrapper />}>
