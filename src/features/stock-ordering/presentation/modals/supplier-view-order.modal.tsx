@@ -68,15 +68,11 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
       product_data: reviewOrdersProductDataParam,
     };
 
-    await dispatch(updateNewOrders(reviewOrdersParamData));
-  };
+    dispatch(updateNewOrders(reviewOrdersParamData));
 
-  useEffect(() => {
-    if (stockUpdateNewOrder.status === updateNewOrdersState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [stockUpdateNewOrder]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   const handleCancelledOrder = async () => {
     setOpenPopUp(true);

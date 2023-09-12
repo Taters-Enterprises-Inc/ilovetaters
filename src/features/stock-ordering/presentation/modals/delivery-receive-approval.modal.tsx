@@ -77,20 +77,13 @@ export function DeliveryReceiveApprovalModal(
       remarks: remarks,
     };
 
-    await dispatch(
+    dispatch(
       updateDeliveryReceiveApprovalOrders(updateDeliveryReceiveApprovalParam)
     );
-  };
 
-  useEffect(() => {
-    if (
-      deliveryRecieveApprovalState.status ===
-      updateDeliveryReceiveApprovalOrdersState.success
-    ) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [deliveryRecieveApprovalState]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");

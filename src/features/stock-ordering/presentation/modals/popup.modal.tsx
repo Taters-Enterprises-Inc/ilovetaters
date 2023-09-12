@@ -22,7 +22,7 @@ export function PopupModal(props: CompleteModalProps) {
       id: props.id,
       remarks: props.remarks,
     };
-    await dispatch(updateOrderCancelled(cancelParameter));
+    dispatch(updateOrderCancelled(cancelParameter));
     document.body.classList.remove("overflow-hidden");
 
     props.orderCancelled(true);

@@ -91,17 +91,11 @@ export function ProcurementReviewOrdersModal(
       status: status,
     };
 
-    await dispatch(updateReviewOrders(reviewOrdersParamData));
-  };
+    dispatch(updateReviewOrders(reviewOrdersParamData));
 
-  useEffect(() => {
-    if (
-      stockUpdateReviewOrderState.status === updateReviewOrdersState.success
-    ) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [stockUpdateReviewOrderState]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   const isQuantityEmpty = () => {
     let empty = false;

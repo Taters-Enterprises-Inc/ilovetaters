@@ -116,13 +116,6 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
     dispatch(getPayBillingSi(query));
   }, [dispatch, invoiceSearch]);
 
-  useEffect(() => {
-    if (updatePayBillingOrdersState.success === billingState.status) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose(true);
-    }
-  }, [billingState]);
-
   const handlePayBilling = async () => {
     const payBilingParam: updatePayBillingParam = {
       selectedData: selectedData ?? [],
@@ -130,7 +123,10 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
       remarks: remarks,
     };
 
-    await dispatch(updatePayBillingOrders(payBilingParam));
+    dispatch(updatePayBillingOrders(payBilingParam));
+
+    document.body.classList.remove("overflow-hidden");
+    props.onClose(true);
   };
 
   const handleOnSelectionModelChange = (
@@ -195,6 +191,7 @@ export function PayMultipleOrder(props: PayMultipleOrderProps) {
           <span>Remarks: </span>
           <TextField
             value={remarks}
+            autoComplete="off"
             onChange={(event) => setRemarks(event.target.value)}
             inputProps={{ maxLength: 512 }}
             multiline

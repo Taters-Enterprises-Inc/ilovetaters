@@ -150,15 +150,11 @@ export function SupplierDispatchOrderModal(
       product_data: dispatchedOrdersProductDataParam,
     };
 
-    await dispatch(updateDispatchOrders(dispatchOrdersParamData));
-  };
+    dispatch(updateDispatchOrders(dispatchOrdersParamData));
 
-  useEffect(() => {
-    if (dispatchOrderState.status === updateDispatchOrdersState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [dispatchOrderState]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   const handleCancelOrder = () => {
     setOpenPopUp(true);
@@ -288,7 +284,12 @@ export function SupplierDispatchOrderModal(
                             setDispachedDelivery(date);
                           }}
                           renderInput={(params) => (
-                            <TextField required {...params} size="small" />
+                            <TextField
+                              required
+                              {...params}
+                              autoComplete="off"
+                              size="small"
+                            />
                           )}
                         />
                       </LocalizationProvider>

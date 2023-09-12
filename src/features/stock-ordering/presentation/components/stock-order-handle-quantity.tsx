@@ -91,6 +91,7 @@ export function StockOrderHandleQuantity(props: StockOrderHandleQuantityProps) {
         value={props.currentValue}
         inputProps={{ maxLength: 4 }}
         onChange={handleQuantityTextChange}
+        autoComplete="off"
         size="small"
         variant="outlined"
         placeholder="0"

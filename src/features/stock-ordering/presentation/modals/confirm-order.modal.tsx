@@ -78,17 +78,10 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     setRows(TableData);
   };
 
-  useEffect(() => {
-    if (insertNewUserState.status === InsertNewOrderState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [insertNewUserState, dispatch]);
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    await dispatch(
+    dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
         deliveryScheduleData: deliveryDate,
@@ -101,6 +94,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         OrderData: rows,
       })
     );
+
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
   };
 
   const deliverySchedules = (

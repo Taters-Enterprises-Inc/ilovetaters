@@ -72,15 +72,11 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
       status: status,
     };
 
-    await dispatch(updateConfirmPayment(updateConfirmPaymentParam));
-  };
+    dispatch(updateConfirmPayment(updateConfirmPaymentParam));
 
-  useEffect(() => {
-    if (confirmPaymentState.status === updateConfirmPaymentState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [confirmPaymentState]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   useEffect(() => {
     setUploadedReciept(rows.order_information.view_payment_details);
@@ -156,21 +152,23 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                   </div> */}
 
                   <div className="flex space-x-4">
-                    <ButtonGroup fullWidth variant="contained">
-                      <Button
-                        onClick={() => handleValidate("7")}
-                        sx={STOCK_ORDERING_BUTTON_STYLE}
-                      >
-                        Return to Tei Finance
-                      </Button>
+                    {/* <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => handleValidate("7")}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      Return to Tei Finance
+                    </Button> */}
 
-                      <Button
-                        onClick={() => handleValidate("9")}
-                        sx={STOCK_ORDERING_BUTTON_STYLE}
-                      >
-                        Validate
-                      </Button>
-                    </ButtonGroup>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => handleValidate("9")}
+                      sx={STOCK_ORDERING_BUTTON_STYLE}
+                    >
+                      Validate
+                    </Button>
                   </div>
                 </div>
               </div>

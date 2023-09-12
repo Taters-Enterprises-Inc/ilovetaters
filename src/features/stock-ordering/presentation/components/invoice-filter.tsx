@@ -15,6 +15,7 @@ export function InvoiceFilter(props: InvoiceFilterProps) {
         size="small"
         name="search"
         autoFocus
+        autoComplete="off"
         defaultValue={props.search}
         onChange={(e) => {
           props.onSearch(e.target.value);

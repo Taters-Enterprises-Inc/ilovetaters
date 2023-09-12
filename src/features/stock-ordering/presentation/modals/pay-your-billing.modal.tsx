@@ -62,7 +62,7 @@ export function PayBillingModal(props: PayBillingModalProps) {
                 />
                 <h4 className="mt-1 text-sm leading-5 text-secondary">
                   <strong>Note:</strong>
-                  Maximum file size is 5MB.
+                  Maximum file size is 2MB.
                 </h4>
               </div>
 

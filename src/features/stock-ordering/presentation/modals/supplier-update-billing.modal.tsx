@@ -117,16 +117,11 @@ export function SupplierUpdateBillingModal(
       withNewSI: uploadedGoodsReceipt || uploadedRegionReceipt ? true : false,
     };
 
-    console.log(updateBillingOrderParam);
-    await dispatch(updateBillingOrders(updateBillingOrderParam));
-  };
+    dispatch(updateBillingOrders(updateBillingOrderParam));
 
-  useEffect(() => {
-    if (updateBillingState.status === updateBillingOrdersState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [updateBillingState]);
+    document.body.classList.remove("overflow-hidden");
+    props.onClose();
+  };
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {

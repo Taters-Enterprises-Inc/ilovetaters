@@ -104,18 +104,14 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
         product_data: receieveOrdersProductDataParam,
       };
 
-      await dispatch(updateReceiveOrders(receiveOrdersParamData));
+      dispatch(updateReceiveOrders(receiveOrdersParamData));
+
+      document.body.classList.remove("overflow-hidden");
+      props.onClose();
     } else {
       setOpenUploadDeliveryRecieptModal(true);
     }
   };
-
-  useEffect(() => {
-    if (receiveOrderState.status === updateReceiveOrdersState.success) {
-      document.body.classList.remove("overflow-hidden");
-      props.onClose();
-    }
-  }, [receiveOrderState]);
 
   const isValidFile = (file: string | File | undefined): boolean => {
     if (!file) {
