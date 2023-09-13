@@ -4,7 +4,7 @@ import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { TextField, Button, ButtonGroup } from "@mui/material";
+import { TextField, Button, ButtonGroup, Skeleton } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { selectGetProductData } from "../slices/get-product-data.slice";
@@ -14,7 +14,11 @@ import {
   updateNewOrders,
   updateNewOrdersState,
 } from "../slices/update-new-order.slice";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import {
   getStockOrderStores,
@@ -202,125 +206,129 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
               </button>
             </div>
           </div>
-
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <form className="overflow-auto" onSubmit={handleSubmit}>
-              <StockOrderTable
-                isCommitedTextFieldAvailable={setEnabled() && !preview}
-                isStore={false}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
+            {rows.product_data.length !== 0 ? (
+              <form className="overflow-auto" onSubmit={handleSubmit}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={setEnabled() && !preview}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
 
-              {setEnabled() ? (
-                <div className="px-2 space-y-3">
-                  <div className="flex flex-col mt-2">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-5 ">
-                    <div className="basis-full md:basis-1/2 flex flex-col space-y-4">
-                      <div className="flex flex-wrap space-x-2 text-sm md:pt-4 md:text-base">
-                        <span>Commited Delivery:</span>
-                        {getStoreState.data?.window_time ? (
-                          <>
-                            <span>
-                              {convertTo12HourFormat(
-                                getStoreState.data.window_time.start_time
-                              )}
-                            </span>
-                            <span>-</span>
-                            <span>
-                              {convertTo12HourFormat(
-                                getStoreState.data.window_time.end_Time
-                              )}
-                            </span>
-                          </>
-                        ) : (
-                          <span>Can be delivered anytime</span>
-                        )}
+                {setEnabled() ? (
+                  <div className="px-2 space-y-3">
+                    <div className="flex flex-col mt-2">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2 md:flex-row md:space-x-5 ">
+                      <div className="basis-full md:basis-1/2 flex flex-col space-y-4">
+                        <div className="flex flex-wrap space-x-2 text-sm md:pt-4 md:text-base">
+                          <span>Commited Delivery:</span>
+                          {getStoreState.data?.window_time ? (
+                            <>
+                              <span>
+                                {convertTo12HourFormat(
+                                  getStoreState.data.window_time.start_time
+                                )}
+                              </span>
+                              <span>-</span>
+                              <span>
+                                {convertTo12HourFormat(
+                                  getStoreState.data.window_time.end_Time
+                                )}
+                              </span>
+                            </>
+                          ) : (
+                            <span>Can be delivered anytime</span>
+                          )}
+                        </div>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DateTimePicker
+                            disabled={preview}
+                            label="Delivery date and time"
+                            views={["year", "month", "day", "hours", "minutes"]}
+                            onChange={(date) => {
+                              if (date) {
+                                const formattedDate = dayjs(date).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                );
+
+                                setCommitedDeliveryDate(formattedDate);
+                              }
+                            }}
+                            value={dayjs(CommitedDeliveryDate)}
+                            renderInput={(params) => (
+                              <TextField required {...params} size="small" />
+                            )}
+                            minDate={dayjs()}
+                            minTime={getTimeLimit("start")}
+                            maxTime={getTimeLimit("end")}
+                          />
+                        </LocalizationProvider>
                       </div>
 
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                          disabled={preview}
-                          label="Delivery date and time"
-                          views={["year", "month", "day", "hours", "minutes"]}
-                          onChange={(date) => {
-                            if (date) {
-                              const formattedDate = dayjs(date).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              );
-
-                              setCommitedDeliveryDate(formattedDate);
-                            }
-                          }}
-                          value={dayjs(CommitedDeliveryDate)}
-                          renderInput={(params) => (
-                            <TextField required {...params} size="small" />
-                          )}
-                          minDate={dayjs()}
-                          minTime={getTimeLimit("start")}
-                          maxTime={getTimeLimit("end")}
-                        />
-                      </LocalizationProvider>
-                    </div>
-
-                    <div className="basis-full md:basis-1/2 space-y-3">
-                      {preview ? (
-                        <Button
-                          fullWidth
-                          type="submit"
-                          variant="contained"
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
-                        >
-                          Confirm
-                        </Button>
-                      ) : (
-                        <Button
-                          disabled={isQuantityEmpty()}
-                          fullWidth
-                          variant="contained"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            setPreview(true);
-                          }}
-                          sx={{ color: "white", backgroundColor: "#CC5801" }}
-                        >
-                          Preview
-                        </Button>
-                      )}
-
-                      <ButtonGroup fullWidth size="small" variant="text">
-                        <Button onClick={handleCancelledOrder}>
-                          <span className="text-primary underline">
-                            Cancel Order
-                          </span>
-                        </Button>
-
-                        {preview && (
-                          <Button onClick={() => setPreview(false)}>
-                            <span className="text-primary underline">
-                              Re-edit
-                            </span>
+                      <div className="basis-full md:basis-1/2 space-y-3">
+                        {preview ? (
+                          <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          >
+                            Confirm
+                          </Button>
+                        ) : (
+                          <Button
+                            disabled={isQuantityEmpty()}
+                            fullWidth
+                            variant="contained"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setPreview(true);
+                            }}
+                            sx={{ color: "white", backgroundColor: "#CC5801" }}
+                          >
+                            Preview
                           </Button>
                         )}
-                      </ButtonGroup>
+
+                        <ButtonGroup fullWidth size="small" variant="text">
+                          <Button onClick={handleCancelledOrder}>
+                            <span className="text-primary underline">
+                              Cancel Order
+                            </span>
+                          </Button>
+
+                          {preview && (
+                            <Button onClick={() => setPreview(false)}>
+                              <span className="text-primary underline">
+                                Re-edit
+                              </span>
+                            </Button>
+                          )}
+                        </ButtonGroup>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </form>
+                ) : null}
+              </form>
+            ) : (
+              <StockOrderingWatingSkeleton />
+            )}
           </div>
+          )
         </div>
       </div>
 
