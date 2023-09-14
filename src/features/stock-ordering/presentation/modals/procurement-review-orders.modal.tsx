@@ -191,7 +191,13 @@ export function ProcurementReviewOrdersModal(
                 ) : null}
               </form>
             ) : (
-              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>

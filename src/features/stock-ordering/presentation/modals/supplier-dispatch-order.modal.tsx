@@ -387,11 +387,17 @@ export function SupplierDispatchOrderModal(
                 ) : null}
               </form>
             ) : (
-              <StockOrderingWatingSkeleton
-                remarks
-                dispatchDoubleComponent
-                firstDoubleComponents
-              />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton
+                    remarks
+                    dispatchDoubleComponent
+                    firstDoubleComponents
+                  />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>

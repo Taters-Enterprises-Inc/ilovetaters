@@ -325,11 +325,17 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 ) : null}
               </form>
             ) : (
-              <StockOrderingWatingSkeleton
-                remarks
-                firstDoubleComponents
-                secondDoubleComponents
-              />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton
+                    remarks
+                    firstDoubleComponents
+                    secondDoubleComponents
+                  />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>

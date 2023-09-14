@@ -194,7 +194,7 @@ export function SupplierUpdateBillingModal(
                   isUpdateBilling={true}
                 />
                 {setEnabled() ? (
-                  <div className="px-5 space-y-2">
+                  <div className="px-3 space-y-2">
                     <div className="flex flex-col mt-2 ">
                       <span>Remarks: </span>
                       <TextField
@@ -335,7 +335,13 @@ export function SupplierUpdateBillingModal(
                 ) : null}
               </>
             ) : (
-              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>

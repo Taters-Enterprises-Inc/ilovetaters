@@ -171,7 +171,13 @@ export function DeliveryReceiveApprovalModal(
                 ) : null}
               </>
             ) : (
-              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>

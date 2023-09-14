@@ -180,10 +180,16 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                 ) : null}
               </>
             ) : (
-              <StockOrderingWatingSkeleton
-                remarks
-                confirmPaymentFullwidthButton
-              />
+              <>
+                {setEnabled() ? (
+                  <StockOrderingWatingSkeleton
+                    remarks
+                    confirmPaymentFullwidthButton
+                  />
+                ) : (
+                  <StockOrderingWatingSkeleton />
+                )}
+              </>
             )}
           </div>
         </div>
