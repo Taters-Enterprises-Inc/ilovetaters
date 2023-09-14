@@ -11,7 +11,11 @@ import {
   updateReviewOrders,
   updateReviewOrdersState,
 } from "../slices/update-review-order.slice";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
@@ -134,59 +138,62 @@ export function ProcurementReviewOrdersModal(
               <IoMdClose />
             </button>
           </div>
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
+            {rows.product_data.length !== 0 ? (
+              <form className="space-y-3" onSubmit={handleOrderReviewed}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
 
-          <form onSubmit={handleOrderReviewed}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={false}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
+                {setEnabled() || isEditEnabled ? (
+                  <div className="px-2 space-y-3">
+                    <div className="flex flex-col">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
 
-              {setEnabled() || isEditEnabled ? (
-                <>
-                  <div className="flex flex-col">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
-                    />
+                    <div className="flex space-x-3">
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        disabled={isQuantityEmpty()}
+                        type="submit"
+                        onClick={() => setStatus("1")}
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
+                      >
+                        Send back to New Order
+                      </Button>
+
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        disabled={isQuantityEmpty()}
+                        type="submit"
+                        onClick={() => setStatus("3")}
+                        sx={STOCK_ORDERING_BUTTON_STYLE}
+                      >
+                        Order Reviewed
+                      </Button>
+                    </div>
                   </div>
-
-                  <div className="flex space-x-3">
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      disabled={isQuantityEmpty()}
-                      type="submit"
-                      onClick={() => setStatus("1")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Send back to New Order
-                    </Button>
-
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      disabled={isQuantityEmpty()}
-                      type="submit"
-                      onClick={() => setStatus("3")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Order Reviewed
-                    </Button>
-                  </div>
-                </>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+            )}
+          </div>
         </div>
       </div>
     </>

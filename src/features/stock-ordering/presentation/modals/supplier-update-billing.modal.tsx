@@ -3,7 +3,11 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import {
@@ -177,152 +181,162 @@ export function SupplierUpdateBillingModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={false}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-              isDispatchedQtyAvailable={false}
-              isUpdateBilling={true}
-            />
-            {setEnabled() ? (
-              <div className="px-5 space-y-2">
-                <div className="flex flex-col mt-2 ">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
-                </div>
+            {rows.product_data.length !== 0 ? (
+              <>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={true}
+                />
+                {setEnabled() ? (
+                  <div className="px-5 space-y-2">
+                    <div className="flex flex-col mt-2 ">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
 
-                <div
-                  className={`${
-                    warningMismatch ? "" : "hidden"
-                  } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
-                >
-                  <span className="font-semibold">Warning:</span>
-                  <span className="text-sm">
-                    Dispatch quantity and delivered quantity does not match.
-                    Must upload updated sales invoice
-                  </span>
-                </div>
-
-                <div
-                  className={`${
-                    warningNonNCR ? "" : "hidden"
-                  } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
-                >
-                  <span className="font-semibold">Warning:</span>
-                  <span className="text-sm">
-                    Store location is not in NCR region. Must upload updated
-                    sales invoice
-                  </span>
-                </div>
-
-                <div className="flex flex-col space-y-5 md:flex-row md:space-x-5 md:space-y-0">
-                  <div className="basis-1/2">
-                    <Button
-                      onClick={() => {
-                        const id = props.id;
-                        const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
-
-                        window.open(link, "_blank");
-                      }}
-                      fullWidth
-                      variant="contained"
-                      sx={{ color: "white", backgroundColor: "#CC5801" }}
+                    <div
+                      className={`${
+                        warningMismatch ? "" : "hidden"
+                      } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
                     >
-                      Download SI
-                    </Button>
-                  </div>
+                      <span className="font-semibold">Warning:</span>
+                      <span className="text-sm">
+                        Dispatch quantity and delivered quantity does not match.
+                        Must upload updated sales invoice
+                      </span>
+                    </div>
 
-                  <div className="basis-1/2">
-                    {(warningMismatch &&
-                      !warningNonNCR &&
-                      isValidFile(uploadedGoodsReceipt)) ||
-                    (!warningMismatch &&
-                      warningNonNCR &&
-                      isValidFile(uploadedRegionReceipt)) ||
-                    (warningMismatch &&
-                      warningNonNCR &&
-                      isValidFile(uploadedGoodsReceipt) &&
-                      isValidFile(uploadedRegionReceipt)) ||
-                    (!warningMismatch && !warningNonNCR) ? (
-                      <div className="space-y-1">
+                    <div
+                      className={`${
+                        warningNonNCR ? "" : "hidden"
+                      } space-x-2 border border-gray-200 rounded-lg shadow-md px-5 py-2 border-l-8 border-l-tertiary`}
+                    >
+                      <span className="font-semibold">Warning:</span>
+                      <span className="text-sm">
+                        Store location is not in NCR region. Must upload updated
+                        sales invoice
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col space-y-5 md:flex-row md:space-x-5 md:space-y-0">
+                      <div className="basis-1/2">
                         <Button
-                          onClick={() => handleSupplierUpdate()}
+                          onClick={() => {
+                            const id = props.id;
+                            const link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+
+                            window.open(link, "_blank");
+                          }}
                           fullWidth
                           variant="contained"
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                          sx={{ color: "white", backgroundColor: "#CC5801" }}
                         >
-                          Confirm
+                          Download SI
                         </Button>
-
-                        <div className="flex flex-col space-y-1 md:flex-row md:space-x-3 md:space-y-0">
-                          {warningMismatch && (
-                            <Button
-                              onClick={() => setUploadedGoodsReceiptModal(true)}
-                              size="small"
-                              variant="outlined"
-                              sx={{ flexBasis: "50%" }}
-                            >
-                              Change SI (Goods)
-                            </Button>
-                          )}
-
-                          {warningNonNCR && (
-                            <Button
-                              onClick={() =>
-                                setOpenUploadDeliveryRecieptModal(true)
-                              }
-                              size="small"
-                              variant="outlined"
-                              sx={{ flexBasis: "50%" }}
-                            >
-                              change SI (Region)
-                            </Button>
-                          )}
-                        </div>
                       </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {warningMismatch &&
-                          !isValidFile(uploadedGoodsReceipt) && (
+
+                      <div className="basis-1/2">
+                        {(warningMismatch &&
+                          !warningNonNCR &&
+                          isValidFile(uploadedGoodsReceipt)) ||
+                        (!warningMismatch &&
+                          warningNonNCR &&
+                          isValidFile(uploadedRegionReceipt)) ||
+                        (warningMismatch &&
+                          warningNonNCR &&
+                          isValidFile(uploadedGoodsReceipt) &&
+                          isValidFile(uploadedRegionReceipt)) ||
+                        (!warningMismatch && !warningNonNCR) ? (
+                          <div className="space-y-1">
                             <Button
-                              id="goods"
-                              onClick={() => setUploadedGoodsReceiptModal(true)}
+                              onClick={() => handleSupplierUpdate()}
                               fullWidth
                               variant="contained"
                               sx={STOCK_ORDERING_BUTTON_STYLE}
                             >
-                              Upload updated sales invoice (GOODS)
+                              Confirm
                             </Button>
-                          )}
 
-                        {warningNonNCR &&
-                          !isValidFile(uploadedRegionReceipt) && (
-                            <Button
-                              id="region"
-                              onClick={() =>
-                                setOpenUploadDeliveryRecieptModal(true)
-                              }
-                              fullWidth
-                              variant="contained"
-                              sx={STOCK_ORDERING_BUTTON_STYLE}
-                            >
-                              Upload updated sales invoice (REGION)
-                            </Button>
-                          )}
+                            <div className="flex flex-col space-y-1 md:flex-row md:space-x-3 md:space-y-0">
+                              {warningMismatch && (
+                                <Button
+                                  onClick={() =>
+                                    setUploadedGoodsReceiptModal(true)
+                                  }
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ flexBasis: "50%" }}
+                                >
+                                  Change SI (Goods)
+                                </Button>
+                              )}
+
+                              {warningNonNCR && (
+                                <Button
+                                  onClick={() =>
+                                    setOpenUploadDeliveryRecieptModal(true)
+                                  }
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ flexBasis: "50%" }}
+                                >
+                                  change SI (Region)
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            {warningMismatch &&
+                              !isValidFile(uploadedGoodsReceipt) && (
+                                <Button
+                                  id="goods"
+                                  onClick={() =>
+                                    setUploadedGoodsReceiptModal(true)
+                                  }
+                                  fullWidth
+                                  variant="contained"
+                                  sx={STOCK_ORDERING_BUTTON_STYLE}
+                                >
+                                  Upload updated sales invoice (GOODS)
+                                </Button>
+                              )}
+
+                            {warningNonNCR &&
+                              !isValidFile(uploadedRegionReceipt) && (
+                                <Button
+                                  id="region"
+                                  onClick={() =>
+                                    setOpenUploadDeliveryRecieptModal(true)
+                                  }
+                                  fullWidth
+                                  variant="contained"
+                                  sx={STOCK_ORDERING_BUTTON_STYLE}
+                                >
+                                  Upload updated sales invoice (REGION)
+                                </Button>
+                              )}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : null}
+                ) : null}
+              </>
+            ) : (
+              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+            )}
           </div>
         </div>
       </div>

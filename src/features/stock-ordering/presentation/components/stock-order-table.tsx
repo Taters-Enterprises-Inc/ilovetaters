@@ -17,12 +17,12 @@ import { useEffect, useState } from "react";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
 
 interface StockOrderTableProps {
-  isCommitedTextFieldAvailable: boolean;
-  isDeliveredQtyAvailable: boolean;
-  isDispatchedQtyAvailable: boolean;
-  isStore: Boolean;
-  isUpdateBilling: boolean;
-  activeTab: Number | undefined;
+  isCommitedTextFieldAvailable?: boolean;
+  isDeliveredQtyAvailable?: boolean;
+  isDispatchedQtyAvailable?: boolean;
+  isStore?: Boolean;
+  isUpdateBilling?: boolean;
+  activeTab?: Number | undefined;
   rowData: StockOrderingInformationModel;
   setRows: (rows: StockOrderingInformationModel) => void;
 }

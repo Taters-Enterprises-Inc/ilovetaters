@@ -325,10 +325,13 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 ) : null}
               </form>
             ) : (
-              <StockOrderingWatingSkeleton />
+              <StockOrderingWatingSkeleton
+                remarks
+                firstDoubleComponents
+                secondDoubleComponents
+              />
             )}
           </div>
-          )
         </div>
       </div>
 

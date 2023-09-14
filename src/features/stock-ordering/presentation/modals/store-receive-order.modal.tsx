@@ -9,6 +9,7 @@ import {
   InitializeModal,
   InitializeProductData,
   StockOrderTable,
+  StockOrderingWatingSkeleton,
 } from "../components";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
@@ -171,97 +172,106 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
               <IoMdClose />
             </button>
           </div>
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
+            {rows.product_data.length !== 0 ? (
+              <form onSubmit={handleSubmit}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={true}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={setEnabled()}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
 
-          <form onSubmit={handleSubmit}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={true}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={setEnabled()}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
-
-              {setEnabled() ? (
-                <div className="space-y-5">
-                  <div className="px-5">
-                    <div className="flex flex-col mt-2">
-                      <span>Remarks: </span>
-                      <TextField
-                        value={remarks}
-                        onChange={(event) => setRemarks(event.target.value)}
-                        inputProps={{ maxLength: 512 }}
-                        multiline
-                      />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row md:space-x-3 space-y-4 mt-2">
-                      <div className="md:basis-1/2 flex flex-col space-y-2">
-                        <span>Actual Delivery Date: </span>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DateTimePicker
-                            label="Delivery date and time"
-                            views={["year", "month", "day", "hours", "minutes"]}
-                            onChange={(date) => {
-                              if (date) {
-                                const formattedDate = dayjs(date).format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                );
-
-                                setActualDeliveryDate(formattedDate);
-                              }
-                            }}
-                            value={dayjs(actualDeliveryDate)}
-                            minDateTime={dayjs().subtract(7, "day")}
-                            renderInput={(params) => (
-                              <TextField required {...params} size="small" />
-                            )}
-                          />
-                        </LocalizationProvider>
+                {setEnabled() ? (
+                  <div className="space-y-5">
+                    <div className="px-5">
+                      <div className="flex flex-col mt-2">
+                        <span>Remarks: </span>
+                        <TextField
+                          value={remarks}
+                          onChange={(event) => setRemarks(event.target.value)}
+                          inputProps={{ maxLength: 512 }}
+                          multiline
+                        />
                       </div>
 
-                      <div className="md:basis-1/2 flex items-stretch">
-                        <div
-                          className={`${
-                            isValidFile(uploadedReceipt)
-                              ? "basis-4/5"
-                              : "basis-full"
-                          } "flex self-end space-x-5"`}
-                        >
-                          <Button
-                            disabled={isQuantityEmpty()}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={STOCK_ORDERING_BUTTON_STYLE}
-                          >
-                            Confirm
-                          </Button>
+                      <div className="flex flex-col md:flex-row md:space-x-3 space-y-4 mt-2">
+                        <div className="md:basis-1/2 flex flex-col space-y-2">
+                          <span>Actual Delivery Date: </span>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                              label="Delivery date and time"
+                              views={[
+                                "year",
+                                "month",
+                                "day",
+                                "hours",
+                                "minutes",
+                              ]}
+                              onChange={(date) => {
+                                if (date) {
+                                  const formattedDate = dayjs(date).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  );
+
+                                  setActualDeliveryDate(formattedDate);
+                                }
+                              }}
+                              value={dayjs(actualDeliveryDate)}
+                              minDateTime={dayjs().subtract(7, "day")}
+                              renderInput={(params) => (
+                                <TextField required {...params} size="small" />
+                              )}
+                            />
+                          </LocalizationProvider>
                         </div>
 
-                        {isValidFile(uploadedReceipt) ? (
-                          <div className="basis-1/5 flex  justify-center items-stretch">
-                            <div className="self-end">
-                              <IconButton
-                                onClick={() =>
-                                  setOpenUploadDeliveryRecieptModal(true)
-                                }
-                              >
-                                <MdPreview className=" text-3xl" />
-                              </IconButton>
-                            </div>
+                        <div className="md:basis-1/2 flex items-stretch">
+                          <div
+                            className={`${
+                              isValidFile(uploadedReceipt)
+                                ? "basis-4/5"
+                                : "basis-full"
+                            } "flex self-end space-x-5"`}
+                          >
+                            <Button
+                              disabled={isQuantityEmpty()}
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              sx={STOCK_ORDERING_BUTTON_STYLE}
+                            >
+                              Confirm
+                            </Button>
                           </div>
-                        ) : null}
+
+                          {isValidFile(uploadedReceipt) ? (
+                            <div className="basis-1/5 flex  justify-center items-stretch">
+                              <div className="self-end">
+                                <IconButton
+                                  onClick={() =>
+                                    setOpenUploadDeliveryRecieptModal(true)
+                                  }
+                                >
+                                  <MdPreview className=" text-3xl" />
+                                </IconButton>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+            )}
+          </div>
         </div>
       </div>
 

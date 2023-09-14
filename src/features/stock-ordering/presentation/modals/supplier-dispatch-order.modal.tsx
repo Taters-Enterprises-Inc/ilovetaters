@@ -22,7 +22,11 @@ import {
   updateDispatchOrders,
   updateDispatchOrdersState,
 } from "../slices/update-dispatch-order.slice";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -221,168 +225,175 @@ export function SupplierDispatchOrderModal(
               </button>
             </div>
           </div>
-
-          <form onSubmit={handleDispatchOrder}>
-            <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-              <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={false}
-                activeTab={props.currentTab}
-                setRows={setRows}
-                rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
-              />
-              {setEnabled() ? (
-                <div className="flex flex-col px-3 space-y-3">
-                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
-                    <FormControl
-                      sx={{
-                        flexBasis: { md: "50%" },
-                        alignSelf: { md: "flex-end" },
-                      }}
-                      disabled={preview}
-                      required
-                    >
-                      <FormLabel id="transport-route-label">
-                        Transport Route
-                      </FormLabel>
-
-                      <RadioGroup
-                        onChange={(event, value) => setTransport(value)}
-                        value={transport}
-                        row
-                        aria-labelledby="transport-route"
-                      >
-                        <FormControlLabel
-                          value="1"
-                          control={<Radio size="small" />}
-                          label="Ground"
-                        />
-                        <FormControlLabel
-                          value="2"
-                          control={<Radio size="small" />}
-                          label="Ocean"
-                        />
-                        <FormControlLabel
-                          value="3"
-                          control={<Radio size="small" />}
-                          label="Air"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-
-                    <div className="flex flex-col space-y-2 md:basis-1/2">
-                      <span>Dispatched Delivery Date: </span>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <TimePicker
-                          disabled={preview}
-                          label="Dispatch Time Picker"
-                          value={dispatchedDelivery}
-                          onChange={(date) => {
-                            setDispachedDelivery(date);
-                          }}
-                          renderInput={(params) => (
-                            <TextField
-                              required
-                              {...params}
-                              autoComplete="off"
-                              size="small"
-                            />
-                          )}
-                        />
-                      </LocalizationProvider>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col mt-2">
-                    <span>Remarks: </span>
-                    <TextField
-                      value={remarks}
-                      onChange={(event) => setRemarks(event.target.value)}
-                      inputProps={{ maxLength: 512 }}
-                      multiline
-                    />
-                  </div>
-
-                  <div className="flex flex-col space-y-3">
-                    <div className="flex flex-col md:flex-row gap-3">
-                      <Button
-                        fullWidth
-                        size="small"
-                        sx={STOCK_ORDERING_BUTTON_STYLE}
-                        onClick={() => {
-                          setOpenUploadDeliveryRecieptModal(true);
+          <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
+            {rows.product_data.length !== 0 ? (
+              <form className="space-y-3" onSubmit={handleDispatchOrder}>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
+                {setEnabled() ? (
+                  <div className="flex flex-col px-3 space-y-3">
+                    <div className="flex flex-col space-y-2 md:flex-row md:space-x-3">
+                      <FormControl
+                        sx={{
+                          flexBasis: { md: "50%" },
+                          alignSelf: { md: "flex-end" },
                         }}
-                        variant="contained"
+                        disabled={preview}
+                        required
                       >
-                        Upload Sales Invoice
-                      </Button>
+                        <FormLabel id="transport-route-label">
+                          Transport Route
+                        </FormLabel>
 
-                      {preview ? (
-                        <Button
-                          fullWidth
-                          size="small"
-                          type="submit"
-                          variant="contained"
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                        <RadioGroup
+                          onChange={(event, value) => setTransport(value)}
+                          value={transport}
+                          row
+                          aria-labelledby="transport-route"
                         >
-                          Dispatch Order
-                        </Button>
-                      ) : (
-                        <Button
-                          fullWidth
-                          size="small"
-                          variant="contained"
-                          onClick={handlePreviewButton}
-                          sx={STOCK_ORDERING_BUTTON_STYLE}
-                          disabled={
-                            !isValidFile(uploadedReceipt) ||
-                            transport === "" ||
-                            isQuantityEmpty() ||
-                            dispatchedDelivery === null
-                          }
-                        >
-                          Preview
-                        </Button>
-                      )}
+                          <FormControlLabel
+                            value="1"
+                            control={<Radio size="small" />}
+                            label="Ground"
+                          />
+                          <FormControlLabel
+                            value="2"
+                            control={<Radio size="small" />}
+                            label="Ocean"
+                          />
+                          <FormControlLabel
+                            value="3"
+                            control={<Radio size="small" />}
+                            label="Air"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <div className="flex flex-col space-y-2 md:basis-1/2">
+                        <span>Dispatched Delivery Date: </span>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <TimePicker
+                            disabled={preview}
+                            label="Dispatch Time Picker"
+                            value={dispatchedDelivery}
+                            onChange={(date) => {
+                              setDispachedDelivery(date);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                required
+                                {...params}
+                                autoComplete="off"
+                                size="small"
+                              />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </div>
                     </div>
 
-                    <div className="flex justify-between">
-                      {preview && uploadedReceipt && (
+                    <div className="flex flex-col mt-2">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+
+                    <div className="flex flex-col space-y-3">
+                      <div className="flex flex-col md:flex-row gap-3">
                         <Button
-                          onClick={() => setOpenExcelPreview(true)}
+                          fullWidth
                           size="small"
-                          variant="text"
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                          onClick={() => {
+                            setOpenUploadDeliveryRecieptModal(true);
+                          }}
+                          variant="contained"
                         >
-                          {Object.values(uploadedReceipt).map((name) => name)}
-                        </Button>
-                      )}
-                      <div>
-                        <Button size="small" onClick={handleCancelOrder}>
-                          <span className="text-primary underline">
-                            Cancel Order
-                          </span>
+                          Upload Sales Invoice
                         </Button>
 
-                        {preview && (
+                        {preview ? (
                           <Button
+                            fullWidth
                             size="small"
-                            onClick={() => setPreview(false)}
+                            type="submit"
+                            variant="contained"
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
                           >
-                            <span className="text-primary underline">
-                              Re-edit
-                            </span>
+                            Dispatch Order
+                          </Button>
+                        ) : (
+                          <Button
+                            fullWidth
+                            size="small"
+                            variant="contained"
+                            onClick={handlePreviewButton}
+                            sx={STOCK_ORDERING_BUTTON_STYLE}
+                            disabled={
+                              !isValidFile(uploadedReceipt) ||
+                              transport === "" ||
+                              isQuantityEmpty() ||
+                              dispatchedDelivery === null
+                            }
+                          >
+                            Preview
                           </Button>
                         )}
                       </div>
+
+                      <div className="flex justify-between">
+                        {preview && uploadedReceipt && (
+                          <Button
+                            onClick={() => setOpenExcelPreview(true)}
+                            size="small"
+                            variant="text"
+                          >
+                            {Object.values(uploadedReceipt).map((name) => name)}
+                          </Button>
+                        )}
+                        <div>
+                          <Button size="small" onClick={handleCancelOrder}>
+                            <span className="text-primary underline">
+                              Cancel Order
+                            </span>
+                          </Button>
+
+                          {preview && (
+                            <Button
+                              size="small"
+                              onClick={() => setPreview(false)}
+                            >
+                              <span className="text-primary underline">
+                                Re-edit
+                              </span>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </form>
+                ) : null}
+              </form>
+            ) : (
+              <StockOrderingWatingSkeleton
+                remarks
+                dispatchDoubleComponent
+                firstDoubleComponents
+              />
+            )}
+          </div>
         </div>
       </div>
 

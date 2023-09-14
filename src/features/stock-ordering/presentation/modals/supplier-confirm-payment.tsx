@@ -3,7 +3,11 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
@@ -114,30 +118,31 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={false}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-              isDispatchedQtyAvailable={false}
-              isUpdateBilling={false}
-            />
-
-            {setEnabled() ? (
-              <div className="space-y-2">
-                <div className="flex flex-col mt-2 ">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 ">
-                  {/* <div className="basis-full">
+            {rows.product_data.length !== 0 ? (
+              <>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
+                {setEnabled() ? (
+                  <div className="space-y-2">
+                    <div className="flex flex-col mt-2 ">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2 ">
+                      {/* <div className="basis-full">
                     <Button
                       onClick={() => setOpenPayBillingModal(true)}
                       fullWidth
@@ -151,8 +156,8 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                     </Button>
                   </div> */}
 
-                  <div className="flex space-x-4">
-                    {/* <Button
+                      <div className="flex space-x-4">
+                        {/* <Button
                       fullWidth
                       variant="contained"
                       onClick={() => handleValidate("7")}
@@ -161,18 +166,25 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                       Return to Tei Finance
                     </Button> */}
 
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => handleValidate("9")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Validate
-                    </Button>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => handleValidate("9")}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                        >
+                          Validate
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : null}
+                ) : null}
+              </>
+            ) : (
+              <StockOrderingWatingSkeleton
+                remarks
+                confirmPaymentFullwidthButton
+              />
+            )}
           </div>
         </div>
       </div>

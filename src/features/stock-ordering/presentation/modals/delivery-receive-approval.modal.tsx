@@ -3,7 +3,11 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { InitializeModal, InitializeProductData } from "../components";
+import {
+  InitializeModal,
+  InitializeProductData,
+  StockOrderingWatingSkeleton,
+} from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { selectGetProductData } from "../slices/get-product-data.slice";
 import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
@@ -115,54 +119,60 @@ export function DeliveryReceiveApprovalModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            <StockOrderTable
-              isCommitedTextFieldAvailable={false}
-              isStore={false}
-              activeTab={props.currentTab}
-              setRows={setRows}
-              rowData={rows}
-              isDeliveredQtyAvailable={false}
-              isDispatchedQtyAvailable={false}
-              isUpdateBilling={false}
-            />
-            {setEnabled() ? (
+            {rows.product_data.length !== 0 ? (
               <>
-                <div className="flex flex-col">
-                  <span>Remarks: </span>
-                  <TextField
-                    value={remarks}
-                    onChange={(event) => setRemarks(event.target.value)}
-                    inputProps={{ maxLength: 512 }}
-                    multiline
-                  />
-                </div>
-                <div className="flex space-x-3">
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={() => handleValidate("4")}
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#CC5801",
-                    }}
-                  >
-                    Reject
-                  </Button>
+                <StockOrderTable
+                  isCommitedTextFieldAvailable={false}
+                  isStore={false}
+                  activeTab={props.currentTab}
+                  setRows={setRows}
+                  rowData={rows}
+                  isDeliveredQtyAvailable={false}
+                  isDispatchedQtyAvailable={false}
+                  isUpdateBilling={false}
+                />
+                {setEnabled() ? (
+                  <>
+                    <div className="flex flex-col">
+                      <span>Remarks: </span>
+                      <TextField
+                        value={remarks}
+                        onChange={(event) => setRemarks(event.target.value)}
+                        inputProps={{ maxLength: 512 }}
+                        multiline
+                      />
+                    </div>
+                    <div className="flex space-x-3">
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => handleValidate("4")}
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
+                      >
+                        Reject
+                      </Button>
 
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={() => handleValidate("6")}
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#CC5801",
-                    }}
-                  >
-                    Approve
-                  </Button>
-                </div>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => handleValidate("6")}
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CC5801",
+                        }}
+                      >
+                        Approve
+                      </Button>
+                    </div>
+                  </>
+                ) : null}
               </>
-            ) : null}
+            ) : (
+              <StockOrderingWatingSkeleton remarks firstDoubleComponents />
+            )}
           </div>
         </div>
       </div>
