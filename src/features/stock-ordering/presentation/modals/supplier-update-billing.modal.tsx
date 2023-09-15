@@ -3,13 +3,13 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import {
   selectUpdateBillingOrders,
   updateBillingOrders,
@@ -25,6 +25,7 @@ import { MdPreview } from "react-icons/md";
 import { updateBillingOrderParam } from "features/stock-ordering/core/stock-ordering.params";
 import { isValid } from "date-fns";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface SupplierUpdateBillingModalProps {
   open: boolean;
@@ -56,12 +57,11 @@ export function SupplierUpdateBillingModal(
 
   const [remarks, setRemarks] = useState("");
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const updateBillingState = useAppSelector(selectUpdateBillingOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -78,18 +78,31 @@ export function SupplierUpdateBillingModal(
   };
 
   useEffect(() => {
-    setRemarks("");
-    setUploadedGoodsReciept("");
-    setUploadedRegionReciept("");
-  }, [props.open]);
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+      setRemarks("");
+      setUploadedGoodsReciept("");
+      setUploadedRegionReciept("");
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
     if (
-      rows.product_data &&
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
+
+  useEffect(() => {
+    if (
+      rows?.product_data &&
       (uploadedGoodsReceipt === "" || uploadedRegionReceipt === "")
     ) {
       const isWarningMismatch = rows.product_data.some(
-        (product) => product.commitedQuantity !== product.deliveredQuantity
+        (product) => product.commited_qty !== product.delivered_qty
       );
 
       const isWarningNonNCR = rows.order_information.region_id !== 2;
@@ -98,19 +111,6 @@ export function SupplierUpdateBillingModal(
       setwarningNonNCR(isWarningNonNCR);
     }
   }, [rows]);
-
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
 
   const handleSupplierUpdate = async () => {
     const updateBillingOrderParam: updateBillingOrderParam = {
@@ -181,7 +181,7 @@ export function SupplierUpdateBillingModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}

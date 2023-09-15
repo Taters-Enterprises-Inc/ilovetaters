@@ -5,16 +5,15 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderTable,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { StockOrderTable, StockOrderingWatingSkeleton } from "../components";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { MdPreview } from "react-icons/md";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { receiveOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
 import {
   selectupdateReceiveOrders,
@@ -24,6 +23,7 @@ import {
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface StoreReceiveOrderModalProps {
   open: boolean;
@@ -46,18 +46,31 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
   const [uploadedReceipt, setUploadedReciept] = useState<File | string>("");
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
+  const getAdminSessionState = useAppSelector(selectGetAdminSession);
 
   useEffect(() => {
-    setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-    setUploadedReciept("");
-    setRemarks("");
-  }, [props.open]);
+    if (props.open && props.id) {
+      dispatch(getProductData({ orderId: props.id }));
 
-  const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const receiveOrderState = useAppSelector(selectupdateReceiveOrders);
+      setActualDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+      setUploadedReciept("");
+      setRemarks("");
+    }
+
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
+
+  useEffect(() => {
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -73,29 +86,16 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (isValidFile(uploadedReceipt)) {
       const receieveOrdersProductDataParam: receiveOrdersParam["product_data"] =
-        rows.product_data.map((product) => ({
+        rows?.product_data.map((product) => ({
           id: product.id,
-          productId: product.productId,
-          deliveryQuantity: product.deliveredQuantity,
-        }));
+          productId: product.product_id,
+          deliveryQuantity: product.delivered_qty,
+        })) ?? [];
 
       const receiveOrdersParamData: receiveOrdersParam = {
         id: props.id,
@@ -142,8 +142,8 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (product.commitedQuantity === "") empty = true;
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "") empty = true;
     });
 
     return empty;
@@ -173,7 +173,7 @@ export function StoreReceiveOrderModal(props: StoreReceiveOrderModalProps) {
             </button>
           </div>
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <form onSubmit={handleSubmit}>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}

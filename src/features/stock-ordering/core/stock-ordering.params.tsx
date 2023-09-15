@@ -44,7 +44,7 @@ export interface dispatchOrderParam {
   product_data: {
     id: string;
     productId: string;
-    dispatchedQuantity: string;
+    // dispatchedQuantity: string;
   }[];
 }
 

@@ -3,13 +3,13 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { updateStatus } from "features/stock-ordering/core/stock-ordering.params";
 import {
   selectUpdateConfirmPayment,
@@ -20,6 +20,7 @@ import { ViewImageModal } from "./view-image.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface SupplierConfirmModalProps {
   open: boolean;
@@ -35,12 +36,11 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
   const dispatch = useAppDispatch();
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const confirmPaymentState = useAppSelector(selectUpdateConfirmPayment);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -56,19 +56,6 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
-
   const handleValidate = async (status: string) => {
     const updateConfirmPaymentParam: updateStatus = {
       id: props.id,
@@ -83,12 +70,25 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
   };
 
   useEffect(() => {
-    setUploadedReciept(rows.order_information.view_payment_details);
-  }, [rows.order_information.view_payment_details]);
+    setUploadedReciept(rows?.order_information.payment_detail_image ?? "");
+  }, [rows?.order_information.payment_detail_image]);
 
   useEffect(() => {
-    setRemarks("");
-  }, [props.open]);
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+      setRemarks("");
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
+
+  useEffect(() => {
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -118,17 +118,12 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <>
                 <StockOrderTable
-                  isCommitedTextFieldAvailable={false}
-                  isStore={false}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}
-                  isDeliveredQtyAvailable={false}
-                  isDispatchedQtyAvailable={false}
-                  isUpdateBilling={false}
                 />
                 {setEnabled() ? (
                   <div className="space-y-2">

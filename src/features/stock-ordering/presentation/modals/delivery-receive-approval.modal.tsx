@@ -3,13 +3,13 @@ import { StockOrderTable } from "../components/stock-order-table";
 import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { updateDeliveryReceiveApproval } from "features/stock-ordering/core/stock-ordering.params";
 import {
   selectupdateDeliveryReceiveApprovalOrders,
@@ -18,6 +18,7 @@ import {
 } from "../slices/update-delivery-receive-approval.slice";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface DeliveryReceiveApprovalModalProps {
   open: boolean;
@@ -34,14 +35,11 @@ export function DeliveryReceiveApprovalModal(
   const getProductDataState = useAppSelector(selectGetProductData);
   const dispatch = useAppDispatch();
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const deliveryRecieveApprovalState = useAppSelector(
-    selectupdateDeliveryReceiveApprovalOrders
-  );
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -57,22 +55,22 @@ export function DeliveryReceiveApprovalModal(
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+  useEffect(() => {
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+      setRemarks("");
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.currentTab, props.id]);
 
   useEffect(() => {
-    setRemarks("");
-  }, [props.open]);
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const handleValidate = async (status: string) => {
     const updateDeliveryReceiveApprovalParam: updateDeliveryReceiveApproval = {
@@ -119,7 +117,7 @@ export function DeliveryReceiveApprovalModal(
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={false}

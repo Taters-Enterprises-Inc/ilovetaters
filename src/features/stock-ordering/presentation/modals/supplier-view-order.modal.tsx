@@ -3,22 +3,18 @@ import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { StockOrderTable } from "../components/stock-order-table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
-import { TextField, Button, ButtonGroup, Skeleton } from "@mui/material";
+import { TextField, Button, ButtonGroup } from "@mui/material";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  resetGetProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { newOrdersParam } from "features/stock-ordering/core/stock-ordering.params";
-import {
-  selectupdateNewOrders,
-  updateNewOrders,
-  updateNewOrdersState,
-} from "../slices/update-new-order.slice";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { updateNewOrders } from "../slices/update-new-order.slice";
+import { StockOrderingWatingSkeleton } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import {
   getStockOrderStores,
@@ -26,8 +22,9 @@ import {
 } from "../slices/get-store.slice";
 import { createQueryParams } from "features/config/helpers";
 import { AiOutlineDownload } from "react-icons/ai";
-import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { PopupModal } from ".";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
+import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -39,10 +36,9 @@ interface PlaceOrdersModalProps {
 export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   const dispatch = useAppDispatch();
 
-  const getProductDataState = useAppSelector(selectGetProductData);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
   const getStoreState = useAppSelector(selectGetStockOrderStores);
-  const stockUpdateNewOrder = useAppSelector(selectupdateNewOrders);
+  const getProductDataState = useAppSelector(selectGetProductData);
 
   const [remarks, setRemarks] = useState("");
   const [preview, setPreview] = useState(false);
@@ -51,7 +47,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
   );
   const [openPopUp, setOpenPopUp] = useState(false);
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
@@ -59,11 +55,11 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     event.preventDefault();
 
     const reviewOrdersProductDataParam: newOrdersParam["product_data"] =
-      rows.product_data.map((productsItem, index) => ({
+      rows?.product_data.map((productsItem) => ({
         id: productsItem.id,
-        productId: productsItem.productId,
-        commitedQuantity: productsItem.commitedQuantity,
-      }));
+        productId: productsItem.product_id,
+        commitedQuantity: productsItem.commited_qty,
+      })) ?? [];
 
     const reviewOrdersParamData: newOrdersParam = {
       id: props.id,
@@ -96,43 +92,40 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
-
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+  useEffect(() => {
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+      setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+      setRemarks("");
+      setPreview(false);
+      setOpenPopUp(false);
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
-    setCommitedDeliveryDate(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-    setRemarks("");
-    setPreview(false);
-    setOpenPopUp(false);
-  }, [props.open]);
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   useEffect(() => {
-    if (rows.order_information) {
+    if (rows?.order_information.store_id && props.open) {
       const query = createQueryParams({
         store_id: rows.order_information.store_id,
       });
 
       dispatch(getStockOrderStores(query));
     }
-  }, [rows.order_information]);
+  }, [rows?.order_information]);
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (
-        product.commitedQuantity === "" ||
-        product.commitedQuantity === null
-      ) {
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "" || product.commited_qty === null) {
         empty = true;
       }
     });
@@ -187,7 +180,6 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 className="text-2xl text-white"
                 onClick={() => {
                   //Waiting for download endpoint
-
                   document.body.classList.remove("overflow-hidden");
                   props.onClose();
                 }}
@@ -207,17 +199,13 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
             </div>
           </div>
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <form className="overflow-auto" onSubmit={handleSubmit}>
                 <StockOrderTable
                   isCommitedTextFieldAvailable={setEnabled() && !preview}
-                  isStore={false}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}
-                  isDeliveredQtyAvailable={false}
-                  isDispatchedQtyAvailable={false}
-                  isUpdateBilling={false}
                 />
 
                 {setEnabled() ? (

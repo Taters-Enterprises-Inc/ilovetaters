@@ -1,15 +1,16 @@
 import { IoMdClose } from "react-icons/io";
 import { StockOrderTable } from "../components/stock-order-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
+import { StockOrderingWatingSkeleton } from "../components";
+import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
-import { useAppSelector } from "features/config/hooks";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface CompleteModalProps {
   open: boolean;
@@ -20,23 +21,27 @@ interface CompleteModalProps {
 
 export function CompleteModal(props: CompleteModalProps) {
   const getProductDataState = useAppSelector(selectGetProductData);
+  const dispatch = useAppDispatch();
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
+  useEffect(() => {
+    if (props.id && props.open) {
+      dispatch(getProductData({ orderId: props.id }));
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+  useEffect(() => {
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   if (props.open) {
     document.body.classList.add("overflow-hidden");
@@ -66,16 +71,11 @@ export function CompleteModal(props: CompleteModalProps) {
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <StockOrderTable
-                isCommitedTextFieldAvailable={false}
-                isStore={false}
                 activeTab={props.currentTab}
                 setRows={setRows}
                 rowData={rows}
-                isDeliveredQtyAvailable={false}
-                isDispatchedQtyAvailable={false}
-                isUpdateBilling={false}
               />
             ) : (
               <StockOrderingWatingSkeleton />

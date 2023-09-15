@@ -15,6 +15,7 @@ import { StockOrderingInformationModel } from "features/stock-ordering/core/doma
 import { StockOrderHandleQuantity } from "./stock-order-handle-quantity";
 import { useEffect, useState } from "react";
 import { OrderTableData } from "features/stock-ordering/core/domain/order-table-row.model";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 
 interface StockOrderTableProps {
   isCommitedTextFieldAvailable?: boolean;
@@ -23,8 +24,8 @@ interface StockOrderTableProps {
   isStore?: Boolean;
   isUpdateBilling?: boolean;
   activeTab?: Number | undefined;
-  rowData: StockOrderingInformationModel;
-  setRows: (rows: StockOrderingInformationModel) => void;
+  rowData: GetProductDataModel;
+  setRows: (rows: GetProductDataModel) => void;
 }
 
 const columns: Array<Column> = [
@@ -61,33 +62,33 @@ export function StockOrderTable(props: StockOrderTableProps) {
                   key={index}
                   sx={{
                     backgroundColor:
-                      row.commitedQuantity !== row.deliveredQuantity &&
+                      row.commited_qty !== row.delivered_qty &&
                       props.isUpdateBilling
                         ? "red"
                         : "",
                   }}
                 >
-                  <TableCell sx={{ width: 75 }}>{row.productId}</TableCell>
-                  <TableCell>{row.productName}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.product_id}</TableCell>
+                  <TableCell>{row.product_name}</TableCell>
                   <TableCell sx={{ width: 75 }}>{row.uom}</TableCell>
-                  <TableCell sx={{ width: 75 }}>{row.orderQty}</TableCell>
+                  <TableCell sx={{ width: 75 }}>{row.order_qty}</TableCell>
                   <TableCell sx={{ width: 75 }}>
                     {props.isCommitedTextFieldAvailable ? (
                       <StockOrderHandleQuantity
                         rows={props.rowData.product_data}
-                        setRows={(rows) =>
+                        setRows={(rows) => {
                           props.setRows({
                             product_data: rows,
                             order_information: props.rowData.order_information,
-                          })
-                        }
+                          });
+                        }}
                         rowsIndex={index}
-                        currentValue={row.commitedQuantity}
-                        propertyKey={"commitedQuantity"}
-                        precedingPropertyKey={"orderQty"}
+                        currentValue={row.commited_qty}
+                        propertyKey={"commited_qty"}
+                        precedingPropertyKey={"order_qty"}
                       />
                     ) : (
-                      row.commitedQuantity ?? <div>--</div>
+                      row.commited_qty ?? <div>--</div>
                     )}
                   </TableCell>
 
@@ -95,19 +96,19 @@ export function StockOrderTable(props: StockOrderTableProps) {
                     {props.isDeliveredQtyAvailable ? (
                       <StockOrderHandleQuantity
                         rows={props.rowData.product_data}
-                        setRows={(rows) =>
+                        setRows={(rows) => {
                           props.setRows({
                             product_data: rows,
                             order_information: props.rowData.order_information,
-                          })
-                        }
+                          });
+                        }}
                         rowsIndex={index}
-                        currentValue={row.deliveredQuantity}
-                        propertyKey={"deliveredQuantity"}
-                        precedingPropertyKey={"commitedQuantity"}
+                        currentValue={row.delivered_qty}
+                        propertyKey={"delivered_qty"}
+                        precedingPropertyKey={"commited_qty"}
                       />
                     ) : (
-                      row.deliveredQuantity ?? <div>--</div>
+                      row.delivered_qty ?? <div>--</div>
                     )}
                   </TableCell>
                   <TableCell>

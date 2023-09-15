@@ -53,6 +53,10 @@ import {
   BackdropLoading,
   DataList,
 } from "features/shared/presentation/components";
+import {
+  selectstockOrderSideBar,
+  togglestockOrderSideBar,
+} from "../slices/stock-order.slice";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -100,6 +104,7 @@ export function OrderContents() {
 
   const getStockOrdersState = useAppSelector(selectGetStockOrders);
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
+  const stockOrderSideBar = useAppSelector(selectstockOrderSideBar);
 
   const [modals, setModals] = useState<Modals>({
     placeOrder: false,
@@ -162,6 +167,9 @@ export function OrderContents() {
 
   const handleAction = (id: string) => {
     handleModalToggle(Object.keys(modals)[Number(tabValue) + 2]);
+    if (stockOrderSideBar.status) {
+      dispatch(togglestockOrderSideBar());
+    }
     setOrderId(id);
   };
 

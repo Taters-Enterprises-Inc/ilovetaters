@@ -16,17 +16,17 @@ import { useEffect, useState } from "react";
 import { UploadDeliveryRecieptModal } from "./upload-delivery-reciepts.modal";
 import { StockOrderingInformationModel } from "features/stock-ordering/core/domain/table-row.model";
 import { dispatchOrderParam } from "features/stock-ordering/core/stock-ordering.params";
-import { selectGetProductData } from "../slices/get-product-data.slice";
+import {
+  GetProductDataState,
+  getProductData,
+  selectGetProductData,
+} from "../slices/get-product-data.slice";
 import {
   selectupdateDispatchOrders,
   updateDispatchOrders,
   updateDispatchOrdersState,
 } from "../slices/update-dispatch-order.slice";
-import {
-  InitializeModal,
-  InitializeProductData,
-  StockOrderingWatingSkeleton,
-} from "../components";
+import { StockOrderingWatingSkeleton } from "../components";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -34,6 +34,7 @@ import { productDataInitialState } from "features/stock-ordering/core/productDat
 import { PopupModal } from "./popup.modal";
 import { ExcelPreviewModal } from "./excel-preview.modal";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 // import { verifyDispatchOrders } from "../slices/verify-dispatch-invoice.slice";
 
 interface SupplierDispatchOrderModalProps {
@@ -62,7 +63,7 @@ export function SupplierDispatchOrderModal(
   const [remarks, setRemarks] = useState("");
   const [openPopUp, setOpenPopUp] = useState(false);
 
-  const [rows, setRows] = useState<StockOrderingInformationModel>(
+  const [rows, setRows] = useState<GetProductDataModel | undefined>(
     productDataInitialState
   );
 
@@ -95,7 +96,6 @@ export function SupplierDispatchOrderModal(
   };
 
   const getAdminSessionState = useAppSelector(selectGetAdminSession);
-  const dispatchOrderState = useAppSelector(selectupdateDispatchOrders);
 
   const setEnabled = () => {
     const user = getAdminSessionState.data?.admin?.user_details?.sos_groups;
@@ -111,38 +111,38 @@ export function SupplierDispatchOrderModal(
     return result;
   };
 
-  InitializeModal({
-    setRows: setRows,
-    id: props.id,
-    open: props.open,
-  });
+  useEffect(() => {
+    if (props.open && props.id) {
+      dispatch(getProductData({ orderId: props.id }));
 
-  InitializeProductData({
-    setRows: setRows,
-    productData: getProductDataState.data
-      ? getProductDataState.data
-      : undefined,
-  });
+      setUploadedReciept("");
+      setDispachedDelivery(null);
+      setTransport("");
+      setRemarks("");
+      setuploadButton(true);
+      setPreview(false);
+      setOpenPopUp(false);
+    }
+    setRows(undefined);
+  }, [dispatch, props.open, props.id, props.currentTab]);
 
   useEffect(() => {
-    setUploadedReciept("");
-    setDispachedDelivery(null);
-    setTransport("");
-    setRemarks("");
-    setuploadButton(true);
-    setPreview(false);
-    setOpenPopUp(false);
-  }, [props.open]);
+    if (
+      GetProductDataState.success === getProductDataState.status &&
+      getProductDataState.data
+    ) {
+      setRows(getProductDataState.data);
+    }
+  }, [getProductDataState]);
 
   const handleDispatchOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     const dispatchedOrdersProductDataParam: dispatchOrderParam["product_data"] =
-      rows.product_data.map((product) => ({
+      rows?.product_data.map((product) => ({
         id: product.id,
-        productId: product.productId,
-        dispatchedQuantity: product.dispatchedQuantity,
-      }));
+        productId: product.product_id,
+      })) ?? [];
 
     const dispatchOrdersParamData: dispatchOrderParam = {
       id: props.id,
@@ -166,11 +166,8 @@ export function SupplierDispatchOrderModal(
 
   const isQuantityEmpty = () => {
     let empty = false;
-    rows.product_data.map((product) => {
-      if (
-        product.commitedQuantity === "" ||
-        product.commitedQuantity === null
-      ) {
+    rows?.product_data.map((product) => {
+      if (product.commited_qty === "" || product.commited_qty === null) {
         empty = true;
       }
     });
@@ -226,17 +223,12 @@ export function SupplierDispatchOrderModal(
             </div>
           </div>
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
-            {rows.product_data.length !== 0 ? (
+            {rows ? (
               <form className="space-y-3" onSubmit={handleDispatchOrder}>
                 <StockOrderTable
-                  isCommitedTextFieldAvailable={false}
-                  isStore={false}
                   activeTab={props.currentTab}
                   setRows={setRows}
                   rowData={rows}
-                  isDeliveredQtyAvailable={false}
-                  isDispatchedQtyAvailable={false}
-                  isUpdateBilling={false}
                 />
                 {setEnabled() ? (
                   <div className="flex flex-col px-3 space-y-3">
