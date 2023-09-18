@@ -2,9 +2,6 @@ import {
   Box,
   Button,
   Divider,
-  List,
-  ListItem,
-  Paper,
   Step,
   StepContent,
   StepLabel,
@@ -14,7 +11,6 @@ import {
 import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { useState } from "react";
-import { AnyIfEmpty } from "react-redux";
 
 interface StockOrderLogsProps {
   order_details: {
@@ -22,53 +18,65 @@ interface StockOrderLogsProps {
   };
 }
 
+interface trackingModel {
+  name: string;
+  datetime: string;
+  first_name: string;
+  last_name: string;
+}
+
 export function StockOrderLogs(props: StockOrderLogsProps) {
-  //Temporary need to make it dynamic
-  const trackingInformation = [
+  const documentFiles = [
+    { id: "delivery_receipt", label: "Delivery Receipt", processId: 4 },
     {
-      label: "Order recently placed",
-      description: "Order placement Date",
+      id: "updated_delivery_receipt",
+      label: "Updated Delivery Receipt",
+      processId: 4,
     },
     {
-      label: "Supplier has confirm the quantity and date",
-      description: "Requested delivery Date",
+      id: "sales_invoice",
+      label: "Download sales invoice",
+      processId: 4,
     },
     {
-      label: "Order has been reviewed by TEI Procurement",
-      description: "Commmited delivery Date",
+      id: "theoretical_invoice",
+      label: "Generate Theoretical Invoice",
+      processId: 5,
     },
     {
-      label: "Order has been deployed by the supplier",
-      description: "Order review Date",
+      id: "updated_delivery_goods_receipt",
+      label: "Updated goods invoice",
+      processId: 6,
     },
     {
-      label: "Order has been received by the recieving store",
-      description: "Order dispatch Date",
+      id: "updated_delivery_region_receipt",
+      label: "Updated region invoice",
+      processId: 6,
     },
-    {
-      label: "Order has checked and approved by the store manager",
-      description: "Order dispatch Date",
-    },
-    {
-      label: "Supplier has updated/awcknowledged the billing information",
-      description: "Order dispatch Date",
-    },
-    {
-      label: "Finance has settled the payment ",
-      description: "Order dispatch Date",
-    },
-    {
-      label: "Supplier has awknowledge the payment and completed the order",
-      description: "Order dispatch Date",
-    },
+    { id: "payment_detail_image", label: "Payment detail image", processId: 7 },
   ];
+
+  const [trackingShowMore, setTrackingShowMore] = useState(false);
+  const [downloadableShowMore, setDownloadableShowMore] = useState(false);
+
+  const handleTrackingShowMore = () => {
+    if (props.order_details["tracking"].length < 1) {
+      return "fit-content";
+    } else {
+      if (trackingShowMore) {
+        return "fit-content";
+      } else {
+        return 75;
+      }
+    }
+  };
 
   const isValidDate = (dateStr: string): boolean => {
     const dateObj = new Date(dateStr);
     return !isNaN(dateObj.getTime());
   };
 
-  const getOrderData = (value: string | number | boolean) => {
+  const getOrderDate = (value: string | number | boolean) => {
     if (isValidDate(value as string) && value !== null) {
       return new Date(value as string).toLocaleDateString("en-PH", {
         month: "long",
@@ -80,6 +88,21 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
     }
 
     return value;
+  };
+
+  const handleDownload = (type: string) => {
+    const id = props.order_details.id;
+    let link = "";
+
+    if (type === "sales_invoice") {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/generate-multim-si-pdf/${id}`;
+    } else if (type === "theoretical_invoice") {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/generate-si-pdf/${id}`;
+    } else {
+      link = `${REACT_APP_DOMAIN_URL}api/stock/ordered/download_file_information/${type}`;
+    }
+
+    window.open(link, "_blank");
   };
 
   return (
@@ -119,34 +142,115 @@ export function StockOrderLogs(props: StockOrderLogsProps) {
               </div>
             </div>
           </div>
-          <div className="space-y-2">
-            <span className="text-base font-semibold md:text-lg md:font-bold">
-              Tracking Log
-            </span>
 
-            <div className="border border-gray-200 shadow rounded-md bg-white p-5 space-y-2">
-              <Box sx={{ maxWidth: 400 }}>
-                <Stepper
-                  activeStep={props.order_details["status_id"]}
-                  orientation="vertical"
+          {props.order_details["tracking"].length !== 0 && (
+            <div className="space-y-2">
+              <span className="text-base font-semibold md:text-lg md:font-bold">
+                Tracking Log
+              </span>
+
+              <div className="border border-gray-200 shadow rounded-md bg-white px-5 pt-5 space-y-2">
+                <Box
+                  sx={{
+                    maxWidth: "100%",
+                    height: handleTrackingShowMore(),
+                    overflow: "hidden",
+                  }}
                 >
-                  {trackingInformation.map((step, index: number) => {
-                    if (index < props.order_details["status_id"]) {
-                      return (
+                  <Stepper
+                    activeStep={props.order_details["tracking"].length}
+                    orientation="vertical"
+                  >
+                    {props.order_details["tracking"].map(
+                      (step: trackingModel, index: number) => (
                         <Step key={index}>
-                          <StepLabel>{step.label}</StepLabel>
-                          <StepContent>
-                            <Typography>{step.description}</Typography>
-                          </StepContent>
+                          <StepLabel sx={{ marginRight: 5 }}>
+                            <div className="flex flex-col">
+                              <span className="text:sm md:text-base font-semibold">
+                                {step.name}
+                              </span>
+                              <span className="text-xs">
+                                {getOrderDate(step.datetime)}
+                              </span>
+                              <span className="text-xs">
+                                Performed by:{" "}
+                                {step.first_name + " " + step.last_name}
+                              </span>
+                            </div>
+                          </StepLabel>
                         </Step>
-                      );
-                    }
-                    return null;
-                  })}
-                </Stepper>
-              </Box>
+                      )
+                    )}
+                  </Stepper>
+                </Box>
+                <Button
+                  onClick={() =>
+                    trackingShowMore
+                      ? setTrackingShowMore(false)
+                      : setTrackingShowMore(true)
+                  }
+                  size="small"
+                  fullWidth
+                >
+                  {props.order_details["status_id"] >= 2
+                    ? trackingShowMore
+                      ? "Show Less"
+                      : "Show more"
+                    : null}
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {props.order_details.status_id >= 4 && (
+            <div className="space-y-2">
+              <span className="text-base font-semibold md:text-lg md:font-bold">
+                Invoices and payment files
+              </span>
+
+              <div className="border border-gray-200 shadow rounded-md bg-white px-5 pt-5 space-y-2 overflow-hidden">
+                <div
+                  className={`"" ${!downloadableShowMore ? "h-16" : "h-fit"} `}
+                >
+                  {documentFiles.map((row) => (
+                    <>
+                      {row.processId <= props.order_details.status_id && (
+                        <>
+                          <div className="flex justify-between">
+                            <span>{row.label}</span>
+                            <Button
+                              onClick={() => handleDownload(row.id)}
+                              size="small"
+                            >
+                              Download
+                            </Button>
+                          </div>
+                          <Divider />
+                        </>
+                      )}
+                    </>
+                  ))}
+                </div>
+                <Button
+                  onClick={() =>
+                    downloadableShowMore
+                      ? setDownloadableShowMore(false)
+                      : setDownloadableShowMore(true)
+                  }
+                  size="small"
+                  sx={{
+                    backgroundColor: "white",
+                    ":hover": {
+                      backgroundColor: "white",
+                    },
+                  }}
+                  fullWidth
+                >
+                  {downloadableShowMore ? "Show Less" : "Show more"}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

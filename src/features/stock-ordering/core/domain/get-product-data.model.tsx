@@ -16,14 +16,26 @@ export interface GetProductDataModel {
     reviewed_date: string;
     dispatch_date: string;
     payment_confirmation_date: string;
-    delivery_receipt: string;
-    updated_delivery_receipt: string;
-    payment_detail_image: string;
     transport_route: string;
     region_id: number;
     region_name: string;
+
+    //files
     updated_delivery_goods_receipt: string;
     updated_delivery_region_receipt: string;
+    payment_detail_image: string;
+    delivery_receipt: string;
+    updated_delivery_receipt: string;
+
+    //Tracking
+    tracking: Array<{
+      datetime: string;
+      first_name: string;
+      last_name: string;
+      name: string;
+    }>;
+
+    //remarks
     remarks: Array<{
       date: string;
       first_name: string;
