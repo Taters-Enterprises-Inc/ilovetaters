@@ -152,14 +152,14 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
                   </div> */}
 
                       <div className="flex space-x-4">
-                        {/* <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => handleValidate("7")}
-                      sx={STOCK_ORDERING_BUTTON_STYLE}
-                    >
-                      Return to Tei Finance
-                    </Button> */}
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={() => handleValidate("7")}
+                          sx={STOCK_ORDERING_BUTTON_STYLE}
+                        >
+                          Return to Tei Finance
+                        </Button>
 
                         <Button
                           fullWidth
