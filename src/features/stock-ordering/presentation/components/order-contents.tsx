@@ -218,7 +218,7 @@ export function OrderContents() {
       <div className="space-y-3">
         <div className="">
           <span className="text-secondary text-3xl font-['Bebas_Neue'] flex-1">
-            Order
+            Order {" > " + TAB_NAVIGATION[Number(tabValue)].label3}
           </span>
         </div>
 
