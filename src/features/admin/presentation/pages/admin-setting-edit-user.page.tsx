@@ -1,5 +1,5 @@
 import { AdminHead } from "../components";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "features/config/hooks";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -24,16 +24,13 @@ import {
   MaterialInputPassword,
   MaterialPhoneInput,
 } from "features/shared/presentation/components";
-import { FormControlLabel, FormGroup, Switch } from "@mui/material";
-import { RiSurroundSoundLine } from "react-icons/ri";
+import { FormGroup } from "@mui/material";
 
 export function AdminSettingEditUser() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-
-  const [stockOrderingEnabled, setStockOrderingEnabled] = useState(false);
 
   const getAdminUserState = useAppSelector(selectGetAdminUser);
   const getAdminGroupsState = useAppSelector(selectGetAdminGroups);
@@ -126,10 +123,10 @@ export function AdminSettingEditUser() {
         password: "",
         confirmPassword: "",
         groups: groups,
-        stock_order_group: stockOrderingEnabled ? stock_order_groups : null,
+        stock_order_group: stock_order_groups,
       });
     }
-  }, [getAdminUserState, stockOrderingEnabled]);
+  }, [getAdminUserState]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (id) {
@@ -215,49 +212,53 @@ export function AdminSettingEditUser() {
                 label="Confirm Password"
               />
 
-              <div className="flex flex-wrap">
-                {getAdminGroupsState.data?.shop.map((group, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
-                  >
-                    <Checkbox
-                      color="primary"
-                      value={group.id}
-                      defaultChecked={getAdminUserState.data?.groups.some(
-                        (element) => {
-                          if (element.id === group.id) {
-                            return true;
+              <div className="flex flex-col">
+                <span className="text-xl">User Groups</span>
+
+                <div className="flex flex-wrap">
+                  {getAdminGroupsState.data?.shop.map((group, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
+                    >
+                      <Checkbox
+                        color="primary"
+                        value={group.id}
+                        defaultChecked={getAdminUserState.data?.groups.some(
+                          (element) => {
+                            if (element.id === group.id) {
+                              return true;
+                            }
+
+                            return false;
+                          }
+                        )}
+                        onChange={(event) => {
+                          let groups = formState.groups;
+
+                          if (groups === null) {
+                            groups = [group.id];
+                          } else if (groups.some((e) => e === group.id)) {
+                            groups = groups.filter((e) => e !== group.id);
+                          } else {
+                            groups.push(group.id);
                           }
 
-                          return false;
-                        }
-                      )}
-                      onChange={(event) => {
-                        let groups = formState.groups;
-
-                        if (groups === null) {
-                          groups = [group.id];
-                        } else if (groups.some((e) => e === group.id)) {
-                          groups = groups.filter((e) => e !== group.id);
-                        } else {
-                          groups.push(group.id);
-                        }
-
-                        setFormState({
-                          ...formState,
-                          groups: groups,
-                        });
-                      }}
-                    />
-                    <span>{group.name}</span>
-                  </div>
-                ))}
+                          setFormState({
+                            ...formState,
+                            groups: groups,
+                          });
+                        }}
+                      />
+                      <span>{group.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col mt-5">
                 <FormGroup>
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     control={
                       <Switch
                         checked={stockOrderingEnabled}
@@ -267,59 +268,59 @@ export function AdminSettingEditUser() {
                       />
                     }
                     label="Enable Stock Ordering"
-                  />
+                  /> */}
 
-                  {stockOrderingEnabled === true ? (
-                    <div className="flex flex-wrap">
-                      {getAdminGroupsState.data?.stock_order.map(
-                        (stock_order_gr, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
-                          >
-                            <Checkbox
-                              color="primary"
-                              value={stock_order_gr.id}
-                              defaultChecked={
-                                getAdminUserState.data?.stockOrderGroup
-                                  ?.length === 0
-                                  ? false
-                                  : getAdminUserState.data?.stockOrderGroup?.some(
-                                      (element) => {
-                                        if (element.id === stock_order_gr.id) {
-                                          return true;
-                                        }
-                                        return false;
+                  <span className="text-xl">Stock Ordering Permissions</span>
+
+                  <div className="flex flex-wrap">
+                    {getAdminGroupsState.data?.stock_order.map(
+                      (stock_order_gr, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-start space-x-1 text-sm text-secondary lg:text-base"
+                        >
+                          <Checkbox
+                            color="primary"
+                            value={stock_order_gr.id}
+                            defaultChecked={
+                              getAdminUserState.data?.stockOrderGroup
+                                ?.length === 0
+                                ? false
+                                : getAdminUserState.data?.stockOrderGroup?.some(
+                                    (element) => {
+                                      if (element.id === stock_order_gr.id) {
+                                        return true;
                                       }
-                                    )
+                                      return false;
+                                    }
+                                  )
+                            }
+                            onChange={(event) => {
+                              let groups = formState.stock_order_group;
+
+                              if (groups === null) {
+                                groups = [stock_order_gr.id];
+                              } else if (
+                                groups.some((e) => e === stock_order_gr.id)
+                              ) {
+                                groups = groups.filter(
+                                  (e) => e !== stock_order_gr.id
+                                );
+                              } else {
+                                groups.push(stock_order_gr.id);
                               }
-                              onChange={(event) => {
-                                let groups = formState.stock_order_group;
 
-                                if (groups === null) {
-                                  groups = [stock_order_gr.id];
-                                } else if (
-                                  groups.some((e) => e === stock_order_gr.id)
-                                ) {
-                                  groups = groups.filter(
-                                    (e) => e !== stock_order_gr.id
-                                  );
-                                } else {
-                                  groups.push(stock_order_gr.id);
-                                }
-
-                                setFormState({
-                                  ...formState,
-                                  stock_order_group: groups,
-                                });
-                              }}
-                            />
-                            <span>{stock_order_gr.name}</span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  ) : null}
+                              setFormState({
+                                ...formState,
+                                stock_order_group: groups,
+                              });
+                            }}
+                          />
+                          <span>{stock_order_gr.name}</span>
+                        </div>
+                      )
+                    )}
+                  </div>
                 </FormGroup>
               </div>
 
