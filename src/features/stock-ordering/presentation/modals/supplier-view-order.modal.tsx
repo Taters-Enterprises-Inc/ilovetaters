@@ -25,6 +25,7 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { PopupModal } from ".";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
+import { REACT_APP_DOMAIN_URL } from "features/shared/constants";
 
 interface PlaceOrdersModalProps {
   open: boolean;
@@ -176,10 +177,13 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
             <span className="text-2xl text-white">Supplier View Order </span>
 
             <div className="space-x-3">
+              {/* Download button */}
               <button
                 className="text-2xl text-white"
                 onClick={() => {
-                  //Waiting for download endpoint
+                  const link = `${REACT_APP_DOMAIN_URL}api/stock/export-order-pdf/${props.id}`;
+                  window.open(link, "_blank");
+
                   document.body.classList.remove("overflow-hidden");
                   props.onClose();
                 }}
@@ -187,6 +191,7 @@ export function SupplierViewOrderModal(props: PlaceOrdersModalProps) {
                 <AiOutlineDownload />
               </button>
 
+              {/* close */}
               <button
                 className="text-2xl text-white"
                 onClick={() => {

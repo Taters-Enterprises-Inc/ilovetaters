@@ -33,7 +33,10 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
 import { PopupModal } from "./popup.modal";
 import { ExcelPreviewModal } from "./excel-preview.modal";
-import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  STOCK_ORDERING_BUTTON_STYLE,
+} from "features/shared/constants";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
 // import { verifyDispatchOrders } from "../slices/verify-dispatch-invoice.slice";
 
@@ -202,7 +205,8 @@ export function SupplierDispatchOrderModal(
               <button
                 className="text-2xl text-white"
                 onClick={() => {
-                  //Waiting for download endpoint
+                  const link = `${REACT_APP_DOMAIN_URL}api/stock/export-order-pdf/${props.id}`;
+                  window.open(link, "_blank");
 
                   document.body.classList.remove("overflow-hidden");
                   props.onClose();
@@ -210,7 +214,6 @@ export function SupplierDispatchOrderModal(
               >
                 <AiOutlineDownload />
               </button>
-
               <button
                 className="text-2xl text-white"
                 onClick={() => {

@@ -19,8 +19,12 @@ import {
 import { ViewImageModal } from "./view-image.modal";
 import { selectGetAdminSession } from "features/admin/presentation/slices/get-admin-session.slice";
 import { productDataInitialState } from "features/stock-ordering/core/productDataInitialState";
-import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import {
+  REACT_APP_DOMAIN_URL,
+  STOCK_ORDERING_BUTTON_STYLE,
+} from "features/shared/constants";
 import { GetProductDataModel } from "features/stock-ordering/core/domain/get-product-data.model";
+import { AiOutlineDownload } from "react-icons/ai";
 
 interface SupplierConfirmModalProps {
   open: boolean;
@@ -106,15 +110,29 @@ export function SupplierConfirmModal(props: SupplierConfirmModalProps) {
         <div className="w-[97%] lg:w-[900px] my-5 rounded-[10px]">
           <div className="bg-secondary rounded-t-[10px] flex items-center justify-between p-4">
             <span className="text-2xl text-white">Confirm Payment</span>
-            <button
-              className="text-2xl text-white"
-              onClick={() => {
-                document.body.classList.remove("overflow-hidden");
-                props.onClose();
-              }}
-            >
-              <IoMdClose />
-            </button>
+            <div className="space-x-5">
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  const link = `${REACT_APP_DOMAIN_URL}api/stock/export-order-pdf/${props.id}`;
+                  window.open(link, "_blank");
+
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <AiOutlineDownload />
+              </button>
+              <button
+                className="text-2xl text-white"
+                onClick={() => {
+                  document.body.classList.remove("overflow-hidden");
+                  props.onClose();
+                }}
+              >
+                <IoMdClose />
+              </button>
+            </div>
           </div>
 
           <div className="p-4 bg-white border-b-2 border-l-2 border-r-2 border-secondary space-y-5">
