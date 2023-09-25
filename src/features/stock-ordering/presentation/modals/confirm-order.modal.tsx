@@ -10,14 +10,15 @@ import { OrderTableData } from "features/stock-ordering/core/domain/order-table-
 import { selectGetStockOrderStores } from "../slices/get-store.slice";
 import { selectconfirmNewOrder } from "../slices/confirm-new-order.slice";
 import {
-  InsertNewOrderState,
   insertNewOrder,
-  resetInsertNewOrder,
   selectInsertNewOrder,
 } from "../slices/insert-new-order.slice";
-import { DeliverySchedule } from "features/stock-ordering/core/domain/delivery-schedule.model";
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
+import {
+  getDeliverySchedule,
+  selectGetDeliverySchedule,
+} from "../slices/get-delivery-schedule.slice";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -39,7 +40,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
 
   const getStores = useAppSelector(selectGetStockOrderStores);
   const getOrderInformation = useAppSelector(selectconfirmNewOrder);
-  const insertNewUserState = useAppSelector(selectInsertNewOrder);
+  const getDeliveryScheduleState = useAppSelector(selectGetDeliverySchedule);
 
   const [selectedStore, setSelectedStore] = useState<selectedStore>();
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -57,6 +58,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       const getSelectedStore = getStores.data?.stores.find((store) => {
         return store.store_id === getOrderInformation.data?.selectedStoreId;
       });
+
       setLeadTime(0);
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
       setSelectedStore(getSelectedStore);
@@ -65,6 +67,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setIsEdit(false);
       setRows([]);
     }
+
+    dispatch(getDeliverySchedule());
   }, [props.open]);
 
   useEffect(() => {
@@ -84,7 +88,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
-        deliveryScheduleData: deliveryDate,
+        deliveryScheduleData: "",
         selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         remarks: remarks,
         category: {
@@ -99,34 +103,38 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     props.onClose();
   };
 
+  const schedule = getDeliveryScheduleState.data?.find(
+    (item) => item.id === selectedStore?.store_id
+  );
+
   const deliverySchedules = (
     date: string | number | Date | dayjs.Dayjs | null | undefined
   ) => {
     const dayIndex = dayjs(date).day();
-    const schedule: DeliverySchedule = getOrderInformation.data
-      ?.deliveryScheduleData as DeliverySchedule;
 
-    if (!schedule?.is_mwf && !schedule?.is_tths) {
-      setLeadTime(Number(schedule?.leadtime));
-    } else {
-      if (dayjs(date).isBefore(schedule.cutoff)) {
-        setLeadTime(Number(schedule.leadtime));
-      } else {
-        setLeadTime(Number(schedule.leadtime) + 2);
-      }
-
-      if (schedule.is_mwf) {
-        return (
-          dayIndex === 2 || dayIndex === 4 || dayIndex === 6 || dayIndex === 0
-        );
-      } else if (schedule.is_tths) {
-        return (
-          dayIndex === 1 || dayIndex === 3 || dayIndex === 5 || dayIndex === 0
-        );
-      }
+    if (schedule?.is_mwf) {
+      return (
+        dayIndex === 2 || dayIndex === 4 || dayIndex === 6 || dayIndex === 0
+      );
+    } else if (schedule?.is_tths) {
+      return (
+        dayIndex === 1 || dayIndex === 3 || dayIndex === 5 || dayIndex === 0
+      );
     }
 
     return false;
+  };
+
+  const handleLeadTime = () => {
+    const targetTime = dayjs()
+      .set("hour", 14)
+      .set("minute", 0)
+      .set("second", 0);
+    if (dayjs().isBefore(targetTime)) {
+      return Number(schedule?.leadtime) - 2;
+    } else {
+      return Number(schedule?.leadtime) + 1;
+    }
   };
 
   const isQuantityEmpty = () => {
@@ -267,7 +275,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
                           renderInput={(params) => (
                             <TextField required {...params} size="small" />
                           )}
-                          minDate={dayjs().add(leadTime ?? 2, "day")}
+                          minDate={dayjs().add(handleLeadTime(), "day")}
                           shouldDisableDate={deliverySchedules}
                         />
                       </LocalizationProvider>

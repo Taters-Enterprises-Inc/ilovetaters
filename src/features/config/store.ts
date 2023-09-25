@@ -261,6 +261,7 @@ import updateDeliveryReceiveApprovalOrders from "features/stock-ordering/present
 import updateOrderCancelled from "features/stock-ordering/presentation/slices/update-order-cancelled.slice";
 import getPayBillingSi from "features/stock-ordering/presentation/slices/get-pay-billing-si.slice";
 import changePassword from "features/admin/presentation/slices/change-password.slice";
+import getDeliverySchedule from "features/stock-ordering/presentation/slices/get-delivery-schedule.slice";
 
 export const store = configureStore({
   reducer: {
@@ -525,6 +526,7 @@ export const store = configureStore({
     updateOrderCancelled,
     getPayBillingSi,
     changePassword,
+    getDeliverySchedule,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

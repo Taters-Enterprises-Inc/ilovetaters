@@ -151,6 +151,9 @@ export function OrderContents() {
   ];
 
   const handleModalToggle = (modal: string) => {
+    if (stockOrderSideBar.status) {
+      dispatch(togglestockOrderSideBar());
+    }
     setModals((prevModals) => ({
       ...prevModals,
       [modal]: !prevModals[modal],
@@ -167,9 +170,7 @@ export function OrderContents() {
 
   const handleAction = (id: string) => {
     handleModalToggle(Object.keys(modals)[Number(tabValue) + 2]);
-    if (stockOrderSideBar.status) {
-      dispatch(togglestockOrderSideBar());
-    }
+
     setOrderId(id);
   };
 

@@ -1,5 +1,3 @@
-import { DeliverySchedule } from "./delivery-schedule.model";
-
 export interface GetStockProductModel {
   products: [
     {
@@ -10,5 +8,4 @@ export interface GetStockProductModel {
       orderQty: string;
     }
   ];
-  schedule: DeliverySchedule | undefined;
 }

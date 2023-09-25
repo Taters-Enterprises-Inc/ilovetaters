@@ -1,5 +1,3 @@
-import { GridSelectionModel } from "@mui/x-data-grid";
-import { DeliverySchedule } from "./domain/delivery-schedule.model";
 import { OrderTableData } from "./domain/order-table-row.model";
 
 export interface test {
@@ -9,7 +7,7 @@ export interface test {
 export interface InsertNewOrderParam {
   selectedStoreId: string | undefined;
   selectedAddress: string;
-  deliveryScheduleData: string | DeliverySchedule | undefined;
+  deliveryScheduleData: string;
   remarks: string;
   category: {
     category_id: string;
