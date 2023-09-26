@@ -418,6 +418,7 @@ export function SupplierDispatchOrderModal(
         message={"Are you sure you want to cancel your order?"}
         remarks={remarks}
         id={props.id}
+        cancelOrder
         orderCancelled={(isCancelled: boolean) =>
           isCancelled && props.onClose()
         }

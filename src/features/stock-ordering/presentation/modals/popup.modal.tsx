@@ -9,9 +9,10 @@ interface CompleteModalProps {
   onClose: () => void;
   title: string;
   message: string;
-  remarks: string;
-  id: string;
-  orderCancelled: (isCancelled: boolean) => void;
+  remarks?: string;
+  id?: string;
+  cancelOrder?: boolean;
+  orderCancelled?: (isCancelled: boolean) => void;
 }
 
 export function PopupModal(props: CompleteModalProps) {
@@ -19,13 +20,13 @@ export function PopupModal(props: CompleteModalProps) {
 
   const handleCancelOrder = async () => {
     const cancelParameter: updateCancelledStatus = {
-      id: props.id,
-      remarks: props.remarks,
+      id: props.id ?? "",
+      remarks: props.remarks ?? "",
     };
     dispatch(updateOrderCancelled(cancelParameter));
     document.body.classList.remove("overflow-hidden");
 
-    props.orderCancelled(true);
+    props.orderCancelled?.(true);
   };
 
   if (props.open) {
@@ -50,15 +51,17 @@ export function PopupModal(props: CompleteModalProps) {
               <span>{props.message}</span>
             </div>
             <div className="flex space-x-3">
-              <Button
-                fullWidth
-                size="small"
-                onClick={handleCancelOrder}
-                variant="contained"
-                sx={{ color: "white", backgroundColor: "#CC5801" }}
-              >
-                Yes
-              </Button>
+              {props.cancelOrder && (
+                <Button
+                  fullWidth
+                  size="small"
+                  onClick={handleCancelOrder}
+                  variant="contained"
+                  sx={{ color: "white", backgroundColor: "#CC5801" }}
+                >
+                  Yes
+                </Button>
+              )}
               <Button
                 fullWidth
                 size="small"
@@ -66,7 +69,7 @@ export function PopupModal(props: CompleteModalProps) {
                 onClick={() => props.onClose()}
                 sx={{ color: "white", backgroundColor: "#CC5801" }}
               >
-                No
+                {props.cancelOrder ? "No" : "Ok"}
               </Button>
             </div>
           </div>

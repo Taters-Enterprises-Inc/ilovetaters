@@ -16,9 +16,11 @@ import {
 import { MaterialInputAutoComplete } from "features/shared/presentation/components";
 import { STOCK_ORDERING_BUTTON_STYLE } from "features/shared/constants";
 import {
+  GetDeliveryScheduleState,
   getDeliverySchedule,
   selectGetDeliverySchedule,
 } from "../slices/get-delivery-schedule.slice";
+import { PopupModal } from "./popup.modal";
 
 interface ConfirmOrdersModalProps {
   open: boolean;
@@ -51,6 +53,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [deliveryDateError, setDeliveryDateError] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [rows, setRows] = useState<OrderTableData[]>([]);
+  const [openPopup, setOpenPopup] = useState(false);
 
   useEffect(() => {
     if (getOrderInformation.data) {
@@ -62,9 +65,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       setSelectedStore(getSelectedStore);
       setDeliveryData("");
       setRemarks("");
-      setIsEdit(false);
       setRows([]);
-
+      setIsEdit(false);
       dispatch(getDeliverySchedule());
     }
   }, [props.open]);
@@ -104,6 +106,16 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const schedule = getDeliveryScheduleState.data?.find(
     (item) => item.store_id === selectedStore?.store_id
   );
+
+  useEffect(() => {
+    if (
+      GetDeliveryScheduleState.success === getDeliveryScheduleState.status &&
+      schedule === undefined &&
+      props.open
+    ) {
+      setOpenPopup(true);
+    }
+  }, [schedule, getDeliveryScheduleState]);
 
   const deliverySchedules = (
     date: string | number | Date | dayjs.Dayjs | null | undefined
@@ -186,6 +198,8 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
+
+  console.log(openPopup);
 
   return (
     <>
@@ -340,6 +354,18 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
           </form>
         </div>
       </div>
+
+      <PopupModal
+        open={openPopup}
+        onClose={() => {
+          props.onClose();
+          setOpenPopup(false);
+        }}
+        title={"Can't create order"}
+        message={
+          "Looks like your store is not register on delivery schedule. Please contact TEI MIS Department."
+        }
+      />
     </>
   );
 }
