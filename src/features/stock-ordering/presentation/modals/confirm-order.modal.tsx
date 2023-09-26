@@ -50,7 +50,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   const [deliveryDate, setDeliveryData] = useState("");
   const [deliveryDateError, setDeliveryDateError] = useState(false);
   const [remarks, setRemarks] = useState("");
-  const [leadTime, setLeadTime] = useState<number>();
   const [rows, setRows] = useState<OrderTableData[]>([]);
 
   useEffect(() => {
@@ -59,16 +58,15 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
         return store.store_id === getOrderInformation.data?.selectedStoreId;
       });
 
-      setLeadTime(0);
       setSelectedAddress(getOrderInformation.data.selectedAddress ?? "");
       setSelectedStore(getSelectedStore);
       setDeliveryData("");
       setRemarks("");
       setIsEdit(false);
       setRows([]);
-    }
 
-    dispatch(getDeliverySchedule());
+      dispatch(getDeliverySchedule());
+    }
   }, [props.open]);
 
   useEffect(() => {
@@ -104,7 +102,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
   };
 
   const schedule = getDeliveryScheduleState.data?.find(
-    (item) => item.id === selectedStore?.store_id
+    (item) => item.store_id === selectedStore?.store_id
   );
 
   const deliverySchedules = (
