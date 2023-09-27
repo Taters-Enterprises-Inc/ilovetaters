@@ -88,7 +88,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     dispatch(
       insertNewOrder({
         selectedStoreId: selectedStore?.store_id,
-        deliveryScheduleData: "",
+        deliveryScheduleData: deliveryDate ?? "",
         selectedAddress: getOrderInformation.data?.selectedAddress ?? "",
         remarks: remarks,
         category: {
@@ -199,7 +199,7 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     return null;
   }
 
-  console.log(openPopup);
+  console.log(deliveryDate);
 
   return (
     <>
