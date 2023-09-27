@@ -140,8 +140,9 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
       .set("hour", 14)
       .set("minute", 0)
       .set("second", 0);
+
     if (dayjs().isBefore(targetTime)) {
-      return Number(schedule?.leadtime) - 2;
+      return Number(schedule?.leadtime);
     } else {
       return Number(schedule?.leadtime) + 1;
     }
@@ -198,8 +199,6 @@ export function ConfirmOrdersModal(props: ConfirmOrdersModalProps) {
     document.body.classList.remove("overflow-hidden");
     return null;
   }
-
-  console.log(deliveryDate);
 
   return (
     <>
